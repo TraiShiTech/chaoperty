@@ -36,6 +36,8 @@ import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTranBill_model.dart';
 import '../Model/GetTrans_Kon_Model.dart';
 import '../Model/GetTrans_Model.dart';
+import '../Model/Get_trasn_Matjum_KF_model.dart';
+import '../Model/Get_trasn_matjum_model.dart';
 import '../Model/Get_trasn_pakan_KF_model.dart';
 import '../Model/Get_trasn_pakan_model.dart';
 import '../Model/trans_re_bill_history_model.dart';
@@ -89,6 +91,8 @@ class _PaysState extends State<Pays> {
   List<TransPakanModel> transPakanModels = [];
   List<TransPakanKFModel> transPakanKFModels = [];
   List<TransKonModel> transKonModels = [];
+  List<TransMatjumModel> transMatjumModels = [];
+  List<TransMatjumKFModel> transMatjumKFModels = [];
 
   final sum_disamtx = TextEditingController();
   final sum_dispx = TextEditingController();
@@ -103,6 +107,7 @@ class _PaysState extends State<Pays> {
   final Formposlok_ = TextEditingController();
   final Formposlokpri_ = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final Formposlokdispri_ = TextEditingController();
 
   double sum_pvat = 0.00,
       sum_vat = 0.00,
@@ -114,10 +119,16 @@ class _PaysState extends State<Pays> {
       sum_Pakan = 0,
       sum_Pakan_KF = 0,
       dis_Pakan = 0,
-      dis_sum_Pakan = 0.00;
+      dis_matjum = 0,
+      dis_sum_Pakan = 0.00,
+      dis_sum_Matjum = 0.00,
+      sum_Matjum_KF = 0,
+      sum_tran_dis = 0,
+      sum_matjum = 0.00;
   int select_page = 0,
       pamentpage = 0,
       _Pakan = 0,
+      _matjum = 0,
       renTal_lavel = 0; // = 0 _TransModels : = 1 _InvoiceHistoryModels
 
   String? numinvoice,
@@ -180,7 +191,14 @@ class _PaysState extends State<Pays> {
     'บิลธรรมดา',
     'ใบกำกับภาษี',
   ];
+  ////////------------------------------------>
+  int Default_Receipt_type = 0;
 
+  List Default_Receipt_ = [
+    'ออกใบเสร็จ',
+    'ไม่ออกใบเสร็จ',
+  ];
+  ////////------------------------------------>
   ScrollController _scrollController1 = ScrollController();
   ScrollController _scrollController2 = ScrollController();
   String? Slip_status;
@@ -202,6 +220,123 @@ class _PaysState extends State<Pays> {
     read_GC_pkan();
     red_Trans_Kon();
     red_Invoice();
+    read_GC_matjum();
+  }
+
+  Future<Null> read_GC_matjum() async {
+    setState(() {
+      _matjum = 0;
+    });
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    // var zone = preferences.getString('zoneSer');
+    var ciddoc = widget.Get_Value_cid;
+    var qutser = 1;
+
+    String url =
+        '${MyConstant().domain}/GC_Matjum.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>--------------  $result');
+
+      if (result.toString() == 'true') {
+        setState(() {
+          _matjum = 1;
+          read_GC_matjum_total();
+        });
+      }
+    } catch (e) {}
+    setState(() {
+      renTal_lavel = int.parse(preferences.getString('lavel').toString());
+    });
+  }
+
+  Future<Null> read_GC_matjum_total() async {
+    setState(() {
+      if (transMatjumModels.isNotEmpty) {
+        setState(() {
+          transMatjumModels.clear();
+        });
+      }
+      sum_matjum = 0;
+    });
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    // var zone = preferences.getString('zoneSer');
+    var ciddoc = widget.Get_Value_cid;
+    var qutser = 1;
+
+    String url =
+        '${MyConstant().domain}/GC_Matjum_total.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>--------------  $result');
+      sum_matjum = 0;
+      if (result.toString() != 'true') {
+        for (var map in result) {
+          TransMatjumModel transMatjumModel = TransMatjumModel.fromJson(map);
+          var sum_P = double.parse(transMatjumModel.total!);
+          setState(() {
+            sum_matjum = sum_matjum + sum_P;
+            transMatjumModels.add(transMatjumModel);
+          });
+        }
+      }
+    } catch (e) {}
+
+    setState(() {
+      read_GC_Matjum_total_MM();
+    });
+  }
+
+  Future<Null> read_GC_Matjum_total_MM() async {
+    setState(() {
+      if (transMatjumKFModels.isNotEmpty) {
+        setState(() {
+          transMatjumKFModels.clear();
+        });
+      }
+      sum_Matjum_KF = 0;
+    });
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    // var zone = preferences.getString('zoneSer');
+    var ciddoc = widget.Get_Value_cid;
+    var qutser = 1;
+
+    String url =
+        '${MyConstant().domain}/GC_Matjum_total_KF.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>--------------  $result');
+      sum_Matjum_KF = 0;
+      if (result.toString() != 'true') {
+        for (var map in result) {
+          TransMatjumKFModel transMatjumKFModel =
+              TransMatjumKFModel.fromJson(map);
+          var sum_P = double.parse(transMatjumKFModel.total!);
+          setState(() {
+            sum_Matjum_KF = sum_Matjum_KF + sum_P;
+            transMatjumKFModels.add(transMatjumKFModel);
+          });
+        }
+        setState(() {
+          sum_matjum = sum_matjum - sum_Matjum_KF;
+        });
+      }
+    } catch (e) {}
   }
 
   Future<Null> red_Trans_Kon() async {
@@ -593,9 +728,10 @@ class _PaysState extends State<Pays> {
               paymentSer1 = serx.toString();
               paymentName1 = ptnamex.toString();
 
-              Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan)
-                  .toStringAsFixed(2)
-                  .toString();
+              Form_payment1.text =
+                  (sum_amt - sum_disamt - dis_sum_Pakan - dis_sum_Matjum)
+                      .toStringAsFixed(2)
+                      .toString();
             }
           });
         }
@@ -604,9 +740,10 @@ class _PaysState extends State<Pays> {
           paymentSer1 = 0.toString();
           paymentName1 = 'เลือก'.toString();
 
-          Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan)
-              .toStringAsFixed(2)
-              .toString();
+          Form_payment1.text =
+              (sum_amt - sum_disamt - dis_sum_Pakan - dis_sum_Matjum)
+                  .toStringAsFixed(2)
+                  .toString();
         }
       }
     } catch (e) {}
@@ -895,9 +1032,10 @@ class _PaysState extends State<Pays> {
 
     var textadd = text_add.text;
     var priceadd = price_add.text;
+    var dtypeadd = widget.can == 'A' ? 'J' : '';
 
     String url =
-        '${MyConstant().domain}/In_tran_select_add.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&textadd=$textadd&priceadd=$priceadd&user=$user';
+        '${MyConstant().domain}/In_tran_select_add.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&textadd=$textadd&priceadd=$priceadd&user=$user&dtypeadd=$dtypeadd';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -991,6 +1129,8 @@ class _PaysState extends State<Pays> {
         sum_vat = 0;
         sum_wht = 0;
         sum_amt = 0;
+        sum_tran_dis = 0;
+        sum_matjum = 0;
       });
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -1013,6 +1153,7 @@ class _PaysState extends State<Pays> {
           sum_vat = 0;
           sum_wht = 0;
           sum_amt = 0;
+          sum_tran_dis = 0;
         });
         for (var map in result) {
           TransModel _TransModel = TransModel.fromJson(map);
@@ -1021,18 +1162,30 @@ class _PaysState extends State<Pays> {
           var sum_vatx = double.parse(_TransModel.vat!);
           var sum_whtx = double.parse(_TransModel.wht!);
           var sum_amtx = double.parse(_TransModel.total!);
+          var sum_disx = double.parse(_TransModel.dis!);
           setState(() {
             sum_pvat = sum_pvat + sum_pvatx;
             sum_vat = sum_vat + sum_vatx;
             sum_wht = sum_wht + sum_whtx;
             sum_amt = sum_amt + sum_amtx;
+            sum_tran_dis = sum_tran_dis + sum_disx;
             _TransModels.add(_TransModel);
           });
         }
+      } else {
+        setState(() {
+          dis_matjum = 0;
+          dis_sum_Matjum = 0.00;
+        });
       }
 
       setState(() {
-        Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan)
+        read_GC_matjum();
+        Form_payment1.text = (sum_amt -
+                sum_disamt -
+                dis_sum_Pakan -
+                sum_tran_dis -
+                dis_sum_Matjum)
             .toStringAsFixed(2)
             .toString();
       });
@@ -1138,7 +1291,11 @@ class _PaysState extends State<Pays> {
       }
 
       setState(() {
-        Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan)
+        Form_payment1.text = (sum_amt -
+                sum_disamt -
+                dis_sum_Pakan -
+                sum_tran_dis -
+                dis_sum_Matjum)
             .toStringAsFixed(2)
             .toString();
       });
@@ -1232,7 +1389,11 @@ class _PaysState extends State<Pays> {
       }
 
       setState(() {
-        Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan)
+        Form_payment1.text = (sum_amt -
+                sum_disamt -
+                dis_sum_Pakan -
+                sum_tran_dis -
+                dis_sum_Matjum)
             .toStringAsFixed(2)
             .toString();
       });
@@ -1301,7 +1462,11 @@ class _PaysState extends State<Pays> {
         }
       }
       setState(() {
-        Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan)
+        Form_payment1.text = (sum_amt -
+                sum_disamt -
+                dis_sum_Pakan -
+                sum_tran_dis -
+                dis_sum_Matjum)
             .toStringAsFixed(2)
             .toString();
         red_Invoice();
@@ -1640,19 +1805,22 @@ class _PaysState extends State<Pays> {
                                   sum_disamt = 0.00;
                                   sum_disp = 0;
                                   select_page = 0;
+                                  red_Trans_select2();
                                   red_Trans_bill();
                                   red_Invoice();
-                                  Form_payment1.text =
-                                      (sum_amt - sum_disamt - dis_sum_Pakan)
-                                          .toStringAsFixed(2)
-                                          .toString();
+                                  Form_payment1.text = (sum_amt -
+                                          sum_disamt -
+                                          dis_sum_Pakan -
+                                          dis_sum_Matjum)
+                                      .toStringAsFixed(2)
+                                      .toString();
                                 });
                               },
                               child: Container(
                                 height: 50,
                                 decoration: BoxDecoration(
                                   color: Colors.yellow[200],
-                                  borderRadius: const BorderRadius.only(
+                                  borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(0),
                                     bottomLeft: Radius.circular(0),
@@ -1661,10 +1829,12 @@ class _PaysState extends State<Pays> {
                                   // border: Border.all(
                                   //     color: Colors.grey, width: 1),
                                 ),
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: AutoSizeText(
-                                    'รายการยังไม่วางบิล (${_TransBillModels.length})',
+                                    widget.can == 'A'
+                                        ? 'รายการชำระ (${_TransBillModels.length})'
+                                        : 'รายการยังไม่วางบิล (${_TransBillModels.length})',
                                     minFontSize: 12,
                                     maxFontSize: 18,
                                     textAlign: TextAlign.center,
@@ -1682,68 +1852,72 @@ class _PaysState extends State<Pays> {
                               ),
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _InvoiceModels.clear();
-                                  _InvoiceHistoryModels.clear();
-                                  _TransReBillHistoryModels.clear();
-                                  sum_disamtx.text = '0.00';
-                                  sum_dispx.text = '0.00';
-                                  sum_pvat = 0.00;
-                                  sum_vat = 0.00;
-                                  sum_wht = 0.00;
-                                  sum_amt = 0.00;
-                                  sum_dis = 0.00;
-                                  sum_disamt = 0.00;
-                                  sum_disp = 0;
-                                  deall_Trans_select();
-                                  red_Invoice();
-                                  select_page = 1;
-                                  numinvoice = null;
-                                  Form_payment1.text =
-                                      (sum_amt - sum_disamt - dis_sum_Pakan)
-                                          .toStringAsFixed(2)
-                                          .toString();
-                                });
-                              },
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.orange[200],
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(0),
-                                    bottomLeft: Radius.circular(0),
-                                    bottomRight: Radius.circular(0),
-                                  ),
-                                  // border: Border.all(
-                                  //     color: Colors.grey, width: 1),
-                                ),
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                    child: AutoSizeText(
-                                  'รายการวางบิล (${_InvoiceModels.length})',
-                                  minFontSize: 12,
-                                  maxFontSize: 18,
-                                  textAlign: TextAlign
-                                      .center, //(Responsive.isTablet(context))
-
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text1_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T
-                                      //fontSize: 10.0
+                          widget.can == 'A'
+                              ? SizedBox()
+                              : Expanded(
+                                  flex: 2,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _InvoiceModels.clear();
+                                        _InvoiceHistoryModels.clear();
+                                        _TransReBillHistoryModels.clear();
+                                        sum_disamtx.text = '0.00';
+                                        sum_dispx.text = '0.00';
+                                        sum_pvat = 0.00;
+                                        sum_vat = 0.00;
+                                        sum_wht = 0.00;
+                                        sum_amt = 0.00;
+                                        sum_dis = 0.00;
+                                        sum_disamt = 0.00;
+                                        sum_disp = 0;
+                                        deall_Trans_select();
+                                        red_Invoice();
+                                        select_page = 1;
+                                        numinvoice = null;
+                                        Form_payment1.text = (sum_amt -
+                                                sum_disamt -
+                                                dis_sum_Pakan -
+                                                dis_sum_Matjum)
+                                            .toStringAsFixed(2)
+                                            .toString();
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.orange[200],
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(0),
+                                          bottomLeft: Radius.circular(0),
+                                          bottomRight: Radius.circular(0),
+                                        ),
+                                        // border: Border.all(
+                                        //     color: Colors.grey, width: 1),
                                       ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                              ),
-                            ),
-                          ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                          child: AutoSizeText(
+                                        'รายการวางบิล (${_InvoiceModels.length})',
+                                        minFontSize: 12,
+                                        maxFontSize: 18,
+                                        textAlign: TextAlign
+                                            .center, //(Responsive.isTablet(context))
+
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      )),
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
                       Row(
@@ -2490,50 +2664,100 @@ class _PaysState extends State<Pays> {
                                             children: [
                                               select_page == 1
                                                   ? SizedBox()
-                                                  : InkWell(
-                                                      onTap: () {
-                                                        addPlaySelect();
-                                                        // addPlay();
-                                                      },
-                                                      child: Container(
-                                                        width: 100,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.green,
-                                                          borderRadius: BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
+                                                  : widget.can == 'A'
+                                                      ? InkWell(
+                                                          onTap: () {
+                                                            addPlaySelectA();
+                                                            deall_Trans_select();
+                                                            print('เพิ่มมัดจำ');
+                                                          },
+                                                          child: Container(
+                                                            width: 100,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.green,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
                                                                       .circular(
                                                                           10)),
-                                                          // border: Border.all(color: Colors.white, width: 1),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: const Center(
-                                                          child: AutoSizeText(
-                                                            minFontSize: 8,
-                                                            maxFontSize: 15,
-                                                            'เพิ่มใหม่',
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                //fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
+                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: const Center(
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 8,
+                                                                maxFontSize: 15,
+                                                                'เพิ่มมัดจำ',
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : InkWell(
+                                                          onTap: () {
+                                                            addPlaySelect();
+                                                            // addPlay();
+                                                          },
+                                                          child: Container(
+                                                            width: 100,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.green,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: const Center(
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 8,
+                                                                maxFontSize: 15,
+                                                                'เพิ่มใหม่',
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ),
                                             ],
                                           ),
                                         ),
@@ -2564,7 +2788,7 @@ class _PaysState extends State<Pays> {
                                                               color: Colors.grey
                                                                   .shade300,
                                                               borderRadius: const BorderRadius
-                                                                  .only(
+                                                                      .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -2604,74 +2828,82 @@ class _PaysState extends State<Pays> {
                                                     )
                                               : SizedBox(),
                                         (Responsive.isDesktop(context))
-                                            ? Expanded(
-                                                flex: 1,
-                                                child: Center(
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        _InvoiceModels.clear();
-                                                        _InvoiceHistoryModels
-                                                            .clear();
-                                                        _TransReBillHistoryModels
-                                                            .clear();
-                                                        sum_disamtx.text =
-                                                            '0.00';
-                                                        sum_dispx.text = '0.00';
-                                                        sum_pvat = 0.00;
-                                                        sum_vat = 0.00;
-                                                        sum_wht = 0.00;
-                                                        sum_amt = 0.00;
-                                                        sum_dis = 0.00;
-                                                        sum_disamt = 0.00;
-                                                        sum_disp = 0;
-                                                        deall_Trans_select();
-                                                        red_InvoiceC();
-                                                        select_page = 2;
-                                                        numinvoice = null;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      // width: 120,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.grey[300],
-                                                        borderRadius: const BorderRadius
-                                                            .only(
-                                                            topLeft: Radius
-                                                                .circular(10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: const Center(
-                                                        child: AutoSizeText(
-                                                          minFontSize: 8,
-                                                          maxFontSize: 15,
-                                                          'ใบเสร็จชั่วคราว',
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
+                                            ? widget.can == 'A'
+                                                ? SizedBox()
+                                                : Expanded(
+                                                    flex: 1,
+                                                    child: Center(
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            _InvoiceModels
+                                                                .clear();
+                                                            _InvoiceHistoryModels
+                                                                .clear();
+                                                            _TransReBillHistoryModels
+                                                                .clear();
+                                                            sum_disamtx.text =
+                                                                '0.00';
+                                                            sum_dispx.text =
+                                                                '0.00';
+                                                            sum_pvat = 0.00;
+                                                            sum_vat = 0.00;
+                                                            sum_wht = 0.00;
+                                                            sum_amt = 0.00;
+                                                            sum_dis = 0.00;
+                                                            sum_disamt = 0.00;
+                                                            sum_disp = 0;
+                                                            deall_Trans_select();
+                                                            red_InvoiceC();
+                                                            select_page = 2;
+                                                            numinvoice = null;
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                          // width: 120,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors
+                                                                .grey[300],
+                                                            borderRadius: const BorderRadius
+                                                                    .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            // border: Border.all(color: Colors.white, width: 1),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: const Center(
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 15,
+                                                              'ใบเสร็จชั่วคราว',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                              )
+                                                  )
                                             : SizedBox(),
                                       ],
                                     ),
@@ -2699,7 +2931,7 @@ class _PaysState extends State<Pays> {
                                                           color: Colors
                                                               .grey.shade300,
                                                           borderRadius: const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -2741,77 +2973,85 @@ class _PaysState extends State<Pays> {
                                               SizedBox(
                                                 width: 5,
                                               ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Center(
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        _InvoiceModels.clear();
-                                                        _InvoiceHistoryModels
-                                                            .clear();
-                                                        _TransReBillHistoryModels
-                                                            .clear();
-                                                        sum_disamtx.text =
-                                                            '0.00';
-                                                        sum_dispx.text = '0.00';
-                                                        sum_pvat = 0.00;
-                                                        sum_vat = 0.00;
-                                                        sum_wht = 0.00;
-                                                        sum_amt = 0.00;
-                                                        sum_dis = 0.00;
-                                                        sum_disamt = 0.00;
-                                                        sum_disp = 0;
-                                                        deall_Trans_select();
-                                                        red_InvoiceC();
-                                                        select_page = 2;
-                                                        numinvoice = null;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      // width: 120,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.grey[300],
-                                                        borderRadius: const BorderRadius
-                                                            .only(
-                                                            topLeft: Radius
-                                                                .circular(10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: const Center(
-                                                        child: AutoSizeText(
-                                                          maxLines: 2,
-                                                          minFontSize: 8,
-                                                          maxFontSize: 15,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          'ใบเสร็จชั่วคราว',
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
+                                              widget.can == 'A'
+                                                  ? SizedBox()
+                                                  : Expanded(
+                                                      flex: 1,
+                                                      child: Center(
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              _InvoiceModels
+                                                                  .clear();
+                                                              _InvoiceHistoryModels
+                                                                  .clear();
+                                                              _TransReBillHistoryModels
+                                                                  .clear();
+                                                              sum_disamtx.text =
+                                                                  '0.00';
+                                                              sum_dispx.text =
+                                                                  '0.00';
+                                                              sum_pvat = 0.00;
+                                                              sum_vat = 0.00;
+                                                              sum_wht = 0.00;
+                                                              sum_amt = 0.00;
+                                                              sum_dis = 0.00;
+                                                              sum_disamt = 0.00;
+                                                              sum_disp = 0;
+                                                              deall_Trans_select();
+                                                              red_InvoiceC();
+                                                              select_page = 2;
+                                                              numinvoice = null;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            // width: 120,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Colors
+                                                                  .grey[300],
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft:
+                                                                      Radius.circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: const Center(
+                                                              child:
+                                                                  AutoSizeText(
+                                                                maxLines: 2,
+                                                                minFontSize: 8,
+                                                                maxFontSize: 15,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                'ใบเสร็จชั่วคราว',
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ),
                                             ],
                                           )
                                   ]),
@@ -3075,6 +3315,9 @@ class _PaysState extends State<Pays> {
                                       setState(() {
                                         dis_sum_Pakan = 0.00;
                                         dis_Pakan = 0;
+                                        dis_matjum = 0;
+                                        sum_matjum = 0.00;
+                                        dis_sum_Matjum = 0.00;
                                       });
                                     },
                                     child: Container(
@@ -3127,267 +3370,401 @@ class _PaysState extends State<Pays> {
                                     color: AppbackgroundColor.Sub_Abg_Colors,
                                     child: ListTile(
                                       onTap: () {},
-                                      title: Row(
+                                      title: Column(
                                         children: [
-                                          Expanded(
-                                              flex: 1,
-                                              child: PopupMenuButton(
-                                                itemBuilder:
-                                                    (BuildContext context) => [
-                                                  PopupMenuItem(
-                                                    child: InkWell(
-                                                        onTap: () async {
-                                                          // de_Trans_item(index);
-                                                          showDialog<String>(
-                                                            context: context,
-                                                            builder: (BuildContext
-                                                                    context) =>
-                                                                AlertDialog(
-                                                              shape: const RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              20.0))),
-                                                              title: Row(
-                                                                children: [
-                                                                  Expanded(
-                                                                    child:
-                                                                        Center(
-                                                                      child:
-                                                                          Text(
-                                                                        'รหัสผ่านการทำรายการ', // Navigator.pop(context, 'OK');
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                AdminScafScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .end,
-                                                                      children: [
-                                                                        IconButton(
-                                                                            onPressed:
-                                                                                () {
-                                                                              setState(() {
-                                                                                Formpasslok_.clear();
-                                                                                Formposlok_.clear();
-                                                                              });
-                                                                              Navigator.pop(context);
-                                                                            },
-                                                                            icon:
-                                                                                Icon(Icons.close, color: Colors.black)),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              actions: <Widget>[
-                                                                Form(
-                                                                  key: _formKey,
-                                                                  child: Column(
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                  flex: 1,
+                                                  child: PopupMenuButton(
+                                                    itemBuilder: (BuildContext
+                                                            context) =>
+                                                        [
+                                                      PopupMenuItem(
+                                                        child: InkWell(
+                                                            onTap: () async {
+                                                              // de_Trans_item(index);
+                                                              showDialog<
+                                                                  String>(
+                                                                context:
+                                                                    context,
+                                                                builder: (BuildContext
+                                                                        context) =>
+                                                                    AlertDialog(
+                                                                  shape: const RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(20.0))),
+                                                                  title: Row(
                                                                     children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            EdgeInsets.all(8.0),
+                                                                      Expanded(
                                                                         child:
-                                                                            TextFormField(
-                                                                          controller:
-                                                                              Formposlok_,
-                                                                          // obscureText:
-                                                                          //     true,
-                                                                          validator:
-                                                                              (value) {
-                                                                            if (value == null ||
-                                                                                value.isEmpty) {
-                                                                              return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                            }
-                                                                            // if (int.parse(value.toString()) < 13) {
-                                                                            //   return '< 13';
-                                                                            // }
-                                                                            return null;
-                                                                          },
-
-                                                                          // maxLength: 13,
-                                                                          cursorColor:
-                                                                              Colors.green,
-                                                                          decoration: InputDecoration(
-                                                                              fillColor: Colors.white.withOpacity(0.3),
-                                                                              filled: true,
-                                                                              // prefixIcon: const Icon(Icons.water,
-                                                                              //     color: Colors.blue),
-                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                              focusedBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                              enabledBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.grey,
-                                                                                ),
-                                                                              ),
-                                                                              labelText: 'หมายเหตุ',
-                                                                              labelStyle: const TextStyle(
-                                                                                color: ManageScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T,
-                                                                              )),
-                                                                          // inputFormatters: <TextInputFormatter>[
-                                                                          //   // for below version 2 use this
-                                                                          //   FilteringTextInputFormatter.allow(
-                                                                          //       RegExp(r'[0-9]')),
-                                                                          //   // for version 2 and greater youcan also use this
-                                                                          //   FilteringTextInputFormatter.digitsOnly
-                                                                          // ],
+                                                                            Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'รหัสผ่านการทำรายการ', // Navigator.pop(context, 'OK');
+                                                                            style: TextStyle(
+                                                                                color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T),
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            EdgeInsets.all(8.0),
+                                                                      Expanded(
                                                                         child:
-                                                                            TextFormField(
-                                                                          keyboardType:
-                                                                              TextInputType.number,
-                                                                          controller:
-                                                                              Formpasslok_,
-                                                                          obscureText:
-                                                                              true,
-                                                                          validator:
-                                                                              (value) {
-                                                                            if (value == null ||
-                                                                                value.isEmpty) {
-                                                                              return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                            }
-                                                                            // if (int.parse(value.toString()) < 13) {
-                                                                            //   return '< 13';
-                                                                            // }
-                                                                            return null;
-                                                                          },
-                                                                          onFieldSubmitted:
-                                                                              (value) async {
-                                                                            if (_formKey.currentState!.validate()) {
-                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                              var ren = preferences.getString('renTalSer');
-                                                                              var user = preferences.getString('ser');
-                                                                              print('value>>>>$value');
-                                                                              String url = '${MyConstant().domain}/GC_Passcode.php?isAdd=true&puser=$value&ren=$ren';
-
-                                                                              try {
-                                                                                var response = await http.get(Uri.parse(url));
-
-                                                                                var result = json.decode(response.body);
-                                                                                print(result);
-                                                                                if (result.toString() == 'true') {
-                                                                                  de_Trans_item(index);
-                                                                                } else {
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.end,
+                                                                          children: [
+                                                                            IconButton(
+                                                                                onPressed: () {
                                                                                   setState(() {
                                                                                     Formpasslok_.clear();
                                                                                     Formposlok_.clear();
                                                                                   });
-                                                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                                                    SnackBar(content: Text('Password ผิดพลาด กรุณาลองใหม่!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                                  );
-                                                                                  Navigator.pop(context, 'OK');
-                                                                                  Navigator.pop(context, 'OK');
-                                                                                }
-                                                                              } catch (e) {}
-                                                                            }
-                                                                          },
-
-                                                                          // maxLength: 13,
-                                                                          cursorColor:
-                                                                              Colors.green,
-                                                                          decoration: InputDecoration(
-                                                                              fillColor: Colors.white.withOpacity(0.3),
-                                                                              filled: true,
-                                                                              // prefixIcon: const Icon(Icons.water,
-                                                                              //     color: Colors.blue),
-                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                              focusedBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                              enabledBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.grey,
-                                                                                ),
-                                                                              ),
-                                                                              labelText: 'Password',
-                                                                              labelStyle: const TextStyle(
-                                                                                color: ManageScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T,
-                                                                              )),
-                                                                          // inputFormatters: <TextInputFormatter>[
-                                                                          //   // for below version 2 use this
-                                                                          //   FilteringTextInputFormatter.allow(
-                                                                          //       RegExp(r'[0-9]')),
-                                                                          //   // for version 2 and greater youcan also use this
-                                                                          //   FilteringTextInputFormatter.digitsOnly
-                                                                          // ],
+                                                                                  Navigator.pop(context);
+                                                                                },
+                                                                                icon: Icon(Icons.close, color: Colors.black)),
+                                                                          ],
                                                                         ),
                                                                       ),
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
+                                                                    ],
+                                                                  ),
+                                                                  actions: <Widget>[
+                                                                    Form(
+                                                                      key:
+                                                                          _formKey,
+                                                                      child:
+                                                                          Column(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                TextFormField(
+                                                                              controller: Formposlok_,
+                                                                              // obscureText:
+                                                                              //     true,
+                                                                              validator: (value) {
+                                                                                if (value == null || value.isEmpty) {
+                                                                                  return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                                }
+                                                                                // if (int.parse(value.toString()) < 13) {
+                                                                                //   return '< 13';
+                                                                                // }
+                                                                                return null;
+                                                                              },
+
+                                                                              // maxLength: 13,
+                                                                              cursorColor: Colors.green,
+                                                                              decoration: InputDecoration(
+                                                                                  fillColor: Colors.white.withOpacity(0.3),
+                                                                                  filled: true,
+                                                                                  // prefixIcon: const Icon(Icons.water,
+                                                                                  //     color: Colors.blue),
+                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                  focusedBorder: const OutlineInputBorder(
+                                                                                    borderRadius: BorderRadius.only(
+                                                                                      topRight: Radius.circular(15),
+                                                                                      topLeft: Radius.circular(15),
+                                                                                      bottomRight: Radius.circular(15),
+                                                                                      bottomLeft: Radius.circular(15),
+                                                                                    ),
+                                                                                    borderSide: BorderSide(
+                                                                                      width: 1,
+                                                                                      color: Colors.black,
+                                                                                    ),
+                                                                                  ),
+                                                                                  enabledBorder: const OutlineInputBorder(
+                                                                                    borderRadius: BorderRadius.only(
+                                                                                      topRight: Radius.circular(15),
+                                                                                      topLeft: Radius.circular(15),
+                                                                                      bottomRight: Radius.circular(15),
+                                                                                      bottomLeft: Radius.circular(15),
+                                                                                    ),
+                                                                                    borderSide: BorderSide(
+                                                                                      width: 1,
+                                                                                      color: Colors.grey,
+                                                                                    ),
+                                                                                  ),
+                                                                                  labelText: 'หมายเหตุ',
+                                                                                  labelStyle: const TextStyle(
+                                                                                    color: ManageScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight:
+                                                                                    //     FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T,
+                                                                                  )),
+                                                                              // inputFormatters: <TextInputFormatter>[
+                                                                              //   // for below version 2 use this
+                                                                              //   FilteringTextInputFormatter.allow(
+                                                                              //       RegExp(r'[0-9]')),
+                                                                              //   // for version 2 and greater youcan also use this
+                                                                              //   FilteringTextInputFormatter.digitsOnly
+                                                                              // ],
+                                                                            ),
+                                                                          ),
+                                                                          Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                TextFormField(
+                                                                              keyboardType: TextInputType.number,
+                                                                              controller: Formpasslok_,
+                                                                              obscureText: true,
+                                                                              validator: (value) {
+                                                                                if (value == null || value.isEmpty) {
+                                                                                  return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                                }
+                                                                                // if (int.parse(value.toString()) < 13) {
+                                                                                //   return '< 13';
+                                                                                // }
+                                                                                return null;
+                                                                              },
+                                                                              onFieldSubmitted: (value) async {
+                                                                                if (_formKey.currentState!.validate()) {
+                                                                                  SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                  var ren = preferences.getString('renTalSer');
+                                                                                  var user = preferences.getString('ser');
+                                                                                  print('value>>>>$value');
+                                                                                  String url = '${MyConstant().domain}/GC_Passcode.php?isAdd=true&puser=$value&ren=$ren';
+
+                                                                                  try {
+                                                                                    var response = await http.get(Uri.parse(url));
+
+                                                                                    var result = json.decode(response.body);
+                                                                                    print(result);
+                                                                                    if (result.toString() == 'true') {
+                                                                                      de_Trans_item(index);
+                                                                                    } else {
+                                                                                      setState(() {
+                                                                                        Formpasslok_.clear();
+                                                                                        Formposlok_.clear();
+                                                                                      });
+                                                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                                                        SnackBar(content: Text('Password ผิดพลาด กรุณาลองใหม่!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                      );
+                                                                                      Navigator.pop(context, 'OK');
+                                                                                      Navigator.pop(context, 'OK');
+                                                                                    }
+                                                                                  } catch (e) {}
+                                                                                }
+                                                                              },
+
+                                                                              // maxLength: 13,
+                                                                              cursorColor: Colors.green,
+                                                                              decoration: InputDecoration(
+                                                                                  fillColor: Colors.white.withOpacity(0.3),
+                                                                                  filled: true,
+                                                                                  // prefixIcon: const Icon(Icons.water,
+                                                                                  //     color: Colors.blue),
+                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                  focusedBorder: const OutlineInputBorder(
+                                                                                    borderRadius: BorderRadius.only(
+                                                                                      topRight: Radius.circular(15),
+                                                                                      topLeft: Radius.circular(15),
+                                                                                      bottomRight: Radius.circular(15),
+                                                                                      bottomLeft: Radius.circular(15),
+                                                                                    ),
+                                                                                    borderSide: BorderSide(
+                                                                                      width: 1,
+                                                                                      color: Colors.black,
+                                                                                    ),
+                                                                                  ),
+                                                                                  enabledBorder: const OutlineInputBorder(
+                                                                                    borderRadius: BorderRadius.only(
+                                                                                      topRight: Radius.circular(15),
+                                                                                      topLeft: Radius.circular(15),
+                                                                                      bottomRight: Radius.circular(15),
+                                                                                      bottomLeft: Radius.circular(15),
+                                                                                    ),
+                                                                                    borderSide: BorderSide(
+                                                                                      width: 1,
+                                                                                      color: Colors.grey,
+                                                                                    ),
+                                                                                  ),
+                                                                                  labelText: 'Password',
+                                                                                  labelStyle: const TextStyle(
+                                                                                    color: ManageScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight:
+                                                                                    //     FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T,
+                                                                                  )),
+                                                                              // inputFormatters: <TextInputFormatter>[
+                                                                              //   // for below version 2 use this
+                                                                              //   FilteringTextInputFormatter.allow(
+                                                                              //       RegExp(r'[0-9]')),
+                                                                              //   // for version 2 and greater youcan also use this
+                                                                              //   FilteringTextInputFormatter.digitsOnly
+                                                                              // ],
+                                                                            ),
+                                                                          ),
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                                Container(
+                                                                                  width: 150,
+                                                                                  decoration: const BoxDecoration(
+                                                                                    color: Colors.black,
+                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                  ),
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: TextButton(
+                                                                                    onPressed: () async {
+                                                                                      if (_formKey.currentState!.validate()) {
+                                                                                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                        var ren = preferences.getString('renTalSer');
+                                                                                        var user = preferences.getString('ser');
+                                                                                        var vel = Formpasslok_.text.trim();
+                                                                                        print('vel>>>>$vel');
+                                                                                        String url = '${MyConstant().domain}/GC_Passcode.php?isAdd=true&puser=$vel&ren=$ren';
+
+                                                                                        try {
+                                                                                          var response = await http.get(Uri.parse(url));
+
+                                                                                          var result = json.decode(response.body);
+                                                                                          print(result);
+                                                                                          if (result.toString() == 'true') {
+                                                                                            de_Trans_item(index);
+                                                                                          } else {
+                                                                                            setState(() {
+                                                                                              Formpasslok_.clear();
+                                                                                              Formposlok_.clear();
+                                                                                            });
+                                                                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                                                              SnackBar(content: Text('Password ผิดพลาด กรุณาลองใหม่!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                            );
+                                                                                            Navigator.pop(context, 'OK');
+                                                                                            // Navigator.pop(context, 'OK');
+                                                                                          }
+                                                                                        } catch (e) {}
+                                                                                      }
+                                                                                    },
+                                                                                    child: const Text(
+                                                                                      'Submit',
+                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                                padding:
+                                                                    const EdgeInsets
                                                                             .all(
-                                                                            8.0),
+                                                                        10),
+                                                                width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                                child: Row(
+                                                                  children: [
+                                                                    Expanded(
                                                                         child:
-                                                                            Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.center,
+                                                                            Text(
+                                                                      'ยกเลิกรายการตั้งหนี้',
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          //fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ))
+                                                                  ],
+                                                                ))),
+                                                      ),
+                                                      if (_TransModels[index]
+                                                              .ucost ==
+                                                          '0.00')
+                                                        PopupMenuItem(
+                                                          child: InkWell(
+                                                              onTap: () async {
+                                                                showDialog<
+                                                                    String>(
+                                                                  context:
+                                                                      context,
+                                                                  builder: (BuildContext
+                                                                          context) =>
+                                                                      AlertDialog(
+                                                                    shape: const RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(20.0))),
+                                                                    title: Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'แบ่งชำระ', // Navigator.pop(context, 'OK');
+                                                                              style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.end,
+                                                                            children: [
+                                                                              IconButton(
+                                                                                  onPressed: () {
+                                                                                    setState(() {
+                                                                                      Formposlokpri_.clear();
+                                                                                    });
+                                                                                    Navigator.pop(context);
+                                                                                  },
+                                                                                  icon: Icon(Icons.close, color: Colors.black)),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    actions: <Widget>[
+                                                                      Form(
+                                                                        key:
+                                                                            _formKey,
+                                                                        child:
+                                                                            Column(
                                                                           children: [
-                                                                            Container(
-                                                                              width: 150,
-                                                                              decoration: const BoxDecoration(
-                                                                                color: Colors.black,
-                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                              ),
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: TextButton(
-                                                                                onPressed: () async {
+                                                                            Padding(
+                                                                              padding: EdgeInsets.all(8.0),
+                                                                              child: TextFormField(
+                                                                                controller: Formposlokpri_,
+                                                                                // obscureText:
+                                                                                //     true,
+                                                                                validator: (value) {
+                                                                                  if (value == null || value.isEmpty) {
+                                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                                  }
+                                                                                  // if (int.parse(value.toString()) < 13) {
+                                                                                  //   return '< 13';
+                                                                                  // }
+                                                                                  return null;
+                                                                                },
+
+                                                                                onFieldSubmitted: (val) async {
                                                                                   if (_formKey.currentState!.validate()) {
                                                                                     SharedPreferences preferences = await SharedPreferences.getInstance();
                                                                                     var ren = preferences.getString('renTalSer');
                                                                                     var user = preferences.getString('ser');
-                                                                                    var vel = Formpasslok_.text.trim();
+
+                                                                                    var sertran = _TransModels[index].ser;
+                                                                                    var vel = Formposlokpri_.text.trim();
                                                                                     print('vel>>>>$vel');
-                                                                                    String url = '${MyConstant().domain}/GC_Passcode.php?isAdd=true&puser=$vel&ren=$ren';
+                                                                                    String url = '${MyConstant().domain}/c_trans_select_sub.php?isAdd=true&ren=$ren&puser=$vel&sertran=$sertran';
 
                                                                                     try {
                                                                                       var response = await http.get(Uri.parse(url));
@@ -3395,25 +3772,124 @@ class _PaysState extends State<Pays> {
                                                                                       var result = json.decode(response.body);
                                                                                       print(result);
                                                                                       if (result.toString() == 'true') {
-                                                                                        de_Trans_item(index);
+                                                                                        setState(() {
+                                                                                          red_Trans_select2();
+                                                                                          red_Trans_bill();
+                                                                                          Formposlokpri_.clear();
+                                                                                        });
+                                                                                        Navigator.pop(context);
                                                                                       } else {
                                                                                         setState(() {
-                                                                                          Formpasslok_.clear();
-                                                                                          Formposlok_.clear();
+                                                                                          Formposlokpri_.clear();
                                                                                         });
-                                                                                        ScaffoldMessenger.of(context).showSnackBar(
-                                                                                          SnackBar(content: Text('Password ผิดพลาด กรุณาลองใหม่!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                                        );
-                                                                                        Navigator.pop(context, 'OK');
-                                                                                        // Navigator.pop(context, 'OK');
+
+                                                                                        Navigator.pop(context);
                                                                                       }
                                                                                     } catch (e) {}
+                                                                                    Navigator.pop(context);
                                                                                   }
                                                                                 },
-                                                                                child: const Text(
-                                                                                  'Submit',
-                                                                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                ),
+                                                                                cursorColor: Colors.green,
+                                                                                decoration: InputDecoration(
+                                                                                    fillColor: Colors.white.withOpacity(0.3),
+                                                                                    filled: true,
+                                                                                    // prefixIcon: const Icon(Icons.water,
+                                                                                    //     color: Colors.blue),
+                                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                    focusedBorder: const OutlineInputBorder(
+                                                                                      borderRadius: BorderRadius.only(
+                                                                                        topRight: Radius.circular(15),
+                                                                                        topLeft: Radius.circular(15),
+                                                                                        bottomRight: Radius.circular(15),
+                                                                                        bottomLeft: Radius.circular(15),
+                                                                                      ),
+                                                                                      borderSide: BorderSide(
+                                                                                        width: 1,
+                                                                                        color: Colors.black,
+                                                                                      ),
+                                                                                    ),
+                                                                                    enabledBorder: const OutlineInputBorder(
+                                                                                      borderRadius: BorderRadius.only(
+                                                                                        topRight: Radius.circular(15),
+                                                                                        topLeft: Radius.circular(15),
+                                                                                        bottomRight: Radius.circular(15),
+                                                                                        bottomLeft: Radius.circular(15),
+                                                                                      ),
+                                                                                      borderSide: BorderSide(
+                                                                                        width: 1,
+                                                                                        color: Colors.grey,
+                                                                                      ),
+                                                                                    ),
+                                                                                    labelText: 'จำนวนเงิน',
+                                                                                    labelStyle: const TextStyle(
+                                                                                      color: ManageScreen_Color.Colors_Text2_,
+                                                                                      // fontWeight:
+                                                                                      //     FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                    )),
+                                                                                // inputFormatters: <TextInputFormatter>[
+                                                                                //   // for below version 2 use this
+                                                                                //   FilteringTextInputFormatter.allow(
+                                                                                //       RegExp(r'[0-9]')),
+                                                                                //   // for version 2 and greater youcan also use this
+                                                                                //   FilteringTextInputFormatter.digitsOnly
+                                                                                // ],
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                children: [
+                                                                                  Container(
+                                                                                    width: 150,
+                                                                                    decoration: const BoxDecoration(
+                                                                                      color: Colors.black,
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    ),
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: TextButton(
+                                                                                      onPressed: () async {
+                                                                                        if (_formKey.currentState!.validate()) {
+                                                                                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                          var ren = preferences.getString('renTalSer');
+                                                                                          var user = preferences.getString('ser');
+
+                                                                                          var sertran = _TransModels[index].ser;
+                                                                                          var vel = Formposlokpri_.text.trim();
+                                                                                          print('vel>>>>$vel');
+                                                                                          String url = '${MyConstant().domain}/c_trans_select_sub.php?isAdd=true&ren=$ren&puser=$vel&sertran=$sertran';
+
+                                                                                          try {
+                                                                                            var response = await http.get(Uri.parse(url));
+
+                                                                                            var result = json.decode(response.body);
+                                                                                            print(result);
+                                                                                            if (result.toString() == 'true') {
+                                                                                              setState(() {
+                                                                                                red_Trans_select2();
+                                                                                                red_Trans_bill();
+                                                                                                Formposlokpri_.clear();
+                                                                                              });
+                                                                                              Navigator.pop(context);
+                                                                                            } else {
+                                                                                              setState(() {
+                                                                                                Formposlokpri_.clear();
+                                                                                              });
+
+                                                                                              Navigator.pop(context);
+                                                                                            }
+                                                                                          } catch (e) {}
+                                                                                          Navigator.pop(context);
+                                                                                        }
+                                                                                      },
+                                                                                      child: const Text(
+                                                                                        'Submit',
+                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
                                                                               ),
                                                                             ),
                                                                           ],
@@ -3421,188 +3897,114 @@ class _PaysState extends State<Pays> {
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(10),
-                                                            width:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                            child: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                    child: Text(
-                                                                  'ยกเลิกรายการตั้งหนี้',
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T),
-                                                                ))
-                                                              ],
-                                                            ))),
-                                                  ),
-                                                  if (_TransModels[index]
-                                                          .ucost ==
-                                                      '0.00')
-                                                    PopupMenuItem(
-                                                      child: InkWell(
-                                                          onTap: () async {
-                                                            showDialog<String>(
-                                                              context: context,
-                                                              builder: (BuildContext
-                                                                      context) =>
-                                                                  AlertDialog(
-                                                                shape: const RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.all(
-                                                                            Radius.circular(20.0))),
-                                                                title: Row(
-                                                                  children: [
-                                                                    Expanded(
-                                                                      child:
-                                                                          Center(
-                                                                        child:
-                                                                            Text(
-                                                                          'แบ่งชำระ', // Navigator.pop(context, 'OK');
-                                                                          style: TextStyle(
-                                                                              color: AdminScafScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Expanded(
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.end,
-                                                                        children: [
-                                                                          IconButton(
-                                                                              onPressed: () {
-                                                                                setState(() {
-                                                                                  Formposlokpri_.clear();
-                                                                                });
-                                                                                Navigator.pop(context);
-                                                                              },
-                                                                              icon: Icon(Icons.close, color: Colors.black)),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                actions: <Widget>[
-                                                                  Form(
-                                                                    key:
-                                                                        _formKey,
-                                                                    child:
-                                                                        Column(
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding:
-                                                                              EdgeInsets.all(8.0),
+                                                                );
+                                                              },
+                                                              child: Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          10),
+                                                                  width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Expanded(
                                                                           child:
-                                                                              TextFormField(
-                                                                            controller:
-                                                                                Formposlokpri_,
-                                                                            // obscureText:
-                                                                            //     true,
-                                                                            validator:
-                                                                                (value) {
-                                                                              if (value == null || value.isEmpty) {
-                                                                                return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                              }
-                                                                              // if (int.parse(value.toString()) < 13) {
-                                                                              //   return '< 13';
-                                                                              // }
-                                                                              return null;
-                                                                            },
-
-                                                                            // maxLength: 13,
-                                                                            cursorColor:
-                                                                                Colors.green,
-                                                                            decoration: InputDecoration(
-                                                                                fillColor: Colors.white.withOpacity(0.3),
-                                                                                filled: true,
-                                                                                // prefixIcon: const Icon(Icons.water,
-                                                                                //     color: Colors.blue),
-                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                focusedBorder: const OutlineInputBorder(
-                                                                                  borderRadius: BorderRadius.only(
-                                                                                    topRight: Radius.circular(15),
-                                                                                    topLeft: Radius.circular(15),
-                                                                                    bottomRight: Radius.circular(15),
-                                                                                    bottomLeft: Radius.circular(15),
-                                                                                  ),
-                                                                                  borderSide: BorderSide(
-                                                                                    width: 1,
-                                                                                    color: Colors.black,
-                                                                                  ),
-                                                                                ),
-                                                                                enabledBorder: const OutlineInputBorder(
-                                                                                  borderRadius: BorderRadius.only(
-                                                                                    topRight: Radius.circular(15),
-                                                                                    topLeft: Radius.circular(15),
-                                                                                    bottomRight: Radius.circular(15),
-                                                                                    bottomLeft: Radius.circular(15),
-                                                                                  ),
-                                                                                  borderSide: BorderSide(
-                                                                                    width: 1,
-                                                                                    color: Colors.grey,
-                                                                                  ),
-                                                                                ),
-                                                                                labelText: 'จำนวนเงิน',
-                                                                                labelStyle: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T,
-                                                                                )),
-                                                                            // inputFormatters: <TextInputFormatter>[
-                                                                            //   // for below version 2 use this
-                                                                            //   FilteringTextInputFormatter.allow(
-                                                                            //       RegExp(r'[0-9]')),
-                                                                            //   // for version 2 and greater youcan also use this
-                                                                            //   FilteringTextInputFormatter.digitsOnly
-                                                                            // ],
+                                                                              Text(
+                                                                        'แบ่งชำระ',
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ))
+                                                                    ],
+                                                                  ))),
+                                                        ),
+                                                      if (_TransModels[index]
+                                                              .ucost ==
+                                                          '0.00')
+                                                        PopupMenuItem(
+                                                          child: InkWell(
+                                                              onTap: () async {
+                                                                showDialog<
+                                                                    String>(
+                                                                  context:
+                                                                      context,
+                                                                  builder: (BuildContext
+                                                                          context) =>
+                                                                      AlertDialog(
+                                                                    shape: const RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(20.0))),
+                                                                    title: Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'ส่วนลดรายการ', // Navigator.pop(context, 'OK');
+                                                                              style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                        Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                        Expanded(
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:
-                                                                                MainAxisAlignment.center,
+                                                                                MainAxisAlignment.end,
                                                                             children: [
-                                                                              Container(
-                                                                                width: 150,
-                                                                                decoration: const BoxDecoration(
-                                                                                  color: Colors.black,
-                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                ),
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: TextButton(
-                                                                                  onPressed: () async {
-                                                                                    if (_formKey.currentState!.validate()) {
-                                                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                      var ren = preferences.getString('renTalSer');
-                                                                                      var user = preferences.getString('ser');
+                                                                              IconButton(
+                                                                                  onPressed: () {
+                                                                                    setState(() {
+                                                                                      Formposlokdispri_.clear();
+                                                                                    });
+                                                                                    Navigator.pop(context);
+                                                                                  },
+                                                                                  icon: Icon(Icons.close, color: Colors.black)),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    actions: <Widget>[
+                                                                      Form(
+                                                                        key:
+                                                                            _formKey,
+                                                                        child:
+                                                                            Column(
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: EdgeInsets.all(8.0),
+                                                                              child: TextFormField(
+                                                                                controller: Formposlokdispri_,
+                                                                                // obscureText:
+                                                                                //     true,
+                                                                                validator: (value) {
+                                                                                  if (value == null || value.isEmpty) {
+                                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                                  }
+                                                                                  // if (int.parse(value.toString()) < 13) {
+                                                                                  //   return '< 13';
+                                                                                  // }
+                                                                                  return null;
+                                                                                },
 
-                                                                                      var sertran = _TransModels[index].ser;
-                                                                                      var vel = Formposlokpri_.text.trim();
+                                                                                onFieldSubmitted: (val) async {
+                                                                                  if (_formKey.currentState!.validate()) {
+                                                                                    SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                    var ren = preferences.getString('renTalSer');
+                                                                                    var user = preferences.getString('ser');
+
+                                                                                    var sertran = _TransModels[index].ser;
+                                                                                    var vel = Formposlokdispri_.text.trim();
+                                                                                    if (double.parse(vel) <= double.parse(_TransModels[index].total!)) {
                                                                                       print('vel>>>>$vel');
-                                                                                      String url = '${MyConstant().domain}/c_trans_select_sub.php?isAdd=true&ren=$ren&puser=$vel&sertran=$sertran';
+                                                                                      String url = '${MyConstant().domain}/c_trans_select_dis.php?isAdd=true&ren=$ren&puser=$vel&sertran=$sertran';
 
                                                                                       try {
                                                                                         var response = await http.get(Uri.parse(url));
@@ -3613,69 +4015,191 @@ class _PaysState extends State<Pays> {
                                                                                           setState(() {
                                                                                             red_Trans_select2();
                                                                                             red_Trans_bill();
-                                                                                            Formposlokpri_.clear();
+                                                                                            Formposlokdispri_.clear();
                                                                                           });
                                                                                           Navigator.pop(context);
                                                                                         } else {
                                                                                           setState(() {
-                                                                                            Formposlokpri_.clear();
+                                                                                            Formposlokdispri_.clear();
                                                                                           });
 
                                                                                           Navigator.pop(context);
                                                                                         }
                                                                                       } catch (e) {}
                                                                                       Navigator.pop(context);
+                                                                                    } else {
+                                                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                                                        const SnackBar(content: Text('กรอกจำนวนเงินให้ถูกต้อง', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                      );
                                                                                     }
-                                                                                  },
-                                                                                  child: const Text(
-                                                                                    'Submit',
-                                                                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                  ),
-                                                                                ),
+                                                                                  }
+                                                                                },
+                                                                                cursorColor: Colors.green,
+                                                                                decoration: InputDecoration(
+                                                                                    fillColor: Colors.white.withOpacity(0.3),
+                                                                                    filled: true,
+                                                                                    // prefixIcon: const Icon(Icons.water,
+                                                                                    //     color: Colors.blue),
+                                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                    focusedBorder: const OutlineInputBorder(
+                                                                                      borderRadius: BorderRadius.only(
+                                                                                        topRight: Radius.circular(15),
+                                                                                        topLeft: Radius.circular(15),
+                                                                                        bottomRight: Radius.circular(15),
+                                                                                        bottomLeft: Radius.circular(15),
+                                                                                      ),
+                                                                                      borderSide: BorderSide(
+                                                                                        width: 1,
+                                                                                        color: Colors.black,
+                                                                                      ),
+                                                                                    ),
+                                                                                    enabledBorder: const OutlineInputBorder(
+                                                                                      borderRadius: BorderRadius.only(
+                                                                                        topRight: Radius.circular(15),
+                                                                                        topLeft: Radius.circular(15),
+                                                                                        bottomRight: Radius.circular(15),
+                                                                                        bottomLeft: Radius.circular(15),
+                                                                                      ),
+                                                                                      borderSide: BorderSide(
+                                                                                        width: 1,
+                                                                                        color: Colors.grey,
+                                                                                      ),
+                                                                                    ),
+                                                                                    labelText: 'จำนวนเงิน',
+                                                                                    labelStyle: const TextStyle(
+                                                                                      color: ManageScreen_Color.Colors_Text2_,
+                                                                                      // fontWeight:
+                                                                                      //     FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                    )),
+                                                                                // inputFormatters: <TextInputFormatter>[
+                                                                                //   // for below version 2 use this
+                                                                                //   FilteringTextInputFormatter.allow(
+                                                                                //       RegExp(r'[0-9]')),
+                                                                                //   // for version 2 and greater youcan also use this
+                                                                                //   FilteringTextInputFormatter.digitsOnly
+                                                                                // ],
                                                                               ),
-                                                                            ],
-                                                                          ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                children: [
+                                                                                  Container(
+                                                                                    width: 150,
+                                                                                    decoration: const BoxDecoration(
+                                                                                      color: Colors.black,
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    ),
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: TextButton(
+                                                                                      onPressed: () async {
+                                                                                        if (_formKey.currentState!.validate()) {
+                                                                                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                          var ren = preferences.getString('renTalSer');
+                                                                                          var user = preferences.getString('ser');
+
+                                                                                          var sertran = _TransModels[index].ser;
+                                                                                          var vel = Formposlokdispri_.text.trim();
+                                                                                          if (double.parse(vel) <= double.parse(_TransModels[index].total!)) {
+                                                                                            print('vel>>>>$vel');
+                                                                                            String url = '${MyConstant().domain}/c_trans_select_dis.php?isAdd=true&ren=$ren&puser=$vel&sertran=$sertran';
+
+                                                                                            try {
+                                                                                              var response = await http.get(Uri.parse(url));
+
+                                                                                              var result = json.decode(response.body);
+                                                                                              print(result);
+                                                                                              if (result.toString() == 'true') {
+                                                                                                setState(() {
+                                                                                                  red_Trans_select2();
+                                                                                                  red_Trans_bill();
+                                                                                                  Formposlokdispri_.clear();
+                                                                                                });
+                                                                                                Navigator.pop(context);
+                                                                                              } else {
+                                                                                                setState(() {
+                                                                                                  Formposlokdispri_.clear();
+                                                                                                });
+
+                                                                                                Navigator.pop(context);
+                                                                                              }
+                                                                                            } catch (e) {}
+                                                                                            Navigator.pop(context);
+                                                                                          } else {
+                                                                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                                                              const SnackBar(content: Text('กรอกจำนวนเงินให้ถูกต้อง', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                            );
+                                                                                          }
+                                                                                        }
+                                                                                      },
+                                                                                      child: const Text(
+                                                                                        'Submit',
+                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
                                                                         ),
-                                                                      ],
-                                                                    ),
+                                                                      ),
+                                                                    ],
                                                                   ),
-                                                                ],
-                                                              ),
-                                                            );
-                                                          },
-                                                          child: Container(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(10),
-                                                              width:
-                                                                  MediaQuery.of(
+                                                                );
+                                                              },
+                                                              child: Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          10),
+                                                                  width: MediaQuery.of(
                                                                           context)
                                                                       .size
                                                                       .width,
-                                                              child: Row(
-                                                                children: [
-                                                                  Expanded(
-                                                                      child:
-                                                                          Text(
-                                                                    'แบ่งชำระ',
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ))
-                                                                ],
-                                                              ))),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                          child:
+                                                                              Text(
+                                                                        'ส่วนลดรายการ',
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ))
+                                                                    ],
+                                                                  ))),
+                                                        ),
+                                                    ],
+                                                    child: AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      '${index + 1}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
                                                     ),
-                                                ],
+                                                  )),
+                                              Expanded(
+                                                flex: 2,
                                                 child: AutoSizeText(
                                                   minFontSize: 10,
                                                   maxFontSize: 15,
                                                   maxLines: 1,
-                                                  '${index + 1}',
-                                                  textAlign: TextAlign.center,
+                                                  '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}', //${_TransModels[index].date}
+                                                  textAlign: TextAlign.start,
                                                   style: const TextStyle(
                                                       color:
                                                           PeopleChaoScreen_Color
@@ -3684,127 +4208,201 @@ class _PaysState extends State<Pays> {
                                                       fontFamily:
                                                           Font_.Fonts_T),
                                                 ),
-                                              )),
-                                          Expanded(
-                                            flex: 2,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}', //${_TransModels[index].date}
-                                              textAlign: TextAlign.start,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${_TransModels[index].name}',
+                                                  textAlign: TextAlign.start,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${_TransModels[index].tqty}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  _TransModels[index]
+                                                              .unit_con ==
+                                                          null
+                                                      ? ''
+                                                      : '${_TransModels[index].unit_con}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${_TransModels[index].vat}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_TransModels[index].wht!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_TransModels[index].total!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                  flex: 1,
+                                                  child: Center(
+                                                    child: IconButton(
+                                                        onPressed: () {
+                                                          de_Trans_select(
+                                                              index);
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.remove_circle,
+                                                          color: Colors.red,
+                                                        )),
+                                                  )),
+                                            ],
                                           ),
-                                          Expanded(
-                                            flex: 2,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              '${_TransModels[index].name}',
-                                              textAlign: TextAlign.start,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              '${_TransModels[index].tqty}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              _TransModels[index].unit_con ==
-                                                      null
-                                                  ? ''
-                                                  : '${_TransModels[index].unit_con}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              '${_TransModels[index].vat}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              '${nFormat.format(double.parse(_TransModels[index].wht!))}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              '${nFormat.format(double.parse(_TransModels[index].total!))}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                              flex: 1,
-                                              child: Center(
-                                                child: IconButton(
-                                                    onPressed: () {
-                                                      de_Trans_select(index);
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.remove_circle,
-                                                      color: Colors.red,
-                                                    )),
-                                              )),
+                                          double.parse(_TransModels[index]
+                                                      .dis!) ==
+                                                  0.0
+                                              ? SizedBox()
+                                              : Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: SizedBox(),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: Icon(
+                                                        Icons
+                                                            .subdirectory_arrow_right,
+                                                        // color: Colors.red,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 15,
+                                                        maxLines: 1,
+                                                        'ส่วนลด',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: const TextStyle(
+                                                            color: Colors.red,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: SizedBox(),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: SizedBox(),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: SizedBox(),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: SizedBox(),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 15,
+                                                        maxLines: 1,
+                                                        '${nFormat.format(double.parse(_TransModels[index].dis!))}', //${nFormat.format(double.parse(_TransModels[index].total!))}
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: SizedBox(),
+                                                    ),
+                                                  ],
+                                                )
                                         ],
                                       ),
                                     ),
@@ -4081,9 +4679,8 @@ class _PaysState extends State<Pays> {
                                                                           ),
                                                                         ),
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:
@@ -4385,6 +4982,40 @@ class _PaysState extends State<Pays> {
                                                 ),
                                                 Row(
                                                   children: [
+                                                    const Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 15,
+                                                        'ส่วนลดรายการ',
+                                                        style: TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 15,
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        '${nFormat.format(sum_tran_dis)}',
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
                                                     // Expanded(
                                                     //   flex: 1,
                                                     //   child: Row(
@@ -4458,7 +5089,9 @@ class _PaysState extends State<Pays> {
                                                                   Form_payment1
                                                                       .text = (sum_amt -
                                                                           sum_disamt -
-                                                                          dis_sum_Pakan)
+                                                                          dis_sum_Pakan -
+                                                                          sum_tran_dis -
+                                                                          dis_sum_Matjum)
                                                                       .toStringAsFixed(
                                                                           2)
                                                                       .toString();
@@ -4555,6 +5188,7 @@ class _PaysState extends State<Pays> {
                                                         ],
                                                       ),
                                                     ),
+
                                                     Expanded(
                                                       flex: 1,
                                                       child: SizedBox(
@@ -4595,7 +5229,9 @@ class _PaysState extends State<Pays> {
                                                               Form_payment1
                                                                   .text = (sum_amt -
                                                                       sum_disamt -
-                                                                      dis_sum_Pakan)
+                                                                      dis_sum_Pakan -
+                                                                      sum_tran_dis -
+                                                                      dis_sum_Matjum)
                                                                   .toStringAsFixed(
                                                                       2)
                                                                   .toString();
@@ -4756,9 +5392,9 @@ class _PaysState extends State<Pays> {
                                                                                 });
                                                                                 setState(() {
                                                                                   if (dis_Pakan == 1) {
-                                                                                    Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan).toStringAsFixed(2).toString();
+                                                                                    Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
                                                                                   } else {
-                                                                                    Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan).toStringAsFixed(2).toString();
+                                                                                    Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
                                                                                   }
                                                                                 });
                                                                               },
@@ -4802,6 +5438,103 @@ class _PaysState extends State<Pays> {
                                                         ],
                                                       )
                                                     : SizedBox(),
+                                                _matjum == 0
+                                                    ? SizedBox()
+                                                    : Row(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 2,
+                                                            child: Row(
+                                                              children: [
+                                                                AutoSizeText(
+                                                                  minFontSize:
+                                                                      10,
+                                                                  maxFontSize:
+                                                                      15,
+                                                                  'เงินมัดจำ (${nFormat.format(sum_matjum)})',
+                                                                  style: TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                transMatjumModels
+                                                                            .length !=
+                                                                        0
+                                                                    ? IconButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            Form_payment1.clear();
+                                                                            if (dis_matjum ==
+                                                                                1) {
+                                                                              dis_matjum = 0;
+                                                                              dis_sum_Matjum = 0.00;
+                                                                            } else {
+                                                                              dis_matjum = 1;
+
+                                                                              if (sum_matjum < sum_amt) {
+                                                                                dis_sum_Matjum = sum_matjum;
+                                                                              } else {
+                                                                                dis_sum_Matjum = sum_amt - sum_disamt;
+                                                                              }
+                                                                            }
+                                                                          });
+                                                                          setState(
+                                                                              () {
+                                                                            if (dis_matjum ==
+                                                                                1) {
+                                                                              Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
+                                                                            } else {
+                                                                              Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
+                                                                            }
+                                                                          });
+                                                                        },
+                                                                        icon: dis_matjum ==
+                                                                                1
+                                                                            ? Icon(
+                                                                                Icons.done,
+                                                                                color: Colors.green,
+                                                                              )
+                                                                            : Icon(
+                                                                                Icons.close,
+                                                                                color: Colors.black,
+                                                                              ))
+                                                                    : Icon(
+                                                                        Icons
+                                                                            .close,
+                                                                        color: Colors
+                                                                            .red,
+                                                                      ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 15,
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              dis_sum_Matjum ==
+                                                                      0.00
+                                                                  ? '${nFormat.format(dis_sum_Matjum)}'
+                                                                  : '(ตัดมัดจำ) ${nFormat.format(dis_sum_Matjum)}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                 Row(
                                                   children: [
                                                     const Expanded(
@@ -4825,7 +5558,7 @@ class _PaysState extends State<Pays> {
                                                         maxFontSize: 15,
                                                         textAlign:
                                                             TextAlign.end,
-                                                        '${nFormat.format(sum_amt - double.parse(sum_disamtx.text) - dis_sum_Pakan)}',
+                                                        '${nFormat.format(sum_amt - double.parse(sum_disamtx.text) - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum)}',
                                                         style: const TextStyle(
                                                             color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
@@ -6047,6 +6780,119 @@ class _PaysState extends State<Pays> {
                                                 ),
                                                 Row(
                                                   children: [
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: Row(
+                                                        children: [
+                                                          AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 15,
+                                                            'เงินมัดจำ (${nFormat.format(sum_matjum)})',
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                                //fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          transMatjumModels
+                                                                      .length !=
+                                                                  0
+                                                              ? IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      Form_payment1
+                                                                          .clear();
+                                                                      if (dis_matjum ==
+                                                                          1) {
+                                                                        dis_matjum =
+                                                                            0;
+                                                                        dis_sum_Matjum =
+                                                                            0.00;
+                                                                      } else {
+                                                                        dis_matjum =
+                                                                            1;
+
+                                                                        if (sum_matjum <
+                                                                            sum_amt) {
+                                                                          dis_sum_Matjum =
+                                                                              sum_matjum;
+                                                                        } else {
+                                                                          dis_sum_Matjum =
+                                                                              sum_amt - sum_disamt;
+                                                                        }
+                                                                      }
+                                                                    });
+                                                                    setState(
+                                                                        () {
+                                                                      if (dis_matjum ==
+                                                                          1) {
+                                                                        Form_payment1
+                                                                            .text = (sum_amt -
+                                                                                sum_disamt -
+                                                                                dis_sum_Pakan -
+                                                                                sum_tran_dis -
+                                                                                dis_sum_Matjum)
+                                                                            .toStringAsFixed(2)
+                                                                            .toString();
+                                                                      } else {
+                                                                        Form_payment1
+                                                                            .text = (sum_amt -
+                                                                                sum_disamt -
+                                                                                dis_sum_Pakan -
+                                                                                sum_tran_dis -
+                                                                                dis_sum_Matjum)
+                                                                            .toStringAsFixed(2)
+                                                                            .toString();
+                                                                      }
+                                                                    });
+                                                                  },
+                                                                  icon:
+                                                                      dis_matjum ==
+                                                                              1
+                                                                          ? Icon(
+                                                                              Icons.done,
+                                                                              color: Colors.green,
+                                                                            )
+                                                                          : Icon(
+                                                                              Icons.close,
+                                                                              color: Colors.black,
+                                                                            ))
+                                                              : Icon(
+                                                                  Icons.close,
+                                                                  color: Colors
+                                                                      .red,
+                                                                ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 15,
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        dis_sum_Matjum == 0.00
+                                                            ? '${nFormat.format(dis_sum_Matjum)}'
+                                                            : '(ตัดมัดจำ) ${nFormat.format(dis_sum_Matjum)}',
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
                                                     const Expanded(
                                                       flex: 1,
                                                       child: AutoSizeText(
@@ -6068,7 +6914,7 @@ class _PaysState extends State<Pays> {
                                                         maxFontSize: 15,
                                                         textAlign:
                                                             TextAlign.end,
-                                                        '${nFormat.format(sum_amt - sum_disamt)}',
+                                                        '${nFormat.format(sum_amt - sum_disamt - sum_tran_dis - dis_sum_Matjum)}',
                                                         style: const TextStyle(
                                                             color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
@@ -7030,7 +7876,7 @@ class _PaysState extends State<Pays> {
                                                           maxFontSize: 15,
                                                           textAlign:
                                                               TextAlign.end,
-                                                          '${nFormat.format(sum_amt - sum_disamt)}',
+                                                          '${nFormat.format(sum_amt - sum_disamt - sum_tran_dis - dis_sum_Matjum)}',
                                                           style:
                                                               const TextStyle(
                                                                   color: PeopleChaoScreen_Color
@@ -7138,7 +7984,7 @@ class _PaysState extends State<Pays> {
                                 child: Center(
                                   child: Text(
                                     // '${nFormat.format(sum_amt - sum_disamt)}',
-                                    '${nFormat.format(sum_amt - sum_disamt - dis_sum_Pakan)}',
+                                    '${nFormat.format(sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum)}',
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         color: PeopleChaoScreen_Color
@@ -7148,6 +7994,132 @@ class _PaysState extends State<Pays> {
                                         //fontSize: 10.0
                                         ),
                                   ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                height: 40,
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Center(
+                                  child: Text(
+                                    'ใบเสร็จ',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                height: 40,
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                padding: const EdgeInsets.all(8.0),
+                                child: DropdownButtonFormField2(
+                                  alignment: Alignment.center,
+                                  focusColor: Colors.white,
+                                  autofocus: false,
+                                  decoration: InputDecoration(
+                                    enabled: true,
+                                    hoverColor: Colors.brown,
+                                    prefixIconColor: Colors.blue,
+                                    fillColor: Colors.white.withOpacity(0.05),
+                                    filled: false,
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.red),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(10),
+                                        topLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                      ),
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color:
+                                            Color.fromARGB(255, 231, 227, 227),
+                                      ),
+                                    ),
+                                  ),
+                                  hint: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      '${Default_Receipt_[Default_Receipt_type]}',
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
+                                  ),
+
+                                  isExpanded: false,
+                                  // value: Default_Receipt_type == 0 ?''
+                                  // :'',
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.black,
+                                  ),
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                  iconSize: 20,
+                                  buttonHeight: 40,
+                                  buttonWidth: 250,
+                                  // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                  dropdownDecoration: BoxDecoration(
+                                    // color: Colors
+                                    //     .amber,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: Colors.white, width: 1),
+                                  ),
+                                  items: Default_Receipt_.map(
+                                      (item) => DropdownMenuItem<String>(
+                                            value: '${item}',
+                                            child: Text(
+                                              '${item}',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          )).toList(),
+
+                                  onChanged: (value) async {
+                                    int selectedIndex =
+                                        Default_Receipt_.indexWhere(
+                                            (item) => item == value);
+
+                                    setState(() {
+                                      Default_Receipt_type = selectedIndex;
+                                    });
+
+                                    print(
+                                        '${selectedIndex}////$value  ////----> $Default_Receipt_type');
+                                  },
                                 ),
                               ),
                             ),
@@ -7350,7 +8322,9 @@ class _PaysState extends State<Pays> {
                                             } else {
                                               Form_payment1.text = (sum_amt -
                                                       sum_disamt -
-                                                      dis_sum_Pakan)
+                                                      dis_sum_Pakan -
+                                                      sum_tran_dis -
+                                                      dis_sum_Matjum)
                                                   .toStringAsFixed(2)
                                                   .toString();
                                             }
@@ -7615,7 +8589,9 @@ class _PaysState extends State<Pays> {
                                           var money1 = double.parse(value);
                                           var money2 = (sum_amt -
                                               sum_disamt -
-                                              dis_sum_Pakan);
+                                              dis_sum_Pakan -
+                                              sum_tran_dis -
+                                              dis_sum_Matjum);
                                           var money3 = (money2 - money1)
                                               .toStringAsFixed(2)
                                               .toString();
@@ -7742,7 +8718,7 @@ class _PaysState extends State<Pays> {
                                                 if (paymentSer1 != null) {
                                                   setState(() {
                                                     Form_payment1.text =
-                                                        '${(sum_amt - sum_disamt - dis_sum_Pakan) - double.parse(value)}';
+                                                        '${(sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - sum_tran_dis - dis_sum_Matjum) - double.parse(value)}';
                                                   });
                                                 }
 
@@ -7763,7 +8739,10 @@ class _PaysState extends State<Pays> {
                                                     double.parse(value);
                                                 var money2 =
                                                     (sum_amt - sum_disamt);
-                                                var money3 = (money2 - money1)
+                                                var money3 = (money2 -
+                                                        money1 -
+                                                        sum_tran_dis -
+                                                        dis_sum_Matjum)
                                                     .toStringAsFixed(2)
                                                     .toString();
                                                 setState(() {
@@ -8301,7 +9280,7 @@ class _PaysState extends State<Pays> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -8310,8 +9289,7 @@ class _PaysState extends State<Pays> {
                                                                         decoration: BoxDecoration(
                                                                           color:
                                                                               Colors.red[600],
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(10),
                                                                               topRight: Radius.circular(10),
                                                                               bottomLeft: Radius.circular(10),
@@ -8343,7 +9321,7 @@ class _PaysState extends State<Pays> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -8978,7 +9956,7 @@ class _PaysState extends State<Pays> {
                                                                       .white,
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .fromLTRB(
+                                                                              .fromLTRB(
                                                                           4,
                                                                           8,
                                                                           4,
@@ -9003,9 +9981,8 @@ class _PaysState extends State<Pays> {
                                                                                 bottomLeft: Radius.circular(0),
                                                                                 bottomRight: Radius.circular(0)),
                                                                           ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Center(
                                                                             child:
@@ -9149,7 +10126,7 @@ class _PaysState extends State<Pays> {
                                                                 ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextButton(
@@ -9258,8 +10235,7 @@ class _PaysState extends State<Pays> {
                                                                               Radius.circular(10)),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         TextButton(
@@ -9319,414 +10295,428 @@ class _PaysState extends State<Pays> {
                         ),
                         Row(
                           children: [
-                            Expanded(
-                              flex: 4,
-                              child: widget.can == 'C'
-                                  ? SizedBox()
-                                  : Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          var pay1;
-                                          var pay2;
-                                          setState(() {
-                                            Slip_status = '1';
-                                          });
-                                          List newValuePDFimg = [];
-                                          for (int index = 0;
-                                              index < 1;
-                                              index++) {
-                                            if (renTalModels[0]
-                                                    .imglogo!
-                                                    .trim() ==
-                                                '') {
-                                              // newValuePDFimg.add(
-                                              //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                            } else {
-                                              newValuePDFimg.add(
-                                                  '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                            }
-                                          }
-                                          print((sum_amt - sum_disamt));
-                                          if (pamentpage == 0) {
-                                            setState(() {
-                                              // Form_payment2.clear();
-                                              Form_payment2.text = '';
-                                            });
-                                          }
-                                          setState(() {
-                                            pay1 = Form_payment1.text == ''
-                                                ? '0.00'
-                                                : Form_payment1.text;
-                                            pay2 = Form_payment2.text == ''
-                                                ? '0.00'
-                                                : Form_payment2.text;
-                                          });
-
-                                          //                if (double.parse(pay1) < 0.00 ||
-                                          //     double.parse(pay2) < 0.00) {
-                                          //   print(
-                                          //       '${double.parse(pay1)} ////////////****-////////${double.parse(pay2)}');
-                                          //   ScaffoldMessenger.of(context)
-                                          //       .showSnackBar(
-                                          //     const SnackBar(
-                                          //         content: Text(
-                                          //             'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
-                                          //             style: TextStyle(
-                                          //                 color: Colors.white,
-                                          //                 fontFamily:
-                                          //                     Font_.Fonts_T))),
-                                          //   );
-                                          // } else {}
-                                          if ((double.parse(pay1) +
-                                                  double.parse(pay2) !=
-                                              (sum_amt - sum_disamt))) {
-                                            _showMyDialogPay_Error(
-                                                'จำนวนเงินไม่ถูกต้อง ');
-                                            // ScaffoldMessenger.of(context)
-                                            //     .showSnackBar(
-                                            //   const SnackBar(
-                                            //       content: Text(
-                                            //           'จำนวนเงินไม่ถูกต้อง ',
-                                            //           style: TextStyle(
-                                            //               color: Colors.white,
-                                            //               fontFamily:
-                                            //                   Font_.Fonts_T))),
-                                            // );
-                                          } else if (double.parse(pay1) <
-                                                  0.00 ||
-                                              double.parse(pay2) < 0.00) {
-                                            _showMyDialogPay_Error(
-                                                'จำนวนเงินไม่ถูกต้อง ');
-                                            // ScaffoldMessenger.of(context)
-                                            //     .showSnackBar(
-                                            //   const SnackBar(
-                                            //       content: Text('จำนวนเงินไม่ถูกต้อง',
-                                            //           style: TextStyle(
-                                            //               color: Colors.white,
-                                            //               fontFamily:
-                                            //                   Font_.Fonts_T))),
-                                            // );
-                                          } else {
-                                            if (pamentpage == 0 &&
-                                                // Form_payment1.text == '' ||
-                                                paymentName1 == null) {
-                                              _showMyDialogPay_Error(
-                                                  'กรุณาเลือกรูปแบบชำระ! ที่ 1');
-                                              // ScaffoldMessenger.of(context)
-                                              //     .showSnackBar(
-                                              //   const SnackBar(
-                                              //       content: Text(
-                                              //           'กรุณาเลือกรูปแบบชำระ! ที่ 1',
-                                              //           style: TextStyle(
-                                              //               color: Colors.white,
-                                              //               fontFamily:
-                                              //                   Font_.Fonts_T))),
-                                              // );
-                                            } else if (pamentpage == 1 &&
-                                                    // Form_payment2.text ==
-                                                    //     '' ||
-                                                    paymentName2 == null ||
-                                                paymentName1 == null) {
-                                              _showMyDialogPay_Error((paymentName1 ==
-                                                      null)
-                                                  ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
-                                                  : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
-                                              // ScaffoldMessenger.of(context)
-                                              //     .showSnackBar(
-                                              //   SnackBar(
-                                              //       content: (paymentName1 == null)
-                                              //           ?
-                                              //           Text(
-                                              //               'กรุณาเลือกรูปแบบชำระ! ที่ 1',
-                                              //               style: TextStyle(
-                                              //                   color: Colors.white,
-                                              //                   fontFamily:
-                                              //                       Font_.Fonts_T))
-                                              //           : Text(
-                                              //               'กรุณาเลือกรูปแบบชำระ! ที่ 2',
-                                              //               style: TextStyle(
-                                              //                   color: Colors.white,
-                                              //                   fontFamily:
-                                              //                       Font_.Fonts_T))),
-                                              // );
-                                            } else {
-                                              if (select_page == 2) {
-                                                // print('object963');
-                                                Insert_log.Insert_logs(
-                                                    'บัญชี',
-                                                    (select_page == 2)
-                                                        ? (Slip_status
-                                                                    .toString() ==
-                                                                '1')
-                                                            ? 'พิมพ์ซ้ำ:$numinvoice '
-                                                            : 'พิมพ์ซ้ำ:$cFinn '
-                                                        : (Slip_status
-                                                                    .toString() ==
-                                                                '1')
-                                                            ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
-                                                            : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
-                                                PdfgenReceipt.exportPDF_Receipt2(
-                                                    context,
-                                                    Slip_status,
-                                                    _TransReBillHistoryModels,
-                                                    '${widget.Get_Value_cid}',
-                                                    '${widget.namenew}',
-                                                    '${sum_pvat}',
-                                                    '${sum_vat}',
-                                                    '${sum_wht}',
-                                                    '${sum_amt}',
-                                                    '$sum_disp',
-                                                    '${nFormat.format(sum_disamt)}',
-                                                    '${sum_amt - sum_disamt}',
-                                                    // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                    '${renTal_name.toString()}',
-                                                    '${Form_bussshop}',
-                                                    '${Form_address}',
-                                                    '${Form_tel}',
-                                                    '${Form_email}',
-                                                    '${Form_tax}',
-                                                    ' ${Form_nameshop}',
-                                                    ' ${renTalModels[0].bill_addr}',
-                                                    ' ${renTalModels[0].bill_email}',
-                                                    ' ${renTalModels[0].bill_tel}',
-                                                    ' ${renTalModels[0].bill_tax}',
-                                                    ' ${renTalModels[0].bill_name}',
-                                                    newValuePDFimg,
-                                                    pamentpage,
-                                                    paymentName1,
-                                                    paymentName2,
-                                                    Form_payment1.text,
-                                                    Form_payment2.text,
-                                                    numinvoice,
-                                                    cFinn);
-                                              } else {
-                                                if (paymentSer1 != '0' &&
-                                                    paymentSer1 != null) {
-                                                  if ((double.parse(pay1) +
-                                                          double.parse(pay2)) >=
-                                                      (sum_amt - sum_disamt)) {
-                                                    if ((sum_amt -
-                                                            sum_disamt) !=
-                                                        0) {
-                                                      if (select_page == 0) {
-                                                        // print(
-                                                        //     '(select_page == 0n_Trans_invoice_P)');
-                                                        // _TransModels
-                                                        // sum_disamtx sum_dispx
-                                                        in_Trans_invoice_P(
-                                                            newValuePDFimg);
-                                                      } else if (select_page ==
-                                                          1) {
-                                                        final tableData00 = [
-                                                          for (int index = 0;
-                                                              index <
-                                                                  _InvoiceHistoryModels
-                                                                      .length;
-                                                              index++)
-                                                            [
-                                                              '${index + 1}',
-                                                              '${_InvoiceHistoryModels[index].date}',
-                                                              '${_InvoiceHistoryModels[index].descr}',
-                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                            ],
-                                                        ];
-                                                        //_InvoiceHistoryModels
-                                                        in_Trans_invoice_refno_p();
-                                                        Insert_log.Insert_logs(
-                                                            'บัญชี',
-                                                            (select_page == 2)
-                                                                ? (Slip_status
-                                                                            .toString() ==
-                                                                        '1')
-                                                                    ? 'พิมพ์ซ้ำ:$numinvoice '
-                                                                    : 'พิมพ์ซ้ำ:$cFinn '
-                                                                : (Slip_status
-                                                                            .toString() ==
-                                                                        '1')
-                                                                    ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
-                                                                    : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
-                                                        PdfgenReceipt.exportPDF_Receipt1(
-                                                            numinvoice,
-                                                            tableData00,
-                                                            context,
-                                                            Slip_status,
-                                                            _InvoiceHistoryModels,
-                                                            '${widget.Get_Value_cid}',
-                                                            '${widget.namenew}',
-                                                            '${sum_pvat}',
-                                                            '${sum_vat}',
-                                                            '${sum_wht}',
-                                                            '${sum_amt}',
-                                                            '$sum_disp',
-                                                            '${nFormat.format(sum_disamt)}',
-                                                            '${sum_amt - sum_disamt}',
-                                                            // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                            '${renTal_name.toString()}',
-                                                            '${Form_bussshop}',
-                                                            '${Form_address}',
-                                                            '${Form_tel}',
-                                                            '${Form_email}',
-                                                            '${Form_tax}',
-                                                            ' ${Form_nameshop}',
-                                                            ' ${renTalModels[0].bill_addr}',
-                                                            ' ${renTalModels[0].bill_email}',
-                                                            ' ${renTalModels[0].bill_tel}',
-                                                            ' ${renTalModels[0].bill_tax}',
-                                                            ' ${renTalModels[0].bill_name}',
-                                                            newValuePDFimg,
-                                                            pamentpage,
-                                                            paymentName1,
-                                                            paymentName2,
-                                                            Form_payment1.text,
-                                                            Form_payment2.text);
-                                                      } else if (select_page ==
-                                                          2) {
-                                                        //TransReBillHistoryModel
-                                                        // in_Trans_re_invoice_refno();
-                                                        //พิมพ์ซ้ำ
-                                                        Insert_log.Insert_logs(
-                                                            'บัญชี',
-                                                            (select_page == 2)
-                                                                ? (Slip_status
-                                                                            .toString() ==
-                                                                        '1')
-                                                                    ? 'พิมพ์ซ้ำ:$numinvoice '
-                                                                    : 'พิมพ์ซ้ำ:$cFinn '
-                                                                : (Slip_status
-                                                                            .toString() ==
-                                                                        '1')
-                                                                    ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
-                                                                    : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
-                                                        PdfgenReceipt.exportPDF_Receipt2(
-                                                            context,
-                                                            Slip_status,
-                                                            _TransModels,
-                                                            '${widget.Get_Value_cid}',
-                                                            '${widget.namenew}',
-                                                            '${sum_pvat}',
-                                                            '${sum_vat}',
-                                                            '${sum_wht}',
-                                                            '${sum_amt}',
-                                                            '$sum_disp',
-                                                            '${nFormat.format(sum_disamt)}',
-                                                            '${sum_amt - sum_disamt}',
-                                                            // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                            '${renTal_name.toString()}',
-                                                            '${Form_bussshop}',
-                                                            '${Form_address}',
-                                                            '${Form_tel}',
-                                                            '${Form_email}',
-                                                            '${Form_tax}',
-                                                            '${Form_nameshop}',
-                                                            '${renTalModels[0].bill_addr}',
-                                                            '${renTalModels[0].bill_email}',
-                                                            '${renTalModels[0].bill_tel}',
-                                                            '${renTalModels[0].bill_tax}',
-                                                            '${renTalModels[0].bill_name}',
-                                                            newValuePDFimg,
-                                                            pamentpage,
-                                                            paymentName1,
-                                                            paymentName2,
-                                                            Form_payment1.text,
-                                                            Form_payment2.text,
-                                                            numinvoice,
-                                                            cFinn);
-                                                      }
-                                                      // PdfgenReceipt.exportPDF_Receipt(context);
-                                                    } else {
-                                                      _showMyDialogPay_Error(
-                                                          'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
-                                                      // ScaffoldMessenger.of(context)
-                                                      //     .showSnackBar(
-                                                      //   const SnackBar(
-                                                      //       content: Text(
-                                                      //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
-                                                      //           style: TextStyle(
-                                                      //               color:
-                                                      //                   Colors.white,
-                                                      //               fontFamily: Font_
-                                                      //                   .Fonts_T))),
-                                                      // );
-                                                    }
+                            widget.can == 'A'
+                                ? SizedBox()
+                                : Expanded(
+                                    flex: 4,
+                                    child: widget.can == 'C'
+                                        ? SizedBox()
+                                        : Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                var pay1;
+                                                var pay2;
+                                                setState(() {
+                                                  Slip_status = '1';
+                                                });
+                                                List newValuePDFimg = [];
+                                                for (int index = 0;
+                                                    index < 1;
+                                                    index++) {
+                                                  if (renTalModels[0]
+                                                          .imglogo!
+                                                          .trim() ==
+                                                      '') {
+                                                    // newValuePDFimg.add(
+                                                    //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
                                                   } else {
-                                                    _showMyDialogPay_Error(
-                                                        'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
-                                                    // ScaffoldMessenger.of(context)
-                                                    //     .showSnackBar(
-                                                    //   const SnackBar(
-                                                    //       content: Text(
-                                                    //           'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
-                                                    //           style: TextStyle(
-                                                    //               color: Colors.white,
-                                                    //               fontFamily: Font_
-                                                    //                   .Fonts_T))),
-                                                    // );
+                                                    newValuePDFimg.add(
+                                                        '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
                                                   }
-                                                } else {
+                                                }
+                                                print((sum_amt - sum_disamt));
+                                                if (pamentpage == 0) {
+                                                  setState(() {
+                                                    // Form_payment2.clear();
+                                                    Form_payment2.text = '';
+                                                  });
+                                                }
+                                                setState(() {
+                                                  pay1 =
+                                                      Form_payment1.text == ''
+                                                          ? '0.00'
+                                                          : Form_payment1.text;
+                                                  pay2 =
+                                                      Form_payment2.text == ''
+                                                          ? '0.00'
+                                                          : Form_payment2.text;
+                                                });
+
+                                                //                if (double.parse(pay1) < 0.00 ||
+                                                //     double.parse(pay2) < 0.00) {
+                                                //   print(
+                                                //       '${double.parse(pay1)} ////////////****-////////${double.parse(pay2)}');
+                                                //   ScaffoldMessenger.of(context)
+                                                //       .showSnackBar(
+                                                //     const SnackBar(
+                                                //         content: Text(
+                                                //             'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontFamily:
+                                                //                     Font_.Fonts_T))),
+                                                //   );
+                                                // } else {}
+                                                if ((double.parse(pay1) +
+                                                        double.parse(pay2) !=
+                                                    (sum_amt - sum_disamt))) {
                                                   _showMyDialogPay_Error(
-                                                      'กรุณาเลือกรูปแบบการชำระ!');
+                                                      'จำนวนเงินไม่ถูกต้อง ');
                                                   // ScaffoldMessenger.of(context)
                                                   //     .showSnackBar(
                                                   //   const SnackBar(
                                                   //       content: Text(
-                                                  //           'กรุณาเลือกรูปแบบการชำระ!',
+                                                  //           'จำนวนเงินไม่ถูกต้อง ',
                                                   //           style: TextStyle(
                                                   //               color: Colors.white,
                                                   //               fontFamily:
                                                   //                   Font_.Fonts_T))),
                                                   // );
+                                                } else if (double.parse(pay1) <
+                                                        0.00 ||
+                                                    double.parse(pay2) < 0.00) {
+                                                  _showMyDialogPay_Error(
+                                                      'จำนวนเงินไม่ถูกต้อง ');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text('จำนวนเงินไม่ถูกต้อง',
+                                                  //           style: TextStyle(
+                                                  //               color: Colors.white,
+                                                  //               fontFamily:
+                                                  //                   Font_.Fonts_T))),
+                                                  // );
+                                                } else {
+                                                  if (pamentpage == 0 &&
+                                                      // Form_payment1.text == '' ||
+                                                      paymentName1 == null) {
+                                                    _showMyDialogPay_Error(
+                                                        'กรุณาเลือกรูปแบบชำระ! ที่ 1');
+                                                    // ScaffoldMessenger.of(context)
+                                                    //     .showSnackBar(
+                                                    //   const SnackBar(
+                                                    //       content: Text(
+                                                    //           'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+                                                    //           style: TextStyle(
+                                                    //               color: Colors.white,
+                                                    //               fontFamily:
+                                                    //                   Font_.Fonts_T))),
+                                                    // );
+                                                  } else if (pamentpage == 1 &&
+                                                          // Form_payment2.text ==
+                                                          //     '' ||
+                                                          paymentName2 ==
+                                                              null ||
+                                                      paymentName1 == null) {
+                                                    _showMyDialogPay_Error(
+                                                        (paymentName1 == null)
+                                                            ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
+                                                            : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+                                                    // ScaffoldMessenger.of(context)
+                                                    //     .showSnackBar(
+                                                    //   SnackBar(
+                                                    //       content: (paymentName1 == null)
+                                                    //           ?
+                                                    //           Text(
+                                                    //               'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+                                                    //               style: TextStyle(
+                                                    //                   color: Colors.white,
+                                                    //                   fontFamily:
+                                                    //                       Font_.Fonts_T))
+                                                    //           : Text(
+                                                    //               'กรุณาเลือกรูปแบบชำระ! ที่ 2',
+                                                    //               style: TextStyle(
+                                                    //                   color: Colors.white,
+                                                    //                   fontFamily:
+                                                    //                       Font_.Fonts_T))),
+                                                    // );
+                                                  } else {
+                                                    if (select_page == 2) {
+                                                      // print('object963');
+                                                      Insert_log.Insert_logs(
+                                                          'บัญชี',
+                                                          (select_page == 2)
+                                                              ? (Slip_status
+                                                                          .toString() ==
+                                                                      '1')
+                                                                  ? 'พิมพ์ซ้ำ:$numinvoice '
+                                                                  : 'พิมพ์ซ้ำ:$cFinn '
+                                                              : (Slip_status
+                                                                          .toString() ==
+                                                                      '1')
+                                                                  ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
+                                                                  : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
+                                                      PdfgenReceipt.exportPDF_Receipt2(
+                                                          context,
+                                                          Slip_status,
+                                                          _TransReBillHistoryModels,
+                                                          '${widget.Get_Value_cid}',
+                                                          '${widget.namenew}',
+                                                          '${sum_pvat}',
+                                                          '${sum_vat}',
+                                                          '${sum_wht}',
+                                                          '${sum_amt}',
+                                                          '$sum_disp',
+                                                          '${nFormat.format(sum_disamt)}',
+                                                          '${sum_amt - sum_disamt}',
+                                                          // '${nFormat.format(sum_amt - sum_disamt)}',
+                                                          '${renTal_name.toString()}',
+                                                          '${Form_bussshop}',
+                                                          '${Form_address}',
+                                                          '${Form_tel}',
+                                                          '${Form_email}',
+                                                          '${Form_tax}',
+                                                          ' ${Form_nameshop}',
+                                                          ' ${renTalModels[0].bill_addr}',
+                                                          ' ${renTalModels[0].bill_email}',
+                                                          ' ${renTalModels[0].bill_tel}',
+                                                          ' ${renTalModels[0].bill_tax}',
+                                                          ' ${renTalModels[0].bill_name}',
+                                                          newValuePDFimg,
+                                                          pamentpage,
+                                                          paymentName1,
+                                                          paymentName2,
+                                                          Form_payment1.text,
+                                                          Form_payment2.text,
+                                                          numinvoice,
+                                                          cFinn);
+                                                    } else {
+                                                      if (paymentSer1 != '0' &&
+                                                          paymentSer1 != null) {
+                                                        if ((double.parse(
+                                                                    pay1) +
+                                                                double.parse(
+                                                                    pay2)) >=
+                                                            (sum_amt -
+                                                                sum_disamt)) {
+                                                          if ((sum_amt -
+                                                                  sum_disamt) !=
+                                                              0) {
+                                                            if (select_page ==
+                                                                0) {
+                                                              // print(
+                                                              //     '(select_page == 0n_Trans_invoice_P)');
+                                                              // _TransModels
+                                                              // sum_disamtx sum_dispx
+                                                              in_Trans_invoice_P(
+                                                                  newValuePDFimg);
+                                                            } else if (select_page ==
+                                                                1) {
+                                                              final tableData00 =
+                                                                  [
+                                                                for (int index =
+                                                                        0;
+                                                                    index <
+                                                                        _InvoiceHistoryModels
+                                                                            .length;
+                                                                    index++)
+                                                                  [
+                                                                    '${index + 1}',
+                                                                    '${_InvoiceHistoryModels[index].date}',
+                                                                    '${_InvoiceHistoryModels[index].descr}',
+                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                                  ],
+                                                              ];
+                                                              //_InvoiceHistoryModels
+                                                              in_Trans_invoice_refno_p();
+                                                              Insert_log.Insert_logs(
+                                                                  'บัญชี',
+                                                                  (select_page == 2)
+                                                                      ? (Slip_status.toString() == '1')
+                                                                          ? 'พิมพ์ซ้ำ:$numinvoice '
+                                                                          : 'พิมพ์ซ้ำ:$cFinn '
+                                                                      : (Slip_status.toString() == '1')
+                                                                          ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
+                                                                          : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
+                                                              PdfgenReceipt.exportPDF_Receipt1(
+                                                                  numinvoice,
+                                                                  tableData00,
+                                                                  context,
+                                                                  Slip_status,
+                                                                  _InvoiceHistoryModels,
+                                                                  '${widget.Get_Value_cid}',
+                                                                  '${widget.namenew}',
+                                                                  '${sum_pvat}',
+                                                                  '${sum_vat}',
+                                                                  '${sum_wht}',
+                                                                  '${sum_amt}',
+                                                                  '$sum_disp',
+                                                                  '${nFormat.format(sum_disamt)}',
+                                                                  '${sum_amt - sum_disamt}',
+                                                                  // '${nFormat.format(sum_amt - sum_disamt)}',
+                                                                  '${renTal_name.toString()}',
+                                                                  '${Form_bussshop}',
+                                                                  '${Form_address}',
+                                                                  '${Form_tel}',
+                                                                  '${Form_email}',
+                                                                  '${Form_tax}',
+                                                                  ' ${Form_nameshop}',
+                                                                  ' ${renTalModels[0].bill_addr}',
+                                                                  ' ${renTalModels[0].bill_email}',
+                                                                  ' ${renTalModels[0].bill_tel}',
+                                                                  ' ${renTalModels[0].bill_tax}',
+                                                                  ' ${renTalModels[0].bill_name}',
+                                                                  newValuePDFimg,
+                                                                  pamentpage,
+                                                                  paymentName1,
+                                                                  paymentName2,
+                                                                  Form_payment1.text,
+                                                                  Form_payment2.text);
+                                                            } else if (select_page ==
+                                                                2) {
+                                                              //TransReBillHistoryModel
+                                                              // in_Trans_re_invoice_refno();
+                                                              //พิมพ์ซ้ำ
+                                                              Insert_log.Insert_logs(
+                                                                  'บัญชี',
+                                                                  (select_page == 2)
+                                                                      ? (Slip_status.toString() == '1')
+                                                                          ? 'พิมพ์ซ้ำ:$numinvoice '
+                                                                          : 'พิมพ์ซ้ำ:$cFinn '
+                                                                      : (Slip_status.toString() == '1')
+                                                                          ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
+                                                                          : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
+                                                              PdfgenReceipt.exportPDF_Receipt2(
+                                                                  context,
+                                                                  Slip_status,
+                                                                  _TransModels,
+                                                                  '${widget.Get_Value_cid}',
+                                                                  '${widget.namenew}',
+                                                                  '${sum_pvat}',
+                                                                  '${sum_vat}',
+                                                                  '${sum_wht}',
+                                                                  '${sum_amt}',
+                                                                  '$sum_disp',
+                                                                  '${nFormat.format(sum_disamt)}',
+                                                                  '${sum_amt - sum_disamt}',
+                                                                  // '${nFormat.format(sum_amt - sum_disamt)}',
+                                                                  '${renTal_name.toString()}',
+                                                                  '${Form_bussshop}',
+                                                                  '${Form_address}',
+                                                                  '${Form_tel}',
+                                                                  '${Form_email}',
+                                                                  '${Form_tax}',
+                                                                  '${Form_nameshop}',
+                                                                  '${renTalModels[0].bill_addr}',
+                                                                  '${renTalModels[0].bill_email}',
+                                                                  '${renTalModels[0].bill_tel}',
+                                                                  '${renTalModels[0].bill_tax}',
+                                                                  '${renTalModels[0].bill_name}',
+                                                                  newValuePDFimg,
+                                                                  pamentpage,
+                                                                  paymentName1,
+                                                                  paymentName2,
+                                                                  Form_payment1.text,
+                                                                  Form_payment2.text,
+                                                                  numinvoice,
+                                                                  cFinn);
+                                                            }
+                                                            // PdfgenReceipt.exportPDF_Receipt(context);
+                                                          } else {
+                                                            _showMyDialogPay_Error(
+                                                                'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                                            // ScaffoldMessenger.of(context)
+                                                            //     .showSnackBar(
+                                                            //   const SnackBar(
+                                                            //       content: Text(
+                                                            //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
+                                                            //           style: TextStyle(
+                                                            //               color:
+                                                            //                   Colors.white,
+                                                            //               fontFamily: Font_
+                                                            //                   .Fonts_T))),
+                                                            // );
+                                                          }
+                                                        } else {
+                                                          _showMyDialogPay_Error(
+                                                              'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                                          // ScaffoldMessenger.of(context)
+                                                          //     .showSnackBar(
+                                                          //   const SnackBar(
+                                                          //       content: Text(
+                                                          //           'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
+                                                          //           style: TextStyle(
+                                                          //               color: Colors.white,
+                                                          //               fontFamily: Font_
+                                                          //                   .Fonts_T))),
+                                                          // );
+                                                        }
+                                                      } else {
+                                                        _showMyDialogPay_Error(
+                                                            'กรุณาเลือกรูปแบบการชำระ!');
+                                                        // ScaffoldMessenger.of(context)
+                                                        //     .showSnackBar(
+                                                        //   const SnackBar(
+                                                        //       content: Text(
+                                                        //           'กรุณาเลือกรูปแบบการชำระ!',
+                                                        //           style: TextStyle(
+                                                        //               color: Colors.white,
+                                                        //               fontFamily:
+                                                        //                   Font_.Fonts_T))),
+                                                        // );
+                                                      }
+                                                    }
+                                                  }
                                                 }
-                                              }
-                                            }
-                                          }
-                                        },
-                                        child: Container(
-                                            height: 50,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.green,
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10)),
-                                              // border: Border.all(color: Colors.white, width: 1),
+                                              },
+                                              child: Container(
+                                                  height: 50,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    // border: Border.all(color: Colors.white, width: 1),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Center(
+                                                      child: select_page == 2
+                                                          ? const Text(
+                                                              'พิมพ์ซ้ำ',
+                                                              style: TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T),
+                                                            )
+                                                          //
+                                                          : const Text(
+                                                              'พิมพ์ใบเสร็จชั่วคราว',
+                                                              style: TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T),
+                                                            ))),
                                             ),
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                                child: select_page == 2
-                                                    ? const Text(
-                                                        'พิมพ์ซ้ำ',
-                                                        style: TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T),
-                                                      )
-                                                    //
-                                                    : const Text(
-                                                        'พิมพ์ใบเสร็จชั่วคราว',
-                                                        style: TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T),
-                                                      ))),
-                                      ),
-                                    ),
-                            ),
+                                          ),
+                                  ),
                             // Expanded(
                             //   flex: 2,
                             //   child: Padding(
@@ -9827,21 +10817,36 @@ class _PaysState extends State<Pays> {
                                       //                   Font_.Fonts_T))),
                                       // );
                                     }
-                                    if (widget.can != 'C') {
-                                      await pay_ment(
-                                          pay1, pay2, newValuePDFimg);
+                                    if (dis_sum_Matjum == 0.00) {
+                                      if (widget.can != 'C') {
+                                        await pay_ment(
+                                            pay1, pay2, newValuePDFimg);
+                                      } else {
+                                        if (_TransBillModels.length != 0) {
+                                          if (_TransModels.length != 0) {
+                                            await pay_Pakan(
+                                                pay1, pay2, newValuePDFimg);
+                                          } else {
+                                            _showMyDialogPay_Error(
+                                                'ไม่มีรายการชำระ!');
+                                          }
+                                        } else {
+                                          _showMyDialogPay_Error(
+                                              'ไม่มีรายการชำระ!');
+                                        }
+                                      }
                                     } else {
-                                      if (_TransBillModels.length != 0) {
-                                        if (_TransModels.length != 0) {
-                                          await pay_Pakan(
+                                      if (_TransModels.length != 0) {
+                                        await pay_Matjum(
+                                            pay1, pay2, newValuePDFimg);
+                                      } else {
+                                        if (_TransBillModels.length != 0) {
+                                          await pay_Matjum(
                                               pay1, pay2, newValuePDFimg);
                                         } else {
                                           _showMyDialogPay_Error(
                                               'ไม่มีรายการชำระ!');
                                         }
-                                      } else {
-                                        _showMyDialogPay_Error(
-                                            'ไม่มีรายการชำระ!');
                                       }
                                     }
                                   },
@@ -9887,7 +10892,8 @@ class _PaysState extends State<Pays> {
   }
 
   Future<void> pay_ment(pay1, pay2, List<dynamic> newValuePDFimg) async {
-    if ((double.parse(pay1) + double.parse(pay2) != (sum_amt - sum_disamt))) {
+    if ((double.parse(pay1) + double.parse(pay2) !=
+        (sum_amt - sum_disamt - sum_tran_dis))) {
       _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง ');
       // ScaffoldMessenger.of(context)
       //     .showSnackBar(
@@ -9913,14 +10919,14 @@ class _PaysState extends State<Pays> {
     } else {
       if (paymentSer1 != '0' && paymentSer1 != null) {
         if ((double.parse(pay1) + double.parse(pay2)) >=
-                (sum_amt - sum_disamt) ||
+                (sum_amt - sum_disamt - sum_tran_dis) ||
             (double.parse(pay1) + double.parse(pay2)) <
-                (sum_amt - sum_disamt)) {
-          if ((sum_amt - sum_disamt) != 0) {
+                (sum_amt - sum_disamt - sum_tran_dis)) {
+          if ((sum_amt - sum_disamt - sum_tran_dis) != 0) {
             if (select_page == 0) {
               print('(select_page == 0)');
               if ((double.parse(pay1) + double.parse(pay2) !=
-                  (sum_amt - sum_disamt))) {
+                  (sum_amt - sum_disamt - sum_tran_dis))) {
                 _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง ');
                 // ScaffoldMessenger.of(context)
                 //     .showSnackBar(
@@ -10008,7 +11014,7 @@ class _PaysState extends State<Pays> {
               }
             } else if (select_page == 1) {
               if ((double.parse(pay1) + double.parse(pay2) !=
-                  (sum_amt - sum_disamt))) {
+                  (sum_amt - sum_disamt - sum_tran_dis))) {
                 _showMyDialogPay_Error(
                     'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ');
                 // ScaffoldMessenger.of(context)
@@ -10138,7 +11144,7 @@ class _PaysState extends State<Pays> {
               }
             } else if (select_page == 2) {
               if ((double.parse(pay1) + double.parse(pay2) !=
-                  (sum_amt - sum_disamt))) {
+                  (sum_amt - sum_disamt - sum_tran_dis))) {
                 _showMyDialogPay_Error(
                     'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ');
                 // ScaffoldMessenger.of(context)
@@ -10283,7 +11289,7 @@ class _PaysState extends State<Pays> {
     if (select_page == 0) {
       print('(select_page == 0)');
       if ((double.parse(pay1) + double.parse(pay2) !=
-          (sum_amt - sum_disamt - dis_sum_Pakan))) {
+          (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis))) {
         _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง ');
         // ScaffoldMessenger.of(context)
         //     .showSnackBar(
@@ -10371,7 +11377,7 @@ class _PaysState extends State<Pays> {
       }
     } else if (select_page == 1) {
       if ((double.parse(pay1) + double.parse(pay2) !=
-          (sum_amt - sum_disamt - dis_sum_Pakan))) {
+          (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis))) {
         _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ');
         // ScaffoldMessenger.of(context)
         //     .showSnackBar(
@@ -10500,7 +11506,7 @@ class _PaysState extends State<Pays> {
       }
     } else if (select_page == 2) {
       if ((double.parse(pay1) + double.parse(pay2) !=
-          (sum_amt - sum_disamt - dis_sum_Pakan))) {
+          (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis))) {
         _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ');
         // ScaffoldMessenger.of(context)
         //     .showSnackBar(
@@ -10598,6 +11604,683 @@ class _PaysState extends State<Pays> {
         }
       }
     }
+  }
+
+  Future<void> pay_Matjum(pay1, pay2, List<dynamic> newValuePDFimg) async {
+    if (select_page == 0) {
+      print('(select_page == 0)');
+      if ((double.parse(pay1) + double.parse(pay2) !=
+          (sum_amt -
+              sum_disamt -
+              dis_sum_Pakan -
+              sum_tran_dis -
+              dis_sum_Matjum))) {
+        _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง ');
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(
+        //   const SnackBar(
+        //       content: Text(
+        //           'จำนวนเงินไม่ถูกต้อง ',
+        //           style: TextStyle(
+        //               color:
+        //                   Colors.white,
+        //               fontFamily: Font_
+        //                   .Fonts_T))),
+        // );
+      } else {
+        if (pamentpage == 0 &&
+            // Form_payment1.text ==
+            //     '' ||
+            paymentName1 == null) {
+          _showMyDialogPay_Error('กรุณาเลือกรูปแบบชำระ! ที่ 1');
+          // ScaffoldMessenger.of(context)
+          //     .showSnackBar(
+          //   const SnackBar(
+          //       content: Text(
+          //           'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+          //           style: TextStyle(
+          //               color: Colors
+          //                   .white,
+          //               fontFamily: Font_
+          //                   .Fonts_T))),
+          // );
+        } else if (pamentpage == 1 &&
+            // Form_payment2.text ==
+            //     '' ||
+            paymentName2 == null) {
+          _showMyDialogPay_Error('กรุณาเลือกรูปแบบชำระ! ที่ 2');
+          // ScaffoldMessenger.of(context)
+          //     .showSnackBar(
+          //   const SnackBar(
+          //       content: Text(
+          //           'กรุณาเลือกรูปแบบชำระ! ที่ 2',
+          //           style: TextStyle(
+          //               color: Colors
+          //                   .white,
+          //               fontFamily: Font_
+          //                   .Fonts_T))),
+          // );
+        } else {
+          if (paymentName1.toString().trim() == 'เงินโอน' ||
+              paymentName2.toString().trim() == 'เงินโอน' ||
+              paymentName1.toString().trim() == 'Online Payment' ||
+              paymentName2.toString().trim() == 'Online Payment') {
+            if (base64_Slip != null) {
+              try {
+                OKuploadFile_Slip();
+                // _TransModels
+                // sum_disamtx sum_dispx
+
+                await in_Trans_invoice(newValuePDFimg);
+              } catch (e) {}
+            } else {
+              _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+              // ScaffoldMessenger.of(
+              //         context)
+              //     .showSnackBar(
+              //   const SnackBar(
+              //       content: Text(
+              //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+              //           style: TextStyle(
+              //               color: Colors
+              //                   .white,
+              //               fontFamily:
+              //                   Font_
+              //                       .Fonts_T))),
+              // );
+            }
+          } else {
+            try {
+              // OKuploadFile_Slip();
+              // _TransModels
+              // sum_disamtx sum_dispx
+
+              await in_Trans_invoice(newValuePDFimg);
+            } catch (e) {}
+          }
+        }
+      }
+    } else if (select_page == 1) {
+      if ((double.parse(pay1) + double.parse(pay2) !=
+          (sum_amt -
+              sum_disamt -
+              dis_sum_Pakan -
+              sum_tran_dis -
+              dis_sum_Matjum))) {
+        _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ');
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(
+        //   const SnackBar(
+        //       content: Text(
+        //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ',
+        //           style: TextStyle(
+        //               color:
+        //                   Colors.white,
+        //               fontFamily: Font_
+        //                   .Fonts_T))),
+        // );
+      } else {
+        if (pamentpage == 0 &&
+            // Form_payment1.text ==
+            //     '' ||
+            paymentName1 == null) {
+          _showMyDialogPay_Error('กรุณาเลือกรูปแบบชำระ! ที่ 1');
+          // ScaffoldMessenger.of(context)
+          //     .showSnackBar(
+          //   const SnackBar(
+          //       content: Text(
+          //           'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+          //           style: TextStyle(
+          //               color: Colors
+          //                   .white,
+          //               fontFamily: Font_
+          //                   .Fonts_T))),
+          // );
+        } else if (pamentpage == 1 &&
+                // Form_payment2.text ==
+                //     '' ||
+                paymentName2 == null ||
+            paymentName1 == null) {
+          _showMyDialogPay_Error((paymentName1 == null)
+              ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
+              : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+          // ScaffoldMessenger.of(context)
+          //     .showSnackBar(
+          //   SnackBar(
+          //       content:
+          //(paymentName1 ==
+          //               null)
+          //           ? Text(
+          //               'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+          //               style: TextStyle(
+          //                   color: Colors
+          //                       .white,
+          //                   fontFamily: Font_
+          //                       .Fonts_T))
+          //           : Text(
+          //               'กรุณาเลือกรูปแบบชำระ! ที่ 2',
+          //               style: TextStyle(
+          //                   color: Colors
+          //                       .white,
+          //                   fontFamily:
+          //                       Font_
+          //                           .Fonts_T))),
+          // );
+        } else {
+          if (paymentName1.toString().trim() == 'เงินโอน' ||
+              paymentName2.toString().trim() == 'เงินโอน' ||
+              paymentName1.toString().trim() == 'Online Payment' ||
+              paymentName2.toString().trim() == 'Online Payment') {
+            if (base64_Slip != null) {
+              try {
+                final tableData00 = [
+                  for (int index = 0;
+                      index < _InvoiceHistoryModels.length;
+                      index++)
+                    [
+                      '${index + 1}',
+                      '${_InvoiceHistoryModels[index].date}',
+                      '${_InvoiceHistoryModels[index].descr}',
+                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                    ],
+                ];
+                OKuploadFile_Slip();
+
+                in_Trans_invoice_refno(tableData00, newValuePDFimg);
+              } catch (e) {}
+            } else {
+              _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+              // ScaffoldMessenger.of(
+              //         context)
+              //     .showSnackBar(
+              //   const SnackBar(
+              //       content: Text(
+              //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+              //           style: TextStyle(
+              //               color: Colors
+              //                   .white,
+              //               fontFamily:
+              //                   Font_
+              //                       .Fonts_T))),
+              // );
+            }
+          } else {
+            try {
+              final tableData00 = [
+                for (int index = 0;
+                    index < _InvoiceHistoryModels.length;
+                    index++)
+                  [
+                    '${index + 1}',
+                    '${_InvoiceHistoryModels[index].date}',
+                    '${_InvoiceHistoryModels[index].descr}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                  ],
+              ];
+              // OKuploadFile_Slip();
+              //_InvoiceHistoryModels
+
+              in_Trans_invoice_refno(tableData00, newValuePDFimg);
+            } catch (e) {}
+          }
+        }
+      }
+    } else if (select_page == 2) {
+      if ((double.parse(pay1) + double.parse(pay2) !=
+          (sum_amt -
+              sum_disamt -
+              dis_sum_Pakan -
+              sum_tran_dis -
+              dis_sum_Matjum))) {
+        _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ');
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(
+        //   const SnackBar(
+        //       content: Text(
+        //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! 789',
+        //           style: TextStyle(
+        //               color:
+        //                   Colors.white,
+        //               fontFamily: Font_
+        //                   .Fonts_T))),
+        // );
+      } else {
+        if (pamentpage == 0 &&
+            // Form_payment1.text ==
+            //     '' ||
+            paymentName1 == null) {
+          _showMyDialogPay_Error('กรุณาเลือกรูปแบบชำระ! ที่ 1');
+          // ScaffoldMessenger.of(context)
+          //     .showSnackBar(
+          //   const SnackBar(
+          //       content: Text(
+          //           'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+          //           style: TextStyle(
+          //               color: Colors
+          //                   .white,
+          //               fontFamily: Font_
+          //                   .Fonts_T))),
+          // );
+        } else if (pamentpage == 1 &&
+                // Form_payment2.text ==
+                //     '' ||
+                paymentName2 == null ||
+            paymentName1 == null) {
+          _showMyDialogPay_Error((paymentName1 == null)
+              ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
+              : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+          // ScaffoldMessenger.of(context)
+          //     .showSnackBar(
+          //   SnackBar(
+          //       content: (paymentName1 ==
+          //               null)
+          //           ? Text(
+          //               'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+          //               style: TextStyle(
+          //                   color: Colors
+          //                       .white,
+          //                   fontFamily: Font_
+          //                       .Fonts_T))
+          //           : Text(
+          //               'กรุณาเลือกรูปแบบชำระ! ที่ 2',
+          //               style: TextStyle(
+          //                   color: Colors
+          //                       .white,
+          //                   fontFamily:
+          //                       Font_
+          //                           .Fonts_T))),
+          // );
+        } else {
+          if (paymentName1.toString().trim() == 'เงินโอน' ||
+              paymentName2.toString().trim() == 'เงินโอน' ||
+              paymentName1.toString().trim() == 'Online Payment' ||
+              paymentName2.toString().trim() == 'Online Payment') {
+            if (base64_Slip != null) {
+              try {
+                OKuploadFile_Slip();
+                //TransReBillHistoryModel
+
+                await in_Trans_re_invoice_refno(newValuePDFimg);
+              } catch (e) {}
+            } else {
+              _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+              // ScaffoldMessenger.of(
+              //         context)
+              //     .showSnackBar(
+              //   const SnackBar(
+              //       content: Text(
+              //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+              //           style: TextStyle(
+              //               color: Colors
+              //                   .white,
+              //               fontFamily:
+              //                   Font_
+              //                       .Fonts_T))),
+              // );
+            }
+          } else {
+            try {
+              // OKuploadFile_Slip();
+              //TransReBillHistoryModel
+
+              await in_Trans_re_invoice_refno(newValuePDFimg);
+            } catch (e) {}
+          }
+        }
+      }
+    }
+  }
+
+  Future<void> addPlaySelectA() {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListBody(
+                    children: <Widget>[
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'รับมัดจำ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Column(
+                          children: [
+                            StreamBuilder(
+                                stream:
+                                    Stream.periodic(const Duration(seconds: 0)),
+                                builder: (context, snapshot) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 350,
+                                    child: GridView.count(
+                                      crossAxisCount:
+                                          Responsive.isDesktop(context) ? 5 : 2,
+                                      children: [
+                                        // Card(
+                                        //   child: InkWell(
+                                        //     onTap: () async {
+                                        //       Navigator.of(context).pop();
+                                        //       addPlay();
+                                        //     },
+                                        //     child:
+                                        //         Icon(Icons.add_circle_outline),
+                                        //   ),
+                                        // ),
+                                        // for (int i = 0;
+                                        //     i < expModels.length;
+                                        //     i++)
+                                        Card(
+                                          color: text_add.text == 'รับมัดจำ'
+                                              ? Colors.lime
+                                              : Colors.white,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              setState(() {
+                                                if (text_add.text ==
+                                                    'รับมัดจำ') {
+                                                  text_add.clear();
+                                                  price_add.clear();
+                                                } else {
+                                                  text_add.text = 'รับมัดจำ';
+                                                  price_add.text = '10000';
+                                                }
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: [
+                                                  AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 15,
+                                                    maxLines: 1,
+                                                    'รับมัดจำ',
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                  AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 15,
+                                                    maxLines: 1,
+                                                    '10,000.00',
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          ],
+                        )),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: Container(
+                          height: 350,
+                          child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.6 /
+                                        2.5,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        // keyboardType: TextInputType.name,
+                                        controller: text_add,
+
+                                        maxLines: 1,
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'รายการชำระ',
+                                          labelStyle: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.6 /
+                                        2.5,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: price_add,
+
+                                        maxLines: 1,
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'ยอดชำระ',
+                                          labelStyle: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 150,
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade900,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ตกลง',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          if (text_add.text != '' && price_add.text != '') {
+                            if (price_add.text != '0') {
+                              in_Trans_add();
+                              Navigator.of(context).pop();
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ปิด',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> addPlaySelect() {
@@ -11651,6 +13334,92 @@ class _PaysState extends State<Pays> {
     } catch (e) {}
   }
 
+  Future<Null> Show_Dialog() async {
+    Dialog_Update();
+  }
+
+  Dialog_Update() async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          backgroundColor: Colors.green,
+          content: Text('รับชำระเสร็จสิ้น ...!!',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontWeight_.Fonts_T))),
+    );
+    // showDialog<String>(
+    //   context: context,
+    //   barrierDismissible: true,
+    //   builder: (BuildContext context) => AlertDialog(
+    //     shape: const RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.all(Radius.circular(20.0))),
+    //     title: Center(
+    //       child: Text(
+    //         'รับชำระเสร็จสิ้น',
+    //         textAlign: TextAlign.center,
+    //         style: TextStyle(
+    //             color: Colors.black,
+    //             fontWeight: FontWeight.bold,
+    //             fontFamily: FontWeight_.Fonts_T),
+    //       ),
+    //     ),
+    //     actions: <Widget>[
+    //       StreamBuilder(
+    //           stream: Stream.periodic(const Duration(seconds: 1)),
+    //           builder: (context, snapshot) {
+    //             return Column(
+    //               children: [
+    //                 const SizedBox(
+    //                   height: 5.0,
+    //                 ),
+    //                 const Divider(
+    //                   color: Colors.grey,
+    //                   height: 4.0,
+    //                 ),
+    //                 const SizedBox(
+    //                   height: 5.0,
+    //                 ),
+    //                 Padding(
+    //                   padding: const EdgeInsets.all(8.0),
+    //                   child: Row(
+    //                     mainAxisAlignment: MainAxisAlignment.center,
+    //                     children: [
+    //                       Container(
+    //                         width: 100,
+    //                         decoration: const BoxDecoration(
+    //                           color: Colors.black,
+    //                           borderRadius: BorderRadius.only(
+    //                               topLeft: Radius.circular(10),
+    //                               topRight: Radius.circular(10),
+    //                               bottomLeft: Radius.circular(10),
+    //                               bottomRight: Radius.circular(10)),
+    //                         ),
+    //                         padding: const EdgeInsets.all(8.0),
+    //                         child: TextButton(
+    //                           onPressed: () async {
+    //                             Navigator.pop(context, 'OK');
+    //                           },
+    //                           child: const Text(
+    //                             'ปิด',
+    //                             style: TextStyle(
+    //                                 color: Colors.white,
+    //                                 fontWeight: FontWeight.bold,
+    //                                 fontFamily: FontWeight_.Fonts_T),
+    //                           ),
+    //                         ),
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ],
+    //             );
+    //           })
+    //     ],
+    //   ),
+    // );
+  }
+
   Future<Null> in_Trans_invoice(newValuePDFimg) async {
     var tableData00;
     setState(() {
@@ -11690,6 +13459,7 @@ class _PaysState extends State<Pays> {
     var time = Form_time.text;
     var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
     var dis_akan = dis_sum_Pakan.toString();
+    var dis_Matjum = dis_sum_Matjum.toString();
     //pamentpage == 0
     var payment1 = Form_payment1.text.toString();
     var payment2 = Form_payment2.text.toString();
@@ -11702,8 +13472,8 @@ class _PaysState extends State<Pays> {
     print('in_Trans_invoice>>> $payment1  $payment2 $bill');
 
     String url = pamentpage == 0
-        ? '${MyConstant().domain}/In_tran_financet1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan'
-        : '${MyConstant().domain}/In_tran_financet2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan';
+        ? '${MyConstant().domain}/In_tran_financet1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum'
+        : '${MyConstant().domain}/In_tran_financet2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -11727,41 +13497,44 @@ class _PaysState extends State<Pays> {
             (Slip_status.toString() == '1')
                 ? 'รับชำระ:$numinvoice '
                 : 'รับชำระ:$cFinn ');
-        PdfgenReceipt.exportPDF_Receipt(
-            tableData00,
-            context,
-            Slip_status,
-            _TransModels,
-            '${widget.Get_Value_cid}',
-            '${widget.namenew}',
-            '${sum_pvat}',
-            '${sum_vat}',
-            '${sum_wht}',
-            '${sum_amt}',
-            (discount_ == null) ? '0' : '${discount_} ',
-            '${nFormat.format(sum_disamt)}',
-            '${sum_amt - sum_disamt}',
-            // '${nFormat.format(sum_amt - sum_disamt)}',
-            '${renTal_name.toString()}',
-            '${Form_bussshop}',
-            '${Form_address}',
-            '${Form_tel}',
-            '${Form_email}',
-            '${Form_tax}',
-            '${Form_nameshop}',
-            '${renTalModels[0].bill_addr}',
-            '${renTalModels[0].bill_email}',
-            '${renTalModels[0].bill_tel}',
-            '${renTalModels[0].bill_tax}',
-            '${renTalModels[0].bill_name}',
-            newValuePDFimg,
-            pamentpage,
-            paymentName1,
-            paymentName2,
-            Form_payment1.text,
-            Form_payment2.text,
-            cFinn,
-            Value_newDateD);
+
+        (Default_Receipt_type == 1)
+            ? Show_Dialog()
+            : PdfgenReceipt.exportPDF_Receipt(
+                tableData00,
+                context,
+                Slip_status,
+                _TransModels,
+                '${widget.Get_Value_cid}',
+                '${widget.namenew}',
+                '${sum_pvat}',
+                '${sum_vat}',
+                '${sum_wht}',
+                '${sum_amt}',
+                (discount_ == null) ? '0' : '${discount_} ',
+                '${nFormat.format(sum_disamt)}',
+                '${sum_amt - sum_disamt}',
+                // '${nFormat.format(sum_amt - sum_disamt)}',
+                '${renTal_name.toString()}',
+                '${Form_bussshop}',
+                '${Form_address}',
+                '${Form_tel}',
+                '${Form_email}',
+                '${Form_tax}',
+                '${Form_nameshop}',
+                '${renTalModels[0].bill_addr}',
+                '${renTalModels[0].bill_email}',
+                '${renTalModels[0].bill_tel}',
+                '${renTalModels[0].bill_tax}',
+                '${renTalModels[0].bill_name}',
+                newValuePDFimg,
+                pamentpage,
+                paymentName1,
+                paymentName2,
+                Form_payment1.text,
+                Form_payment2.text,
+                cFinn,
+                Value_newDateD);
         setState(() async {
           await red_Trans_bill();
           red_Trans_select2();
@@ -11776,6 +13549,9 @@ class _PaysState extends State<Pays> {
           Form_note.clear();
           dis_sum_Pakan = 0.00;
           dis_Pakan = 0;
+          dis_matjum = 0;
+          sum_matjum = 0.00;
+          dis_sum_Matjum = 0.00;
           // Value_newDateY = null;
           pamentpage = 0;
           bills_name_ = 'บิลธรรมดา';
@@ -11885,6 +13661,7 @@ class _PaysState extends State<Pays> {
     var time = Form_time.text;
     //pamentpage == 0
     var dis_akan = dis_sum_Pakan.toString();
+    var dis_Matjum = dis_sum_Matjum.toString();
     var payment1 = Form_payment1.text.toString();
     var payment2 = Form_payment2.text.toString();
     var pSer1 = paymentSer1;
@@ -11897,8 +13674,8 @@ class _PaysState extends State<Pays> {
     // print('in_Trans_invoice_refno >>> $payment1  $payment2  $bill ');
 
     String url = pamentpage == 0
-        ? '${MyConstant().domain}/In_tran_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan'
-        : '${MyConstant().domain}/In_tran_finanref2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan';
+        ? '${MyConstant().domain}/In_tran_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum'
+        : '${MyConstant().domain}/In_tran_finanref2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -11921,40 +13698,42 @@ class _PaysState extends State<Pays> {
             (Slip_status.toString() == '1')
                 ? 'รับชำระ:$numinvoice '
                 : 'รับชำระ:$cFinn ');
-        PdfgenReceipt.exportPDF_Receipt1(
-            cFinn,
-            tableData00,
-            context,
-            Slip_status,
-            _TransModels,
-            '${widget.Get_Value_cid}',
-            '${widget.namenew}',
-            '${sum_pvat}',
-            '${sum_vat}',
-            '${sum_wht}',
-            '${sum_amt}',
-            '$sum_disp',
-            '${nFormat.format(sum_disamt)}',
-            '${sum_amt - sum_disamt}',
-            // '${nFormat.format(sum_amt - sum_disamt)}',
-            '${renTal_name.toString()}',
-            '${Form_bussshop}',
-            '${Form_address}',
-            '${Form_tel}',
-            '${Form_email}',
-            '${Form_tax}',
-            '${Form_nameshop}',
-            '${renTalModels[0].bill_addr}',
-            '${renTalModels[0].bill_email}',
-            '${renTalModels[0].bill_tel}',
-            '${renTalModels[0].bill_tax}',
-            '${renTalModels[0].bill_name}',
-            newValuePDFimg,
-            pamentpage,
-            paymentName1,
-            paymentName2,
-            Form_payment1.text,
-            Form_payment2.text);
+        (Default_Receipt_type == 1)
+            ? Show_Dialog()
+            : PdfgenReceipt.exportPDF_Receipt1(
+                cFinn,
+                tableData00,
+                context,
+                Slip_status,
+                _TransModels,
+                '${widget.Get_Value_cid}',
+                '${widget.namenew}',
+                '${sum_pvat}',
+                '${sum_vat}',
+                '${sum_wht}',
+                '${sum_amt}',
+                '$sum_disp',
+                '${nFormat.format(sum_disamt)}',
+                '${sum_amt - sum_disamt}',
+                // '${nFormat.format(sum_amt - sum_disamt)}',
+                '${renTal_name.toString()}',
+                '${Form_bussshop}',
+                '${Form_address}',
+                '${Form_tel}',
+                '${Form_email}',
+                '${Form_tax}',
+                '${Form_nameshop}',
+                '${renTalModels[0].bill_addr}',
+                '${renTalModels[0].bill_email}',
+                '${renTalModels[0].bill_tel}',
+                '${renTalModels[0].bill_tax}',
+                '${renTalModels[0].bill_name}',
+                newValuePDFimg,
+                pamentpage,
+                paymentName1,
+                paymentName2,
+                Form_payment1.text,
+                Form_payment2.text);
         setState(() async {
           await red_Trans_bill();
           red_Trans_select2();
@@ -11963,6 +13742,9 @@ class _PaysState extends State<Pays> {
           sum_disamtx.text = '0.00';
           dis_sum_Pakan = 0.00;
           dis_Pakan = 0;
+          dis_matjum = 0;
+          sum_matjum = 0.00;
+          dis_sum_Matjum = 0.00;
           sum_dispx.clear();
           Form_payment1.clear();
           Form_payment2.clear();
@@ -12011,6 +13793,7 @@ class _PaysState extends State<Pays> {
     var time = Form_time.text;
     //pamentpage == 0
     var dis_akan = dis_sum_Pakan.toString();
+    var dis_Matjum = dis_sum_Matjum.toString();
     var payment1 = Form_payment1.text.toString();
     var payment2 = Form_payment2.text.toString();
     var pSer1 = paymentSer1;
@@ -12023,8 +13806,8 @@ class _PaysState extends State<Pays> {
     print('in_Trans_invoice>>> $payment1  $payment2 $bill');
 
     String url = pamentpage == 0
-        ? '${MyConstant().domain}/In_tran_re_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan'
-        : '${MyConstant().domain}/In_tran_re_finanref2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan';
+        ? '${MyConstant().domain}/In_tran_re_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum'
+        : '${MyConstant().domain}/In_tran_re_finanref2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -12095,6 +13878,9 @@ class _PaysState extends State<Pays> {
           sum_disamtx.text = '0.00';
           dis_sum_Pakan = 0.00;
           dis_Pakan = 0;
+          dis_matjum = 0;
+          sum_matjum = 0.00;
+          dis_sum_Matjum = 0.00;
           sum_dispx.clear();
           Form_payment1.clear();
           Form_payment2.clear();

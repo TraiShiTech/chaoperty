@@ -17,6 +17,7 @@ import 'Report_Screen.dart';
 
 class Excgen_DailyReport {
   static void exportExcel_DailyReport(
+      ser_type_repro,
       context,
       NameFile_,
       _verticalGroupValue_NameFile,
@@ -169,7 +170,14 @@ class Excgen_DailyReport {
     sheet.getRangeByName('N1').cellStyle = globalStyle22;
     // sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
-    range.setText('รายงานประจำวัน ( โซน : $Value_Chang_Zone_Daily)');
+    range.setText(
+      (ser_type_repro == '1')
+          ? 'รายงานประจำวัน ( โซน : $Value_Chang_Zone_Daily)'
+          : (ser_type_repro == '2')
+              ? 'รายงานประจำวัน เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Daily)'
+              : 'รายงานประจำวัน เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Daily)',
+      // 'รายงานประจำวัน ( โซน : $Value_Chang_Zone_Daily)'
+    );
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -496,8 +504,16 @@ class Excgen_DailyReport {
     MimeType type = MimeType.MICROSOFTEXCEL;
 
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
-      String path = await FileSaver.instance
-          .saveFile("รายงานประจำวัน", data, "xlsx", mimeType: type);
+      String path = await FileSaver.instance.saveFile(
+          (ser_type_repro == '1')
+              ? 'รายงานประจำวัน ( โซน : $Value_Chang_Zone_Daily)'
+              : (ser_type_repro == '2')
+                  ? 'รายงานประจำวัน เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Daily)'
+                  : 'รายงานประจำวัน เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Daily)',
+          // "รายงานประจำวัน",
+          data,
+          "xlsx",
+          mimeType: type);
       log(path);
     } else {
       String path = await FileSaver.instance

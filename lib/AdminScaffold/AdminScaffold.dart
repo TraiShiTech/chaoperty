@@ -1,7 +1,7 @@
 // ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:marquee/marquee.dart';
 import 'package:device_marketing_names/device_marketing_names.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
@@ -447,6 +447,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     }
   }
 
+  String read_data_davtext = '';
   Future<Null> Check_connected() async {
     if (userModels.isNotEmpty) {
       userModels.clear();
@@ -455,7 +456,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     var ren = preferences.getString('renTalSer');
     String url =
         '${MyConstant().domain}/Connected_User.php?isAdd=true&ren=$ren&emailrental=$renTal_Email';
-
+    int indexfor = 0;
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -479,6 +480,10 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               userModels.add(userModel);
             });
           }
+          if (indexfor == 0) {
+            read_data_davtext = '${userModel.dev_text}';
+          }
+          indexfor++;
         }
       } else {}
     } catch (e) {}
@@ -888,6 +893,273 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     );
   }
 
+  final Dev_text = TextEditingController();
+  Future<void> _showMyDialogDev() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: Dev_text,
+                      onSaved: (String? value) {
+                        // This optional block of code can be used to run
+                        // code when the user saves the form.
+                      },
+                      validator: (String? value) {
+                        return (value != null && value.contains('@'))
+                            ? 'Do not use the @ char.'
+                            : null;
+                      },
+                      decoration: InputDecoration(
+                          fillColor: Colors.white.withOpacity(0.3),
+                          filled: true,
+                          prefixIcon:
+                              const Icon(Icons.chat, color: Colors.black),
+                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                          focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(15),
+                              topLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
+                            ),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                            ),
+                          ),
+                          errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(15),
+                              topLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
+                            ),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                            ),
+                          ),
+                          labelStyle: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                              fontFamily: Font_.Fonts_T)),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    child: Container(
+                      width: 250,
+                      decoration: const BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Center(
+                        child: Text(
+                          'ข้อความแจ้งเตือน',
+                          style: TextStyle(
+                            // fontSize: 15,
+                            color: Colors.white,
+                            fontFamily: Font_.Fonts_T,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    onTap: () async {
+                      if (Dev_text.text != '') {
+                        String url =
+                            '${MyConstant().domain}/Awat_UP_sytem.php?isAdd=true&dev_tex=${Dev_text.text}';
+
+                        try {
+                          var response = await http.get(Uri.parse(url));
+
+                          var result = json.decode(response.body);
+                          if (result.toString() == 'true') {
+                            setState(() {
+                              Dev_text.clear();
+                            });
+                            Navigator.of(context).pop();
+                          }
+                        } catch (e) {
+                          setState(() {
+                            Dev_text.clear();
+                          });
+                        }
+                      } else {}
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    child: Container(
+                      width: 250,
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Center(
+                        child: Text(
+                          'ยกเลิกข้อความแจ้งเตือน',
+                          style: TextStyle(
+                            // fontSize: 15,
+                            color: Colors.white,
+                            fontFamily: Font_.Fonts_T,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    onTap: () async {
+                      String tex_t = '';
+                      String url =
+                          '${MyConstant().domain}/Awat_UP_sytem.php?isAdd=true&dev_tex=${tex_t}';
+
+                      try {
+                        var response = await http.get(Uri.parse(url));
+
+                        var result = json.decode(response.body);
+                        if (result.toString() == 'true') {
+                          setState(() {
+                            Dev_text.clear();
+                          });
+                          Navigator.of(context).pop();
+                        }
+                      } catch (e) {
+                        setState(() {
+                          Dev_text.clear();
+                        });
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                const Divider(
+                  color: Colors.grey,
+                  height: 4.0,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    child: Container(
+                      width: 250,
+                      decoration: const BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Center(
+                        child: Text(
+                          'แจ้งเตือน Dialog หลังอัพเดต',
+                          style: TextStyle(
+                            // fontSize: 15,
+                            color: Colors.white,
+                            fontFamily: Font_.Fonts_T,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    onTap: () async {
+                      DateTime now = DateTime.now();
+                      String formattedDate =
+                          DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+
+                      String url =
+                          '${MyConstant().domain}/OK_UP_sytem.php?isAdd=true&datex=${formattedDate}';
+
+                      try {
+                        var response = await http.get(Uri.parse(url));
+
+                        var result = json.decode(response.body);
+                        if (result.toString() == 'true') {
+                          Navigator.of(context).pop();
+                        }
+                      } catch (e) {}
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                const Divider(
+                  color: Colors.grey,
+                  height: 4.0,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            InkWell(
+              child: Container(
+                width: 100,
+                decoration: const BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                ),
+                padding: const EdgeInsets.all(8.0),
+                child: const Center(
+                  child: Text(
+                    'ปิด',
+                    style: TextStyle(
+                      // fontSize: 15,
+                      color: Colors.white,
+                      fontFamily: Font_.Fonts_T,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (Responsive.isDesktop(context))
@@ -986,8 +1258,66 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               }),
         ),
         actions: [
-          Column(
+          Row(
             children: [
+              StreamBuilder(
+                  stream: Stream.periodic(const Duration(seconds: 0)),
+                  builder: (context, snapshot) {
+                    return Row(
+                      children: [
+                        if (!Responsive.isMobile(context) &&
+                            read_data_davtext != '')
+                          Container(
+                            width: (Responsive.isDesktop(context))
+                                ? MediaQuery.of(context).size.width / 4
+                                : MediaQuery.of(context).size.width / 2,
+                            child: Marquee(
+                              text:
+                                  '   📢 แจ้งเตือน : $read_data_davtext     ||   ',
+
+                              // text: '$read_data_davtext',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 179, 92, 85),
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T),
+                              scrollAxis: Axis.horizontal,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              // blankSpace: 20.0,
+                              // velocity: 100.0,
+                              pauseAfterRound: Duration(seconds: 1),
+                              // startPadding: 10.0,
+                              // accelerationDuration: Duration(seconds: 5),
+                              accelerationCurve: Curves.linear,
+                              decelerationDuration: Duration(seconds: 5),
+                              decelerationCurve: Curves.easeInOut,
+                            ),
+                          ),
+                      ],
+                    );
+                  }),
+              if (Responsive.isDesktop(context) && ser_user == '63' ||
+                  ser_user == '56' ||
+                  ser_user == '61' ||
+                  ser_user == '37')
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {
+                      _showMyDialogDev();
+                    },
+                    child: Container(
+                      color: Colors.yellow,
+                      child: Center(
+                          child: Text(
+                        '  DEV  ',
+                        style: TextStyle(
+                            color: AdminScafScreen_Color.Colors_Text1_,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T),
+                      )),
+                    ),
+                  ),
+                ),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.lightGreen[200],
@@ -2065,8 +2395,67 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               }),
         ),
         actions: [
-          Column(
+          Row(
             children: [
+              (Responsive.isMobile(context))
+                  ? Text('')
+                  : StreamBuilder(
+                      stream: Stream.periodic(const Duration(seconds: 0)),
+                      builder: (context, snapshot) {
+                        return Row(
+                          children: [
+                            if (read_data_davtext != '')
+                              Container(
+                                width: (Responsive.isDesktop(context))
+                                    ? MediaQuery.of(context).size.width / 4
+                                    : MediaQuery.of(context).size.width / 5,
+                                child: Marquee(
+                                  text:
+                                      '   📢 แจ้งเตือน : $read_data_davtext     ||   ',
+
+                                  /// velocity: 50.0, //speed
+                                  // text: '$read_data_davtext',
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(255, 179, 92, 85),
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                  scrollAxis: Axis.horizontal,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  // blankSpace: 20.0,
+                                  // velocity: 100.0,
+                                  pauseAfterRound: Duration(seconds: 1),
+                                  // startPadding: 10.0,
+                                  // accelerationDuration: Duration(seconds: 5),
+                                  accelerationCurve: Curves.linear,
+                                  decelerationDuration: Duration(seconds: 5),
+                                  decelerationCurve: Curves.easeInOut,
+                                ),
+                              ),
+                          ],
+                        );
+                      }),
+              if (!Responsive.isMobile(context) && ser_user == '63' ||
+                  ser_user == '56' ||
+                  ser_user == '61' ||
+                  ser_user == '37')
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: InkWell(
+                    onTap: () {
+                      _showMyDialogDev();
+                    },
+                    child: Container(
+                      color: Colors.yellow,
+                      child: Center(
+                          child: Text(
+                        '  DEV  ',
+                        style: TextStyle(
+                            color: AdminScafScreen_Color.Colors_Text1_,
+                            fontFamily: FontWeight_.Fonts_T),
+                      )),
+                    ),
+                  ),
+                ),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.lightGreen[200],

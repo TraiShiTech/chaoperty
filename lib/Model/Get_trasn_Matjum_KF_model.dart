@@ -1,4 +1,4 @@
-class TransReBillModelRECM {
+class TransMatjumKFModel {
   String? ser;
   String? datex;
   String? timex;
@@ -74,8 +74,8 @@ class TransReBillModelRECM {
   String? total;
   String? disendbill;
   String? diffx;
-  String? dtype;
   String? dtypex;
+  String? dtype;
   String? paid;
   String? refund;
   String? returnSt;
@@ -101,190 +101,113 @@ class TransReBillModelRECM {
   String? unit_con;
   String? qty_con;
   String? amt_con;
-  String? total_bill;
-  String? sname;
-  String? ln;
-  String? pdate;
-  String? total_dis;
-  String? room_number;
+  String? img;
+  String? ucost;
 
-  String? cname;
-  String? addr;
-  String? type;
-  String? ramt;
-  String? ramtd;
-  String? bno;
-  String? bank;
-  String? remark1;
-  String? zn;
-  String? area;
-  String? zser;
-  String? zser1;
-  String? znn;
-  String? descr;
-  String? descr1;
+  TransMatjumKFModel(
+      {this.ser,
+      this.datex,
+      this.timex,
+      this.user,
+      this.rser,
+      this.daterec,
+      this.timerec,
+      this.date,
+      this.dateacc,
+      this.duedate,
+      this.dateCheckin,
+      this.dateCheckout,
+      this.shopno,
+      this.pos,
+      this.shifts,
+      this.st,
+      this.dochtax,
+      this.doctax,
+      this.cid,
+      this.meter,
+      this.docno,
+      this.custno,
+      this.supno,
+      this.supnox,
+      this.refno,
+      this.refnox,
+      this.po,
+      this.inv,
+      this.accode,
+      this.accodeAccrued,
+      this.service,
+      this.expense,
+      this.xxxno,
+      this.xxxdate,
+      this.barcode,
+      this.stcode,
+      this.name,
+      this.namex,
+      this.unit,
+      this.no,
+      this.tqty,
+      this.qty1,
+      this.qty2,
+      this.qty3,
+      this.qty4,
+      this.qty5,
+      this.agqty,
+      this.emp,
+      this.distype,
+      this.dis,
+      this.discount,
+      this.deposit,
+      this.other,
+      this.fine,
+      this.expser,
+      this.expname,
+      this.term,
+      this.sdate,
+      this.ldate,
+      this.amt,
+      this.amtx,
+      this.vtype,
+      this.nvat,
+      this.tax,
+      this.vat,
+      this.pvat,
+      this.xpvat,
+      this.xvat,
+      this.wtax,
+      this.wamt,
+      this.nwht,
+      this.wht,
+      this.total,
+      this.disendbill,
+      this.diffx,
+      this.dtypex,
+      this.dtype,
+      this.paid,
+      this.refund,
+      this.returnSt,
+      this.asset,
+      this.pass,
+      this.datepass,
+      this.remark,
+      this.ovalue,
+      this.nvalue,
+      this.qty,
+      this.pri,
+      this.c_pvat,
+      this.c_nvat,
+      this.c_vat,
+      this.c_amt,
+      this.c_refno,
+      this.c_note,
+      this.ser_in,
+      this.docno_in,
+      this.unit_con,
+      this.qty_con,
+      this.img,
+      this.amt_con,
+      this.ucost});
 
-  String? sum_expser1;
-  String? sum_expser9;
-  String? sum_expser10;
-  String? sum_expser11;
-  String? sum_expser12;
-
-  String? all_sum_expser1;
-  String? all_sum_expser9;
-  String? all_sum_expser10;
-  String? all_sum_expser11;
-  String? all_sum_expser12;
-  String? slip;
-
-  String? zonepri;
-  String? jon;
-  String? ren_pri;
-  String? total_expname;
-  String? sub_zone;
-  String? zn_sub;
-
-  TransReBillModelRECM({
-    this.ser,
-    this.datex,
-    this.timex,
-    this.user,
-    this.rser,
-    this.daterec,
-    this.timerec,
-    this.date,
-    this.dateacc,
-    this.duedate,
-    this.dateCheckin,
-    this.dateCheckout,
-    this.shopno,
-    this.pos,
-    this.shifts,
-    this.st,
-    this.dochtax,
-    this.doctax,
-    this.cid,
-    this.meter,
-    this.docno,
-    this.custno,
-    this.supno,
-    this.supnox,
-    this.refno,
-    this.refnox,
-    this.po,
-    this.inv,
-    this.accode,
-    this.accodeAccrued,
-    this.service,
-    this.expense,
-    this.xxxno,
-    this.xxxdate,
-    this.barcode,
-    this.stcode,
-    this.name,
-    this.namex,
-    this.unit,
-    this.no,
-    this.tqty,
-    this.qty1,
-    this.qty2,
-    this.qty3,
-    this.qty4,
-    this.qty5,
-    this.agqty,
-    this.emp,
-    this.distype,
-    this.dis,
-    this.discount,
-    this.deposit,
-    this.other,
-    this.fine,
-    this.expser,
-    this.expname,
-    this.term,
-    this.sdate,
-    this.ldate,
-    this.amt,
-    this.amtx,
-    this.vtype,
-    this.nvat,
-    this.tax,
-    this.vat,
-    this.pvat,
-    this.xpvat,
-    this.xvat,
-    this.wtax,
-    this.wamt,
-    this.nwht,
-    this.wht,
-    this.total,
-    this.disendbill,
-    this.diffx,
-    this.dtype,
-    this.dtypex,
-    this.paid,
-    this.refund,
-    this.returnSt,
-    this.asset,
-    this.pass,
-    this.datepass,
-    this.remark,
-    this.ovalue,
-    this.nvalue,
-    this.qty,
-    this.pri,
-    this.c_pvat,
-    this.c_nvat,
-    this.c_vat,
-    this.c_amt,
-    this.c_refno,
-    this.c_note,
-    this.ser_in,
-    this.docno_in,
-    this.unit_con,
-    this.qty_con,
-    this.amt_con,
-    this.total_bill,
-    this.sname,
-    this.ln,
-    this.pdate,
-    this.total_dis,
-    this.room_number,
-    this.cname,
-    this.addr,
-    this.type,
-    this.ramt,
-    this.ramtd,
-    this.bno,
-    this.bank,
-    this.remark1,
-    this.zn,
-    this.area,
-    this.zser,
-    this.zser1,
-    this.znn,
-    this.descr,
-    this.descr1,
-    this.sum_expser1,
-    this.sum_expser9,
-    this.sum_expser10,
-    this.sum_expser11,
-    this.sum_expser12,
-    this.all_sum_expser1,
-    this.all_sum_expser9,
-    this.all_sum_expser10,
-    this.all_sum_expser11,
-    this.all_sum_expser12,
-    this.slip,
-    this.zonepri,
-    this.jon,
-    this.ren_pri,
-    this.total_expname,
-    this.sub_zone,
-    this.zn_sub,
-  });
-
-  TransReBillModelRECM.fromJson(Map<String, dynamic> json) {
+  TransMatjumKFModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
     datex = json['datex'];
     timex = json['timex'];
@@ -360,8 +283,8 @@ class TransReBillModelRECM {
     total = json['total'];
     disendbill = json['disendbill'];
     diffx = json['diffx'];
-    dtype = json['dtype'];
     dtypex = json['dtypex'];
+    dtype = json['dtype'];
     paid = json['paid'];
     refund = json['refund'];
     returnSt = json['return_st'];
@@ -385,47 +308,8 @@ class TransReBillModelRECM {
     unit_con = json['unit_con'];
     qty_con = json['qty_con'];
     amt_con = json['amt_con'];
-    total_bill = json['total_bill'];
-    sname = json['sname'];
-    ln = json['ln'];
-    pdate = json['pdate'];
-    total_dis = json['total_dis'];
-    room_number = json['room_number'];
-    cname = json['cname'];
-    addr = json['addr'];
-    type = json['type'];
-    ramt = json['ramt'];
-    ramtd = json['ramtd'];
-    bno = json['bno'];
-    bank = json['bank'];
-    remark1 = json['remark1'];
-    zn = json['zn'];
-    area = json['area'];
-    zser = json['zser'];
-    zser1 = json['zser1'];
-    znn = json['znn'];
-    descr = json['descr'];
-    descr1 = json['descr1'];
-
-    sum_expser1 = json['sum_expser1'];
-    sum_expser9 = json['sum_expser9'];
-    sum_expser10 = json['sum_expser10'];
-    sum_expser11 = json['sum_expser11'];
-    sum_expser12 = json['sum_expser12'];
-
-    all_sum_expser1 = json['all_sum_expser1'];
-    all_sum_expser9 = json['all_sum_expser9'];
-    all_sum_expser10 = json['all_sum_expser10'];
-    all_sum_expser11 = json['all_sum_expser11'];
-    all_sum_expser12 = json['all_sum_expser12'];
-    slip = json['slip'];
-
-    zonepri = json['zonepri'];
-    jon = json['jon'];
-    ren_pri = json['ren_pri'];
-    total_expname = json['total_expname'];
-    sub_zone = json['sub_zone'];
-    zn_sub = json['zn_sub'];
+    img = json['img'];
+    ucost= json['ucost'];
   }
 
   Map<String, dynamic> toJson() {
@@ -505,8 +389,8 @@ class TransReBillModelRECM {
     data['total'] = this.total;
     data['disendbill'] = this.disendbill;
     data['diffx'] = this.diffx;
-    data['dtype'] = this.dtype;
     data['dtypex'] = this.dtypex;
+    data['dtype'] = this.dtype;
     data['paid'] = this.paid;
     data['refund'] = this.refund;
     data['return_st'] = this.returnSt;
@@ -530,48 +414,8 @@ class TransReBillModelRECM {
     data['unit_con'] = this.unit_con;
     data['qty_con'] = this.qty_con;
     data['amt_con'] = this.amt_con;
-    data['total_bill'] = this.total_bill;
-    data['sname'] = this.sname;
-    data['ln'] = this.ln;
-    data['pdate'] = this.pdate;
-    data['total_dis'] = this.total_dis;
-    data['room_number'] = this.room_number;
-    data['cname'] = this.cname;
-    data['addr'] = this.addr;
-    data['type'] = this.type;
-    data['ramt'] = this.ramt;
-    data['ramtd'] = this.ramtd;
-    data['bno'] = this.bno;
-    data['bank'] = this.bank;
-    data['remark1'] = this.remark1;
-    data['zn'] = this.zn;
-    data['area'] = this.area;
-    data['zser'] = this.zser;
-    data['zser1'] = this.zser1;
-    data['znn'] = this.znn;
-    data['descr'] = this.descr;
-    data['descr1'] = this.descr1;
-
-    data['sum_expser1'] = this.sum_expser1;
-    data['sum_expser9'] = this.sum_expser9;
-    data['sum_expser10'] = this.sum_expser10;
-    data['sum_expser11'] = this.sum_expser11;
-    data['sum_expser12'] = this.sum_expser12;
-
-    data['all_sum_expser1'] = this.all_sum_expser1;
-    data['all_sum_expser9'] = this.all_sum_expser9;
-    data['all_sum_expser10'] = this.all_sum_expser10;
-    data['all_sum_expser11'] = this.all_sum_expser11;
-    data['all_sum_expser12'] = this.all_sum_expser12;
-
-    data['slip'] = this.slip;
-    data['zonepri'] = this.zonepri;
-    data['jon'] = this.jon;
-    data['ren_pri'] = this.ren_pri;
-    data['total_expname'] = this.total_expname;
-    data['sub_zone'] = this.sub_zone;
-    data['zn_sub'] = this.zn_sub;
-
+    data['img'] = this.img;
+       data['ucost'] = this.ucost;
     return data;
   }
 }

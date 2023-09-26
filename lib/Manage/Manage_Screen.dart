@@ -11,6 +11,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:grouped_buttons_ns/grouped_buttons_ns.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +21,7 @@ import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetArea_Model.dart';
 import '../Model/GetContractx_Model.dart';
+import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/Get_maintenance_model.dart';
@@ -31,6 +33,8 @@ import '../Responsive/responsive.dart';
 import '../Setting/SettingScreen.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
+import 'dart:html' as html;
 
 class ManageScreen extends StatefulWidget {
   const ManageScreen({super.key});
@@ -53,6 +57,7 @@ class _ManageScreenState extends State<ManageScreen> {
   List<TeNantModel> teNantModels = [];
   List<ExpSZModel> expSZModels = [];
   List<ZoneModel> zoneModels = [];
+  List<RenTalModel> renTalModels = [];
   final FormMeter_text = TextEditingController();
   final Formbecause_ = TextEditingController();
   String? typezonesName, typevalue;
@@ -69,16 +74,93 @@ class _ManageScreenState extends State<ManageScreen> {
       custnoarea,
       zone_ser,
       zone_name;
+  String? rtname,
+      type,
+      typex,
+      renname,
+      bill_name,
+      bill_addr,
+      bill_tax,
+      bill_tel,
+      bill_email,
+      expbill,
+      cFinn,
+      expbill_name,
+      bill_default,
+      bill_tser,
+      Slip_status,
+      foder,
+      bills_name_,
+      renTal_name;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    read_GC_rental();
     checkPreferance();
     read_GC_zone();
     red_Trans_bill();
     red_Trans_c_maintenance();
     red_exp_sz();
     read_GC_areaSelect();
+  }
+
+  Future<Null> read_GC_rental() async {
+    if (renTalModels.isNotEmpty) {
+      setState(() {
+        renTalModels.clear();
+      });
+    }
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
+    renTal_name = preferences.getString('renTalName');
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          RenTalModel renTalModel = RenTalModel.fromJson(map);
+          var rtnamex = renTalModel.rtname!.trim();
+          var typexs = renTalModel.type!.trim();
+          var typexx = renTalModel.typex!.trim();
+          var bill_namex = renTalModel.bill_name!.trim();
+          var bill_addrx = renTalModel.bill_addr!.trim();
+          var bill_taxx = renTalModel.bill_tax!.trim();
+          var bill_telx = renTalModel.bill_tel!.trim();
+          var bill_emailx = renTalModel.bill_email!.trim();
+          var bill_defaultx = renTalModel.bill_default;
+          var bill_tserx = renTalModel.tser;
+          var name = renTalModel.pn!.trim();
+          var foderx = renTalModel.dbn;
+          setState(() {
+            foder = foderx;
+            rtname = rtnamex;
+            type = typexs;
+            typex = typexx;
+            renname = name;
+            bill_name = bill_namex;
+            bill_addr = bill_addrx;
+            bill_tax = bill_taxx;
+            bill_tel = bill_telx;
+            bill_email = bill_emailx;
+            bill_default = bill_defaultx;
+            bill_tser = bill_tserx;
+            renTalModels.add(renTalModel);
+            if (bill_defaultx == 'P') {
+              bills_name_ = 'บิลธรรมดา';
+            } else {
+              bills_name_ = 'ใบกำกับภาษี';
+            }
+          });
+        }
+      } else {}
+    } catch (e) {}
+    print('name>>>>>  $renname');
   }
 
   Future<Null> checkPreferance() async {
@@ -196,6 +278,16 @@ class _ManageScreenState extends State<ManageScreen> {
           zoneModels.add(zoneModel);
         });
       }
+      zoneModels.sort((a, b) {
+        if (a.zn == 'ทั้งหมด') {
+          return -1; // 'all' should come before other elements
+        } else if (b.zn == 'ทั้งหมด') {
+          return 1; // 'all' should come after other elements
+        } else {
+          return a.zn!
+              .compareTo(b.zn!); // sort other elements in ascending order
+        }
+      });
     } catch (e) {}
   }
 
@@ -551,7 +643,634 @@ class _ManageScreenState extends State<ManageScreen> {
 
   final Form_note = TextEditingController();
 
-  ///----------------->
+/////////////----------------------------------------------------------->
+  var extension_;
+  var file_;
+  String? base64_Slip, fileName_Slip;
+  Future<void> uploadFile_Slip(docno, Cid, ser) async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.getImage(
+        source: ImageSource.gallery, maxHeight: 100, maxWidth: 100);
+
+    if (pickedFile == null) {
+      print('User canceled image selection');
+      return;
+    } else {
+      // 2. Read the image as bytes
+      final imageBytes = await pickedFile.readAsBytes();
+
+      // 3. Encode the image as a base64 string
+      final base64Image = base64Encode(imageBytes);
+      setState(() {
+        base64_Slip = base64Image;
+      });
+
+      setState(() {
+        extension_ = 'png';
+        // file_ = file;
+      });
+      print(extension_);
+      print(extension_);
+      Future.delayed(Duration(milliseconds: 200), () {
+        OKuploadFile_Slip(docno, Cid, ser);
+      });
+    }
+    // print(base64_Slip);
+    //
+  }
+
+/////////////----------------------------------------------------------->
+  Future<void> OKuploadFile_Slip(docno, Cid, ser) async {
+    if (base64_Slip != null) {
+      String Path_foder = 'Meter';
+      String dateTimeNow = DateTime.now().toString();
+      String date = DateFormat('ddMMyyyy')
+          .format(DateTime.parse('${dateTimeNow}'))
+          .toString();
+      final dateTimeNow2 = DateTime.now().toUtc().add(const Duration(hours: 7));
+      final formatter2 = DateFormat('HHmmss');
+      final formattedTime2 = formatter2.format(dateTimeNow2);
+      String Time_ = formattedTime2.toString();
+
+      setState(() {
+        fileName_Slip = 'Meter_${Cid}_${date}_$Time_.$extension_';
+      });
+
+      try {
+        // 2. Read the image as bytes
+        // final imageBytes = await pickedFile.readAsBytes();
+
+        // 3. Encode the image as a base64 string
+        // final base64Image = base64Encode(imageBytes);
+
+        // 4. Make an HTTP POST request to your server
+        final url =
+            '${MyConstant().domain}/File_uploadMeter.php?name=$fileName_Slip&Foder=$foder&extension=$extension_';
+
+        final response = await http.post(
+          Uri.parse(url),
+          body: {
+            'image': base64_Slip,
+            'Foder': foder,
+            'name': fileName_Slip,
+            'ex': extension_.toString()
+          }, // Send the image as a form field named 'image'
+        );
+
+        if (response.statusCode == 200) {
+          print('File uploaded successfully!*** : $fileName_Slip');
+          OK_up_insert_img(docno, Cid, ser);
+        } else {
+          print('Image upload failed');
+        }
+      } catch (e) {
+        print('Error during image processing: $e');
+      }
+    } else {
+      print('ยังไม่ได้เลือกรูปภาพ');
+    }
+  }
+
+/////////////----------------------------------------------------------->
+  Future<void> OK_up_insert_img(docno, Cid, ser) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+
+    var docno_ = docno;
+    String url =
+        '${MyConstant().domain}/UPC_Invoice_img.php?isAdd=true&ren=$ren&fileName=$fileName_Slip&transer=$ser';
+    print('$docno_ /// $ren /// $user /// $fileName_Slip ');
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+
+      if (result.toString() == 'true') {
+        //print(result);
+        // Navigator.pop(context);
+        setState(() {
+          checkPreferance();
+          read_GC_zone();
+          red_Trans_bill();
+          red_Trans_c_maintenance();
+          red_exp_sz();
+          read_GC_areaSelect();
+          read_GC_rental();
+        });
+      }
+    } catch (e) {
+      print('******************** > $e');
+    }
+  }
+
+  ////------------------------------------------------->
+  Future<void> Dialog_img_Meter(docno, Cid, ser, index) async {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Center(
+          child: Text(
+            '$Cid',
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+                fontFamily: FontWeight_.Fonts_T),
+          ),
+        ),
+        content: SizedBox(
+          width: 350,
+          // width: MediaQuery.of(context)
+          //     .size
+          //     .width,
+          child: (transMeterModels.isEmpty ||
+                  transMeterModels[index].img.toString() == '' ||
+                  transMeterModels[index].img == null)
+              ? Center(child: Icon(Icons.image_not_supported))
+              : Image.network(
+                  // '${MyConstant().domain}/files/kad_taii/logo/${Img_logo_}',
+                  '${MyConstant().domain}/files/$foder/Meter/${transMeterModels[index].img}',
+                  // fit: BoxFit.cover,
+                ),
+        ),
+        actions: <Widget>[
+          Column(
+            children: [
+              const SizedBox(
+                height: 5.0,
+              ),
+              const Divider(
+                color: Colors.grey,
+                height: 4.0,
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                        ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextButton(
+                          onPressed: () async {
+                            uploadFile_Slip(docno, Cid, ser);
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'แก้ไข',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text(
+                                'ปิด',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  ////------------------------------------------------->
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1666,7 +2385,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                   // ),
 
                                   Expanded(
-                                    flex: 10,
+                                    flex: 6,
                                     child: Container(
                                       height: 30,
                                       decoration: const BoxDecoration(
@@ -1882,63 +2601,63 @@ class _ManageScreenState extends State<ManageScreen> {
                                         ),
                                       ),
                                     ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.deepPurple[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'Vat (%)',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.deepPurple[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'Vat (บาท)',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.deepPurple[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'ก่อน Vat (บาท)',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    // Expanded(
+                                    //   flex: 2,
+                                    //   child: Container(
+                                    //     height: 50,
+                                    //     color: Colors.deepPurple[300],
+                                    //     child: const Center(
+                                    //       child: Text(
+                                    //         'Vat (%)',
+                                    //         textAlign: TextAlign.center,
+                                    //         style: TextStyle(
+                                    //           color: ManageScreen_Color
+                                    //               .Colors_Text1_,
+                                    //           fontWeight: FontWeight.bold,
+                                    //           fontFamily: FontWeight_.Fonts_T,
+                                    //         ),
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    // Expanded(
+                                    //   flex: 2,
+                                    //   child: Container(
+                                    //     height: 50,
+                                    //     color: Colors.deepPurple[300],
+                                    //     child: const Center(
+                                    //       child: Text(
+                                    //         'Vat (บาท)',
+                                    //         textAlign: TextAlign.center,
+                                    //         style: TextStyle(
+                                    //           color: ManageScreen_Color
+                                    //               .Colors_Text1_,
+                                    //           fontWeight: FontWeight.bold,
+                                    //           fontFamily: FontWeight_.Fonts_T,
+                                    //         ),
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    // Expanded(
+                                    //   flex: 2,
+                                    //   child: Container(
+                                    //     height: 50,
+                                    //     color: Colors.deepPurple[300],
+                                    //     child: const Center(
+                                    //       child: Text(
+                                    //         'ก่อน Vat (บาท)',
+                                    //         textAlign: TextAlign.center,
+                                    //         style: TextStyle(
+                                    //           color: ManageScreen_Color
+                                    //               .Colors_Text1_,
+                                    //           fontWeight: FontWeight.bold,
+                                    //           fontFamily: FontWeight_.Fonts_T,
+                                    //         ),
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
                                     Expanded(
                                       flex: 2,
                                       child: Container(
@@ -1947,6 +2666,25 @@ class _ManageScreenState extends State<ManageScreen> {
                                         child: const Center(
                                           child: Text(
                                             'รวม Vat',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: ManageScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        height: 50,
+                                        color: Colors.deepPurple[300],
+                                        child: const Center(
+                                          child: Text(
+                                            '...',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: ManageScreen_Color
@@ -2618,51 +3356,51 @@ class _ManageScreenState extends State<ManageScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Text(
-                                                  '${nFormat.format(double.parse(transMeterModels[index].nvat!))}',
-                                                  // '${transMeterModels[index].nvat} %',
-                                                  textAlign: TextAlign.right,
-                                                  style: const TextStyle(
-                                                    color: ManageScreen_Color
-                                                        .Colors_Text2_,
-                                                    // fontWeight:
-                                                    //     FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Text(
-                                                  '${nFormat.format(double.parse(transMeterModels[index].c_vat!))}',
-                                                  //'${transMeterModels[index].c_vat}',
-                                                  textAlign: TextAlign.right,
-                                                  style: const TextStyle(
-                                                    color: ManageScreen_Color
-                                                        .Colors_Text2_,
-                                                    // fontWeight:
-                                                    //     FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Text(
-                                                  // '${transMeterModels[index].c_pvat}',
-                                                  '${nFormat.format(double.parse(transMeterModels[index].c_pvat!))}',
-                                                  textAlign: TextAlign.right,
-                                                  style: const TextStyle(
-                                                    color: ManageScreen_Color
-                                                        .Colors_Text2_,
-                                                    // fontWeight:
-                                                    //     FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
+                                              // Expanded(
+                                              //   flex: 2,
+                                              //   child: Text(
+                                              //     '${nFormat.format(double.parse(transMeterModels[index].nvat!))}',
+                                              //     // '${transMeterModels[index].nvat} %',
+                                              //     textAlign: TextAlign.right,
+                                              //     style: const TextStyle(
+                                              //       color: ManageScreen_Color
+                                              //           .Colors_Text2_,
+                                              //       // fontWeight:
+                                              //       //     FontWeight.bold,
+                                              //       fontFamily: Font_.Fonts_T,
+                                              //     ),
+                                              //   ),
+                                              // ),
+                                              // Expanded(
+                                              //   flex: 2,
+                                              //   child: Text(
+                                              //     '${nFormat.format(double.parse(transMeterModels[index].c_vat!))}',
+                                              //     //'${transMeterModels[index].c_vat}',
+                                              //     textAlign: TextAlign.right,
+                                              //     style: const TextStyle(
+                                              //       color: ManageScreen_Color
+                                              //           .Colors_Text2_,
+                                              //       // fontWeight:
+                                              //       //     FontWeight.bold,
+                                              //       fontFamily: Font_.Fonts_T,
+                                              //     ),
+                                              //   ),
+                                              // ),
+                                              // Expanded(
+                                              //   flex: 2,
+                                              //   child: Text(
+                                              //     // '${transMeterModels[index].c_pvat}',
+                                              //     '${nFormat.format(double.parse(transMeterModels[index].c_pvat!))}',
+                                              //     textAlign: TextAlign.right,
+                                              //     style: const TextStyle(
+                                              //       color: ManageScreen_Color
+                                              //           .Colors_Text2_,
+                                              //       // fontWeight:
+                                              //       //     FontWeight.bold,
+                                              //       fontFamily: Font_.Fonts_T,
+                                              //     ),
+                                              //   ),
+                                              // ),
                                               Expanded(
                                                 flex: 2,
                                                 child: Text(
@@ -2678,6 +3416,92 @@ class _ManageScreenState extends State<ManageScreen> {
                                                   ),
                                                 ),
                                               ),
+
+                                              Expanded(
+                                                  flex: 2,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: InkWell(
+                                                      child: Container(
+                                                        // height: 50,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: (transMeterModels[
+                                                                          index]
+                                                                      .img !=
+                                                                  '')
+                                                              ? Colors.grey
+                                                              : Colors.green,
+                                                          borderRadius: BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Center(
+                                                          child: Text(
+                                                            (transMeterModels[
+                                                                            index]
+                                                                        .img !=
+                                                                    '')
+                                                                ? 'ดู/แก้ไข'
+                                                                : 'เพิ่ม',
+                                                            //'${transMeterModels[index].c_amt}',
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: ManageScreen_Color
+                                                                  .Colors_Text2_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      onTap: () {
+                                                        var doc =
+                                                            transMeterModels[
+                                                                    index]
+                                                                .docno;
+                                                        var cid =
+                                                            transMeterModels[
+                                                                    index]
+                                                                .refno;
+                                                        var ser =
+                                                            transMeterModels[
+                                                                    index]
+                                                                .ser;
+                                                        print(
+                                                            '$ser /// $doc // $cid   //   ');
+
+                                                        if (transMeterModels[
+                                                                    index]
+                                                                .img !=
+                                                            '') {
+                                                          Dialog_img_Meter(doc,
+                                                              cid, ser, index);
+                                                        } else {
+                                                          uploadFile_Slip(
+                                                              doc, cid, ser);
+                                                        }
+                                                      },
+                                                    ),
+                                                  )),
                                             ],
                                           ),
                                         ),

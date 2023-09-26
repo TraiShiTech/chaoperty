@@ -317,11 +317,11 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                 widget.updateMessage(0);
               },
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+                padding: const EdgeInsets.fromLTRB(0, 4, 4, 0),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
+                    padding: const EdgeInsets.fromLTRB(4, 4, 2, 0),
                     child: Container(
                       width: 100,
                       decoration: BoxDecoration(
@@ -334,7 +334,7 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                         ),
                         border: Border.all(color: Colors.white, width: 2),
                       ),
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.all(2.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
@@ -342,7 +342,7 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                             ' <  ',
                             overflow: TextOverflow.ellipsis,
                             minFontSize: 8,
-                            maxFontSize: 20,
+                            maxFontSize: 14,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -353,7 +353,7 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                             'ย้อนกลับ ',
                             overflow: TextOverflow.ellipsis,
                             minFontSize: 8,
-                            maxFontSize: 20,
+                            maxFontSize: 14,
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                               color: Colors.white,
@@ -369,7 +369,7 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: Container(
                 decoration: BoxDecoration(
                   // color: Colors.white.withOpacity(0.3),
@@ -381,7 +381,7 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                   ),
                   border: Border.all(color: Colors.grey, width: 1),
                 ),
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Row(
                   children: [
                     InkWell(
@@ -404,11 +404,11 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                           ),
                           border: Border.all(color: Colors.white, width: 2),
                         ),
-                        padding: const EdgeInsets.all(5.0),
+                        padding: const EdgeInsets.all(2.0),
                         child: Center(
                           child: AutoSizeText(
-                            minFontSize: 10,
-                            maxFontSize: 20,
+                            minFontSize: 8,
+                            maxFontSize: 14,
                             'แบบปกติ',
                             style: TextStyle(
                               color: Colors.white,
@@ -440,12 +440,12 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                           ),
                           border: Border.all(color: Colors.white, width: 2),
                         ),
-                        padding: const EdgeInsets.all(5.0),
+                        padding: const EdgeInsets.all(2.0),
                         child: Center(
                           child: AutoSizeText(
-                            minFontSize: 10,
-                            maxFontSize: 20,
-                            'แบบExcell',
+                            minFontSize: 8,
+                            maxFontSize: 14,
+                            'แบบExcel',
                             style: TextStyle(
                               color: Colors.white,
                               // fontWeight: FontWeight.bold,
@@ -1623,7 +1623,15 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                                               'sum_whta': '',
                                               'bill': '',
                                               'fileNameSlip': '',
-                                              'areaSer': '',
+                                              'areaSer': (typeModels
+                                                          .elementAt(
+                                                              Value_AreaSer_)
+                                                          .type
+                                                          .toString()
+                                                          .trim() ==
+                                                      'ส่วนตัว/บุคคลธรรมดา')
+                                                  ? '1'
+                                                  : '2',
                                               'typeModels':
                                                   '${typeModels.elementAt(Value_AreaSer_).type}',
                                               'typeshop': Status4Form_typeshop

@@ -1530,7 +1530,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .only(
+                                                                      .only(
                                                                   top: 8,
                                                                   bottom: 8),
                                                           child: Container(
@@ -1743,7 +1743,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                               child: Container(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         15.0),
                                                                 child:
                                                                     AutoSizeText(
@@ -1861,7 +1861,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .only(
+                                                                    .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: Container(
@@ -2038,7 +2038,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                             child: Container(
                                                               padding:
                                                                   const EdgeInsets
-                                                                      .all(
+                                                                          .all(
                                                                       15.0),
                                                               child:
                                                                   AutoSizeText(
@@ -2372,7 +2372,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .only(
+                                                                    .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: TextFormField(
@@ -2620,7 +2620,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .only(
+                                                                    .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: TextFormField(
@@ -2867,7 +2867,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .only(
+                                                                    .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: TextFormField(
@@ -3217,9 +3217,8 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                                           ),
                                                                         ),
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:

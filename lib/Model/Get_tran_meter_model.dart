@@ -107,6 +107,7 @@ class TransMeterModel {
   String? c_qty;
   String? ser_zone;
   String? name_zone;
+  String? img;
 
   TransMeterModel(
       {this.ser,
@@ -212,7 +213,8 @@ class TransMeterModel {
       this.sname,
       this.c_qty,
       this.ser_zone,
-      this.name_zone});
+      this.name_zone,
+      this.img});
 
   TransMeterModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -320,6 +322,7 @@ class TransMeterModel {
     c_qty = json['c_qty'];
     ser_zone = json['ser_zone'];
     name_zone = json['name_zone'];
+    img = json['img'];
   }
 
   Map<String, dynamic> toJson() {
@@ -430,6 +433,7 @@ class TransMeterModel {
     data['c_qty'] = this.c_qty;
     data['ser_zone'] = this.ser_zone;
     data['name_zone'] = this.name_zone;
+    data['img'] = this.img;
 
     return data;
   }

@@ -380,7 +380,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                           decoration: BoxDecoration(
                                             color: Colors.lime[800],
                                             borderRadius: const BorderRadius
-                                                .only(
+                                                    .only(
                                                 topLeft: Radius.circular(20),
                                                 topRight: Radius.circular(20),
                                                 bottomLeft: Radius.circular(20),

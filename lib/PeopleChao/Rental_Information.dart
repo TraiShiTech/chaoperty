@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chaoperty/PeopleChao/Seteing_listmenu.dart';
 import 'package:crypto/crypto.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
@@ -67,11 +68,13 @@ import 'package:convert/convert.dart';
 class RentalInformation extends StatefulWidget {
   final Get_Value_NameShop_index;
   final Get_Value_cid;
+  final Get_Value_statu;
 
   const RentalInformation({
     super.key,
     this.Get_Value_NameShop_index,
     this.Get_Value_cid,
+    this.Get_Value_statu,
   });
 
   @override
@@ -140,6 +143,30 @@ class _RentalInformationState extends State<RentalInformation> {
     super.initState();
     checkPreferance();
     read_customer();
+  }
+
+  Color cardColor = Colors.green[300]!;
+  int indexcardColor = 0;
+  List<dynamic> colorList = [
+    Colors.green[300],
+    Colors.red[300],
+    Colors.blue[300],
+    Colors.yellow[300],
+    Colors.orange[300],
+    Colors.purple[300],
+    Colors.teal[300],
+    Colors.pink[300],
+    Colors.indigo[300],
+    Colors.cyan[300],
+    Colors.brown[300],
+    Colors.black,
+    Colors.grey[300],
+  ];
+  void changeCardColor(namecolor) {
+    setState(() {
+      // Change the color to a different one
+      cardColor = namecolor; // You can replace this with any color you want
+    });
   }
 
   Future<Null> checkPreferance() async {
@@ -306,6 +333,7 @@ class _RentalInformationState extends State<RentalInformation> {
     var ren = preferences.getString('renTalSer');
     var ciddoc = widget.Get_Value_cid;
     var qutser = widget.Get_Value_NameShop_index;
+    print('Get_Value_NameShop_index >>>>>> $qutser');
 
     String url =
         '${MyConstant().domain}/GC_tenantlookAS.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
@@ -2333,21 +2361,6 @@ class _RentalInformationState extends State<RentalInformation> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                fiew = 'pic_tenant';
-                              });
-                              uploadImage(ImageSource.gallery);
-                              // _getFromGallery2();
-                            },
-                            icon: const Icon(
-                              Icons.photo_camera_back_outlined,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
                           const AutoSizeText(
                             minFontSize: 10,
                             maxFontSize: 15,
@@ -2357,6 +2370,22 @@ class _RentalInformationState extends State<RentalInformation> {
                                 color: PeopleChaoScreen_Color.Colors_Text1_,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: FontWeight_.Fonts_T),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                fiew = 'pic_tenant';
+                              });
+                              uploadImage(ImageSource.gallery);
+                              // _getFromGallery2();
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.red,
+                            ),
                           ),
                         ],
                       ),
@@ -2482,21 +2511,6 @@ class _RentalInformationState extends State<RentalInformation> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                fiew = 'pic_shop';
-                              });
-                              uploadImage(ImageSource.gallery);
-                              // _getFromGallery2();
-                            },
-                            icon: const Icon(
-                              Icons.photo_camera_back_outlined,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
                           const AutoSizeText(
                             minFontSize: 10,
                             maxFontSize: 15,
@@ -2506,6 +2520,22 @@ class _RentalInformationState extends State<RentalInformation> {
                                 color: PeopleChaoScreen_Color.Colors_Text1_,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: FontWeight_.Fonts_T),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                fiew = 'pic_shop';
+                              });
+                              uploadImage(ImageSource.gallery);
+                              // _getFromGallery2();
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.red,
+                            ),
                           ),
                         ],
                       ),
@@ -2631,21 +2661,6 @@ class _RentalInformationState extends State<RentalInformation> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                fiew = 'pic_plan';
-                              });
-                              uploadImage(ImageSource.gallery);
-                              // _getFromGallery2();
-                            },
-                            icon: const Icon(
-                              Icons.photo_camera_back_outlined,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
                           const AutoSizeText(
                             minFontSize: 10,
                             maxFontSize: 15,
@@ -2655,6 +2670,22 @@ class _RentalInformationState extends State<RentalInformation> {
                                 color: PeopleChaoScreen_Color.Colors_Text1_,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: FontWeight_.Fonts_T),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                fiew = 'pic_plan';
+                              });
+                              uploadImage(ImageSource.gallery);
+                              // _getFromGallery2();
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.red,
+                            ),
                           ),
                         ],
                       ),
@@ -2731,17 +2762,75 @@ class _RentalInformationState extends State<RentalInformation> {
                       ),
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     flex: 1,
-                    child: Text(
-                      'บัตรผู้เช่า',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
+                    child: Row(
+                      children: [
+                        Text(
+                          'บัตรผู้เช่า',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                              // fontWeight: FontWeight.bold,
+                              fontFamily: Font_.Fonts_T
+                              //fontSize: 10.0
+                              ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            border: Border.all(color: Colors.grey, width: 1),
                           ),
+                          width: 70,
+                          child: DropdownButtonFormField2(
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            isExpanded: true,
+                            hint: Icon(Icons.circle_rounded,
+                                color: cardColor, size: 16),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: TextHome_Color.TextHome_Colors,
+                            ),
+                            style: const TextStyle(
+                                color: Colors.green, fontFamily: Font_.Fonts_T),
+                            iconSize: 20,
+                            buttonHeight: 30,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            items: colorList
+                                .map((item) => DropdownMenuItem<dynamic>(
+                                      value: item,
+                                      child: Icon(Icons.circle_rounded,
+                                          color: item, size: 16),
+                                    ))
+                                .toList(),
+
+                            onChanged: (value) async {
+                              final selectedColor = value;
+                              final index = colorList.indexWhere((color) =>
+                                  color.value == selectedColor.value);
+                              setState(() {
+                                indexcardColor = index;
+                              });
+
+                              changeCardColor(colorList[index]);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
@@ -2831,8 +2920,8 @@ class _RentalInformationState extends State<RentalInformation> {
                                                   children: [
                                                     Center(
                                                         child: Container(
-                                                      height: 100,
-                                                      width: 100,
+                                                      height: 84,
+                                                      width: 84,
                                                       child: SfBarcodeGenerator(
                                                         value:
                                                             '${widget.Get_Value_cid}',
@@ -2840,6 +2929,47 @@ class _RentalInformationState extends State<RentalInformation> {
                                                         showValue: false,
                                                       ),
                                                     )),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              0, 4, 0, 0),
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              Colors.grey[100],
+                                                          borderRadius: const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                          // border: Border.all(color: Colors.grey, width: 1),
+                                                        ),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                2, 2, 2, 0),
+                                                        child: Text(
+                                                          'ลงชื่อ.....................................',
+                                                          maxLines: 1,
+                                                          style: TextStyle(
+                                                            fontSize: 7.0,
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
 
                                                     // Center(
                                                     //   child: PrettyQr(
@@ -2970,7 +3100,20 @@ class _RentalInformationState extends State<RentalInformation> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          'พื้นที่ : ${Form_ln.text} ( ${Form_zn.text} )',
+                                                          'พื้นที่ : ${Form_ln.text} ',
+                                                          maxLines: 1,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 9.0,
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          'โซน : ${Form_zn.text}',
                                                           maxLines: 1,
                                                           style:
                                                               const TextStyle(
@@ -3075,7 +3218,9 @@ class _RentalInformationState extends State<RentalInformation> {
                                                           '${Form_bussscontact.text}',
                                                           '${Form_sdate.text} ถึง ${Form_ldate.text}',
                                                           '${Form_nameshop.text}',
-                                                          '${Form_ln.text} ( ${Form_zn.text} )');
+                                                          '${Form_ln.text}',
+                                                          '${Form_zn.text}',
+                                                          indexcardColor);
                                                     },
                                                   ),
                                                 )
@@ -3087,35 +3232,35 @@ class _RentalInformationState extends State<RentalInformation> {
                                     ),
                                   ),
                                   Container(
-                                    height: 136,
+                                    height: 150,
                                     width: 15,
                                     decoration: BoxDecoration(
-                                      color: Colors.green[300],
+                                      color: cardColor,
                                       borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(0),
                                           topRight: Radius.circular(10),
                                           bottomLeft: Radius.circular(0),
                                           bottomRight: Radius.circular(10)),
                                     ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        RotatedBox(
-                                          quarterTurns: 1,
-                                          child: Text(
-                                            '$renTal_name',
-                                            maxLines: 1,
-                                            style: const TextStyle(
-                                              fontSize: 9.0,
-                                              color: Colors.white,
-                                              // fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    // child: Column(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.center,
+                                    //   children: [
+                                    //     RotatedBox(
+                                    //       quarterTurns: 1,
+                                    //       child: Text(
+                                    //         '$renTal_name',
+                                    //         maxLines: 1,
+                                    //         style: const TextStyle(
+                                    //           fontSize: 9.0,
+                                    //           color: Colors.white,
+                                    //           // fontWeight: FontWeight.bold,
+                                    //           fontFamily: Font_.Fonts_T,
+                                    //         ),
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // ),
                                   ),
                                 ],
                               ),
@@ -6967,98 +7112,102 @@ class _RentalInformationState extends State<RentalInformation> {
             ),
             renTal_lavel <= 1
                 ? SizedBox()
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          setState(() {
-                            if (ser_tabbarview_2 == 2) {
-                              ser_tabbarview_2 = 0;
-                            } else {
-                              ser_tabbarview_2 = 2;
-                            }
-                          });
+                : widget.Get_Value_NameShop_index.toString() != '1'
+                    ? SizedBox()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              setState(() {
+                                if (ser_tabbarview_2 == 2) {
+                                  ser_tabbarview_2 = 0;
+                                } else {
+                                  ser_tabbarview_2 = 2;
+                                }
+                              });
 
-                          SharedPreferences preferences =
-                              await SharedPreferences.getInstance();
-                          String? ren = preferences.getString('renTalSer');
-                          String? ser_user = preferences.getString('ser');
-                          String url2 =
-                              '${MyConstant().domain}/D_quotx.php?isAdd=true&ren=$ren&ser_user=$ser_user';
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              String? ren = preferences.getString('renTalSer');
+                              String? ser_user = preferences.getString('ser');
+                              String url2 =
+                                  '${MyConstant().domain}/D_quotx.php?isAdd=true&ren=$ren&ser_user=$ser_user';
 
-                          try {
-                            var response2 = await http.get(Uri.parse(url2));
+                              try {
+                                var response2 = await http.get(Uri.parse(url2));
 
-                            var result2 = json.decode(response2.body);
-                            print(result2);
-                            if (result2.toString() == 'true') {}
-                          } catch (e) {}
-                        },
-                        child: Container(
-                          width: 200,
-                          decoration: BoxDecoration(
-                            color: Colors.blue[600],
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            border: Border.all(color: Colors.white, width: 1),
-                          ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            ser_tabbarview_2 == 2
-                                ? 'ยกเลิกเพิ่มค่าบริการ'
-                                : 'เพิ่มค่าบริการ',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              // fontSize: 15.0,
+                                var result2 = json.decode(response2.body);
+                                print(result2);
+                                if (result2.toString() == 'true') {}
+                              } catch (e) {}
+                            },
+                            child: Container(
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.blue[600],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                ser_tabbarview_2 == 2
+                                    ? 'ยกเลิกเพิ่มค่าบริการ'
+                                    : 'เพิ่มค่าบริการ',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  // fontSize: 15.0,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (ser_tabbarview_2 == 1) {
-                              ser_tabbarview_2 = 0;
-                            } else {
-                              ser_tabbarview_2 = 1;
-                            }
-                          });
-                        },
-                        child: Container(
-                          width: 200,
-                          decoration: BoxDecoration(
-                            color: Colors.orange[900],
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            border: Border.all(color: Colors.white, width: 1),
+                          SizedBox(
+                            width: 10,
                           ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            ser_tabbarview_2 == 1
-                                ? 'ยกเลิกปรับตั้งหนี้'
-                                : 'ปรับตั้งหนี้',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.0),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                if (ser_tabbarview_2 == 1) {
+                                  ser_tabbarview_2 = 0;
+                                } else {
+                                  ser_tabbarview_2 = 1;
+                                }
+                              });
+                            },
+                            child: Container(
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.orange[900],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                ser_tabbarview_2 == 1
+                                    ? 'ยกเลิกปรับตั้งหนี้'
+                                    : 'ปรับตั้งหนี้',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15.0),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
             ser_tabbarview_2 == 0
                 ? SizedBox(
                     width: 10,

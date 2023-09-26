@@ -4,6 +4,7 @@ import 'dart:html';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:crypto/crypto.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,9 @@ class CustomerScreen extends StatefulWidget {
 }
 
 class _CustomerScreenState extends State<CustomerScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final Form_User = TextEditingController();
+  final Form_UserPass = TextEditingController();
   int Status_cuspang = 0;
   var nFormat = NumberFormat("#,##0.00", "en_US");
   var nFormat2 = NumberFormat("#,##0", "en_US");
@@ -792,6 +796,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
         _customerModels = customerModels;
       });
     } catch (e) {}
+    if (tappedIndex_ != '') {
+      Form_User.text = customerModels[int.parse(tappedIndex_)].user_name!;
+    } else {}
   }
 
 //////--------------------------------------------->
@@ -2060,6 +2067,342 @@ class _CustomerScreenState extends State<CustomerScreen> {
   }
 
 ///////////------------------------------------------------>
+
+  Future<Null> Password(int index) async {
+    showDialog<String>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => Form(
+        key: _formKey,
+        child: AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: const Center(
+              child: Text(
+            'แก้ไข User & Password',
+            style: TextStyle(
+                color: AdminScafScreen_Color.Colors_Text1_,
+                fontWeight: FontWeight.bold,
+                fontFamily: FontWeight_.Fonts_T),
+          )),
+          actions: <Widget>[
+            Column(
+              children: [
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'User',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                          //fontWeight: FontWeight.bold,
+                          fontFamily: Font_.Fonts_T),
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    // color: Colors.green,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(6),
+                      topRight: Radius.circular(6),
+                      bottomLeft: Radius.circular(6),
+                      bottomRight: Radius.circular(6),
+                    ),
+                    // border: Border.all(color: Colors.grey, width: 1),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    showCursor: true, //add this line
+                    readOnly: false,
+                    controller: Form_User,
+                    cursorColor: Colors.green,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'ใส่ข้อมูลให้ครบถ้วน ';
+                      }
+                      // if (int.parse(value.toString()) < 13) {
+                      //   return '< 13';
+                      // }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        fillColor: Colors.white.withOpacity(0.3),
+                        // fillColor: Colors.green[100]!.withOpacity(0.5),
+                        filled: true,
+                        // labelText: 'User',
+                        // prefixIcon:
+                        //     const Icon(Icons.person, color: Colors.black),
+                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            topLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                          ),
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            topLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                          ),
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        labelStyle: const TextStyle(
+                            color: Colors.black54, fontFamily: Font_.Fonts_T)),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.deny(RegExp("[' ']")),
+                      // for below version 2 use this
+                      // FilteringTextInputFormatter.allow(
+                      //     RegExp(r'[a-z A-Z 1-9]')),
+                      // for version 2 and greater youcan also use this
+                      // FilteringTextInputFormatter
+                      //     .digitsOnly
+                    ],
+                    onChanged: (value) {
+                      // print('User : ${value}');
+                    },
+                  ),
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Password',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                          //fontWeight: FontWeight.bold,
+                          fontFamily: Font_.Fonts_T),
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    // color: Colors.green,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(6),
+                      topRight: Radius.circular(6),
+                      bottomLeft: Radius.circular(6),
+                      bottomRight: Radius.circular(6),
+                    ),
+                    // border: Border.all(color: Colors.grey, width: 1),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    showCursor: true, //add this line
+                    readOnly: false,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'ใส่ข้อมูลให้ครบถ้วน ';
+                      }
+                      // if (int.parse(value.toString()) < 13) {
+                      //   return '< 13';
+                      // }
+                      return null;
+                    },
+                    controller: Form_UserPass,
+                    cursorColor: Colors.green,
+                    decoration: InputDecoration(
+                        fillColor: Colors.white.withOpacity(0.3),
+                        // fillColor: Colors.green[100]!.withOpacity(0.5),
+                        filled: true,
+                        // labelText: 'Password',
+                        // prefixIcon:
+                        //     const Icon(Icons.person, color: Colors.black),
+                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            topLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                          ),
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            topLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                          ),
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        labelStyle: const TextStyle(
+                            color: Colors.black54, fontFamily: Font_.Fonts_T)),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.deny(RegExp("[' ']")),
+                      // for below version 2 use this
+                      // FilteringTextInputFormatter.allow(
+                      //     RegExp(r'[a-z A-Z 1-9]')),
+                      // for version 2 and greater youcan also use this
+                      // FilteringTextInputFormatter
+                      //     .digitsOnly
+                    ],
+                    onChanged: (value) {
+                      // print('Pass_User : ${value}');
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                const Divider(
+                  color: Colors.grey,
+                  height: 4.0,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton(
+                            onPressed: () async {
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              String? ren = preferences.getString('renTalSer');
+                              String? ser_user = preferences.getString('ser');
+
+                              String Cid_ = '${customerModels[index].custno}';
+                              // print('User : ${Form_User.text}');
+                              // print('Cust_no_ : ${customerModels[index].custno}');
+
+                              String password = md5
+                                  .convert(utf8.encode(Form_UserPass.text))
+                                  .toString();
+                              print('password Md5 $password');
+                              if (_formKey.currentState!.validate()) {
+                                String url =
+                                    '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&cust_no=${customerModels[index].custno}&user_U=${Form_User.text}&pass_U=$password&ren=$ren';
+                                try {
+                                  var response = await http.get(Uri.parse(url));
+
+                                  var result = json.decode(response.body);
+                                  Insert_log.Insert_logs('ผู้เช่า',
+                                      'ข้อมูลผู้เช่า>>แก้ไขUser&password(${customerModels[index].custno})');
+                                  select_coutumer();
+                                  setState(() {
+                                    Form_UserPass.clear();
+                                    Form_User.clear();
+                                  });
+                                  Navigator.pop(context, 'OK');
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'แก้ไขข้อมูลเสร็จสิ้น !!',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontFamily: Font_.Fonts_T))));
+                                } catch (e) {
+                                  Navigator.pop(context, 'OK');
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('เกิดข้อผิดพลาด',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily: Font_.Fonts_T))),
+                                  );
+                                }
+                              }
+                            },
+                            child: const Text(
+                              'ยืนยัน',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 100,
+                              decoration: const BoxDecoration(
+                                color: Colors.redAccent,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    Form_UserPass.clear();
+                                    Form_User.clear();
+                                  });
+                                  Navigator.pop(context, 'OK');
+                                },
+                                child: const Text(
+                                  'ยกเลิก',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  ///----------------------->
+
   Widget build(BuildContext context) {
     return (Status_cuspang == 1)
         ? Add_Custo_Screen(
@@ -2488,6 +2831,10 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           'null')
                                                                       ? ''
                                                                       : '${customerModels[index].scname}';
+                                                                  Form_User
+                                                                      .text = customerModels[
+                                                                          index]
+                                                                      .user_name!;
                                                                   Form_typeshop_
                                                                           .text =
                                                                       '${customerModels[index].stype}';
@@ -2912,7 +3259,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           0)),
                                                     ),
                                                     child: Row(
-                                                      children: const [
+                                                      children: [
                                                         Expanded(
                                                           flex: 1,
                                                           child: AutoSizeText(
@@ -2934,7 +3281,50 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                 //fontSize: 10.0
                                                                 ),
                                                           ),
-                                                        ),
+                                                        ), // Password(index)
+                                                        if (tappedIndex_ != '')
+                                                          InkWell(
+                                                              child: Container(
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                  color: Colors
+                                                                      .red,
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              8),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              8)),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        4.0),
+                                                                child:
+                                                                    const Text(
+                                                                  '🔒 User/pass',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: TextStyle(
+                                                                      color: Colors.white,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T
+                                                                      //fontSize: 10.0
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              onTap: () {
+                                                                Password(int.parse(
+                                                                    tappedIndex_));
+                                                              })
                                                       ],
                                                     )),
                                                 Expanded(

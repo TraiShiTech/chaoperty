@@ -18,8 +18,8 @@ import 'Rental_Information.dart';
 
 class Pdfgen_QR_2 {
   /////////////////////////////////////-------------------->(QR)
-  static void displayPdf_QR2(
-      context, renTal_name, cid, cname, date, sname, ln) async {
+  static void displayPdf_QR2(context, renTal_name, cid, cname, date, sname, ln,
+      zn, indexcardColor) async {
     //final font = await rootBundle.load("fonts/Saysettha-OT.ttf");
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
     final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
@@ -28,6 +28,22 @@ class Pdfgen_QR_2 {
     final doc = pw.Document();
     final iconImage =
         (await rootBundle.load('images/pngegg2.png')).buffer.asUint8List();
+
+    List<dynamic> colorList = [
+      PdfColors.green,
+      PdfColors.red,
+      PdfColors.blue,
+      PdfColors.yellow,
+      PdfColors.orange,
+      PdfColors.purple,
+      PdfColors.teal,
+      PdfColors.pink,
+      PdfColors.indigo,
+      PdfColors.cyan,
+      PdfColors.brown,
+      PdfColors.black,
+      PdfColors.grey,
+    ];
     doc.addPage(
       pw.MultiPage(
         pageFormat:
@@ -75,7 +91,7 @@ class Pdfgen_QR_2 {
         build: (context) {
           return [
             pw.Container(
-              width: 240, // Adjust the width as per your requirement
+              width: 270, // Adjust the width as per your requirement
               // height:
               //     200, // Adjust the height as per your requirement
               decoration: pw.BoxDecoration(
@@ -88,9 +104,9 @@ class Pdfgen_QR_2 {
               ),
               padding: const pw.EdgeInsets.all(4.0),
               child: pw.Padding(
-                  padding: pw.EdgeInsets.all(8.0),
+                  padding: pw.EdgeInsets.all(2.0),
                   child: pw.Container(
-                    width: 240,
+                    width: 270,
                     // height: 135,
                     decoration: pw.BoxDecoration(
                       borderRadius: pw.BorderRadius.only(
@@ -109,8 +125,8 @@ class Pdfgen_QR_2 {
                       crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
                         pw.Container(
-                            height: 110,
-                            width: 193,
+                            height: 125,
+                            width: 243,
                             // height: 135,
                             decoration: pw.BoxDecoration(
                               borderRadius: pw.BorderRadius.only(
@@ -189,7 +205,7 @@ class Pdfgen_QR_2 {
                                                     barcode:
                                                         pw.Barcode.qrCode(),
                                                     width: 65,
-                                                    height: 70),
+                                                    height: 65),
 
                                                 //  pw.PrettyQr(
                                                 //   // typeNumber: 3,
@@ -201,6 +217,21 @@ class Pdfgen_QR_2 {
                                                 //   errorCorrectLevel: QrErrorCorrectLevel.M,
                                                 //   roundEdges: true,
                                                 // ),
+                                              ),
+                                            ),
+                                            pw.Container(
+                                              padding:
+                                                  const pw.EdgeInsets.fromLTRB(
+                                                      0, 4, 0, 0),
+                                              child: pw.Text(
+                                                'ลงชื่อ................................',
+                                                style: pw.TextStyle(
+                                                  fontSize: 7.0,
+                                                  color: PdfColors.black,
+                                                  fontWeight:
+                                                      pw.FontWeight.bold,
+                                                  font: ttf,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -239,7 +270,7 @@ class Pdfgen_QR_2 {
                                             pw.Text(
                                               '${cid}',
                                               style: pw.TextStyle(
-                                                fontSize: 9.0,
+                                                fontSize: 10.0,
                                                 color: PdfColors.black,
                                                 fontWeight: pw.FontWeight.bold,
                                                 font: ttf,
@@ -282,7 +313,18 @@ class Pdfgen_QR_2 {
                                               ),
                                             ),
                                             pw.Text(
-                                              '${ln}',
+                                              'พื้นที่ :${ln}',
+
+                                              // 'พื้นที่ : ${teNantModels[startIndex + index].ln} ( ${teNantModels[startIndex + index].zn} )',
+                                              maxLines: 1,
+                                              style: pw.TextStyle(
+                                                fontSize: 8.0,
+                                                color: PdfColors.black,
+                                                font: ttf,
+                                              ),
+                                            ),
+                                            pw.Text(
+                                              'โซน :${zn}',
 
                                               // 'พื้นที่ : ${teNantModels[startIndex + index].ln} ( ${teNantModels[startIndex + index].zn} )',
                                               maxLines: 1,
@@ -327,10 +369,10 @@ class Pdfgen_QR_2 {
                               ],
                             )),
                         pw.Container(
-                          height: 110,
-                          width: 23.5,
-                          decoration: const pw.BoxDecoration(
-                            color: PdfColors.green300,
+                          height: 125,
+                          width: 15,
+                          decoration: pw.BoxDecoration(
+                            color: colorList[indexcardColor],
                             borderRadius: pw.BorderRadius.only(
                               topLeft: pw.Radius.circular(0),
                               topRight: pw.Radius.circular(10),

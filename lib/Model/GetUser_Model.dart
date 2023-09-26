@@ -20,6 +20,7 @@ class UserModel {
   String? onoff;
   String? showst_update;
   String? system_datex;
+  String? dev_text;
 
   UserModel(
       {this.ser,
@@ -42,6 +43,7 @@ class UserModel {
       this.data_update,
       this.showst_update,
       this.system_datex,
+      this.dev_text,
       this.onoff});
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -66,6 +68,7 @@ class UserModel {
     onoff = json['onoff'];
     showst_update = json['showst_update'];
     system_datex = json['system_datex'];
+    dev_text = json['dev_text'];
   }
 
   Map<String, dynamic> toJson() {
@@ -91,6 +94,7 @@ class UserModel {
     data['onoff'] = this.onoff;
     data['showst_update'] = this.showst_update;
     data['system_datex'] = this.system_datex;
+    data['dev_text'] = this.dev_text;
     return data;
   }
 }

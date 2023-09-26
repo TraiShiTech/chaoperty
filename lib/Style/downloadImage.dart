@@ -22,6 +22,7 @@ dynamic captureAndConvertToBase64(chartKey, Name) async {
   print(base64String);
   String fileName = '${Name}_$timestamp.png';
   await Future.delayed(Duration(milliseconds: 100));
+
   String Foder_ = '';
   try {
     final url =

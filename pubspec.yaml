@@ -98,6 +98,9 @@ dependencies:
   web_image_downloader: ^1.0.1
   universal_html: ^2.0.8 
   syncfusion_flutter_charts: any
+  marquee: ^2.2.3
+  drag_and_drop_lists: ^0.3.3
+  
 
 dev_dependencies:
   flutter_test:

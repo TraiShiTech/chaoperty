@@ -63,6 +63,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 import 'Play_column.dart';
+import 'Verifi_Payment_History.dart';
 import 'lockpay.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -118,7 +119,8 @@ class _AccountScreenState extends State<AccountScreen> {
     'ภาพรวม',
     'ค้างชำระ',
     'ประวัติบิล',
-    'ล็อกเสียบ ',
+
+    'ล็อกเสียบ ', 'ประวัติชำระรอตรวจสอบ',
   ];
   String? base64_Slip, fileName_Slip, Slip_history;
   String? teNantcid, teNantsname, teNantnamenew;
@@ -507,11 +509,13 @@ class _AccountScreenState extends State<AccountScreen> {
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModel transReBillModel = TransReBillModel.fromJson(map);
-          setState(() {
-            _TransReBillModels.add(transReBillModel);
+          if (transReBillModel.pos != '1') {
+            setState(() {
+              _TransReBillModels.add(transReBillModel);
 
-            // _TransBillModels.add(_TransBillModel);
-          });
+              // _TransBillModels.add(_TransBillModel);
+            });
+          }
         }
         setState(() {
           TransReBillModels_ = _TransReBillModels;
@@ -1925,15 +1929,16 @@ class _AccountScreenState extends State<AccountScreen> {
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: (i + 1 == 1)
-                                                  ? Colors.green
+                                                  ? Colors.green[400]
                                                   : (i + 1 == 2)
-                                                      ? Colors.green
+                                                      ? Colors.red[400]
                                                       : (i + 1 == 3)
-                                                          ? Colors.red
+                                                          ? Colors.purple[400]
                                                           : (i + 1 == 4)
                                                               ? Colors
                                                                   .brown[400]
-                                                              : Colors.blue,
+                                                              : Colors
+                                                                  .orange[400],
                                               borderRadius:
                                                   const BorderRadius.only(
                                                       topLeft:
@@ -1973,7 +1978,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         InkWell(
                             child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.amber[400],
+                                  color: Colors.blue[400],
                                   borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(6),
                                       topRight: Radius.circular(6),
@@ -2463,10 +2468,12 @@ class _AccountScreenState extends State<AccountScreen> {
             ? BodyStatus1_Web()
             : (Status_ == 3)
                 ? BodyStatus3_Web()
-                : BodyStatus4_Web();
+                : (Status_ == 4)
+                    ? BodyStatus4_Web()
+                    : Verifi_Payment_History();
   }
 
-  // Widget BodyStatusPlay_Web() {
+  // Widget BodyStatusPlay_Web() {Verifi_Payment_History
   //   return PlayColumn();
   // }
 
@@ -13460,6 +13467,23 @@ class _AccountScreenState extends State<AccountScreen> {
                                               child: Padding(
                                                 padding: EdgeInsets.all(8.0),
                                                 child: Text(
+                                                  'ทำรายการ',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: AccountScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
                                                   'สถานะ',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
@@ -14076,6 +14100,56 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       textAlign:
                                                                           TextAlign
                                                                               .center,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    richMessage:
+                                                                        const TextSpan(
+                                                                      text: '',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: HomeScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          200],
+                                                                    ),
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          25,
+                                                                      maxLines:
+                                                                          1,
+                                                                      _TransReBillModels[index].shopno ==
+                                                                              '1'
+                                                                          ? 'ผ่านระบบผู้เช่า'
+                                                                          : 'ผ่านระบบแอดมิน',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .start,
                                                                       style: const TextStyle(
                                                                           color: PeopleChaoScreen_Color
                                                                               .Colors_Text2_,

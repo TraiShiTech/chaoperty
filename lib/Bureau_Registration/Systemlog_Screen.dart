@@ -36,6 +36,8 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
   List<RenTalModel> renTalModels = [];
   List<SyslogModel> syslogModel = [];
   List<SyslogModel> _syslogModel = <SyslogModel>[];
+  List<SyslogModel> syslogModel_User = [];
+  List<SyslogModel> _syslogModel_User = <SyslogModel>[];
   String tappedIndex_ = '';
   String? renTal_user, renTal_name, zone_ser, zone_name;
   String? ser_user,
@@ -61,6 +63,8 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
     'ทะเบียน',
     'ตั้งค่า'
   ];
+  List Status_User = ['ทั้งหมด', 'ชำระ', 'ประวัติชำระ', 'ข้อมูลส่วนตัว'];
+  int ser_type_TapMan = 0;
   @override
   void initState() {
     checkPreferance();
@@ -70,10 +74,15 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
   }
 
   Future<Null> checkPreferance() async {
+    DateTime currentDate = DateTime.now();
+
+    // Format the date as 'YYYY-MM-DD'
+    String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
+      Value_selectDate = formattedDate;
     });
   }
 
@@ -128,7 +137,9 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
     var ren = preferences.getString('renTalSer');
     var ser_user = preferences.getString('ser');
 
-    String Status_ = '${Status_3[Status_3_]}';
+    String Status_ = (ser_type_TapMan == 0)
+        ? '${Status_3[Status_3_]}'
+        : '${Status_User[Status_3_]}';
 
     String url = (Value_selectDate == null)
         ? '${MyConstant().domain}/GC_Syslog.php?isAdd=true&ren=$ren&datex_=null&status=$Status_'
@@ -142,10 +153,20 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
       if (result != null) {
         for (var map in result) {
           SyslogModel syslogModels = SyslogModel.fromJson(map);
-          setState(() {
-            syslogModel.add(syslogModels);
-            _syslogModel = syslogModel;
-          });
+          if (syslogModels.uid.toString() == '0' && ser_type_TapMan == 0) {
+            setState(() {
+              syslogModel.add(syslogModels);
+              _syslogModel = syslogModel;
+            });
+          } else if (syslogModels.uid.toString() == '1' &&
+              ser_type_TapMan == 1) {
+            if (syslogModels.frm.toString() != 'ล็อคอิน') {
+              setState(() {
+                syslogModel.add(syslogModels);
+                _syslogModel = syslogModel;
+              });
+            } else {}
+          } else {}
         }
 
         print('00000000>>>>>>>>>>>>>>>>> ${syslogModel.length}');
@@ -285,6 +306,80 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                 children: [
                   Row(
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            setState(() {
+                              ser_type_TapMan = 0;
+                              Status_3_ = 0;
+                            });
+                            red_Syslog();
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: (ser_type_TapMan == 0)
+                                    ? Colors.black
+                                    : Colors.grey,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Center(
+                                child: Text(
+                                  'ระบบแอดมิน',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      // fontSize: 10.0,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              )),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            setState(() {
+                              ser_type_TapMan = 1;
+                              Status_3_ = 0;
+                            });
+                            red_Syslog();
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: (ser_type_TapMan == 1)
+                                    ? Colors.black
+                                    : Colors.grey,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Center(
+                                child: Text(
+                                  'ระบบผู้ใช้ทั่วไป',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      // fontSize: 10.0,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
                       Expanded(
                         child: Center(
                           child: Padding(
@@ -295,211 +390,297 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                 PointerDeviceKind.touch,
                                 PointerDeviceKind.mouse,
                               }),
-                              child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(children: [
-                                    for (int i = 0; i < Status_3.length; i++)
-                                      Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                tappedIndex_ = '';
-                                                Status_3_ = i;
-                                              });
-                                              red_Syslog();
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: (i + 1 == 1)
-                                                    ? Colors.blue[300]
-                                                    : (i + 1 == 2)
-                                                        ? Colors.grey[300]
-                                                        : (i + 1 == 3)
-                                                            ? Colors.purple[300]
-                                                            : (i + 1 == 4)
-                                                                ? Colors
-                                                                    .amber[300]
-                                                                : (i + 1 == 5)
-                                                                    ? Colors.lime[
-                                                                        300]
-                                                                    : (i + 1 ==
-                                                                            6)
-                                                                        ? Colors.blueGrey[
-                                                                            300]
-                                                                        : (i + 1 ==
-                                                                                7)
-                                                                            ? Colors.brown[300]
-                                                                            : Colors.red[300],
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(10),
-                                                        topRight:
-                                                            Radius.circular(10),
-                                                        bottomLeft:
-                                                            Radius.circular(10),
-                                                        bottomRight:
-                                                            Radius.circular(
-                                                                10)),
-                                                border: (Status_3_ == i)
-                                                    ? Border.all(
-                                                        color: Colors.white,
-                                                        width: 1)
-                                                    : null,
-                                              ),
+                              child: (ser_type_TapMan == 0)
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(children: [
+                                        for (int i = 0;
+                                            i < Status_3.length;
+                                            i++)
+                                          Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: Center(
-                                                child: Text(
-                                                  Status_3[i],
-                                                  style: TextStyle(
-                                                      color: (Status_3_ == i)
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    tappedIndex_ = '';
+                                                    Status_3_ = i;
+                                                  });
+                                                  red_Syslog();
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: (i + 1 == 1)
+                                                        ? Colors.blue[300]
+                                                        : (i + 1 == 2)
+                                                            ? Colors.grey[300]
+                                                            : (i + 1 == 3)
+                                                                ? Colors
+                                                                    .purple[300]
+                                                                : (i + 1 == 4)
+                                                                    ? Colors.amber[
+                                                                        300]
+                                                                    : (i + 1 ==
+                                                                            5)
+                                                                        ? Colors.lime[
+                                                                            300]
+                                                                        : (i + 1 ==
+                                                                                6)
+                                                                            ? Colors.blueGrey[300]
+                                                                            : (i + 1 == 7)
+                                                                                ? Colors.brown[300]
+                                                                                : Colors.red[300],
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    border: (Status_3_ == i)
+                                                        ? Border.all(
+                                                            color: Colors.white,
+                                                            width: 1)
+                                                        : null,
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Center(
+                                                    child: Text(
+                                                      Status_3[i],
+                                                      style: TextStyle(
+                                                          color: (Status_3_ ==
+                                                                  i)
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                          )),
-                                  ])),
+                                              )),
+                                      ]))
+                                  : SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(children: [
+                                        for (int i = 0;
+                                            i < Status_User.length;
+                                            i++)
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    tappedIndex_ = '';
+                                                    Status_3_ = i;
+                                                  });
+                                                  red_Syslog();
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: (i + 1 == 1)
+                                                        ? Colors.blue[300]
+                                                        : (i + 1 == 2)
+                                                            ? Colors.grey[300]
+                                                            : (i + 1 == 3)
+                                                                ? Colors
+                                                                    .purple[300]
+                                                                : (i + 1 == 4)
+                                                                    ? Colors.amber[
+                                                                        300]
+                                                                    : (i + 1 ==
+                                                                            5)
+                                                                        ? Colors.lime[
+                                                                            300]
+                                                                        : (i + 1 ==
+                                                                                6)
+                                                                            ? Colors.blueGrey[300]
+                                                                            : (i + 1 == 7)
+                                                                                ? Colors.brown[300]
+                                                                                : Colors.red[300],
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    border: (Status_3_ == i)
+                                                        ? Border.all(
+                                                            color: Colors.white,
+                                                            width: 1)
+                                                        : null,
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Center(
+                                                    child: Text(
+                                                      Status_User[i],
+                                                      style: TextStyle(
+                                                          color: (Status_3_ ==
+                                                                  i)
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                      ])),
                             ),
                           ),
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          if (Value_selectDate != null) {
-                            _displayPdf();
-                          } else {
-                            showDialog<String>(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0))),
-                                title: const Center(
-                                    child: Text(
-                                  'กรุณาเลือกวันที่ !!',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )),
-                                content: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'กรุณาเลือกวันที่ แบบระบุวันที่',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            CustomerScreen_Color.Colors_Text1_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
-                                  ),
-                                ),
-                                actions: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: const BorderRadius
-                                                    .only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomLeft: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10)),
-                                            border: Border.all(
-                                                color: Colors.grey, width: 1),
-                                          ),
-                                          padding: const EdgeInsets.all(3.0),
-                                          child: const Center(
-                                            child: Text(
-                                              'ปิด',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  // fontSize: 10.0,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            ),
-                                          )),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
-                        child: Container(
-                          // height: 50,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            color: Colors.green[600],
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            border: Border.all(color: Colors.grey, width: 1),
-                          ),
-                          padding: const EdgeInsets.all(4.0),
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: Icon(
-                                    Icons.print,
-                                    color: (Status_3_ + 1 == 1)
-                                        ? Colors.blue[100]
-                                        : (Status_3_ + 1 == 2)
-                                            ? Colors.grey[100]
-                                            : (Status_3_ + 1 == 3)
-                                                ? Colors.purple[100]
-                                                : (Status_3_ + 1 == 4)
-                                                    ? Colors.amber[100]
-                                                    : (Status_3_ + 1 == 5)
-                                                        ? Colors.lime[100]
-                                                        : (Status_3_ + 1 == 6)
-                                                            ? Colors
-                                                                .blueGrey[100]
-                                                            : (Status_3_ + 1 ==
-                                                                    7)
-                                                                ? Colors
-                                                                    .brown[100]
-                                                                : Colors
-                                                                    .red[100],
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: Text(
-                                    'พิมพ์',
-                                    style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text1_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
+                      // InkWell(
+                      //   onTap: () {
+                      //     if (Value_selectDate != null) {
+                      //       _displayPdf();
+                      //     } else {
+                      //       showDialog<String>(
+                      //         barrierDismissible: false,
+                      //         context: context,
+                      //         builder: (BuildContext context) => AlertDialog(
+                      //           shape: const RoundedRectangleBorder(
+                      //               borderRadius: BorderRadius.all(
+                      //                   Radius.circular(20.0))),
+                      //           title: const Center(
+                      //               child: Text(
+                      //             'กรุณาเลือกวันที่ !!',
+                      //             style: TextStyle(
+                      //               color: Colors.red,
+                      //               // fontWeight: FontWeight.bold,
+                      //               fontFamily: FontWeight_.Fonts_T,
+                      //               fontWeight: FontWeight.bold,
+                      //             ),
+                      //           )),
+                      //           content: const Padding(
+                      //             padding: EdgeInsets.all(8.0),
+                      //             child: Text(
+                      //               'กรุณาเลือกวันที่ แบบระบุวันที่',
+                      //               textAlign: TextAlign.center,
+                      //               style: TextStyle(
+                      //                   color:
+                      //                       CustomerScreen_Color.Colors_Text1_,
+                      //                   // fontWeight: FontWeight.bold,
+                      //                   fontFamily: Font_.Fonts_T),
+                      //             ),
+                      //           ),
+                      //           actions: [
+                      //             Padding(
+                      //               padding: const EdgeInsets.all(8.0),
+                      //               child: InkWell(
+                      //                 onTap: () {
+                      //                   Navigator.pop(context);
+                      //                 },
+                      //                 child: Container(
+                      //                     height: 50,
+                      //                     decoration: BoxDecoration(
+                      //                       color: Colors.black,
+                      //                       borderRadius: const BorderRadius
+                      //                               .only(
+                      //                           topLeft: Radius.circular(10),
+                      //                           topRight: Radius.circular(10),
+                      //                           bottomLeft: Radius.circular(10),
+                      //                           bottomRight:
+                      //                               Radius.circular(10)),
+                      //                       border: Border.all(
+                      //                           color: Colors.grey, width: 1),
+                      //                     ),
+                      //                     padding: const EdgeInsets.all(3.0),
+                      //                     child: const Center(
+                      //                       child: Text(
+                      //                         'ปิด',
+                      //                         style: TextStyle(
+                      //                             color: Colors.white,
+                      //                             // fontSize: 10.0,
+                      //                             fontFamily:
+                      //                                 FontWeight_.Fonts_T),
+                      //                       ),
+                      //                     )),
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       );
+                      //     }
+                      //   },
+                      //   child: Container(
+                      //     // height: 50,
+                      //     width: 100,
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.green[600],
+                      //       borderRadius: const BorderRadius.only(
+                      //           topLeft: Radius.circular(10),
+                      //           topRight: Radius.circular(10),
+                      //           bottomLeft: Radius.circular(10),
+                      //           bottomRight: Radius.circular(10)),
+                      //       border: Border.all(color: Colors.grey, width: 1),
+                      //     ),
+                      //     padding: const EdgeInsets.all(4.0),
+                      //     child: Center(
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Padding(
+                      //             padding: EdgeInsets.all(4.0),
+                      //             child: Icon(
+                      //               Icons.print,
+                      //               color: (Status_3_ + 1 == 1)
+                      //                   ? Colors.blue[100]
+                      //                   : (Status_3_ + 1 == 2)
+                      //                       ? Colors.grey[100]
+                      //                       : (Status_3_ + 1 == 3)
+                      //                           ? Colors.purple[100]
+                      //                           : (Status_3_ + 1 == 4)
+                      //                               ? Colors.amber[100]
+                      //                               : (Status_3_ + 1 == 5)
+                      //                                   ? Colors.lime[100]
+                      //                                   : (Status_3_ + 1 == 6)
+                      //                                       ? Colors
+                      //                                           .blueGrey[100]
+                      //                                       : (Status_3_ + 1 ==
+                      //                                               7)
+                      //                                           ? Colors
+                      //                                               .brown[100]
+                      //                                           : Colors
+                      //                                               .red[100],
+                      //             ),
+                      //           ),
+                      //           const Padding(
+                      //             padding: EdgeInsets.all(4.0),
+                      //             child: Text(
+                      //               'พิมพ์',
+                      //               style: TextStyle(
+                      //                 color:
+                      //                     PeopleChaoScreen_Color.Colors_Text1_,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 fontFamily: FontWeight_.Fonts_T,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                   Container(

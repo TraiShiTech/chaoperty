@@ -28,6 +28,7 @@ class Add_Custo_EXC_Screen extends StatefulWidget {
 
 class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
   List<dynamic> ADD_Cus_finished = [];
+  List<dynamic> Select_Cus_index = [];
   List<CustomerModel> customerModels = [];
   List<CustomerModel> _customerModels = <CustomerModel>[];
   String? renTal_user, renTal_name, fname_;
@@ -52,6 +53,23 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
     read_GC_type();
   }
 
+  ScrollController _scrollController1 = ScrollController();
+
+  ///----------------->
+  _moveUp1() {
+    _scrollController1.animateTo(_scrollController1.offset - 250,
+        curve: Curves.linear, duration: const Duration(milliseconds: 500));
+  }
+
+  _moveDown1() {
+    _scrollController1.animateTo(_scrollController1.offset + 250,
+        curve: Curves.linear, duration: const Duration(milliseconds: 500));
+  }
+
+  ///----------------->
+  // GlobalKey qrImageKey = GlobalKey();
+
+  ////////////------------------------------------------------------>
   Future<Null> checkPreferance() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
@@ -59,7 +77,7 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
       renTal_name = preferences.getString('renTalName');
       fname_ = preferences.getString('fname');
     });
-    System_New_Update();
+    // System_New_Update();
   }
 
   System_New_Update() async {
@@ -92,7 +110,7 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'ขออภัย ขณะนี้ฟังก์ชั่นก์ เพิ่มแบบExcell อยู่ในช่วงทดสอบ... !!!!!! ',
+                    'ขออภัย ขณะนี้ฟังก์ชั่นก์ เพิ่มแบบExcel อยู่ในช่วงทดสอบ... !!!!!! ',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.red,
@@ -318,7 +336,11 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
       customerModels.clear();
       index = 0;
     });
-
+    setState(() {
+      Select_Cus_index.clear();
+      Select_Cus_index.clear();
+      customerModels.clear();
+    });
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -521,7 +543,7 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                   child: AutoSizeText(
                     minFontSize: 10,
                     maxFontSize: 20,
-                    'เพิ่มข้อมูลทะเบียนลูกค้าแบบ ( Excell )',
+                    'เพิ่มข้อมูลทะเบียนลูกค้าแบบ ( Excel )',
                     style: TextStyle(
                       color: PeopleChaoScreen_Color.Colors_Text1_,
                       // fontWeight: FontWeight.bold,
@@ -613,10 +635,11 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                 child: Row(
                   children: [
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.6,
+                      color: AppbackgroundColor.Sub_Abg_Colors,
+                      height: MediaQuery.of(context).size.height * 0.48,
                       width: (Responsive.isDesktop(context))
                           ? MediaQuery.of(context).size.width * 0.9
-                          : 800,
+                          : 1000,
                       child: Column(
                         children: [
                           Padding(
@@ -633,7 +656,7 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                               ),
                               width: (Responsive.isDesktop(context))
                                   ? MediaQuery.of(context).size.width * 0.9
-                                  : 800,
+                                  : 1000,
                               child: Row(
                                 children: [
                                   // SizedBox(
@@ -653,6 +676,48 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                                   //         ),
                                   //   ),
                                   // ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: InkWell(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.blueGrey[300],
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8),
+                                              bottomLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(8)),
+                                        ),
+                                        padding: const EdgeInsets.all(4),
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          'เลือกทั้งหมด',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0Test_UP_img_Custo
+                                              ),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        for (int index = 0;
+                                            index < customerModels.length;
+                                            index++) {
+                                          if (Select_Cus_index.contains(
+                                                  index) !=
+                                              true) {
+                                            setState(() {
+                                              Select_Cus_index.add(index);
+                                            });
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  ),
                                   Expanded(
                                     flex: 1,
                                     child: AutoSizeText(
@@ -832,6 +897,7 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
                                   child: ListView.builder(
+                                      controller: _scrollController1,
                                       physics:
                                           const AlwaysScrollableScrollPhysics(),
                                       shrinkWrap: true,
@@ -862,23 +928,40 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                                                       });
                                                     },
                                                     title: Row(children: [
-                                                      // SizedBox(
-                                                      //   width: 80,
-                                                      //   child: AutoSizeText(
-                                                      //     minFontSize: 10,
-                                                      //     maxFontSize: 18,
-                                                      //     '${index + 1}',
-                                                      //     textAlign:
-                                                      //         TextAlign.center,
-                                                      //     style:
-                                                      //         const TextStyle(
-                                                      //             color: CustomerScreen_Color
-                                                      //                 .Colors_Text2_,
-                                                      //             // fontWeight: FontWeight.bold,
-                                                      //             fontFamily: Font_
-                                                      //                 .Fonts_T),
-                                                      //   ),
-                                                      // ),
+                                                      SizedBox(
+                                                          width: 80,
+                                                          child: (Select_Cus_index
+                                                                      .contains(
+                                                                          index) ==
+                                                                  true)
+                                                              ? IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      Select_Cus_index
+                                                                          .remove(
+                                                                              index);
+                                                                    });
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .check_box,
+                                                                    color: Colors
+                                                                        .red,
+                                                                  ))
+                                                              : IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      Select_Cus_index
+                                                                          .add(
+                                                                              index);
+                                                                    });
+                                                                  },
+                                                                  icon: Icon(Icons
+                                                                      .check_box_outline_blank))),
                                                       Expanded(
                                                         flex: 1,
                                                         child: Row(
@@ -951,6 +1034,9 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                                                                                               _verticalGroupValue = value.type!;
                                                                                             });
                                                                                             print(Value_AreaSer_);
+                                                                                            print(
+                                                                                              'typeModels: ${typeModels.elementAt(Value_AreaSer_).type}',
+                                                                                            );
                                                                                             updated_Customer(customerModels[index].scname, customerModels[index].stype, Value_AreaSer_, _verticalGroupValue, customerModels[index].cname, customerModels[index].attn, customerModels[index].addr1, customerModels[index].tel, customerModels[index].tax, customerModels[index].email, index);
                                                                                           },
                                                                                           items: typeModels,
@@ -2291,7 +2377,7 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                                                             ),
                                                             padding:
                                                                 const EdgeInsets
-                                                                    .all(2.0),
+                                                                    .all(8.0),
                                                             child: Center(
                                                               child:
                                                                   AutoSizeText(
@@ -2333,10 +2419,11 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                                                                               index]
                                                                           .stype!;
 
-                                                                  var type_ =
-                                                                      customerModels[
-                                                                              index]
-                                                                          .type!;
+                                                                  var type_ = customerModels[
+                                                                          index]
+                                                                      .type
+                                                                      .toString()
+                                                                      .trim();
 
                                                                   var cname_ =
                                                                       customerModels[
@@ -2373,208 +2460,205 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                                                                         context,
                                                                     builder: (BuildContext
                                                                             context) =>
-                                                                        AlertDialog(
-                                                                      shape: const RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.all(Radius.circular(20.0))),
-                                                                      title: const Center(
-                                                                          child: Text(
-                                                                        'เพิ่มข้อมูล',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                AdminScafScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T),
-                                                                      )),
-                                                                      content:
-                                                                          SingleChildScrollView(
-                                                                        child:
-                                                                            ListBody(
-                                                                          children: <Widget>[
-                                                                            Text(
-                                                                              'ลำดับ : ${index + 1}',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                            Text(
-                                                                              'ประเภท : $type_',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                            Text(
-                                                                              'ชื่อร้านค้า : $scname_',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                            Text(
-                                                                              'ประเภทร้านค้า : $stype_',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                            Text(
-                                                                              'ชื่อผู้เช่า/บริษัท : $cname_',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                            Text(
-                                                                              'ชื่อผู้ติดต่อ : $attn_',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                            Text(
-                                                                              'ที่อยู่ : $addr1_',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                            Text(
-                                                                              'เบอร์โทร : $tel_',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                            Text(
-                                                                              'อีเมล : $email_',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                            Text(
-                                                                              'ID/TAX ID : $tax_ ',
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      actions: <Widget>[
-                                                                        Column(
-                                                                          children: [
-                                                                            const SizedBox(
-                                                                              height: 5.0,
-                                                                            ),
-                                                                            const Divider(
-                                                                              color: Colors.grey,
-                                                                              height: 4.0,
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              height: 5.0,
-                                                                            ),
-                                                                            Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                children: [
-                                                                                  Padding(
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: Container(
-                                                                                      width: 100,
-                                                                                      decoration: const BoxDecoration(
-                                                                                        color: Colors.green,
-                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                        StreamBuilder(
+                                                                            stream:
+                                                                                Stream.periodic(const Duration(seconds: 0)),
+                                                                            builder: (context, snapshot) {
+                                                                              return AlertDialog(
+                                                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                title: const Center(
+                                                                                    child: Text(
+                                                                                  'เพิ่มข้อมูล',
+                                                                                  style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                )),
+                                                                                content: SingleChildScrollView(
+                                                                                  child: ListBody(
+                                                                                    children: <Widget>[
+                                                                                      Text(
+                                                                                        'ลำดับ : ${index + 1}',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
                                                                                       ),
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: TextButton(
-                                                                                        onPressed: () async {
-                                                                                          SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                          var ren = preferences.getString('renTalSer');
-                                                                                          var user = preferences.getString('ser');
-                                                                                          // String url = '${MyConstant().domain}/InC_CustoAdd_Bureau.php?isAdd=true&ren=$ren';
-                                                                                          try {
-                                                                                            // var response = await http.post(Uri.parse(url), body: {
-                                                                                            //   'ciddoc': '',
-                                                                                            //   'qutser': '',
-                                                                                            //   'user': '',
-                                                                                            //   'sumdis': '',
-                                                                                            //   'sumdisp': '',
-                                                                                            //   'dateY': '',
-                                                                                            //   'dateY1': '',
-                                                                                            //   'time': '',
-                                                                                            //   'payment1': '',
-                                                                                            //   'payment2': '',
-                                                                                            //   'pSer1': '',
-                                                                                            //   'pSer2': '',
-                                                                                            //   'sum_whta': '',
-                                                                                            //   'bill': '',
-                                                                                            //   'fileNameSlip': '',
-                                                                                            //   'areaSer': '',
-                                                                                            //   'typeModels': '${typeModels.elementAt(Value_AreaSer_).type}',
-                                                                                            //   'typeshop': stype_,
-                                                                                            //   'nameshop': scname_,
-                                                                                            //   'bussshop': cname_,
-                                                                                            //   'bussscontact': attn_,
-                                                                                            //   'address': addr1_,
-                                                                                            //   'tel': tel_,
-                                                                                            //   'tax': tax_,
-                                                                                            //   'email': email_,
-                                                                                            //   'Serbool': '',
-                                                                                            //   'area_rent_sum': '',
-                                                                                            //   'comment': '',
-                                                                                            //   'zser': ''.trim().toString(),
-                                                                                            // }).then((value) => {
-                                                                                            setState(() {
-                                                                                              ADD_Cus_finished.add(index);
-                                                                                              Navigator.pop(context, 'OK');
-                                                                                            });
-                                                                                            //     });
-                                                                                          } catch (e) {
-                                                                                            Navigator.pop(context, 'OK');
-                                                                                          }
-                                                                                        },
-                                                                                        child: const Text(
-                                                                                          'ยืนยัน',
-                                                                                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                        ),
+                                                                                      Text(
+                                                                                        'ประเภท : $type_  }',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
                                                                                       ),
-                                                                                    ),
+                                                                                      Text(
+                                                                                        'ชื่อร้านค้า : $scname_',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        'ประเภทร้านค้า : $stype_',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        'ชื่อผู้เช่า/บริษัท : $cname_',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        'ชื่อผู้ติดต่อ : $attn_',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        'ที่อยู่ : $addr1_',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        'เบอร์โทร : $tel_',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        'อีเมล : $email_',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        'ID/TAX ID : $tax_ ',
+                                                                                        style: const TextStyle(
+                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                    ],
                                                                                   ),
-                                                                                  Padding(
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: Row(
-                                                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                                                      children: [
-                                                                                        Container(
-                                                                                          width: 100,
-                                                                                          decoration: const BoxDecoration(
-                                                                                            color: Colors.redAccent,
-                                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                          ),
-                                                                                          padding: const EdgeInsets.all(8.0),
-                                                                                          child: TextButton(
-                                                                                            onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                            child: const Text(
-                                                                                              'ยกเลิก',
-                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                ),
+                                                                                actions: <Widget>[
+                                                                                  Column(
+                                                                                    children: [
+                                                                                      const SizedBox(
+                                                                                        height: 5.0,
+                                                                                      ),
+                                                                                      const Divider(
+                                                                                        color: Colors.grey,
+                                                                                        height: 4.0,
+                                                                                      ),
+                                                                                      const SizedBox(
+                                                                                        height: 5.0,
+                                                                                      ),
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Padding(
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: Container(
+                                                                                                width: 100,
+                                                                                                decoration: const BoxDecoration(
+                                                                                                  color: Colors.green,
+                                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                ),
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: TextButton(
+                                                                                                  onPressed: () async {
+                                                                                                    SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                    var ren = preferences.getString('renTalSer');
+                                                                                                    var user = preferences.getString('ser');
+                                                                                                    String url = '${MyConstant().domain}/InC_CustoAdd_Bureau.php?isAdd=true&ren=$ren';
+                                                                                                    try {
+                                                                                                      var response = await http.post(Uri.parse(url), body: {
+                                                                                                        'ciddoc': '',
+                                                                                                        'qutser': '',
+                                                                                                        'user': '',
+                                                                                                        'sumdis': '',
+                                                                                                        'sumdisp': '',
+                                                                                                        'dateY': '',
+                                                                                                        'dateY1': '',
+                                                                                                        'time': '',
+                                                                                                        'payment1': '',
+                                                                                                        'payment2': '',
+                                                                                                        'pSer1': '',
+                                                                                                        'pSer2': '',
+                                                                                                        'sum_whta': '',
+                                                                                                        'bill': '',
+                                                                                                        'fileNameSlip': '',
+                                                                                                        'areaSer': (type_ == 'ส่วนตัว/บุคคลธรรมดา') ? '1' : '2',
+                                                                                                        'typeModels': '${type_}',
+                                                                                                        'typeshop': stype_,
+                                                                                                        'nameshop': scname_,
+                                                                                                        'bussshop': cname_,
+                                                                                                        'bussscontact': attn_,
+                                                                                                        'address': addr1_,
+                                                                                                        'tel': tel_,
+                                                                                                        'tax': tax_,
+                                                                                                        'email': email_,
+                                                                                                        'Serbool': '',
+                                                                                                        'area_rent_sum': '',
+                                                                                                        'comment': '',
+                                                                                                        'zser': ''.trim().toString(),
+                                                                                                      }).then((value) => {
+                                                                                                            setState(() {
+                                                                                                              ADD_Cus_finished.add(index);
+                                                                                                              Navigator.pop(context, 'OK');
+                                                                                                            })
+                                                                                                          });
+                                                                                                    } catch (e) {
+                                                                                                      Navigator.pop(context, 'OK');
+                                                                                                    }
+                                                                                                  },
+                                                                                                  child: const Text(
+                                                                                                    'ยืนยัน',
+                                                                                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
                                                                                             ),
-                                                                                          ),
+                                                                                            Padding(
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    width: 100,
+                                                                                                    decoration: const BoxDecoration(
+                                                                                                      color: Colors.redAccent,
+                                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                    ),
+                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                    child: TextButton(
+                                                                                                      onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                      child: const Text(
+                                                                                                        'ยกเลิก',
+                                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
                                                                                         ),
-                                                                                      ],
-                                                                                    ),
+                                                                                      ),
+                                                                                    ],
                                                                                   ),
                                                                                 ],
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ],
-                                                                    ),
+                                                                              );
+                                                                            }),
                                                                   );
 
                                                                   print(
@@ -2617,6 +2701,694 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                 ),
               ),
             ),
+            Container(
+                child: Row(
+              children: [
+                const Expanded(
+                  flex: 2,
+                  child: AutoSizeText(
+                    minFontSize: 10,
+                    maxFontSize: 18,
+                    '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: CustomerScreen_Color.Colors_Text1_,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: FontWeight_.Fonts_T
+                        //fontSize: 10.0
+                        //fontSize: 10.0
+                        ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: const AutoSizeText(
+                      minFontSize: 8,
+                      maxFontSize: 12,
+                      '**กด Enter ทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล',
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: FontWeight_.Fonts_T
+                          //fontSize: 10.0
+                          //fontSize: 10.0
+                          ),
+                    ),
+                  ),
+                ),
+              ],
+            )),
+            Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                  color: AppbackgroundColor.Sub_Abg_Colors,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(0),
+                      topRight: Radius.circular(0),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () {
+                                _scrollController1.animateTo(
+                                  0,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.easeOut,
+                                );
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                    // color: AppbackgroundColor
+                                    //     .TiTile_Colors,
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(6),
+                                        topRight: Radius.circular(6),
+                                        bottomLeft: Radius.circular(6),
+                                        bottomRight: Radius.circular(8)),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: const Text(
+                                    'Top',
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 10.0,
+                                        fontFamily: FontWeight_.Fonts_T),
+                                  )),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              if (_scrollController1.hasClients) {
+                                final position =
+                                    _scrollController1.position.maxScrollExtent;
+                                _scrollController1.animateTo(
+                                  position,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.easeOut,
+                                );
+                              }
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  // color: AppbackgroundColor
+                                  //     .TiTile_Colors,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(6),
+                                      topRight: Radius.circular(6),
+                                      bottomLeft: Radius.circular(6),
+                                      bottomRight: Radius.circular(6)),
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
+                                ),
+                                padding: const EdgeInsets.all(3.0),
+                                child: const Text(
+                                  'Down',
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 10.0,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        children: [
+                          InkWell(
+                            onTap: _moveUp1,
+                            child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Icon(
+                                    Icons.arrow_upward,
+                                    color: Colors.grey,
+                                  ),
+                                )),
+                          ),
+                          Container(
+                              decoration: BoxDecoration(
+                                // color: AppbackgroundColor
+                                //     .TiTile_Colors,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(6),
+                                    bottomRight: Radius.circular(6)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(3.0),
+                              child: const Text(
+                                'Scroll',
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 10.0,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              )),
+                          InkWell(
+                            onTap: _moveDown1,
+                            child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Icon(
+                                    Icons.arrow_downward,
+                                    color: Colors.grey,
+                                  ),
+                                )),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.green[200],
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                ),
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AutoSizeText(
+                      minFontSize: 8,
+                      maxFontSize: 14,
+                      'รายการที่เลือกทั้งหมด : ${Select_Cus_index.length}',
+                      style: TextStyle(
+                        color: Colors.grey[800],
+                        // fontWeight: FontWeight.bold,
+                        fontFamily: FontWeight_.Fonts_T,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: (Select_Cus_index.length == 0)
+                          ? null
+                          : () async {
+                              int serr_showDialog = 0;
+                              showDialog<String>(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) =>
+                                      StreamBuilder(
+                                          stream: Stream.periodic(
+                                              const Duration(seconds: 0)),
+                                          builder: (context, snapshot) {
+                                            return AlertDialog(
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20.0))),
+                                              title: Center(
+                                                child: (serr_showDialog == 1)
+                                                    ? Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(4.0),
+                                                        child:
+                                                            const CircularProgressIndicator())
+                                                    : Text(
+                                                        'ยืนยันการเพิ่มใช่หรือไม่',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T),
+                                                      ),
+                                              ),
+                                              actions: <Widget>[
+                                                Column(
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 5.0,
+                                                    ),
+                                                    const Divider(
+                                                      color: Colors.grey,
+                                                      height: 4.0,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5.0,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Container(
+                                                              width: 100,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: (serr_showDialog ==
+                                                                        1)
+                                                                    ? Colors.grey[
+                                                                        400]
+                                                                    : Colors
+                                                                        .green,
+                                                                borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: TextButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  setState(() {
+                                                                    serr_showDialog =
+                                                                        1;
+                                                                  });
+                                                                  SharedPreferences
+                                                                      preferences =
+                                                                      await SharedPreferences
+                                                                          .getInstance();
+                                                                  var ren = preferences
+                                                                      .getString(
+                                                                          'renTalSer');
+                                                                  var user = preferences
+                                                                      .getString(
+                                                                          'ser');
+                                                                  String url =
+                                                                      '${MyConstant().domain}/InC_CustoAdd_Bureau.php?isAdd=true&ren=$ren';
+                                                                  for (int index =
+                                                                          0;
+                                                                      index <
+                                                                          Select_Cus_index
+                                                                              .length;
+                                                                      index++) {
+                                                                    var scname_ =
+                                                                        customerModels[index]
+                                                                            .scname!;
+                                                                    var stype_ =
+                                                                        customerModels[index]
+                                                                            .stype!;
+
+                                                                    var type_ = customerModels[
+                                                                            index]
+                                                                        .type
+                                                                        .toString()
+                                                                        .trim();
+
+                                                                    var cname_ =
+                                                                        customerModels[index]
+                                                                            .cname!;
+
+                                                                    var attn_ =
+                                                                        customerModels[index]
+                                                                            .attn!;
+
+                                                                    var addr1_ =
+                                                                        customerModels[index]
+                                                                            .addr1!;
+
+                                                                    var tel_ =
+                                                                        customerModels[index]
+                                                                            .tel!;
+
+                                                                    var tax_ =
+                                                                        customerModels[index]
+                                                                            .tax!;
+                                                                    var email_ =
+                                                                        customerModels[index]
+                                                                            .email!;
+                                                                    try {
+                                                                      var response = await http.post(
+                                                                          Uri.parse(
+                                                                              url),
+                                                                          body: {
+                                                                            'ciddoc':
+                                                                                '',
+                                                                            'qutser':
+                                                                                '',
+                                                                            'user':
+                                                                                '',
+                                                                            'sumdis':
+                                                                                '',
+                                                                            'sumdisp':
+                                                                                '',
+                                                                            'dateY':
+                                                                                '',
+                                                                            'dateY1':
+                                                                                '',
+                                                                            'time':
+                                                                                '',
+                                                                            'payment1':
+                                                                                '',
+                                                                            'payment2':
+                                                                                '',
+                                                                            'pSer1':
+                                                                                '',
+                                                                            'pSer2':
+                                                                                '',
+                                                                            'sum_whta':
+                                                                                '',
+                                                                            'bill':
+                                                                                '',
+                                                                            'fileNameSlip':
+                                                                                '',
+                                                                            'areaSer': (type_ == 'ส่วนตัว/บุคคลธรรมดา')
+                                                                                ? '1'
+                                                                                : '2',
+                                                                            'typeModels':
+                                                                                '${type_}',
+                                                                            'typeshop':
+                                                                                stype_,
+                                                                            'nameshop':
+                                                                                scname_,
+                                                                            'bussshop':
+                                                                                cname_,
+                                                                            'bussscontact':
+                                                                                attn_,
+                                                                            'address':
+                                                                                addr1_,
+                                                                            'tel':
+                                                                                tel_,
+                                                                            'tax':
+                                                                                tax_,
+                                                                            'email':
+                                                                                email_,
+                                                                            'Serbool':
+                                                                                '',
+                                                                            'area_rent_sum':
+                                                                                '',
+                                                                            'comment':
+                                                                                '',
+                                                                            'zser':
+                                                                                ''.trim().toString(),
+                                                                          }).then(
+                                                                          (value) =>
+                                                                              {
+                                                                                setState(() {
+                                                                                  ADD_Cus_finished.add(index);
+                                                                                  // Navigator.pop(context, 'OK');
+                                                                                })
+                                                                              });
+                                                                    } catch (e) {
+                                                                      // Navigator.pop(context, 'OK');
+                                                                    }
+                                                                    if (index +
+                                                                            1 ==
+                                                                        Select_Cus_index
+                                                                            .length) {
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                        SnackBar(
+                                                                            backgroundColor:
+                                                                                Colors.green,
+                                                                            content: Text('ทำรายการเสร็จสิ้น ...!!', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T))),
+                                                                      );
+                                                                      setState(
+                                                                          () {
+                                                                        serr_showDialog =
+                                                                            0;
+                                                                        Select_Cus_index
+                                                                            .clear();
+                                                                        Select_Cus_index
+                                                                            .clear();
+                                                                        customerModels
+                                                                            .clear();
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context,
+                                                                          'OK');
+                                                                    }
+                                                                  }
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                  'ยืนยัน',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Container(
+                                                              width: 100,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                color:
+                                                                    Colors.red,
+                                                                borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: TextButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  Navigator.pop(
+                                                                      context,
+                                                                      'OK');
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                  'ปิด',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            );
+                                          }));
+                            },
+                      child: Container(
+                        width: 120,
+                        decoration: BoxDecoration(
+                          color: (Select_Cus_index.length == 0)
+                              ? Colors.blue[100]
+                              : Colors.blue,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
+                          ),
+                          // border:
+                          //     Border.all(color: Colors.white, width: 2),
+                        ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: AutoSizeText(
+                            minFontSize: 8,
+                            maxFontSize: 14,
+                            'ยืนยันการเพิ่ม',
+                            style: TextStyle(
+                              color: Colors.black,
+                              // fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Container(
+            //     width: MediaQuery.of(context).size.width,
+            //     height: 200,
+            //     // color: Colors.blue,
+            //     child: Row(
+            //       children: [
+            //         Expanded(
+            //           flex: 1,
+            //           child: Container(
+            //             // color: Colors.red,
+            //             child: Column(
+            //               children: [],
+            //             ),
+            //           ),
+            //         ),
+            //         Expanded(
+            //           flex: 2,
+            //           child: Container(
+            //             color: AppbackgroundColor.Abg_Colors.withOpacity(0.5),
+            //             // decoration: BoxDecoration(
+            //             //   color: Colors.green[200],
+            //             //   borderRadius: const BorderRadius.only(
+            //             //     topLeft: Radius.circular(8),
+            //             //     topRight: Radius.circular(8),
+            //             //     bottomLeft: Radius.circular(0),
+            //             //     bottomRight: Radius.circular(0),
+            //             //   ),
+            //             //   // border:
+            //             //   //     Border.all(color: Colors.white, width: 2),
+            //             // ),
+            //             child: Column(
+            //               crossAxisAlignment: CrossAxisAlignment.center,
+            //               mainAxisAlignment: MainAxisAlignment.center,
+            //               children: [
+            //                 Container(
+            //                   height: 40,
+            //                   decoration: BoxDecoration(
+            //                     color: Colors.green[200],
+            //                     borderRadius: const BorderRadius.only(
+            //                       topLeft: Radius.circular(8),
+            //                       topRight: Radius.circular(8),
+            //                       bottomLeft: Radius.circular(0),
+            //                       bottomRight: Radius.circular(0),
+            //                     ),
+            //                   ),
+            //                 ),
+            //                 Expanded(
+            //                     child: Container(
+            //                   child: Column(
+            //                     crossAxisAlignment: CrossAxisAlignment.center,
+            //                     mainAxisAlignment: MainAxisAlignment.center,
+            //                     children: [
+            //                       Padding(
+            //                         padding: const EdgeInsets.all(8.0),
+            //                         child: Text(
+            //                           'เพิ่มรายการที่เลือกทั้งหมด',
+            //                           textAlign: TextAlign.center,
+            //                           style: TextStyle(
+            //                               color: CustomerScreen_Color
+            //                                   .Colors_Text2_,
+            //                               fontWeight: FontWeight.bold,
+            //                               fontFamily: FontWeight_.Fonts_T
+            //                               //fontSize: 10.0
+            //                               ),
+            //                         ),
+            //                       ),
+            //                       Padding(
+            //                         padding: const EdgeInsets.all(8.0),
+            //                         child: InkWell(
+            //                           onTap: () {},
+            //                           child: Container(
+            //                             width: 150,
+            //                             decoration: BoxDecoration(
+            //                               color: Colors.blue,
+            //                               borderRadius: const BorderRadius.only(
+            //                                 topLeft: Radius.circular(8),
+            //                                 topRight: Radius.circular(8),
+            //                                 bottomLeft: Radius.circular(8),
+            //                                 bottomRight: Radius.circular(8),
+            //                               ),
+            //                               // border:
+            //                               //     Border.all(color: Colors.white, width: 2),
+            //                             ),
+            //                             padding: const EdgeInsets.all(8.0),
+            //                             child: Center(
+            //                               child: AutoSizeText(
+            //                                 minFontSize: 8,
+            //                                 maxFontSize: 14,
+            //                                 'ยืนยันการเพิ่ม',
+            //                                 style: TextStyle(
+            //                                   color: Colors.black,
+            //                                   // fontWeight: FontWeight.bold,
+            //                                   fontFamily: FontWeight_.Fonts_T,
+            //                                   fontWeight: FontWeight.bold,
+            //                                 ),
+            //                               ),
+            //                             ),
+            //                           ),
+            //                         ),
+            //                       ),
+            //                     ],
+            //                   ),
+            //                 ))
+            //               ],
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

@@ -17,6 +17,7 @@ import 'Report_Screen.dart';
 
 class Excgen_BankmovemenReport {
   static void exportExcel_BankmovemenReport(
+      ser_type_repro,
       context,
       NameFile_,
       _verticalGroupValue_NameFile,
@@ -172,8 +173,14 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('N1').cellStyle = globalStyle22;
     sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
-    range
-        .setText('รายงานการเคลื่อนไหวธนาคาร ( โซน : $Value_Chang_Zone_Income)');
+    range.setText(
+      (ser_type_repro == '1')
+          ? 'รายงานการเคลื่อนไหวธนาคาร ( โซน : $Value_Chang_Zone_Income)'
+          : (ser_type_repro == '2')
+              ? 'รายงานการเคลื่อนไหวธนาคาร เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Income)'
+              : 'รายงานการเคลื่อนไหวธนาคาร เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Income)',
+      // 'รายงานการเคลื่อนไหวธนาคาร ( โซน : $Value_Chang_Zone_Income)'
+    );
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -577,8 +584,17 @@ class Excgen_BankmovemenReport {
     MimeType type = MimeType.MICROSOFTEXCEL;
 
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
-      String path = await FileSaver.instance
-          .saveFile("รายงานการเคลื่อนไหวธนาคาร", data, "xlsx", mimeType: type);
+      String path = await FileSaver.instance.saveFile(
+          (ser_type_repro == '1')
+              ? 'รายงานการเคลื่อนไหวธนาคาร ( โซน : $Value_Chang_Zone_Income)'
+              : (ser_type_repro == '2')
+                  ? 'รายงานการเคลื่อนไหวธนาคาร เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Income)'
+                  : 'รายงานการเคลื่อนไหวธนาคาร เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Income)',
+          // "รายงานการเคลื่อนไหวธนาคาร",
+
+          data,
+          "xlsx",
+          mimeType: type);
       log(path);
     } else {
       String path = await FileSaver.instance

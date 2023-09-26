@@ -16,6 +16,7 @@ import 'dart:math' as math;
 
 class Mini_Ex_IncomeReport {
   static void mini_exportExcel_IncomeReport(
+      ser_type_repro,
       context,
       NameFile_,
       _verticalGroupValue_NameFile,
@@ -167,7 +168,11 @@ class Mini_Ex_IncomeReport {
     sheet.getRangeByName('L1').cellStyle = globalStyle22;
 
     final x.Range range = sheet.getRangeByName('E1');
-    range.setText('รายงานรายรับแบบย่อ ( โซน : $Value_Chang_Zone_Income)');
+    range.setText((ser_type_repro == '1')
+        ? 'รายงานรายรับแบบย่อ ( โซน : $Value_Chang_Zone_Income)'
+        : (ser_type_repro == '2')
+            ? 'รายงานรายรับแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Income)'
+            : 'รายงานรายรับแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Income)');
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -427,8 +432,17 @@ class Mini_Ex_IncomeReport {
     MimeType type = MimeType.MICROSOFTEXCEL;
 
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
-      String path = await FileSaver.instance
-          .saveFile("รายงานรายรับแบบย่อ", data, "xlsx", mimeType: type);
+      String path = await FileSaver.instance.saveFile(
+          (ser_type_repro == '1')
+              ? 'รายงานรายรับแบบย่อ ( โซน : $Value_Chang_Zone_Income)'
+              : (ser_type_repro == '2')
+                  ? 'รายงานรายรับแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Income)'
+                  : 'รายงานรายรับแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Income)',
+          // "รายงานรายรับแบบย่อ",
+
+          data,
+          "xlsx",
+          mimeType: type);
       log(path);
     } else {
       String path = await FileSaver.instance

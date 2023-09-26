@@ -152,8 +152,13 @@ class Excgen_SystemLogReport {
     // sheet.getRangeByName('I1').cellStyle = globalStyle22;
 
     final x.Range range = sheet.getRangeByName('D1');
-    range
-        .setText('รายงานประวัติการใช้งาน (เมนู : $Value_Chang_Menu_LogSytem) ');
+    range.setText((type_s.toString() == '0')
+        ? "รายงานประวัติการใช้งานระบบ system log admin รายเดือน (เมนู : $Value_Chang_Menu_LogSytem)"
+        : (type_s.toString() == '1')
+            ? "รายงานประวัติการใช้งานระบบ system log admin รายเดือน (เมนู : $Value_Chang_Menu_LogSytem)"
+            : (type_s.toString() == '2')
+                ? "รายงานประวัติการใช้งานระบบ system log user รายเดือน (เมนู : $Value_Chang_Menu_LogSytem)"
+                : "รายงานประวัติการใช้งานระบบ system log user รายวัน (เมนู : $Value_Chang_Menu_LogSytem)");
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -281,8 +286,12 @@ class Excgen_SystemLogReport {
     MimeType type = MimeType.MICROSOFTEXCEL;
     String path = await FileSaver.instance.saveFile(
         (type_s.toString() == '0')
-            ? "รายงานประวัติการใช้งานรายเดือน (เมนู : $Value_Chang_Menu_LogSytem)"
-            : "รายงานประวัติการใช้งานรายวัน (เมนู : $Value_Chang_Menu_LogSytem)",
+            ? "รายงานประวัติการใช้งานระบบ system log admin รายเดือน (เมนู : $Value_Chang_Menu_LogSytem)"
+            : (type_s.toString() == '1')
+                ? "รายงานประวัติการใช้งานระบบ system log admin รายเดือน (เมนู : $Value_Chang_Menu_LogSytem)"
+                : (type_s.toString() == '2')
+                    ? "รายงานประวัติการใช้งานระบบ system log user รายเดือน (เมนู : $Value_Chang_Menu_LogSytem)"
+                    : "รายงานประวัติการใช้งานระบบ system log user รายวัน (เมนู : $Value_Chang_Menu_LogSytem)",
         data,
         "xlsx",
         mimeType: type);

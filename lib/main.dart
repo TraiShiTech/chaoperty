@@ -35,13 +35,26 @@ void main() {
 ///  flutter build web --web-renderer html --release --dart-define=web-browser-flag=--disable-web-security --no-tree-shake-icons (แก้ปัญหา This application cannot tree shake icons fonts. It has non-constant instances of IconData at the following location)
 
 //----------------------------------------------------->
+//flutter build web --web-renderer html --release --dart-define=web-browser-flag=--disable-web-security --no-tree-shake-icons (แก้ปัญหา This application cannot tree shake icons fonts. It has non-constant instances of IconData at the following location)
+///
+///flutter build web --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false   (แก้ปัญหา Security Capture Screen )
+///flutter build web --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false-browser-flag=--disable-web-security  (แก้ปัญหา Security Capture Screen + security  CORS )
+///flutter build web --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false-define=web-browser-flag=--disable-web-security --no-tree-shake-icons  (แก้ปัญหา Security Capture Screen + security  CORS + icons )
+///
+///flutter build web --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false-browser-flag=--disable-web-security --no-tree-shake-icons
 //----(Git Lab)
 //1.----> git add .
 //2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
-//3.-------->git commit -m "อัพเดตรายงาน ครั้งใหญ่ 9/9/23"
+//3.-------->git commit -m "commit message"
 //4.-----------> git push origin main
 //----------------------------------------------------->
-//----(Git Hub)
+//----(Git Lab)
+//1.----> git add .
+//2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
+//3.-------->git commit -m "อัพเดตรายงาน ครั้งใหญ่ CM 26/9/23"
+//4.-----------> git push origin main
+//----------------------------------------------------->
+//----(Git Hub) 
 //1.----> git add .
 //2.------> git remote set-url origin https://github.com/TraiShiTech/chaoperty.git
 //3.-------->git commit -m "commit message"

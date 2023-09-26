@@ -16,6 +16,7 @@ import 'dart:math' as math;
 
 class Mini_Ex_BankdailyReport {
   static void mini_exportExcel_BankdailyReport(
+      ser_type_repro,
       context,
       NameFile_,
       _verticalGroupValue_NameFile,
@@ -171,7 +172,13 @@ class Mini_Ex_BankdailyReport {
     // sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
-        'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ ( โซน : $Value_Chang_Zone_Daily)');
+      (ser_type_repro == '1')
+          ? 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ ( โซน : $Value_Chang_Zone_Daily)'
+          : (ser_type_repro == '2')
+              ? 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Daily)'
+              : 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Daily)',
+      // 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ ( โซน : $Value_Chang_Zone_Daily)'
+    );
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -491,7 +498,14 @@ class Mini_Ex_BankdailyReport {
 
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
       String path = await FileSaver.instance.saveFile(
-          "รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ", data, "xlsx",
+          (ser_type_repro == '1')
+              ? 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ ( โซน : $Value_Chang_Zone_Daily)'
+              : (ser_type_repro == '2')
+                  ? 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Daily)'
+                  : 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Daily)',
+          // "รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ",
+          data,
+          "xlsx",
           mimeType: type);
       log(path);
     } else {

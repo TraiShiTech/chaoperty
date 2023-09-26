@@ -1,4 +1,4 @@
-class ZoneModel {
+class SubZoneModel {
   String? ser;
   String? rser;
   String? zn;
@@ -17,7 +17,7 @@ class ZoneModel {
   String? jon_book;
   String? sub_zone;
 
-  ZoneModel({
+  SubZoneModel({
     this.ser,
     this.rser,
     this.zn,
@@ -37,7 +37,7 @@ class ZoneModel {
     this.sub_zone,
   });
 
-  ZoneModel.fromJson(Map<String, dynamic> json) {
+  SubZoneModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
     rser = json['rser'];
     zn = json['zn'];

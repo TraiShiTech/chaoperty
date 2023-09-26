@@ -17,13 +17,17 @@ import 'dart:math' as math;
 
 class Excgen_DailyReport_category_cm {
   static void excgen_DailyReport_category_cm(
+      ser_report,
       context,
       NameFile_,
       renTal_name,
       _verticalGroupValue_NameFile,
       Value_selectDate,
       zoneModels_report,
+      zoneModels_report_Sub_zone,
+      zoneModeels_report_Ser_Sub_zone,
       _TransReBillModels_GropType,
+      _TransReBillModels_GropType_Sub_zone,
       expModels) async {
     final x.Workbook workbook = x.Workbook();
 
@@ -160,7 +164,9 @@ class Excgen_DailyReport_category_cm {
     sheet.getRangeByName('G1').cellStyle = globalStyle22;
 
     final x.Range range = sheet.getRangeByName('D1');
-    range.setText('รายงาน รายรับรายวันแยกตามประเภท');
+    range.setText((ser_report.toString() == '1')
+        ? 'รายงาน รายงานรายรับแยกตามประเภท(รายวัน)'
+        : 'รายงาน รายงานรายรับแยกตามประเภท(รายเดือน)');
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -176,7 +182,9 @@ class Excgen_DailyReport_category_cm {
     sheet.getRangeByName('G2').cellStyle = globalStyle22;
 
     sheet.getRangeByName('A2').setText('${renTal_name}');
-    sheet.getRangeByName('G2').setText('ณ วันที่: ${Value_selectDate}');
+    sheet.getRangeByName('G2').setText((ser_report.toString() == '1')
+        ? 'ณ วันที่: ${Value_selectDate}'
+        : 'เดือน: ${Value_selectDate}');
 
     globalStyle2.hAlign = x.HAlignType.center;
     sheet.getRangeByName('A2').cellStyle = globalStyle22;
@@ -233,41 +241,52 @@ class Excgen_DailyReport_category_cm {
       Set<String> uniqueDocnos = {};
       double totalBills = 0.0;
 
-      for (int index = 0; index < _TransReBillModels_GropType.length; index++) {
-        if (_TransReBillModels_GropType[index].room_number.toString() !=
-            'ล็อคเสียบ') {
-          if (!uniqueDocnos
-              .contains(_TransReBillModels_GropType[index].docno)) {
-            if (_TransReBillModels_GropType[index].zser == null) {
-              totalBills += double.parse(_TransReBillModels_GropType[index]
-                          .zser1 ==
-                      zoneModels_report[index1].ser
-                  ? _TransReBillModels_GropType[index].total_expname == null ||
-                          _TransReBillModels_GropType[index].total_expname! ==
-                              ''
-                      ? 0.toString()
-                      : _TransReBillModels_GropType[index]
-                          .total_expname
-                          .toString()
-                  : 0.toString());
-            } else {
-              totalBills += double.parse(_TransReBillModels_GropType[index]
-                          .zser ==
-                      zoneModels_report[index1].ser
-                  ? _TransReBillModels_GropType[index].total_expname == null ||
-                          _TransReBillModels_GropType[index].total_expname! ==
-                              ''
-                      ? 0.toString()
-                      : _TransReBillModels_GropType[index]
-                          .total_expname
-                          .toString()
-                  : 0.toString());
-            }
-            uniqueDocnos.add(_TransReBillModels_GropType[index].docno!);
-          }
-        }
-      }
+      totalBills = (_TransReBillModels_GropType.length == 0)
+          ? 0.00
+          : double.parse((_TransReBillModels_GropType.map((e) =>
+              (e.zser == null)
+                  ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
+                          e.expser! == '1' &&
+                          e.room_number.toString() != 'ล็อคเสียบ'
+                      ? e.total_expname == null || e.total_expname! == ''
+                          ? 0.toString()
+                          : e.total_expname.toString()
+                      : 0.toString())
+                  : double.parse(e.zser == zoneModels_report[index1].ser &&
+                          e.expser! == '1' &&
+                          e.room_number.toString() != 'ล็อคเสียบ'
+                      ? e.total_expname == null || e.total_expname! == ''
+                          ? 0.toString()
+                          : e.total_expname.toString()
+                      : 0.toString())).reduce((a, b) => a + b)).toString());
 
+      return totalBills.toString();
+    }
+
+    String calculateTotalBills_Zone_Sub(int index1) {
+      Set<String> uniqueDocnos = {};
+      double totalBills = 0.0;
+
+      totalBills = (_TransReBillModels_GropType_Sub_zone.length == 0)
+          ? 0.00
+          : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) =>
+              (e.zser == null)
+                  ? double.parse(
+                      e.zser1 == zoneModeels_report_Ser_Sub_zone[index1].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())
+                  : double.parse(
+                      e.zser == zoneModeels_report_Ser_Sub_zone[index1].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())).reduce((a, b) => a + b)).toString());
       return totalBills.toString();
     }
 
@@ -307,284 +326,479 @@ class Excgen_DailyReport_category_cm {
       return totalArea.toString();
     }
 
+    String calculateTotalArea_Zone_Sub(int index1) {
+      Set<String> uniqueDocnos = {};
+      double totalArea = 0.0;
+
+      for (int index = 0;
+          index < _TransReBillModels_GropType_Sub_zone.length;
+          index++) {
+        if (_TransReBillModels_GropType_Sub_zone[index]
+                .room_number
+                .toString() !=
+            'ล็อคเสียบ') {
+          if (!uniqueDocnos
+              .contains(_TransReBillModels_GropType_Sub_zone[index].docno)) {
+            if (_TransReBillModels_GropType_Sub_zone[index].zser == null) {
+              totalArea += double.parse(
+                  _TransReBillModels_GropType_Sub_zone[index].zser1 ==
+                          zoneModeels_report_Ser_Sub_zone[index1].ser
+                      ? _TransReBillModels_GropType_Sub_zone[index].area ==
+                                  null ||
+                              _TransReBillModels_GropType_Sub_zone[index]
+                                      .area! ==
+                                  ''
+                          ? 1.toString()
+                          : _TransReBillModels_GropType_Sub_zone[index]
+                              .area
+                              .toString()
+                      : 0.toString());
+            } else {
+              totalArea += double.parse(
+                  _TransReBillModels_GropType_Sub_zone[index].zser ==
+                          zoneModeels_report_Ser_Sub_zone[index1].ser
+                      ? _TransReBillModels_GropType_Sub_zone[index].area ==
+                                  null ||
+                              _TransReBillModels_GropType_Sub_zone[index]
+                                      .area! ==
+                                  ''
+                          ? 1.toString()
+                          : _TransReBillModels_GropType_Sub_zone[index]
+                              .area
+                              .toString()
+                      : 0.toString());
+            }
+            uniqueDocnos
+                .add(_TransReBillModels_GropType_Sub_zone[index].docno!);
+          }
+        }
+      }
+
+      return totalArea.toString();
+    }
+
     int indextotol = 0;
     int indextotol_ = 0;
 
     for (var index1 = 0; index1 < zoneModels_report.length; index1++) {
-      var index = indextotol;
-      dynamic numberColor = index1 % 2 == 0 ? globalStyle22 : globalStyle222;
+      if (zoneModels_report[index1].sub_zone.toString() == '0') {
+        var index = indextotol;
+        dynamic numberColor = index1 % 2 == 0 ? globalStyle22 : globalStyle222;
 
-      dynamic numberColor_s =
-          index1 % 2 == 0 ? globalStyle220 : globalStyle2220;
+        dynamic numberColor_s =
+            index1 % 2 == 0 ? globalStyle220 : globalStyle2220;
 
-      dynamic numberColor_ss =
-          index1 % 2 == 0 ? globalStyle220D : globalStyle2220D;
+        dynamic numberColor_ss =
+            index1 % 2 == 0 ? globalStyle220D : globalStyle2220D;
 
-      indextotol = indextotol + 1;
-      sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
+        indextotol = indextotol + 1;
+        sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
 
-      sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = ((double.parse(
-                  (_TransReBillModels_GropType.map((e) => (e.zser == null)
+        sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
+
+        sheet.getRangeByName('D${indextotol + 5 - 1}').cellStyle = numberColor;
+
+        sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle = numberColor;
+
+        sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle = numberColor;
+
+        sheet.getRangeByName('A${indextotol + 5 - 1}').columnWidth = 25;
+        sheet.getRangeByName('B${indextotol + 5 - 1}').columnWidth = 18;
+        sheet.getRangeByName('C${indextotol + 5 - 1}').columnWidth = 18;
+        sheet.getRangeByName('D${indextotol + 5 - 1}').columnWidth = 18;
+        sheet.getRangeByName('E${indextotol + 5 - 1}').columnWidth = 18;
+        sheet.getRangeByName('F${indextotol + 5 - 1}').columnWidth = 18;
+        sheet.getRangeByName('G${indextotol + 5 - 1}').columnWidth = 18;
+        // sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle =
+        //     (ser_dis != 0) ? numberColor : numberColor_s;
+
+        sheet
+            .getRangeByName('A${indextotol + 5 - 1}')
+            .setText(zoneModels_report[index1].zn);
+
+        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
+            (_TransReBillModels_GropType.length == 0)
+                ? 0.00
+                : double.parse((_TransReBillModels_GropType.map((e) => (e
+                            .zser ==
+                        null)
+                    ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
+                            e.expser! == '1' &&
+                            e.room_number.toString() != 'ล็อคเสียบ'
+                        ? e.total_expname == null || e.total_expname! == ''
+                            ? 0.toString()
+                            : e.total_expname.toString()
+                        : 0.toString())
+                    : double.parse(e.zser == zoneModels_report[index1].ser &&
+                            e.expser! == '1' &&
+                            e.room_number.toString() != 'ล็อคเสียบ'
+                        ? e.total_expname == null || e.total_expname! == ''
+                            ? 0.toString()
+                            : e.total_expname.toString()
+                        : 0.toString())).reduce((a, b) => a + b)).toString()));
+
+        sheet
+            .getRangeByName('C${indextotol + 5 - 1}')
+            .setNumber(double.parse(calculateTotalArea_Zone(index1)!));
+
+        sheet.getRangeByName('D${indextotol + 5 - 1}').setNumber(
+            (zoneModels_report[index1].jon! == '1' &&
+                    zoneModels_report[index1].jon_book! == '1')
+                ? double.parse(calculateTotalBills_Zone(index1)!) -
+                    ((double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_1}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_2}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_3}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_4}')))
+                : double.parse(calculateTotalArea_Zone(index1)!) *
+                    double.parse('${zoneModels_report[index1].b_1}'));
+
+        sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(
+            (zoneModels_report[index1].jon! == '1' &&
+                    zoneModels_report[index1].jon_book! == '2')
+                ? double.parse(calculateTotalBills_Zone(index1)!) -
+                    ((double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_1}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_2}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_3}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_4}')))
+                : double.parse(calculateTotalArea_Zone(index1)!) *
+                    double.parse('${zoneModels_report[index1].b_2}'));
+
+        sheet.getRangeByName('F${indextotol + 5 - 1}').setNumber(
+            (zoneModels_report[index1].jon! == '1' &&
+                    zoneModels_report[index1].jon_book! == '3')
+                ? double.parse(calculateTotalBills_Zone(index1)!) -
+                    ((double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_1}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_2}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_3}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_4}')))
+                : double.parse(calculateTotalArea_Zone(index1)!) *
+                    double.parse('${zoneModels_report[index1].b_3}'));
+
+        sheet.getRangeByName('G${indextotol + 5 - 1}').setNumber(
+            (zoneModels_report[index1].jon! == '1' &&
+                    zoneModels_report[index1].jon_book! == '4')
+                ? double.parse(calculateTotalBills_Zone(index1)!) -
+                    ((double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_1}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_2}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_3}')) +
+                        (double.parse(calculateTotalArea_Zone(index1)!) *
+                            double.parse('${zoneModels_report[index1].b_4}')))
+                : double.parse(calculateTotalArea_Zone(index1)!) *
+                    double.parse('${zoneModels_report[index1].b_4}'));
+
+        for (int index = 0; index < 1; index++) {
+          indextotol = indextotol + 1;
+          sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('D${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet
+              .getRangeByName('A${indextotol + 5 - 1}')
+              .setText('- ล็อคเสียบ/ขาจร');
+
+          sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(
+              (_TransReBillModels_GropType.length == 0)
+                  ? 0.00
+                  : double.parse((_TransReBillModels_GropType.map((e) => (e
+                              .zser ==
+                          null)
                       ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
                               e.expser! == '1' &&
-                              e.room_number.toString() != 'ล็อคเสียบ'
+                              e.room_number.toString() == 'ล็อคเสียบ'
                           ? e.total_expname == null || e.total_expname! == ''
                               ? 0.toString()
                               : e.total_expname.toString()
                           : 0.toString())
                       : double.parse(e.zser == zoneModels_report[index1].ser &&
                               e.expser! == '1' &&
-                              e.room_number.toString() != 'ล็อคเสียบ'
+                              e.room_number.toString() == 'ล็อคเสียบ'
                           ? e.total_expname == null || e.total_expname! == ''
                               ? 0.toString()
                               : e.total_expname.toString()
                           : 0.toString())).reduce(
-                      (a, b) => a + b)).toString())) ==
-              0.00)
-          ? numberColor_s
-          : numberColor;
-      sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle =
-          (double.parse(calculateTotalArea_Zone(index1)!) == 0.00)
-              ? numberColor_s
-              : numberColor;
+                      (a, b) => a + b)).toString()));
+        }
 
-      sheet.getRangeByName('D${indextotol + 5 - 1}').cellStyle =
-          (((zoneModels_report[index1].jon! == '1' &&
-                          zoneModels_report[index1].jon_book! == '1')
-                      ? (double.parse(calculateTotalBills_Zone(index1)!) -
-                          (double.parse(calculateTotalArea_Zone(index1)!) *
-                              double.parse('${zoneModels_report[index1].b_2}')))
-                      : double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_1}')) ==
-                  0.00)
-              ? numberColor_s
-              : numberColor;
+        for (int index_exp = 0; index_exp < expModels.length; index_exp++) {
+          if (expModels[index_exp].ser.toString() != '1') {
+            indextotol = indextotol + 1;
+            sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle =
+                numberColor;
+            sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle =
+                numberColor;
+            sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle =
+                numberColor;
+            sheet.getRangeByName('D${indextotol + 5 - 1}').cellStyle =
+                numberColor;
+            sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle =
+                numberColor;
+            sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle =
+                numberColor;
+            sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle =
+                numberColor;
+            sheet
+                .getRangeByName('A${indextotol + 5 - 1}')
+                .setText('- ${expModels[index_exp].expname}');
 
-      sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle =
-          ((double.parse(calculateTotalArea_Zone(index1)!) *
-                      double.parse('${zoneModels_report[index1].b_2}')) ==
-                  0.00)
-              ? numberColor_s
-              : numberColor;
-
-      sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle =
-          (((zoneModels_report[index1].jon! == '1' &&
-                          zoneModels_report[index1].jon_book! == '3')
-                      ? (double.parse(calculateTotalBills_Zone(index1)!) -
-                          (double.parse(calculateTotalArea_Zone(index1)!) *
-                              double.parse('${zoneModels_report[index1].b_2}')))
-                      : double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_3}')) ==
-                  0.00)
-              ? numberColor_s
-              : numberColor;
-      sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle =
-          (((zoneModels_report[index1].jon! == '1' &&
-                          zoneModels_report[index1].jon_book! == '4')
-                      ? (double.parse(calculateTotalBills_Zone(index1)!) -
-                          (double.parse(calculateTotalArea_Zone(index1)!) *
-                              double.parse('${zoneModels_report[index1].b_2}')))
-                      : double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_4}')) ==
-                  0.00)
-              ? numberColor_s
-              : numberColor;
-
-      sheet.getRangeByName('A${indextotol + 5 - 1}').columnWidth = 25;
-      sheet.getRangeByName('B${indextotol + 5 - 1}').columnWidth = 18;
-      sheet.getRangeByName('C${indextotol + 5 - 1}').columnWidth = 18;
-      sheet.getRangeByName('D${indextotol + 5 - 1}').columnWidth = 18;
-      sheet.getRangeByName('E${indextotol + 5 - 1}').columnWidth = 18;
-      sheet.getRangeByName('F${indextotol + 5 - 1}').columnWidth = 18;
-      sheet.getRangeByName('G${indextotol + 5 - 1}').columnWidth = 18;
-      // sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle =
-      //     (ser_dis != 0) ? numberColor : numberColor_s;
-
-      sheet
-          .getRangeByName('A${indextotol + 5 - 1}')
-          .setText(zoneModels_report[index1].zn);
-
-      sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(double.parse(
-          (_TransReBillModels_GropType.map((e) => (e.zser == null)
-              ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
-                      e.expser! == '1' &&
-                      e.room_number.toString() != 'ล็อคเสียบ'
-                  ? e.total_expname == null || e.total_expname! == ''
-                      ? 0.toString()
-                      : e.total_expname.toString()
-                  : 0.toString())
-              : double.parse(e.zser == zoneModels_report[index1].ser &&
-                      e.expser! == '1' &&
-                      e.room_number.toString() != 'ล็อคเสียบ'
-                  ? e.total_expname == null || e.total_expname! == ''
-                      ? 0.toString()
-                      : e.total_expname.toString()
-                  : 0.toString())).reduce((a, b) => a + b)).toString()));
-
-      sheet
-          .getRangeByName('C${indextotol + 5 - 1}')
-          .setNumber(double.parse(calculateTotalArea_Zone(index1)!));
-
-      sheet.getRangeByName('D${indextotol + 5 - 1}').setNumber(
-          (zoneModels_report[index1].jon! == '1' &&
-                  zoneModels_report[index1].jon_book! == '1')
-              ? double.parse(calculateTotalBills_Zone(index1)!) -
-                  ((double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_1}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_2}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_3}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_4}')))
-              : double.parse(calculateTotalArea_Zone(index1)!) *
-                  double.parse('${zoneModels_report[index1].b_1}'));
-
-      sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(
-          (zoneModels_report[index1].jon! == '1' &&
-                  zoneModels_report[index1].jon_book! == '2')
-              ? double.parse(calculateTotalBills_Zone(index1)!) -
-                  ((double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_1}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_2}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_3}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_4}')))
-              : double.parse(calculateTotalArea_Zone(index1)!) *
-                  double.parse('${zoneModels_report[index1].b_2}'));
-
-      sheet.getRangeByName('F${indextotol + 5 - 1}').setNumber(
-          (zoneModels_report[index1].jon! == '1' &&
-                  zoneModels_report[index1].jon_book! == '3')
-              ? double.parse(calculateTotalBills_Zone(index1)!) -
-                  ((double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_1}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_2}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_3}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_4}')))
-              : double.parse(calculateTotalArea_Zone(index1)!) *
-                  double.parse('${zoneModels_report[index1].b_3}'));
-
-      sheet.getRangeByName('G${indextotol + 5 - 1}').setNumber(
-          (zoneModels_report[index1].jon! == '1' &&
-                  zoneModels_report[index1].jon_book! == '4')
-              ? double.parse(calculateTotalBills_Zone(index1)!) -
-                  ((double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_1}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_2}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_3}')) +
-                      (double.parse(calculateTotalArea_Zone(index1)!) *
-                          double.parse('${zoneModels_report[index1].b_4}')))
-              : double.parse(calculateTotalArea_Zone(index1)!) *
-                  double.parse('${zoneModels_report[index1].b_4}'));
-
-      for (int index = 0; index < 1; index++) {
-        indextotol = indextotol + 1;
-        sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
-        sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = numberColor;
-        sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
-        sheet.getRangeByName('D${indextotol + 5 - 1}').cellStyle = numberColor;
-        sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle =
-            (double.parse((_TransReBillModels_GropType.map((e) => (e.zser ==
+            sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(
+                (_TransReBillModels_GropType.length == 0)
+                    ? 0.00
+                    : double.parse((_TransReBillModels_GropType.map((e) => (e
+                                .zser ==
                             null)
                         ? double.parse(e.zser1 ==
                                     zoneModels_report[index1].ser &&
-                                e.expser! == '1' &&
-                                e.room_number.toString() == 'ล็อคเสียบ'
+                                e.expser! == '${expModels[index_exp].ser}'
                             ? e.total_expname == null || e.total_expname! == ''
                                 ? 0.toString()
                                 : e.total_expname.toString()
                             : 0.toString())
                         : double.parse(e.zser ==
                                     zoneModels_report[index1].ser &&
-                                e.expser! == '1' &&
-                                e.room_number.toString() == 'ล็อคเสียบ'
+                                e.expser! == '${expModels[index_exp].ser}'
                             ? e.total_expname == null || e.total_expname! == ''
                                 ? 0.toString()
                                 : e.total_expname.toString()
                             : 0.toString())).reduce(
-                        (a, b) => a + b)).toString()) ==
-                    0.00)
-                ? numberColor_s
-                : numberColor;
-        sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle = numberColor;
-        sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle = numberColor;
-        sheet
-            .getRangeByName('A${indextotol + 5 - 1}')
-            .setText('- ล็อคเสียบ/ขาจร');
-
-        sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(double.parse(
-            (_TransReBillModels_GropType.map((e) => (e.zser == null)
-                ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
-                        e.expser! == '1' &&
-                        e.room_number.toString() == 'ล็อคเสียบ'
-                    ? e.total_expname == null || e.total_expname! == ''
-                        ? 0.toString()
-                        : e.total_expname.toString()
-                    : 0.toString())
-                : double.parse(e.zser == zoneModels_report[index1].ser &&
-                        e.expser! == '1' &&
-                        e.room_number.toString() == 'ล็อคเสียบ'
-                    ? e.total_expname == null || e.total_expname! == ''
-                        ? 0.toString()
-                        : e.total_expname.toString()
-                    : 0.toString())).reduce((a, b) => a + b)).toString()));
+                        (a, b) => a + b)).toString()));
+          }
+        }
       }
+    }
 
-      for (int index_exp = 0; index_exp < expModels.length; index_exp++) {
+    for (var index3 = 0; index3 < zoneModels_report_Sub_zone.length; index3++) {
+      var index = indextotol;
+      dynamic numberColor = index3 % 2 == 0 ? globalStyle22 : globalStyle222;
+
+      dynamic numberColor_s =
+          index3 % 2 == 0 ? globalStyle220 : globalStyle2220;
+
+      dynamic numberColor_ss =
+          index3 % 2 == 0 ? globalStyle220D : globalStyle2220D;
+
+      indextotol = indextotol + 1;
+      sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('D${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
+            '${zoneModels_report_Sub_zone[index3].zn} ',
+          );
+
+      for (int in_dex = 0;
+          in_dex < zoneModeels_report_Ser_Sub_zone.length;
+          in_dex++) {
         indextotol = indextotol + 1;
+        if (zoneModeels_report_Ser_Sub_zone[in_dex].sub_zone.toString() ==
+            zoneModels_report_Sub_zone[index3].ser.toString()) {
+          sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
+                '** ${zoneModeels_report_Ser_Sub_zone[in_dex].zn} ',
+              );
+
+          sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
+                (_TransReBillModels_GropType_Sub_zone.length == 0)
+                    ? 0.00
+                    : double.parse((_TransReBillModels_GropType_Sub_zone.map(
+                        (e) => (e.zser == null)
+                            ? double.parse(
+                                e.zser1 ==
+                                            zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                .ser &&
+                                        e.expser! == '1' &&
+                                        e.room_number.toString() != 'ล็อคเสียบ'
+                                    ? e.total_expname == null ||
+                                            e.total_expname! == ''
+                                        ? 0.toString()
+                                        : e.total_expname.toString()
+                                    : 0.toString())
+                            : double.parse(e.zser ==
+                                        zoneModeels_report_Ser_Sub_zone[in_dex]
+                                            .ser &&
+                                    e.expser! == '1' &&
+                                    e.room_number.toString() != 'ล็อคเสียบ'
+                                ? e.total_expname == null ||
+                                        e.total_expname! == ''
+                                    ? 0.toString()
+                                    : e.total_expname.toString()
+                                : 0.toString())).reduce(
+                        (a, b) => a + b)).toString()),
+              );
+          sheet.getRangeByName('C${indextotol + 5 - 1}').setNumber(
+                double.parse(calculateTotalArea_Zone_Sub(in_dex)!),
+              );
+
+          sheet.getRangeByName('D${indextotol + 5 - 1}').setNumber(
+              (zoneModeels_report_Ser_Sub_zone[in_dex].jon! == '1' &&
+                      zoneModeels_report_Ser_Sub_zone[in_dex].jon_book! == '1')
+                  ? (double.parse(calculateTotalBills_Zone_Sub(in_dex)!) -
+                      ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                              double.parse(
+                                  '${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) +
+                          (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                              double.parse(
+                                  '${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) +
+                          (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                              double.parse(
+                                  '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) +
+                          (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                              double.parse(
+                                  '${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))
+                  : (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                      double.parse(
+                          '${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')));
+
+          sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(
+                (zoneModeels_report_Ser_Sub_zone[in_dex].jon! == '1' &&
+                        zoneModeels_report_Ser_Sub_zone[in_dex].jon_book! ==
+                            '2')
+                    ? (double.parse(calculateTotalBills_Zone_Sub(in_dex)!) -
+                        ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                                double.parse(
+                                    '${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) +
+                            (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                                double.parse(
+                                    '${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) +
+                            (double.parse(
+                                    calculateTotalArea_Zone_Sub(in_dex)!) *
+                                double.parse(
+                                    '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) +
+                            (double.parse(
+                                    calculateTotalArea_Zone_Sub(in_dex)!) *
+                                double.parse(
+                                    '${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))
+                    : (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                        double.parse(
+                            '${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')),
+              );
+
+          sheet.getRangeByName('F${indextotol + 5 - 1}').setNumber(
+              (zoneModeels_report_Ser_Sub_zone[in_dex].jon! == '1' &&
+                      zoneModeels_report_Ser_Sub_zone[in_dex].jon_book! == '3')
+                  ? (double.parse(calculateTotalBills_Zone_Sub(in_dex)!) -
+                      ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                              double.parse(
+                                  '${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) +
+                          (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                              double.parse(
+                                  '${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) +
+                          (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                              double.parse(
+                                  '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) +
+                          (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                              double.parse(
+                                  '${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))
+                  : (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                      double.parse(
+                          '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')));
+
+          sheet.getRangeByName('G${indextotol + 5 - 1}').setNumber(
+                (zoneModeels_report_Ser_Sub_zone[in_dex].jon! == '1' &&
+                        zoneModeels_report_Ser_Sub_zone[in_dex].jon_book! ==
+                            '4')
+                    ? (double.parse(calculateTotalBills_Zone_Sub(in_dex)!) -
+                        ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                                double.parse(
+                                    '${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) +
+                            (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                                double.parse(
+                                    '${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) +
+                            (double.parse(
+                                    calculateTotalArea_Zone_Sub(in_dex)!) *
+                                double.parse(
+                                    '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) +
+                            (double.parse(
+                                    calculateTotalArea_Zone_Sub(in_dex)!) *
+                                double.parse(
+                                    '${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))
+                    : (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                        double.parse(
+                            '${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}')),
+              );
+        }
         sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
         sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = numberColor;
         sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
         sheet.getRangeByName('D${indextotol + 5 - 1}').cellStyle = numberColor;
-        sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle =
-            (double.parse((_TransReBillModels_GropType.map((e) => (e.zser ==
-                            null)
-                        ? double.parse(e.zser1 ==
-                                    zoneModels_report[index1].ser &&
-                                e.expser! == '${expModels[index_exp].ser}'
-                            ? e.total_expname == null || e.total_expname! == ''
-                                ? 0.toString()
-                                : e.total_expname.toString()
-                            : 0.toString())
-                        : double.parse(e.zser ==
-                                    zoneModels_report[index1].ser &&
-                                e.expser! == '${expModels[index_exp].ser}'
-                            ? e.total_expname == null || e.total_expname! == ''
-                                ? 0.toString()
-                                : e.total_expname.toString()
-                            : 0.toString())).reduce(
-                        (a, b) => a + b)).toString()) ==
-                    0.00)
-                ? numberColor_s
-                : numberColor;
+        sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle = numberColor;
         sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle = numberColor;
         sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle = numberColor;
-        sheet
-            .getRangeByName('A${indextotol + 5 - 1}')
-            .setText('- ${expModels[index_exp].expname}');
+      }
+      for (int index_exp = 0; index_exp < expModels.length; index_exp++) {
+        if (expModels[index_exp].ser.toString() != '1') {
+          indextotol = indextotol + 1;
+          sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('D${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle =
+              numberColor;
+          sheet
+              .getRangeByName('A${indextotol + 5 - 1}')
+              .setText('- ${expModels[index_exp].expname}');
 
-        sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(double.parse(
-            (_TransReBillModels_GropType.map((e) => (e.zser == null)
-                ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
-                        e.expser! == '${expModels[index_exp].ser}'
-                    ? e.total_expname == null || e.total_expname! == ''
-                        ? 0.toString()
-                        : e.total_expname.toString()
-                    : 0.toString())
-                : double.parse(e.zser == zoneModels_report[index1].ser &&
-                        e.expser! == '${expModels[index_exp].ser}'
-                    ? e.total_expname == null || e.total_expname! == ''
-                        ? 0.toString()
-                        : e.total_expname.toString()
-                    : 0.toString())).reduce((a, b) => a + b)).toString()));
+          sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(
+              (_TransReBillModels_GropType_Sub_zone.length == 0)
+                  ? 0.00
+                  : double.parse((_TransReBillModels_GropType_Sub_zone.map(
+                      (e) => (e.zser == null)
+                          ? double.parse(e.sub_zone ==
+                                      zoneModeels_report_Ser_Sub_zone[index3]
+                                          .ser &&
+                                  e.expser! == '${expModels[index_exp].ser}'
+                              ? e.total_expname == null ||
+                                      e.total_expname! == ''
+                                  ? 0.toString()
+                                  : e.total_expname.toString()
+                              : 0.toString())
+                          : double.parse(e.sub_zone ==
+                                      zoneModeels_report_Ser_Sub_zone[index3]
+                                          .ser &&
+                                  e.expser! == '${expModels[index_exp].ser}'
+                              ? e.total_expname == null ||
+                                      e.total_expname! == ''
+                                  ? 0.toString()
+                                  : e.total_expname.toString()
+                              : 0.toString())).reduce(
+                      (a, b) => a + b)).toString()));
+        }
       }
     }
 
@@ -627,7 +841,11 @@ class Excgen_DailyReport_category_cm {
 
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
       String path = await FileSaver.instance.saveFile(
-          "รายงานรายรับรายวันแยกตามประเภท(${Value_selectDate})", data, "xlsx",
+          (ser_report.toString() == '1')
+              ? 'รายงานรายงานรายรับแยกตามประเภท(รายวัน)'
+              : 'รายงานรายงานรายรับแยกตามประเภท(รายเดือน)',
+          data,
+          "xlsx",
           mimeType: type);
       log(path);
     } else {

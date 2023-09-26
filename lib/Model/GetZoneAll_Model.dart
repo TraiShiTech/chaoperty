@@ -13,6 +13,9 @@ class ZoneAllModel {
   String? b_2;
   String? b_3;
   String? b_4;
+  String? number_zn;
+  String? jon_book;
+  String? sub_zone;
 
   ZoneAllModel({
     this.ser,
@@ -29,6 +32,9 @@ class ZoneAllModel {
     this.b_2,
     this.b_3,
     this.b_4,
+    this.number_zn,
+    this.jon_book,
+    this.sub_zone,
   });
 
   ZoneAllModel.fromJson(Map<String, dynamic> json) {
@@ -46,6 +52,9 @@ class ZoneAllModel {
     b_2 = json['b_2'];
     b_3 = json['b_3'];
     b_4 = json['b_4'];
+    number_zn = json['number_zn'];
+    jon_book = json['jon_book'];
+    sub_zone = json['sub_zone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +73,9 @@ class ZoneAllModel {
     data['b_2'] = this.b_2;
     data['b_3'] = this.b_3;
     data['b_4'] = this.b_4;
+    data['number_zn'] = this.number_zn;
+    data['jon_book'] = this.jon_book;
+    data['sub_zone'] = this.sub_zone;
     return data;
   }
 }

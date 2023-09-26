@@ -35,13 +35,17 @@ import '../Style/colors.dart';
 import 'Access_Rights.dart';
 import 'Advance_Setting.dart';
 import 'Bill_Document.dart';
+import 'Draginto_example.dart';
 import 'Edit_web.dart';
 import 'OtherScreen.dart';
 import 'Payment.dart';
 import 'Rental.dart';
+import 'Rownum_example.dart';
 import 'User_Information.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
+import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 
 import 'Webview.dart';
 
@@ -54,6 +58,8 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
+  final ScrollController _scrollController = ScrollController();
+  List<DragAndDropList> _contents = <DragAndDropList>[];
   DateTime datex = DateTime.now();
   int Status_ = 1;
   //------------------------------------------------------>
@@ -143,8 +149,99 @@ class _SettingScreenState extends State<SettingScreen> {
     read_GC_package();
     read_GC_zone();
     read_GC_area();
-    read_GC_rownum();
+
     read_GC_area_count();
+    read_GC_rownum().then((value) => con_row());
+  }
+
+  List<DragAndDropList> con_row() {
+    return _contents = List.generate(1, (index) {
+      return DragAndDropList(
+        contentsWhenEmpty: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Text(
+            "$name_Zone",
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+        lastTarget: Text(
+          "$name_Zone",
+          style: TextStyle(color: Colors.transparent),
+        ),
+        header: Column(
+          children: <Widget>[
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, bottom: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '$name_Zone',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        children: <DragAndDropItem>[
+          for (int indexc = 0; indexc < contractRownumModels.length; indexc++)
+            DragAndDropItem(
+              feedbackWidget: Text("${contractRownumModels[indexc].ser}"),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 12),
+                      child: Text(
+                        '${contractRownumModels[indexc].sw}',
+                        style: TextStyle(
+                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                            fontFamily: Font_.Fonts_T),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 12),
+                      child: Text(
+                        '${contractRownumModels[indexc].ln}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                            fontFamily: Font_.Fonts_T),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 12),
+                      child: Text(
+                        '${contractRownumModels[indexc].sname}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                            fontFamily: Font_.Fonts_T),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+        ],
+      );
+    });
   }
 
   final _formKeyZone = GlobalKey<FormState>();
@@ -3563,7 +3660,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                         ser_Zonex =
                                             zoneModels[index].ser.toString();
                                         read_GC_area();
-                                        read_GC_rownum();
+                                        read_GC_rownum()
+                                            .then((value) => con_row());
                                       });
                                       print(index);
                                     },
@@ -3626,7 +3724,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                 setState(() {
                                                   read_GC_zone();
                                                   read_GC_area();
-                                                  read_GC_rownum();
+                                                  read_GC_rownum().then(
+                                                      (value) => con_row());
                                                   read_GC_area_count();
                                                   Ser_Zone = 0;
                                                   ser_Zonex = null;
@@ -3690,7 +3789,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             } else {
                               row_num = 1;
                             }
-                            read_GC_rownum();
+                            read_GC_rownum().then((value) => con_row());
                             read_GC_area();
                           });
                         },
@@ -3709,6 +3808,43 @@ class _SettingScreenState extends State<SettingScreen> {
                           child: Center(
                             child: Text(
                               'จัดลำดับ',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: FontWeight_.Fonts_T),
+                            ),
+                          ),
+                        ),
+                      )),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () async {
+                          setState(() {
+                            if (row_num == 2) {
+                              row_num = 0;
+                            } else {
+                              row_num = 2;
+                            }
+
+                            read_GC_rownum().then((value) => con_row());
+                            read_GC_area();
+                          });
+                        },
+                        child: Container(
+                          width: 150,
+                          decoration: BoxDecoration(
+                            color: Colors.purpleAccent.shade700,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.black, width: 1),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              'จัดหมวดโซนใหญ่',
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: FontWeight_.Fonts_T),
@@ -7010,324 +7146,574 @@ class _SettingScreenState extends State<SettingScreen> {
                           )),
                     ],
                   )
-                : Column(
-                    children: [
-                      ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context)
-                            .copyWith(dragDevices: {
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse,
-                        }),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          dragStartBehavior: DragStartBehavior.start,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: (!Responsive.isDesktop(context))
-                                    ? 790
-                                    : MediaQuery.of(context).size.width * 0.84,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 50,
-                                      decoration: const BoxDecoration(
-                                        color: AppbackgroundColor.TiTile_Colors,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(0),
-                                            bottomRight: Radius.circular(0)),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              'ลำดับ',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 4,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              'รหัสพื้นที่',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 4,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              'ชื่อผู้เช่า',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    StreamBuilder(
-                                      stream: Stream.periodic(
-                                          const Duration(seconds: 0)),
-                                      builder: (context, snapshot) {
-                                        return Container(
-                                          height: 500,
+                : row_num == 1
+                    ?
+                    // Padding(
+                    //     padding: const EdgeInsets.all(8.0),
+                    //     child: Column(
+                    //       children: [
+                    //         Container(
+                    //           color: Colors.white,
+                    //           child:  RownumExample(Get_name_Zone: name_Zone,
+                    //     Get_ser_Zonex: ser_Zonex,),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   )
+                    Column(
+                        children: [
+                          ScrollConfiguration(
+                            behavior: ScrollConfiguration.of(context)
+                                .copyWith(dragDevices: {
+                              PointerDeviceKind.touch,
+                              PointerDeviceKind.mouse,
+                            }),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              dragStartBehavior: DragStartBehavior.start,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: (!Responsive.isDesktop(context))
+                                        ? 790
+                                        : MediaQuery.of(context).size.width *
+                                            0.84,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 50,
                                           decoration: const BoxDecoration(
                                             color: AppbackgroundColor
-                                                .Sub_Abg_Colors,
+                                                .TiTile_Colors,
                                             borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(0),
-                                              topRight: Radius.circular(0),
-                                              bottomLeft: Radius.circular(0),
-                                              bottomRight: Radius.circular(0),
-                                            ),
-                                            // border: Border.all(
-                                            //     color: Colors.grey, width: 1),
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(0),
+                                                bottomRight:
+                                                    Radius.circular(0)),
                                           ),
-                                          child: ListView.builder(
-                                            // controller: _scrollController1,
-                                            // itemExtent: 50,
-                                            physics:
-                                                const AlwaysScrollableScrollPhysics(), //const NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount:
-                                                contractRownumModels.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return Row(
-                                                children: [
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(8, 8, 0, 8),
-                                                      child: TextFormField(
-                                                        textAlign:
-                                                            TextAlign.end,
-                                                        initialValue:
-                                                            contractRownumModels[
-                                                                    index]
-                                                                .sw,
-                                                        onChanged:
-                                                            (value) async {
-                                                          SharedPreferences
-                                                              preferences =
-                                                              await SharedPreferences
-                                                                  .getInstance();
-                                                          String? ren = preferences
-                                                              .getString(
-                                                                  'renTalSer');
-                                                          String? ser_user =
-                                                              preferences
-                                                                  .getString(
-                                                                      'ser');
-                                                          var vser =
-                                                              contractRownumModels[
-                                                                      index]
-                                                                  .ser;
-                                                          String url =
-                                                              '${MyConstant().domain}/UpC_rownum.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                          try {
-                                                            var response =
-                                                                await http.get(
-                                                                    Uri.parse(
-                                                                        url));
-
-                                                            var result = json
-                                                                .decode(response
-                                                                    .body);
-                                                            print(result);
-                                                            if (result
-                                                                    .toString() ==
-                                                                'true') {
-                                                              // setState(() {
-                                                              //   read_GC_rownum();
-                                                              // });
-                                                            } else {}
-                                                          } catch (e) {}
-                                                        },
-                                                        onFieldSubmitted:
-                                                            (value) async {
-                                                          setState(() {
-                                                            read_GC_rownum();
-                                                            read_GC_area();
-                                                          });
-                                                        },
-                                                        // maxLength: 13,
-                                                        cursorColor:
-                                                            Colors.green,
-                                                        decoration:
-                                                            InputDecoration(
-                                                          fillColor: Colors
-                                                              .white
-                                                              .withOpacity(
-                                                                  0.05),
-                                                          filled: true,
-                                                          // prefixIcon:
-                                                          //     const Icon(Icons.key, color: Colors.black),
-                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                          focusedBorder:
-                                                              const OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .only(
-                                                              topRight: Radius
-                                                                  .circular(15),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  'ลำดับ',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 4,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  'รหัสพื้นที่',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 4,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  'ชื่อผู้เช่า',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 4,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: Container(
+                                                    width: 100,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius:
+                                                          BorderRadius.only(
                                                               topLeft: Radius
-                                                                  .circular(15),
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
                                                               bottomRight:
                                                                   Radius
                                                                       .circular(
-                                                                          15),
-                                                              bottomLeft: Radius
-                                                                  .circular(15),
-                                                            ),
-                                                            borderSide:
-                                                                BorderSide(
-                                                              width: 1,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                          ),
-                                                          enabledBorder:
-                                                              const OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .only(
-                                                              topRight: Radius
-                                                                  .circular(15),
-                                                              topLeft: Radius
-                                                                  .circular(15),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          15),
-                                                              bottomLeft: Radius
-                                                                  .circular(15),
-                                                            ),
-                                                            borderSide:
-                                                                BorderSide(
-                                                              width: 1,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                          ),
-                                                          // labelText: 'PASSWOED',
-                                                          labelStyle:
-                                                              const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
+                                                                          10)),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: TextButton(
+                                                      onPressed: () async {
+                                                        for (int index = 0;
+                                                            index <
+                                                                _contents
+                                                                    .length;
+                                                            index++) {
+                                                          var Order =
+                                                              _contents[index]
+                                                                  .lastTarget
+                                                                  .toString()
+                                                                  .indexOf('"');
+                                                          var Order2 =
+                                                              _contents[index]
+                                                                  .lastTarget
+                                                                  .toString()
+                                                                  .substring(
+                                                                      Order +
+                                                                          1);
+                                                          var Order22 =
+                                                              Order2.toString()
+                                                                  .indexOf('"');
+                                                          var sub_zone =
+                                                              Order2.toString()
+                                                                  .substring(0,
+                                                                      Order22);
+                                                          print(
+                                                              'sub_zone $sub_zone');
+                                                          var reverseOrder =
+                                                              _contents[index]
+                                                                  .children;
+
+                                                          for (int i = 0;
+                                                              i <
+                                                                  reverseOrder
+                                                                      .length;
+                                                              i++) {
+                                                            var reverse =
+                                                                reverseOrder[i]
+                                                                    .feedbackWidget
+                                                                    .toString()
+                                                                    .indexOf(
+                                                                        '"');
+                                                            var reverse2 =
+                                                                reverseOrder[i]
+                                                                    .feedbackWidget
+                                                                    .toString()
+                                                                    .substring(
+                                                                        reverse +
+                                                                            1);
+                                                            var zone = reverse2
+                                                                .toString()
+                                                                .substring(
+                                                                    0,
+                                                                    reverse2.length -
+                                                                        2);
+                                                            print('zone $zone');
+                                                            edit_SW(i, zone);
+                                                          }
+                                                        }
+                                                        setState(() {
+                                                          read_GC_rownum().then(
+                                                              (value) =>
+                                                                  con_row());
+                                                        });
+                                                      },
+                                                      child: const Text(
+                                                        'บันทึก',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
-                                                        inputFormatters: <TextInputFormatter>[
-                                                          // for below version 2 use this
-                                                          FilteringTextInputFormatter
-                                                              .allow(RegExp(
-                                                                  r'[0-9]')),
-                                                          // for version 2 and greater youcan also use this
-                                                          // FilteringTextInputFormatter
-                                                          //     .digitsOnly
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    // AutoSizeText(
-                                                    //   minFontSize: 10,
-                                                    //   maxFontSize: 25,
-                                                    //   maxLines: 1,
-                                                    //   '${contractRownumModels[index].sw}',
-                                                    //   textAlign:
-                                                    //       TextAlign.center,
-                                                    //   style: TextStyle(
-                                                    //       color:
-                                                    //           PeopleChaoScreen_Color
-                                                    //               .Colors_Text2_,
-                                                    //       fontFamily:
-                                                    //           FontWeight_
-                                                    //               .Fonts_T),
-                                                    // ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 4,
-                                                    child: Container(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(8, 8, 0, 8),
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 25,
-                                                        maxLines: 1,
-                                                        '${contractRownumModels[index].ln}',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
                                                       ),
                                                     ),
                                                   ),
-                                                  Expanded(
-                                                    flex: 4,
-                                                    child: Container(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(8, 8, 0, 8),
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 25,
-                                                        maxLines: 1,
-                                                        '${contractRownumModels[index].sname}',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              );
-                                            },
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        );
-                                      },
+                                        ),
+                                        StreamBuilder(
+                                          stream: Stream.periodic(
+                                              const Duration(seconds: 0)),
+                                          builder: (context, snapshot) {
+                                            return Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.35,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              decoration: const BoxDecoration(
+                                                color: AppbackgroundColor
+                                                    .Sub_Abg_Colors,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(0),
+                                                  topRight: Radius.circular(0),
+                                                  bottomLeft:
+                                                      Radius.circular(0),
+                                                  bottomRight:
+                                                      Radius.circular(0),
+                                                ),
+                                                // border: Border.all(
+                                                //     color: Colors.grey, width: 1),
+                                              ),
+                                              child: DragAndDropLists(
+                                                children: _contents,
+                                                onItemReorder: _onItemReorder,
+                                                onListReorder: _onListReorder,
+                                                scrollController:
+                                                    _scrollController,
+                                                axis: Axis.horizontal,
+                                                listWidth: Responsive.isDesktop(
+                                                        context)
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.8
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.8,
+                                                listDraggingWidth:
+                                                    Responsive.isDesktop(
+                                                            context)
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8
+                                                        : MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                listPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15,
+                                                        vertical: 10),
+                                                itemDivider: Divider(
+                                                  thickness: 2,
+                                                  height: 2,
+                                                  color: Color.fromARGB(
+                                                      255, 243, 242, 248),
+                                                ),
+                                                itemDecorationWhileDragging:
+                                                    BoxDecoration(
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 2,
+                                                      blurRadius: 3,
+                                                      offset: const Offset(0,
+                                                          0), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                                listInnerDecoration:
+                                                    BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .canvasColor,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(8.0)),
+                                                ),
+                                                lastItemTargetHeight: 8,
+                                                addLastItemTargetHeightToTop:
+                                                    true,
+                                                lastListTargetSize: 40,
+                                                listDragHandle:
+                                                    const DragHandle(
+                                                  verticalAlignment:
+                                                      DragHandleVerticalAlignment
+                                                          .top,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 10),
+                                                    child: Icon(
+                                                      Icons.menu,
+                                                      color: Colors.black26,
+                                                    ),
+                                                  ),
+                                                ),
+                                                itemDragHandle:
+                                                    const DragHandle(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 10),
+                                                    child: Icon(
+                                                      Icons.menu,
+                                                      color: Colors.blueGrey,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              // ListView.builder(
+                                              //   // controller: _scrollController1,
+                                              //   // itemExtent: 50,
+                                              //   physics:
+                                              //       const AlwaysScrollableScrollPhysics(), //const NeverScrollableScrollPhysics(),
+                                              //   shrinkWrap: true,
+                                              //   itemCount:
+                                              //       contractRownumModels.length,
+                                              //   itemBuilder:
+                                              //       (BuildContext context,
+                                              //           int index) {
+                                              //     return Row(
+                                              //       children: [
+                                              //         Expanded(
+                                              //           flex: 1,
+                                              //           child: Padding(
+                                              //             padding:
+                                              //                 const EdgeInsets
+                                              //                     .fromLTRB(
+                                              //                     8, 8, 0, 8),
+                                              //             child: TextFormField(
+                                              //               textAlign:
+                                              //                   TextAlign.end,
+                                              //               initialValue:
+                                              //                   contractRownumModels[
+                                              //                           index]
+                                              //                       .sw,
+                                              //               onChanged:
+                                              //                   (value) async {
+                                              //                 SharedPreferences
+                                              //                     preferences =
+                                              //                     await SharedPreferences
+                                              //                         .getInstance();
+                                              //                 String? ren =
+                                              //                     preferences
+                                              //                         .getString(
+                                              //                             'renTalSer');
+                                              //                 String? ser_user =
+                                              //                     preferences
+                                              //                         .getString(
+                                              //                             'ser');
+                                              //                 var vser =
+                                              //                     contractRownumModels[
+                                              //                             index]
+                                              //                         .ser;
+                                              //                 String url =
+                                              //                     '${MyConstant().domain}/UpC_rownum.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                              //                 try {
+                                              //                   var response =
+                                              //                       await http.get(
+                                              //                           Uri.parse(
+                                              //                               url));
+
+                                              //                   var result =
+                                              //                       json.decode(
+                                              //                           response
+                                              //                               .body);
+                                              //                   print(result);
+                                              //                   if (result
+                                              //                           .toString() ==
+                                              //                       'true') {
+                                              //                     // setState(() {
+                                              //                     //   read_GC_rownum();
+                                              //                     // });
+                                              //                   } else {}
+                                              //                 } catch (e) {}
+                                              //               },
+                                              //               onFieldSubmitted:
+                                              //                   (value) async {
+                                              //                 setState(() {
+                                              //                   read_GC_rownum();
+                                              //                   read_GC_area();
+                                              //                 });
+                                              //               },
+                                              //               // maxLength: 13,
+                                              //               cursorColor:
+                                              //                   Colors.green,
+                                              //               decoration:
+                                              //                   InputDecoration(
+                                              //                 fillColor: Colors
+                                              //                     .white
+                                              //                     .withOpacity(
+                                              //                         0.05),
+                                              //                 filled: true,
+                                              //                 // prefixIcon:
+                                              //                 //     const Icon(Icons.key, color: Colors.black),
+                                              //                 // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                              //                 focusedBorder:
+                                              //                     const OutlineInputBorder(
+                                              //                   borderRadius:
+                                              //                       BorderRadius
+                                              //                           .only(
+                                              //                     topRight: Radius
+                                              //                         .circular(
+                                              //                             15),
+                                              //                     topLeft: Radius
+                                              //                         .circular(
+                                              //                             15),
+                                              //                     bottomRight: Radius
+                                              //                         .circular(
+                                              //                             15),
+                                              //                     bottomLeft: Radius
+                                              //                         .circular(
+                                              //                             15),
+                                              //                   ),
+                                              //                   borderSide:
+                                              //                       BorderSide(
+                                              //                     width: 1,
+                                              //                     color: Colors
+                                              //                         .grey,
+                                              //                   ),
+                                              //                 ),
+                                              //                 enabledBorder:
+                                              //                     const OutlineInputBorder(
+                                              //                   borderRadius:
+                                              //                       BorderRadius
+                                              //                           .only(
+                                              //                     topRight: Radius
+                                              //                         .circular(
+                                              //                             15),
+                                              //                     topLeft: Radius
+                                              //                         .circular(
+                                              //                             15),
+                                              //                     bottomRight: Radius
+                                              //                         .circular(
+                                              //                             15),
+                                              //                     bottomLeft: Radius
+                                              //                         .circular(
+                                              //                             15),
+                                              //                   ),
+                                              //                   borderSide:
+                                              //                       BorderSide(
+                                              //                     width: 1,
+                                              //                     color: Colors
+                                              //                         .grey,
+                                              //                   ),
+                                              //                 ),
+                                              //                 // labelText: 'PASSWOED',
+                                              //                 labelStyle:
+                                              //                     const TextStyle(
+                                              //                         color: PeopleChaoScreen_Color
+                                              //                             .Colors_Text2_,
+                                              //                         // fontWeight: FontWeight.bold,
+                                              //                         fontFamily:
+                                              //                             Font_
+                                              //                                 .Fonts_T),
+                                              //               ),
+                                              //               inputFormatters: <TextInputFormatter>[
+                                              //                 // for below version 2 use this
+                                              //                 FilteringTextInputFormatter
+                                              //                     .allow(RegExp(
+                                              //                         r'[0-9]')),
+                                              //                 // for version 2 and greater youcan also use this
+                                              //                 // FilteringTextInputFormatter
+                                              //                 //     .digitsOnly
+                                              //               ],
+                                              //             ),
+                                              //           ),
+                                              //           // AutoSizeText(
+                                              //           //   minFontSize: 10,
+                                              //           //   maxFontSize: 25,
+                                              //           //   maxLines: 1,
+                                              //           //   '${contractRownumModels[index].sw}',
+                                              //           //   textAlign:
+                                              //           //       TextAlign.center,
+                                              //           //   style: TextStyle(
+                                              //           //       color:
+                                              //           //           PeopleChaoScreen_Color
+                                              //           //               .Colors_Text2_,
+                                              //           //       fontFamily:
+                                              //           //           FontWeight_
+                                              //           //               .Fonts_T),
+                                              //           // ),
+                                              //         ),
+                                              //         Expanded(
+                                              //           flex: 4,
+                                              //           child: Container(
+                                              //             padding:
+                                              //                 const EdgeInsets
+                                              //                     .fromLTRB(
+                                              //                     8, 8, 0, 8),
+                                              //             child: AutoSizeText(
+                                              //               minFontSize: 10,
+                                              //               maxFontSize: 25,
+                                              //               maxLines: 1,
+                                              //               '${contractRownumModels[index].ln}',
+                                              //               textAlign:
+                                              //                   TextAlign.start,
+                                              //               style: TextStyle(
+                                              //                   color: PeopleChaoScreen_Color
+                                              //                       .Colors_Text2_,
+                                              //                   fontFamily: Font_
+                                              //                       .Fonts_T),
+                                              //             ),
+                                              //           ),
+                                              //         ),
+                                              //         Expanded(
+                                              //           flex: 4,
+                                              //           child: Container(
+                                              //             padding:
+                                              //                 const EdgeInsets
+                                              //                     .fromLTRB(
+                                              //                     8, 8, 0, 8),
+                                              //             child: AutoSizeText(
+                                              //               minFontSize: 10,
+                                              //               maxFontSize: 25,
+                                              //               maxLines: 1,
+                                              //               '${contractRownumModels[index].sname}',
+                                              //               textAlign:
+                                              //                   TextAlign.start,
+                                              //               style: TextStyle(
+                                              //                   color: PeopleChaoScreen_Color
+                                              //                       .Colors_Text2_,
+                                              //                   fontFamily: Font_
+                                              //                       .Fonts_T),
+                                              //             ),
+                                              //           ),
+                                              //         )
+                                              //       ],
+                                              //     );
+                                              //   },
+                                              // ),
+                                            );
+                                          },
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
+                        ],
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              color: Colors.white,
+                              child: const DragIntoListExample(),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
           ),
           const SizedBox(
             height: 20,
@@ -7335,6 +7721,42 @@ class _SettingScreenState extends State<SettingScreen> {
         ],
       ),
     );
+  }
+
+  Future<Null> edit_SW(int sub_zone, String zone) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? ren = preferences.getString('renTalSer');
+    String? ser_user = preferences.getString('ser');
+    var vser = zone;
+    String url =
+        '${MyConstant().domain}/UpC_rownum.php?isAdd=true&ren=$ren&vser=$vser&value=${sub_zone + 1}&ser_user=$ser_user';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result.toString() == 'true') {
+        // setState(() {
+        //   read_GC_rownum();
+        // });
+      } else {}
+    } catch (e) {}
+  }
+
+  _onItemReorder(
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+    setState(() {
+      var movedItem = _contents[oldListIndex].children.removeAt(oldItemIndex);
+      _contents[newListIndex].children.insert(newItemIndex, movedItem);
+    });
+  }
+
+  _onListReorder(int oldListIndex, int newListIndex) {
+    setState(() {
+      var movedList = _contents.removeAt(oldListIndex);
+      _contents.insert(newListIndex, movedList);
+    });
   }
 
   Widget Status2_Web() {

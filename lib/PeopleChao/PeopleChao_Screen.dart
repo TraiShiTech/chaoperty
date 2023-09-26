@@ -276,6 +276,16 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
           zoneModels.add(zoneModel);
         });
       }
+      zoneModels.sort((a, b) {
+        if (a.zn == 'ทั้งหมด') {
+          return -1; // 'all' should come before other elements
+        } else if (b.zn == 'ทั้งหมด') {
+          return 1; // 'all' should come after other elements
+        } else {
+          return a.zn!
+              .compareTo(b.zn!); // sort other elements in ascending order
+        }
+      });
     } catch (e) {}
   }
 
@@ -409,7 +419,6 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
   }
 
 /////////////////////----------------------------------------->
-
   Future<Null> read_GC_areaSelect(int select) async {
     if (teNantModels.isNotEmpty) {
       teNantModels.clear();
@@ -995,7 +1004,9 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
               zone_name,
               (Status_pe == null) ? 'ปัจจุบัน' : Status_pe,
               teNantModels,
-              contractPhotoModels);
+              contractPhotoModels,
+              '',
+              '');
           // _exportExcel_(NameFile_, _verticalGroupValue_NameFile, Value_Report);
           // Navigator.of(context).pop();
         }
@@ -1032,7 +1043,9 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
             zone_name,
             (Status_pe == null) ? 'ปัจจุบัน' : Status_pe,
             teNantModels,
-            contractPhotoModels);
+            contractPhotoModels,
+            '',
+            '');
         // _exportExcel_(NameFile_, _verticalGroupValue_NameFile, Value_Report);
         // Navigator.of(context).pop();
       }
@@ -2313,10 +2326,10 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                         tappedIndex_ = '';
                                                       });
                                                       setState(() {
-                                                        Status_pe = Status[i]!;
+                                                        Status_ = i + 1;
                                                       });
                                                       setState(() {
-                                                        Status_ = i + 1;
+                                                        Status_pe = Status[i]!;
                                                       });
                                                       read_GC_areaSelect(
                                                           Status_);
@@ -2968,9 +2981,19 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                                                       teNantModels_Save[index_type][index].ln_c == null
                                                                                                                           ? teNantModels_Save[index_type][index].ln_q == null
                                                                                                                               ? ''
-                                                                                                                              : 'พื้นที่ :${teNantModels_Save[index_type][index].ln_q}( ${teNantModels_Save[index_type][index].zn} )'
-                                                                                                                          : 'พื้นที่ :${teNantModels_Save[index_type][index].ln_c}( ${teNantModels_Save[index_type][index].zn} )',
+                                                                                                                              : 'พื้นที่ :${teNantModels_Save[index_type][index].ln_q}'
+                                                                                                                          : 'พื้นที่ :${teNantModels_Save[index_type][index].ln_c}',
                                                                                                                       // 'พื้นที่ : ${teNantModels[index].ln} ( ${teNantModels[index].zn} )',
+                                                                                                                      maxLines: 1,
+                                                                                                                      style: const TextStyle(
+                                                                                                                        fontSize: 9.0,
+                                                                                                                        color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                                                        // fontWeight: FontWeight.bold,
+                                                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                                                      ),
+                                                                                                                    ),
+                                                                                                                    Text(
+                                                                                                                      'โซน :${teNantModels_Save[index_type][index].zn}',
                                                                                                                       maxLines: 1,
                                                                                                                       style: const TextStyle(
                                                                                                                         fontSize: 9.0,
@@ -3158,7 +3181,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                                 ),
                                                                                               ),
                                                                                               Container(
-                                                                                                height: 136,
+                                                                                                height: 150,
                                                                                                 width: 15,
                                                                                                 decoration: BoxDecoration(
                                                                                                   color: cardColor,
@@ -3460,182 +3483,182 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                               const SizedBox(
                                                 width: 10,
                                               ),
-                                              InkWell(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.green[600],
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                    border: Border.all(
-                                                        color: Colors.grey,
-                                                        width: 1),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: PopupMenuButton(
-                                                    child: const Center(
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    2.0),
-                                                            child: Icon(
-                                                              Icons
-                                                                  .file_download,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    2.0),
-                                                            child: Text(
-                                                              'Exprt',
-                                                              style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text1_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    itemBuilder: (BuildContext
-                                                            context) =>
-                                                        [
-                                                      // PopupMenuItem(
-                                                      //   child: InkWell(
-                                                      //       onTap: () async {
-                                                      //         List newValuePDFimg =
-                                                      //             [];
-                                                      //         for (int index = 0;
-                                                      //             index < 1;
-                                                      //             index++) {
-                                                      //           if (renTalModels[0]
-                                                      //                   .imglogo!
-                                                      //                   .trim() ==
-                                                      //               '') {
-                                                      //             // newValuePDFimg.add(
-                                                      //             //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                                      //           } else {
-                                                      //             newValuePDFimg.add(
-                                                      //                 '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                                      //           }
-                                                      //         }
-                                                      //         SharedPreferences
-                                                      //             preferences =
-                                                      //             await SharedPreferences
-                                                      //                 .getInstance();
-                                                      //         var renTal_name =
-                                                      //             preferences.getString(
-                                                      //                 'renTalName');
-                                                      //         setState(() {
-                                                      //           Pre_and_Dow =
-                                                      //               'Preview';
-                                                      //         });
-                                                      //         Navigator.pop(
-                                                      //             context);
-                                                      //         _displayPdf(
-                                                      //           '$renTal_name',
-                                                      //           ' ${renTalModels[0].bill_addr}',
-                                                      //           ' ${renTalModels[0].bill_email}',
-                                                      //           ' ${renTalModels[0].bill_tel}',
-                                                      //           ' ${renTalModels[0].bill_tax}',
-                                                      //           ' ${renTalModels[0].bill_name}',
-                                                      //           newValuePDFimg,
-                                                      //         );
-                                                      //       },
-                                                      //       child: Container(
-                                                      //           padding:
-                                                      //               const EdgeInsets
-                                                      //                   .all(10),
-                                                      //           width:
-                                                      //               MediaQuery.of(
-                                                      //                       context)
-                                                      //                   .size
-                                                      //                   .width,
-                                                      //           child: Row(
-                                                      //             children: const [
-                                                      //               Expanded(
-                                                      //                 child: Text(
-                                                      //                   'Preview & Print',
-                                                      //                   style: TextStyle(
-                                                      //                       color: PeopleChaoScreen_Color
-                                                      //                           .Colors_Text1_,
-                                                      //                       fontWeight:
-                                                      //                           FontWeight
-                                                      //                               .bold,
-                                                      //                       fontFamily:
-                                                      //                           FontWeight_.Fonts_T),
-                                                      //                 ),
-                                                      //               )
-                                                      //             ],
-                                                      //           ))),
-                                                      // ),
-                                                      PopupMenuItem(
-                                                        child: InkWell(
-                                                            onTap: () async {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              setState(() {
-                                                                Pre_and_Dow =
-                                                                    'Download';
-                                                              });
-                                                              _showMyDialog_SAVE();
-                                                            },
-                                                            child: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        10),
-                                                                width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                                child:
-                                                                    const Row(
-                                                                  children: [
-                                                                    Expanded(
-                                                                      child:
-                                                                          Text(
-                                                                        'Exprt file',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ))),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
+                                              // InkWell(
+                                              //   child: Container(
+                                              //     decoration: BoxDecoration(
+                                              //       color: Colors.green[600],
+                                              //       borderRadius:
+                                              //           const BorderRadius.only(
+                                              //               topLeft:
+                                              //                   Radius.circular(
+                                              //                       10),
+                                              //               topRight:
+                                              //                   Radius.circular(
+                                              //                       10),
+                                              //               bottomLeft:
+                                              //                   Radius.circular(
+                                              //                       10),
+                                              //               bottomRight:
+                                              //                   Radius.circular(
+                                              //                       10)),
+                                              //       border: Border.all(
+                                              //           color: Colors.grey,
+                                              //           width: 1),
+                                              //     ),
+                                              //     padding:
+                                              //         const EdgeInsets.all(4.0),
+                                              //     child: PopupMenuButton(
+                                              //       child: const Center(
+                                              //         child: Row(
+                                              //           mainAxisAlignment:
+                                              //               MainAxisAlignment
+                                              //                   .center,
+                                              //           children: [
+                                              //             Padding(
+                                              //               padding:
+                                              //                   EdgeInsets.all(
+                                              //                       2.0),
+                                              //               child: Icon(
+                                              //                 Icons
+                                              //                     .file_download,
+                                              //                 color:
+                                              //                     Colors.white,
+                                              //               ),
+                                              //             ),
+                                              //             Padding(
+                                              //               padding:
+                                              //                   EdgeInsets.all(
+                                              //                       2.0),
+                                              //               child: Text(
+                                              //                 'Export',
+                                              //                 style: TextStyle(
+                                              //                   color: PeopleChaoScreen_Color
+                                              //                       .Colors_Text1_,
+                                              //                   fontWeight:
+                                              //                       FontWeight
+                                              //                           .bold,
+                                              //                   fontFamily:
+                                              //                       FontWeight_
+                                              //                           .Fonts_T,
+                                              //                 ),
+                                              //               ),
+                                              //             ),
+                                              //           ],
+                                              //         ),
+                                              //       ),
+                                              //       itemBuilder: (BuildContext
+                                              //               context) =>
+                                              //           [
+                                              //         // PopupMenuItem(
+                                              //         //   child: InkWell(
+                                              //         //       onTap: () async {
+                                              //         //         List newValuePDFimg =
+                                              //         //             [];
+                                              //         //         for (int index = 0;
+                                              //         //             index < 1;
+                                              //         //             index++) {
+                                              //         //           if (renTalModels[0]
+                                              //         //                   .imglogo!
+                                              //         //                   .trim() ==
+                                              //         //               '') {
+                                              //         //             // newValuePDFimg.add(
+                                              //         //             //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                              //         //           } else {
+                                              //         //             newValuePDFimg.add(
+                                              //         //                 '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                              //         //           }
+                                              //         //         }
+                                              //         //         SharedPreferences
+                                              //         //             preferences =
+                                              //         //             await SharedPreferences
+                                              //         //                 .getInstance();
+                                              //         //         var renTal_name =
+                                              //         //             preferences.getString(
+                                              //         //                 'renTalName');
+                                              //         //         setState(() {
+                                              //         //           Pre_and_Dow =
+                                              //         //               'Preview';
+                                              //         //         });
+                                              //         //         Navigator.pop(
+                                              //         //             context);
+                                              //         //         _displayPdf(
+                                              //         //           '$renTal_name',
+                                              //         //           ' ${renTalModels[0].bill_addr}',
+                                              //         //           ' ${renTalModels[0].bill_email}',
+                                              //         //           ' ${renTalModels[0].bill_tel}',
+                                              //         //           ' ${renTalModels[0].bill_tax}',
+                                              //         //           ' ${renTalModels[0].bill_name}',
+                                              //         //           newValuePDFimg,
+                                              //         //         );
+                                              //         //       },
+                                              //         //       child: Container(
+                                              //         //           padding:
+                                              //         //               const EdgeInsets
+                                              //         //                   .all(10),
+                                              //         //           width:
+                                              //         //               MediaQuery.of(
+                                              //         //                       context)
+                                              //         //                   .size
+                                              //         //                   .width,
+                                              //         //           child: Row(
+                                              //         //             children: const [
+                                              //         //               Expanded(
+                                              //         //                 child: Text(
+                                              //         //                   'Preview & Print',
+                                              //         //                   style: TextStyle(
+                                              //         //                       color: PeopleChaoScreen_Color
+                                              //         //                           .Colors_Text1_,
+                                              //         //                       fontWeight:
+                                              //         //                           FontWeight
+                                              //         //                               .bold,
+                                              //         //                       fontFamily:
+                                              //         //                           FontWeight_.Fonts_T),
+                                              //         //                 ),
+                                              //         //               )
+                                              //         //             ],
+                                              //         //           ))),
+                                              //         // ),
+                                              //         PopupMenuItem(
+                                              //           child: InkWell(
+                                              //               onTap: () async {
+                                              //                 Navigator.pop(
+                                              //                     context);
+                                              //                 setState(() {
+                                              //                   Pre_and_Dow =
+                                              //                       'Download';
+                                              //                 });
+                                              //                 _showMyDialog_SAVE();
+                                              //               },
+                                              //               child: Container(
+                                              //                   padding:
+                                              //                       const EdgeInsets
+                                              //                               .all(
+                                              //                           10),
+                                              //                   width: MediaQuery.of(
+                                              //                           context)
+                                              //                       .size
+                                              //                       .width,
+                                              //                   child:
+                                              //                       const Row(
+                                              //                     children: [
+                                              //                       Expanded(
+                                              //                         child:
+                                              //                             Text(
+                                              //                           'Exprt file',
+                                              //                           style: TextStyle(
+                                              //                               color:
+                                              //                                   PeopleChaoScreen_Color.Colors_Text1_,
+                                              //                               fontWeight: FontWeight.bold,
+                                              //                               fontFamily: FontWeight_.Fonts_T),
+                                              //                         ),
+                                              //                       )
+                                              //                     ],
+                                              //                   ))),
+                                              //         ),
+                                              //       ],
+                                              //     ),
+                                              //   ),
+                                              // ),
                                             ],
                                           ),
                                         ],
@@ -5505,319 +5528,319 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
   }
 
   //////////////////////////////////------------------------->(รายงานผู้เช่า)
-//   void _exportExcel_(
-//       NameFile_, _verticalGroupValue_NameFile, Value_Report) async {
-//     String day_ =
-//         '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
+  void _exportExcel_(
+      NameFile_, _verticalGroupValue_NameFile, Value_Report) async {
+    String day_ =
+        '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
 
-//     String Tim_ =
-//         '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}';
-//     final x.Workbook workbook = x.Workbook();
+    String Tim_ =
+        '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}';
+    final x.Workbook workbook = x.Workbook();
 
-//     final x.Worksheet sheet = workbook.worksheets[0];
-//     sheet.pageSetup.topMargin = 1;
-//     sheet.pageSetup.bottomMargin = 1;
-//     sheet.pageSetup.leftMargin = 1;
-//     sheet.pageSetup.rightMargin = 1;
+    final x.Worksheet sheet = workbook.worksheets[0];
+    sheet.pageSetup.topMargin = 1;
+    sheet.pageSetup.bottomMargin = 1;
+    sheet.pageSetup.leftMargin = 1;
+    sheet.pageSetup.rightMargin = 1;
 
-//     //Adding a picture
-//     final ByteData bytes_image = await rootBundle.load('images/LOGO.png');
-//     final Uint8List image = bytes_image.buffer
-//         .asUint8List(bytes_image.offsetInBytes, bytes_image.lengthInBytes);
-//     DateTime date = DateTime.now();
-//     var formatter = new DateFormat.MMMMd('th_TH');
-//     String thaiDate = formatter.format(date);
+    //Adding a picture
+    final ByteData bytes_image = await rootBundle.load('images/LOGO.png');
+    final Uint8List image = bytes_image.buffer
+        .asUint8List(bytes_image.offsetInBytes, bytes_image.lengthInBytes);
+    DateTime date = DateTime.now();
+    var formatter = new DateFormat.MMMMd('th_TH');
+    String thaiDate = formatter.format(date);
 
-//     x.Style globalStyle = workbook.styles.add('style');
-//     globalStyle.backColorRgb = const Color.fromARGB(255, 252, 255, 251);
-//     globalStyle.fontName = 'Angsana New';
-//     globalStyle.numberFormat = '_(\$* #,##0_)';
-//     globalStyle.fontSize = 14;
-//     globalStyle.hAlign = x.HAlignType.center;
-// ///////////////////////////////----------------------->
+    x.Style globalStyle = workbook.styles.add('style');
+    globalStyle.backColorRgb = const Color.fromARGB(255, 252, 255, 251);
+    globalStyle.fontName = 'Angsana New';
+    globalStyle.numberFormat = '_(\$* #,##0_)';
+    globalStyle.fontSize = 14;
+    globalStyle.hAlign = x.HAlignType.center;
+///////////////////////////////----------------------->
 
-//     x.Style globalStyle2 = workbook.styles.add('style2');
-//     globalStyle2.backColorRgb = const Color.fromARGB(255, 141, 185, 90);
-//     globalStyle2.fontName = 'Angsana New';
-//     globalStyle2.fontSize = 14;
+    x.Style globalStyle2 = workbook.styles.add('style2');
+    globalStyle2.backColorRgb = const Color.fromARGB(255, 141, 185, 90);
+    globalStyle2.fontName = 'Angsana New';
+    globalStyle2.fontSize = 14;
 
-//     x.Style globalStyle22 = workbook.styles.add('style22');
-//     globalStyle22.backColorRgb = Color(0xC7F5F7FA);
-//     globalStyle22.numberFormat = '_(\* #,##0.00_)';
-//     globalStyle22.fontSize = 12;
-//     globalStyle22.numberFormat;
-//     globalStyle22.hAlign = x.HAlignType.center;
+    x.Style globalStyle22 = workbook.styles.add('style22');
+    globalStyle22.backColorRgb = Color(0xC7F5F7FA);
+    globalStyle22.numberFormat = '_(\* #,##0.00_)';
+    globalStyle22.fontSize = 12;
+    globalStyle22.numberFormat;
+    globalStyle22.hAlign = x.HAlignType.center;
 
-//     x.Style globalStyle222 = workbook.styles.add('style222');
-//     globalStyle222.backColorRgb = Color(0xC7E1E2E6);
-//     globalStyle222.numberFormat = '_(\* #,##0.00_)';
-//     // globalStyle222.numberFormat;
-//     globalStyle222.fontSize = 12;
-//     globalStyle222.hAlign = x.HAlignType.center;
-// ///////////////////////////////----------------------->
-//     x.Style globalStyle3 = workbook.styles.add('style3');
-//     globalStyle3.backColorRgb =
-//         const Color.fromRGBO(232, 232, 232, 1.000); //    Color(0xFFD9D9B7);
+    x.Style globalStyle222 = workbook.styles.add('style222');
+    globalStyle222.backColorRgb = Color(0xC7E1E2E6);
+    globalStyle222.numberFormat = '_(\* #,##0.00_)';
+    // globalStyle222.numberFormat;
+    globalStyle222.fontSize = 12;
+    globalStyle222.hAlign = x.HAlignType.center;
+///////////////////////////////----------------------->
+    x.Style globalStyle3 = workbook.styles.add('style3');
+    globalStyle3.backColorRgb =
+        const Color.fromRGBO(232, 232, 232, 1.000); //    Color(0xFFD9D9B7);
 
-//     globalStyle3.fontName = 'Angsana New';
-//     globalStyle3.fontSize = 14;
-//     globalStyle3.hAlign = x.HAlignType.center;
+    globalStyle3.fontName = 'Angsana New';
+    globalStyle3.fontSize = 14;
+    globalStyle3.hAlign = x.HAlignType.center;
 
-// ///////////////////////////////----------------------->
-//     sheet.getRangeByName('A1').cellStyle = globalStyle;
-//     sheet.getRangeByName('B1').cellStyle = globalStyle;
-//     sheet.getRangeByName('C1').cellStyle = globalStyle;
-//     sheet.getRangeByName('D1').cellStyle = globalStyle;
-//     sheet.getRangeByName('E1').cellStyle = globalStyle;
-//     sheet.getRangeByName('F1').cellStyle = globalStyle;
-//     sheet.getRangeByName('G1').cellStyle = globalStyle;
-//     sheet.getRangeByName('H1').cellStyle = globalStyle;
-//     sheet.getRangeByName('I1').cellStyle = globalStyle;
-//     sheet.getRangeByName('J1').cellStyle = globalStyle;
-//     sheet.getRangeByName('L1').cellStyle = globalStyle;
-//     sheet.getRangeByName('M1').cellStyle = globalStyle;
-//     sheet.getRangeByName('N1').cellStyle = globalStyle;
+///////////////////////////////----------------------->
+    sheet.getRangeByName('A1').cellStyle = globalStyle;
+    sheet.getRangeByName('B1').cellStyle = globalStyle;
+    sheet.getRangeByName('C1').cellStyle = globalStyle;
+    sheet.getRangeByName('D1').cellStyle = globalStyle;
+    sheet.getRangeByName('E1').cellStyle = globalStyle;
+    sheet.getRangeByName('F1').cellStyle = globalStyle;
+    sheet.getRangeByName('G1').cellStyle = globalStyle;
+    sheet.getRangeByName('H1').cellStyle = globalStyle;
+    sheet.getRangeByName('I1').cellStyle = globalStyle;
+    sheet.getRangeByName('J1').cellStyle = globalStyle;
+    sheet.getRangeByName('L1').cellStyle = globalStyle;
+    sheet.getRangeByName('M1').cellStyle = globalStyle;
+    sheet.getRangeByName('N1').cellStyle = globalStyle;
 
-//     sheet.getRangeByName('A2').setText('ผู้เช่า : ${Status[Status_ - 1]}');
-//     sheet.getRangeByName('E1').setText('ข้อมูลผู้เช่า');
-//     sheet
-//         .getRangeByName('J1')
-//         .setText((zone_name == null) ? 'โซน : ทั้งหมด' : 'โซน : $zone_name');
-//     // sheet
-//     //     .getRangeByName('J1')
-//     //     .setText('โทรศัพท์ : ${renTalModels[0].bill_tel}');
+    sheet.getRangeByName('A2').setText('ผู้เช่า : ${Status[Status_ - 1]}');
+    sheet.getRangeByName('E1').setText('ข้อมูลผู้เช่า');
+    sheet
+        .getRangeByName('J1')
+        .setText((zone_name == null) ? 'โซน : ทั้งหมด' : 'โซน : $zone_name');
+    // sheet
+    //     .getRangeByName('J1')
+    //     .setText('โทรศัพท์ : ${renTalModels[0].bill_tel}');
 
-// // ExcelSheetProtectionOption
-//     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
-//     options.all = true;
+// ExcelSheetProtectionOption
+    final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
+    options.all = true;
 
-// // Protecting the Worksheet by using a Password
+// Protecting the Worksheet by using a Password
 
-//     sheet.getRangeByName('A2').cellStyle = globalStyle;
-//     sheet.getRangeByName('B2').cellStyle = globalStyle;
-//     sheet.getRangeByName('C2').cellStyle = globalStyle;
-//     sheet.getRangeByName('D2').cellStyle = globalStyle;
-//     sheet.getRangeByName('E2').cellStyle = globalStyle;
-//     sheet.getRangeByName('F2').cellStyle = globalStyle;
-//     sheet.getRangeByName('G2').cellStyle = globalStyle;
-//     sheet.getRangeByName('H2').cellStyle = globalStyle;
-//     sheet.getRangeByName('I2').cellStyle = globalStyle;
-//     sheet.getRangeByName('J2').cellStyle = globalStyle;
-//     sheet.getRangeByName('L2').cellStyle = globalStyle;
-//     sheet.getRangeByName('M2').cellStyle = globalStyle;
-//     sheet.getRangeByName('N2').cellStyle = globalStyle;
-//     // sheet.getRangeByName('A2').setText('${renTalModels[0].bill_addr}');
-//     // sheet.getRangeByName('J2').setText('อีเมล : ${renTalModels[0].bill_email}');
+    sheet.getRangeByName('A2').cellStyle = globalStyle;
+    sheet.getRangeByName('B2').cellStyle = globalStyle;
+    sheet.getRangeByName('C2').cellStyle = globalStyle;
+    sheet.getRangeByName('D2').cellStyle = globalStyle;
+    sheet.getRangeByName('E2').cellStyle = globalStyle;
+    sheet.getRangeByName('F2').cellStyle = globalStyle;
+    sheet.getRangeByName('G2').cellStyle = globalStyle;
+    sheet.getRangeByName('H2').cellStyle = globalStyle;
+    sheet.getRangeByName('I2').cellStyle = globalStyle;
+    sheet.getRangeByName('J2').cellStyle = globalStyle;
+    sheet.getRangeByName('L2').cellStyle = globalStyle;
+    sheet.getRangeByName('M2').cellStyle = globalStyle;
+    sheet.getRangeByName('N2').cellStyle = globalStyle;
+    // sheet.getRangeByName('A2').setText('${renTalModels[0].bill_addr}');
+    // sheet.getRangeByName('J2').setText('อีเมล : ${renTalModels[0].bill_email}');
 
-//     sheet.getRangeByName('A3').cellStyle = globalStyle;
-//     sheet.getRangeByName('B3').cellStyle = globalStyle;
-//     sheet.getRangeByName('C3').cellStyle = globalStyle;
-//     sheet.getRangeByName('D3').cellStyle = globalStyle;
-//     sheet.getRangeByName('E3').cellStyle = globalStyle;
-//     sheet.getRangeByName('F3').cellStyle = globalStyle;
-//     sheet.getRangeByName('G3').cellStyle = globalStyle;
-//     sheet.getRangeByName('H3').cellStyle = globalStyle;
-//     sheet.getRangeByName('I3').cellStyle = globalStyle;
-//     sheet.getRangeByName('J3').cellStyle = globalStyle;
-//     sheet.getRangeByName('L3').cellStyle = globalStyle;
-//     sheet.getRangeByName('M3').cellStyle = globalStyle;
-//     sheet.getRangeByName('N3').cellStyle = globalStyle;
+    sheet.getRangeByName('A3').cellStyle = globalStyle;
+    sheet.getRangeByName('B3').cellStyle = globalStyle;
+    sheet.getRangeByName('C3').cellStyle = globalStyle;
+    sheet.getRangeByName('D3').cellStyle = globalStyle;
+    sheet.getRangeByName('E3').cellStyle = globalStyle;
+    sheet.getRangeByName('F3').cellStyle = globalStyle;
+    sheet.getRangeByName('G3').cellStyle = globalStyle;
+    sheet.getRangeByName('H3').cellStyle = globalStyle;
+    sheet.getRangeByName('I3').cellStyle = globalStyle;
+    sheet.getRangeByName('J3').cellStyle = globalStyle;
+    sheet.getRangeByName('L3').cellStyle = globalStyle;
+    sheet.getRangeByName('M3').cellStyle = globalStyle;
+    sheet.getRangeByName('N3').cellStyle = globalStyle;
 
-//     sheet
-//         .getRangeByName('J2')
-//         .setText('ณ วันที่ : $thaiDate ${DateTime.now().year + 543}');
+    sheet
+        .getRangeByName('J2')
+        .setText('ณ วันที่ : $thaiDate ${DateTime.now().year + 543}');
 
-//     globalStyle2.hAlign = x.HAlignType.center;
-//     sheet.getRangeByName('A4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('B4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('C4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('D4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('E4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('F4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('G4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('H4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('I4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('J4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('k4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('L4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('M4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('N4').cellStyle = globalStyle2;
+    globalStyle2.hAlign = x.HAlignType.center;
+    sheet.getRangeByName('A4').cellStyle = globalStyle2;
+    sheet.getRangeByName('B4').cellStyle = globalStyle2;
+    sheet.getRangeByName('C4').cellStyle = globalStyle2;
+    sheet.getRangeByName('D4').cellStyle = globalStyle2;
+    sheet.getRangeByName('E4').cellStyle = globalStyle2;
+    sheet.getRangeByName('F4').cellStyle = globalStyle2;
+    sheet.getRangeByName('G4').cellStyle = globalStyle2;
+    sheet.getRangeByName('H4').cellStyle = globalStyle2;
+    sheet.getRangeByName('I4').cellStyle = globalStyle2;
+    sheet.getRangeByName('J4').cellStyle = globalStyle2;
+    sheet.getRangeByName('k4').cellStyle = globalStyle2;
+    sheet.getRangeByName('L4').cellStyle = globalStyle2;
+    sheet.getRangeByName('M4').cellStyle = globalStyle2;
+    sheet.getRangeByName('N4').cellStyle = globalStyle2;
 
-//     sheet.getRangeByName('A4').columnWidth = 18;
-//     sheet.getRangeByName('B4').columnWidth = 18;
-//     sheet.getRangeByName('C4').columnWidth = 18;
-//     sheet.getRangeByName('D4').columnWidth = 18;
-//     sheet.getRangeByName('E4').columnWidth = 18;
-//     sheet.getRangeByName('F4').columnWidth = 18;
-//     sheet.getRangeByName('G4').columnWidth = 18;
-//     sheet.getRangeByName('H4').columnWidth = 18;
-//     sheet.getRangeByName('I4').columnWidth = 18;
-//     sheet.getRangeByName('J4').columnWidth = 28;
-//     sheet.getRangeByName('L4').columnWidth = 40;
-//     sheet.getRangeByName('M4').columnWidth = 40;
-//     sheet.getRangeByName('N4').columnWidth = 40;
+    sheet.getRangeByName('A4').columnWidth = 18;
+    sheet.getRangeByName('B4').columnWidth = 18;
+    sheet.getRangeByName('C4').columnWidth = 18;
+    sheet.getRangeByName('D4').columnWidth = 18;
+    sheet.getRangeByName('E4').columnWidth = 18;
+    sheet.getRangeByName('F4').columnWidth = 18;
+    sheet.getRangeByName('G4').columnWidth = 18;
+    sheet.getRangeByName('H4').columnWidth = 18;
+    sheet.getRangeByName('I4').columnWidth = 18;
+    sheet.getRangeByName('J4').columnWidth = 28;
+    sheet.getRangeByName('L4').columnWidth = 40;
+    sheet.getRangeByName('M4').columnWidth = 40;
+    sheet.getRangeByName('N4').columnWidth = 40;
 
-//     sheet.getRangeByName('A4').setText('ลำดับ');
-//     sheet.getRangeByName('B4').setText('เลขที่สัญญา/เสนอราคา');
-//     sheet.getRangeByName('C4').setText('ชื่อผู้ติดต่อ');
-//     sheet.getRangeByName('D4').setText('ชื่อร้านค้า');
-//     sheet.getRangeByName('E4').setText('โซนพื้นที่');
-//     sheet.getRangeByName('F4').setText('รหัสพื้นที่');
-//     sheet.getRangeByName('G4').setText('ขนาดพื้นที่(ต.ร.ม.)');
-//     sheet.getRangeByName('H4').setText('ระยะเวลาการเช่า');
-//     sheet.getRangeByName('I4').setText('วันเริ่มสัญญา');
-//     sheet.getRangeByName('J4').setText('วันสิ้นสุดสัญญา');
-//     sheet.getRangeByName('K4').setText('สถานะ');
-//     sheet.getRangeByName('L4').setText('รูปผู้เช่า');
-//     sheet.getRangeByName('M4').setText('รูปร้านค้า');
-//     sheet.getRangeByName('N4').setText('รูปแผนผัง');
-//     int indextotol = 0;
-//     int indextotol_ = 0;
-//     for (int i = 0; i < teNantModels.length; i++) {
-//       var index = indextotol;
-//       dynamic numberColor = i % 2 == 0 ? globalStyle22 : globalStyle222;
+    sheet.getRangeByName('A4').setText('ลำดับ');
+    sheet.getRangeByName('B4').setText('เลขที่สัญญา/เสนอราคา');
+    sheet.getRangeByName('C4').setText('ชื่อผู้ติดต่อ');
+    sheet.getRangeByName('D4').setText('ชื่อร้านค้า');
+    sheet.getRangeByName('E4').setText('โซนพื้นที่');
+    sheet.getRangeByName('F4').setText('รหัสพื้นที่');
+    sheet.getRangeByName('G4').setText('ขนาดพื้นที่(ต.ร.ม.)');
+    sheet.getRangeByName('H4').setText('ระยะเวลาการเช่า');
+    sheet.getRangeByName('I4').setText('วันเริ่มสัญญา');
+    sheet.getRangeByName('J4').setText('วันสิ้นสุดสัญญา');
+    sheet.getRangeByName('K4').setText('สถานะ');
+    sheet.getRangeByName('L4').setText('รูปผู้เช่า');
+    sheet.getRangeByName('M4').setText('รูปร้านค้า');
+    sheet.getRangeByName('N4').setText('รูปแผนผัง');
+    int indextotol = 0;
+    int indextotol_ = 0;
+    for (int i = 0; i < teNantModels.length; i++) {
+      var index = indextotol;
+      dynamic numberColor = i % 2 == 0 ? globalStyle22 : globalStyle222;
 
-//       indextotol = indextotol + 1;
+      indextotol = indextotol + 1;
 
-//       ///---------------------------------------------------------->contractPhotoModels
-//       sheet.getRangeByName('A${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('B${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('C${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('D${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('E${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('F${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('G${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('H${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('I${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('J${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('K${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('L${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('M${i + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('N${i + 5}').cellStyle = numberColor;
+      ///---------------------------------------------------------->contractPhotoModels
+      sheet.getRangeByName('A${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('B${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('C${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('D${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('E${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('F${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('G${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('H${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('I${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('J${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('K${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('L${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('M${i + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('N${i + 5}').cellStyle = numberColor;
 
-//       sheet.getRangeByName('A${i + 5}').setText(
-//             '${i + 1}',
-//           );
-//       sheet.getRangeByName('B${i + 5}').setText(
-//             teNantModels[i].docno == null
-//                 ? teNantModels[i].cid == null
-//                     ? ''
-//                     : '${teNantModels[i].cid}'
-//                 : '${teNantModels[i].docno}',
-//           );
-//       sheet.getRangeByName('C${i + 5}').setText(
-//             teNantModels[i].cname == null
-//                 ? teNantModels[i].cname_q == null
-//                     ? ''
-//                     : '${teNantModels[i].cname_q}'
-//                 : '${teNantModels[i].cname}',
-//           );
-//       sheet.getRangeByName('D${i + 5}').setText(
-//             teNantModels[i].sname == null
-//                 ? teNantModels[i].sname_q == null
-//                     ? ''
-//                     : '${teNantModels[i].sname_q}'
-//                 : '${teNantModels[i].sname}',
-//           );
-//       sheet.getRangeByName('E${i + 5}').setText(
-//             '${teNantModels[index].zn}',
-//           );
-//       sheet.getRangeByName('F${i + 5}').setText(
-//             teNantModels[i].ln_c == null
-//                 ? teNantModels[i].ln_q == null
-//                     ? ''
-//                     : '${teNantModels[i].ln_q}'
-//                 : '${teNantModels[i].ln_c}',
-//           );
-//       sheet.getRangeByName('G${i + 5}').setText(
-//             teNantModels[i].area_c == null
-//                 ? teNantModels[i].area_q == null
-//                     ? ''
-//                     : '${teNantModels[i].area_q}'
-//                 : '${teNantModels[i].area_c}',
-//           );
-//       sheet.getRangeByName('H${i + 5}').setText(
-//             teNantModels[i].period == null
-//                 ? teNantModels[i].period_q == null
-//                     ? ''
-//                     : '${teNantModels[i].period_q}  ${teNantModels[i].rtname_q!.substring(3)}'
-//                 : '${teNantModels[i].period}  ${teNantModels[i].rtname!.substring(3)}',
-//           );
-//       sheet.getRangeByName('I${i + 5}').setText(
-//             teNantModels[i].sdate_q == null
-//                 ? teNantModels[i].sdate == null
-//                     ? ''
-//                     : DateFormat('dd-MM-yyyy')
-//                         .format(
-//                             DateTime.parse('${teNantModels[i].sdate} 00:00:00'))
-//                         .toString()
-//                 : DateFormat('dd-MM-yyyy')
-//                     .format(
-//                         DateTime.parse('${teNantModels[i].sdate_q} 00:00:00'))
-//                     .toString(),
-//           );
-//       sheet.getRangeByName('J${i + 5}').setText(
-//             teNantModels[i].ldate_q == null
-//                 ? teNantModels[i].ldate == null
-//                     ? ''
-//                     : DateFormat('dd-MM-yyyy')
-//                         .format(
-//                             DateTime.parse('${teNantModels[i].ldate} 00:00:00'))
-//                         .toString()
-//                 : DateFormat('dd-MM-yyyy')
-//                     .format(
-//                         DateTime.parse('${teNantModels[i].ldate_q} 00:00:00'))
-//                     .toString(),
-//           );
-//       sheet.getRangeByName('K${i + 5}').setText(
-//             teNantModels[i].quantity == '1'
-//                 ? datex.isAfter(DateTime.parse(
-//                                 '${teNantModels[i].ldate} 00:00:00.000')
-//                             .subtract(const Duration(days: 0))) ==
-//                         true
-//                     ? 'หมดสัญญา'
-//                     : datex.isAfter(DateTime.parse(
-//                                     '${teNantModels[i].ldate} 00:00:00.000')
-//                                 .subtract(const Duration(days: 30))) ==
-//                             true
-//                         ? 'ใกล้หมดสัญญา'
-//                         : 'เช่าอยู่'
-//                 : teNantModels[i].quantity == '2'
-//                     ? 'เสนอราคา'
-//                     : teNantModels[i].quantity == '3'
-//                         ? 'เสนอราคา(มัดจำ)'
-//                         : 'ว่าง',
-//           );
+      sheet.getRangeByName('A${i + 5}').setText(
+            '${i + 1}',
+          );
+      sheet.getRangeByName('B${i + 5}').setText(
+            teNantModels[i].docno == null
+                ? teNantModels[i].cid == null
+                    ? ''
+                    : '${teNantModels[i].cid}'
+                : '${teNantModels[i].docno}',
+          );
+      sheet.getRangeByName('C${i + 5}').setText(
+            teNantModels[i].cname == null
+                ? teNantModels[i].cname_q == null
+                    ? ''
+                    : '${teNantModels[i].cname_q}'
+                : '${teNantModels[i].cname}',
+          );
+      sheet.getRangeByName('D${i + 5}').setText(
+            teNantModels[i].sname == null
+                ? teNantModels[i].sname_q == null
+                    ? ''
+                    : '${teNantModels[i].sname_q}'
+                : '${teNantModels[i].sname}',
+          );
+      sheet.getRangeByName('E${i + 5}').setText(
+            '${teNantModels[index].zn}',
+          );
+      sheet.getRangeByName('F${i + 5}').setText(
+            teNantModels[i].ln_c == null
+                ? teNantModels[i].ln_q == null
+                    ? ''
+                    : '${teNantModels[i].ln_q}'
+                : '${teNantModels[i].ln_c}',
+          );
+      sheet.getRangeByName('G${i + 5}').setText(
+            teNantModels[i].area_c == null
+                ? teNantModels[i].area_q == null
+                    ? ''
+                    : '${teNantModels[i].area_q}'
+                : '${teNantModels[i].area_c}',
+          );
+      sheet.getRangeByName('H${i + 5}').setText(
+            teNantModels[i].period == null
+                ? teNantModels[i].period_q == null
+                    ? ''
+                    : '${teNantModels[i].period_q}  ${teNantModels[i].rtname_q!.substring(3)}'
+                : '${teNantModels[i].period}  ${teNantModels[i].rtname!.substring(3)}',
+          );
+      sheet.getRangeByName('I${i + 5}').setText(
+            teNantModels[i].sdate_q == null
+                ? teNantModels[i].sdate == null
+                    ? ''
+                    : DateFormat('dd-MM-yyyy')
+                        .format(
+                            DateTime.parse('${teNantModels[i].sdate} 00:00:00'))
+                        .toString()
+                : DateFormat('dd-MM-yyyy')
+                    .format(
+                        DateTime.parse('${teNantModels[i].sdate_q} 00:00:00'))
+                    .toString(),
+          );
+      sheet.getRangeByName('J${i + 5}').setText(
+            teNantModels[i].ldate_q == null
+                ? teNantModels[i].ldate == null
+                    ? ''
+                    : DateFormat('dd-MM-yyyy')
+                        .format(
+                            DateTime.parse('${teNantModels[i].ldate} 00:00:00'))
+                        .toString()
+                : DateFormat('dd-MM-yyyy')
+                    .format(
+                        DateTime.parse('${teNantModels[i].ldate_q} 00:00:00'))
+                    .toString(),
+          );
+      sheet.getRangeByName('K${i + 5}').setText(
+            teNantModels[i].quantity == '1'
+                ? datex.isAfter(DateTime.parse(
+                                '${teNantModels[i].ldate} 00:00:00.000')
+                            .subtract(const Duration(days: 0))) ==
+                        true
+                    ? 'หมดสัญญา'
+                    : datex.isAfter(DateTime.parse(
+                                    '${teNantModels[i].ldate} 00:00:00.000')
+                                .subtract(const Duration(days: 30))) ==
+                            true
+                        ? 'ใกล้หมดสัญญา'
+                        : 'เช่าอยู่'
+                : teNantModels[i].quantity == '2'
+                    ? 'เสนอราคา'
+                    : teNantModels[i].quantity == '3'
+                        ? 'เสนอราคา(มัดจำ)'
+                        : 'ว่าง',
+          );
 
-//       sheet
-//           .getRangeByName('L${i + 5}')
-//           .setText('${contractPhotoModels[i].pic_tenant}');
-//       sheet
-//           .getRangeByName('M${i + 5}')
-//           .setText('${contractPhotoModels[i].pic_shop}');
-//       sheet
-//           .getRangeByName('N${i + 5}')
-//           .setText('${contractPhotoModels[i].pic_plan}');
-//     }
+      sheet
+          .getRangeByName('L${i + 5}')
+          .setText('${contractPhotoModels[i].pic_tenant}');
+      sheet
+          .getRangeByName('M${i + 5}')
+          .setText('${contractPhotoModels[i].pic_shop}');
+      sheet
+          .getRangeByName('N${i + 5}')
+          .setText('${contractPhotoModels[i].pic_plan}');
+    }
 
-//     final List<int> bytes = workbook.saveAsStream();
-//     workbook.dispose();
-//     Uint8List data = Uint8List.fromList(bytes);
-//     MimeType type = MimeType.MICROSOFTEXCEL;
+    final List<int> bytes = workbook.saveAsStream();
+    workbook.dispose();
+    Uint8List data = Uint8List.fromList(bytes);
+    MimeType type = MimeType.MICROSOFTEXCEL;
 
-//     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
-//       String path = await FileSaver.instance.saveFile(
-//           "ผู้เช่า(${Status[Status_ - 1]}โซน$zone_name)(ณ วันที่${day_})",
-//           data,
-//           "xlsx",
-//           mimeType: type);
-//       log(path);
-//     } else {
-//       String path = await FileSaver.instance
-//           .saveFile("$NameFile_", data, "xlsx", mimeType: type);
-//       log(path);
-//     }
-//   }
+    if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
+      String path = await FileSaver.instance.saveFile(
+          "ผู้เช่า(${Status[Status_ - 1]}โซน$zone_name)(ณ วันที่${day_})",
+          data,
+          "xlsx",
+          mimeType: type);
+      log(path);
+    } else {
+      String path = await FileSaver.instance
+          .saveFile("$NameFile_", data, "xlsx", mimeType: type);
+      log(path);
+    }
+  }
 //////////----------------------------------------------------------------->
 
   void _displayPdf(renTal_name, bill_addr, bill_email, bill_tel, bill_tax,

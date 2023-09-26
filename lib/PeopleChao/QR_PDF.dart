@@ -106,7 +106,7 @@ class Pdfgen_QR_ {
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: List.generate(endIndex - startIndex, (index) {
                     return pw.Container(
-                      width: 240, // Adjust the width as per your requirement
+                      width: 270, // Adjust the width as per your requirement
                       // height:
                       //     200, // Adjust the height as per your requirement
                       decoration: pw.BoxDecoration(
@@ -120,9 +120,9 @@ class Pdfgen_QR_ {
                       ),
                       padding: const pw.EdgeInsets.all(4.0),
                       child: pw.Padding(
-                          padding: pw.EdgeInsets.all(8.0),
+                          padding: pw.EdgeInsets.all(2.0),
                           child: pw.Container(
-                            width: 240,
+                            width: 270,
                             // height: 135,
                             decoration: pw.BoxDecoration(
                               borderRadius: pw.BorderRadius.only(
@@ -141,8 +141,8 @@ class Pdfgen_QR_ {
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Container(
-                                    height: 110,
-                                    width: 200,
+                                    height: 125,
+                                    width: 243,
                                     // height: 135,
                                     decoration: pw.BoxDecoration(
                                       borderRadius: pw.BorderRadius.only(
@@ -293,7 +293,7 @@ class Pdfgen_QR_ {
                                                     pw.Text(
                                                       '${teNantModels[startIndex + index].cid}',
                                                       style: pw.TextStyle(
-                                                        fontSize: 9.0,
+                                                        fontSize: 10.0,
                                                         color: PdfColors.black,
                                                         fontWeight:
                                                             pw.FontWeight.bold,
@@ -348,8 +348,19 @@ class Pdfgen_QR_ {
                                                                       .ln_q ==
                                                                   null
                                                               ? ''
-                                                              : 'พื้นที่ :${teNantModels[startIndex + index].ln_q}( ${teNantModels[startIndex + index].zn} )'
-                                                          : 'พื้นที่ :${teNantModels[startIndex + index].ln_c}( ${teNantModels[startIndex + index].zn} )',
+                                                              : 'พื้นที่ :${teNantModels[startIndex + index].ln_q}'
+                                                          : 'พื้นที่ :${teNantModels[startIndex + index].ln_c}',
+
+                                                      // 'พื้นที่ : ${teNantModels[startIndex + index].ln} ( ${teNantModels[startIndex + index].zn} )',
+                                                      maxLines: 1,
+                                                      style: pw.TextStyle(
+                                                        fontSize: 8.0,
+                                                        color: PdfColors.black,
+                                                        font: ttf,
+                                                      ),
+                                                    ),
+                                                    pw.Text(
+                                                      'โซน :${teNantModels[startIndex + index].zn}',
 
                                                       // 'พื้นที่ : ${teNantModels[startIndex + index].ln} ( ${teNantModels[startIndex + index].zn} )',
                                                       maxLines: 1,
@@ -394,7 +405,7 @@ class Pdfgen_QR_ {
                                       ],
                                     )),
                                 pw.Container(
-                                  height: 110,
+                                  height: 125,
                                   width: 15,
                                   decoration: pw.BoxDecoration(
                                     color: colorList[indexcardColor],

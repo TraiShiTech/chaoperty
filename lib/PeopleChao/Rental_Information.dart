@@ -44,9 +44,10 @@ import '../Model/GetCustomer_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
-import '../PDF/pdf_Agreement.dart';
-import '../PDF/pdf_Agreement2.dart';
-import '../PDF/pdf_RentalInforma.dart';
+
+import '../PDF/PDF_Agreement/pdf_Agreement.dart';
+import '../PDF/PDF_Agreement/pdf_Agreement2.dart';
+import '../PDF/PDF_Agreement/pdf_RentalInforma.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'package:pdf/pdf.dart';

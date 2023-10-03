@@ -18,7 +18,7 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTranBill_model.dart';
 import '../Model/GetTrans_Model.dart';
-import '../PDF/pdf_BillingNote_IV.dart';
+import '../PDF/PDF_Billing/pdf_BillingNote_IV.dart';
 import '../Style/colors.dart';
 
 class BillsHistory extends StatefulWidget {

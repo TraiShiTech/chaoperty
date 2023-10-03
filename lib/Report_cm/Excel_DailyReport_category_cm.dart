@@ -622,7 +622,7 @@ class Excgen_DailyReport_category_cm {
         if (zoneModeels_report_Ser_Sub_zone[in_dex].sub_zone.toString() ==
             zoneModels_report_Sub_zone[index3].ser.toString()) {
           sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
-                '** ${zoneModeels_report_Ser_Sub_zone[in_dex].zn} ',
+                '- ${zoneModeels_report_Ser_Sub_zone[in_dex].zn} ',
               );
 
           sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
@@ -752,6 +752,47 @@ class Excgen_DailyReport_category_cm {
         sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle = numberColor;
         sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle = numberColor;
         sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle = numberColor;
+      }
+      for (int index = 0; index < 1; index++) {
+        indextotol = indextotol + 1;
+        sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('D${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet
+            .getRangeByName('A${indextotol + 5 - 1}')
+            .setText('- ล็อคเสียบ/ขาจร');
+
+        sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(
+              (_TransReBillModels_GropType_Sub_zone.length < 1)
+                  ? 0.00
+                  : (double.parse((_TransReBillModels_GropType_Sub_zone.map(
+                      (e) => (e.zser == null)
+                          ? double.parse(
+                              e.zser1 ==
+                                          zoneModels_report_Sub_zone[index3]
+                                              .ser &&
+                                      e.expser! == '1' &&
+                                      e.room_number.toString() == 'ล็อคเสียบ'
+                                  ? e.total_expname == null ||
+                                          e.total_expname! == ''
+                                      ? 0.toString()
+                                      : e.total_expname.toString()
+                                  : 0.toString())
+                          : double.parse(e.zser ==
+                                      zoneModels_report_Sub_zone[index3].ser &&
+                                  e.expser! == '1' &&
+                                  e.room_number.toString() == 'ล็อคเสียบ'
+                              ? e.total_expname == null ||
+                                      e.total_expname! == ''
+                                  ? 0.toString()
+                                  : e.total_expname.toString()
+                              : 0.toString())).reduce(
+                      (a, b) => a + b)).toString())),
+            );
       }
       for (int index_exp = 0; index_exp < expModels.length; index_exp++) {
         if (expModels[index_exp].ser.toString() != '1') {

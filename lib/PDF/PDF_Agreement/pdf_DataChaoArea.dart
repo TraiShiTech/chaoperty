@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 
-import '../ChaoArea/ChaoAreaRenew_Screen.dart';
+import '../../ChaoArea/ChaoAreaRenew_Screen.dart';
 
 class Pdfgen_DataChaoArea {
   static void exportPDF_DataChaoArea(

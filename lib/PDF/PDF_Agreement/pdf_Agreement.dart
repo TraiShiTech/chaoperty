@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chaoperty/PDF/pdf_Agreement2.dart';
+
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -11,11 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../PeopleChao/Rental_Information.dart';
-import '../Style/colors.dart';
+import '../../PeopleChao/Rental_Information.dart';
+
+
 
 class Pdfgen_Agreement {
-//////////---------------------------------------------------->(DOCX)
+//////////---------------------------------------------------->( **** เอกสารสัญญาเช่า ปกติ  )
 
   static void exportPDF_Agreement(
       context,

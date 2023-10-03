@@ -25,7 +25,8 @@ import '../Model/GetTranBill_model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
-import '../PDF/pdf_historybill2.dart';
+import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
+
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 
@@ -2286,8 +2287,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         Container(
@@ -2304,9 +2304,9 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed: () => Navigator.pop(
@@ -3169,22 +3169,24 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                     //     Form_tel,
                                                     //     Form_email,
                                                     //     Form_tax;
-                                                    Pdfgen_his_statusbill2
-                                                        .exportPDF_statusbill2(
+
+                                                    Pdfgen_his_statusbill
+                                                        .exportPDF_statusbill(
                                                             tableData00,
                                                             context,
-                                                            numdoctax == ''
-                                                                ? '$numinvoice'
-                                                                : '$numdoctax',
+                                                            _TransReBillHistoryModels,
+                                                            'Num_cid',
+                                                            'Namenew',
                                                             sum_pvat,
                                                             sum_vat,
                                                             sum_wht,
                                                             sum_amt,
                                                             sum_disp,
                                                             sum_disamt,
+                                                            '${sum_amt - sum_disamt}',
                                                             renTal_name,
                                                             Form_bussscontact,
-                                                            // cname,
+                                                            Form_bussscontact,
                                                             Form_address,
                                                             Form_tax,
                                                             bill_addr,
@@ -3193,11 +3195,41 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                             bill_tax,
                                                             bill_name,
                                                             newValuePDFimg,
+                                                            numdoctax == ''
+                                                                ? '$numinvoice'
+                                                                : '$numdoctax',
                                                             numinvoice,
-                                                            finnancetransModels
+                                                            finnancetransModels,
+                                                            '${finnancetransModels[0].date}');
 
-                                                            // finnancetransModels
-                                                            );
+                                                    // Pdfgen_his_statusbill2
+                                                    //     .exportPDF_statusbill2(
+                                                    //         tableData00,
+                                                    //         context,
+                                                    //         numdoctax == ''
+                                                    //             ? '$numinvoice'
+                                                    //             : '$numdoctax',
+                                                    //         sum_pvat,
+                                                    //         sum_vat,
+                                                    //         sum_wht,
+                                                    //         sum_amt,
+                                                    //         sum_disp,
+                                                    //         sum_disamt,
+                                                    //         renTal_name,
+                                                    //         Form_bussscontact,
+                                                    //         // cname,
+                                                    //         Form_address,
+                                                    //         Form_tax,
+                                                    //         bill_addr,
+                                                    //         bill_email,
+                                                    //         bill_tel,
+                                                    //         bill_tax,
+                                                    //         bill_name,
+                                                    //         newValuePDFimg,
+                                                    //         numinvoice,
+                                                    //         finnancetransModels
+
+                                                    //         );
                                                   },
                                         child: Container(
                                             height: 50,

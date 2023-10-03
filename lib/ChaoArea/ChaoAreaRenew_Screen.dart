@@ -40,10 +40,10 @@ import '../Model/GetUnit_Model.dart';
 import '../Model/GetUnitx_Model.dart';
 import '../Model/GetVat_Model.dart';
 import '../Model/GetWht_Model.dart';
-import '../PDF/pdf_Agreement.dart';
-import '../PDF/pdf_Quotation.dart';
-import '../PDF/pdf_Quotation2.dart';
-import '../PDF/pdf_Receipt.dart';
+
+import '../PDF/PDF_Agreement/pdf_Agreement.dart';
+
+import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
 import '../PeopleChao/Rental_Information.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';

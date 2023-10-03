@@ -33,7 +33,7 @@ import '../Model/GetZone_Model.dart';
 import '../Model/areak_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../PDF/pdf_LockReceipt.dart';
-import '../PDF/pdf_Receipt.dart';
+import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'dart:html' as html;
@@ -11008,8 +11008,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
             sum_disamtx.text == ''
                 ? '${sum_amt - 0}'
                 : '${sum_amt - double.parse(sum_disamtx.text.toString())}',
-            // ? '${nFormat.format(sum_amt - 0).toString()}'
-            // : '${nFormat.format(sum_amt - double.parse(sum_disamtx.text)).toString()}',
+        
             renTal_name,
             Status4Form_bussshop.text.toString(),
             Status4Form_address.text.toString(),

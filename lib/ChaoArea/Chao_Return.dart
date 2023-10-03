@@ -30,7 +30,7 @@ import '../Model/Get_pakan_finnent_model.dart';
 import '../Model/Get_trasn_pakan_KF_model.dart';
 import '../Model/Get_trasn_pakan_Pay_model.dart';
 import '../Model/Get_trasn_pakan_model.dart';
-import '../PDF/pdf_Receipt.dart';
+import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
 import '../PDF/pdf_Receipt_PayPakan.dart';
 import '../PeopleChao/Pays_.dart';
 import '../Style/colors.dart';

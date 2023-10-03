@@ -29,7 +29,7 @@ import '../Model/Get_Trans_play_pay.dart';
 import '../Model/Get_trans_playListx.dart';
 import '../Model/Get_trans_playx.dart';
 import '../Model/Get_trans_playx_pay.dart';
-import '../PDF/pdf_Receipt.dart';
+import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'dart:html' as html;

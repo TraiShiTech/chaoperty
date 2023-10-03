@@ -37,8 +37,8 @@ import '../Model/GetUnit_Model.dart';
 import '../Model/GetUnitx_Model.dart';
 import '../Model/GetVat_Model.dart';
 import '../Model/GetWht_Model.dart';
-import '../PDF/pdf_DataChaoArea.dart';
-import '../PDF/pdf_Quotation2.dart';
+import '../PDF/PDF_Agreement/pdf_DataChaoArea.dart';
+
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'package:pdf/pdf.dart';

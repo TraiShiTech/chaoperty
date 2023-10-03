@@ -9,13 +9,13 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 
-import '../ChaoArea/ChaoAreaRenew_Screen.dart';
-import '../Constant/Myconstant.dart';
-import '../PeopleChao/Bills_.dart';
-import '../Style/ThaiBaht.dart';
+import '../../ChaoArea/ChaoAreaRenew_Screen.dart';
+import '../../Constant/Myconstant.dart';
+import '../../PeopleChao/Bills_.dart';
+import '../../Style/ThaiBaht.dart';
 
 class Pdfgen_BillingNoteInvlice {
-  //////////---------------------------------------------------->(ใบวางบิล แจ้งหนี้)
+  //////////---------------------------------------------------->(ใบวางบิล แจ้งหนี้)  ใช้  ++
   static void exportPDF_BillingNoteInvlice(
       tableData003,
       context,
@@ -42,9 +42,6 @@ class Pdfgen_BillingNoteInvlice {
       bill_name,
       newValuePDFimg,
       cFinn) async {
-    ////
-    //// ------------>(ใบเสนอราคา)
-    ///////
     final pdf = pw.Document();
     // final fontData = await rootBundle.load("ThaiFonts/Sarabun-Medium.ttf");
     // var dataint = fontData.buffer
@@ -63,7 +60,8 @@ class Pdfgen_BillingNoteInvlice {
     var formatter = new DateFormat.MMMMd('th_TH');
     String thaiDate = formatter.format(date);
     // final iconImage =
-    //     (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
+    //     (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();  
+
     List netImage = [];
 
     for (int i = 0; i < newValuePDFimg.length; i++) {

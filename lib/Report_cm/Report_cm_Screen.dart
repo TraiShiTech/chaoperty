@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:html';
@@ -42,7 +43,6 @@ import '../Model/Get_SCReportTotal_Model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../Model/trans_re_bill_model_REprot_CM.dart';
-import '../PDF/pdf_Quotation.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../Report/Report_Screen2.dart';
 import '../Responsive/responsive.dart';
@@ -1757,9 +1757,6 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
           Value_selectDate_daly_cus = null;
           Value_selectDate_Daily = "${formatter.format(result)}";
         });
-        if (Value_Chang_Zone_Daily != null) {
-          red_Trans_bill();
-        }
 
         // red_Trans_bill_Groptype_daly();
       }
@@ -2228,7 +2225,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               zoneModels_report,
               expModels,
               Value_Chang_Zone_Daily);
-        }  else if (Value_Report == 'รายงานรายชื่อผู้เช่าแยกตามโซน') {
+        } else if (Value_Report == 'รายงานรายชื่อผู้เช่าแยกตามโซน') {
           Excgen_tenants_zone_cm.excgen_tenants_zone_cm(
               context,
               NameFile_,
@@ -2284,6 +2281,27 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
         Navigator.of(context).pop();
       }
     }
+  }
+
+  Dia_log() {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext builderContext) {
+          Timer(Duration(seconds: 4), () {
+            Navigator.of(context).pop();
+          });
+
+          return AlertDialog(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            content: Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        });
   }
 
   Widget build(BuildContext context) {
@@ -2567,18 +2585,19 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                               ),
                                             ),
                                             isExpanded: false,
-                                            hint: Text(
-                                              Mon_Income == null
-                                                  ? 'เลือก'
-                                                  : '$Mon_Income',
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                overflow: TextOverflow.ellipsis,
-                                                fontSize: 14,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
+                                            value: Mon_Income,
+                                            // hint: Text(
+                                            //   Mon_Income == null
+                                            //       ? 'เลือก'
+                                            //       : '$Mon_Income',
+                                            //   maxLines: 2,
+                                            //   textAlign: TextAlign.center,
+                                            //   style: const TextStyle(
+                                            //     overflow: TextOverflow.ellipsis,
+                                            //     fontSize: 14,
+                                            //     color: Colors.grey,
+                                            //   ),
+                                            // ),
                                             icon: const Icon(
                                               Icons.arrow_drop_down,
                                               color: Colors.black,
@@ -2620,12 +2639,6 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
 
                                             onChanged: (value) async {
                                               Mon_Income = value;
-
-                                              if (Value_Chang_Zone_Income !=
-                                                  null) {
-                                                red_Trans_billIncome();
-                                                red_Trans_billMovemen();
-                                              }
                                             },
                                           ),
                                         ),
@@ -2697,18 +2710,19 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                               ),
                                             ),
                                             isExpanded: false,
-                                            hint: Text(
-                                              YE_Income == null
-                                                  ? 'เลือก'
-                                                  : '$YE_Income',
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                overflow: TextOverflow.ellipsis,
-                                                fontSize: 14,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
+                                            value: YE_Income,
+                                            // hint: Text(
+                                            //   YE_Income == null
+                                            //       ? 'เลือก'
+                                            //       : '$YE_Income',
+                                            //   maxLines: 2,
+                                            //   textAlign: TextAlign.center,
+                                            //   style: const TextStyle(
+                                            //     overflow: TextOverflow.ellipsis,
+                                            //     fontSize: 14,
+                                            //     color: Colors.grey,
+                                            //   ),
+                                            // ),
                                             icon: const Icon(
                                               Icons.arrow_drop_down,
                                               color: Colors.black,
@@ -2746,12 +2760,6 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
 
                                             onChanged: (value) async {
                                               YE_Income = value;
-
-                                              if (Value_Chang_Zone_Income !=
-                                                  null) {
-                                                red_Trans_billIncome();
-                                                red_Trans_billMovemen();
-                                              }
                                             },
                                           ),
                                         ),
@@ -2821,18 +2829,19 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                               ),
                                             ),
                                             isExpanded: false,
-                                            hint: Text(
-                                              Value_Chang_Zone_Income == null
-                                                  ? 'เลือก'
-                                                  : '$Value_Chang_Zone_Income',
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                overflow: TextOverflow.ellipsis,
-                                                fontSize: 14,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
+                                            value: Value_Chang_Zone_Income,
+                                            // hint: Text(
+                                            //   Value_Chang_Zone_Income == null
+                                            //       ? 'เลือก'
+                                            //       : '$Value_Chang_Zone_Income',
+                                            //   maxLines: 2,
+                                            //   textAlign: TextAlign.center,
+                                            //   style: const TextStyle(
+                                            //     overflow: TextOverflow.ellipsis,
+                                            //     fontSize: 14,
+                                            //     color: Colors.grey,
+                                            //   ),
+                                            // ),
                                             icon: const Icon(
                                               Icons.arrow_drop_down,
                                               color: Colors.black,
@@ -2887,14 +2896,50 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                               });
                                               print(
                                                   'Selected Index: $Value_Chang_Zone_Income  //${Value_Chang_Zone_Ser_Income}');
-
-                                              if (Value_Chang_Zone_Income !=
-                                                  null) {
-                                                red_Trans_billIncome();
-                                                red_Trans_billMovemen();
-                                              }
                                             },
                                           ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: InkWell(
+                                          onTap: () async {
+                                            if (Value_Chang_Zone_Income !=
+                                                null) {
+                                              red_Trans_billIncome();
+                                              red_Trans_billMovemen();
+                                            }
+                                            Dia_log();
+                                          },
+                                          child: Container(
+                                              width: 100,
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green[700],
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10)),
+                                              ),
+                                              child: const Center(
+                                                child: Text(
+                                                  'ค้นหา',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                  ),
+                                                ),
+                                              )),
                                         ),
                                       ),
                                     ],
@@ -4514,8 +4559,16 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                             ),
                                                           ),
                                                         ),
-                                                        onTap: () {
-                                                          setState(() {});
+                                                        onTap: () async {
+                                                          setState(() {
+                                                            Value_Chang_Zone_Income =
+                                                                null;
+                                                            Mon_Income = null;
+                                                            YE_Income = null;
+                                                          });
+
+                                                          red_Trans_billIncome();
+                                                          red_Trans_billMovemen();
                                                           Navigator.of(context)
                                                               .pop();
                                                         },
@@ -4554,7 +4607,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                       fontFamily: Font_.Fonts_T,
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -6146,8 +6199,16 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                             ),
                                                           ),
                                                         ),
-                                                        onTap: () {
-                                                          // check_clear();
+                                                        onTap: () async {
+                                                          setState(() {
+                                                            Value_Chang_Zone_Income =
+                                                                null;
+                                                            Mon_Income = null;
+                                                            YE_Income = null;
+                                                          });
+
+                                                          red_Trans_billIncome();
+                                                          red_Trans_billMovemen();
                                                           Navigator.of(context)
                                                               .pop();
                                                         },
@@ -6339,18 +6400,19 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                               ),
                                             ),
                                             isExpanded: false,
-                                            hint: Text(
-                                              Value_Chang_Zone_Daily == null
-                                                  ? 'เลือก'
-                                                  : '$Value_Chang_Zone_Daily',
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                overflow: TextOverflow.ellipsis,
-                                                fontSize: 14,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
+                                            value: Value_Chang_Zone_Daily,
+                                            // hint: Text(
+                                            //   Value_Chang_Zone_Daily == null
+                                            //       ? 'เลือก'
+                                            //       : '$Value_Chang_Zone_Daily',
+                                            //   maxLines: 2,
+                                            //   textAlign: TextAlign.center,
+                                            //   style: const TextStyle(
+                                            //     overflow: TextOverflow.ellipsis,
+                                            //     fontSize: 14,
+                                            //     color: Colors.grey,
+                                            //   ),
+                                            // ),
                                             icon: const Icon(
                                               Icons.arrow_drop_down,
                                               color: Colors.black,
@@ -6405,13 +6467,51 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                               });
                                               print(
                                                   'Selected Index: $Value_Chang_Zone_Daily  //${Value_Chang_Zone_Ser_Daily}');
-
-                                              if (Value_selectDate_Daily !=
-                                                  null) {
-                                                red_Trans_bill();
-                                              }
                                             },
                                           ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: InkWell(
+                                          onTap: () async {
+                                            if (Value_selectDate_Daily !=
+                                                    null &&
+                                                Value_Chang_Zone_Daily !=
+                                                    null) {
+                                              red_Trans_bill();
+                                            }
+                                            Dia_log();
+                                          },
+                                          child: Container(
+                                              width: 100,
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green[700],
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10)),
+                                              ),
+                                              child: const Center(
+                                                child: Text(
+                                                  'ค้นหา',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                  ),
+                                                ),
+                                              )),
                                         ),
                                       ),
                                     ],
@@ -7901,8 +8001,13 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                             show_more = null;
                                                             Value_selectDate_Daily =
                                                                 null;
+
+                                                            Value_selectDate_Daily =
+                                                                null;
+                                                            Value_Chang_Zone_Daily =
+                                                                null;
                                                           });
-                                                          // setState_();
+
                                                           red_Trans_bill();
                                                           Navigator.of(context)
                                                               .pop();
@@ -8022,18 +8127,19 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                       ),
                                     ),
                                     isExpanded: false,
-                                    hint: Text(
-                                      Value_Chang_Zone_ == null
-                                          ? 'เลือก'
-                                          : '$Value_Chang_Zone_',
-                                      maxLines: 2,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
+                                    value: Value_Chang_Zone_,
+                                    // hint: Text(
+                                    //   Value_Chang_Zone_ == null
+                                    //       ? 'เลือก'
+                                    //       : '$Value_Chang_Zone_',
+                                    //   maxLines: 2,
+                                    //   textAlign: TextAlign.center,
+                                    //   style: const TextStyle(
+                                    //     overflow: TextOverflow.ellipsis,
+                                    //     fontSize: 14,
+                                    //     color: Colors.grey,
+                                    //   ),
+                                    // ),
                                     icon: const Icon(
                                       Icons.arrow_drop_down,
                                       color: Colors.black,
@@ -8082,10 +8188,42 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                       });
                                       print(
                                           'Selected Index: $Value_Chang_Zone_  //${Value_Chang_Zone_Ser_}');
-                                      read_GC_tenant();
+
                                       // print('Selected Value: $value');
                                     },
                                   ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (Value_Chang_Zone_Ser_ != null) {
+                                      read_GC_tenant();
+                                    }
+                                    Dia_log();
+                                  },
+                                  child: Container(
+                                      width: 100,
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[700],
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          'ค้นหา',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                          ),
+                                        ),
+                                      )),
                                 ),
                               ),
                             ],
@@ -9329,13 +9467,14 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                             ),
                                                           ),
                                                         ),
-                                                        onTap: () {
-                                                          // setState(() {
-                                                          //   Value_Chang_Zone_Ser_ =
-                                                          //       null;
-                                                          //   Value_Chang_Zone_ = null;
-                                                          // });
-                                                          // read_GC_tenant();
+                                                        onTap: () async {
+                                                          setState(() {
+                                                            Value_Chang_Zone_Ser_ =
+                                                                null;
+                                                            Value_Chang_Zone_ =
+                                                                null;
+                                                          });
+                                                          read_GC_tenant();
                                                           Navigator.of(context)
                                                               .pop();
                                                         },

@@ -19,10 +19,9 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTranBill_model.dart';
 import '../Model/GetTrans_Model.dart';
-import '../PDF/pdf_BillingNote_IV.dart';
-import '../PDF/pdf_Quotation.dart';
-import '../PDF/pdf_Quotation.dart';
-import '../PDF/pdf_Receipt.dart';
+import '../PDF/PDF_Billing/pdf_BillingNote_IV.dart';
+
+import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
 import '../Style/colors.dart';
 import 'Bills_history.dart';
 import 'package:pdf/widgets.dart' as pw;

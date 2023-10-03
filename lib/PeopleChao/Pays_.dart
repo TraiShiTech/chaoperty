@@ -42,7 +42,14 @@ import '../Model/Get_trasn_pakan_KF_model.dart';
 import '../Model/Get_trasn_pakan_model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
-import '../PDF/pdf_Receipt.dart';
+import '../PDF/PDF_Receipt/pdf_Receipt.dart';
+import '../PDF/PDF_Temporary_Receipt/pdf_Temporary.dart';
+// import '../PDF/pdf_Receipt.dart';
+import '../PDF_TP2/PDF_Receipt_TP2/pdf_Receipt_TP2.dart';
+import '../PDF_TP3/PDF_Receipt_TP3/pdf_Receipt_TP3.dart';
+import '../PDF_TP4/PDF_Receipt_TP4/pdf_Receipt_TP4.dart';
+import '../PDF_TP5/PDF_Receipt_TP5/pdf_Receipt_TP5.dart';
+import '../PDF_TP6/PDF_Receipt_TP6/pdf_Receipt_TP6.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -156,7 +163,8 @@ class _PaysState extends State<Pays> {
       expbill_name,
       bill_default,
       bill_tser,
-      foder;
+      foder,
+      tem_page_ser;
 
   String? bills_name_;
   String? name_slip, name_slip_ser;
@@ -220,7 +228,7 @@ class _PaysState extends State<Pays> {
     read_GC_pkan();
     red_Trans_Kon();
     red_Invoice();
-    read_GC_matjum();
+    // read_GC_matjum();
   }
 
   Future<Null> read_GC_matjum() async {
@@ -260,9 +268,9 @@ class _PaysState extends State<Pays> {
       if (transMatjumModels.isNotEmpty) {
         setState(() {
           transMatjumModels.clear();
+          sum_matjum = 0;
         });
       }
-      sum_matjum = 0;
     });
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -332,10 +340,10 @@ class _PaysState extends State<Pays> {
             transMatjumKFModels.add(transMatjumKFModel);
           });
         }
-        setState(() {
-          sum_matjum = sum_matjum - sum_Matjum_KF;
-        });
       }
+      setState(() {
+        sum_matjum = sum_matjum - sum_Matjum_KF;
+      });
     } catch (e) {}
   }
 
@@ -662,6 +670,7 @@ class _PaysState extends State<Pays> {
             bill_email = bill_emailx;
             bill_default = bill_defaultx;
             bill_tser = bill_tserx;
+            tem_page_ser = renTalModel.tem_page!.trim();
             renTalModels.add(renTalModel);
             if (bill_defaultx == 'P') {
               bills_name_ = 'บิลธรรมดา';
@@ -925,7 +934,7 @@ class _PaysState extends State<Pays> {
     var qutser = widget.Get_Value_NameShop_index;
 
     String url =
-        '${MyConstant().domain}/GC_bill_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser}';
+        '${MyConstant().domain}/GC_bill_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -954,7 +963,7 @@ class _PaysState extends State<Pays> {
     var qutser = widget.Get_Value_NameShop_index;
 
     String url =
-        '${MyConstant().domain}/GC_re_bill_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser}';
+        '${MyConstant().domain}/GC_re_bill_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -5463,46 +5472,48 @@ class _PaysState extends State<Pays> {
                                                                 transMatjumModels
                                                                             .length !=
                                                                         0
-                                                                    ? IconButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            Form_payment1.clear();
-                                                                            if (dis_matjum ==
-                                                                                1) {
-                                                                              dis_matjum = 0;
-                                                                              dis_sum_Matjum = 0.00;
-                                                                            } else {
-                                                                              dis_matjum = 1;
+                                                                    ? nFormat.format(sum_matjum) ==
+                                                                            '0.00'
+                                                                        ? Icon(
+                                                                            Icons.close,
+                                                                            color:
+                                                                                Colors.red,
+                                                                          )
+                                                                        : IconButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              setState(() {
+                                                                                Form_payment1.clear();
+                                                                                if (dis_matjum == 1) {
+                                                                                  dis_matjum = 0;
+                                                                                  dis_sum_Matjum = 0.00;
+                                                                                } else {
+                                                                                  dis_matjum = 1;
 
-                                                                              if (sum_matjum < sum_amt) {
-                                                                                dis_sum_Matjum = sum_matjum;
-                                                                              } else {
-                                                                                dis_sum_Matjum = sum_amt - sum_disamt;
-                                                                              }
-                                                                            }
-                                                                          });
-                                                                          setState(
-                                                                              () {
-                                                                            if (dis_matjum ==
-                                                                                1) {
-                                                                              Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
-                                                                            } else {
-                                                                              Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
-                                                                            }
-                                                                          });
-                                                                        },
-                                                                        icon: dis_matjum ==
-                                                                                1
-                                                                            ? Icon(
-                                                                                Icons.done,
-                                                                                color: Colors.green,
-                                                                              )
-                                                                            : Icon(
-                                                                                Icons.close,
-                                                                                color: Colors.black,
-                                                                              ))
+                                                                                  if (sum_matjum < sum_amt) {
+                                                                                    dis_sum_Matjum = sum_matjum - sum_tran_dis;
+                                                                                  } else {
+                                                                                    dis_sum_Matjum = sum_amt - sum_disamt - sum_tran_dis;
+                                                                                  }
+                                                                                }
+                                                                              });
+                                                                              setState(() {
+                                                                                if (dis_matjum == 1) {
+                                                                                  Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
+                                                                                } else {
+                                                                                  Form_payment1.text = (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
+                                                                                }
+                                                                              });
+                                                                            },
+                                                                            icon: dis_matjum == 1
+                                                                                ? Icon(
+                                                                                    Icons.done,
+                                                                                    color: Colors.green,
+                                                                                  )
+                                                                                : Icon(
+                                                                                    Icons.close,
+                                                                                    color: Colors.black,
+                                                                                  ))
                                                                     : Icon(
                                                                         Icons
                                                                             .close,
@@ -6801,59 +6812,53 @@ class _PaysState extends State<Pays> {
                                                           transMatjumModels
                                                                       .length !=
                                                                   0
-                                                              ? IconButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    setState(
-                                                                        () {
-                                                                      Form_payment1
-                                                                          .clear();
-                                                                      if (dis_matjum ==
-                                                                          1) {
-                                                                        dis_matjum =
-                                                                            0;
-                                                                        dis_sum_Matjum =
-                                                                            0.00;
-                                                                      } else {
-                                                                        dis_matjum =
-                                                                            1;
+                                                              ? nFormat.format(
+                                                                          sum_matjum) ==
+                                                                      '0.00'
+                                                                  ? Icon(
+                                                                      Icons
+                                                                          .close,
+                                                                      color: Colors
+                                                                          .red,
+                                                                    )
+                                                                  : IconButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          Form_payment1
+                                                                              .clear();
+                                                                          if (dis_matjum ==
+                                                                              1) {
+                                                                            dis_matjum =
+                                                                                0;
+                                                                            dis_sum_Matjum =
+                                                                                0.00;
+                                                                          } else {
+                                                                            dis_matjum =
+                                                                                1;
 
-                                                                        if (sum_matjum <
-                                                                            sum_amt) {
-                                                                          dis_sum_Matjum =
-                                                                              sum_matjum;
-                                                                        } else {
-                                                                          dis_sum_Matjum =
-                                                                              sum_amt - sum_disamt;
-                                                                        }
-                                                                      }
-                                                                    });
-                                                                    setState(
-                                                                        () {
-                                                                      if (dis_matjum ==
-                                                                          1) {
-                                                                        Form_payment1
-                                                                            .text = (sum_amt -
-                                                                                sum_disamt -
-                                                                                dis_sum_Pakan -
-                                                                                sum_tran_dis -
-                                                                                dis_sum_Matjum)
-                                                                            .toStringAsFixed(2)
-                                                                            .toString();
-                                                                      } else {
-                                                                        Form_payment1
-                                                                            .text = (sum_amt -
-                                                                                sum_disamt -
-                                                                                dis_sum_Pakan -
-                                                                                sum_tran_dis -
-                                                                                dis_sum_Matjum)
-                                                                            .toStringAsFixed(2)
-                                                                            .toString();
-                                                                      }
-                                                                    });
-                                                                  },
-                                                                  icon:
-                                                                      dis_matjum ==
+                                                                            if (sum_matjum <
+                                                                                sum_amt) {
+                                                                              dis_sum_Matjum = sum_matjum - sum_tran_dis;
+                                                                            } else {
+                                                                              dis_sum_Matjum = sum_amt - sum_disamt - sum_tran_dis;
+                                                                            }
+                                                                          }
+                                                                        });
+                                                                        setState(
+                                                                            () {
+                                                                          if (dis_matjum ==
+                                                                              1) {
+                                                                            Form_payment1.text =
+                                                                                (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
+                                                                          } else {
+                                                                            Form_payment1.text =
+                                                                                (sum_amt - sum_disamt - dis_sum_Pakan - sum_tran_dis - dis_sum_Matjum).toStringAsFixed(2).toString();
+                                                                          }
+                                                                        });
+                                                                      },
+                                                                      icon: dis_matjum ==
                                                                               1
                                                                           ? Icon(
                                                                               Icons.done,
@@ -10433,21 +10438,32 @@ class _PaysState extends State<Pays> {
                                                     // );
                                                   } else {
                                                     if (select_page == 2) {
-                                                      // print('object963');
+                                                      final tableData001 = [
+                                                        for (int index = 0;
+                                                            index <
+                                                                _TransReBillHistoryModels
+                                                                    .length;
+                                                            index++)
+                                                          [
+                                                            '${index + 1}',
+                                                            '${_TransReBillHistoryModels[index].date}',
+                                                            '${_TransReBillHistoryModels[index].expname}',
+                                                            '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
+                                                            '${nFormat.format(double.parse(_TransReBillHistoryModels[index].wht!))}',
+                                                            '${nFormat.format(double.parse(_TransReBillHistoryModels[index].pvat!))}',
+                                                            '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
+                                                          ],
+                                                      ];
                                                       Insert_log.Insert_logs(
                                                           'บัญชี',
-                                                          (select_page == 2)
-                                                              ? (Slip_status
-                                                                          .toString() ==
-                                                                      '1')
-                                                                  ? 'พิมพ์ซ้ำ:$numinvoice '
-                                                                  : 'พิมพ์ซ้ำ:$cFinn '
-                                                              : (Slip_status
-                                                                          .toString() ==
-                                                                      '1')
-                                                                  ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
-                                                                  : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
-                                                      PdfgenReceipt.exportPDF_Receipt2(
+                                                          (Slip_status.toString() ==
+                                                                  '1')
+                                                              ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
+                                                              : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
+                                                      print(
+                                                          'Pdfgen_Temporary_receipt **พิมพ์ซ้ำ*** select_page==2 ');
+                                                      Pdfgen_Temporary_receipt.exportPDF_Temporary_receipt(
+                                                          tableData001,
                                                           context,
                                                           Slip_status,
                                                           _TransReBillHistoryModels,
@@ -10495,35 +10511,15 @@ class _PaysState extends State<Pays> {
                                                               0) {
                                                             if (select_page ==
                                                                 0) {
-                                                              // print(
-                                                              //     '(select_page == 0n_Trans_invoice_P)');
-                                                              // _TransModels
-                                                              // sum_disamtx sum_dispx
+                                                              print(
+                                                                  'พิมพ์ใบเสร็จชั่วคราว Pdfgen_Temporary_receipt **in_Trans_invoice_P*** select_page==0 ');
+
                                                               in_Trans_invoice_P(
                                                                   newValuePDFimg);
                                                             } else if (select_page ==
                                                                 1) {
-                                                              final tableData00 =
-                                                                  [
-                                                                for (int index =
-                                                                        0;
-                                                                    index <
-                                                                        _InvoiceHistoryModels
-                                                                            .length;
-                                                                    index++)
-                                                                  [
-                                                                    '${index + 1}',
-                                                                    '${_InvoiceHistoryModels[index].date}',
-                                                                    '${_InvoiceHistoryModels[index].descr}',
-                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                                  ],
-                                                              ];
-                                                              //_InvoiceHistoryModels
-                                                              in_Trans_invoice_refno_p();
+                                                              in_Trans_invoice_refno_p(
+                                                                  newValuePDFimg);
                                                               Insert_log.Insert_logs(
                                                                   'บัญชี',
                                                                   (select_page == 2)
@@ -10533,89 +10529,10 @@ class _PaysState extends State<Pays> {
                                                                       : (Slip_status.toString() == '1')
                                                                           ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
                                                                           : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
-                                                              PdfgenReceipt.exportPDF_Receipt1(
-                                                                  numinvoice,
-                                                                  tableData00,
-                                                                  context,
-                                                                  Slip_status,
-                                                                  _InvoiceHistoryModels,
-                                                                  '${widget.Get_Value_cid}',
-                                                                  '${widget.namenew}',
-                                                                  '${sum_pvat}',
-                                                                  '${sum_vat}',
-                                                                  '${sum_wht}',
-                                                                  '${sum_amt}',
-                                                                  '$sum_disp',
-                                                                  '${nFormat.format(sum_disamt)}',
-                                                                  '${sum_amt - sum_disamt}',
-                                                                  // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                                  '${renTal_name.toString()}',
-                                                                  '${Form_bussshop}',
-                                                                  '${Form_address}',
-                                                                  '${Form_tel}',
-                                                                  '${Form_email}',
-                                                                  '${Form_tax}',
-                                                                  ' ${Form_nameshop}',
-                                                                  ' ${renTalModels[0].bill_addr}',
-                                                                  ' ${renTalModels[0].bill_email}',
-                                                                  ' ${renTalModels[0].bill_tel}',
-                                                                  ' ${renTalModels[0].bill_tax}',
-                                                                  ' ${renTalModels[0].bill_name}',
-                                                                  newValuePDFimg,
-                                                                  pamentpage,
-                                                                  paymentName1,
-                                                                  paymentName2,
-                                                                  Form_payment1.text,
-                                                                  Form_payment2.text);
+                                                              print(
+                                                                  'Pdfgen_Temporary_receipt ** in_Trans_invoice_refno_p*** select_page==1 ');
                                                             } else if (select_page ==
-                                                                2) {
-                                                              //TransReBillHistoryModel
-                                                              // in_Trans_re_invoice_refno();
-                                                              //พิมพ์ซ้ำ
-                                                              Insert_log.Insert_logs(
-                                                                  'บัญชี',
-                                                                  (select_page == 2)
-                                                                      ? (Slip_status.toString() == '1')
-                                                                          ? 'พิมพ์ซ้ำ:$numinvoice '
-                                                                          : 'พิมพ์ซ้ำ:$cFinn '
-                                                                      : (Slip_status.toString() == '1')
-                                                                          ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
-                                                                          : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
-                                                              PdfgenReceipt.exportPDF_Receipt2(
-                                                                  context,
-                                                                  Slip_status,
-                                                                  _TransModels,
-                                                                  '${widget.Get_Value_cid}',
-                                                                  '${widget.namenew}',
-                                                                  '${sum_pvat}',
-                                                                  '${sum_vat}',
-                                                                  '${sum_wht}',
-                                                                  '${sum_amt}',
-                                                                  '$sum_disp',
-                                                                  '${nFormat.format(sum_disamt)}',
-                                                                  '${sum_amt - sum_disamt}',
-                                                                  // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                                  '${renTal_name.toString()}',
-                                                                  '${Form_bussshop}',
-                                                                  '${Form_address}',
-                                                                  '${Form_tel}',
-                                                                  '${Form_email}',
-                                                                  '${Form_tax}',
-                                                                  '${Form_nameshop}',
-                                                                  '${renTalModels[0].bill_addr}',
-                                                                  '${renTalModels[0].bill_email}',
-                                                                  '${renTalModels[0].bill_tel}',
-                                                                  '${renTalModels[0].bill_tax}',
-                                                                  '${renTalModels[0].bill_name}',
-                                                                  newValuePDFimg,
-                                                                  pamentpage,
-                                                                  paymentName1,
-                                                                  paymentName2,
-                                                                  Form_payment1.text,
-                                                                  Form_payment2.text,
-                                                                  numinvoice,
-                                                                  cFinn);
-                                                            }
+                                                                2) {}
                                                             // PdfgenReceipt.exportPDF_Receipt(context);
                                                           } else {
                                                             _showMyDialogPay_Error(
@@ -10818,14 +10735,17 @@ class _PaysState extends State<Pays> {
                                       // );
                                     }
                                     if (dis_sum_Matjum == 0.00) {
+                                      print('widget.can >>>>  ${widget.can}');
                                       if (widget.can != 'C') {
+                                        print(
+                                            ' **รับชำระ*** pay_ment   // widget.can != C  *** select_page==$select_page');
                                         await pay_ment(
                                             pay1, pay2, newValuePDFimg);
                                       } else {
                                         if (_TransBillModels.length != 0) {
                                           if (_TransModels.length != 0) {
-                                            await pay_Pakan(
-                                                pay1, pay2, newValuePDFimg);
+                                            // await pay_Pakan(
+                                            //     pay1, pay2, newValuePDFimg);
                                           } else {
                                             _showMyDialogPay_Error(
                                                 'ไม่มีรายการชำระ!');
@@ -10836,13 +10756,19 @@ class _PaysState extends State<Pays> {
                                         }
                                       }
                                     } else {
+                                      // print(
+                                      //     'select_pageselect_page >>>>  $select_page ${_InvoiceHistoryModels.length}');
                                       if (_TransModels.length != 0) {
-                                        await pay_Matjum(
-                                            pay1, pay2, newValuePDFimg);
+                                        print(
+                                            'Pdfgen_Temporary_receipt **รับชำระ*** pay_Matjum   // _TransModels.length != 0');
+                                        // await pay_Matjum(
+                                        //     pay1, pay2, newValuePDFimg);
                                       } else {
-                                        if (_TransBillModels.length != 0) {
-                                          await pay_Matjum(
-                                              pay1, pay2, newValuePDFimg);
+                                        if (_InvoiceHistoryModels.length != 0) {
+                                          print(
+                                              'Pdfgen_Temporary_receipt **รับชำระ*** pay_Matjum   // _InvoiceHistoryModels.length != 0');
+                                          // await pay_Matjum(
+                                          //     pay1, pay2, newValuePDFimg);
                                         } else {
                                           _showMyDialogPay_Error(
                                               'ไม่มีรายการชำระ!');
@@ -10977,30 +10903,18 @@ class _PaysState extends State<Pays> {
                       paymentName2.toString().trim() == 'เงินโอน' ||
                       paymentName1.toString().trim() == 'Online Payment' ||
                       paymentName2.toString().trim() == 'Online Payment') {
-                    if (base64_Slip != null) {
-                      try {
-                        OKuploadFile_Slip();
-                        // _TransModels
-                        // sum_disamtx sum_dispx
+                    // if (base64_Slip != null) {
+                    try {
+                      OKuploadFile_Slip();
+                      // _TransModels
+                      // sum_disamtx sum_dispx
 
-                        await in_Trans_invoice(newValuePDFimg);
-                      } catch (e) {}
-                    } else {
-                      _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-                      // ScaffoldMessenger.of(
-                      //         context)
-                      //     .showSnackBar(
-                      //   const SnackBar(
-                      //       content: Text(
-                      //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                      //           style: TextStyle(
-                      //               color: Colors
-                      //                   .white,
-                      //               fontFamily:
-                      //                   Font_
-                      //                       .Fonts_T))),
-                      // );
-                    }
+                      await in_Trans_invoice(newValuePDFimg);
+                    } catch (e) {}
+                    // } else {
+                    //   _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+
+                    // }
                   } else {
                     try {
                       // OKuploadFile_Slip();
@@ -11080,43 +10994,31 @@ class _PaysState extends State<Pays> {
                       paymentName2.toString().trim() == 'เงินโอน' ||
                       paymentName1.toString().trim() == 'Online Payment' ||
                       paymentName2.toString().trim() == 'Online Payment') {
-                    if (base64_Slip != null) {
-                      try {
-                        final tableData00 = [
-                          for (int index = 0;
-                              index < _InvoiceHistoryModels.length;
-                              index++)
-                            [
-                              '${index + 1}',
-                              '${_InvoiceHistoryModels[index].date}',
-                              '${_InvoiceHistoryModels[index].descr}',
-                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                            ],
-                        ];
-                        OKuploadFile_Slip();
+                    // if (base64_Slip != null) {
+                    try {
+                      final tableData00 = [
+                        for (int index = 0;
+                            index < _InvoiceHistoryModels.length;
+                            index++)
+                          [
+                            '${index + 1}',
+                            '${_InvoiceHistoryModels[index].date}',
+                            '${_InvoiceHistoryModels[index].descr}',
+                            // '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                          ],
+                      ];
+                      OKuploadFile_Slip();
 
-                        in_Trans_invoice_refno(tableData00, newValuePDFimg);
-                      } catch (e) {}
-                    } else {
-                      _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-                      // ScaffoldMessenger.of(
-                      //         context)
-                      //     .showSnackBar(
-                      //   const SnackBar(
-                      //       content: Text(
-                      //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                      //           style: TextStyle(
-                      //               color: Colors
-                      //                   .white,
-                      //               fontFamily:
-                      //                   Font_
-                      //                       .Fonts_T))),
-                      // );
-                    }
+                      in_Trans_invoice_refno(tableData00, newValuePDFimg);
+                    } catch (e) {}
+                    // } else {
+                    //   _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+
+                    // }
                   } else {
                     try {
                       final tableData00 = [
@@ -11209,29 +11111,17 @@ class _PaysState extends State<Pays> {
                       paymentName2.toString().trim() == 'เงินโอน' ||
                       paymentName1.toString().trim() == 'Online Payment' ||
                       paymentName2.toString().trim() == 'Online Payment') {
-                    if (base64_Slip != null) {
-                      try {
-                        OKuploadFile_Slip();
-                        //TransReBillHistoryModel
+                    // if (base64_Slip != null) {
+                    try {
+                      OKuploadFile_Slip();
+                      //TransReBillHistoryModel
 
-                        await in_Trans_re_invoice_refno(newValuePDFimg);
-                      } catch (e) {}
-                    } else {
-                      _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-                      // ScaffoldMessenger.of(
-                      //         context)
-                      //     .showSnackBar(
-                      //   const SnackBar(
-                      //       content: Text(
-                      //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                      //           style: TextStyle(
-                      //               color: Colors
-                      //                   .white,
-                      //               fontFamily:
-                      //                   Font_
-                      //                       .Fonts_T))),
-                      // );
-                    }
+                      await in_Trans_re_invoice_refno(newValuePDFimg);
+                    } catch (e) {}
+                    // } else {
+                    //   _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+
+                    // }
                   } else {
                     try {
                       // OKuploadFile_Slip();
@@ -11340,30 +11230,18 @@ class _PaysState extends State<Pays> {
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
               paymentName2.toString().trim() == 'Online Payment') {
-            if (base64_Slip != null) {
-              try {
-                OKuploadFile_Slip();
-                // _TransModels
-                // sum_disamtx sum_dispx
+            // if (base64_Slip != null) {
+            try {
+              OKuploadFile_Slip();
+              // _TransModels
+              // sum_disamtx sum_dispx
 
-                await in_Trans_invoice(newValuePDFimg);
-              } catch (e) {}
-            } else {
-              _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-              // ScaffoldMessenger.of(
-              //         context)
-              //     .showSnackBar(
-              //   const SnackBar(
-              //       content: Text(
-              //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-              //           style: TextStyle(
-              //               color: Colors
-              //                   .white,
-              //               fontFamily:
-              //                   Font_
-              //                       .Fonts_T))),
-              // );
-            }
+              await in_Trans_invoice(newValuePDFimg);
+            } catch (e) {}
+            // } else {
+            //   _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+
+            // }
           } else {
             try {
               // OKuploadFile_Slip();
@@ -11442,43 +11320,31 @@ class _PaysState extends State<Pays> {
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
               paymentName2.toString().trim() == 'Online Payment') {
-            if (base64_Slip != null) {
-              try {
-                final tableData00 = [
-                  for (int index = 0;
-                      index < _InvoiceHistoryModels.length;
-                      index++)
-                    [
-                      '${index + 1}',
-                      '${_InvoiceHistoryModels[index].date}',
-                      '${_InvoiceHistoryModels[index].descr}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                    ],
-                ];
-                OKuploadFile_Slip();
+            // if (base64_Slip != null) {
+            try {
+              final tableData00 = [
+                for (int index = 0;
+                    index < _InvoiceHistoryModels.length;
+                    index++)
+                  [
+                    '${index + 1}',
+                    '${_InvoiceHistoryModels[index].date}',
+                    '${_InvoiceHistoryModels[index].descr}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                  ],
+              ];
+              OKuploadFile_Slip();
 
-                in_Trans_invoice_refno(tableData00, newValuePDFimg);
-              } catch (e) {}
-            } else {
-              _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-              // ScaffoldMessenger.of(
-              //         context)
-              //     .showSnackBar(
-              //   const SnackBar(
-              //       content: Text(
-              //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-              //           style: TextStyle(
-              //               color: Colors
-              //                   .white,
-              //               fontFamily:
-              //                   Font_
-              //                       .Fonts_T))),
-              // );
-            }
+              in_Trans_invoice_refno(tableData00, newValuePDFimg);
+            } catch (e) {}
+            // } else {
+            //   _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+
+            // }
           } else {
             try {
               final tableData00 = [
@@ -11570,29 +11436,17 @@ class _PaysState extends State<Pays> {
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
               paymentName2.toString().trim() == 'Online Payment') {
-            if (base64_Slip != null) {
-              try {
-                OKuploadFile_Slip();
-                //TransReBillHistoryModel
+            // if (base64_Slip != null) {
+            try {
+              OKuploadFile_Slip();
+              //TransReBillHistoryModel
 
-                await in_Trans_re_invoice_refno(newValuePDFimg);
-              } catch (e) {}
-            } else {
-              _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-              // ScaffoldMessenger.of(
-              //         context)
-              //     .showSnackBar(
-              //   const SnackBar(
-              //       content: Text(
-              //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-              //           style: TextStyle(
-              //               color: Colors
-              //                   .white,
-              //               fontFamily:
-              //                   Font_
-              //                       .Fonts_T))),
-              // );
-            }
+              await in_Trans_re_invoice_refno(newValuePDFimg);
+            } catch (e) {}
+            // } else {
+            //   _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+
+            // }
           } else {
             try {
               // OKuploadFile_Slip();
@@ -11665,30 +11519,18 @@ class _PaysState extends State<Pays> {
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
               paymentName2.toString().trim() == 'Online Payment') {
-            if (base64_Slip != null) {
-              try {
-                OKuploadFile_Slip();
-                // _TransModels
-                // sum_disamtx sum_dispx
+            // if (base64_Slip != null) {
+            try {
+              OKuploadFile_Slip();
+              // _TransModels
+              // sum_disamtx sum_dispx
 
-                await in_Trans_invoice(newValuePDFimg);
-              } catch (e) {}
-            } else {
-              _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-              // ScaffoldMessenger.of(
-              //         context)
-              //     .showSnackBar(
-              //   const SnackBar(
-              //       content: Text(
-              //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-              //           style: TextStyle(
-              //               color: Colors
-              //                   .white,
-              //               fontFamily:
-              //                   Font_
-              //                       .Fonts_T))),
-              // );
-            }
+              await in_Trans_invoice(newValuePDFimg);
+            } catch (e) {}
+            // } else {
+            //   _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+
+            // }
           } else {
             try {
               // OKuploadFile_Slip();
@@ -11771,43 +11613,31 @@ class _PaysState extends State<Pays> {
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
               paymentName2.toString().trim() == 'Online Payment') {
-            if (base64_Slip != null) {
-              try {
-                final tableData00 = [
-                  for (int index = 0;
-                      index < _InvoiceHistoryModels.length;
-                      index++)
-                    [
-                      '${index + 1}',
-                      '${_InvoiceHistoryModels[index].date}',
-                      '${_InvoiceHistoryModels[index].descr}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                    ],
-                ];
-                OKuploadFile_Slip();
+            // if (base64_Slip != null) {
+            try {
+              final tableData00 = [
+                for (int index = 0;
+                    index < _InvoiceHistoryModels.length;
+                    index++)
+                  [
+                    '${index + 1}',
+                    '${_InvoiceHistoryModels[index].date}',
+                    '${_InvoiceHistoryModels[index].descr}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                  ],
+              ];
+              OKuploadFile_Slip();
 
-                in_Trans_invoice_refno(tableData00, newValuePDFimg);
-              } catch (e) {}
-            } else {
-              _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-              // ScaffoldMessenger.of(
-              //         context)
-              //     .showSnackBar(
-              //   const SnackBar(
-              //       content: Text(
-              //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-              //           style: TextStyle(
-              //               color: Colors
-              //                   .white,
-              //               fontFamily:
-              //                   Font_
-              //                       .Fonts_T))),
-              // );
-            }
+              in_Trans_invoice_refno(tableData00, newValuePDFimg);
+            } catch (e) {}
+            // } else {
+            //   _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+
+            // }
           } else {
             try {
               final tableData00 = [
@@ -11903,29 +11733,17 @@ class _PaysState extends State<Pays> {
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
               paymentName2.toString().trim() == 'Online Payment') {
-            if (base64_Slip != null) {
-              try {
-                OKuploadFile_Slip();
-                //TransReBillHistoryModel
+            // if (base64_Slip != null) {
+            try {
+              OKuploadFile_Slip();
+              //TransReBillHistoryModel
 
-                await in_Trans_re_invoice_refno(newValuePDFimg);
-              } catch (e) {}
-            } else {
-              _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-              // ScaffoldMessenger.of(
-              //         context)
-              //     .showSnackBar(
-              //   const SnackBar(
-              //       content: Text(
-              //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-              //           style: TextStyle(
-              //               color: Colors
-              //                   .white,
-              //               fontFamily:
-              //                   Font_
-              //                       .Fonts_T))),
-              // );
-            }
+              await in_Trans_re_invoice_refno(newValuePDFimg);
+            } catch (e) {}
+            // } else {
+            //   _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+
+            // }
           } else {
             try {
               // OKuploadFile_Slip();
@@ -13207,14 +13025,24 @@ class _PaysState extends State<Pays> {
           [
             '${index + 1}',
             '${_TransModels[index].date}',
-            '${_TransModels[index].name}',
-            '${_TransModels[index].tqty}',
-            '${_TransModels[index].unit_con}',
-            _TransModels[index].qty_con == '0.00'
-                ? '${nFormat.format(double.parse(_TransModels[index].amt_con!))}'
-                : '${nFormat.format(double.parse(_TransModels[index].qty_con!))}',
+            '${_TransModels[index].expname}',
+            // '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+            '${nFormat.format(double.parse(_TransModels[index].nvat!))}',
+            '${nFormat.format(double.parse(_TransModels[index].vat!))}',
             '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+            '${nFormat.format(double.parse(_TransModels[index].amt!))}',
           ],
+        // [
+        //   '${index + 1}',
+        //   '${_TransModels[index].date}',
+        //   '${_TransModels[index].name}',
+        //   '${_TransModels[index].tqty}',
+        //   '${_TransModels[index].unit_con}',
+        //   _TransModels[index].qty_con == '0.00'
+        //       ? '${nFormat.format(double.parse(_TransModels[index].amt_con!))}'
+        //       : '${nFormat.format(double.parse(_TransModels[index].qty_con!))}',
+        //   '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+        // ],
       ];
     });
     // fileName_Slip
@@ -13262,20 +13090,17 @@ class _PaysState extends State<Pays> {
           setState(() {
             cFinn = cFinnancetransModel.docno;
           });
-          print(' in_Trans_invoice_P$discount_///zzzzasaaa123454>>>>  $cFinn');
+          print(
+              ' Slip_status $Slip_status // in_Trans_invoice_P$discount_///zzzzasaaa123454>>>> cFinn  $cFinn  >>>> numinvoice $numinvoice');
           print(
               ' in_Trans_invoice_P///bnobnobnobno123454>>>>  ${cFinnancetransModel.bno}');
         }
         Insert_log.Insert_logs(
             'บัญชี',
-            (select_page == 2)
-                ? (Slip_status.toString() == '1')
-                    ? 'พิมพ์ซ้ำ:$numinvoice '
-                    : 'พิมพ์ซ้ำ:$cFinn '
-                : (Slip_status.toString() == '1')
-                    ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
-                    : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
-        PdfgenReceipt.exportPDF_Receipt(
+            (Slip_status.toString() == '1')
+                ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
+                : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
+        Pdfgen_Temporary_receipt.exportPDF_Temporary_receipt(
             tableData00,
             context,
             Slip_status,
@@ -13289,7 +13114,7 @@ class _PaysState extends State<Pays> {
             (discount_ == null) ? '0' : '${discount_} ',
             '${nFormat.format(sum_disamt)}',
             '${sum_amt - sum_disamt}',
-            // '${nFormat.format(sum_amt - sum_disamt)}',
+            // '${nFormat.format(sum_amt - sum_disamt)}',r2/350
             '${renTal_name.toString()}',
             '${Form_bussshop}',
             '${Form_address}',
@@ -13309,7 +13134,7 @@ class _PaysState extends State<Pays> {
             Form_payment1.text,
             Form_payment2.text,
             cFinn,
-            Value_newDateD);
+            numinvoice);
         setState(() async {
           await red_Trans_bill();
           red_Trans_select2();
@@ -13361,7 +13186,8 @@ class _PaysState extends State<Pays> {
     //         style: TextStyle(
     //             color: Colors.black,
     //             fontWeight: FontWeight.bold,
-    //             fontFamily: FontWeight_.Fonts_T),
+    //             fontFamily: FontWeight_.Fonts_T
+    // ),
     //       ),
     //     ),
     //     actions: <Widget>[
@@ -13428,14 +13254,24 @@ class _PaysState extends State<Pays> {
           [
             '${index + 1}',
             '${_TransModels[index].date}',
-            '${_TransModels[index].name}',
-            '${_TransModels[index].tqty}',
-            '${_TransModels[index].unit_con}',
-            _TransModels[index].qty_con == '0.00'
-                ? '${nFormat.format(double.parse(_TransModels[index].amt_con!))}'
-                : '${nFormat.format(double.parse(_TransModels[index].qty_con!))}',
+            '${_TransModels[index].expname}',
+            // '${nFormat.format(double.parse(_TransModels[index].qty!))}',
+            '${nFormat.format(double.parse(_TransModels[index].nvat!))}',
+            '${nFormat.format(double.parse(_TransModels[index].vat!))}',
             '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+            '${nFormat.format(double.parse(_TransModels[index].amt!))}',
           ],
+        // [
+        //   '${index + 1}',
+        //   '${_TransModels[index].date}',
+        //   '${_TransModels[index].name}',
+        //   '${_TransModels[index].tqty}',
+        //   '${_TransModels[index].unit_con}',
+        //   _TransModels[index].qty_con == '0.00'
+        //       ? '${nFormat.format(double.parse(_TransModels[index].amt_con!))}'
+        //       : '${nFormat.format(double.parse(_TransModels[index].qty_con!))}',
+        //   '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+        // ],
       ];
     });
     // fileName_Slip
@@ -13470,6 +13306,8 @@ class _PaysState extends State<Pays> {
 
     print('dis_akan()///$dis_akan');
     print('in_Trans_invoice>>> $payment1  $payment2 $bill');
+    print(
+        'Form_payment1Form_payment1Form_payment1 >>> ${Form_payment1.text} //// ${Form_payment2.text}');
 
     String url = pamentpage == 0
         ? '${MyConstant().domain}/In_tran_financet1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum'
@@ -13497,44 +13335,46 @@ class _PaysState extends State<Pays> {
             (Slip_status.toString() == '1')
                 ? 'รับชำระ:$numinvoice '
                 : 'รับชำระ:$cFinn ');
-
         (Default_Receipt_type == 1)
             ? Show_Dialog()
-            : PdfgenReceipt.exportPDF_Receipt(
-                tableData00,
-                context,
-                Slip_status,
-                _TransModels,
-                '${widget.Get_Value_cid}',
-                '${widget.namenew}',
-                '${sum_pvat}',
-                '${sum_vat}',
-                '${sum_wht}',
-                '${sum_amt}',
-                (discount_ == null) ? '0' : '${discount_} ',
-                '${nFormat.format(sum_disamt)}',
-                '${sum_amt - sum_disamt}',
-                // '${nFormat.format(sum_amt - sum_disamt)}',
-                '${renTal_name.toString()}',
-                '${Form_bussshop}',
-                '${Form_address}',
-                '${Form_tel}',
-                '${Form_email}',
-                '${Form_tax}',
-                '${Form_nameshop}',
-                '${renTalModels[0].bill_addr}',
-                '${renTalModels[0].bill_email}',
-                '${renTalModels[0].bill_tel}',
-                '${renTalModels[0].bill_tax}',
-                '${renTalModels[0].bill_name}',
-                newValuePDFimg,
-                pamentpage,
-                paymentName1,
-                paymentName2,
-                Form_payment1.text,
-                Form_payment2.text,
-                cFinn,
-                Value_newDateD);
+            : Receipt_Tempage(tableData00, newValuePDFimg);
+        // (Default_Receipt_type == 1)
+        //     ? Show_Dialog()
+        //     : PdfgenReceipt.exportPDF_Receipt(
+        //         tableData00,
+        //         context,
+        //         Slip_status,
+        //         _TransModels,
+        //         '${widget.Get_Value_cid}',
+        //         '${widget.namenew}',
+        //         '${sum_pvat}',
+        //         '${sum_vat}',
+        //         '${sum_wht}',
+        //         '${sum_amt}',
+        //         (discount_ == null) ? '0' : '${discount_} ',
+        //         '${nFormat.format(sum_disamt)}',
+        //         '${sum_amt - sum_disamt}',
+        //         // '${nFormat.format(sum_amt - sum_disamt)}',
+        //         '${renTal_name.toString()}',
+        //         '${Form_bussshop}',
+        //         '${Form_address}',
+        //         '${Form_tel}',
+        //         '${Form_email}',
+        //         '${Form_tax}',
+        //         '${Form_nameshop}',
+        //         '${renTalModels[0].bill_addr}',
+        //         '${renTalModels[0].bill_email}',
+        //         '${renTalModels[0].bill_tel}',
+        //         '${renTalModels[0].bill_tax}',
+        //         '${renTalModels[0].bill_name}',
+        //         newValuePDFimg,
+        //         pamentpage,
+        //         paymentName1,
+        //         paymentName2,
+        //         Form_payment1.text,
+        //         Form_payment2.text,
+        //         cFinn,
+        //         Value_newDateD);
         setState(() async {
           await red_Trans_bill();
           red_Trans_select2();
@@ -13543,8 +13383,8 @@ class _PaysState extends State<Pays> {
           sum_disamtx.text = '0.00';
           sum_disamt = 0.00;
           sum_dispx.clear();
-          Form_payment1.clear();
-          Form_payment2.clear();
+          // Form_payment1.clear();
+          // Form_payment2.clear();
           Form_time.clear();
           Form_note.clear();
           dis_sum_Pakan = 0.00;
@@ -13568,14 +13408,20 @@ class _PaysState extends State<Pays> {
     }
   }
 
-  Future<Null> in_Trans_invoice_refno_p() async {
-    // fileName_Slip
-    // String fileName_Slip_ = '';
-    // if (fileName_Slip != null) {
-    //   setState(() {
-    //     fileName_Slip_ = fileName_Slip.toString().trim();
-    //   });
-    // } else {}
+  Future<Null> in_Trans_invoice_refno_p(newValuePDFimg) async {
+    final tableData00 = [
+      for (int index = 0; index < _InvoiceHistoryModels.length; index++)
+        [
+          '${index + 1}',
+          '${_InvoiceHistoryModels[index].date}',
+          '${_InvoiceHistoryModels[index].descr}',
+          // '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+          '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+          '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+          '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+          '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+        ],
+    ];
     String? fileName_Slip_ = fileName_Slip.toString().trim();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
@@ -13608,6 +13454,41 @@ class _PaysState extends State<Pays> {
       var result = json.decode(response.body);
       print(result);
       if (result.toString() == 'true') {
+        Pdfgen_Temporary_receipt.exportPDF_Temporary_receipt(
+            tableData00,
+            context,
+            Slip_status,
+            _TransReBillHistoryModels,
+            '${widget.Get_Value_cid}',
+            '${widget.namenew}',
+            sum_pvat,
+            sum_vat,
+            sum_wht,
+            '${sum_amt}',
+            sum_disp,
+            sum_disamt,
+            '${sum_amt - sum_disamt}',
+            renTal_name,
+            Form_bussshop,
+            Form_address,
+            Form_tel,
+            Form_email,
+            Form_tax,
+            Form_nameshop,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            pamentpage,
+            paymentName1,
+            paymentName2,
+            Form_payment1,
+            Form_payment2,
+            numinvoice,
+            cFinn);
+
         setState(() {
           red_Trans_bill();
           red_Trans_select2();
@@ -13670,6 +13551,7 @@ class _PaysState extends State<Pays> {
     var sum_whta = sum_wht.toString();
     var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
     var comment = Form_note.text.toString();
+
     // print('in_Trans_invoice_refno()///$fileName_Slip_');
     // print('in_Trans_invoice_refno >>> $payment1  $payment2  $bill ');
 
@@ -13700,40 +13582,43 @@ class _PaysState extends State<Pays> {
                 : 'รับชำระ:$cFinn ');
         (Default_Receipt_type == 1)
             ? Show_Dialog()
-            : PdfgenReceipt.exportPDF_Receipt1(
-                cFinn,
-                tableData00,
-                context,
-                Slip_status,
-                _TransModels,
-                '${widget.Get_Value_cid}',
-                '${widget.namenew}',
-                '${sum_pvat}',
-                '${sum_vat}',
-                '${sum_wht}',
-                '${sum_amt}',
-                '$sum_disp',
-                '${nFormat.format(sum_disamt)}',
-                '${sum_amt - sum_disamt}',
-                // '${nFormat.format(sum_amt - sum_disamt)}',
-                '${renTal_name.toString()}',
-                '${Form_bussshop}',
-                '${Form_address}',
-                '${Form_tel}',
-                '${Form_email}',
-                '${Form_tax}',
-                '${Form_nameshop}',
-                '${renTalModels[0].bill_addr}',
-                '${renTalModels[0].bill_email}',
-                '${renTalModels[0].bill_tel}',
-                '${renTalModels[0].bill_tax}',
-                '${renTalModels[0].bill_name}',
-                newValuePDFimg,
-                pamentpage,
-                paymentName1,
-                paymentName2,
-                Form_payment1.text,
-                Form_payment2.text);
+            : Receipt_Tempage(tableData00, newValuePDFimg);
+        // Pdf_genReceipt.exportPDF_Receipt(
+        //     cFinn,
+        //     tableData00,
+        //     context,
+        //     Slip_status,
+        //     _TransModels,
+        //     '${widget.Get_Value_cid}',
+        //     '${widget.namenew}',
+        //     '${sum_pvat}',
+        //     '${sum_vat}',
+        //     '${sum_wht}',
+        //     '${sum_amt}',
+        //     '$sum_disp',
+        //     '${nFormat.format(sum_disamt)}',
+        //     '${sum_amt - sum_disamt}',
+        //     // '${nFormat.format(sum_amt - sum_disamt)}',
+        //     '${renTal_name.toString()}',
+        //     '${Form_bussshop}',
+        //     '${Form_address}',
+        //     '${Form_tel}',
+        //     '${Form_email}',
+        //     '${Form_tax}',
+        //     '${Form_nameshop}',
+        //     '${renTalModels[0].bill_addr}',
+        //     '${renTalModels[0].bill_email}',
+        //     '${renTalModels[0].bill_tel}',
+        //     '${renTalModels[0].bill_tax}',
+        //     '${renTalModels[0].bill_name}',
+        //     newValuePDFimg,
+        //     pamentpage,
+        //     paymentName1,
+        //     paymentName2,
+        //     Form_payment1.text,
+        //     Form_payment2.text,
+        //     Value_newDateD);
+
         setState(() async {
           await red_Trans_bill();
           red_Trans_select2();
@@ -13773,13 +13658,18 @@ class _PaysState extends State<Pays> {
   }
 
   Future<Null> in_Trans_re_invoice_refno(newValuePDFimg) async {
-    // fileName_Slip
-    // String fileName_Slip_ = '';
-    // if (fileName_Slip != null) {
-    //   setState(() {
-    //     fileName_Slip_ = fileName_Slip.toString().trim();
-    //   });
-    // } else {}
+    final tableData00 = [
+      for (int index = 0; index < _TransReBillHistoryModels.length; index++)
+        [
+          '${index + 1}',
+          '${_TransReBillHistoryModels[index].date}',
+          '${_TransReBillHistoryModels[index].expname}',
+          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
+          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].wht!))}',
+          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].pvat!))}',
+          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
+        ],
+    ];
     String? fileName_Slip_ = fileName_Slip.toString().trim();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
@@ -13833,41 +13723,46 @@ class _PaysState extends State<Pays> {
             (Slip_status.toString() == '1')
                 ? 'รับชำระ:$numinvoice '
                 : 'รับชำระ:$cFinn ');
-        PdfgenReceipt.exportPDF_Receipt2(
-          context,
-          Slip_status,
-          _TransReBillHistoryModels,
-          '${widget.Get_Value_cid}',
-          '${widget.namenew}',
-          '${sum_pvat}',
-          '${sum_vat}',
-          '${sum_wht}',
-          '${sum_amt}',
-          '$sum_disp',
-          '${nFormat.format(sum_disamt)}',
-          '${sum_amt - sum_disamt}',
-          // '${nFormat.format(sum_amt - sum_disamt)}',
-          '${renTal_name.toString()}',
-          '${Form_bussshop}',
-          '${Form_address}',
-          '${Form_tel}',
-          '${Form_email}',
-          '${Form_tax}',
-          '${Form_nameshop}',
-          '${renTalModels[0].bill_addr}',
-          '${renTalModels[0].bill_email}',
-          '${renTalModels[0].bill_tel}',
-          '${renTalModels[0].bill_tax}',
-          '${renTalModels[0].bill_name}',
-          newValuePDFimg,
-          pamentpage,
-          '${paymentName1}',
-          '${paymentName2}',
-          Form_payment1.text,
-          Form_payment2.text,
-          numinvoice,
-          cFinn,
-        );
+
+        (Default_Receipt_type == 1)
+            ? Show_Dialog()
+            : Receipt_Tempage(tableData00, newValuePDFimg);
+        // Pdf_genReceipt.exportPDF_Receipt(
+        //     numinvoice,
+        //     tableData001,
+        //     context,
+        //     Slip_status,
+        //     _InvoiceHistoryModels,
+        //     '${widget.Get_Value_cid}',
+        //     '${widget.namenew}',
+        //     sum_pvat,
+        //     sum_vat,
+        //     sum_wht,
+        //     sum_amt,
+        //     sum_disp,
+        //     sum_disamt,
+        //     '${sum_amt - sum_disamt}',
+        //     renTal_name,
+        //     Form_bussshop,
+        //     Form_address,
+        //     Form_tel,
+        //     Form_email,
+        //     Form_tax,
+        //     Form_nameshop,
+        //     bill_addr,
+        //     bill_email,
+        //     bill_tel,
+        //     bill_tax,
+        //     bill_name,
+        //     newValuePDFimg,
+        //     pamentpage,
+        //     paymentName1,
+        //     paymentName2,
+        //     Form_payment1,
+        //     Form_payment2,
+        //     Value_newDateD
+
+        //     );
 
         print('rrrrrrrrrrrrrr');
         setState(() async {
@@ -13908,6 +13803,223 @@ class _PaysState extends State<Pays> {
         });
       }
     } catch (e) {}
+  }
+
+/////---------------------------------------------------------->Tempage รับชำระ ( bill_type_ = 'RE' (ใบเสร็จรับชำระ)  // bill_type_ = 'TA' (ใบกำกับ/ภาษี)  )
+  Future<Null> Receipt_Tempage(tableData00, newValuePDFimg) async {
+    var Form_payment1_ = Form_payment1.text;
+    var Form_payment2_ = Form_payment2.text;
+    if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
+      Pdf_genReceipt.exportPDF_Receipt(
+          cFinn,
+          tableData00,
+          context,
+          Slip_status,
+          _TransModels,
+          '${widget.Get_Value_cid}',
+          '${widget.namenew}',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          (discount_ == null) ? 0 : discount_,
+          sum_disamt,
+          (sum_amt - sum_disamt),
+          renTal_name,
+          Form_bussshop,
+          Form_address,
+          Form_tel,
+          Form_email,
+          Form_tax,
+          Form_nameshop,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          pamentpage,
+          paymentName1,
+          paymentName2,
+          Form_payment1_,
+          Form_payment2_,
+          Value_newDateD);
+    } else if (tem_page_ser.toString() == '1') {
+      Pdf_genReceipt_Template2.exportPDF_Receipt_Template2(
+          cFinn,
+          tableData00,
+          context,
+          Slip_status,
+          _TransModels,
+          '${widget.Get_Value_cid}',
+          '${widget.namenew}',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          (discount_ == null) ? 0 : discount_,
+          sum_disamt,
+          (sum_amt - sum_disamt),
+          renTal_name,
+          Form_bussshop,
+          Form_address,
+          Form_tel,
+          Form_email,
+          Form_tax,
+          Form_nameshop,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          pamentpage,
+          paymentName1,
+          paymentName2,
+          Form_payment1_,
+          Form_payment2_,
+          Value_newDateD);
+    } else if (tem_page_ser.toString() == '2') {
+      Pdf_genReceipt_Template3.exportPDF_Receipt_Template3(
+          cFinn,
+          tableData00,
+          context,
+          Slip_status,
+          _TransModels,
+          '${widget.Get_Value_cid}',
+          '${widget.namenew}',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          (discount_ == null) ? 0 : discount_,
+          sum_disamt,
+          (sum_amt - sum_disamt),
+          renTal_name,
+          Form_bussshop,
+          Form_address,
+          Form_tel,
+          Form_email,
+          Form_tax,
+          Form_nameshop,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          pamentpage,
+          paymentName1,
+          paymentName2,
+          Form_payment1_,
+          Form_payment2_,
+          Value_newDateD);
+    } else if (tem_page_ser.toString() == '3') {
+      Pdf_genReceipt_Template4.exportPDF_Receipt_Template4(
+          cFinn,
+          tableData00,
+          context,
+          Slip_status,
+          _TransModels,
+          '${widget.Get_Value_cid}',
+          '${widget.namenew}',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          (discount_ == null) ? 0 : discount_,
+          sum_disamt,
+          (sum_amt - sum_disamt),
+          renTal_name,
+          Form_bussshop,
+          Form_address,
+          Form_tel,
+          Form_email,
+          Form_tax,
+          Form_nameshop,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          pamentpage,
+          paymentName1,
+          paymentName2,
+          Form_payment1_,
+          Form_payment2_,
+          Value_newDateD);
+    } else if (tem_page_ser.toString() == '4') {
+      Pdf_genReceipt_Template5.exportPDF_Receipt_Template5(
+          cFinn,
+          tableData00,
+          context,
+          Slip_status,
+          _TransModels,
+          '${widget.Get_Value_cid}',
+          '${widget.namenew}',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          (discount_ == null) ? 0 : discount_,
+          sum_disamt,
+          (sum_amt - sum_disamt),
+          renTal_name,
+          Form_bussshop,
+          Form_address,
+          Form_tel,
+          Form_email,
+          Form_tax,
+          Form_nameshop,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          pamentpage,
+          paymentName1,
+          paymentName2,
+          Form_payment1_,
+          Form_payment2_,
+          Value_newDateD);
+    } else if (tem_page_ser.toString() == '5') {
+      Pdf_genReceipt_Template6.exportPDF_Receipt_Template6(
+          cFinn,
+          tableData00,
+          context,
+          Slip_status,
+          _TransModels,
+          '${widget.Get_Value_cid}',
+          '${widget.namenew}',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          (discount_ == null) ? 0 : discount_,
+          sum_disamt,
+          (sum_amt - sum_disamt),
+          renTal_name,
+          Form_bussshop,
+          Form_address,
+          Form_tel,
+          Form_email,
+          Form_tax,
+          Form_nameshop,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          pamentpage,
+          paymentName1,
+          paymentName2,
+          Form_payment1_,
+          Form_payment2_,
+          Value_newDateD);
+    }
   }
 }
 

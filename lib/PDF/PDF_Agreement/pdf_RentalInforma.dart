@@ -8,10 +8,11 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 
-import '../ChaoArea/ChaoAreaRenew_Screen.dart';
-import '../PeopleChao/Rental_Information.dart';
-import '../Style/ThaiBaht.dart';
+import '../../ChaoArea/ChaoAreaRenew_Screen.dart';
+import '../../PeopleChao/Rental_Information.dart';
+import '../../Style/ThaiBaht.dart';
 
+///////-------------------------------------------> ( ใบเสนอราคา/สัญญาเช่าพื้นที่ )
 class Pdfgen_RentalInforma {
   static void exportPDF_RentalInforma(
       context,
@@ -44,9 +45,6 @@ class Pdfgen_RentalInforma {
       bill_tax,
       bill_name,
       newValuePDFimg) async {
-    ////
-    //// ------------>(ใบเสนอราคา),
-    ///////
     final pdf = pw.Document();
     // final fontData = await rootBundle.load("ThaiFonts/Sarabun-Medium.ttf");
     // var dataint = fontData.buffer

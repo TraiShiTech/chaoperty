@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:chaoperty/Account/Verifi_Payment_History.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/gestures.dart';
@@ -27,6 +28,7 @@ import 'package:side_sheet/side_sheet.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_barcode_scanner/enum.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import '../AdminScaffold/AdminScaffold.dart';
 import '../CRC_16_Prompay/generate_qrcode.dart';
 import '../ChaoArea/ChaoArea_Screen.dart';
 import '../Constant/Myconstant.dart';
@@ -39,6 +41,7 @@ import '../Model/GetFinnancetrans_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
 import '../Model/GetPayMent_Model.dart';
 import '../Model/GetRenTal_Model.dart';
+import '../Model/GetSubZone_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Model/GetType_Model.dart';
@@ -46,14 +49,11 @@ import '../Model/GetZone_Model.dart';
 import '../Model/areak_model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
-import '../PDF/pdf_AC_his_statusbill.dart';
-import '../PDF/pdf_AC_historybill.dart';
-import '../PDF/pdf_BillingNote_IV.dart';
-import '../PDF/pdf_Receipt.dart';
+import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
+import '../PDF/PDF_Receipt/pdf_Receipt.dart';
 import '../PeopleChao/Pays_.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../PeopleChao/PeopleChao_Screen2.dart';
-import '../Report/Excel_Historybills_Report.dart';
 import '../Report/Report_Screen.dart';
 import '../Responsive/responsive.dart';
 import '../Setting/SettingScreen.dart';
@@ -63,7 +63,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 import 'Play_column.dart';
-import 'Verifi_Payment_History.dart';
 import 'lockpay.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -99,6 +98,7 @@ class _AccountScreenState extends State<AccountScreen> {
   List<AreaModel> areaModels = [];
   List<PayMentModel> _PayMentModels = [];
   List<AreakModel> areakModels = [];
+  List<SubZoneModel> subzoneModels = [];
   String? selectedValue;
   final Formbecause_ = TextEditingController();
   List Area_ = [
@@ -150,7 +150,9 @@ class _AccountScreenState extends State<AccountScreen> {
       bill_default,
       bill_tser,
       foder,
-      bills_name_;
+      bills_name_,
+      zone_Subser,
+      zone_Subname;
 
   String? Form_nameshop,
       Form_typeshop,
@@ -193,6 +195,7 @@ class _AccountScreenState extends State<AccountScreen> {
   void initState() {
     super.initState();
     checkPreferance();
+    read_GC_Sub_zone();
     read_GC_zone();
     read_GC_tenant1();
     red_Trans_bill();
@@ -201,6 +204,45 @@ class _AccountScreenState extends State<AccountScreen> {
     read_GC_areaSelect();
     red_payMent();
     read_GC_areak();
+  }
+
+  Future<Null> read_GC_Sub_zone() async {
+    if (subzoneModels.length != 0) {
+      setState(() {
+        subzoneModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+
+    String url = '${MyConstant().domain}/GC_zone_sub.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      Map<String, dynamic> map = Map();
+      map['ser'] = '0';
+      map['rser'] = '0';
+      map['zn'] = 'ทั้งหมด';
+      map['qty'] = '0';
+      map['img'] = '0';
+      map['data_update'] = '0';
+
+      SubZoneModel subzoneModelx = SubZoneModel.fromJson(map);
+
+      setState(() {
+        subzoneModels.add(subzoneModelx);
+      });
+
+      for (var map in result) {
+        SubZoneModel subzoneModel = SubZoneModel.fromJson(map);
+        setState(() {
+          subzoneModels.add(subzoneModel);
+        });
+      }
+    } catch (e) {}
   }
 
   Future<Null> read_GC_areak() async {
@@ -543,6 +585,8 @@ class _AccountScreenState extends State<AccountScreen> {
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
+    var zoneSubSer = preferences.getString('zoneSubSer');
+    var zonesSubName = preferences.getString('zonesSubName');
     var ren = preferences.getString('renTalSer');
 
     String url = '${MyConstant().domain}/GC_zone.php?isAdd=true&ren=$ren';
@@ -568,11 +612,34 @@ class _AccountScreenState extends State<AccountScreen> {
 
       for (var map in result) {
         ZoneModel zoneModel = ZoneModel.fromJson(map);
+        var sub = zoneModel.sub_zone;
         setState(() {
-          zoneModels.add(zoneModel);
+          if (zoneSubSer == null || zoneSubSer == '0') {
+            zoneModels.add(zoneModel);
+          } else {
+            if (sub == zoneSubSer) {
+              zoneModels.add(zoneModel);
+            }
+          }
         });
       }
+      zoneModels.sort((a, b) {
+        if (a.zn == 'ทั้งหมด') {
+          return -1; // 'all' should come before other elements
+        } else if (b.zn == 'ทั้งหมด') {
+          return 1; // 'all' should come after other elements
+        } else {
+          return a.zn!
+              .compareTo(b.zn!); // sort other elements in ascending order
+        }
+      });
     } catch (e) {}
+    setState(() {
+      zone_ser = preferences.getString('zonePSer');
+      zone_name = preferences.getString('zonesPName');
+      zone_Subser = preferences.getString('zoneSubSer');
+      zone_Subname = preferences.getString('zonesSubName');
+    });
   }
 
   Future<Null> read_GC_tenant1() async {
@@ -583,12 +650,19 @@ class _AccountScreenState extends State<AccountScreen> {
 
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zonePSer');
+    var zone_Sub = preferences.getString('zoneSubSer');
 
-    String url = zone == null
-        ? '${MyConstant().domain}/GC_tenantAll_setring1.php?isAdd=true&ren=$ren&zone=$zone'
-        : zone == '0'
+    String url = zone_Sub == null
+        ? zone == null
             ? '${MyConstant().domain}/GC_tenantAll_setring1.php?isAdd=true&ren=$ren&zone=$zone'
-            : '${MyConstant().domain}/GC_tenant_setring1.php?isAdd=true&ren=$ren&zone=$zone';
+            : zone == '0'
+                ? '${MyConstant().domain}/GC_tenantAll_setring1.php?isAdd=true&ren=$ren&zone=$zone'
+                : '${MyConstant().domain}/GC_tenant_setring1.php?isAdd=true&ren=$ren&zone=$zone'
+        : zone == null
+            ? '${MyConstant().domain}/GC_tenantAll_setring1_sub.php?isAdd=true&ren=$ren&zone=$zone_Sub'
+            : zone == '0'
+                ? '${MyConstant().domain}/GC_tenantAll_setring1_sub.php?isAdd=true&ren=$ren&zone=$zone_Sub'
+                : '${MyConstant().domain}/GC_tenant_setring1.php?isAdd=true&ren=$ren&zone=$zone';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -751,12 +825,19 @@ class _AccountScreenState extends State<AccountScreen> {
 
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zonePSer');
+    var zone_Sub = preferences.getString('zoneSubSer');
 
-    String url = zone == null
-        ? '${MyConstant().domain}/GC_tenantAll_setring.php?isAdd=true&ren=$ren&zone=$zone'
-        : zone == '0'
+    String url = zone_Sub == null
+        ? zone == null
             ? '${MyConstant().domain}/GC_tenantAll_setring.php?isAdd=true&ren=$ren&zone=$zone'
-            : '${MyConstant().domain}/GC_tenant_setring.php?isAdd=true&ren=$ren&zone=$zone';
+            : zone == '0'
+                ? '${MyConstant().domain}/GC_tenantAll_setring.php?isAdd=true&ren=$ren&zone=$zone'
+                : '${MyConstant().domain}/GC_tenant_setring.php?isAdd=true&ren=$ren&zone=$zone'
+        : zone == null
+            ? '${MyConstant().domain}/GC_tenantAll_setring_sub.php?isAdd=true&ren=$ren&zone=$zone_Sub'
+            : zone == '0'
+                ? '${MyConstant().domain}/GC_tenantAll_setring_sub.php?isAdd=true&ren=$ren&zone=$zone_Sub'
+                : '${MyConstant().domain}/GC_tenant_setring.php?isAdd=true&ren=$ren&zone=$zone';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -1204,6 +1285,142 @@ class _AccountScreenState extends State<AccountScreen> {
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                   child: Row(
                     children: [
+                      subzoneModels.length == 1
+                          ? SizedBox()
+                          : MediaQuery.of(context).size.shortestSide <
+                                  MediaQuery.of(context).size.width * 1
+                              ? const Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'โซน:',
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
+                                  ))
+                              : const SizedBox(),
+                      subzoneModels.length == 1
+                          ? SizedBox()
+                          : Expanded(
+                              flex: MediaQuery.of(context).size.shortestSide <
+                                      MediaQuery.of(context).size.width * 1
+                                  ? 2
+                                  : 3,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppbackgroundColor.Sub_Abg_Colors,
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  width: 200,
+                                  child: DropdownButtonFormField2(
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    isExpanded: true,
+                                    hint: Text(
+                                      zone_Subname == null
+                                          ? 'ทั้งหมด'
+                                          : '$zone_Subname',
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: TextHome_Color.TextHome_Colors,
+                                    ),
+                                    style: const TextStyle(
+                                        color: Colors.green,
+                                        fontFamily: Font_.Fonts_T),
+                                    iconSize: 30,
+                                    buttonHeight: 40,
+                                    // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    items: subzoneModels
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: '${item.ser},${item.zn}',
+                                              child: Text(
+                                                item.zn!,
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ))
+                                        .toList(),
+
+                                    onChanged: (value) async {
+                                      var zones = value!.indexOf(',');
+                                      var zoneSer = value.substring(0, zones);
+                                      var zonesName =
+                                          value.substring(zones + 1);
+                                      print(
+                                          'mmmmm ${zoneSer.toString()} $zonesName');
+
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                      preferences.setString(
+                                          'zoneSubSer', zoneSer.toString());
+                                      preferences.setString(
+                                          'zonesSubName', zonesName.toString());
+                                      preferences.remove("zoneSer");
+                                      preferences.remove("zonesName");
+                                      preferences.remove("zonePSer");
+                                      preferences.remove("zonesPName");
+
+                                      // setState(() {
+                                      //   zoneModels.clear();
+                                      //   zone_ser =
+                                      //       preferences.getString('zoneSer');
+                                      //   zone_name =
+                                      //       preferences.getString('zonesName');
+                                      //   zone_Subser =
+                                      //       preferences.getString('zoneSubSer');
+                                      //   zone_Subname =
+                                      //       preferences.getString('zonesSubName');
+                                      //   read_GC_Sub_zone().then((value) =>
+                                      //       read_GC_zone()
+                                      //           .then((value) => read_GC_area()));
+                                      // });
+
+                                      String? _route =
+                                          preferences.getString('route');
+                                      MaterialPageRoute materialPageRoute =
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  AdminScafScreen(
+                                                      route: _route));
+                                      Navigator.pushAndRemoveUntil(context,
+                                          materialPageRoute, (route) => false);
+                                    },
+                                    // onSaved: (value) {
+                                    //   // selectedValue = value.toString();
+                                    // },
+                                  ),
+                                ),
+                              ),
+                            ),
+
                       const Expanded(
                         flex: 1,
                         child: Padding(
@@ -1293,6 +1510,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     'zoneSer', zoneSer.toString());
                                 preferences.setString(
                                     'zonesName', zonesName.toString());
+
                                 setState(() {
                                   if (Status_ == 1) {
                                     read_GC_tenant1();
@@ -1360,15 +1578,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       // if (Status_ != 4)
                       //   InkWell(
                       //     onTap: () {
-                      //       // Excgen_HistorybillsReport
-                      //       //     .exportExcel_HistorybillsReport(
-                      //       //         context,
-                      //       //         '',
-                      //       //         'จากระบบ',
-                      //       //         renTal_name,
-                      //       //         _TransReBillModels,
-                      //       //         Value_selectDate_Historybills,
-                      //       //         Value_Chang_Zone_People);
+                      //       _exportExcel_();
                       //     },
                       //     child: Container(
                       //         decoration: BoxDecoration(
@@ -2473,7 +2683,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     : Verifi_Payment_History();
   }
 
-  // Widget BodyStatusPlay_Web() {Verifi_Payment_History
+  // Widget BodyStatusPlay_Web() {
   //   return PlayColumn();
   // }
 
@@ -7937,7 +8147,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                               '${index + 1}',
                                                                                               '${_InvoiceHistoryModels[index].date}',
                                                                                               '${_InvoiceHistoryModels[index].descr}',
-                                                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                                                              // '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
                                                                                               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
                                                                                               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
                                                                                               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
@@ -8315,7 +8525,7 @@ class _AccountScreenState extends State<AccountScreen> {
           print('zzzzasaaa123454>>>>  $cFinn');
           print('bnobnobnobno123454>>>>  ${cFinnancetransModel.bno}');
         }
-        PdfgenReceipt.exportPDF_Receipt1(
+        Pdf_genReceipt.exportPDF_Receipt(
             cFinn,
             tableData00,
             context,
@@ -8348,7 +8558,8 @@ class _AccountScreenState extends State<AccountScreen> {
             paymentName1,
             paymentName2,
             Form_payment1.text,
-            Form_payment2.text);
+            Form_payment2.text,
+            Value_newDateD);
         setState(() async {
           await red_Trans_bill();
           red_Trans_select2();
@@ -8400,14 +8611,24 @@ class _AccountScreenState extends State<AccountScreen> {
           [
             '${index + 1}',
             '${_TransModels[index].date}',
-            '${_TransModels[index].name}',
-            '${_TransModels[index].tqty}',
-            '${_TransModels[index].unit_con}',
-            _TransModels[index].qty_con == '0.00'
-                ? '${nFormat.format(double.parse(_TransModels[index].amt_con!))}'
-                : '${nFormat.format(double.parse(_TransModels[index].qty_con!))}',
+            '${_TransModels[index].expname}',
+            // '${nFormat.format(double.parse(_TransModels[index].qty!))}',
+            '${nFormat.format(double.parse(_TransModels[index].nvat!))}',
+            '${nFormat.format(double.parse(_TransModels[index].vat!))}',
             '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+            '${nFormat.format(double.parse(_TransModels[index].amt!))}',
           ],
+        // [
+        //   '${index + 1}',
+        //   '${_TransModels[index].date}',
+        //   '${_TransModels[index].name}',
+        //   '${_TransModels[index].tqty}',
+        //   '${_TransModels[index].unit_con}',
+        //   _TransModels[index].qty_con == '0.00'
+        //       ? '${nFormat.format(double.parse(_TransModels[index].amt_con!))}'
+        //       : '${nFormat.format(double.parse(_TransModels[index].qty_con!))}',
+        //   '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+        // ],
       ];
     });
     // fileName_Slip
@@ -8460,41 +8681,75 @@ class _AccountScreenState extends State<AccountScreen> {
           print(
               ' in_Trans_invoice_P///bnobnobnobno123454>>>>  ${cFinnancetransModel.bno}');
         }
-        PdfgenReceipt.exportPDF_Receipt(
+        Pdf_genReceipt.exportPDF_Receipt(
+            numinvoice,
             tableData00,
             context,
             Slip_status,
             _TransModels,
             '${cid_Name}',
             '${name_Name}',
-            '${sum_pvat}',
-            '${sum_vat}',
-            '${sum_wht}',
-            '${sum_amt}',
-            (discount_ == null) ? '0' : '${discount_} ',
-            '${nFormat.format(sum_disamt)}',
-            '${sum_amt - sum_disamt}',
-            // '${nFormat.format(sum_amt - sum_disamt)}',
-            '${renTal_name.toString()}',
-            '${Form_bussshop}',
-            '${Form_address}',
-            '${Form_tel}',
-            '${Form_email}',
-            '${Form_tax}',
-            '${Form_nameshop}',
-            '${renTalModels[0].bill_addr}',
-            '${renTalModels[0].bill_email}',
-            '${renTalModels[0].bill_tel}',
-            '${renTalModels[0].bill_tax}',
-            '${renTalModels[0].bill_name}',
+            sum_pvat,
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            ' ${sum_amt - sum_disamt}',
+            renTal_name,
+            Form_bussshop,
+            Form_address,
+            Form_tel,
+            Form_email,
+            Form_tax,
+            Form_nameshop,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
             newValuePDFimg,
             pamentpage,
             paymentName1,
             paymentName2,
-            Form_payment1.text,
-            Form_payment2.text,
-            cFinn,
-            Value_newDateD);
+            Form_payment1,
+            Form_payment2,
+            Value_newDateD
+            // tableData00,
+            // context,
+            // Slip_status,
+            // _TransModels,
+            // '${cid_Name}',
+            // '${name_Name}',
+            // '${sum_pvat}',
+            // '${sum_vat}',
+            // '${sum_wht}',
+            // '${sum_amt}',
+            // (discount_ == null) ? '0' : '${discount_} ',
+            // '${nFormat.format(sum_disamt)}',
+            // '${sum_amt - sum_disamt}',
+            // // '${nFormat.format(sum_amt - sum_disamt)}',
+            // '${renTal_name.toString()}',
+            // '${Form_bussshop}',
+            // '${Form_address}',
+            // '${Form_tel}',
+            // '${Form_email}',
+            // '${Form_tax}',
+            // '${Form_nameshop}',
+            // '${renTalModels[0].bill_addr}',
+            // '${renTalModels[0].bill_email}',
+            // '${renTalModels[0].bill_tel}',
+            // '${renTalModels[0].bill_tax}',
+            // '${renTalModels[0].bill_name}',
+            // newValuePDFimg,
+            // pamentpage,
+            // paymentName1,
+            // paymentName2,
+            // Form_payment1.text,
+            // Form_payment2.text,
+            // cFinn,
+            // Value_newDateD
+            );
         setState(() async {
           await red_Trans_bill();
           red_Trans_select2();
@@ -8527,14 +8782,24 @@ class _AccountScreenState extends State<AccountScreen> {
           [
             '${index + 1}',
             '${_TransModels[index].date}',
-            '${_TransModels[index].name}',
-            '${_TransModels[index].tqty}',
-            '${_TransModels[index].unit_con}',
-            _TransModels[index].qty_con == '0.00'
-                ? '${nFormat.format(double.parse(_TransModels[index].amt_con!))}'
-                : '${nFormat.format(double.parse(_TransModels[index].qty_con!))}',
+            '${_TransModels[index].expname}',
+            // '${nFormat.format(double.parse(_TransModels[index].qty!))}',
+            '${nFormat.format(double.parse(_TransModels[index].nvat!))}',
+            '${nFormat.format(double.parse(_TransModels[index].vat!))}',
             '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+            '${nFormat.format(double.parse(_TransModels[index].amt!))}',
           ],
+        // [
+        //   '${index + 1}',
+        //   '${_TransModels[index].date}',
+        //   '${_TransModels[index].name}',
+        //   '${_TransModels[index].tqty}',
+        //   '${_TransModels[index].unit_con}',
+        //   _TransModels[index].qty_con == '0.00'
+        //       ? '${nFormat.format(double.parse(_TransModels[index].amt_con!))}'
+        //       : '${nFormat.format(double.parse(_TransModels[index].qty_con!))}',
+        //   '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+        // ],
       ];
     });
     // fileName_Slip
@@ -8590,41 +8855,75 @@ class _AccountScreenState extends State<AccountScreen> {
               'in_Trans_invoice///bnobnobnobno123454>>>>  ${cFinnancetransModel.bno}');
         }
 
-        PdfgenReceipt.exportPDF_Receipt(
+        Pdf_genReceipt.exportPDF_Receipt(
+            numinvoice,
             tableData00,
             context,
             Slip_status,
-            _TransModels,
+            _InvoiceHistoryModels,
             '$cid_Name',
             '$name_Name',
-            '${sum_pvat}',
-            '${sum_vat}',
-            '${sum_wht}',
-            '${sum_amt}',
-            (discount_ == null) ? '0' : '${discount_} ',
-            '${nFormat.format(sum_disamt)}',
+            sum_pvat,
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
             '${sum_amt - sum_disamt}',
-            // '${nFormat.format(sum_amt - sum_disamt)}',
-            '${renTal_name.toString()}',
-            '${teNantModels[index].cname} (${teNantModels[index].sname})',
-            '${teNantModels[index].addr}',
-            '${teNantModels[index].tel}',
-            '${teNantModels[index].email}',
-            '${teNantModels[index].tax}',
-            '${teNantModels[index].sname}',
-            '${renTalModels[0].bill_addr}',
-            '${renTalModels[0].bill_email}',
-            '${renTalModels[0].bill_tel}',
-            '${renTalModels[0].bill_tax}',
-            '${renTalModels[0].bill_name}',
+            renTal_name,
+            Form_bussshop,
+            Form_address,
+            Form_tel,
+            Form_email,
+            Form_tax,
+            Form_nameshop,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
             newValuePDFimg,
             pamentpage,
             paymentName1,
             paymentName2,
-            Form_payment1.text,
-            Form_payment2.text,
-            cFinn,
-            Value_newDateD);
+            Form_payment1,
+            Form_payment2,
+            Value_newDateD
+            // tableData00,
+            // context,
+            // Slip_status,
+            // _TransModels,
+            // '$cid_Name',
+            // '$name_Name',
+            // '${sum_pvat}',
+            // '${sum_vat}',
+            // '${sum_wht}',
+            // '${sum_amt}',
+            // (discount_ == null) ? '0' : '${discount_} ',
+            // '${nFormat.format(sum_disamt)}',
+            // '${sum_amt - sum_disamt}',
+            // // '${nFormat.format(sum_amt - sum_disamt)}',
+            // '${renTal_name.toString()}',
+            // '${teNantModels[index].cname} (${teNantModels[index].sname})',
+            // '${teNantModels[index].addr}',
+            // '${teNantModels[index].tel}',
+            // '${teNantModels[index].email}',
+            // '${teNantModels[index].tax}',
+            // '${teNantModels[index].sname}',
+            // '${renTalModels[0].bill_addr}',
+            // '${renTalModels[0].bill_email}',
+            // '${renTalModels[0].bill_tel}',
+            // '${renTalModels[0].bill_tax}',
+            // '${renTalModels[0].bill_name}',
+            // newValuePDFimg,
+            // pamentpage,
+            // paymentName1,
+            // paymentName2,
+            // Form_payment1.text,
+            // Form_payment2.text,
+            // cFinn,
+            // Value_newDateD
+            );
         setState(() async {
           await red_Trans_bill();
           red_Trans_select2();
@@ -12914,7 +13213,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 : Container(
                     child: Pays(
                         Get_Value_cid: teNantcid,
-                        Get_Value_NameShop_index: teNantsname,
+                        Get_Value_NameShop_index: 1,
                         namenew: teNantnamenew,
                         Screen_name: 'ACSceen',
                         Form_bussshop: '${Form_bussshop}',
@@ -12931,209 +13230,209 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   //////////////////////////////////------------------------->(รายงานประวัติบิล)
-//   void _exportExcel_() async {
-//     String day_ =
-//         '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
+  void _exportExcel_() async {
+    String day_ =
+        '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
 
-//     String Tim_ =
-//         '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}';
-//     final x.Workbook workbook = x.Workbook();
+    String Tim_ =
+        '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}';
+    final x.Workbook workbook = x.Workbook();
 
-//     final x.Worksheet sheet = workbook.worksheets[0];
-//     sheet.pageSetup.topMargin = 1;
-//     sheet.pageSetup.bottomMargin = 1;
-//     sheet.pageSetup.leftMargin = 1;
-//     sheet.pageSetup.rightMargin = 1;
+    final x.Worksheet sheet = workbook.worksheets[0];
+    sheet.pageSetup.topMargin = 1;
+    sheet.pageSetup.bottomMargin = 1;
+    sheet.pageSetup.leftMargin = 1;
+    sheet.pageSetup.rightMargin = 1;
 
-//     //Adding a picture
-//     // final ByteData bytes_image = await rootBundle.load('images/LOGO.png');
-//     // final Uint8List image = bytes_image.buffer
-//     //     .asUint8List(bytes_image.offsetInBytes, bytes_image.lengthInBytes);
-// // Adding an image.
-//     // sheet.pictures.addStream(1, 1, image);
-//     // final x.Picture picture = sheet.pictures[0];
+    //Adding a picture
+    // final ByteData bytes_image = await rootBundle.load('images/LOGO.png');
+    // final Uint8List image = bytes_image.buffer
+    //     .asUint8List(bytes_image.offsetInBytes, bytes_image.lengthInBytes);
+// Adding an image.
+    // sheet.pictures.addStream(1, 1, image);
+    // final x.Picture picture = sheet.pictures[0];
 
-// // Re-size an image
-//     // picture.height = 30;
-//     // picture.width = 50;
+// Re-size an image
+    // picture.height = 30;
+    // picture.width = 50;
 
-// // // rotate an image.
-// //     picture.rotation = 100;
+// // rotate an image.
+//     picture.rotation = 100;
 
-// // // Flip an image.
-// //     picture.horizontalFlip = true;
-//     x.Style globalStyle = workbook.styles.add('style');
-//     globalStyle.fontName = 'Angsana New';
-//     globalStyle.numberFormat = '_(\$* #,##0_)';
-//     globalStyle.fontSize = 16;
+// // Flip an image.
+//     picture.horizontalFlip = true;
+    x.Style globalStyle = workbook.styles.add('style');
+    globalStyle.fontName = 'Angsana New';
+    globalStyle.numberFormat = '_(\$* #,##0_)';
+    globalStyle.fontSize = 16;
 
-//     globalStyle.backColorRgb = const Color.fromARGB(255, 252, 255, 251);
-//     x.Style globalStyle2 = workbook.styles.add('style1');
-//     globalStyle2.backColorRgb = const Color.fromARGB(255, 147, 223, 124);
-//     globalStyle2.fontSize = 15;
-//     globalStyle2.fontName = 'Angsana New';
-//     sheet.getRangeByName('A1').cellStyle = globalStyle;
-//     sheet.getRangeByName('B1').cellStyle = globalStyle;
-//     sheet.getRangeByName('C1').cellStyle = globalStyle;
-//     sheet.getRangeByName('D1').cellStyle = globalStyle;
-//     sheet.getRangeByName('E1').cellStyle = globalStyle;
-//     sheet.getRangeByName('F1').cellStyle = globalStyle;
-//     sheet.getRangeByName('G1').cellStyle = globalStyle;
-//     sheet.getRangeByName('H1').cellStyle = globalStyle;
-//     sheet.getRangeByName('I1').cellStyle = globalStyle;
+    globalStyle.backColorRgb = const Color.fromARGB(255, 252, 255, 251);
+    x.Style globalStyle2 = workbook.styles.add('style1');
+    globalStyle2.backColorRgb = const Color.fromARGB(255, 147, 223, 124);
+    globalStyle2.fontSize = 15;
+    globalStyle2.fontName = 'Angsana New';
+    sheet.getRangeByName('A1').cellStyle = globalStyle;
+    sheet.getRangeByName('B1').cellStyle = globalStyle;
+    sheet.getRangeByName('C1').cellStyle = globalStyle;
+    sheet.getRangeByName('D1').cellStyle = globalStyle;
+    sheet.getRangeByName('E1').cellStyle = globalStyle;
+    sheet.getRangeByName('F1').cellStyle = globalStyle;
+    sheet.getRangeByName('G1').cellStyle = globalStyle;
+    sheet.getRangeByName('H1').cellStyle = globalStyle;
+    sheet.getRangeByName('I1').cellStyle = globalStyle;
 
-//     sheet.getRangeByName('J1').cellStyle = globalStyle;
-//     x.Style globalStyle22 = workbook.styles.add('style22');
-//     globalStyle22.backColorRgb = const Color(0xC7F5F7FA);
-//     globalStyle22.numberFormat = '_(\$* #,##0_)';
-//     globalStyle22.fontName = 'Angsana New';
-//     globalStyle22.fontSize = 14;
-//     globalStyle22.hAlign = x.HAlignType.center;
+    sheet.getRangeByName('J1').cellStyle = globalStyle;
+    x.Style globalStyle22 = workbook.styles.add('style22');
+    globalStyle22.backColorRgb = const Color(0xC7F5F7FA);
+    globalStyle22.numberFormat = '_(\$* #,##0_)';
+    globalStyle22.fontName = 'Angsana New';
+    globalStyle22.fontSize = 14;
+    globalStyle22.hAlign = x.HAlignType.center;
 
-//     x.Style globalStyle222 = workbook.styles.add('style222');
-//     globalStyle222.backColorRgb = const Color(0xC7E1E2E6);
-//     globalStyle222.numberFormat = '_(\$* #,##0_)';
-//     globalStyle222.fontName = 'Angsana New';
-//     globalStyle222.fontSize = 14;
-//     globalStyle222.hAlign = x.HAlignType.center;
-//     final x.Range range = sheet.getRangeByName('E2');
-//     range.setText('ประวัติบิล($day_)');
-// // ExcelSheetProtectionOption
-//     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
-//     options.all = true;
+    x.Style globalStyle222 = workbook.styles.add('style222');
+    globalStyle222.backColorRgb = const Color(0xC7E1E2E6);
+    globalStyle222.numberFormat = '_(\$* #,##0_)';
+    globalStyle222.fontName = 'Angsana New';
+    globalStyle222.fontSize = 14;
+    globalStyle222.hAlign = x.HAlignType.center;
+    final x.Range range = sheet.getRangeByName('E2');
+    range.setText('ประวัติบิล($day_)');
+// ExcelSheetProtectionOption
+    final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
+    options.all = true;
 
-// // Protecting the Worksheet by using a Password
+// Protecting the Worksheet by using a Password
 
-//     sheet.getRangeByName('A2').cellStyle = globalStyle;
-//     sheet.getRangeByName('B2').cellStyle = globalStyle;
-//     sheet.getRangeByName('C2').cellStyle = globalStyle;
-//     sheet.getRangeByName('D2').cellStyle = globalStyle;
-//     sheet.getRangeByName('E2').cellStyle = globalStyle;
-//     sheet.getRangeByName('F2').cellStyle = globalStyle;
-//     sheet.getRangeByName('G2').cellStyle = globalStyle;
-//     sheet.getRangeByName('H2').cellStyle = globalStyle;
-//     sheet.getRangeByName('I2').cellStyle = globalStyle;
-//     sheet.getRangeByName('J2').cellStyle = globalStyle;
-//     sheet.getRangeByName('A2').setText('${renTal_name}');
-//     sheet.getRangeByName('J1').setText('ออก ณ วันที่: ${day_}');
+    sheet.getRangeByName('A2').cellStyle = globalStyle;
+    sheet.getRangeByName('B2').cellStyle = globalStyle;
+    sheet.getRangeByName('C2').cellStyle = globalStyle;
+    sheet.getRangeByName('D2').cellStyle = globalStyle;
+    sheet.getRangeByName('E2').cellStyle = globalStyle;
+    sheet.getRangeByName('F2').cellStyle = globalStyle;
+    sheet.getRangeByName('G2').cellStyle = globalStyle;
+    sheet.getRangeByName('H2').cellStyle = globalStyle;
+    sheet.getRangeByName('I2').cellStyle = globalStyle;
+    sheet.getRangeByName('J2').cellStyle = globalStyle;
+    sheet.getRangeByName('A2').setText('${renTal_name}');
+    sheet.getRangeByName('J1').setText('ออก ณ วันที่: ${day_}');
 
-//     sheet.getRangeByName('A3').cellStyle = globalStyle;
-//     sheet.getRangeByName('B3').cellStyle = globalStyle;
-//     sheet.getRangeByName('C3').cellStyle = globalStyle;
-//     sheet.getRangeByName('D3').cellStyle = globalStyle;
-//     sheet.getRangeByName('E3').cellStyle = globalStyle;
-//     sheet.getRangeByName('F3').cellStyle = globalStyle;
-//     sheet.getRangeByName('G3').cellStyle = globalStyle;
-//     sheet.getRangeByName('H3').cellStyle = globalStyle;
-//     sheet.getRangeByName('I3').cellStyle = globalStyle;
-//     sheet.getRangeByName('J3').cellStyle = globalStyle;
-//     sheet.getRangeByName('J2').setText('เวลา: ${Tim_}');
-//     globalStyle2.hAlign = x.HAlignType.center;
-//     sheet.getRangeByName('A4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('B4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('C4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('D4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('E4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('F4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('G4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('H4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('I4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('J4').cellStyle = globalStyle2;
-//     sheet.getRangeByName('A4').columnWidth = 10;
-//     sheet.getRangeByName('B4').columnWidth = 18;
-//     sheet.getRangeByName('C4').columnWidth = 18;
-//     sheet.getRangeByName('D4').columnWidth = 18;
-//     sheet.getRangeByName('E4').columnWidth = 18;
-//     sheet.getRangeByName('F4').columnWidth = 18;
-//     sheet.getRangeByName('G4').columnWidth = 18;
-//     sheet.getRangeByName('H4').columnWidth = 18;
-//     sheet.getRangeByName('I4').columnWidth = 18;
-//     sheet.getRangeByName('J4').columnWidth = 18;
+    sheet.getRangeByName('A3').cellStyle = globalStyle;
+    sheet.getRangeByName('B3').cellStyle = globalStyle;
+    sheet.getRangeByName('C3').cellStyle = globalStyle;
+    sheet.getRangeByName('D3').cellStyle = globalStyle;
+    sheet.getRangeByName('E3').cellStyle = globalStyle;
+    sheet.getRangeByName('F3').cellStyle = globalStyle;
+    sheet.getRangeByName('G3').cellStyle = globalStyle;
+    sheet.getRangeByName('H3').cellStyle = globalStyle;
+    sheet.getRangeByName('I3').cellStyle = globalStyle;
+    sheet.getRangeByName('J3').cellStyle = globalStyle;
+    sheet.getRangeByName('J2').setText('เวลา: ${Tim_}');
+    globalStyle2.hAlign = x.HAlignType.center;
+    sheet.getRangeByName('A4').cellStyle = globalStyle2;
+    sheet.getRangeByName('B4').cellStyle = globalStyle2;
+    sheet.getRangeByName('C4').cellStyle = globalStyle2;
+    sheet.getRangeByName('D4').cellStyle = globalStyle2;
+    sheet.getRangeByName('E4').cellStyle = globalStyle2;
+    sheet.getRangeByName('F4').cellStyle = globalStyle2;
+    sheet.getRangeByName('G4').cellStyle = globalStyle2;
+    sheet.getRangeByName('H4').cellStyle = globalStyle2;
+    sheet.getRangeByName('I4').cellStyle = globalStyle2;
+    sheet.getRangeByName('J4').cellStyle = globalStyle2;
+    sheet.getRangeByName('A4').columnWidth = 10;
+    sheet.getRangeByName('B4').columnWidth = 18;
+    sheet.getRangeByName('C4').columnWidth = 18;
+    sheet.getRangeByName('D4').columnWidth = 18;
+    sheet.getRangeByName('E4').columnWidth = 18;
+    sheet.getRangeByName('F4').columnWidth = 18;
+    sheet.getRangeByName('G4').columnWidth = 18;
+    sheet.getRangeByName('H4').columnWidth = 18;
+    sheet.getRangeByName('I4').columnWidth = 18;
+    sheet.getRangeByName('J4').columnWidth = 18;
 
-//     sheet.getRangeByName('A4').setText('เลขที่สัญญา');
-//     sheet.getRangeByName('B4').setText('วันที้ทำรายการ');
-//     sheet.getRangeByName('C4').setText('วันที่รับชำระ');
-//     sheet.getRangeByName('D4').setText('เลขที่ใบเสร็จ');
-//     sheet.getRangeByName('E4').setText('เลขที่ใบวางบิล');
-//     sheet.getRangeByName('F4').setText('รหัสพื้นที่');
-//     sheet.getRangeByName('G4').setText('ชื่อร้านค้า');
-//     sheet.getRangeByName('H4').setText('จำนวนเงิน');
-//     sheet.getRangeByName('I4').setText('กำหนดชำระ');
-//     sheet.getRangeByName('J4').setText('สถานะ');
-//     int index1 = 0;
-//     for (int index = 0; index < _TransReBillModels.length; index++) {
-//       dynamic numberColor = (0 * _TransReBillModels.length + index) % 2 == 0
-//           ? globalStyle22
-//           : globalStyle222;
-//       sheet.getRangeByName('A${index + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('B${index + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('C${index + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('D${index + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('E${index + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('F${index + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('G${index + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('H${index + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('I${index + 5}').cellStyle = numberColor;
-//       sheet.getRangeByName('J${index + 5}').cellStyle = numberColor;
+    sheet.getRangeByName('A4').setText('เลขที่สัญญา');
+    sheet.getRangeByName('B4').setText('วันที้ทำรายการ');
+    sheet.getRangeByName('C4').setText('วันที่รับชำระ');
+    sheet.getRangeByName('D4').setText('เลขที่ใบเสร็จ');
+    sheet.getRangeByName('E4').setText('เลขที่ใบวางบิล');
+    sheet.getRangeByName('F4').setText('รหัสพื้นที่');
+    sheet.getRangeByName('G4').setText('ชื่อร้านค้า');
+    sheet.getRangeByName('H4').setText('จำนวนเงิน');
+    sheet.getRangeByName('I4').setText('กำหนดชำระ');
+    sheet.getRangeByName('J4').setText('สถานะ');
+    int index1 = 0;
+    for (int index = 0; index < _TransReBillModels.length; index++) {
+      dynamic numberColor = (0 * _TransReBillModels.length + index) % 2 == 0
+          ? globalStyle22
+          : globalStyle222;
+      sheet.getRangeByName('A${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('B${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('C${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('D${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('E${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('F${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('G${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('H${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('I${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('J${index + 5}').cellStyle = numberColor;
 
-//       sheet.getRangeByName('A${index + 5}').setText(
-//             '${_TransReBillModels[index].cid}',
-//           );
-//       sheet.getRangeByName('B${index + 5}').setText(
-//             '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00').year + 543}',
-//           );
-//       sheet.getRangeByName('C${index + 5}').setText(
-//             '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].dateacc} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].dateacc} 00:00:00').year + 543}',
-//           );
-//       sheet.getRangeByName('D${index + 5}').setText(
-//             _TransReBillModels[index].doctax == ''
-//                 ? '${_TransReBillModels[index].docno}'
-//                 : '${_TransReBillModels[index].doctax}',
-//           );
-//       sheet.getRangeByName('E${index + 5}').setText(
-//             '${_TransReBillModels[index].inv}',
-//           );
-//       sheet.getRangeByName('F${index + 5}').setText(
-//             _TransReBillModels[index].ln == null
-//                 ? '${_TransReBillModels[index].room_number}'
-//                 : '${_TransReBillModels[index].ln}',
-//           );
-//       sheet.getRangeByName('G${index + 5}').setText(
-//             _TransReBillModels[index].sname == null
-//                 ? '${_TransReBillModels[index].remark}'
-//                 : '${_TransReBillModels[index].sname}',
-//           );
-//       sheet.getRangeByName('H${index + 5}').setText(
-//             _TransReBillModels[index].total_dis == null
-//                 ? '${_TransReBillModels[index].total_bill}'
-//                 : '${_TransReBillModels[index].total_dis}',
-//           );
-//       sheet.getRangeByName('I${index + 5}').setText(
-//             '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].date} 00:00:00').year + 543}',
-//           );
-//       sheet.getRangeByName('J${index + 5}').setText(
-//             _TransReBillModels[index].doctax == '' ? ' ' : 'ใบกำกับภาษี',
-//           );
-//     }
+      sheet.getRangeByName('A${index + 5}').setText(
+            '${_TransReBillModels[index].cid}',
+          );
+      sheet.getRangeByName('B${index + 5}').setText(
+            '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00').year + 543}',
+          );
+      sheet.getRangeByName('C${index + 5}').setText(
+            '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].dateacc} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].dateacc} 00:00:00').year + 543}',
+          );
+      sheet.getRangeByName('D${index + 5}').setText(
+            _TransReBillModels[index].doctax == ''
+                ? '${_TransReBillModels[index].docno}'
+                : '${_TransReBillModels[index].doctax}',
+          );
+      sheet.getRangeByName('E${index + 5}').setText(
+            '${_TransReBillModels[index].inv}',
+          );
+      sheet.getRangeByName('F${index + 5}').setText(
+            _TransReBillModels[index].ln == null
+                ? '${_TransReBillModels[index].room_number}'
+                : '${_TransReBillModels[index].ln}',
+          );
+      sheet.getRangeByName('G${index + 5}').setText(
+            _TransReBillModels[index].sname == null
+                ? '${_TransReBillModels[index].remark}'
+                : '${_TransReBillModels[index].sname}',
+          );
+      sheet.getRangeByName('H${index + 5}').setText(
+            _TransReBillModels[index].total_dis == null
+                ? '${_TransReBillModels[index].total_bill}'
+                : '${_TransReBillModels[index].total_dis}',
+          );
+      sheet.getRangeByName('I${index + 5}').setText(
+            '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].date} 00:00:00').year + 543}',
+          );
+      sheet.getRangeByName('J${index + 5}').setText(
+            _TransReBillModels[index].doctax == '' ? ' ' : 'ใบกำกับภาษี',
+          );
+    }
 
-//     final List<int> bytes = workbook.saveAsStream();
-//     workbook.dispose();
-//     Uint8List data = Uint8List.fromList(bytes);
-//     MimeType type = MimeType.MICROSOFTEXCEL;
-//     String path = await FileSaver.instance
-//         .saveFile("ประวัติบิล($day_)", data, "xlsx", mimeType: type);
-//     log(path);
-//     // if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
-//     //   String path = await FileSaver.instance.saveFile(
-//     //       "ผู้เช่า(${Status[Status_ - 1]})(ณ วันที่${day_})", data, "xlsx",
-//     //       mimeType: type);
-//     //   log(path);
-//     // } else {
-//     //   String path = await FileSaver.instance
-//     //       .saveFile("$NameFile_", data, "xlsx", mimeType: type);
-//     //   log(path);
-//     // }
-//   }
+    final List<int> bytes = workbook.saveAsStream();
+    workbook.dispose();
+    Uint8List data = Uint8List.fromList(bytes);
+    MimeType type = MimeType.MICROSOFTEXCEL;
+    String path = await FileSaver.instance
+        .saveFile("ประวัติบิล($day_)", data, "xlsx", mimeType: type);
+    log(path);
+    // if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
+    //   String path = await FileSaver.instance.saveFile(
+    //       "ผู้เช่า(${Status[Status_ - 1]})(ณ วันที่${day_})", data, "xlsx",
+    //       mimeType: type);
+    //   log(path);
+    // } else {
+    //   String path = await FileSaver.instance
+    //       .saveFile("$NameFile_", data, "xlsx", mimeType: type);
+    //   log(path);
+    // }
+  }
 
 //////////----------------------------------------------------------------->
 //////////////////-------------------------------------------------->
@@ -16831,6 +17130,7 @@ class _AccountScreenState extends State<AccountScreen> {
     // var qutser = widget.Get_Value_NameShop_index;
 
     var numin = numinvoice;
+    var doctax;
     print(
         'finnancetransModels>>>zzzz${finnancetransModels.length}>>>>>> $numin');
 
@@ -16841,9 +17141,19 @@ class _AccountScreenState extends State<AccountScreen> {
 
       var result = json.decode(response.body);
       // print(result);
-      if (result.toString() == 'true') {
-        Insert_log.Insert_logs(
-            'บัญชี', 'ประวัติบิล>>เปลี่ยนสถานะบิล(ร้าน:$sname,${numinvoice})');
+      if (result.toString() != 'No') {
+        for (var map in result) {
+          TransReBillModel cFinnancetransModel = TransReBillModel.fromJson(map);
+          setState(() {
+            doctax = cFinnancetransModel.doctax;
+          });
+
+          print('zzzzasaaa123454>>>>  $cFinn');
+          print(
+              'bnobnobnobno123454>>>>  ${cFinnancetransModel.docno}  ////  ${cFinnancetransModel.doctax} ');
+        }
+        Insert_log.Insert_logs('บัญชี',
+            'ประวัติบิล>>เปลี่ยนสถานะบิล(ร้าน:$sname,${numinvoice}-->$doctax)');
         Pdfgen_his_statusbill.exportPDF_statusbill(
             tableData00,
             context,
@@ -16868,17 +17178,13 @@ class _AccountScreenState extends State<AccountScreen> {
             bill_tax,
             bill_name,
             newValuePDFimg,
-            numinvoice,
-            'cFinn',
+            doctax,
+            cFinn,
             finnancetransModels,
             '${DateFormat('dd-MM').format(DateTime.parse('$pdate 00:00:00'))}-${DateTime.parse('$pdate 00:00:00').year + 543}');
         setState(() async {
-          // _InvoiceModels.clear();
-          // _InvoiceHistoryModels.clear();
           _TransReBillHistoryModels.clear();
-          // numinvoice = null;
-          // sum_disamtx.text = '0.00';
-          // sum_dispx.text = '0.00';
+
           sum_pvat = 0.00;
           sum_vat = 0.00;
           sum_wht = 0.00;
@@ -16886,11 +17192,12 @@ class _AccountScreenState extends State<AccountScreen> {
           sum_dis = 0.00;
           sum_disamt = 0.00;
           sum_disp = 0;
-          // select_page = 0;
+
           red_Trans_bill();
           // finnancetransModels.clear();
           Navigator.pop(context);
         });
+
         print('rrrrrrrrrrrrrr');
       }
     } catch (e) {}

@@ -34,42 +34,64 @@ class InvoiceModel {
   String? remark;
   String? note;
   String? meter;
+  String? ptser;
+  String? ptname;
+  String? bno;
+  String? bank;
+  String? img;
+  String? btype;
+  String? c_ln;
+  String? c_zn;
+  String? cid;
+  String? user;
 
-  InvoiceModel(
-      {this.ser,
-      this.daterec,
-      this.date,
-      this.dateacc,
-      this.dtype,
-      this.mrp,
-      this.docno,
-      this.showdate,
-      this.billno,
-      this.custno,
-      this.supno,
-      this.refno,
-      this.descr,
-      this.billdate,
-      this.ovalue,
-      this.nvalue,
-      this.qty,
-      this.pri,
-      this.pvat,
-      this.vat,
-      this.nvat,
-      this.wht,
-      this.nwht,
-      this.camt,
-      this.wtax,
-      this.wamt,
-      this.dis,
-      this.disendbillper,
-      this.disendbill,
-      this.deposit,
-      this.cn,
-      this.amt,
-      this.remark,
-      this.note,this.meter});
+  InvoiceModel({
+    this.ser,
+    this.daterec,
+    this.date,
+    this.dateacc,
+    this.dtype,
+    this.mrp,
+    this.docno,
+    this.showdate,
+    this.billno,
+    this.custno,
+    this.supno,
+    this.refno,
+    this.descr,
+    this.billdate,
+    this.ovalue,
+    this.nvalue,
+    this.qty,
+    this.pri,
+    this.pvat,
+    this.vat,
+    this.nvat,
+    this.wht,
+    this.nwht,
+    this.camt,
+    this.wtax,
+    this.wamt,
+    this.dis,
+    this.disendbillper,
+    this.disendbill,
+    this.deposit,
+    this.cn,
+    this.amt,
+    this.remark,
+    this.note,
+    this.meter,
+    this.ptser,
+    this.ptname,
+    this.bno,
+    this.bank,
+    this.img,
+    this.btype,
+    this.c_ln,
+    this.c_zn,
+    this.cid,
+    this.user,
+  });
 
   InvoiceModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -107,6 +129,16 @@ class InvoiceModel {
     remark = json['remark'];
     note = json['note'];
     meter = json['meter'];
+    ptser = json['ptser'];
+    ptname = json['ptname'];
+    bno = json['bno'];
+    bank = json['bank'];
+    img = json['img'];
+    btype = json['btype'];
+    c_ln = json['c_ln'];
+    c_zn = json['c_zn'];
+    cid = json['cid'];
+    user = json['user'];
   }
 
   Map<String, dynamic> toJson() {
@@ -146,6 +178,17 @@ class InvoiceModel {
     data['remark'] = this.remark;
     data['note'] = this.note;
     data['meter'] = this.meter;
+    data['ptser'] = this.ptser;
+    data['ptname'] = this.ptname;
+    data['bno'] = this.bno;
+    data['bank'] = this.bank;
+    data['img'] = this.img;
+    data['btype'] = this.btype;
+    data['c_ln'] = this.c_ln;
+    data['c_zn'] = this.c_zn;
+    data['cid'] = this.cid;
+    data['user'] = this.user;
+
     return data;
   }
 }

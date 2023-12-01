@@ -18,7 +18,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:web_image_downloader/web_image_downloader.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetContract_Model.dart';
@@ -44,6 +43,7 @@ class CustomerScreen extends StatefulWidget {
 }
 
 class _CustomerScreenState extends State<CustomerScreen> {
+  ScrollController _scrollController1 = ScrollController();
   final _formKey = GlobalKey<FormState>();
   final Form_User = TextEditingController();
   final Form_UserPass = TextEditingController();
@@ -51,6 +51,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
   var nFormat2 = NumberFormat("#,##0", "en_US");
   List<CustomerModel> customerModels = [];
+  List<CustomerModel> limitedList_customerModels = [];
   List<CustomerModel> _customerModels = <CustomerModel>[];
   List<TransReBillModel> _TransReBillModels = [];
   List<TransReBillHistoryModel> _TransReBillHistoryModels = [];
@@ -90,7 +91,12 @@ class _CustomerScreenState extends State<CustomerScreen> {
       pic_shop,
       pic_plan,
       fiew;
+/////////---------------------->
+  int limit = 100; // The maximum number of items you want
+  int offset = 0; // The starting index of items you want
+  int endIndex = 0;
 
+  ///--------------->
   final Form_nameshop_ = TextEditingController();
   final Form_typeshop_ = TextEditingController();
   final Form_bussshop_ = TextEditingController();
@@ -122,8 +128,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
   int? pkqty, pkuser, countarae;
   @override
   void initState() {
-    Status_cuspang = 0;
     super.initState();
+    Status_cuspang = 0;
     checkPreferance();
     read_GC_rental();
     select_coutumer();
@@ -769,9 +775,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
 ///////////////////------------------------------------------------------>
   Future<Null> select_coutumer() async {
     //UP_TEST_PICTENANT.php
-    if (customerModels.isNotEmpty) {
+    if (limitedList_customerModels.isNotEmpty) {
       setState(() {
-        customerModels.clear();
+        limitedList_customerModels.clear();
         _customerModels.clear();
       });
     }
@@ -788,20 +794,35 @@ class _CustomerScreenState extends State<CustomerScreen> {
         for (var map in result) {
           CustomerModel customerModel = CustomerModel.fromJson(map);
           setState(() {
-            customerModels.add(customerModel);
+            limitedList_customerModels.add(customerModel);
           });
         }
       }
       setState(() {
-        _customerModels = customerModels;
+        _customerModels = limitedList_customerModels;
       });
+      read_customer_limit();
     } catch (e) {}
     if (tappedIndex_ != '') {
       Form_User.text = customerModels[int.parse(tappedIndex_)].user_name!;
     } else {}
   }
 
-//////--------------------------------------------->
+  /////////////////--------------------------->
+  Future<Null> read_customer_limit() async {
+    setState(() {
+      endIndex = offset + limit;
+      customerModels = limitedList_customerModels.sublist(
+          offset, // Start index
+          (endIndex <= limitedList_customerModels.length)
+              ? endIndex
+              : limitedList_customerModels.length // End index
+          );
+    });
+    //limitedList_teNantModels
+  }
+////////////////////------------------------------------------------>
+
   ///---------->อัพเดตรูปในสัญญาให้ต้องกับทะเบียนลูกค้า
   // Future<Null> up_photo_tenan(custno, addr2) async {
   //   SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -2402,7 +2423,272 @@ class _CustomerScreenState extends State<CustomerScreen> {
   }
 
   ///----------------------->
+  Widget Next_page() {
+    return Row(
+      children: [
+        Expanded(child: Text('')),
+        StreamBuilder(
+            stream: Stream.periodic(const Duration(milliseconds: 300)),
+            builder: (context, snapshot) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: AppbackgroundColor.Sub_Abg_Colors,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                ),
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.menu_book,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                    InkWell(
+                        onTap: (offset == 0)
+                            ? null
+                            : () async {
+                                if (offset == 0) {
+                                } else {
+                                  setState(() {
+                                    offset = offset - limit;
 
+                                    read_customer_limit();
+                                    tappedIndex_ = '';
+                                  });
+                                  _scrollController1.animateTo(
+                                    0,
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.easeOut,
+                                  );
+                                }
+
+                                setState(() {
+                                  contractPhotoModels.clear();
+
+                                  _TransReBillModels.clear();
+                                  teNantModels.clear();
+                                  Total_tenant = 0.00;
+                                  contractModels.clear();
+                                  _Form_nameshop = null;
+                                  _Form_typeshop = null;
+                                  _Form_bussshop = null;
+                                  _Form_bussscontact = null;
+                                  _Form_address = null;
+                                  _Form_tel = null;
+                                  _Form_email = null;
+                                  _Form_tax = null;
+                                  _Form_Ser = null;
+                                  pic_tenant = null;
+                                  pic_shop = null;
+                                  pic_plan = null;
+                                  fiew = null;
+                                  _verticalGroupValue = '';
+                                  Total_doctax = 0;
+                                  Total_late_payment = 0; //ชำระเกินกำหนด
+                                  Total_early_payment = 0; //ชำระก่อรกำหนด
+                                  Total_ontime_payment = 0; //ชำระตรงเวลา
+                                  Total_tenant = 0; //ค้างชำระ
+                                  Total_amtbill = 0.0;
+
+                                  Form_nameshop_.clear();
+                                  Form_typeshop_.clear();
+                                  Form_bussshop_.clear();
+                                  Form_bussscontact_.clear();
+                                  Form_address_.clear();
+                                  Form_tel_.clear();
+                                  Form_email_.clear();
+                                  Form_tax_.clear();
+                                });
+                              },
+                        child: Icon(
+                          Icons.arrow_left,
+                          color:
+                              (offset == 0) ? Colors.grey[200] : Colors.black,
+                          size: 25,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                      child: Text(
+                        // '*//$endIndex /${limitedList_teNantModels.length} ///${(endIndex / limit)}/${(limitedList_teNantModels.length / limit).ceil()}',
+                        '${(endIndex / limit)}/${(limitedList_customerModels.length / limit).ceil()}',
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: FontWeight_.Fonts_T,
+                          //fontSize: 10.0
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                        onTap: ((endIndex / limit) ==
+                                (limitedList_customerModels.length / limit)
+                                    .ceil())
+                            ? null
+                            : () async {
+                                setState(() {
+                                  offset = offset + limit;
+                                  tappedIndex_ = '';
+                                  read_customer_limit();
+                                });
+                                _scrollController1.animateTo(
+                                  0,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.easeOut,
+                                );
+                                setState(() {
+                                  contractPhotoModels.clear();
+
+                                  _TransReBillModels.clear();
+                                  teNantModels.clear();
+                                  Total_tenant = 0.00;
+                                  contractModels.clear();
+                                  _Form_nameshop = null;
+                                  _Form_typeshop = null;
+                                  _Form_bussshop = null;
+                                  _Form_bussscontact = null;
+                                  _Form_address = null;
+                                  _Form_tel = null;
+                                  _Form_email = null;
+                                  _Form_tax = null;
+                                  _Form_Ser = null;
+                                  pic_tenant = null;
+                                  pic_shop = null;
+                                  pic_plan = null;
+                                  fiew = null;
+                                  _verticalGroupValue = '';
+                                  Total_doctax = 0;
+                                  Total_late_payment = 0; //ชำระเกินกำหนด
+                                  Total_early_payment = 0; //ชำระก่อรกำหนด
+                                  Total_ontime_payment = 0; //ชำระตรงเวลา
+                                  Total_tenant = 0; //ค้างชำระ
+                                  Total_amtbill = 0.0;
+
+                                  Form_nameshop_.clear();
+                                  Form_typeshop_.clear();
+                                  Form_bussshop_.clear();
+                                  Form_bussscontact_.clear();
+                                  Form_address_.clear();
+                                  Form_tel_.clear();
+                                  Form_email_.clear();
+                                  Form_tax_.clear();
+                                });
+                              },
+                        child: Icon(
+                          Icons.arrow_right,
+                          color: ((endIndex / limit) ==
+                                  (limitedList_customerModels.length / limit)
+                                      .ceil())
+                              ? Colors.grey[200]
+                              : Colors.black,
+                          size: 25,
+                        )),
+                  ],
+                ),
+              );
+            }),
+      ],
+    );
+  }
+
+  // Widget Next_page() {
+  //   return Row(
+  //     children: [
+  //       Expanded(child: Text('')),
+  //       StreamBuilder(
+  //           stream: Stream.periodic(const Duration(milliseconds: 300)),
+  //           builder: (context, snapshot) {
+  //             return Container(
+  //               decoration: const BoxDecoration(
+  //                 color: AppbackgroundColor.Sub_Abg_Colors,
+  //                 borderRadius: BorderRadius.only(
+  //                     topLeft: Radius.circular(10),
+  //                     topRight: Radius.circular(10),
+  //                     bottomLeft: Radius.circular(10),
+  //                     bottomRight: Radius.circular(10)),
+  //               ),
+  //               padding: const EdgeInsets.all(4.0),
+  //               child: Row(
+  //                 children: [
+  //                   Icon(
+  //                     Icons.menu_book,
+  //                     color: Colors.grey,
+  //                     size: 20,
+  //                   ),
+  //                   InkWell(
+  //                       onTap: (Count_OFF_SET == 0)
+  //                           ? null
+  //                           : () async {
+  //                               if (Count_OFF_SET == 0) {
+  //                               } else {
+  //                                 Count_OFF_SET = Count_OFF_SET - 50;
+  //                                 setState(() {
+  //                                   Status_cuspang = 0;
+  //                                   checkPreferance();
+  //                                   read_GC_rental();
+  //                                   select_coutumer();
+  //                                   read_GC_type();
+  //                                 });
+  //                               }
+  //                             },
+  //                       child: Icon(
+  //                         Icons.arrow_left,
+  //                         color: (Count_OFF_SET == 0)
+  //                             ? Colors.grey[200]
+  //                             : Colors.black,
+  //                         size: 25,
+  //                       )),
+  //                   Padding(
+  //                     padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+  //                     child: Text(
+  //                       // '$Count_OFF_SET',
+  //                       (Count_OFF_SET == 0)
+  //                           ? '${Count_OFF_SET + 1}'
+  //                           : '${(Count_OFF_SET / 50) + 1}',
+  //                       textAlign: TextAlign.start,
+  //                       style: const TextStyle(
+  //                         fontSize: 14,
+  //                         color: Colors.green,
+  //                         fontWeight: FontWeight.bold,
+  //                         fontFamily: FontWeight_.Fonts_T,
+  //                         //fontSize: 10.0
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   InkWell(
+  //                       onTap: (customerModels.length == 0)
+  //                           ? null
+  //                           : () async {
+  //                               Count_OFF_SET = Count_OFF_SET + 50;
+  //                               setState(() {
+  //                                 Status_cuspang = 0;
+  //                                 checkPreferance();
+  //                                 read_GC_rental();
+  //                                 select_coutumer();
+  //                                 read_GC_type();
+  //                               });
+  //                             },
+  //                       child: Icon(
+  //                         Icons.arrow_right,
+  //                         color: (customerModels.length == 0)
+  //                             ? Colors.grey[200]
+  //                             : Colors.black,
+  //                         size: 25,
+  //                       )),
+  //                 ],
+  //               ),
+  //             );
+  //           }),
+  //     ],
+  //   );
+  // }
+
+///////////--------------------------------->
   Widget build(BuildContext context) {
     return (Status_cuspang == 1)
         ? Add_Custo_Screen(
@@ -2651,9 +2937,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       ),
                                                       child: Row(
                                                         children: const [
-                                                          Center(
-                                                              child:
-                                                                  Text('...')),
+                                                          // Center(
+                                                          //     child:
+                                                          //         Text('...')),
                                                           Expanded(
                                                             flex: 1,
                                                             child: AutoSizeText(
@@ -2740,363 +3026,460 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                   //       bottomRight: Radius.circular(0)),
                                                   //   // border: Border.all(color: Colors.grey, width: 1),
                                                   // ),
-                                                  child: ListView.builder(
-                                                      physics:
-                                                          const AlwaysScrollableScrollPhysics(),
-                                                      shrinkWrap: true,
-                                                      itemCount:
-                                                          customerModels.length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return Material(
-                                                          color: tappedIndex_ ==
-                                                                  index
-                                                                      .toString()
-                                                              ? tappedIndex_Color
-                                                                  .tappedIndex_Colors
-                                                              : AppbackgroundColor
-                                                                  .Sub_Abg_Colors,
-                                                          child: Container(
-                                                            // color: tappedIndex_ ==
-                                                            //         index.toString()
-                                                            //     ? tappedIndex_Color
-                                                            //         .tappedIndex_Colors
-                                                            //         .withOpacity(0.5)
-                                                            //     : null,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(5),
-                                                            child: ListTile(
-                                                              onTap: () async {
-                                                                String custno_ =
-                                                                    customerModels[index].custno ==
-                                                                            null
-                                                                        ? ''
-                                                                        : '${customerModels[index].custno}';
-                                                                setState(() {
-                                                                  in_dex =
-                                                                      index;
-                                                                  cust_no_ =
-                                                                      custno_;
-                                                                  Total_amtbill =
-                                                                      0;
-                                                                  Total_doctax =
-                                                                      0;
-                                                                  Total_late_payment =
-                                                                      0;
-                                                                  Total_early_payment =
-                                                                      0;
-                                                                  Total_ontime_payment =
-                                                                      0;
-                                                                  Total_tenant =
-                                                                      0;
-                                                                  addAreaCusto1 =
-                                                                      [];
-                                                                  addAreaCusto2 =
-                                                                      [];
-                                                                  addAreaCusto3 =
-                                                                      [];
-                                                                  addAreaCusto4 =
-                                                                      [];
-                                                                  addrtname =
-                                                                      [];
-                                                                });
-                                                                read_GC_photo(
-                                                                    custno_);
-                                                                red_Trans_bill(
-                                                                    custno_);
-                                                                read_GC_tenant1(
-                                                                    custno_);
-                                                                read_GC_tenant(
-                                                                    custno_);
-                                                                read_GC_Contract(
-                                                                    custno_);
-                                                                setState(() {
-                                                                  tappedIndex_ =
+                                                  child: customerModels.isEmpty
+                                                      ? SizedBox(
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              const CircularProgressIndicator(),
+                                                              StreamBuilder(
+                                                                stream: Stream.periodic(
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            25),
+                                                                    (i) => i),
+                                                                builder: (context,
+                                                                    snapshot) {
+                                                                  if (!snapshot
+                                                                      .hasData)
+                                                                    return const Text(
+                                                                        '');
+                                                                  double
+                                                                      elapsed =
+                                                                      double.parse(snapshot
+                                                                              .data
+                                                                              .toString()) *
+                                                                          0.05;
+                                                                  return Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: (elapsed >
+                                                                            8.00)
+                                                                        ? const Text(
+                                                                            'ไม่พบข้อมูล',
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                fontFamily: Font_.Fonts_T
+                                                                                //fontSize: 10.0
+                                                                                ),
+                                                                          )
+                                                                        : Text(
+                                                                            'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
+                                                                            // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                fontFamily: Font_.Fonts_T
+                                                                                //fontSize: 10.0
+                                                                                ),
+                                                                          ),
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )
+                                                      : ListView.builder(
+                                                          controller:
+                                                              _scrollController1,
+                                                          physics:
+                                                              const AlwaysScrollableScrollPhysics(),
+                                                          shrinkWrap: true,
+                                                          itemCount:
+                                                              customerModels
+                                                                  .length,
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            return Material(
+                                                              color: tappedIndex_ ==
                                                                       index
-                                                                          .toString();
-                                                                  tappedIndex_2 =
-                                                                      '';
-                                                                  _Form_Ser =
-                                                                      '${customerModels[index].ser}';
-
-                                                                  _verticalGroupValue =
-                                                                      '${customerModels[index].type}'; // ประเภท
-
-                                                                  Form_nameshop_
-                                                                      .text = (customerModels[index]
-                                                                              .scname
-                                                                              .toString() ==
-                                                                          'null')
-                                                                      ? ''
-                                                                      : '${customerModels[index].scname}';
-                                                                  Form_User
-                                                                      .text = customerModels[
-                                                                          index]
-                                                                      .user_name!;
-                                                                  Form_typeshop_
-                                                                          .text =
-                                                                      '${customerModels[index].stype}';
-                                                                  Form_Img_ =
-                                                                      '${customerModels[index].addr2}';
-                                                                  Form_bussshop_
-                                                                          .text =
-                                                                      '${customerModels[index].cname}';
-                                                                  Form_bussscontact_
-                                                                          .text =
-                                                                      '${customerModels[index].attn}';
-                                                                  Form_address_
-                                                                          .text =
-                                                                      '${customerModels[index].addr1}';
-                                                                  Form_tel_
-                                                                          .text =
-                                                                      '${customerModels[index].tel}';
-                                                                  Form_email_
-                                                                          .text =
-                                                                      '${customerModels[index].email}';
-                                                                  Form_tax_
-                                                                      .text = customerModels[index]
-                                                                              .tax ==
-                                                                          'null'
-                                                                      ? "-"
-                                                                      : '${customerModels[index].tax}';
-                                                                });
-
-                                                                for (int i = 0;
-                                                                    i <
-                                                                        typeModels
-                                                                            .length;
-                                                                    i++) {
-                                                                  print(
-                                                                      '--------------------------------------');
-                                                                  print(customerModels[
-                                                                          index]
-                                                                      .type
-                                                                      .toString());
-                                                                  print(typeModels[
-                                                                          i]
-                                                                      .type
-                                                                      .toString());
-                                                                  print(
-                                                                      '--------------------------------------');
-                                                                  if (customerModels[
-                                                                              index]
-                                                                          .type
-                                                                          .toString() ==
-                                                                      typeModels[
-                                                                              i]
-                                                                          .type
-                                                                          .toString()) {
+                                                                          .toString()
+                                                                  ? tappedIndex_Color
+                                                                      .tappedIndex_Colors
+                                                                  : AppbackgroundColor
+                                                                      .Sub_Abg_Colors,
+                                                              child: Container(
+                                                                // color: tappedIndex_ ==
+                                                                //         index.toString()
+                                                                //     ? tappedIndex_Color
+                                                                //         .tappedIndex_Colors
+                                                                //         .withOpacity(0.5)
+                                                                //     : null,
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(5),
+                                                                child: ListTile(
+                                                                  onTap:
+                                                                      () async {
+                                                                    String
+                                                                        custno_ =
+                                                                        customerModels[index].custno ==
+                                                                                null
+                                                                            ? ''
+                                                                            : '${customerModels[index].custno}';
                                                                     setState(
                                                                         () {
-                                                                      Value_AreaSer_ =
-                                                                          int.parse(typeModels[i].ser.toString()) -
-                                                                              1;
+                                                                      in_dex =
+                                                                          index;
+                                                                      cust_no_ =
+                                                                          custno_;
+                                                                      Total_amtbill =
+                                                                          0;
+                                                                      Total_doctax =
+                                                                          0;
+                                                                      Total_late_payment =
+                                                                          0;
+                                                                      Total_early_payment =
+                                                                          0;
+                                                                      Total_ontime_payment =
+                                                                          0;
+                                                                      Total_tenant =
+                                                                          0;
+                                                                      addAreaCusto1 =
+                                                                          [];
+                                                                      addAreaCusto2 =
+                                                                          [];
+                                                                      addAreaCusto3 =
+                                                                          [];
+                                                                      addAreaCusto4 =
+                                                                          [];
+                                                                      addrtname =
+                                                                          [];
                                                                     });
-                                                                  } else {}
-                                                                }
+                                                                    read_GC_photo(
+                                                                        custno_);
+                                                                    red_Trans_bill(
+                                                                        custno_);
+                                                                    read_GC_tenant1(
+                                                                        custno_);
+                                                                    read_GC_tenant(
+                                                                        custno_);
+                                                                    read_GC_Contract(
+                                                                        custno_);
+                                                                    setState(
+                                                                        () {
+                                                                      tappedIndex_ =
+                                                                          index
+                                                                              .toString();
+                                                                      tappedIndex_2 =
+                                                                          '';
+                                                                      _Form_Ser =
+                                                                          '${customerModels[index].ser}';
 
-                                                                // Navigator.pop(context);
-                                                              },
-                                                              title: Row(
-                                                                children: [
-                                                                  AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        18,
-                                                                    '${index + 1}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          18,
-                                                                      customerModels[index].custno ==
-                                                                              null
+                                                                      _verticalGroupValue =
+                                                                          '${customerModels[index].type}'; // ประเภท
+
+                                                                      Form_nameshop_
+                                                                          .text = (customerModels[index].scname.toString() ==
+                                                                              'null')
                                                                           ? ''
-                                                                          : '${customerModels[index].custno}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: const TextStyle(
-                                                                          color: CustomerScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
+                                                                          : '${customerModels[index].scname}';
+                                                                      // Form_User
+                                                                      //     .text = customerModels[
+                                                                      //         index]
+                                                                      //     .user_name!;
+                                                                      Form_typeshop_
+                                                                              .text =
+                                                                          '${customerModels[index].stype}';
+                                                                      Form_Img_ =
+                                                                          '${customerModels[index].addr2}';
+                                                                      Form_bussshop_
+                                                                              .text =
+                                                                          '${customerModels[index].cname}';
+                                                                      Form_bussscontact_
+                                                                              .text =
+                                                                          '${customerModels[index].attn}';
+                                                                      Form_address_
+                                                                              .text =
+                                                                          '${customerModels[index].addr1}';
+                                                                      Form_tel_
+                                                                              .text =
+                                                                          '${customerModels[index].tel}';
+                                                                      Form_email_
+                                                                              .text =
+                                                                          '${customerModels[index].email}';
+                                                                      Form_tax_
+                                                                          .text = customerModels[index].tax ==
+                                                                              'null'
+                                                                          ? "-"
+                                                                          : '${customerModels[index].tax}';
+                                                                    });
+
+                                                                    for (int i =
+                                                                            0;
+                                                                        i < typeModels.length;
+                                                                        i++) {
+                                                                      print(
+                                                                          '--------------------------------------');
+                                                                      print(customerModels[
+                                                                              index]
+                                                                          .type
+                                                                          .toString());
+                                                                      print(typeModels[
+                                                                              i]
+                                                                          .type
+                                                                          .toString());
+                                                                      print(
+                                                                          '--------------------------------------');
+                                                                      if (customerModels[index]
+                                                                              .type
+                                                                              .toString() ==
+                                                                          typeModels[i]
+                                                                              .type
+                                                                              .toString()) {
+                                                                        setState(
+                                                                            () {
+                                                                          Value_AreaSer_ =
+                                                                              int.parse(typeModels[i].ser.toString()) - 1;
+                                                                        });
+                                                                      } else {}
+                                                                    }
+
+                                                                    // Navigator.pop(context);
+                                                                  },
+                                                                  title:
+                                                                      Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      // color: Colors.green[100]!
+                                                                      //     .withOpacity(0.5),
+                                                                      border:
+                                                                          Border(
+                                                                        bottom:
+                                                                            BorderSide(
+                                                                          color:
+                                                                              Colors.black12,
+                                                                          width:
+                                                                              1,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        // AutoSizeText(
+                                                                        //   minFontSize:
+                                                                        //       10,
+                                                                        //   maxFontSize:
+                                                                        //       18,
+                                                                        //   '${index + 1}',
+                                                                        //   textAlign:
+                                                                        //       TextAlign.center,
+                                                                        //   style: const TextStyle(
+                                                                        //       color: CustomerScreen_Color.Colors_Text2_,
+                                                                        //       // fontWeight: FontWeight.bold,
+                                                                        //       fontFamily: Font_.Fonts_T),
+                                                                        // ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                18,
+                                                                            customerModels[index].custno == null
+                                                                                ? ''
+                                                                                : '${customerModels[index].custno}',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style: const TextStyle(
+                                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                18,
+                                                                            '${customerModels[index].scname}',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style: const TextStyle(
+                                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                18,
+                                                                            '${customerModels[index].cname}',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style: const TextStyle(
+                                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          18,
-                                                                      '${customerModels[index].scname}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: const TextStyle(
-                                                                          color: CustomerScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          18,
-                                                                      '${customerModels[index].cname}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: const TextStyle(
-                                                                          color: CustomerScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
-                                                                  ),
-                                                                ],
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ),
-                                                        );
-                                                      }),
+                                                            );
+                                                          }),
                                                 ),
                                               ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  InkWell(
-                                                    onTap:
-                                                        (_TransReBillModels
-                                                                    .length >
-                                                                0)
-                                                            ? null
-                                                            : (tappedIndex_ ==
-                                                                    '')
-                                                                ? null
-                                                                : () async {
-                                                                    showDialog<
-                                                                        String>(
-                                                                      context:
-                                                                          context,
-                                                                      builder: (BuildContext
-                                                                              context) =>
-                                                                          AlertDialog(
-                                                                        shape: const RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.all(Radius.circular(20.0))),
-                                                                        title: const Center(
-                                                                            child: Text(
-                                                                          'ต้องการลบข้อมูลลูกค้าใช่หรือไม่',
-                                                                          style: TextStyle(
-                                                                              color: AdminScafScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T),
-                                                                        )),
-                                                                        actions: <Widget>[
-                                                                          Column(
-                                                                            children: [
-                                                                              const SizedBox(
-                                                                                height: 5.0,
-                                                                              ),
-                                                                              const Divider(
-                                                                                color: Colors.grey,
-                                                                                height: 4.0,
-                                                                              ),
-                                                                              const SizedBox(
-                                                                                height: 5.0,
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey[300],
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  0),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  8)),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: InkWell(
+                                                              onTap: (_TransReBillModels
+                                                                          .length >
+                                                                      0)
+                                                                  ? null
+                                                                  : (tappedIndex_ ==
+                                                                          '')
+                                                                      ? null
+                                                                      : () async {
+                                                                          showDialog<
+                                                                              String>(
+                                                                            context:
+                                                                                context,
+                                                                            builder: (BuildContext context) =>
+                                                                                AlertDialog(
+                                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                              title: const Center(
+                                                                                  child: Text(
+                                                                                'ต้องการลบข้อมูลลูกค้าใช่หรือไม่',
+                                                                                style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                              )),
+                                                                              actions: <Widget>[
+                                                                                Column(
                                                                                   children: [
-                                                                                    Padding(
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: Container(
-                                                                                        width: 100,
-                                                                                        decoration: const BoxDecoration(
-                                                                                          color: Colors.green,
-                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        ),
-                                                                                        padding: const EdgeInsets.all(8.0),
-                                                                                        child: TextButton(
-                                                                                          onPressed: () async {
-                                                                                            SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                            String? ren = preferences.getString('renTalSer');
-                                                                                            String? ser_user = preferences.getString('ser');
-                                                                                            String? Ser = _Form_Ser.toString();
-                                                                                            String? nameshop = Form_nameshop_.text.toString();
-
-                                                                                            String url = '${MyConstant().domain}/De_customer_Bureau.php?isAdd=true&ren=$ren&user=$Ser';
-
-                                                                                            try {
-                                                                                              var response = await http.get(Uri.parse(url));
-
-                                                                                              var result = json.decode(response.body);
-
-                                                                                              if (result.toString() == 'true') {
-                                                                                                Insert_log.Insert_logs('ทะเบียน', 'ทะเบียนลูกค้า>>ลบ($nameshop)');
-                                                                                                setState(() {
-                                                                                                  _TransReBillModels = [];
-                                                                                                  tappedIndex_ = '';
-                                                                                                  select_coutumer();
-                                                                                                });
-                                                                                                Navigator.pop(context, 'OK');
-                                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ลบข้อมูลลูกค้าเรียบร้อย...')));
-                                                                                              } else {
-                                                                                                Navigator.pop(context, 'OK');
-                                                                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                                                                  SnackBar(content: Text('(ผิดพลาด !! )')),
-                                                                                                );
-                                                                                              }
-                                                                                            } catch (e) {}
-                                                                                          },
-                                                                                          child: const Text(
-                                                                                            'ยืนยัน',
-                                                                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
+                                                                                    const SizedBox(
+                                                                                      height: 5.0,
+                                                                                    ),
+                                                                                    const Divider(
+                                                                                      color: Colors.grey,
+                                                                                      height: 4.0,
+                                                                                    ),
+                                                                                    const SizedBox(
+                                                                                      height: 5.0,
                                                                                     ),
                                                                                     Padding(
                                                                                       padding: const EdgeInsets.all(8.0),
                                                                                       child: Row(
                                                                                         mainAxisAlignment: MainAxisAlignment.center,
                                                                                         children: [
-                                                                                          Container(
-                                                                                            width: 100,
-                                                                                            decoration: const BoxDecoration(
-                                                                                              color: Colors.redAccent,
-                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                            ),
+                                                                                          Padding(
                                                                                             padding: const EdgeInsets.all(8.0),
-                                                                                            child: TextButton(
-                                                                                              onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                              child: const Text(
-                                                                                                'ยกเลิก',
-                                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                            child: Container(
+                                                                                              width: 100,
+                                                                                              decoration: const BoxDecoration(
+                                                                                                color: Colors.green,
+                                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                                               ),
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: TextButton(
+                                                                                                onPressed: () async {
+                                                                                                  SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                  String? ren = preferences.getString('renTalSer');
+                                                                                                  String? ser_user = preferences.getString('ser');
+                                                                                                  String? Ser = _Form_Ser.toString();
+                                                                                                  String? nameshop = Form_nameshop_.text.toString();
+
+                                                                                                  String url = '${MyConstant().domain}/De_customer_Bureau.php?isAdd=true&ren=$ren&user=$Ser';
+
+                                                                                                  try {
+                                                                                                    var response = await http.get(Uri.parse(url));
+
+                                                                                                    var result = json.decode(response.body);
+
+                                                                                                    if (result.toString() == 'true') {
+                                                                                                      Insert_log.Insert_logs('ทะเบียน', 'ทะเบียนลูกค้า>>ลบ($nameshop)');
+                                                                                                      setState(() {
+                                                                                                        _TransReBillModels = [];
+                                                                                                        tappedIndex_ = '';
+                                                                                                        select_coutumer();
+                                                                                                      });
+                                                                                                      Navigator.pop(context, 'OK');
+                                                                                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ลบข้อมูลลูกค้าเรียบร้อย...')));
+                                                                                                    } else {
+                                                                                                      Navigator.pop(context, 'OK');
+                                                                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                                                                        SnackBar(content: Text('(ผิดพลาด !! )')),
+                                                                                                      );
+                                                                                                    }
+                                                                                                  } catch (e) {}
+                                                                                                },
+                                                                                                child: const Text(
+                                                                                                  'ยืนยัน',
+                                                                                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          Padding(
+                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                            child: Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                Container(
+                                                                                                  width: 100,
+                                                                                                  decoration: const BoxDecoration(
+                                                                                                    color: Colors.redAccent,
+                                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                  ),
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: TextButton(
+                                                                                                    onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                    child: const Text(
+                                                                                                      'ยกเลิก',
+                                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
                                                                                             ),
                                                                                           ),
                                                                                         ],
@@ -3104,115 +3487,142 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ],
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                              child: Container(
+                                                                width: 50,
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(4),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: (_TransReBillModels.length >
+                                                                              0 ||
+                                                                          tappedIndex_ ==
+                                                                              '')
+                                                                      ? Colors.grey[
+                                                                          300]
+                                                                      : (tappedIndex_ ==
+                                                                              '')
+                                                                          ? Colors.grey[
+                                                                              300]
+                                                                          : Colors
+                                                                              .red[300],
+                                                                  borderRadius: const BorderRadius
+                                                                          .only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                ),
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  minFontSize:
+                                                                      8,
+                                                                  maxFontSize:
+                                                                      12,
+                                                                  'ลบ',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: TextStyle(
+                                                                      color: CustomerScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T
+                                                                      //fontSize: 10.0
+                                                                      //fontSize: 10.0
                                                                       ),
-                                                                    );
-                                                                  },
-                                                    child: Container(
-                                                      width: 100,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8),
-                                                      decoration: BoxDecoration(
-                                                        color: (_TransReBillModels
-                                                                        .length >
-                                                                    0 ||
-                                                                tappedIndex_ ==
-                                                                    '')
-                                                            ? Colors.grey[300]
-                                                            : (tappedIndex_ ==
-                                                                    '')
-                                                                ? Colors
-                                                                    .grey[300]
-                                                                : Colors
-                                                                    .red[300],
-                                                        borderRadius: const BorderRadius
-                                                                .only(
-                                                            topLeft: Radius
-                                                                .circular(10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                      ),
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 18,
-                                                        'ลบ',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T
-                                                            //fontSize: 10.0
-                                                            //fontSize: 10.0
+                                                                ),
+                                                              ),
                                                             ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  Status_cuspang =
+                                                                      1;
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                width: 50,
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(4),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                          .orange[
+                                                                      300],
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                ),
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  minFontSize:
+                                                                      8,
+                                                                  maxFontSize:
+                                                                      12,
+                                                                  'เพิ่ม',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: TextStyle(
+                                                                      color: CustomerScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T
+                                                                      //fontSize: 10.0
+                                                                      //fontSize: 10.0
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        Status_cuspang = 1;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      width: 100,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8),
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.orange[300],
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 18,
-                                                        'เพิ่ม',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T
-                                                            //fontSize: 10.0
-                                                            //fontSize: 10.0
-                                                            ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                                    Expanded(
+                                                        child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 0, 4, 0),
+                                                      child: Next_page(),
+                                                    ))
+                                                  ],
+                                                ),
                                               )
                                             ],
                                           ),
@@ -3281,50 +3691,51 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                 //fontSize: 10.0
                                                                 ),
                                                           ),
-                                                        ), // Password(index)
-                                                        if (tappedIndex_ != '')
-                                                          InkWell(
-                                                              child: Container(
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  color: Colors
-                                                                      .red,
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              8),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              8),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              8),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              8)),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        4.0),
-                                                                child:
-                                                                    const Text(
-                                                                  '🔒 User/pass',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: TextStyle(
-                                                                      color: Colors.white,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                              onTap: () {
-                                                                Password(int.parse(
-                                                                    tappedIndex_));
-                                                              })
+                                                        ),
+                                                        //// Password(index)
+                                                        // if (tappedIndex_ != '')
+                                                        //   InkWell(
+                                                        //       child: Container(
+                                                        //         decoration:
+                                                        //             const BoxDecoration(
+                                                        //           color: Colors
+                                                        //               .red,
+                                                        //           borderRadius: BorderRadius.only(
+                                                        //               topLeft: Radius
+                                                        //                   .circular(
+                                                        //                       8),
+                                                        //               topRight:
+                                                        //                   Radius.circular(
+                                                        //                       8),
+                                                        //               bottomLeft:
+                                                        //                   Radius.circular(
+                                                        //                       8),
+                                                        //               bottomRight:
+                                                        //                   Radius.circular(
+                                                        //                       8)),
+                                                        //         ),
+                                                        //         padding:
+                                                        //             const EdgeInsets
+                                                        //                     .all(
+                                                        //                 4.0),
+                                                        //         child:
+                                                        //             const Text(
+                                                        //           '🔒 User/pass',
+                                                        //           textAlign:
+                                                        //               TextAlign
+                                                        //                   .start,
+                                                        //           style: TextStyle(
+                                                        //               color: Colors.white,
+                                                        //               // fontWeight: FontWeight.bold,
+                                                        //               fontFamily: Font_.Fonts_T
+                                                        //               //fontSize: 10.0
+                                                        //               ),
+                                                        //         ),
+                                                        //       ),
+                                                        //       onTap: () {
+                                                        //         Password(int.parse(
+                                                        //             tappedIndex_));
+                                                        //       })
                                                       ],
                                                     )),
                                                 Expanded(

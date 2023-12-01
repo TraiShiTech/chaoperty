@@ -23,6 +23,7 @@ class CFinnancetransModel {
   String? remark;
   String? st;
   String? dataUpdate;
+  String? doctax;
 
   CFinnancetransModel(
       {this.ser,
@@ -48,7 +49,8 @@ class CFinnancetransModel {
       this.total,
       this.remark,
       this.st,
-      this.dataUpdate});
+      this.dataUpdate,
+      this.doctax});
 
   CFinnancetransModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -75,6 +77,7 @@ class CFinnancetransModel {
     remark = json['remark'];
     st = json['st'];
     dataUpdate = json['data_update'];
+    doctax = json['doctax'];
   }
 
   Map<String, dynamic> toJson() {
@@ -103,6 +106,7 @@ class CFinnancetransModel {
     data['remark'] = this.remark;
     data['st'] = this.st;
     data['data_update'] = this.dataUpdate;
+    data['doctax'] = this.doctax;
     return data;
   }
 }

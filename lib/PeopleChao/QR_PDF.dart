@@ -11,7 +11,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:printing/printing.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../AdminScaffold/AdminScaffold.dart';
 import '../Report/Report_Screen.dart';
 import 'PeopleChao_Screen.dart';
 import 'Rental_Information.dart';
@@ -475,17 +477,21 @@ class Pdfgen_QR_ {
     final Uint8List data = Uint8List.fromList(bytes);
     MimeType type = MimeType.PDF;
     ////////////---------------------------------------------->
-    // final dir = await FileSaver.instance.saveFile(
-    //     "QRRRRR(ณ วันที่${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day})",
-    //     data,
-    //     "pdf",
-    //     mimeType: type);
+    final dir = await FileSaver.instance
+        .saveFile("Generator QR $name", data, "pdf", mimeType: type);
     ////////////---------------------------------------------->
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              PreviewChaoAreaScreen(doc: doc, Status_: 'Generator QR $name'),
-        ));
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    String? _route = preferences.getString('route');
+    MaterialPageRoute materialPageRoute = await MaterialPageRoute(
+        builder: (BuildContext context) => AdminScafScreen(route: _route));
+    Navigator.pushAndRemoveUntil(context, materialPageRoute, (route) => false);
+
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) =>
+    //           PreviewChaoAreaScreen(doc: doc, Status_: 'Generator QR $name'),
+    //     ));
   }
 }

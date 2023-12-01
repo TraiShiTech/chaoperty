@@ -25,7 +25,7 @@ String convertToThaiBaht(double amount) {
     'แสน',
     'ล้าน'
   ];
-/////////////////////////////------------------------>(จำนวนเต็ม)
+   /////////////////////////////------------------------>(จำนวนเต็ม)
   String convertNumberToText(int number) {
     String result = '';
     int numberIntPart = number.toInt();

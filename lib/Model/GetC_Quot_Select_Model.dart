@@ -31,6 +31,7 @@ class QuotxSelectModel {
   String? total;
   String? dataUpdate;
   String? dtype;
+  String? etype;
 
   QuotxSelectModel(
       {this.ser,
@@ -64,7 +65,8 @@ class QuotxSelectModel {
       this.st,
       this.total,
       this.dataUpdate,
-      this.dtype});
+      this.dtype,
+      this.etype});
 
   QuotxSelectModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -99,6 +101,7 @@ class QuotxSelectModel {
     total = json['total'];
     dataUpdate = json['data_update'];
     dtype = json['dtype'];
+    etype = json['etype'];
   }
 
   Map<String, dynamic> toJson() {
@@ -135,6 +138,7 @@ class QuotxSelectModel {
     data['total'] = this.total;
     data['data_update'] = this.dataUpdate;
     data['dtype'] = this.dtype;
+    data['etype'] = this.etype;
     return data;
   }
 }

@@ -848,14 +848,14 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                                 color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                                 // fontWeight: FontWeight.bold,
                                                                                 fontFamily: Font_.Fonts_T)),
-                                                                        inputFormatters: <TextInputFormatter>[
-                                                                          // for below version 2 use this
-                                                                          FilteringTextInputFormatter.allow(
-                                                                              RegExp(r'[0-9]')),
-                                                                          // for version 2 and greater youcan also use this
-                                                                          FilteringTextInputFormatter
-                                                                              .digitsOnly
-                                                                        ],
+                                                                        // inputFormatters: <TextInputFormatter>[
+                                                                        //   // for below version 2 use this
+                                                                        //   FilteringTextInputFormatter.allow(
+                                                                        //       RegExp(r'[0-9]')),
+                                                                        //   // for version 2 and greater youcan also use this
+                                                                        //   FilteringTextInputFormatter
+                                                                        //       .digitsOnly
+                                                                        // ],
                                                                       ),
                                                                     ],
                                                                   ),

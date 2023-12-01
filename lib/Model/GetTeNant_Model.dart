@@ -59,6 +59,9 @@ class TeNantModel {
   String? amt_expser11;
   String? amt_expser12;
   String? cc_remark;
+  String? custno;
+  String? user_name;
+  String? passw;
 
   TeNantModel({
     this.ser,
@@ -121,6 +124,9 @@ class TeNantModel {
     this.amt_expser11,
     this.amt_expser12,
     this.cc_remark,
+    this.custno,
+    this.user_name,
+    this.passw,
   });
 
   TeNantModel.fromJson(Map<String, dynamic> json) {
@@ -187,6 +193,9 @@ class TeNantModel {
     amt_expser11 = json['amt_expser11'];
     amt_expser12 = json['amt_expser12'];
     cc_remark = json['cc_remark'];
+    custno = json['custno'];
+    user_name = json['user_name'];
+    passw = json['passw'];
   }
 
   Map<String, dynamic> toJson() {
@@ -253,6 +262,9 @@ class TeNantModel {
     data['amt_expser11'] = this.amt_expser11;
     data['amt_expser12'] = this.amt_expser12;
     data['cc_remark'] = this.cc_remark;
+    data['custno'] = this.custno;
+    data['user_name'] = this.user_name;
+    data['passw'] = this.passw;
 
     return data;
   }

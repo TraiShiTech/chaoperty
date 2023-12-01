@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -12,8 +11,6 @@ import 'package:printing/printing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../PeopleChao/Rental_Information.dart';
-
-
 
 class Pdfgen_Agreement {
 //////////---------------------------------------------------->( **** เอกสารสัญญาเช่า ปกติ  )
@@ -57,10 +54,11 @@ class Pdfgen_Agreement {
     // var dataint = fontData.buffer
     //     .asUint8List(fontData.offsetInBytes, fontData.lengthInBytes);
     // final PdfFont font = PdfFont.of(pdf, data: dataint);
-    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
     var Colors_pd = PdfColors.black;
 
     final ttf = pw.Font.ttf(font);
+    double font_Size = 12.0;
     DateTime date = DateTime.now();
     // var formatter = DateFormat('MMMMd', 'th');
     String thaiDate = DateFormat('d เดือน MMM', 'th').format(date);
@@ -125,7 +123,7 @@ class Pdfgen_Agreement {
                             '$renTal_name ',
                             maxLines: 1,
                             style: pw.TextStyle(
-                              fontSize: 8,
+                              fontSize: 10,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -153,7 +151,7 @@ class Pdfgen_Agreement {
                         '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           color: PdfColors.black,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
@@ -163,7 +161,7 @@ class Pdfgen_Agreement {
                         '$bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           color: Colors_pd,
                           font: ttf,
                         ),
@@ -197,7 +195,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -207,7 +205,7 @@ class Pdfgen_Agreement {
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -216,7 +214,7 @@ class Pdfgen_Agreement {
                         'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -225,7 +223,7 @@ class Pdfgen_Agreement {
                         '${DateFormat('ณ วันที่: d เดือน MMM ปี ', 'th').format(DateTime.now())}${DateTime.now().year + 543}',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -246,7 +244,7 @@ class Pdfgen_Agreement {
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
                     color: Colors_pd,
-                    fontSize: 11.0,
+                    fontSize: font_Size,
                     fontWeight: pw.FontWeight.bold,
                     font: ttf,
                   ),
@@ -266,7 +264,7 @@ class Pdfgen_Agreement {
                         'เลขที่สัญญา.........$Get_Value_cid................ ',
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -275,7 +273,7 @@ class Pdfgen_Agreement {
                         'ทำที่ $renTal_name ',
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -283,7 +281,7 @@ class Pdfgen_Agreement {
                       pw.Text(
                         'วันที่ทำสัญญา ............. ',
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -298,7 +296,7 @@ class Pdfgen_Agreement {
               'สัญญาฉบับนี้ ทำขึ้นระหว่าง........$bill_name........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -307,7 +305,7 @@ class Pdfgen_Agreement {
               'ที่อยู่........$bill_addr........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -317,7 +315,7 @@ class Pdfgen_Agreement {
               'ซึ่งต่อไปในสัญญานี้เรียกว่า “ผู้ให้เช่า” ฝ่ายหนึ่งกับ........$Form_bussshop........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -326,7 +324,7 @@ class Pdfgen_Agreement {
               'ที่อยู่..............$Form_address.................. ',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -335,13 +333,13 @@ class Pdfgen_Agreement {
               'เลขประจำตัวผู้เสียภาษี..............$Form_tax.................. ',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                  fontSize: font_Size, font: ttf, color: PdfColors.black),
             ),
             pw.Text(
               'เบอร์โทรศัพท์.....$Form_tel...........Email........$Form_email................................... ',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -351,7 +349,7 @@ class Pdfgen_Agreement {
               '        ซึ่งต่อไปในสัญญานี้เรียกว่า “ผู้เช่า” อีกฝ่ายหนึ่ง',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -360,7 +358,7 @@ class Pdfgen_Agreement {
               '        ทั้งสองฝ่ายตกลงทำสัญญาดังมีข้อความต่อไปนี้',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -370,7 +368,7 @@ class Pdfgen_Agreement {
               'ข้อ 1. ผู้ให้เช่า ตกลงให้เช่า และ ผู้เช่าตกลงเช่า พื้นที่บางส่วน บริเวณพื้นที่โซน....$Form_zn....รหัสพื้นที่....$Form_ln....',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
@@ -381,7 +379,7 @@ class Pdfgen_Agreement {
               'มีเนื้อที่ประมาณ....$Form_area....ตารางเมตร จำนวนพื้นที่....$Form_qty....ล็อค/ห้อง',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
@@ -391,7 +389,7 @@ class Pdfgen_Agreement {
               'ตั้งอยู่........$bill_addr........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
@@ -402,7 +400,7 @@ class Pdfgen_Agreement {
               '        ซึ่งต่อไปนี้ในสัญญานี้เรียกว่า “พื้นที่เช่า”',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -419,7 +417,7 @@ class Pdfgen_Agreement {
                           : 'ข้อ 2. ผู้ให้เช่าตกลงให้ผู้เช่า เช่าพื้นที่เช่า มีกำหนดอายุ........$Form_period........$Form_rtname',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
@@ -430,7 +428,7 @@ class Pdfgen_Agreement {
               'เริ่มอายุการเช่าตั้งแต่วันที่........$Form_sdate........และสิ้นสุดในวันที่........$Form_ldate........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -440,7 +438,7 @@ class Pdfgen_Agreement {
               ' โดยมีวัตถุประสงค์ของการเช่าเพื่อทำธุรกิจ........$Form_typeshop........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -451,7 +449,7 @@ class Pdfgen_Agreement {
                   : 'โดยใช้ชื่อธุรกิจว่า........$Form_nameshop........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -462,7 +460,7 @@ class Pdfgen_Agreement {
               'ข้อ 3.  ผู้เช่าจะชำระค่าบริการแก่ผู้ให้เช่า ดังนี้ ',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
@@ -494,7 +492,7 @@ class Pdfgen_Agreement {
                           maxLines: 1,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -512,7 +510,7 @@ class Pdfgen_Agreement {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -530,7 +528,7 @@ class Pdfgen_Agreement {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -548,7 +546,7 @@ class Pdfgen_Agreement {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -566,7 +564,7 @@ class Pdfgen_Agreement {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -591,7 +589,7 @@ class Pdfgen_Agreement {
                           maxLines: 2,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                              fontSize: 8.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -609,7 +607,7 @@ class Pdfgen_Agreement {
                           maxLines: 2,
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
-                              fontSize: 8.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -627,7 +625,7 @@ class Pdfgen_Agreement {
                           maxLines: 2,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                              fontSize: 8.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -645,7 +643,7 @@ class Pdfgen_Agreement {
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
-                              fontSize: 8.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -663,7 +661,7 @@ class Pdfgen_Agreement {
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
-                              fontSize: 8.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -686,7 +684,7 @@ class Pdfgen_Agreement {
               '        โดยผู้ให้เช่าต้องให้การบริการในส่วนที่เก็บค่าบริการอย่างสุจริตและโปร่งใสตามหน้าที่ของผู้ให้เช่า',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -696,7 +694,7 @@ class Pdfgen_Agreement {
               'ข้อ 4.  ผู้เช่าตกลงวางเงินประกันการเช่า ดังนี้',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -706,7 +704,7 @@ class Pdfgen_Agreement {
               ' ( หากมีระบุไว้ในข้อ 3 )',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -716,7 +714,7 @@ class Pdfgen_Agreement {
               '        ให้แก่ผู้ให้เช่าเพื่อเป็นการประกันการปฏิบัติตามสัญญาเช่าและเป็นประกันความเสียหายใดๆที่อาจเกิดขึ้นแก่ พื้นที่เช่าและ/หรือ แก่ผู้ให้เช่า',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -725,7 +723,7 @@ class Pdfgen_Agreement {
               '        เงินประกันการเช่านี้ผู้ให้เช่าจะคืนให้แก่ผู้เช่าในทันทีที่สัญญาเช่าสิ้นสุดลงโดยผู้ให้เช่ามีสิทธิที่จะหักค่าเช่าที่ ค้างชำระอยู่และหากเงินประกันการเช่านี้มีจำนวนไม่เพียงพอ ผู้เช่า สัญญาว่าจะชำระเงินส่วนที่ขาดให้แก่ ผู้ให้เช่า ในทันทีที่ได้รับการทวงถาม',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -735,7 +733,7 @@ class Pdfgen_Agreement {
               'ข้อ 5.  เมื่อสัญญาเช่าฉบับนี้สิ้นสุดลงตามระยะเวลาดังกล่าวใน ข้อ 2. โดย ผู้เช่ามิได้เคยมีการผิดนัดผิดสัญญาในข้อหนึ่ง ข้อใดมาก่อนหากผู้เช่าประสงค์จะขอเช่าพื้นที่เช่านี้ต่อไปอีกต้องดำเนินการแจ้งความประสงค์ดังกล่าวล่วงหน้าเป็นหนังสือก่อนสิ้นสุดระยะเวลาที่ได้ระบุไว้ในสัญญานี้ไม่น้อยกว่า 3 เดือน',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: PdfColors.black,
               ),
@@ -744,7 +742,7 @@ class Pdfgen_Agreement {
               '        เมื่อผู้ให้เช่าได้รับหนังสือตามที่ได้กล่าวไว้ในวรรคแรกแล้วจะทำการตกลงรายละเอียดอีกครั้งเพื่อจัดทำสัญญาเช่า ฉบับใหม่โดยผู้ให้เช่าจะต้องเสนอราคาของการเช่าครั้งใหม่ให้ผู้เช่าก่อนทุกครั้ง',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -755,7 +753,7 @@ class Pdfgen_Agreement {
               'ข้อ 6.  ค่าภาษีโรงเรือนและที่ดิน ผู้ให้เช่าจะเป็นผู้ชำระเองทั้งสิ้น',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -765,7 +763,7 @@ class Pdfgen_Agreement {
               'ข้อ 7.  ผู้ให้เช่ามีหน้าที่ในการจัดหรือแนะนำสถานที่จอดรถและแนวทางการอำนวยการจราจรซึ่งสามารถรวมไปยัง ระบบรักษาความปลอดภัยภายในและภายนอกอาคาร ตลอด 24 ชั่วโมง ',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -775,7 +773,7 @@ class Pdfgen_Agreement {
               'ข้อ 8.  ผู้เช่า มีหน้าที่ในการดูแลรักษาและซ่อมแซม พื้นที่เช่า เสมอวิญญูชนจะพึงสงวนรักษาทรัพย์สินของตนเองโดยทุน ทรัพย์ของผู้เช่าเองเว้นแต่การชำรุดทรุดโทรมที่เกิดขึ้นตามสภาพของพื้นที่เช่าจนถึงขนาดต้องซ่อมแซมใหญ่ ผู้ให้เช่า จึงจะเป็นผู้รับผิดชอบในค่าใช้จ่ายสำหรับการซ่อมแซมนั้น',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -784,7 +782,7 @@ class Pdfgen_Agreement {
               '        หากผู้เช่า ไม่ปฏิบัติหน้าที่ในการดูแลรักษาและซ่อมแซม พื้นที่เช่า ตามวรรคแรก และผู้ให้เช่าได้บอกกล่าวแล้ว ผู้ให้เช่า มีสิทธิจัดการซ่อมแซมเองโดย ผู้เช่า ต้องเป็นผู้ออกค่าใช้จ่ายในการนั้นทั้งสิ้น',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -794,7 +792,7 @@ class Pdfgen_Agreement {
               'ข้อ 9.  ผู้เช่า จะไม่ทำการดัดแปลง ต่อเติม รื้อถอน หรือเปลี่ยนแปลง พื้นที่เช่า ไม่ว่าจะทั้งหมดหรือเพียงบางส่วนเว้นแต่ จะได้รับความยินยอมเป็นหนังสือจาก ผู้ให้เช่าก่อน หากผู้เช่า ได้กระทำการไปโดยไม่ได้รับความยินยอม ผู้ให้เช่าจะเรียก ให้ผู้เช่าทำพื้นที่เช่าให้กลับสู่สภาพเดิมรวมถึงเรียกให้ชดใช้ในค่าเสียหายอันเกิดจากการดัดแปลง ต่อเติม รื้อถอน หรือเปลี่ยนแปลงนั้นก็ได้',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: PdfColors.black,
               ),
@@ -803,7 +801,7 @@ class Pdfgen_Agreement {
               '        บรรดาทรัพย์สิน อุปกรณ์ หรือเครื่องตกแต่งที่มีลักษณะติดตรึงตรากับพื้นที่เช่า ที่ผู้เช่า หรือบริวารนำมาติดตั้ง ไม่ว่าจะโดยได้รับความยินยอมจาก ผู้ให้เช่า หรือไม่ก็ตาม ให้ตกเป็นกรรมสิทธิ์ของผู้ให้เช่าในทันที โดยผู้ให้เช่า ไม่ต้องชดใช้ราคาหรือค่าตอบแทนใด ๆ ทั้งสิ้น',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -813,7 +811,7 @@ class Pdfgen_Agreement {
               'ข้อ 10.  ผู้เช่า ยินยอมให้ ผู้ให้เช่าหรือตัวแทนของผู้ให้เช่า เข้าตรวจตรา พื้นที่เช่า ได้เป็นครั้งคราวและในระยะเวลาที่เหมาะสมตามสมควร',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -823,7 +821,7 @@ class Pdfgen_Agreement {
               'ข้อ 11.  ผู้เช่า จะไม่นำพื้นที่เช่า ไปให้ผู้อื่นเช่าช่วง หรือยินยอมไม่ว่าจะโดยชัดแจ้ง หรือโดยปริยายให้ผู้อื่นใช้ พื้นที่เช่า เว้นแต่จะได้รับความยินยอมเป็นหนังสือจาก ผู้ให้เช่าก่อน',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -834,7 +832,7 @@ class Pdfgen_Agreement {
               'ข้อ 12.  ผู้เช่า สัญญาว่าจะไม่กระทำการใด ๆ ที่เป็นการขัดต่อกฎหมาย หรือศีลธรรมอันดีของประชาชน หรือเป็นการก่อให้เกิดความเดือนร้อนรำคาญแก่บุคคลอื่น',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -845,7 +843,7 @@ class Pdfgen_Agreement {
               'ข้อ 13.  ถ้าผู้เช่า เลิกสัญญาเช่าก่อนครบกำหนดระยะเวลาตามสัญญานี้ หรือผู้เช่า ผิดนัดผิดสัญญาข้อใดข้อหนึ่งก็ตาม ผู้ให้เช่า มีสิทธิบอกเลิกสัญญาเช่า และทำการริบเงินประกันการเช่าไว้ทั้งหมดได้ทันที',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -855,7 +853,7 @@ class Pdfgen_Agreement {
               'ข้อ 14.  เมื่อสัญญาเช่าได้สิ้นสุดลงไม่ว่าจะโดยเหตุใดก็ตาม ผู้เช่า ต้องขนย้ายทรัพย์สินและบริวารออกไปจากพื้นที่เช่า และส่งมอบพื้นที่เช่าคืนให้แก่ ผู้ให้เช่า ในสภาพที่เรียบร้อย ภายในกำหนดเวลา 15 วันนับแต่วันที่สัญญาสิ้นสุดลง โดย ผู้เช่าจะเรียกร้องค่าขนย้ายหรือค่าใช้จ่ายประการใด ๆ จากผู้ให้เช่า อีกไม่ได้ หากผู้เช่า ไม่ดำเนินการภายในกำหนด ผู้เช่ายินยอมให้ผู้ให้เช่าปรับตามเรตอัตราค่าเช่ารายวันคูณ 2 เท่า ไปจนกว่าจะดำเนินการได้ถูกต้องตามสัญญา',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -865,7 +863,7 @@ class Pdfgen_Agreement {
               'ข้อ 15.  ในกรณีที่พื้นที่เช่าถูกเวนคืนตามกฎหมายของทางราชการก่อนครบกำหนดตามสัญญาเช่าหรือเกิดอัคคีภัยหรือ วินาศภัยใดๆขึ้นกับพื้นที่เช่าจนเป็นเหตุให้ไม่สามารถใช้งานพื้นที่เช่าได้โดยมิใช่สาเหตุที่เกิดจากผู้เช่าแล้วคู่สัญญาทั้งสอง ฝ่ายตกลงกันให้ถือว่าสัญญาเช่าฉบับนี้เป็นอันระงับสิ้นสุดลงและต่างฝ่ายต่าง ไม่ติดใจเรียกร้องค่าเสียหายประการใด ๆ ต่อกันอีก',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -875,7 +873,7 @@ class Pdfgen_Agreement {
               'ข้อ 16.  หากคู่สัญญาฝ่ายใดฝ่ายหนึ่ง ผิดนัดผิดสัญญาข้อใดข้อหนึ่ง คู่สัญญาอีกฝ่ายหนึ่ง มีสิทธิบอกเลิกสัญญาได้ทันที และคู่สัญญาฝ่ายที่ผิดยินยอมชดใช้ค่าเสียหายตามที่เกิดขึ้นจริง นับแต่วันบอกเลิกสัญญาเป็นต้นไป',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -887,7 +885,7 @@ class Pdfgen_Agreement {
               '        สัญญานี้ทำขึ้น 2 ฉบับ มีข้อความตรงกัน คู่สัญญาทั้งสองฝ่ายได้อ่าน และเข้าข้อความในสัญญาฉบับนี้โดยตลอดแล้ว เห็นว่าถูกต้องและตรงตามความประสงค์แล้ว จึงได้ลงลายมือชื่อไว้เป็นหลักฐานต่อหน้าพยาน และเก็บสัญญาไว้ฝ่ายละฉบับ',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 color: Colors_pd,
               ),
@@ -904,7 +902,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -915,7 +913,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -926,7 +924,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -943,7 +941,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -954,7 +952,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -965,7 +963,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -985,7 +983,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -996,7 +994,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -1007,7 +1005,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -1024,7 +1022,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -1034,7 +1032,7 @@ class Pdfgen_Agreement {
                         '(.......................................................) ',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),
@@ -1045,7 +1043,7 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                         ),

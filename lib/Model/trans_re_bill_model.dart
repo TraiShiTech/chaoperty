@@ -124,6 +124,10 @@ class TransReBillModel {
   String? descr;
   String? descr1;
   String? slip;
+  String? ptser;
+  String? ptname;
+  String? total_duesbill;
+  String? sum_items;
 
   TransReBillModel({
     this.ser,
@@ -247,6 +251,10 @@ class TransReBillModel {
     this.descr,
     this.descr1,
     this.slip,
+    this.ptser,
+    this.ptname,
+    this.total_duesbill,
+    this.sum_items,
   });
 
   TransReBillModel.fromJson(Map<String, dynamic> json) {
@@ -372,6 +380,10 @@ class TransReBillModel {
     descr = json['descr'];
     descr1 = json['descr1'];
     slip = json['slip'];
+    ptser = json['ptser'];
+    ptname = json['ptname'];
+    total_duesbill = json['total_duesbill'];
+    sum_items = json['sum_items'];
   }
 
   Map<String, dynamic> toJson() {
@@ -498,6 +510,10 @@ class TransReBillModel {
     data['descr'] = this.descr;
     data['descr1'] = this.descr1;
     data['slip'] = this.slip;
+    data['ptser'] = this.ptser;
+    data['ptname'] = this.ptname;
+    data['total_duesbill'] = this.total_duesbill;
+    data['sum_items'] = this.sum_items;
 
     return data;
   }

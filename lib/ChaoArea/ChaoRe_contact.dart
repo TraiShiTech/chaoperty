@@ -39,10 +39,8 @@ import '../Model/GetUnit_Model.dart';
 import '../Model/GetUnitx_Model.dart';
 import '../Model/GetVat_Model.dart';
 import '../Model/GetWht_Model.dart';
-
 import '../PDF/PDF_Agreement/pdf_Agreement.dart';
-
-import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
+import '../PeopleChao/Pays_.dart';
 import '../PeopleChao/Rental_Information.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
@@ -1531,44 +1529,44 @@ class _ChaoReContactState extends State<ChaoReContact> {
                             flex: 1,
                             child: Column(
                               children: [
-                                // Padding(
-                                //   padding: const EdgeInsets.all(8.0),
-                                //   child: InkWell(
-                                //     onTap: () {
-                                //       // setState(() {
-                                //       //   select_coutumerindex = 1;
-                                //       // });
-                                //       select_coutumerAll();
-                                //     },
-                                //     child: Container(
-                                //       decoration: BoxDecoration(
-                                //         color: Colors.grey,
-                                //         borderRadius: const BorderRadius.only(
-                                //           topLeft: Radius.circular(10),
-                                //           topRight: Radius.circular(10),
-                                //           bottomLeft: Radius.circular(10),
-                                //           bottomRight: Radius.circular(10),
-                                //         ),
-                                //         border: Border.all(
-                                //             color: Colors.black, width: 1),
-                                //       ),
-                                //       padding: const EdgeInsets.all(8.0),
-                                //       child: const Text(
-                                //         'ค้นจากทะเบียน',
-                                //         maxLines: 5,
-                                //         textAlign: TextAlign.center,
-                                //         style: TextStyle(
-                                //           color: PeopleChaoScreen_Color
-                                //               .Colors_Text1_,
-                                //           // fontWeight: FontWeight.bold,
-                                //           fontFamily: FontWeight_.Fonts_T,
-                                //           fontWeight: FontWeight.bold,
-                                //           //fontSize: 10.0
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      // setState(() {
+                                      //   select_coutumerindex = 1;
+                                      // });
+                                      select_coutumerAll();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10),
+                                        ),
+                                        border: Border.all(
+                                            color: Colors.black, width: 1),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Text(
+                                        'ค้นจากทะเบียน',
+                                        maxLines: 5,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text1_,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                          fontWeight: FontWeight.bold,
+                                          //fontSize: 10.0
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 // if (!Responsive.isDesktop(context))
                                 //   Padding(
                                 //     padding: const EdgeInsets.all(8.0),
@@ -5554,8 +5552,9 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                       flex: 6,
                                                                       child:
                                                                           Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -5583,8 +5582,9 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                       flex: 1,
                                                                       child:
                                                                           Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -5617,7 +5617,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .fromLTRB(
+                                                                        .fromLTRB(
                                                                         8,
                                                                         0,
                                                                         8,
@@ -8837,12 +8837,12 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                                                                             color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                                                                             // fontWeight: FontWeight.bold,
                                                                                                                             fontFamily: Font_.Fonts_T)),
-                                                                                                                    inputFormatters: <TextInputFormatter>[
-                                                                                                                      // for below version 2 use this
-                                                                                                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                                                                                                      // for version 2 and greater youcan also use this
-                                                                                                                      FilteringTextInputFormatter.digitsOnly
-                                                                                                                    ],
+                                                                                                                    // inputFormatters: <TextInputFormatter>[
+                                                                                                                    //   // for below version 2 use this
+                                                                                                                    //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                                                    //   // for version 2 and greater youcan also use this
+                                                                                                                    //   FilteringTextInputFormatter.digitsOnly
+                                                                                                                    // ],
                                                                                                                   ),
                                                                                                                 ],
                                                                                                               ),
@@ -9714,7 +9714,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -9781,7 +9781,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -9858,7 +9858,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -10617,8 +10617,9 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                       flex: 1,
                                                                       child:
                                                                           Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             AutoSizeText(
                                                                           maxLines:
@@ -10646,8 +10647,9 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                       flex: 1,
                                                                       child:
                                                                           Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             AutoSizeText(
                                                                           maxLines:
@@ -10847,7 +10849,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -10914,7 +10916,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -10990,7 +10992,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -12052,7 +12054,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                 // ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     AutoSizeText(
@@ -12371,6 +12373,12 @@ class _ChaoReContactState extends State<ChaoReContact> {
             Sub_Body4_Web(),
             const SizedBox(
               height: 20,
+            ),
+            Pays(
+              Get_Value_cid: Get_Value_cid,
+              Get_Value_NameShop_index: '1',
+              namenew: _Form_nameshop,
+              can: 'A',
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -13006,7 +13014,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                               color: Colors
                                                                   .red[600],
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -13589,7 +13597,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                             color:
                                                                 Colors.red[600],
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -14044,7 +14052,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                             color:
                                                                 Colors.red[600],
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),

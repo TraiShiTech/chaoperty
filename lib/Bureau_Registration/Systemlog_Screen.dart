@@ -33,6 +33,7 @@ class SystemlogScreen extends StatefulWidget {
 }
 
 class _SystemlogScreenState extends State<SystemlogScreen> {
+  int Count_OFF_SET = 0;
   List<RenTalModel> renTalModels = [];
   List<SyslogModel> syslogModel = [];
   List<SyslogModel> _syslogModel = <SyslogModel>[];
@@ -142,8 +143,8 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
         : '${Status_User[Status_3_]}';
 
     String url = (Value_selectDate == null)
-        ? '${MyConstant().domain}/GC_Syslog.php?isAdd=true&ren=$ren&datex_=null&status=$Status_'
-        : '${MyConstant().domain}/GC_Syslog.php?isAdd=true&ren=$ren&datex_=$Value_selectDate&status=$Status_';
+        ? '${MyConstant().domain}/GC_Syslog.php?isAdd=true&ren=$ren&datex_=null&status=$Status_&count_OFFSET=$Count_OFF_SET'
+        : '${MyConstant().domain}/GC_Syslog.php?isAdd=true&ren=$ren&datex_=$Value_selectDate&status=$Status_&count_OFFSET=$Count_OFF_SET';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -282,7 +283,96 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
     );
   }
 
-  ///////////////------------------------------------------------->
+  ///----------------------->
+  Widget Next_page() {
+    return Row(
+      children: [
+        Expanded(child: Text('')),
+        StreamBuilder(
+            stream: Stream.periodic(const Duration(milliseconds: 300)),
+            builder: (context, snapshot) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: AppbackgroundColor.Sub_Abg_Colors,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                ),
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.menu_book,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                    InkWell(
+                        onTap: (Count_OFF_SET == 0)
+                            ? null
+                            : () async {
+                                if (Count_OFF_SET == 0) {
+                                } else {
+                                  Count_OFF_SET = Count_OFF_SET - 100;
+                                  setState(() {
+                                    checkPreferance();
+                                    red_Syslog();
+                                    read_GC_rental();
+                                  });
+                                }
+                              },
+                        child: Icon(
+                          Icons.arrow_left,
+                          color: (Count_OFF_SET == 0)
+                              ? Colors.grey[200]
+                              : Colors.black,
+                          size: 25,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                      child: Text(
+                        // '$Count_OFF_SET',
+                        (Count_OFF_SET == 0)
+                            ? '${Count_OFF_SET + 1}'
+                            : '${(Count_OFF_SET / 100) + 1}',
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: FontWeight_.Fonts_T,
+                          //fontSize: 10.0
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                        onTap: (syslogModel.length == 0)
+                            ? null
+                            : () async {
+                                Count_OFF_SET = Count_OFF_SET + 100;
+                                setState(() {
+                                  checkPreferance();
+                                  red_Syslog();
+                                  read_GC_rental();
+                                });
+                              },
+                        child: Icon(
+                          Icons.arrow_right,
+                          color: (syslogModel.length == 0)
+                              ? Colors.grey[200]
+                              : Colors.black,
+                          size: 25,
+                        )),
+                  ],
+                ),
+              );
+            }),
+      ],
+    );
+  }
+
+///////////--------------------------------->
   Widget build(BuildContext context) {
     return Expanded(
         child: Padding(
@@ -313,6 +403,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                             setState(() {
                               ser_type_TapMan = 0;
                               Status_3_ = 0;
+                              Count_OFF_SET = 0;
                             });
                             red_Syslog();
                           },
@@ -348,6 +439,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                             setState(() {
                               ser_type_TapMan = 1;
                               Status_3_ = 0;
+                              Count_OFF_SET = 0;
                             });
                             red_Syslog();
                           },
@@ -405,6 +497,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                   setState(() {
                                                     tappedIndex_ = '';
                                                     Status_3_ = i;
+                                                    Count_OFF_SET = 0;
                                                   });
                                                   red_Syslog();
                                                 },
@@ -802,6 +895,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                     onTap: () async {
                                                       setState(() {
                                                         Value_selectDate = null;
+                                                        Count_OFF_SET = 0;
                                                       });
                                                       red_Syslog();
                                                       Navigator.pop(context);
@@ -834,6 +928,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                 child: InkWell(
                                                     onTap: () async {
                                                       Navigator.pop(context);
+                                                      Count_OFF_SET = 0;
                                                       _select_Date(context);
                                                     },
                                                     child: Container(
@@ -1131,135 +1226,152 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                     // border: Border.all(color: Colors.grey, width: 1),
                                   ),
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Row(
+                                  child: Column(
                                     children: [
-                                      // Expanded(
-                                      //   flex: 1,
-                                      //   child: Container(
-                                      //     child: const Center(
-                                      //       child: Text(
-                                      //         'atype',
-                                      //         style: TextStyle(
-                                      //             color: CustomerScreen_Color
-                                      //                 .Colors_Text1_,
-                                      //             fontWeight: FontWeight.bold,
-                                      //             fontFamily:
-                                      //                 FontWeight_.Fonts_T),
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          child: const Center(
-                                            child: Text(
-                                              'วันที่',
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
+                                      Next_page(),
+                                      Row(
+                                        children: [
+                                          // Expanded(
+                                          //   flex: 1,
+                                          //   child: Container(
+                                          //     child: const Center(
+                                          //       child: Text(
+                                          //         'atype',
+                                          //         style: TextStyle(
+                                          //             color: CustomerScreen_Color
+                                          //                 .Colors_Text1_,
+                                          //             fontWeight: FontWeight.bold,
+                                          //             fontFamily:
+                                          //                 FontWeight_.Fonts_T),
+                                          //       ),
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              child: const Center(
+                                                child: Text(
+                                                  'วันที่',
+                                                  style: TextStyle(
+                                                      color:
+                                                          CustomerScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          child: const Center(
-                                            child: Text(
-                                              'เวลา',
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              child: const Center(
+                                                child: Text(
+                                                  'เวลา',
+                                                  style: TextStyle(
+                                                      color:
+                                                          CustomerScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Container(
-                                          child: const Center(
-                                            child: Text(
-                                              'ไอพี(ip)',
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Container(
+                                              child: const Center(
+                                                child: Text(
+                                                  'ไอพี(ip)',
+                                                  style: TextStyle(
+                                                      color:
+                                                          CustomerScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      // Expanded(
-                                      //   flex: 1,
-                                      //   child: Container(
-                                      //     child: const Center(
-                                      //       child: Text(
-                                      //         'uid',
-                                      //         style: TextStyle(
-                                      //             color: CustomerScreen_Color
-                                      //                 .Colors_Text1_,
-                                      //             fontWeight: FontWeight.bold,
-                                      //             fontFamily:
-                                      //                 FontWeight_.Fonts_T),
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Container(
-                                          child: const Center(
-                                            child: Text(
-                                              'ผู้ใช้',
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
+                                          // Expanded(
+                                          //   flex: 1,
+                                          //   child: Container(
+                                          //     child: const Center(
+                                          //       child: Text(
+                                          //         'uid',
+                                          //         style: TextStyle(
+                                          //             color: CustomerScreen_Color
+                                          //                 .Colors_Text1_,
+                                          //             fontWeight: FontWeight.bold,
+                                          //             fontFamily:
+                                          //                 FontWeight_.Fonts_T),
+                                          //       ),
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Container(
+                                              child: const Center(
+                                                child: Text(
+                                                  'ผู้ใช้',
+                                                  style: TextStyle(
+                                                      color:
+                                                          CustomerScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          child: const Center(
-                                            child: Text(
-                                              'เมนู',
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              child: const Center(
+                                                child: Text(
+                                                  'เมนู',
+                                                  style: TextStyle(
+                                                      color:
+                                                          CustomerScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 3,
-                                        child: Container(
-                                          child: const Center(
-                                            child: Text(
-                                              'รายละเอียด',
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Container(
+                                              child: const Center(
+                                                child: Text(
+                                                  'รายละเอียด',
+                                                  style: TextStyle(
+                                                      color:
+                                                          CustomerScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     ],
                                   )),

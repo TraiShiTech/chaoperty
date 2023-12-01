@@ -51,10 +51,11 @@ class Pdfgen_RentalInforma {
     //     .asUint8List(fontData.offsetInBytes, fontData.lengthInBytes);
     // final PdfFont font = PdfFont.of(pdf, data: dataint);
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
-    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
     var Colors_pd = PdfColors.black;
     int pageCount = 1; // Initialize the page count
     final ttf = pw.Font.ttf(font);
+    double font_Size = 12.0;
     DateTime date = DateTime.now();
     var formatter = new DateFormat.MMMMd('th_TH');
     String thaiDate = formatter.format(date);
@@ -122,7 +123,7 @@ class Pdfgen_RentalInforma {
                             '$bill_name ',
                             maxLines: 1,
                             style: pw.TextStyle(
-                              fontSize: 8,
+                              fontSize: 10,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -150,7 +151,7 @@ class Pdfgen_RentalInforma {
                         '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 11.0,
+                          fontSize: font_Size,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                           color: Colors_pd,
@@ -160,7 +161,7 @@ class Pdfgen_RentalInforma {
                         'ที่อยู่: $bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           color: Colors_pd,
                           font: ttf,
                         ),
@@ -198,7 +199,7 @@ class Pdfgen_RentalInforma {
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -212,7 +213,7 @@ class Pdfgen_RentalInforma {
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -225,7 +226,7 @@ class Pdfgen_RentalInforma {
                             : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -238,7 +239,7 @@ class Pdfgen_RentalInforma {
                         //'ณ วันที่:  $thaiDate ${DateTime.now().year + 543}',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -327,7 +328,7 @@ class Pdfgen_RentalInforma {
                   'ใบเสนอราคา/สัญญาเช่าพื้นที่',
                   textAlign: pw.TextAlign.left,
                   style: pw.TextStyle(
-                    fontSize: 10.0,
+                    fontSize: font_Size,
                     font: ttf,
                     fontWeight: pw.FontWeight.bold,
                     color: Colors_pd,
@@ -349,7 +350,7 @@ class Pdfgen_RentalInforma {
                           'ข้อมูลผู้เช่า',
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                            fontSize: 10.0,
+                            fontSize: font_Size,
                             font: ttf,
                             fontWeight: pw.FontWeight.bold,
                             color: Colors_pd,
@@ -374,7 +375,7 @@ class Pdfgen_RentalInforma {
                             'ข้อมูลผู้เช่า',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: PdfColors.green900),
@@ -390,7 +391,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'ประเภท : ',
                             style: pw.TextStyle(
-                              fontSize: 9.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -410,7 +411,7 @@ class Pdfgen_RentalInforma {
                               '$_verticalGroupValue',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -426,7 +427,7 @@ class Pdfgen_RentalInforma {
                                 : 'เลขที่ใบเสนอราคา : ',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 9.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -446,7 +447,7 @@ class Pdfgen_RentalInforma {
                               '$Get_Value_cid',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -464,7 +465,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'ชื่อร้าน : ',
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -484,7 +485,7 @@ class Pdfgen_RentalInforma {
                               '$Form_nameshop',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -498,7 +499,7 @@ class Pdfgen_RentalInforma {
                             'ประเภทร้านค้า :',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -518,7 +519,7 @@ class Pdfgen_RentalInforma {
                               '$Form_typeshop',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -536,7 +537,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'ชื่อผู้เช่า/บริษัท : ',
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -556,7 +557,7 @@ class Pdfgen_RentalInforma {
                               '$Form_bussshop',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 8.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -570,7 +571,7 @@ class Pdfgen_RentalInforma {
                             'ชื่อผู้ติดต่อ :',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -590,7 +591,7 @@ class Pdfgen_RentalInforma {
                               '$Form_bussscontact',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -608,7 +609,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'ที่อยู่ : ',
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -628,7 +629,7 @@ class Pdfgen_RentalInforma {
                               '$Form_address',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -646,7 +647,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'เบอร์โทร : ',
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -666,7 +667,7 @@ class Pdfgen_RentalInforma {
                               '$Form_tel',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -680,7 +681,7 @@ class Pdfgen_RentalInforma {
                             'อีเมล :',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -700,7 +701,7 @@ class Pdfgen_RentalInforma {
                               '$Form_email',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -718,7 +719,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'ID/TAX ID : ',
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -744,7 +745,7 @@ class Pdfgen_RentalInforma {
                               '$Form_tax',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -792,7 +793,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'รหัสพื้นที่เช่า : ',
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -812,7 +813,7 @@ class Pdfgen_RentalInforma {
                               '$Form_ln',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -826,7 +827,7 @@ class Pdfgen_RentalInforma {
                             'โซนพื้นที่เช่า :',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -846,7 +847,7 @@ class Pdfgen_RentalInforma {
                               '$Form_zn',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -864,7 +865,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'รวมพื้นที่เช่า: ',
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -884,7 +885,7 @@ class Pdfgen_RentalInforma {
                               '$Form_area (ตร.ม.)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -898,7 +899,7 @@ class Pdfgen_RentalInforma {
                             'จำนวนพื้นที่ :',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -918,7 +919,7 @@ class Pdfgen_RentalInforma {
                               '$Form_qty ',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -961,7 +962,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'วันที่เริ่มสัญญา/เสนอราคา : ',
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -981,7 +982,7 @@ class Pdfgen_RentalInforma {
                               '$Form_sdate',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -995,7 +996,7 @@ class Pdfgen_RentalInforma {
                             'วันที่สิ้นสุดสัญญา/เสนอราคา :',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -1015,7 +1016,7 @@ class Pdfgen_RentalInforma {
                               '$Form_ldate',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -1033,7 +1034,7 @@ class Pdfgen_RentalInforma {
                           child: pw.Text(
                             'ประเภทการเช่า :',
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -1053,7 +1054,7 @@ class Pdfgen_RentalInforma {
                               '$Form_rtname',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -1067,7 +1068,7 @@ class Pdfgen_RentalInforma {
                             'ระยะเวลาการเช่า :',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -1087,7 +1088,7 @@ class Pdfgen_RentalInforma {
                               '$Form_period',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 9.0,
+                                fontSize: font_Size,
                                 // fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -1157,7 +1158,7 @@ class Pdfgen_RentalInforma {
                               'ลงชื่อ',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 10,
+                                fontSize: font_Size,
                                 fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -1170,7 +1171,7 @@ class Pdfgen_RentalInforma {
                               'ลงชื่อ',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 10,
+                                fontSize: font_Size,
                                 fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 color: Colors_pd,
@@ -1189,7 +1190,7 @@ class Pdfgen_RentalInforma {
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
                                 fontWeight: pw.FontWeight.bold,
-                                fontSize: 10,
+                                fontSize: font_Size,
                                 font: ttf,
                                 color: Colors_pd,
                               ),
@@ -1202,7 +1203,7 @@ class Pdfgen_RentalInforma {
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
                                 fontWeight: pw.FontWeight.bold,
-                                fontSize: 10,
+                                fontSize: font_Size,
                                 font: ttf,
                                 color: Colors_pd,
                               ),
@@ -1219,7 +1220,7 @@ class Pdfgen_RentalInforma {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 10,
+                                fontSize: font_Size,
                                 font: ttf,
                                 color: Colors_pd,
                               ),
@@ -1231,7 +1232,7 @@ class Pdfgen_RentalInforma {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                fontSize: 10,
+                                fontSize: font_Size,
                                 font: ttf,
                                 color: Colors_pd,
                               ),
@@ -1247,7 +1248,7 @@ class Pdfgen_RentalInforma {
                             'หมายเหตุ',
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
-                                fontSize: 10,
+                                fontSize: font_Size,
                                 font: ttf,
                                 color: Colors_pd,
                                 fontWeight: pw.FontWeight.bold),
@@ -1263,7 +1264,7 @@ class Pdfgen_RentalInforma {
                             textAlign: pw.TextAlign.left,
                             maxLines: 1,
                             style: pw.TextStyle(
-                              fontSize: 10,
+                              fontSize: font_Size,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -1309,7 +1310,7 @@ class Pdfgen_RentalInforma {
                           '$bill_name ',
                           maxLines: 1,
                           style: pw.TextStyle(
-                            fontSize: 8,
+                            fontSize: 10,
                             font: ttf,
                             color: Colors_pd,
                           ),
@@ -1337,7 +1338,7 @@ class Pdfgen_RentalInforma {
                       '$bill_name',
                       maxLines: 2,
                       style: pw.TextStyle(
-                        fontSize: 11.0,
+                        fontSize: font_Size,
                         fontWeight: pw.FontWeight.bold,
                         font: ttf,
                         color: Colors_pd,
@@ -1347,7 +1348,7 @@ class Pdfgen_RentalInforma {
                       'ที่อยู่: $bill_addr',
                       maxLines: 3,
                       style: pw.TextStyle(
-                        fontSize: 10.0,
+                        fontSize: font_Size,
                         color: Colors_pd,
                         font: ttf,
                       ),
@@ -1385,7 +1386,7 @@ class Pdfgen_RentalInforma {
                       textAlign: pw.TextAlign.right,
                       maxLines: 1,
                       style: pw.TextStyle(
-                        fontSize: 10.0,
+                        fontSize: font_Size,
                         font: ttf,
                         color: Colors_pd,
                       ),
@@ -1399,7 +1400,7 @@ class Pdfgen_RentalInforma {
                       maxLines: 1,
                       textAlign: pw.TextAlign.right,
                       style: pw.TextStyle(
-                        fontSize: 10.0,
+                        fontSize: font_Size,
                         font: ttf,
                         color: Colors_pd,
                       ),
@@ -1412,7 +1413,7 @@ class Pdfgen_RentalInforma {
                           : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                       maxLines: 2,
                       style: pw.TextStyle(
-                        fontSize: 10.0,
+                        fontSize: font_Size,
                         font: ttf,
                         color: Colors_pd,
                       ),
@@ -1425,7 +1426,7 @@ class Pdfgen_RentalInforma {
                       // 'ณ วันที่:  $thaiDate ${DateTime.now().year + 543}',
                       maxLines: 2,
                       style: pw.TextStyle(
-                        fontSize: 10.0,
+                        fontSize: font_Size,
                         font: ttf,
                         color: Colors_pd,
                       ),
@@ -1454,7 +1455,7 @@ class Pdfgen_RentalInforma {
                       'รายละเอียดค่าบริการ',
                       textAlign: pw.TextAlign.left,
                       style: pw.TextStyle(
-                        fontSize: 10.0,
+                        fontSize: font_Size,
                         font: ttf,
                         fontWeight: pw.FontWeight.bold,
                         color: Colors_pd,
@@ -1487,7 +1488,7 @@ class Pdfgen_RentalInforma {
                               'งวด',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1510,7 +1511,7 @@ class Pdfgen_RentalInforma {
                               'รายการ',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1533,7 +1534,7 @@ class Pdfgen_RentalInforma {
                               'วันที่',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1556,7 +1557,7 @@ class Pdfgen_RentalInforma {
                               'ยอด/งวด',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1579,7 +1580,7 @@ class Pdfgen_RentalInforma {
                               'ยอด',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1610,7 +1611,7 @@ class Pdfgen_RentalInforma {
                               textAlign: pw.TextAlign.left,
                               maxLines: 2,
                               style: pw.TextStyle(
-                                fontSize: 8.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 // fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1634,7 +1635,7 @@ class Pdfgen_RentalInforma {
                               '${quotxSelectModels[index].expname}',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
-                                fontSize: 8.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 // fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1658,7 +1659,7 @@ class Pdfgen_RentalInforma {
                               '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
-                                fontSize: 8.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 // fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1682,7 +1683,7 @@ class Pdfgen_RentalInforma {
                               '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
-                                fontSize: 8.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 // fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1706,7 +1707,7 @@ class Pdfgen_RentalInforma {
                               '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
                               textAlign: pw.TextAlign.right,
                               style: pw.TextStyle(
-                                fontSize: 8.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 // fontWeight: pw.FontWeight.bold,
                                 color: Colors_pd,
@@ -1858,7 +1859,7 @@ class Pdfgen_RentalInforma {
                           pw.Text(
                             'ตัวอักษร ',
                             style: pw.TextStyle(
-                                fontSize: 10,
+                                fontSize: font_Size,
                                 fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 fontStyle: pw.FontStyle.italic,
@@ -1870,7 +1871,7 @@ class Pdfgen_RentalInforma {
                               //"${nFormat2.format(double.parse(Total.toString()))}";
                               '(~${convertToThaiBaht(total_)}~)',
                               style: pw.TextStyle(
-                                fontSize: 10,
+                                fontSize: font_Size,
                                 fontWeight: pw.FontWeight.bold,
                                 font: ttf,
                                 fontStyle: pw.FontStyle.italic,
@@ -1897,7 +1898,7 @@ class Pdfgen_RentalInforma {
                                         style: pw.TextStyle(
                                             fontWeight: pw.FontWeight.bold,
                                             font: ttf,
-                                            fontSize: 10,
+                                            fontSize: font_Size,
                                             color: PdfColors.green900),
                                       ),
                                     ),
@@ -1907,7 +1908,7 @@ class Pdfgen_RentalInforma {
                                       style: pw.TextStyle(
                                           fontWeight: pw.FontWeight.bold,
                                           font: ttf,
-                                          fontSize: 10,
+                                          fontSize: font_Size,
                                           color: PdfColors.green900),
                                     ),
                                   ],
@@ -1962,7 +1963,7 @@ class Pdfgen_RentalInforma {
                             'ลงชื่อ',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -1975,7 +1976,7 @@ class Pdfgen_RentalInforma {
                             'ลงชื่อ',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: Colors_pd,
@@ -1994,7 +1995,7 @@ class Pdfgen_RentalInforma {
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                              fontSize: font_Size,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -2007,7 +2008,7 @@ class Pdfgen_RentalInforma {
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                              fontSize: font_Size,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -2024,7 +2025,7 @@ class Pdfgen_RentalInforma {
                             '(................................)',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10,
+                              fontSize: font_Size,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -2036,7 +2037,7 @@ class Pdfgen_RentalInforma {
                             '(................................)',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
-                              fontSize: 10,
+                              fontSize: font_Size,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -2052,7 +2053,7 @@ class Pdfgen_RentalInforma {
                           'หมายเหตุ',
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                              fontSize: 10,
+                              fontSize: font_Size,
                               font: ttf,
                               color: Colors_pd,
                               fontWeight: pw.FontWeight.bold),
@@ -2068,7 +2069,7 @@ class Pdfgen_RentalInforma {
                           textAlign: pw.TextAlign.left,
                           maxLines: 1,
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: font_Size,
                             font: ttf,
                             color: Colors_pd,
                           ),

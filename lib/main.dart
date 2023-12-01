@@ -20,11 +20,14 @@ void main() {
 }
 
 ///----------------------------------------------------->
+///
 /// flutter run --enable-software-rendering
 /// flutter run -d chrome --web-renderer html --enable-software-rendering
 /// flutter run -d chrome  --no-sound-null-safety
 /// flutter run -d chrome --web-browser-flag "--disable-web-security" (แก้ปัญหา security  CORS (Cross-Origin Resource Sharing))
+///
 ///----------------------------------------------------->
+///
 /// flutter build web --web-renderer html --release
 ///  flutter build web --release --no-sound-null-safety
 /// flutter build web --web-renderer html --release --no-sound-null-safety
@@ -51,16 +54,16 @@ void main() {
 //----(Git Lab)
 //1.----> git add .
 //2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
-//3.-------->git commit -m "สร้างเทมเพลต รูปแบบรายงาน Man ตาม*request* ลูกค้า"
+//3.-------->git commit -m "อ.ต."
 //4.-----------> git push origin main
 //----------------------------------------------------->
-//----(Git Hub) 
+//----(Git Hub)
 //1.----> git add .
 //2.------> git remote set-url origin https://github.com/TraiShiTech/chaoperty.git
 //3.-------->git commit -m "commit message"
 //4.-----------> git push origin main
 //----------------------------------------------------->
-
+//
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -318,3 +321,23 @@ class SalesData {
   final String year;
   final double sales;
 }
+
+
+////--------->0.หยุดเพลง ( หยุด )
+/// ตัวอย่าง .หยุด
+
+////--------->1.ค้นหาเพลง ( ค้นหา )
+/// ตัวอย่าง .ค้นหา คิดถึง
+
+
+////--------->2.เล่นเพลง ( เพลง )
+/// ตัวอย่าง .เพลง คิดถึง  หรือ .เพลง URL
+
+////--------->3.คิวเพลงที่มีอยู่ตอนนี้ ( คิว )
+/// ตัวอย่าง .คิว
+
+////--------->3.ลบคิวเพลงที่มีอยู่ตอนนี้ ( ลบ )
+/// ตัวอย่าง .ลบ 1  คือลบคิวที่1 ออก
+/// 
+////--------->4.ลดเสียง ( ลด )
+/// ตัวอย่าง .ลด 50 

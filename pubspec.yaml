@@ -35,13 +35,13 @@ dependencies:
   dropdown_button2: ^1.8.9
   flutter_admin_scaffold: ^1.2.0
   side_sheet: ^1.0.3
-  scroll_pos: ^0.3.0
-  flutter_easy_table: ^0.0.1+1
+  # scroll_pos: ^0.3.0
+  # flutter_easy_table: ^0.0.1+1
   # pluto_grid: ^5.4.8
-  data_tables: ^1.4.0
-  responsive_table: ^0.2.0+2
-  expandable_datatable: ^0.0.6
-  listview_ex: ^0.0.2
+  # data_tables: ^1.4.0
+  # responsive_table: ^0.2.0+2
+  # expandable_datatable: ^0.0.6
+  # listview_ex: ^0.0.2
   grouped_buttons_ns: ^1.0.0
   iconsax: ^0.0.8
   flutter_limited_checkbox: ^0.0.1
@@ -51,11 +51,11 @@ dependencies:
   fl_pin_code: ^0.0.9
   random_string: ^2.3.1
   email_otp: ^1.0.4
-  email_auth: ^1.0.0
+  # email_auth: ^1.0.0
   tap_debouncer: ^2.0.2
   image_picker: ^0.8.9
   file_picker: ^5.2.2
-  mysql1: ^0.20.0
+  # mysql1: ^0.20.0
   # date_time_picker: ^2.1.0
   printing: ^5.11.0
   syncfusion_flutter_xlsio: ^20.4.43-beta
@@ -66,8 +66,8 @@ dependencies:
   excel: ^2.0.1
   pdf: ^3.8.4
   syncfusion_flutter_pdf: ^20.4.44
-  font_awesome_flutter: ^10.3.0
-  file_cryptor: ^0.0.3
+  # font_awesome_flutter: ^10.3.0
+  # file_cryptor: ^0.0.3
   path_provider: ^2.0.6
   # buddhist_datetime_dateformat_sns: ^1.0.6
   webviewx: ^0.2.2
@@ -77,29 +77,48 @@ dependencies:
   pretty_qr_code: ^2.0.3
   flutter_multi_formatter: ^2.11.1
   simple_barcode_scanner: ^0.0.8
-  fast_image_resizer: ^0.0.2
+  # fast_image_resizer: ^0.0.2
   responsive_grid_list: ^1.3.2
   image_downloader_web: ^2.0.2
   device_marketing_names: ^0.6.5
   dart_ipify: ^1.1.1
-  syncfusion_flutter_signaturepad: ^20.4.54
-  hand_signature: ^3.0.1
+  # syncfusion_flutter_signaturepad: ^20.4.54
+  # hand_signature: ^3.0.1
   syncfusion_flutter_pdfviewer: ^20.4.54
   flutter_localization: ^0.1.12
-  widgets_to_image: ^0.0.2
+  # widgets_to_image: ^0.0.2
   syncfusion_flutter_barcodes: any
   screenshot: ^2.1.0
-  dart_barcode: ^2.0.0
+  # dart_barcode: ^2.0.0
   path_drawing: ^1.0.1
   html_widget: ^0.0.3
   flutter_html_to_pdf: ^0.7.0
   image: ^4.0.17
-  flutter_image_compress: ^2.0.4
-  web_image_downloader: ^1.0.1
+  # flutter_image_compress: ^2.0.4
+  # web_image_downloader: ^1.0.1
   universal_html: ^2.0.8 
   syncfusion_flutter_charts: any
   marquee: ^2.2.3
   drag_and_drop_lists: ^0.3.3
+  flutter_popup_menu_button: ^0.0.1+5
+  popup_menu_plus: ^0.0.5
+  otp_timer_button: ^1.1.0
+  flutter_gbprimepay_qrcode: ^0.0.5
+  # quill_html_editor: ^0.1.5
+  flutter_widget_from_html_core: ^0.10.6
+  htmltopdfwidgets: ^0.0.9+1
+  html_editor_enhanced: ^2.5.1
+  # html_editor_enhanced_fork: ^2.5.1
+  puppeteer: ^3.2.0
+  html: ^0.15.4
+  # xpath_selector_html_parser: ^3.0.1
+  html_main_element: ^2.1.0
+  dio: ^5.3.3
+  get_ip_address: ^0.0.5
+  usb_device: ^1.0.2
+  percent_indicator: ^4.2.3
+  
+  
   
 
 dev_dependencies:
@@ -128,7 +147,21 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - images/data00.htm
+    - images/data001.html
     - images/
+    - images/TP1/
+    - images/TP2/
+    - images/TP3/
+    - images/TP4/
+    - images/TP5/
+    - images/TP6/
+    - images/TP7/
+    - images/TP8/
+    - images/TP8_1/
+    - images/LogoBank/
+    - images/card/
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -167,6 +200,14 @@ flutter:
     - family: LINESeed2
       fonts:
         - asset: fonts/LINESeedSansTH_Rg.ttf
+        
+    - family: MaliExtra
+      fonts:
+        - asset: fonts/MaliExtraLight.ttf
+
+    - family: THSarabunNew
+      fonts:
+        - asset: fonts/THSarabunNew.ttf
 
     - family: DoHyeon
       fonts:
@@ -183,6 +224,8 @@ flutter:
     - family: Phetsarath
       fonts:
         - asset: fonts/Phetsarath-OT.ttf
+
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

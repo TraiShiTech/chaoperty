@@ -1,6 +1,7 @@
-// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, prefer_const_constructors, unnecessary_import, implementation_imports, prefer_const_constructors_in_immutables, non_constant_identifier_names, avoid_init_to_null, prefer_void_to_null, unnecessary_brace_in_string_interps, avoid_print, empty_catches, sized_box_for_whitespace, use_build_context_synchronously, file_names, curly_braces_in_flow_control_structures
 import 'dart:async';
 import 'dart:convert';
+import 'package:get_ip_address/get_ip_address.dart';
 import 'package:marquee/marquee.dart';
 import 'package:device_marketing_names/device_marketing_names.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -28,6 +29,7 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Model/areak_model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
+import '../Register/SignIn_License.dart';
 import '../Register/SignIn_Screen.dart';
 import '../Register/SignUp_Screen.dart';
 import '../Report/Report_Screen.dart';
@@ -78,7 +80,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   DateTime? alert;
   Timer? timer;
   bool isActive = false;
-  String? rtname, type, typex, renname, pkname, ser_Zonex;
+  String? rtname, type, typex, renname, pkname, ser_Zonex, pkldate, data_update;
   int? pkqty, pkuser, countarae, renTal_lavel = 0;
   String? base64_Imgmap, foder;
   String? tel_user, img_, img_logo;
@@ -92,13 +94,14 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   void initState() {
     super.initState();
     checkPreferance();
+    read_GC_rental();
     signInThread();
     Value_Route = widget.route!;
     alert = DateTime.now().add(Duration(seconds: 300));
     readTime();
-    read_GC_rental();
     read_GC_areak();
     initPlugin();
+    changLogin();
   }
 
   String? system_datex_;
@@ -342,6 +345,48 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     );
   }
 
+  Future<Null> changLogin() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var email = preferences.getString('email');
+    if (email != 'dzentric.com@gmail.com') {
+      Timer.periodic(const Duration(seconds: 15), (timer) {
+        changLoginOut(timer);
+      });
+    }
+  }
+
+  Future<Null> changLoginOut(timer) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var login = preferences.getString('login');
+    var ipAddress = IpAddress(type: RequestType.json);
+
+    /// Get the IpAddress based on requestType.
+    dynamic data = await ipAddress.getIpAddress();
+    // print(data.toString());
+
+    var data0 = data.toString().substring(5, data.toString().length - 1).trim();
+    // print(data0.toString());
+
+    String url =
+        '${MyConstant().domain}/changLoginOut.php?isAdd=true&user=$user&iplogin=$data0';
+    // print(url.toString());
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print('changLoginOut>$login>$user>>${result.toString()}');
+      if (result.toString() != login) {
+        deall_Trans_select();
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        preferences.clear();
+        routToService(SignInScreen());
+        timer.cancel();
+      }
+    } catch (e) {}
+  }
+
   Future<Null> passcode_in() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
@@ -529,7 +574,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      // print(result);
+      print('GC_rental_setring>> $result');
       if (result != null) {
         for (var map in result) {
           RenTalModel renTalModel = RenTalModel.fromJson(map);
@@ -543,6 +588,9 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           var foderx = renTalModel.dbn;
           var img = renTalModel.img;
           var imglogo = renTalModel.imglogo;
+          var pksdatex = renTalModel.pksdate;
+          var pkldatex = renTalModel.pkldate;
+          var data_updatex = renTalModel.data_update;
           setState(() {
             preferences.setString(
                 'renTalName', renTalModel.pn!.trim().toString());
@@ -558,12 +606,13 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
             pkname = pkx;
             img_ = img;
             img_logo = imglogo;
+            pkldate = pkldatex;
+            data_update = data_updatex;
             renTalModels.add(renTalModel);
           });
         }
       } else {}
     } catch (e) {}
-    // print('name>>>>>  $renname');
   }
 
   Future<Null> readTime() async {
@@ -1177,6 +1226,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         child: const CircularProgressIndicator(),
       );
     }
+
     return (Responsive.isDesktop(context)) ? adminweb() : adminmobile();
   }
 
@@ -1295,6 +1345,34 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       ],
                     );
                   }),
+              if (pkldate != null)
+                if (datex.isAfter(DateTime.parse(pkldate == '0000-00-00'
+                            ? '$data_update'
+                            : '$pkldate 00:00:00.000')
+                        .subtract(const Duration(days: 7))) ==
+                    true)
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: InkWell(
+                      onTap: () {
+                        MaterialPageRoute route = MaterialPageRoute(
+                          builder: (context) => SignInLicense(route: 'Yes'),
+                        );
+                        Navigator.pushAndRemoveUntil(
+                            context, route, (route) => true);
+                      },
+                      child: Container(
+                        width: 50,
+                        // color: Colors.yellow,
+                        child: Center(
+                          child: Icon(
+                            Icons.vpn_key,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
               if (Responsive.isDesktop(context) && ser_user == '63' ||
                   ser_user == '56' ||
                   ser_user == '61' ||

@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
+import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -26,7 +27,11 @@ import '../Model/GetTrans_Model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
-
+import '../PDF_TP2/PDF_Receipt_TP2/pdf_AC_his_statusbill_TP2.dart';
+import '../PDF_TP3/PDF_Receipt_TP3/pdf_AC_his_statusbill_TP3.dart';
+import '../PDF_TP4/PDF_Receipt_TP4/pdf_AC_his_statusbill_TP4.dart';
+import '../PDF_TP5/PDF_Receipt_TP5/pdf_AC_his_statusbill_TP5.dart';
+import '../PDF_TP6/PDF_Receipt_TP6/pdf_AC_his_statusbill_TP6.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 
@@ -68,7 +73,8 @@ class _HistoryBillsState extends State<HistoryBills> {
       sum_dis = 0.00,
       sum_disamt = 0.00,
       total_amt = 0.00,
-      sum_disp = 0;
+      sum_disp = 0,
+      dis_sum_Matjum = 0.00;
   int select_page = 0,
       pamentpage = 0; // = 0 _TransModels : = 1 _InvoiceHistoryModels
   String? dtypeselect;
@@ -98,7 +104,10 @@ class _HistoryBillsState extends State<HistoryBills> {
       bill_default,
       bill_tser,
       foder,
-      renTal_name;
+      renTal_name,
+      tem_page_ser,
+      room_number_BillHistory,
+      pdate;
   String? Form_nameshop,
       Form_typeshop,
       Form_bussshop,
@@ -161,6 +170,7 @@ class _HistoryBillsState extends State<HistoryBills> {
             bill_email = bill_emailx;
             bill_default = bill_defaultx;
             bill_tser = bill_tserx;
+            tem_page_ser = renTalModel.tem_page!.trim();
             renTalModels.add(renTalModel);
             if (bill_defaultx == 'P') {
               bills_name_ = 'บิลธรรมดา';
@@ -248,20 +258,22 @@ class _HistoryBillsState extends State<HistoryBills> {
   }
 
   String Remark_ = '';
+
   Future<Null> red_Invoice(index) async {
     if (finnancetransModels.length != 0) {
       setState(() {
         finnancetransModels.clear();
         sum_disamt = 0;
         sum_disp = 0;
+        dis_sum_Matjum = 0.00;
       });
     }
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
-    var ciddoc = widget.Get_Value_cid;
-    var qutser = widget.Get_Value_NameShop_index;
-    var docnoin = _TransReBillModels[index].docno;
+    var ciddoc = _TransReBillModels[index].ser;
+    var qutser = _TransReBillModels[index].ser_in;
+    var docnoin = _TransReBillModels[index].docno; //.toString().trim()
     print('>>>>>>>>>>>dd>>> in d  $docnoin');
 
     String url =
@@ -277,11 +289,13 @@ class _HistoryBillsState extends State<HistoryBills> {
 
           var sidamt = double.parse(finnancetransModel.amt!);
           var siddisper = double.parse(finnancetransModel.disper!);
-          print('>>>>>>>>>>>dd>>> in $sidamt $siddisper');
+          var pdatex = finnancetransModel.pdate;
+
           setState(() {
-            Slip_history = finnancetransModel.slip;
+            Slip_history = finnancetransModel.slip.toString();
             if (int.parse(finnancetransModel.receiptSer!) != 0) {
               finnancetransModels.add(finnancetransModel);
+              pdate = pdatex;
             } else {
               if (finnancetransModel.type!.trim() == 'DISCOUNT') {
                 sum_disamt = sidamt;
@@ -289,10 +303,64 @@ class _HistoryBillsState extends State<HistoryBills> {
               }
             }
           });
+          if (finnancetransModel.dtype! == 'MM') {
+            setState(() {
+              dis_sum_Matjum =
+                  dis_sum_Matjum + double.parse(finnancetransModel.amt!);
+            });
+          }
+          print(
+              '>>>>> ${finnancetransModel.slip}>>>>>>dd>>> in $sidamt $siddisper  ');
         }
       }
     } catch (e) {}
   }
+
+  // Future<Null> red_Invoice(index) async {
+  //   if (finnancetransModels.length != 0) {
+  //     setState(() {
+  //       finnancetransModels.clear();
+  //       sum_disamt = 0;
+  //       sum_disp = 0;
+  //     });
+  //   }
+
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var ren = preferences.getString('renTalSer');
+  //   var ciddoc = widget.Get_Value_cid;
+  //   var qutser = widget.Get_Value_NameShop_index;
+  //   var docnoin = _TransReBillModels[index].docno;
+  //   print('>>>>>>>>>>>dd>>> in d  $docnoin');
+
+  //   String url =
+  //       '${MyConstant().domain}/GC_bill_pay_amt.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&docnoin=$docnoin';
+  //   try {
+  //     var response = await http.get(Uri.parse(url));
+  //     var result = json.decode(response.body);
+  //     print('BBBBBBBBBBBBBBBB>>>> $result');
+  //     if (result.toString() != 'null') {
+  //       for (var map in result) {
+  //         FinnancetransModel finnancetransModel =
+  //             FinnancetransModel.fromJson(map);
+
+  //         var sidamt = double.parse(finnancetransModel.amt!);
+  //         var siddisper = double.parse(finnancetransModel.disper!);
+  //         print('>>>>>>>>>>>dd>>> in $sidamt $siddisper');
+  //         setState(() {
+  //           Slip_history = finnancetransModel.slip;
+  //           if (int.parse(finnancetransModel.receiptSer!) != 0) {
+  //             finnancetransModels.add(finnancetransModel);
+  //           } else {
+  //             if (finnancetransModel.type!.trim() == 'DISCOUNT') {
+  //               sum_disamt = sidamt;
+  //               sum_disp = siddisper;
+  //             }
+  //           }
+  //         });
+  //       }
+  //     }
+  //   } catch (e) {}
+  // }
 
   // Future<Null> red_InvoiceC() async {
   //   if (_TransReBillModels.length != 0) {
@@ -478,6 +546,7 @@ class _HistoryBillsState extends State<HistoryBills> {
   //     }
   //   } catch (e) {}
   // }
+/////////////------------------------------------------------>
 
   Future<Null> red_Trans_select(index) async {
     if (_TransReBillHistoryModels.length != 0) {
@@ -501,6 +570,7 @@ class _HistoryBillsState extends State<HistoryBills> {
 
     String url =
         '${MyConstant().domain}/GC_bill_pay_history.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
+
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -554,6 +624,7 @@ class _HistoryBillsState extends State<HistoryBills> {
               _TransReBillHistoryModels.add(_TransReBillHistoryModel);
             } else {
               total_amt = total_amt + total_amtx;
+              _TransReBillHistoryModels.add(_TransReBillHistoryModel);
             }
           });
         }
@@ -563,7 +634,7 @@ class _HistoryBillsState extends State<HistoryBills> {
       // });
     } catch (e) {}
   }
-
+///////////------------------------------------------->
   // Future<Null> red_Trans_selectde() async {
   //   if (_InvoiceHistoryModels.length != 0) {
   //     setState(() {
@@ -850,7 +921,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                 : AppbackgroundColor
                                                     .Sub_Abg_Colors,
                                         child: ListTile(
-                                          onTap: () {
+                                          onTap: () async {
                                             print(
                                                 '${_TransReBillModels[index].ser} ${_TransReBillModels[index].docno}');
                                             red_Trans_select(index);
@@ -858,6 +929,8 @@ class _HistoryBillsState extends State<HistoryBills> {
                                               Remark_ =
                                                   _TransReBillModels[index]
                                                       .remark!;
+                                              room_number_BillHistory =
+                                                  '${_TransReBillModels[index].room_number}';
                                             });
                                             red_Invoice(index);
 
@@ -2287,7 +2360,8 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         Container(
@@ -2304,9 +2378,9 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed: () => Navigator.pop(
@@ -2811,6 +2885,55 @@ class _HistoryBillsState extends State<HistoryBills> {
                                   ),
                                 ],
                               ),
+                              if (room_number_BillHistory.toString().trim() !=
+                                      '' ||
+                                  room_number_BillHistory != null)
+                                Row(children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'ยอดชำระรวม',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        (room_number_BillHistory
+                                                        .toString()
+                                                        .trim() ==
+                                                    '' ||
+                                                room_number_BillHistory == null)
+                                            ? ''
+                                            : 'ประเภท ( ล็อคเสียบ )',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
                               Row(children: [
                                 Expanded(
                                   flex: 2,
@@ -3161,75 +3284,46 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                       }
                                                     }
 
-                                                    // String? Form_nameshop,
-                                                    //     Form_typeshop,
-                                                    //     Form_bussshop,
+                                                    ////////////////////----------------->
+
+                                                    showMyDialog_SAVE(
+                                                        tableData00,
+                                                        newValuePDFimg,
+                                                        room_number_BillHistory);
+
+                                                    ////////////////////----------------->
+
+                                                    //   Pdfgen_his_statusbill
+                                                    // .exportPDF_statusbill(
+                                                    //     tableData00,
+                                                    //     context,
+                                                    //     _TransReBillHistoryModels,
+                                                    //     'Num_cid',
+                                                    //     'Namenew',
+                                                    //     sum_pvat,
+                                                    //     sum_vat,
+                                                    //     sum_wht,
+                                                    //     sum_amt,
+                                                    //     sum_disp,
+                                                    //     sum_disamt,
+                                                    //     '${sum_amt - sum_disamt}',
+                                                    //     renTal_name,
+                                                    //     Form_bussscontact,
                                                     //     Form_bussscontact,
                                                     //     Form_address,
-                                                    //     Form_tel,
-                                                    //     Form_email,
-                                                    //     Form_tax;
-
-                                                    Pdfgen_his_statusbill
-                                                        .exportPDF_statusbill(
-                                                            tableData00,
-                                                            context,
-                                                            _TransReBillHistoryModels,
-                                                            'Num_cid',
-                                                            'Namenew',
-                                                            sum_pvat,
-                                                            sum_vat,
-                                                            sum_wht,
-                                                            sum_amt,
-                                                            sum_disp,
-                                                            sum_disamt,
-                                                            '${sum_amt - sum_disamt}',
-                                                            renTal_name,
-                                                            Form_bussscontact,
-                                                            Form_bussscontact,
-                                                            Form_address,
-                                                            Form_tax,
-                                                            bill_addr,
-                                                            bill_email,
-                                                            bill_tel,
-                                                            bill_tax,
-                                                            bill_name,
-                                                            newValuePDFimg,
-                                                            numdoctax == ''
-                                                                ? '$numinvoice'
-                                                                : '$numdoctax',
-                                                            numinvoice,
-                                                            finnancetransModels,
-                                                            '${finnancetransModels[0].date}');
-
-                                                    // Pdfgen_his_statusbill2
-                                                    //     .exportPDF_statusbill2(
-                                                    //         tableData00,
-                                                    //         context,
-                                                    //         numdoctax == ''
-                                                    //             ? '$numinvoice'
-                                                    //             : '$numdoctax',
-                                                    //         sum_pvat,
-                                                    //         sum_vat,
-                                                    //         sum_wht,
-                                                    //         sum_amt,
-                                                    //         sum_disp,
-                                                    //         sum_disamt,
-                                                    //         renTal_name,
-                                                    //         Form_bussscontact,
-                                                    //         // cname,
-                                                    //         Form_address,
-                                                    //         Form_tax,
-                                                    //         bill_addr,
-                                                    //         bill_email,
-                                                    //         bill_tel,
-                                                    //         bill_tax,
-                                                    //         bill_name,
-                                                    //         newValuePDFimg,
-                                                    //         numinvoice,
-                                                    //         finnancetransModels
-
-                                                    //         );
+                                                    //     Form_tax,
+                                                    //     bill_addr,
+                                                    //     bill_email,
+                                                    //     bill_tel,
+                                                    //     bill_tax,
+                                                    //     bill_name,
+                                                    //     newValuePDFimg,
+                                                    //     numdoctax == ''
+                                                    //         ? '$numinvoice'
+                                                    //         : '$numdoctax',
+                                                    //     numinvoice,
+                                                    //     finnancetransModels,
+                                                    //     '${finnancetransModels[0].date}');
                                                   },
                                         child: Container(
                                             height: 50,
@@ -3247,7 +3341,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                             padding: EdgeInsets.all(8.0),
                                             child: Center(
                                                 child: Text(
-                                              'พิมพ์',
+                                              '$sum_amt พิมพ์',
                                               style: TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text1_,
@@ -3571,5 +3665,397 @@ class _HistoryBillsState extends State<HistoryBills> {
         print('rrrrrrrrrrrrrr');
       }
     } catch (e) {}
+  }
+
+  ////////////------------------------------------------------------>(Export file)
+  Future<void> showMyDialog_SAVE(
+      tableData00, newValuePDFimg, room_number_BillHistory) async {
+    String _ReportValue_type = "ไม่ระบุ";
+    String _verticalGroupValue_NameFile = "จากระบบ";
+    String Value_Report = ' ';
+    String NameFile_ = '';
+    String Pre_and_Dow = '';
+    String? TitleType_Default_Receipt_Name;
+    final _formKey = GlobalKey<FormState>();
+    final FormNameFile_text = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return StreamBuilder(
+          stream: Stream.periodic(const Duration(seconds: 0)),
+          builder: (context, snapshot) {
+            return Form(
+              key: _formKey,
+              child: AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      const Text(
+                        'หัวบิล :',
+                        style: TextStyle(
+                          color: ReportScreen_Color.Colors_Text2_,
+                          // fontWeight: FontWeight.bold,
+                          fontFamily: Font_.Fonts_T,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.3),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                          ),
+                          border: Border.all(color: Colors.grey, width: 1),
+                        ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: RadioGroup<String>.builder(
+                          direction: Axis.horizontal,
+                          groupValue: _ReportValue_type,
+                          horizontalAlignment: MainAxisAlignment.spaceAround,
+                          onChanged: (value) {
+                            // setState(() {
+                            //   FormNameFile_text.clear();
+                            // });
+                            setState(() {
+                              _ReportValue_type = value ?? '';
+                            });
+
+                            if (value == 'ไม่ระบุ') {
+                              setState(() {
+                                TitleType_Default_Receipt_Name = null;
+                              });
+                            } else {
+                              setState(() {
+                                TitleType_Default_Receipt_Name = value;
+                              });
+                            }
+                          },
+                          items: const <String>[
+                            'ไม่ระบุ',
+                            'ต้นฉบับ',
+                            'สำเนา',
+                          ],
+                          textStyle: const TextStyle(
+                            fontSize: 15,
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                          itemBuilder: (item) => RadioButtonBuilder(
+                            item,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: InkWell(
+                          onTap: () {
+                            Receipt_his_statusbill(
+                                tableData00,
+                                newValuePDFimg,
+                                room_number_BillHistory,
+                                TitleType_Default_Receipt_Name);
+                          },
+                          child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'พิมพ์',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  //fontWeight: FontWeight.bold, color:
+
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: InkWell(
+                          onTap: () => Navigator.pop(context, 'OK'),
+                          child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'ปิด',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  //fontWeight: FontWeight.bold, color:
+
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+//////////////-------------------------------------------------------------> ( รายการชำระ ประวัติบิล )
+  Future<Null> Receipt_his_statusbill(tableData00, newValuePDFimg,
+      room_number_BillHistory, TitleType_Default_Receipt_Name) async {
+    var date_Transaction = (finnancetransModels.length == 0)
+        ? ''
+        : '${finnancetransModels[0].daterec}';
+    var date_pay = (finnancetransModels.length == 0)
+        ? ''
+        : '${finnancetransModels[0].dateacc}';
+    Navigator.pop(context, 'OK');
+    if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
+      Pdfgen_his_statusbill.exportPDF_statusbill(
+          foder,
+          tableData00,
+          tableData00,
+          context,
+          _TransReBillHistoryModels,
+          'Num_cid',
+          'Namenew',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          sum_disp,
+          sum_disamt,
+          '${sum_amt - sum_disamt}',
+          renTal_name,
+          Form_bussscontact,
+          Form_bussscontact,
+          Form_address,
+          Form_tax,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          numinvoice,
+          numdoctax,
+          finnancetransModels,
+          date_Transaction,
+          date_pay,
+          room_number_BillHistory,
+          dis_sum_Matjum,
+          TitleType_Default_Receipt_Name);
+    } else if (tem_page_ser.toString() == '1') {
+      Pdfgen_his_statusbill_TP2.exportPDF_statusbill_TP2(
+          foder,
+          tableData00,
+          tableData00,
+          context,
+          _TransReBillHistoryModels,
+          'Num_cid',
+          'Namenew',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          sum_disp,
+          sum_disamt,
+          '${sum_amt - sum_disamt}',
+          renTal_name,
+          Form_bussscontact,
+          Form_bussscontact,
+          Form_address,
+          Form_tax,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          // numdoctax == '' ? '$numinvoice' : '$numdoctax',
+          numinvoice,
+          numdoctax,
+          finnancetransModels,
+          date_Transaction,
+          date_pay,
+          room_number_BillHistory,
+          dis_sum_Matjum,
+          TitleType_Default_Receipt_Name);
+    } else if (tem_page_ser.toString() == '2') {
+      Pdfgen_his_statusbill_TP3.exportPDF_statusbill_TP3(
+          foder,
+          tableData00,
+          tableData00,
+          context,
+          _TransReBillHistoryModels,
+          'Num_cid',
+          'Namenew',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          sum_disp,
+          sum_disamt,
+          '${sum_amt - sum_disamt}',
+          renTal_name,
+          Form_bussscontact,
+          Form_bussscontact,
+          Form_address,
+          Form_tax,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          numinvoice,
+          numdoctax,
+          finnancetransModels,
+          date_Transaction,
+          date_pay,
+          room_number_BillHistory,
+          dis_sum_Matjum,
+          TitleType_Default_Receipt_Name);
+    } else if (tem_page_ser.toString() == '3') {
+      Pdfgen_his_statusbill_TP4.exportPDF_statusbill_TP4(
+          foder,
+          tableData00,
+          tableData00,
+          context,
+          _TransReBillHistoryModels,
+          'Num_cid',
+          'Namenew',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          sum_disp,
+          sum_disamt,
+          '${sum_amt - sum_disamt}',
+          renTal_name,
+          Form_bussscontact,
+          Form_bussscontact,
+          Form_address,
+          Form_tax,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          numinvoice,
+          numdoctax,
+          finnancetransModels,
+          date_Transaction,
+          date_pay,
+          room_number_BillHistory,
+          dis_sum_Matjum,
+          TitleType_Default_Receipt_Name);
+    } else if (tem_page_ser.toString() == '4') {
+      Pdfgen_his_statusbill_TP5.exportPDF_statusbill_TP5(
+          foder,
+          tableData00,
+          tableData00,
+          context,
+          _TransReBillHistoryModels,
+          'Num_cid',
+          'Namenew',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          sum_disp,
+          sum_disamt,
+          '${sum_amt - sum_disamt}',
+          renTal_name,
+          Form_bussscontact,
+          Form_bussscontact,
+          Form_address,
+          Form_tax,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          numinvoice,
+          numdoctax,
+          finnancetransModels,
+          date_Transaction,
+          date_pay,
+          room_number_BillHistory,
+          dis_sum_Matjum,
+          TitleType_Default_Receipt_Name);
+    } else if (tem_page_ser.toString() == '5') {
+      Pdfgen_his_statusbill_TP6.exportPDF_statusbill_TP6(
+          foder,
+          tableData00,
+          tableData00,
+          context,
+          _TransReBillHistoryModels,
+          'Num_cid',
+          'Namenew',
+          sum_pvat,
+          sum_vat,
+          sum_wht,
+          sum_amt,
+          sum_disp,
+          sum_disamt,
+          '${sum_amt - sum_disamt}',
+          renTal_name,
+          Form_bussscontact,
+          Form_bussscontact,
+          Form_address,
+          Form_tax,
+          bill_addr,
+          bill_email,
+          bill_tel,
+          bill_tax,
+          bill_name,
+          newValuePDFimg,
+          numinvoice,
+          numdoctax,
+          finnancetransModels,
+          date_Transaction,
+          date_pay,
+          room_number_BillHistory,
+          dis_sum_Matjum,
+          TitleType_Default_Receipt_Name);
+    }
   }
 }

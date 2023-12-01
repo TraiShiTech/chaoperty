@@ -6,6 +6,7 @@ class PackageModel {
   String? spri;
   String? user;
   String? st;
+  String? payment;
   String? dateUpdate;
 
   PackageModel(
@@ -16,6 +17,7 @@ class PackageModel {
       this.spri,
       this.user,
       this.st,
+      this.payment,
       this.dateUpdate});
 
   PackageModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class PackageModel {
     spri = json['spri'];
     user = json['user'];
     st = json['st'];
+    payment = json['payment'];
     dateUpdate = json['date_update'];
   }
 
@@ -38,6 +41,7 @@ class PackageModel {
     data['spri'] = this.spri;
     data['user'] = this.user;
     data['st'] = this.st;
+    data['payment'] = this.payment;
     data['date_update'] = this.dateUpdate;
     return data;
   }

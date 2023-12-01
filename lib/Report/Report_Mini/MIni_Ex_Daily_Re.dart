@@ -21,12 +21,12 @@ class Mini_Ex_DailyReport {
       NameFile_,
       _verticalGroupValue_NameFile,
       Value_Report,
-      _TransReBillModels,
       TransReBillModels,
+      TranHisBillModels,
       renTal_name,
       zoneModels_report,
-      Value_selectDate_Daily,
-      Value_Chang_Zone_Daily) async {
+      Value_TransDate_Daily,
+      zone_name_Trans_Daily) async {
     final x.Workbook workbook = x.Workbook();
 
     final x.Worksheet sheet = workbook.worksheets[0];
@@ -169,10 +169,12 @@ class Mini_Ex_DailyReport {
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
       (ser_type_repro == '1')
-          ? 'รายงานประจำวันแบบย่อ ( โซน : $Value_Chang_Zone_Daily)'
+          ? 'รายงานประจำวันแบบย่อ ( โซน : $zone_name_Trans_Daily)'
           : (ser_type_repro == '2')
-              ? 'รายงานประจำวันแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Daily)'
-              : 'รายงานประจำวันแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Daily)',
+              ? 'รายงานประจำวันแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $zone_name_Trans_Daily)'
+              : (ser_type_repro == '3')
+                  ? 'รายงานประจำวันแบบย่อ เฉพาะล็อคเสียบ ( โซน : $zone_name_Trans_Daily)'
+                  : 'รายงานประจำวันแบบย่อ เฉพาะรายการที่ออกใบกำกับภาษี ( โซน : $zone_name_Trans_Daily)',
       // 'รายงานประจำวันแบบย่อ ( โซน : $Value_Chang_Zone_Daily)'
     );
 // ExcelSheetProtectionOption
@@ -195,7 +197,7 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('L2').cellStyle = globalStyle22;
 
     sheet.getRangeByName('A2').setText('${renTal_name}');
-    sheet.getRangeByName('K2').setText('วันที่ : ${Value_selectDate_Daily} ');
+    sheet.getRangeByName('K2').setText('วันที่ : ${Value_TransDate_Daily} ');
 
     globalStyle2.hAlign = x.HAlignType.center;
     sheet.getRangeByName('A2').cellStyle = globalStyle22;
@@ -213,9 +215,7 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('K3').cellStyle = globalStyle22;
     sheet.getRangeByName('L3').cellStyle = globalStyle22;
 
-    sheet
-        .getRangeByName('A3')
-        .setText('ใบเสร็จ : ${_TransReBillModels.length}');
+    sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillModels.length}');
 
     sheet.getRangeByName('A3').columnWidth = 18;
     sheet.getRangeByName('B3').columnWidth = 18;
@@ -275,7 +275,7 @@ class Mini_Ex_DailyReport {
     int indextotol = 0;
     int indextotol_ = 0;
 
-    for (var index1 = 0; index1 < _TransReBillModels.length; index1++) {
+    for (var index1 = 0; index1 < TransReBillModels.length; index1++) {
       var index = indextotol;
       dynamic numberColor = index1 % 2 == 0 ? globalStyle22 : globalStyle222;
 
@@ -300,58 +300,60 @@ class Mini_Ex_DailyReport {
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${index1 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
-            _TransReBillModels[index1].docno != null
-                ? '${_TransReBillModels[index1].docno}'
-                : '${_TransReBillModels[index1].doctax}',
+            (TransReBillModels[index1].doctax != '')
+                ? '${TransReBillModels[index1].doctax}'
+                : TransReBillModels[index1].docno == ''
+                    ? '${TransReBillModels[index1].refno}'
+                    : '${TransReBillModels[index1].docno}',
           );
       sheet.getRangeByName('C${indextotol + 5 - 1}').setText(
-            '${_TransReBillModels[index1].daterec}',
+            '${TransReBillModels[index1].daterec}',
           );
 
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
-            (_TransReBillModels[index1].zser == null)
-                ? '${_TransReBillModels[index1].zser1}'
-                : '${_TransReBillModels[index1].zser}',
+            (TransReBillModels[index1].zser == null)
+                ? '${TransReBillModels[index1].zser1}'
+                : '${TransReBillModels[index1].zser}',
           );
       sheet.getRangeByName('E${indextotol + 5 - 1}').setText(
-            (_TransReBillModels[index1].zn == null)
-                ? '${_TransReBillModels[index1].znn}'
-                : '${_TransReBillModels[index1].zn}',
+            (TransReBillModels[index1].zn == null)
+                ? '${TransReBillModels[index1].znn}'
+                : '${TransReBillModels[index1].zn}',
           );
       sheet.getRangeByName('F${indextotol + 5 - 1}').setText(
-          (_TransReBillModels[index1].ln == null)
-              ? '${_TransReBillModels[index1].room_number}'
-              : '${_TransReBillModels[index1].ln}');
+          (TransReBillModels[index1].ln == null)
+              ? '${TransReBillModels[index1].room_number}'
+              : '${TransReBillModels[index1].ln}');
 
       sheet.getRangeByName('G${indextotol + 5 - 1}').setText(
-            (_TransReBillModels[index1].sname == null ||
-                    _TransReBillModels[index1].sname.toString() == '' ||
-                    _TransReBillModels[index1].sname.toString() == 'null')
-                ? '${_TransReBillModels[index1].remark}'
-                : '${_TransReBillModels[index1].sname}',
+            (TransReBillModels[index1].sname == null ||
+                    TransReBillModels[index1].sname.toString() == '' ||
+                    TransReBillModels[index1].sname.toString() == 'null')
+                ? '${TransReBillModels[index1].remark}'
+                : '${TransReBillModels[index1].sname}',
           );
       sheet.getRangeByName('H${indextotol + 5 - 1}').setText(
-            '${_TransReBillModels[index1].type}',
+            '${TransReBillModels[index1].type}',
           );
       sheet.getRangeByName('I${indextotol + 5 - 1}').setNumber(
-          (TransReBillModels[index1].length == null)
+          (TransReBillModels[index1].sum_items == null)
               ? 0
-              : double.parse(TransReBillModels[index1].length.toString()));
+              : double.parse(TransReBillModels[index1].sum_items.toString()));
       sheet.getRangeByName('J${indextotol + 5 - 1}').setNumber(
-          (_TransReBillModels[index1].total_dis == null)
+          (TransReBillModels[index1].total_dis == null)
               ? 0
-              : double.parse(_TransReBillModels[index1].total_bill!) -
-                  double.parse(_TransReBillModels[index1].total_dis!));
+              : double.parse(TransReBillModels[index1].total_bill!) -
+                  double.parse(TransReBillModels[index1].total_dis!));
 
       sheet.getRangeByName('K${indextotol + 5 - 1}').setNumber(
-            (_TransReBillModels[index1].total_bill == null)
+            (TransReBillModels[index1].total_bill == null)
                 ? 0
-                : double.parse(_TransReBillModels[index1].total_bill!),
+                : double.parse(TransReBillModels[index1].total_bill!),
           );
       sheet.getRangeByName('L${indextotol + 5 - 1}').setNumber(
-            (_TransReBillModels[index1].total_dis == null)
-                ? double.parse(_TransReBillModels[index1].total_bill!)
-                : double.parse(_TransReBillModels[index1].total_dis!),
+            (TransReBillModels[index1].total_dis == null)
+                ? double.parse(TransReBillModels[index1].total_bill!)
+                : double.parse(TransReBillModels[index1].total_dis!),
           );
 
       print('-------------------------');
@@ -423,10 +425,12 @@ class Mini_Ex_DailyReport {
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
       String path = await FileSaver.instance.saveFile(
           (ser_type_repro == '1')
-              ? 'รายงานประจำวันแบบย่อ ( โซน : $Value_Chang_Zone_Daily)'
+              ? 'รายงานประจำวันแบบย่อ ( โซน : $zone_name_Trans_Daily)'
               : (ser_type_repro == '2')
-                  ? 'รายงานประจำวันแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Daily)'
-                  : 'รายงานประจำวันแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Daily)',
+                  ? 'รายงานประจำวันแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $zone_name_Trans_Daily)'
+                  : (ser_type_repro == '3')
+                      ? 'รายงานประจำวันแบบย่อ เฉพาะล็อคเสียบ ( โซน : $zone_name_Trans_Daily)'
+                      : 'รายงานประจำวันแบบย่อ เฉพาะรายการที่ออกใบกำกับภาษี ( โซน : $zone_name_Trans_Daily)',
           // "รายงานประจำวันแบบย่อ",
           data,
           "xlsx",

@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, prefer_const_constructors, unnecessary_import, implementation_imports, prefer_const_constructors_in_immutables, non_constant_identifier_names, avoid_init_to_null, prefer_void_to_null, unnecessary_brace_in_string_interps, avoid_print, empty_catches, sized_box_for_whitespace, use_build_context_synchronously, file_names, prefer_const_literals_to_create_immutables, prefer_const_declarations, unnecessary_string_interpolations, prefer_collection_literals, sort_child_properties_last, avoid_unnecessary_containers, prefer_is_empty, prefer_final_fields, camel_case_types, avoid_web_libraries_in_flutter, prefer_typing_uninitialized_variables, no_leading_underscores_for_local_identifiers, deprecated_member_use
 import 'dart:convert';
 import 'dart:js_util';
 import 'dart:typed_data';
@@ -30,7 +31,6 @@ import '../Model/Get_pakan_finnent_model.dart';
 import '../Model/Get_trasn_pakan_KF_model.dart';
 import '../Model/Get_trasn_pakan_Pay_model.dart';
 import '../Model/Get_trasn_pakan_model.dart';
-import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
 import '../PDF/pdf_Receipt_PayPakan.dart';
 import '../PeopleChao/Pays_.dart';
 import '../Style/colors.dart';
@@ -129,7 +129,6 @@ class _ChaoReturnState extends State<ChaoReturn> {
       discount_;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     read_GC_rental();
     read_GC_teNant();

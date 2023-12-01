@@ -29,6 +29,7 @@ import '../Model/Get_maintenance_model.dart';
 import '../Model/Get_tenant_tow_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
+import '../Register/SignIn_License.dart';
 import '../Register/SignUp_Screen.dart';
 import '../Report/Report_Screen.dart';
 import 'package:http/http.dart' as http;
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CustomerModel> customerModels = [];
   List<TransReBillModel> _TransReBillModels = [];
   List<MaintenanceModel> maintenanceModels = [];
-  String? renTal_user, renTal_name, sernote;
+  String? renTal_user, renTal_name, sernote, pkldate, data_update, data_pn;
   int app_port = 0;
 ///////////------------------------------------------->
   @override
@@ -85,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // var qutser = widget.Get_Value_NameShop_index;
 
     String url =
-        '${MyConstant().domain}/GC_maintenance.php?isAdd=true&ren=$ren';
+        '${MyConstant().domain}/GC_maintenance.php?isAdd=true&ren=$ren&serzone=0';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -111,13 +112,20 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     var ren = preferences.getString('renTalSer');
-    var zone = preferences.getString('zonePSer');
+    var zone = '0';
+    var zone_Sub = '0';
 
-    String url = zone == null
-        ? '${MyConstant().domain}/GC_tenantAll_setring.php?isAdd=true&ren=$ren&zone=$zone'
-        : zone == '0'
-            ? '${MyConstant().domain}/GC_tenantAll_setring.php?isAdd=true&ren=$ren&zone=$zone'
-            : '${MyConstant().domain}/GC_tenant_setring.php?isAdd=true&ren=$ren&zone=$zone';
+    String url = zone_Sub == null || zone_Sub == '0'
+        ? zone == null
+            ? '${MyConstant().domain}/GC_tenantAll_setring1.php?isAdd=true&ren=$ren&zone=$zone'
+            : zone == '0'
+                ? '${MyConstant().domain}/GC_tenantAll_setring1.php?isAdd=true&ren=$ren&zone=$zone'
+                : '${MyConstant().domain}/GC_tenant_setring1.php?isAdd=true&ren=$ren&zone=$zone'
+        : zone == null
+            ? '${MyConstant().domain}/GC_tenantAll_setring1_sub.php?isAdd=true&ren=$ren&zone=$zone_Sub'
+            : zone == '0'
+                ? '${MyConstant().domain}/GC_tenantAll_setring1_sub.php?isAdd=true&ren=$ren&zone=$zone_Sub'
+                : '${MyConstant().domain}/GC_tenant_setring1.php?isAdd=true&ren=$ren&zone=$zone';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -355,14 +363,155 @@ class _HomeScreenState extends State<HomeScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      // print(result);
+      print('GC_rental>>> $result');
       for (var map in result) {
         RenTalModel renTalModel = RenTalModel.fromJson(map);
+        var pksdatex = renTalModel.pksdate;
+        var pkldatex = renTalModel.pkldate;
+        var data_updatex = renTalModel.data_update;
+        var data_pnx = renTalModel.pn;
         setState(() {
+          pkldate = pkldatex;
+          data_update = data_updatex;
+          data_pn = data_pnx;
           renTalModels.add(renTalModel);
         });
       }
     } catch (e) {}
+
+    readupdate();
+  }
+
+  Future<Null> readupdate() async {
+    print('$pkldate 0000-00-00  data_update >> $data_update');
+    if (datex.isAfter(DateTime.parse(pkldate == '0000-00-00'
+                ? '$data_update'
+                : '$pkldate 00:00:00.000')
+            .subtract(const Duration(days: 7))) ==
+        true) {
+      License_New_Update();
+      // MaterialPageRoute route = MaterialPageRoute(
+      //   builder: (context) => SignInLicense(route: 'No'),
+      // );
+      // Navigator.pushAndRemoveUntil(context, route, (route) => false);
+    } else if (datex.isAfter(DateTime.parse(pkldate == '0000-00-00'
+                ? '$data_update'
+                : '$pkldate 00:00:00.000')
+            .subtract(const Duration(days: 0))) ==
+        true) {
+      MaterialPageRoute route = MaterialPageRoute(
+        builder: (context) => SignInLicense(route: 'No'),
+      );
+      Navigator.pushAndRemoveUntil(context, route, (route) => false);
+      // License_New_Update();
+    }
+  }
+
+  Future<Null> License_New_Update() async {
+    showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        title: Text(
+          '📢 Plese Update License Key',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 24,
+            color: Colors.red,
+            fontFamily: Font_.Fonts_T,
+          ),
+        ),
+        content: Container(
+          // decoration: BoxDecoration(
+          //   image: const DecorationImage(
+          //     image: AssetImage("images/pngegg.png"),
+          //     // fit: BoxFit.cover,
+          //   ),
+          // ),
+          child: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'พื้นที่ $data_pn ของคุณจะหมดอายุ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    '${DateFormat.MMMMEEEEd('th').format(DateTime.parse(pkldate == '0000-00-00' ? '$data_update' : '$pkldate 00:00:00.000'))} ${int.parse(DateFormat('yyyy').format(DateTime.parse(pkldate == '0000-00-00' ? '$data_update' : '$pkldate 00:00:00.000'))) + 543}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'คำแนะนำ กรุณาต่อ License Key เพื่อการใช้งานต่อไป',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 100,
+                  decoration: const BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10)),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context, 'OK');
+                    },
+                    child: const Text(
+                      'รับทราบ',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: FontWeight_.Fonts_T),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          //         ],
+          //       );
+          //     })
+        ],
+      ),
+    );
   }
 
 //////////------------------------------------------------->
@@ -488,7 +637,7 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.width,
         child: SizedBox(
           // flex: 1,
           child: Container(
@@ -608,123 +757,43 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 renTal_user == null
-                    ? Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.width * 0.45,
-                        child: ListView(
-                          children: [
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        'กรุณาเลือกสถานที่',
-                                        style: TextStyle(
-                                          color: HomeScreen_Color.Colors_Text2_,
-                                          fontFamily: Font_.Fonts_T,
+                    ? SingleChildScrollView(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.width * 0.4,
+                          child: ListView(
+                            children: [
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          'กรุณาเลือกสถานที่',
+                                          style: TextStyle(
+                                            color:
+                                                HomeScreen_Color.Colors_Text2_,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: MediaQuery.of(context).size.width *
-                                        0.25,
-                                    color: Colors.transparent,
-                                    child: GridView.count(
-                                      crossAxisCount:
-                                          (Responsive.isDesktop(context))
-                                              ? 8
-                                              : 4,
-                                      children: [
-                                        Card(
-                                            color:
-                                                AppbackgroundColor.Abg_Colors,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                            ),
-                                            child: InkWell(
-                                              onTap: () async {
-                                                setState(() {
-                                                  app_port = 1;
-                                                });
-                                              },
-                                              child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: AppbackgroundColor
-                                                        .Sub_Abg_Colors,
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    50),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    50),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    50),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    50)),
-                                                  ),
-                                                  // color: Colors.white,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.1,
-                                                  height: 50,
-                                                  child: Center(
-                                                      child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Icon(Icons.add)
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          AutoSizeText(
-                                                            'เพิ่มสถานที่',
-                                                            minFontSize: 10,
-                                                            maxFontSize: 18,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              // fontSize: 20,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                            ),
-                                                            maxLines: 4,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ))),
-                                            )),
-                                        for (int i = 0;
-                                            i < renTalModels.length;
-                                            i++)
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.25,
+                                      color: Colors.transparent,
+                                      child: GridView.count(
+                                        crossAxisCount:
+                                            (Responsive.isDesktop(context))
+                                                ? 8
+                                                : 4,
+                                        children: [
                                           Card(
                                               color:
                                                   AppbackgroundColor.Abg_Colors,
@@ -734,53 +803,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                               child: InkWell(
                                                 onTap: () async {
-                                                  var renTalSer =
-                                                      renTalModels[i].ser;
-                                                  var renTalName =
-                                                      renTalModels[i].pn;
-                                                  print(
-                                                      'mmmmm ${renTalSer.toString()} $renTalName');
-
-                                                  SharedPreferences
-                                                      preferences =
-                                                      await SharedPreferences
-                                                          .getInstance();
-                                                  preferences.setString(
-                                                      'renTalSer',
-                                                      renTalSer.toString());
-                                                  preferences.setString(
-                                                      'renTalName',
-                                                      renTalName.toString());
-                                                  String? _route = preferences
-                                                      .getString('route');
-
-                                                  preferences.remove('zoneSer');
-                                                  preferences
-                                                      .remove('zonesName');
-                                                  preferences
-                                                      .remove('zonePSer');
-                                                  preferences
-                                                      .remove('zonesPName');
-
-                                                  MaterialPageRoute route =
-                                                      MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        AdminScafScreen(
-                                                            route: _route),
-                                                  );
-                                                  Navigator.pushAndRemoveUntil(
-                                                      context,
-                                                      route,
-                                                      (route) => false);
+                                                  setState(() {
+                                                    app_port = 1;
+                                                  });
                                                 },
                                                 child: Container(
-                                                    // color: Colors.green.shade200,
                                                     decoration: BoxDecoration(
-                                                      color:
-                                                          Colors.green.shade200,
+                                                      color: AppbackgroundColor
+                                                          .Sub_Abg_Colors,
                                                       borderRadius:
                                                           const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(50),
                                                               topRight: Radius
@@ -792,124 +825,306 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       .circular(
                                                                           50)),
                                                     ),
+                                                    // color: Colors.white,
                                                     width:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width *
                                                             0.1,
                                                     height: 50,
-                                                    child: renTalModels[i]
-                                                                    .imglogo ==
-                                                                null ||
-                                                            renTalModels[i]
-                                                                    .imglogo ==
-                                                                'null'
-                                                        ? Center(
-                                                            child: AutoSizeText(
-                                                            '${renTalModels[i].pn}',
-                                                            minFontSize: 10,
-                                                            maxFontSize: 18,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              // fontSize: 20,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
+                                                    child: Center(
+                                                        child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(Icons.add)
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            AutoSizeText(
+                                                              'เพิ่มสถานที่',
+                                                              minFontSize: 10,
+                                                              maxFontSize: 18,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                // fontSize: 20,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                              ),
+                                                              maxLines: 4,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
                                                             ),
-                                                            maxLines: 4,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ))
-                                                        : Center(
-                                                            child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              renTalModels[i].imglogo ==
-                                                                          null ||
-                                                                      renTalModels[i]
-                                                                              .imglogo ==
-                                                                          'null'
-                                                                  ? SizedBox()
-                                                                  : Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        // Container(
-                                                                        //   width: 100,
-                                                                        //   height: 60,
-                                                                        //   decoration: BoxDecoration(
-                                                                        //     image: DecorationImage(
-                                                                        //       image: NetworkImage('${MyConstant().domain}/files/${renTalModels[i].dbn}/logo/${renTalModels[i].imglogo}'),
-                                                                        //     ),
-                                                                        //     borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                        //   ),
-                                                                        // ),
-                                                                        CircleAvatar(
-                                                                          radius:
-                                                                              25,
-                                                                          backgroundImage:
-                                                                              NetworkImage('${MyConstant().domain}/files/${renTalModels[i].dbn}/logo/${renTalModels[i].imglogo}'),
-                                                                          backgroundColor:
-                                                                              Colors.transparent,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                              SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  AutoSizeText(
-                                                                    '${renTalModels[i].pn}',
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        18,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      // fontSize: 20,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                    ),
-                                                                    maxLines: 4,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ))),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ))),
                                               )),
-                                      ],
-                                    )),
-                                (app_port == 1)
-                                    ? Row(
-                                        children: [
-                                          Expanded(
-                                            child: Body4(),
-                                          )
+                                          for (int i = 0;
+                                              i < renTalModels.length;
+                                              i++)
+                                            Card(
+                                                color: AppbackgroundColor
+                                                    .Abg_Colors,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    var renTalSer =
+                                                        renTalModels[i].ser;
+                                                    var renTalName =
+                                                        renTalModels[i].pn;
+                                                    print(
+                                                        'mmmmm ${renTalSer.toString()} $renTalName');
+
+                                                    SharedPreferences
+                                                        preferences =
+                                                        await SharedPreferences
+                                                            .getInstance();
+                                                    preferences.setString(
+                                                        'renTalSer',
+                                                        renTalSer.toString());
+                                                    preferences.setString(
+                                                        'renTalName',
+                                                        renTalName.toString());
+                                                    String? _route = preferences
+                                                        .getString('route');
+
+                                                    preferences
+                                                        .remove('zoneSer');
+                                                    preferences
+                                                        .remove('zonesName');
+                                                    preferences
+                                                        .remove('zonePSer');
+                                                    preferences
+                                                        .remove('zonesPName');
+
+                                                    MaterialPageRoute route =
+                                                        MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AdminScafScreen(
+                                                              route: _route),
+                                                    );
+                                                    Navigator
+                                                        .pushAndRemoveUntil(
+                                                            context,
+                                                            route,
+                                                            (route) => false);
+                                                  },
+                                                  child: Container(
+                                                      // color: Colors.green.shade200,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors
+                                                            .green.shade200,
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(50),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    50),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    50),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    50)),
+                                                      ),
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.1,
+                                                      height: 50,
+                                                      child: renTalModels[i]
+                                                                      .imglogo ==
+                                                                  null ||
+                                                              renTalModels[i]
+                                                                      .imglogo ==
+                                                                  'null'
+                                                          ? Center(
+                                                              child:
+                                                                  AutoSizeText(
+                                                              '${renTalModels[i].pn}',
+                                                              minFontSize: 10,
+                                                              maxFontSize: 18,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                // fontSize: 20,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                              ),
+                                                              maxLines: 4,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ))
+                                                          : Center(
+                                                              child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                renTalModels[i].imglogo ==
+                                                                            null ||
+                                                                        renTalModels[i].imglogo ==
+                                                                            'null'
+                                                                    ? SizedBox()
+                                                                    : Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          // Container(
+                                                                          //   width: 100,
+                                                                          //   height: 60,
+                                                                          //   decoration: BoxDecoration(
+                                                                          //     image: DecorationImage(
+                                                                          //       image: NetworkImage('${MyConstant().domain}/files/${renTalModels[i].dbn}/logo/${renTalModels[i].imglogo}'),
+                                                                          //     ),
+                                                                          //     borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                          //   ),
+                                                                          // ),
+                                                                          CircleAvatar(
+                                                                            radius:
+                                                                                25,
+                                                                            backgroundImage:
+                                                                                NetworkImage('${MyConstant().domain}/files/${renTalModels[i].dbn}/logo/${renTalModels[i].imglogo}'),
+                                                                            backgroundColor:
+                                                                                Colors.transparent,
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    AutoSizeText(
+                                                                      '${renTalModels[i].pn}',
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          18,
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        // fontSize: 20,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+                                                                        color: PeopleChaoScreen_Color
+                                                                            .Colors_Text2_,
+                                                                      ),
+                                                                      maxLines:
+                                                                          4,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    if (datex.isAfter(DateTime.parse(renTalModels[i].pkldate == '0000-00-00'
+                                                                                ? '${renTalModels[i].data_update}'
+                                                                                : '${renTalModels[i].pkldate} 00:00:00.000')
+                                                                            .subtract(const Duration(days: 0))) ==
+                                                                        true)
+                                                                      AutoSizeText(
+                                                                        'หมดอายุ',
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            18,
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          // fontSize: 20,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                          color:
+                                                                              PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        ),
+                                                                        maxLines:
+                                                                            4,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                      )
+                                                                    else if (datex.isAfter(DateTime.parse(renTalModels[i].pkldate == '0000-00-00'
+                                                                                ? '${renTalModels[i].data_update}'
+                                                                                : '${renTalModels[i].pkldate} 00:00:00.000')
+                                                                            .subtract(const Duration(days: 7))) ==
+                                                                        true)
+                                                                      AutoSizeText(
+                                                                        'ใกล้หมดอายุ',
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            18,
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          // fontSize: 20,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                          color:
+                                                                              PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        ),
+                                                                        maxLines:
+                                                                            4,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                      ),
+                                                                  ],
+                                                                )
+                                                              ],
+                                                            ))),
+                                                )),
                                         ],
-                                      )
-                                    : SizedBox()
-                              ],
-                            ),
-                          ],
+                                      )),
+                                  (app_port == 1)
+                                      ? Row(
+                                          children: [
+                                            Expanded(
+                                              child: Body4(),
+                                            )
+                                          ],
+                                        )
+                                      : SizedBox()
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       )
                     : Expanded(
@@ -1338,7 +1553,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                .only(
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -1422,7 +1637,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -1831,15 +2046,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           '';
                                                                     });
                                                                   },
-                                                                  title: Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                  title:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      border:
+                                                                          Border(
+                                                                        bottom:
+                                                                            BorderSide(
+                                                                          color:
+                                                                              Colors.black12,
+                                                                          width:
+                                                                              1,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
                                                                           child:
                                                                               AutoSizeText(
                                                                             minFontSize:
@@ -1861,10 +2087,108 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               fontFamily: Font_.Fonts_T,
                                                                             ),
                                                                           ),
-
-                                                                          //  Text(
-                                                                          //   '${customerModels[index].zn}',
-                                                                          //   style: const TextStyle(
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${customerModels[index].ln}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[300],
+                                                                            ),
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              minFontSize: 10,
+                                                                              maxFontSize: 25,
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              '${customerModels[index].ln}',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text2_,
+                                                                                // fontWeight:
+                                                                                //     FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${customerModels[index].scname}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[300],
+                                                                            ),
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              minFontSize: 10,
+                                                                              maxFontSize: 25,
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              '${customerModels[index].scname}',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text2_,
+                                                                                // fontWeight:
+                                                                                //     FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                25,
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            '${nFormat.format(double.parse(customerModels[index].area!))}',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: HomeScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                            ),
+                                                                          ),
+                                                                          // Text(
+                                                                          //   '${customerModels[index].area}',
+                                                                          //   style: TextStyle(
                                                                           //     color: TextHome_Color
                                                                           //         .TextHome_Colors,
 
@@ -1872,152 +2196,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           //   ),
                                                                           // ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Tooltip(
-                                                                          richMessage:
-                                                                              TextSpan(
-                                                                            text:
-                                                                                '${customerModels[index].ln}',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                              //fontSize: 10.0
-                                                                            ),
-                                                                          ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color:
-                                                                                Colors.grey[300],
-                                                                          ),
-                                                                          child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                SizedBox(
-                                                                              child: AutoSizeText(
-                                                                                minFontSize: 10,
-                                                                                maxFontSize: 25,
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                '${customerModels[index].ln}',
-                                                                                textAlign: TextAlign.center,
-                                                                                style: const TextStyle(
-                                                                                  color: HomeScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            //  Text(
-                                                                            //   '${customerModels[index].ln}',
-                                                                            //   style: const TextStyle(
-                                                                            //     color: TextHome_Color
-                                                                            //         .TextHome_Colors,
-
-                                                                            //     //fontSize: 10.0
-                                                                            //   ),
-                                                                            // ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            Tooltip(
-                                                                          richMessage:
-                                                                              TextSpan(
-                                                                            text:
-                                                                                '${customerModels[index].scname}',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                              //fontSize: 10.0
-                                                                            ),
-                                                                          ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color:
-                                                                                Colors.grey[300],
-                                                                          ),
-                                                                          child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                SizedBox(
-                                                                              child: AutoSizeText(
-                                                                                minFontSize: 10,
-                                                                                maxFontSize: 25,
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                '${customerModels[index].scname}',
-                                                                                textAlign: TextAlign.center,
-                                                                                style: const TextStyle(
-                                                                                  color: HomeScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          minFontSize:
-                                                                              10,
-                                                                          maxFontSize:
-                                                                              25,
-                                                                          maxLines:
-                                                                              1,
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          '${nFormat.format(double.parse(customerModels[index].area!))}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                HomeScreen_Color.Colors_Text2_,
-                                                                            // fontWeight:
-                                                                            //     FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
-                                                                          ),
-                                                                        ),
-                                                                        // Text(
-                                                                        //   '${customerModels[index].area}',
-                                                                        //   style: TextStyle(
-                                                                        //     color: TextHome_Color
-                                                                        //         .TextHome_Colors,
-
-                                                                        //     //fontSize: 10.0
-                                                                        //   ),
-                                                                        // ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
                                                                           child:
                                                                               AutoSizeText(
                                                                             minFontSize:
@@ -2039,20 +2220,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               fontFamily: Font_.Fonts_T,
                                                                             ),
                                                                           ),
-
-                                                                          //  Text(
-                                                                          //   '${customerModels[index].sdate}',
-                                                                          //   maxLines: 1,
-                                                                          //   overflow:
-                                                                          //       TextOverflow.ellipsis,
-                                                                          //   style: const TextStyle(
-                                                                          //     color: TextHome_Color
-                                                                          //         .TextHome_Colors,
-                                                                          //   ),
-                                                                          // ),
                                                                         ),
-                                                                      ),
-                                                                    ],
+                                                                      ],
+                                                                    ),
                                                                   )),
                                                             ),
                                                           );
@@ -2095,7 +2265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -2113,8 +2283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -2159,37 +2328,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       );
                                                                     }
                                                                   },
-                                                                  child:
-                                                                      Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            // color: AppbackgroundColor
-                                                                            //     .TiTile_Colors,
-                                                                            borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(6),
-                                                                                topRight: Radius.circular(6),
-                                                                                bottomLeft: Radius.circular(6),
-                                                                                bottomRight: Radius.circular(6)),
-                                                                            border:
-                                                                                Border.all(color: Colors.grey, width: 1),
-                                                                          ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              3.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'Down',
-                                                                            maxLines:
-                                                                                1,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: Colors.grey,
-                                                                              fontSize: 10.0,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                            ),
-                                                                          )),
+                                                                  child: Container(
+                                                                      decoration: BoxDecoration(
+                                                                        // color: AppbackgroundColor
+                                                                        //     .TiTile_Colors,
+                                                                        borderRadius: const BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(6),
+                                                                            topRight: Radius.circular(6),
+                                                                            bottomLeft: Radius.circular(6),
+                                                                            bottomRight: Radius.circular(6)),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.grey,
+                                                                            width: 1),
+                                                                      ),
+                                                                      padding: const EdgeInsets.all(3.0),
+                                                                      child: const Text(
+                                                                        'Down',
+                                                                        maxLines:
+                                                                            1,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.grey,
+                                                                          fontSize:
+                                                                              10.0,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        ),
+                                                                      )),
                                                                 ),
                                                               ],
                                                             ),
@@ -2222,7 +2392,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       // color: AppbackgroundColor
                                                                       //     .TiTile_Colors,
                                                                       borderRadius: const BorderRadius
-                                                                          .only(
+                                                                              .only(
                                                                           topLeft: Radius.circular(
                                                                               6),
                                                                           topRight: Radius.circular(
@@ -2238,8 +2408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             3.0),
                                                                     child:
                                                                         const Text(
@@ -2305,7 +2474,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -2476,7 +2645,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         .ellipsis,
                                                                 textAlign:
                                                                     TextAlign
-                                                                        .center,
+                                                                        .start,
                                                                 style:
                                                                     TextStyle(
                                                                   color: HomeScreen_Color
@@ -2502,7 +2671,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 'รายละเอียด',
                                                                 textAlign:
                                                                     TextAlign
-                                                                        .center,
+                                                                        .start,
                                                                 maxLines: 1,
                                                                 overflow:
                                                                     TextOverflow
@@ -2536,7 +2705,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         .ellipsis,
                                                                 textAlign:
                                                                     TextAlign
-                                                                        .center,
+                                                                        .start,
                                                                 style:
                                                                     TextStyle(
                                                                   color: HomeScreen_Color
@@ -2615,8 +2784,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         controller:
                                                             _scrollController2,
                                                         // itemExtent: 50,
-                                                        physics:
-                                                            const NeverScrollableScrollPhysics(),
+                                                        // physics:
+                                                        //     const NeverScrollableScrollPhysics(),
                                                         shrinkWrap: true,
                                                         itemCount:
                                                             maintenanceModels
@@ -2659,35 +2828,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           '';
                                                                     });
                                                                   },
-                                                                  title: Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Tooltip(
-                                                                          richMessage:
-                                                                              TextSpan(
-                                                                            text:
-                                                                                '${maintenanceModels[index].sname}',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                              //fontSize: 10.0
-                                                                            ),
-                                                                          ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color:
-                                                                                Colors.grey[300],
-                                                                          ),
+                                                                  title:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      border:
+                                                                          Border(
+                                                                        bottom:
+                                                                            BorderSide(
+                                                                          color:
+                                                                              Colors.black12,
+                                                                          width:
+                                                                              1,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
                                                                           child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${maintenanceModels[index].sname}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[300],
+                                                                            ),
                                                                             child:
                                                                                 Text(
                                                                               '${maintenanceModels[index].sname}',
@@ -2703,40 +2880,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            Tooltip(
-                                                                          richMessage:
-                                                                              TextSpan(
-                                                                            text:
-                                                                                '${maintenanceModels[index].aser}',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                              //fontSize: 10.0
-                                                                            ),
-                                                                          ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color:
-                                                                                Colors.grey[300],
-                                                                          ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
                                                                           child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${maintenanceModels[index].aser}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[300],
+                                                                            ),
                                                                             child:
                                                                                 Text(
                                                                               '${maintenanceModels[index].aser}',
                                                                               maxLines: 1,
                                                                               overflow: TextOverflow.ellipsis,
-                                                                              textAlign: TextAlign.center,
+                                                                              textAlign: TextAlign.start,
                                                                               style: const TextStyle(
                                                                                 color: HomeScreen_Color.Colors_Text2_,
                                                                                 // fontWeight:
@@ -2746,70 +2915,58 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Text(
-                                                                          '${maintenanceModels[index].mdescr}',
-                                                                          maxLines:
-                                                                              1,
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                HomeScreen_Color.Colors_Text2_,
-                                                                            // fontWeight:
-                                                                            //     FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Text(
-                                                                          '${DateFormat('dd-MM').format((DateTime.parse('${maintenanceModels[index].mdate} 00:00:00')))}-${DateTime.parse('${maintenanceModels[index].mdate} 00:00:00').year + 543}',
-                                                                          maxLines:
-                                                                              1,
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                HomeScreen_Color.Colors_Text2_,
-                                                                            // fontWeight:
-                                                                            //     FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            Container(
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                Colors.white10,
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
-                                                                          ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              4.0),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
                                                                           child:
-                                                                              Center(
+                                                                              Text(
+                                                                            '${maintenanceModels[index].mdescr}',
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: HomeScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              Text(
+                                                                            '${DateFormat('dd-MM').format((DateTime.parse('${maintenanceModels[index].mdate} 00:00:00')))}-${DateTime.parse('${maintenanceModels[index].mdate} 00:00:00').year + 543}',
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: HomeScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: Colors.white10,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                            ),
                                                                             child:
                                                                                 AutoSizeText(
                                                                               minFontSize: 10,
@@ -2831,8 +2988,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                    ],
+                                                                      ],
+                                                                    ),
                                                                   )),
                                                             ),
                                                           );
@@ -2875,7 +3032,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -2893,8 +3050,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -2939,37 +3095,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       );
                                                                     }
                                                                   },
-                                                                  child:
-                                                                      Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            // color: AppbackgroundColor
-                                                                            //     .TiTile_Colors,
-                                                                            borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(6),
-                                                                                topRight: Radius.circular(6),
-                                                                                bottomLeft: Radius.circular(6),
-                                                                                bottomRight: Radius.circular(6)),
-                                                                            border:
-                                                                                Border.all(color: Colors.grey, width: 1),
-                                                                          ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              3.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'Down',
-                                                                            maxLines:
-                                                                                1,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: Colors.grey,
-                                                                              fontSize: 10.0,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                            ),
-                                                                          )),
+                                                                  child: Container(
+                                                                      decoration: BoxDecoration(
+                                                                        // color: AppbackgroundColor
+                                                                        //     .TiTile_Colors,
+                                                                        borderRadius: const BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(6),
+                                                                            topRight: Radius.circular(6),
+                                                                            bottomLeft: Radius.circular(6),
+                                                                            bottomRight: Radius.circular(6)),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.grey,
+                                                                            width: 1),
+                                                                      ),
+                                                                      padding: const EdgeInsets.all(3.0),
+                                                                      child: const Text(
+                                                                        'Down',
+                                                                        maxLines:
+                                                                            1,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.grey,
+                                                                          fontSize:
+                                                                              10.0,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        ),
+                                                                      )),
                                                                 ),
                                                               ],
                                                             ),
@@ -3002,7 +3159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       // color: AppbackgroundColor
                                                                       //     .TiTile_Colors,
                                                                       borderRadius: const BorderRadius
-                                                                          .only(
+                                                                              .only(
                                                                           topLeft: Radius.circular(
                                                                               6),
                                                                           topRight: Radius.circular(
@@ -3018,8 +3175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             3.0),
                                                                     child:
                                                                         const Text(
@@ -3088,7 +3244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -3457,15 +3613,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           '';
                                                                     });
                                                                   },
-                                                                  title: Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                  title:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      border:
+                                                                          Border(
+                                                                        bottom:
+                                                                            BorderSide(
+                                                                          color:
+                                                                              Colors.black12,
+                                                                          width:
+                                                                              1,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
                                                                           child:
                                                                               AutoSizeText(
                                                                             minFontSize:
@@ -3488,35 +3655,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Tooltip(
-                                                                          richMessage:
-                                                                              TextSpan(
-                                                                            text: teNantModels[index].ln_c == null
-                                                                                ? '${teNantModels[index].ln_q}'
-                                                                                : '${teNantModels[index].ln_c}',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                              //fontSize: 10.0
-                                                                            ),
-                                                                          ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color:
-                                                                                Colors.grey[300],
-                                                                          ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
                                                                           child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: teNantModels[index].ln_c == null ? '${teNantModels[index].ln_q}' : '${teNantModels[index].ln_c}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[300],
+                                                                            ),
                                                                             child:
                                                                                 AutoSizeText(
                                                                               minFontSize: 10,
@@ -3534,35 +3692,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            Tooltip(
-                                                                          richMessage:
-                                                                              TextSpan(
-                                                                            text: teNantModels[index].sname == null
-                                                                                ? '${teNantModels[index].sname_q}'
-                                                                                : '${teNantModels[index].sname}',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                              //fontSize: 10.0
-                                                                            ),
-                                                                          ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color:
-                                                                                Colors.grey[300],
-                                                                          ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
                                                                           child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: teNantModels[index].sname == null ? '${teNantModels[index].sname_q}' : '${teNantModels[index].sname}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[300],
+                                                                            ),
                                                                             child:
                                                                                 AutoSizeText(
                                                                               minFontSize: 10,
@@ -3580,42 +3729,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          minFontSize:
-                                                                              10,
-                                                                          maxFontSize:
-                                                                              25,
-                                                                          maxLines:
-                                                                              1,
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          teNantModels[index].area_c == null
-                                                                              ? '${nFormat.format(double.parse(teNantModels[index].area_q!))}'
-                                                                              : '${nFormat.format(double.parse(teNantModels[index].area_c!))}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                HomeScreen_Color.Colors_Text2_,
-                                                                            // fontWeight:
-                                                                            //     FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                25,
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            teNantModels[index].area_c == null
+                                                                                ? '${nFormat.format(double.parse(teNantModels[index].area_q!))}'
+                                                                                : '${nFormat.format(double.parse(teNantModels[index].area_c!))}',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: HomeScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
                                                                           child:
                                                                               AutoSizeText(
                                                                             minFontSize:
@@ -3641,8 +3784,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                    ],
+                                                                      ],
+                                                                    ),
                                                                   )),
                                                             ),
                                                           );
@@ -3685,9 +3828,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
+                                                                  
                                                                       InkWell(
                                                                     onTap: () {
                                                                       _scrollController3
@@ -3703,8 +3847,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -3749,37 +3892,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       );
                                                                     }
                                                                   },
-                                                                  child:
-                                                                      Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            // color: AppbackgroundColor
-                                                                            //     .TiTile_Colors,
-                                                                            borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(6),
-                                                                                topRight: Radius.circular(6),
-                                                                                bottomLeft: Radius.circular(6),
-                                                                                bottomRight: Radius.circular(6)),
-                                                                            border:
-                                                                                Border.all(color: Colors.grey, width: 1),
-                                                                          ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              3.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'Down',
-                                                                            maxLines:
-                                                                                1,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: Colors.grey,
-                                                                              fontSize: 10.0,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                            ),
-                                                                          )),
+                                                                  child: Container(
+                                                                      decoration: BoxDecoration(
+                                                                        // color: AppbackgroundColor
+                                                                        //     .TiTile_Colors,
+                                                                        borderRadius: const BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(6),
+                                                                            topRight: Radius.circular(6),
+                                                                            bottomLeft: Radius.circular(6),
+                                                                            bottomRight: Radius.circular(6)),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.grey,
+                                                                            width: 1),
+                                                                      ),
+                                                                      padding: const EdgeInsets.all(3.0),
+                                                                      child: const Text(
+                                                                        'Down',
+                                                                        maxLines:
+                                                                            1,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.grey,
+                                                                          fontSize:
+                                                                              10.0,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        ),
+                                                                      )),
                                                                 ),
                                                               ],
                                                             ),
@@ -3812,7 +3956,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       // color: AppbackgroundColor
                                                                       //     .TiTile_Colors,
                                                                       borderRadius: const BorderRadius
-                                                                          .only(
+                                                                              .only(
                                                                           topLeft: Radius.circular(
                                                                               6),
                                                                           topRight: Radius.circular(
@@ -3828,8 +3972,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             3.0),
                                                                     child:
                                                                         const Text(
@@ -3895,7 +4038,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -4249,86 +4392,135 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           '';
                                                                     });
                                                                   },
-                                                                  title: Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Tooltip(
-                                                                          richMessage:
-                                                                              TextSpan(
-                                                                            text:
-                                                                                '${teNantTwoModels[index].sname}',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                              //fontSize: 10.0
-                                                                            ),
-                                                                          ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color:
-                                                                                Colors.grey[300],
-                                                                          ),
+                                                                  title:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      border:
+                                                                          Border(
+                                                                        bottom:
+                                                                            BorderSide(
+                                                                          color:
+                                                                              Colors.black12,
+                                                                          width:
+                                                                              1,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
                                                                           child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                AutoSizeText(
-                                                                              minFontSize: 10,
-                                                                              maxFontSize: 25,
-                                                                              '${teNantTwoModels[index].sname}',
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              textAlign: TextAlign.start,
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${teNantTwoModels[index].sname}',
                                                                               style: const TextStyle(
-                                                                                color: HomeScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T,
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[300],
+                                                                            ),
+                                                                            child:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                '${teNantTwoModels[index].sname}',
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                textAlign: TextAlign.start,
+                                                                                style: const TextStyle(
+                                                                                  color: HomeScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight:
+                                                                                  //     FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                ),
                                                                               ),
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            Tooltip(
-                                                                          richMessage:
-                                                                              TextSpan(
-                                                                            text:
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${teNantTwoModels[index].lncode}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[300],
+                                                                            ),
+                                                                            child:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Text(
                                                                                 '${teNantTwoModels[index].lncode}',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                              //fontSize: 10.0
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                textAlign: TextAlign.center,
+                                                                                style: const TextStyle(
+                                                                                  color: HomeScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight:
+                                                                                  //     FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                ),
+                                                                              ),
                                                                             ),
                                                                           ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color:
-                                                                                Colors.grey[300],
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              Text(
+                                                                            '${teNantTwoModels[index].count_total}',
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: HomeScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                            ),
                                                                           ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
                                                                           child:
                                                                               Padding(
                                                                             padding:
                                                                                 const EdgeInsets.all(8.0),
                                                                             child:
                                                                                 Text(
-                                                                              '${teNantTwoModels[index].lncode}',
+                                                                              '${DateFormat('dd-MM').format(DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00'))}-${DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00').year + 543}',
                                                                               maxLines: 1,
                                                                               overflow: TextOverflow.ellipsis,
-                                                                              textAlign: TextAlign.center,
+                                                                              textAlign: TextAlign.end,
                                                                               style: const TextStyle(
                                                                                 color: HomeScreen_Color.Colors_Text2_,
                                                                                 // fontWeight:
@@ -4338,82 +4530,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Text(
-                                                                          '${teNantTwoModels[index].count_total}',
-                                                                          maxLines:
-                                                                              1,
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          textAlign:
-                                                                              TextAlign.end,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                HomeScreen_Color.Colors_Text2_,
-                                                                            // fontWeight:
-                                                                            //     FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
                                                                           child:
-                                                                              Text(
-                                                                            '${DateFormat('dd-MM').format(DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00'))}-${DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00').year + 543}',
-                                                                            maxLines:
-                                                                                1,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            textAlign:
-                                                                                TextAlign.end,
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text2_,
-                                                                              // fontWeight:
-                                                                              //     FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T,
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Text(
+                                                                              '${teNantTwoModels[index].count_bill} รายการ',
+                                                                              textAlign: TextAlign.end,
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text2_,
+                                                                                // fontWeight:
+                                                                                //     FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T,
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 2,
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
-                                                                          child:
-                                                                              Text(
-                                                                            '${teNantTwoModels[index].count_bill} รายการ',
-                                                                            textAlign:
-                                                                                TextAlign.end,
-                                                                            maxLines:
-                                                                                1,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text2_,
-                                                                              // fontWeight:
-                                                                              //     FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
+                                                                      ],
+                                                                    ),
                                                                   )),
                                                             ),
                                                           );
@@ -4456,7 +4596,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -4474,8 +4614,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -4520,37 +4659,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       );
                                                                     }
                                                                   },
-                                                                  child:
-                                                                      Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            // color: AppbackgroundColor
-                                                                            //     .TiTile_Colors,
-                                                                            borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(6),
-                                                                                topRight: Radius.circular(6),
-                                                                                bottomLeft: Radius.circular(6),
-                                                                                bottomRight: Radius.circular(6)),
-                                                                            border:
-                                                                                Border.all(color: Colors.grey, width: 1),
-                                                                          ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              3.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'Down',
-                                                                            maxLines:
-                                                                                1,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: Colors.grey,
-                                                                              fontSize: 10.0,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                            ),
-                                                                          )),
+                                                                  child: Container(
+                                                                      decoration: BoxDecoration(
+                                                                        // color: AppbackgroundColor
+                                                                        //     .TiTile_Colors,
+                                                                        borderRadius: const BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(6),
+                                                                            topRight: Radius.circular(6),
+                                                                            bottomLeft: Radius.circular(6),
+                                                                            bottomRight: Radius.circular(6)),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.grey,
+                                                                            width: 1),
+                                                                      ),
+                                                                      padding: const EdgeInsets.all(3.0),
+                                                                      child: const Text(
+                                                                        'Down',
+                                                                        maxLines:
+                                                                            1,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.grey,
+                                                                          fontSize:
+                                                                              10.0,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        ),
+                                                                      )),
                                                                 ),
                                                               ],
                                                             ),
@@ -4583,7 +4723,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       // color: AppbackgroundColor
                                                                       //     .TiTile_Colors,
                                                                       borderRadius: const BorderRadius
-                                                                          .only(
+                                                                              .only(
                                                                           topLeft: Radius.circular(
                                                                               6),
                                                                           topRight: Radius.circular(
@@ -4599,8 +4739,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             3.0),
                                                                     child:
                                                                         const Text(
@@ -5422,9 +5561,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             .width,
                                                     height:
                                                         MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.25,
+                                                            .size
+                                                            .width,
                                                     color: Colors.transparent,
                                                     child: GridView.count(
                                                       crossAxisCount:
@@ -5456,7 +5594,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     color: AppbackgroundColor
                                                                         .Sub_Abg_Colors,
                                                                     borderRadius: const BorderRadius
-                                                                        .only(
+                                                                            .only(
                                                                         topLeft:
                                                                             Radius.circular(
                                                                                 50),
@@ -5601,7 +5739,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           .green
                                                                           .shade200,
                                                                       borderRadius: const BorderRadius
-                                                                          .only(
+                                                                              .only(
                                                                           topLeft: Radius.circular(
                                                                               50),
                                                                           topRight: Radius.circular(
@@ -5881,7 +6019,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             color: AppbackgroundColor
                                                                 .Sub_Abg_Colors,
                                                             borderRadius: const BorderRadius
-                                                                .only(
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -5956,7 +6094,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             color: AppbackgroundColor
                                                                 .Sub_Abg_Colors,
                                                             borderRadius: const BorderRadius
-                                                                .only(
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -6056,7 +6194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6075,7 +6213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6103,8 +6241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child: Text(
                                                                       'ทั้งหมด ${customerModels.length} รายการ',
@@ -6210,7 +6347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6229,7 +6366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6257,8 +6394,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child: Text(
                                                                       'ทั้งหมด ${maintenanceModels.length} รายการ',
@@ -6341,7 +6477,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             color: AppbackgroundColor
                                                                 .Sub_Abg_Colors,
                                                             borderRadius: const BorderRadius
-                                                                .only(
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -6413,7 +6549,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             color: AppbackgroundColor
                                                                 .Sub_Abg_Colors,
                                                             borderRadius: const BorderRadius
-                                                                .only(
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -6513,7 +6649,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6532,7 +6668,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6560,8 +6696,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child: Text(
                                                                       'ทั้งหมด ${teNantModels.length} รายการ',
@@ -6668,7 +6803,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6687,7 +6822,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6715,8 +6850,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child: Text(
                                                                       'ทั้งหมด ${teNantTwoModels.length} รายการ',
@@ -7118,7 +7252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       //     .TiTile_Colors,
                                                       borderRadius:
                                                           const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius
@@ -7417,52 +7551,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     tappedIndex_5 = '';
                                                   });
                                                 },
-                                                title: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 25,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          '${customerModels[index].zn}',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: HomeScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight:
-                                                            //     FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-
-                                                        //  Text(
-                                                        //   '${customerModels[index].zn}',
-                                                        //   style: const TextStyle(
-                                                        //     color: TextHome_Color
-                                                        //         .TextHome_Colors,
-
-                                                        //     //fontSize: 10.0
-                                                        //   ),
-                                                        // ),
+                                                title: Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    border: Border(
+                                                      bottom: BorderSide(
+                                                        color: Colors.black12,
+                                                        width: 1,
                                                       ),
                                                     ),
-                                                    Expanded(
-                                                      flex: 2,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: SizedBox(
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
                                                           child: AutoSizeText(
                                                             minFontSize: 10,
                                                             maxFontSize: 25,
@@ -7470,9 +7576,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,
-                                                            '${customerModels[index].ln}',
-                                                            textAlign: TextAlign
-                                                                .center,
+                                                            '${customerModels[index].zn}',
+                                                            textAlign:
+                                                                TextAlign.start,
                                                             style:
                                                                 const TextStyle(
                                                               color: HomeScreen_Color
@@ -7483,93 +7589,69 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   Font_.Fonts_T,
                                                             ),
                                                           ),
-                                                        ),
-                                                        //  Text(
-                                                        //   '${customerModels[index].ln}',
-                                                        //   style: const TextStyle(
-                                                        //     color: TextHome_Color
-                                                        //         .TextHome_Colors,
 
-                                                        //     //fontSize: 10.0
-                                                        //   ),
-                                                        // ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 25,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        '${customerModels[index].scname}',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                          color: HomeScreen_Color
-                                                              .Colors_Text2_,
-                                                          // fontWeight:
-                                                          //     FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                          //  Text(
+                                                          //   '${customerModels[index].zn}',
+                                                          //   style: const TextStyle(
+                                                          //     color: TextHome_Color
+                                                          //         .TextHome_Colors,
+
+                                                          //     //fontSize: 10.0
+                                                          //   ),
+                                                          // ),
                                                         ),
                                                       ),
-                                                      //  Text(
-                                                      //   '${customerModels[index].scname}',
-                                                      //   style: const TextStyle(
-                                                      //     color: TextHome_Color
-                                                      //         .TextHome_Colors,
+                                                      Expanded(
+                                                        flex: 2,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: SizedBox(
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 25,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              '${customerModels[index].ln}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          //  Text(
+                                                          //   '${customerModels[index].ln}',
+                                                          //   style: const TextStyle(
+                                                          //     color: TextHome_Color
+                                                          //         .TextHome_Colors,
 
-                                                      //     //fontSize: 10.0
-                                                      //   ),
-                                                      // ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 2,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 25,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        '${nFormat.format(double.parse(customerModels[index].area!))}',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                          color: HomeScreen_Color
-                                                              .Colors_Text2_,
-                                                          // fontWeight:
-                                                          //     FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                          //     //fontSize: 10.0
+                                                          //   ),
+                                                          // ),
                                                         ),
                                                       ),
-                                                      // Text(
-                                                      //   '${customerModels[index].area}',
-                                                      //   style: TextStyle(
-                                                      //     color: TextHome_Color
-                                                      //         .TextHome_Colors,
-
-                                                      //     //fontSize: 10.0
-                                                      //   ),
-                                                      // ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 2,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
+                                                      Expanded(
+                                                        flex: 1,
                                                         child: AutoSizeText(
                                                           minFontSize: 10,
                                                           maxFontSize: 25,
                                                           maxLines: 1,
                                                           overflow: TextOverflow
                                                               .ellipsis,
-                                                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${customerModels[index].sdate} 00:00:00'))}',
+                                                          '${customerModels[index].scname}',
                                                           textAlign:
-                                                              TextAlign.end,
+                                                              TextAlign.center,
                                                           style:
                                                               const TextStyle(
                                                             color: HomeScreen_Color
@@ -7580,20 +7662,88 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Font_.Fonts_T,
                                                           ),
                                                         ),
-
                                                         //  Text(
-                                                        //   '${customerModels[index].sdate}',
-                                                        //   maxLines: 1,
-                                                        //   overflow:
-                                                        //       TextOverflow.ellipsis,
+                                                        //   '${customerModels[index].scname}',
                                                         //   style: const TextStyle(
                                                         //     color: TextHome_Color
                                                         //         .TextHome_Colors,
+
+                                                        //     //fontSize: 10.0
                                                         //   ),
                                                         // ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Expanded(
+                                                        flex: 2,
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 25,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          '${nFormat.format(double.parse(customerModels[index].area!))}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: HomeScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight:
+                                                            //     FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                        // Text(
+                                                        //   '${customerModels[index].area}',
+                                                        //   style: TextStyle(
+                                                        //     color: TextHome_Color
+                                                        //         .TextHome_Colors,
+
+                                                        //     //fontSize: 10.0
+                                                        //   ),
+                                                        // ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 2,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 25,
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${customerModels[index].sdate} 00:00:00'))}',
+                                                            textAlign:
+                                                                TextAlign.end,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: HomeScreen_Color
+                                                                  .Colors_Text2_,
+                                                              // fontWeight:
+                                                              //     FontWeight.bold,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                            ),
+                                                          ),
+
+                                                          //  Text(
+                                                          //   '${customerModels[index].sdate}',
+                                                          //   maxLines: 1,
+                                                          //   overflow:
+                                                          //       TextOverflow.ellipsis,
+                                                          //   style: const TextStyle(
+                                                          //     color: TextHome_Color
+                                                          //         .TextHome_Colors,
+                                                          //   ),
+                                                          // ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 )),
                                           );
                                         },
@@ -8010,136 +8160,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         tappedIndex_5 = '';
                                                       });
                                                     },
-                                                    title: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Text(
-                                                              '${maintenanceModels[index].aser}',
-                                                              maxLines: 1,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: HomeScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight:
-                                                                //     FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
+                                                    title: Container(
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        border: Border(
+                                                          bottom: BorderSide(
+                                                            color:
+                                                                Colors.black12,
+                                                            width: 1,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Text(
-                                                            '${maintenanceModels[index].sname}',
-                                                            maxLines: 1,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: HomeScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Text(
-                                                            '${maintenanceModels[index].mdescr}',
-                                                            maxLines: 1,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: HomeScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Text(
-                                                            '${DateFormat('dd-MM').format((DateTime.parse('${maintenanceModels[index].mdate} 00:00:00')))}-${DateTime.parse('${maintenanceModels[index].mdate} 00:00:00').year + 543}',
-                                                            maxLines: 1,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: HomeScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Container(
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color: Colors
-                                                                  .white10,
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          10)),
-                                                            ),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(4.0),
-                                                            child: Center(
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
                                                               child: Text(
-                                                                maintenanceModels[index]
-                                                                            .mst ==
-                                                                        '0'
-                                                                    ? ' '
-                                                                    : maintenanceModels[index].mst ==
-                                                                            '1'
-                                                                        ? 'รอดำเนินการ'
-                                                                        : 'เสร็จสิ้น',
+                                                                '${maintenanceModels[index].aser}',
                                                                 maxLines: 1,
                                                                 textAlign:
                                                                     TextAlign
-                                                                        .end,
+                                                                        .start,
                                                                 overflow:
                                                                     TextOverflow
                                                                         .ellipsis,
@@ -8155,8 +8200,129 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                          Expanded(
+                                                            flex: 2,
+                                                            child: Text(
+                                                              '${maintenanceModels[index].sname}',
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 2,
+                                                            child: Text(
+                                                              '${maintenanceModels[index].mdescr}',
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 2,
+                                                            child: Text(
+                                                              '${DateFormat('dd-MM').format((DateTime.parse('${maintenanceModels[index].mdate} 00:00:00')))}-${DateTime.parse('${maintenanceModels[index].mdate} 00:00:00').year + 543}',
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 2,
+                                                            child: Container(
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                color: Colors
+                                                                    .white10,
+                                                                borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(4.0),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  maintenanceModels[index]
+                                                                              .mst ==
+                                                                          '0'
+                                                                      ? ' '
+                                                                      : maintenanceModels[index].mst ==
+                                                                              '1'
+                                                                          ? 'รอดำเนินการ'
+                                                                          : 'เสร็จสิ้น',
+                                                                  maxLines: 1,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .end,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: HomeScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    // fontWeight:
+                                                                    //     FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     )),
                                               );
                                             },
@@ -8577,42 +8743,82 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       tappedIndex_5 = '';
                                                     });
                                                   },
-                                                  title: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 25,
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            '${teNantModels[index].ln}',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: HomeScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
+                                                  title: Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      border: Border(
+                                                        bottom: BorderSide(
+                                                          color: Colors.black12,
+                                                          width: 1,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 25,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              '${teNantModels[index].ln}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 25,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              teNantModels[index]
+                                                                          .ln_c ==
+                                                                      null
+                                                                  ? '${teNantModels[index].ln_q}'
+                                                                  : '${teNantModels[index].ln_c}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 2,
                                                           child: AutoSizeText(
                                                             minFontSize: 10,
                                                             maxFontSize: 25,
@@ -8621,10 +8827,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 TextOverflow
                                                                     .ellipsis,
                                                             teNantModels[index]
-                                                                        .ln_c ==
+                                                                        .sname ==
                                                                     null
-                                                                ? '${teNantModels[index].ln_q}'
-                                                                : '${teNantModels[index].ln_c}',
+                                                                ? '${teNantModels[index].sname_q}'
+                                                                : '${teNantModels[index].sname}',
                                                             textAlign: TextAlign
                                                                 .center,
                                                             style:
@@ -8638,65 +8844,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 25,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          teNantModels[index]
-                                                                      .sname ==
-                                                                  null
-                                                              ? '${teNantModels[index].sname_q}'
-                                                              : '${teNantModels[index].sname}',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: HomeScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight:
-                                                            //     FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 25,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          teNantModels[index]
-                                                                      .area_c ==
-                                                                  null
-                                                              ? '${nFormat.format(double.parse(teNantModels[index].area_q!))}'
-                                                              : '${nFormat.format(double.parse(teNantModels[index].area_c!))}',
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: HomeScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight:
-                                                            //     FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
+                                                        Expanded(
+                                                          flex: 2,
                                                           child: AutoSizeText(
                                                             minFontSize: 10,
                                                             maxFontSize: 25,
@@ -8705,10 +8854,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 TextOverflow
                                                                     .ellipsis,
                                                             teNantModels[index]
-                                                                        .ldate ==
+                                                                        .area_c ==
                                                                     null
-                                                                ? '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].ldate_q} 00:00:00'))}'
-                                                                : '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].ldate} 00:00:00'))}',
+                                                                ? '${nFormat.format(double.parse(teNantModels[index].area_q!))}'
+                                                                : '${nFormat.format(double.parse(teNantModels[index].area_c!))}',
                                                             textAlign:
                                                                 TextAlign.end,
                                                             style:
@@ -8719,12 +8868,44 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               //     FontWeight.bold,
                                                               fontFamily:
                                                                   Font_.Fonts_T,
-                                                              //fontSize: 10.0
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 25,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              teNantModels[index]
+                                                                          .ldate ==
+                                                                      null
+                                                                  ? '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].ldate_q} 00:00:00'))}'
+                                                                  : '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].ldate} 00:00:00'))}',
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                                //fontSize: 10.0
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   )),
                                             );
                                           },
@@ -9140,117 +9321,79 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       tappedIndex_5 = '';
                                                     });
                                                   },
-                                                  title: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            '${teNantTwoModels[index].lncode}',
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: HomeScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
+                                                  title: Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      border: Border(
+                                                        bottom: BorderSide(
+                                                          color: Colors.black12,
+                                                          width: 1,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Text(
+                                                              '${teNantTwoModels[index].lncode}',
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            '${teNantTwoModels[index].sname}',
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: HomeScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Text(
+                                                              '${teNantTwoModels[index].sname}',
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Text(
-                                                          '${teNantTwoModels[index].total}',
-                                                          maxLines: 1,
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: HomeScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight:
-                                                            //     FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
+                                                        Expanded(
+                                                          flex: 2,
                                                           child: Text(
-                                                            '${DateFormat('dd-MM').format(DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00'))}-${DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00').year + 543}',
+                                                            '${teNantTwoModels[index].total}',
                                                             maxLines: 1,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: HomeScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            '${teNantTwoModels[index].count_bill} รายการ',
                                                             textAlign:
                                                                 TextAlign.end,
-                                                            maxLines: 1,
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,
@@ -9265,8 +9408,61 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Text(
+                                                              '${DateFormat('dd-MM').format(DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00'))}-${DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00').year + 543}',
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Text(
+                                                              '${teNantTwoModels[index].count_bill} รายการ',
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: HomeScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   )),
                                             );
                                           },

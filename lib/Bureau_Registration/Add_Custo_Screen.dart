@@ -1523,189 +1523,350 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () async {
-                                        if (base64_Image == null) {
-                                          print('กรุณาอัพโหลดรูปภาพ');
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                backgroundColor: Colors.red,
-                                                content: Text(
-                                                    ' ผิดพลาด กรุณาอัพโหลดรูปภาพ... !',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T))),
-                                          );
-                                        } else {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            print(
-                                                '---------------------------------->');
-                                            print(Value_AreaSer_);
-                                            print(_verticalGroupValue);
-                                            print(
-                                                '${typeModels.elementAt(Value_AreaSer_).type}');
+                                        if (_formKey.currentState!.validate()) {
+                                          print(
+                                              '---------------------------------->');
+                                          print(Value_AreaSer_);
+                                          print(_verticalGroupValue);
+                                          print(
+                                              '${typeModels.elementAt(Value_AreaSer_).type}');
 
-                                            print(
-                                                '---------------------------------->');
+                                          print(
+                                              '---------------------------------->');
 
-                                            print(Status4Form_nameshop.text);
-                                            print(Status4Form_typeshop.text);
-                                            print(Status4Form_nameshop.text);
-                                            print(Status4Form_bussshop.text);
-                                            print(
-                                                Status4Form_bussscontact.text);
+                                          print(Status4Form_nameshop.text);
+                                          print(Status4Form_typeshop.text);
+                                          print(Status4Form_nameshop.text);
+                                          print(Status4Form_bussshop.text);
+                                          print(Status4Form_bussscontact.text);
 
-                                            print(Status4Form_address.text);
-                                            print(Status4Form_email.text);
-                                            print(Status4Form_tax.text);
-                                            print(
-                                                '----------------------------------');
-                                            // Value_AreaSer_ = int.parse(value!.ser!) - 1;
-                                            // _verticalGroupValue = value.type!;
-                                            SharedPreferences preferences =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            var ren = preferences
-                                                .getString('renTalSer');
-                                            var user =
-                                                preferences.getString('ser');
+                                          print(Status4Form_address.text);
+                                          print(Status4Form_email.text);
+                                          print(Status4Form_tax.text);
+                                          print(
+                                              '----------------------------------');
+                                          // Value_AreaSer_ = int.parse(value!.ser!) - 1;
+                                          // _verticalGroupValue = value.type!;
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          var ren = preferences
+                                              .getString('renTalSer');
+                                          var user =
+                                              preferences.getString('ser');
 
-                                            String? nameshop =
-                                                Status4Form_nameshop.text
-                                                    .toString();
-                                            String? typeshop =
-                                                Status4Form_typeshop.text
-                                                    .toString();
-                                            String? bussshop =
-                                                Status4Form_bussshop.text
-                                                    .toString();
-                                            String? bussscontact =
-                                                (_verticalGroupValue
-                                                            .toString()
-                                                            .trim() ==
-                                                        'ส่วนตัว/บุคคลธรรมดา')
+                                          String? nameshop =
+                                              Status4Form_nameshop.text
+                                                  .toString();
+                                          String? typeshop =
+                                              Status4Form_typeshop.text
+                                                  .toString();
+                                          String? bussshop =
+                                              Status4Form_bussshop.text
+                                                  .toString();
+                                          String? bussscontact =
+                                              (_verticalGroupValue
+                                                          .toString()
+                                                          .trim() ==
+                                                      'ส่วนตัว/บุคคลธรรมดา')
+                                                  ? Status4Form_bussshop.text
+                                                      .toString()
+                                                  : Status4Form_bussscontact
+                                                      .text
+                                                      .toString();
+                                          String? address = Status4Form_address
+                                              .text
+                                              .toString();
+                                          String? tel =
+                                              Status4Form_tel.text.toString();
+                                          String? email =
+                                              Status4Form_email.text.toString();
+                                          String? tax =
+                                              Status4Form_tax.text.toString();
+
+                                          String url =
+                                              '${MyConstant().domain}/InC_CustoAdd_Bureau.php?isAdd=true&ren=$ren';
+
+                                          var response = await http
+                                              .post(Uri.parse(url), body: {
+                                            'ciddoc': '',
+                                            'qutser': '',
+                                            'user': '',
+                                            'sumdis': '',
+                                            'sumdisp': '',
+                                            'dateY': '',
+                                            'dateY1': '',
+                                            'time': '',
+                                            'payment1': '',
+                                            'payment2': '',
+                                            'pSer1': '',
+                                            'pSer2': '',
+                                            'sum_whta': '',
+                                            'bill': '',
+                                            'fileNameSlip': '',
+                                            'areaSer': (typeModels
+                                                        .elementAt(
+                                                            Value_AreaSer_)
+                                                        .type
+                                                        .toString()
+                                                        .trim() ==
+                                                    'ส่วนตัว/บุคคลธรรมดา')
+                                                ? '1'
+                                                : '2',
+                                            'typeModels':
+                                                '${typeModels.elementAt(Value_AreaSer_).type}',
+                                            'typeshop': Status4Form_typeshop
+                                                .text
+                                                .toString(),
+                                            'nameshop': Status4Form_nameshop
+                                                .text
+                                                .toString(),
+                                            'bussshop': Status4Form_bussshop
+                                                .text
+                                                .toString(),
+                                            'bussscontact':
+                                                (Value_AreaSer_ + 1) == 1
                                                     ? Status4Form_bussshop.text
                                                         .toString()
                                                     : Status4Form_bussscontact
                                                         .text
-                                                        .toString();
-                                            String? address =
-                                                Status4Form_address.text
-                                                    .toString();
-                                            String? tel =
-                                                Status4Form_tel.text.toString();
-                                            String? email = Status4Form_email
-                                                .text
-                                                .toString();
-                                            String? tax =
-                                                Status4Form_tax.text.toString();
-
-                                            String url =
-                                                '${MyConstant().domain}/InC_CustoAdd_Bureau.php?isAdd=true&ren=$ren';
-
-                                            var response = await http
-                                                .post(Uri.parse(url), body: {
-                                              'ciddoc': '',
-                                              'qutser': '',
-                                              'user': '',
-                                              'sumdis': '',
-                                              'sumdisp': '',
-                                              'dateY': '',
-                                              'dateY1': '',
-                                              'time': '',
-                                              'payment1': '',
-                                              'payment2': '',
-                                              'pSer1': '',
-                                              'pSer2': '',
-                                              'sum_whta': '',
-                                              'bill': '',
-                                              'fileNameSlip': '',
-                                              'areaSer': (typeModels
-                                                          .elementAt(
-                                                              Value_AreaSer_)
-                                                          .type
-                                                          .toString()
-                                                          .trim() ==
-                                                      'ส่วนตัว/บุคคลธรรมดา')
-                                                  ? '1'
-                                                  : '2',
-                                              'typeModels':
-                                                  '${typeModels.elementAt(Value_AreaSer_).type}',
-                                              'typeshop': Status4Form_typeshop
-                                                  .text
-                                                  .toString(),
-                                              'nameshop': Status4Form_nameshop
-                                                  .text
-                                                  .toString(),
-                                              'bussshop': Status4Form_bussshop
-                                                  .text
-                                                  .toString(),
-                                              'bussscontact':
-                                                  (Value_AreaSer_ + 1) == 1
-                                                      ? Status4Form_bussshop
-                                                          .text
-                                                          .toString()
-                                                      : Status4Form_bussscontact
-                                                          .text
-                                                          .toString(),
-                                              'address': Status4Form_address
-                                                  .text
-                                                  .toString(),
-                                              'tel': Status4Form_tel.text
-                                                  .toString(),
-                                              'tax': Status4Form_tax.text
-                                                  .toString(),
-                                              'email': Status4Form_email.text
-                                                  .toString(),
-                                              'Serbool': '',
-                                              'area_rent_sum': '',
-                                              'comment': '',
-                                              'zser': ''.trim().toString(),
-                                            }).then((value) async {
-                                              setState(() {
-                                                Status4Form_nameshop.clear();
-                                                Status4Form_typeshop.clear();
-                                                Status4Form_nameshop.clear();
-                                                Status4Form_bussshop.clear();
-                                                Status4Form_bussscontact
-                                                    .clear();
-                                                Status4Form_address.clear();
-                                                Status4Form_email.clear();
-                                                Status4Form_tax.clear();
-                                              });
-                                              // print('$value');
-                                              var result =
-                                                  json.decode(value.body);
-                                              // print('$result ');
-                                              for (var map in result) {
-                                                CustomerModel CustomerModels =
-                                                    CustomerModel.fromJson(map);
-                                                print(CustomerModels.custno);
-                                                print(CustomerModels.custno);
-                                                setState(() {
-                                                  cust_no_ =
-                                                      CustomerModels.custno!;
-                                                });
-                                                uploadImage();
-                                              }
-
-                                              setState(() {
-                                                Status4Form_nameshop.clear();
-                                                Status4Form_typeshop.clear();
-                                                Status4Form_nameshop.clear();
-                                                Status4Form_bussshop.clear();
-                                                Status4Form_bussscontact
-                                                    .clear();
-                                                Status4Form_address.clear();
-                                                Status4Form_email.clear();
-                                                Status4Form_tax.clear();
-                                              });
+                                                        .toString(),
+                                            'address': Status4Form_address.text
+                                                .toString(),
+                                            'tel':
+                                                Status4Form_tel.text.toString(),
+                                            'tax':
+                                                Status4Form_tax.text.toString(),
+                                            'email': Status4Form_email.text
+                                                .toString(),
+                                            'Serbool': '',
+                                            'area_rent_sum': '',
+                                            'comment': '',
+                                            'zser': ''.trim().toString(),
+                                          }).then((value) async {
+                                            setState(() {
+                                              Status4Form_nameshop.clear();
+                                              Status4Form_typeshop.clear();
+                                              Status4Form_nameshop.clear();
+                                              Status4Form_bussshop.clear();
+                                              Status4Form_bussscontact.clear();
+                                              Status4Form_address.clear();
+                                              Status4Form_email.clear();
+                                              Status4Form_tax.clear();
                                             });
-                                          }
+                                            // print('$value');
+                                            var result =
+                                                json.decode(value.body);
+                                            // print('$result ');
+                                            for (var map in result) {
+                                              CustomerModel CustomerModels =
+                                                  CustomerModel.fromJson(map);
+                                              print(CustomerModels.custno);
+                                              print(CustomerModels.custno);
+                                              setState(() {
+                                                cust_no_ =
+                                                    CustomerModels.custno!;
+                                              });
+                                              uploadImage();
+                                            }
+
+                                            setState(() {
+                                              Status4Form_nameshop.clear();
+                                              Status4Form_typeshop.clear();
+                                              Status4Form_nameshop.clear();
+                                              Status4Form_bussshop.clear();
+                                              Status4Form_bussscontact.clear();
+                                              Status4Form_address.clear();
+                                              Status4Form_email.clear();
+                                              Status4Form_tax.clear();
+                                            });
+                                          });
                                         }
+
+
+                                        // if (base64_Image == null) {
+                                        //   print('กรุณาอัพโหลดรูปภาพ');
+                                        //   ScaffoldMessenger.of(context)
+                                        //       .showSnackBar(
+                                        //     const SnackBar(
+                                        //         backgroundColor: Colors.red,
+                                        //         content: Text(
+                                        //             ' ผิดพลาด กรุณาอัพโหลดรูปภาพ... !',
+                                        //             style: TextStyle(
+                                        //                 color: Colors.white,
+                                        //                 fontWeight:
+                                        //                     FontWeight.bold,
+                                        //                 fontFamily:
+                                        //                     Font_.Fonts_T))),
+                                        //   );
+                                        // } else {
+                                        //   if (_formKey.currentState!
+                                        //       .validate()) {
+                                        //     print(
+                                        //         '---------------------------------->');
+                                        //     print(Value_AreaSer_);
+                                        //     print(_verticalGroupValue);
+                                        //     print(
+                                        //         '${typeModels.elementAt(Value_AreaSer_).type}');
+
+                                        //     print(
+                                        //         '---------------------------------->');
+
+                                        //     print(Status4Form_nameshop.text);
+                                        //     print(Status4Form_typeshop.text);
+                                        //     print(Status4Form_nameshop.text);
+                                        //     print(Status4Form_bussshop.text);
+                                        //     print(
+                                        //         Status4Form_bussscontact.text);
+
+                                        //     print(Status4Form_address.text);
+                                        //     print(Status4Form_email.text);
+                                        //     print(Status4Form_tax.text);
+                                        //     print(
+                                        //         '----------------------------------');
+                                        //     // Value_AreaSer_ = int.parse(value!.ser!) - 1;
+                                        //     // _verticalGroupValue = value.type!;
+                                        //     SharedPreferences preferences =
+                                        //         await SharedPreferences
+                                        //             .getInstance();
+                                        //     var ren = preferences
+                                        //         .getString('renTalSer');
+                                        //     var user =
+                                        //         preferences.getString('ser');
+
+                                        //     String? nameshop =
+                                        //         Status4Form_nameshop.text
+                                        //             .toString();
+                                        //     String? typeshop =
+                                        //         Status4Form_typeshop.text
+                                        //             .toString();
+                                        //     String? bussshop =
+                                        //         Status4Form_bussshop.text
+                                        //             .toString();
+                                        //     String? bussscontact =
+                                        //         (_verticalGroupValue
+                                        //                     .toString()
+                                        //                     .trim() ==
+                                        //                 'ส่วนตัว/บุคคลธรรมดา')
+                                        //             ? Status4Form_bussshop.text
+                                        //                 .toString()
+                                        //             : Status4Form_bussscontact
+                                        //                 .text
+                                        //                 .toString();
+                                        //     String? address =
+                                        //         Status4Form_address.text
+                                        //             .toString();
+                                        //     String? tel =
+                                        //         Status4Form_tel.text.toString();
+                                        //     String? email = Status4Form_email
+                                        //         .text
+                                        //         .toString();
+                                        //     String? tax =
+                                        //         Status4Form_tax.text.toString();
+
+                                        //     String url =
+                                        //         '${MyConstant().domain}/InC_CustoAdd_Bureau.php?isAdd=true&ren=$ren';
+
+                                        //     var response = await http
+                                        //         .post(Uri.parse(url), body: {
+                                        //       'ciddoc': '',
+                                        //       'qutser': '',
+                                        //       'user': '',
+                                        //       'sumdis': '',
+                                        //       'sumdisp': '',
+                                        //       'dateY': '',
+                                        //       'dateY1': '',
+                                        //       'time': '',
+                                        //       'payment1': '',
+                                        //       'payment2': '',
+                                        //       'pSer1': '',
+                                        //       'pSer2': '',
+                                        //       'sum_whta': '',
+                                        //       'bill': '',
+                                        //       'fileNameSlip': '',
+                                        //       'areaSer': (typeModels
+                                        //                   .elementAt(
+                                        //                       Value_AreaSer_)
+                                        //                   .type
+                                        //                   .toString()
+                                        //                   .trim() ==
+                                        //               'ส่วนตัว/บุคคลธรรมดา')
+                                        //           ? '1'
+                                        //           : '2',
+                                        //       'typeModels':
+                                        //           '${typeModels.elementAt(Value_AreaSer_).type}',
+                                        //       'typeshop': Status4Form_typeshop
+                                        //           .text
+                                        //           .toString(),
+                                        //       'nameshop': Status4Form_nameshop
+                                        //           .text
+                                        //           .toString(),
+                                        //       'bussshop': Status4Form_bussshop
+                                        //           .text
+                                        //           .toString(),
+                                        //       'bussscontact':
+                                        //           (Value_AreaSer_ + 1) == 1
+                                        //               ? Status4Form_bussshop
+                                        //                   .text
+                                        //                   .toString()
+                                        //               : Status4Form_bussscontact
+                                        //                   .text
+                                        //                   .toString(),
+                                        //       'address': Status4Form_address
+                                        //           .text
+                                        //           .toString(),
+                                        //       'tel': Status4Form_tel.text
+                                        //           .toString(),
+                                        //       'tax': Status4Form_tax.text
+                                        //           .toString(),
+                                        //       'email': Status4Form_email.text
+                                        //           .toString(),
+                                        //       'Serbool': '',
+                                        //       'area_rent_sum': '',
+                                        //       'comment': '',
+                                        //       'zser': ''.trim().toString(),
+                                        //     }).then((value) async {
+                                        //       setState(() {
+                                        //         Status4Form_nameshop.clear();
+                                        //         Status4Form_typeshop.clear();
+                                        //         Status4Form_nameshop.clear();
+                                        //         Status4Form_bussshop.clear();
+                                        //         Status4Form_bussscontact
+                                        //             .clear();
+                                        //         Status4Form_address.clear();
+                                        //         Status4Form_email.clear();
+                                        //         Status4Form_tax.clear();
+                                        //       });
+                                        //       // print('$value');
+                                        //       var result =
+                                        //           json.decode(value.body);
+                                        //       // print('$result ');
+                                        //       for (var map in result) {
+                                        //         CustomerModel CustomerModels =
+                                        //             CustomerModel.fromJson(map);
+                                        //         print(CustomerModels.custno);
+                                        //         print(CustomerModels.custno);
+                                        //         setState(() {
+                                        //           cust_no_ =
+                                        //               CustomerModels.custno!;
+                                        //         });
+                                        //         uploadImage();
+                                        //       }
+
+                                        //       setState(() {
+                                        //         Status4Form_nameshop.clear();
+                                        //         Status4Form_typeshop.clear();
+                                        //         Status4Form_nameshop.clear();
+                                        //         Status4Form_bussshop.clear();
+                                        //         Status4Form_bussscontact
+                                        //             .clear();
+                                        //         Status4Form_address.clear();
+                                        //         Status4Form_email.clear();
+                                        //         Status4Form_tax.clear();
+                                        //       });
+                                        //     });
+                                        //   }
+                                        // }
                                       },
                                       child: Container(
                                         width: 130,

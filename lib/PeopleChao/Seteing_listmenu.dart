@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../AdminScaffold/AdminScaffold.dart';
 import '../Constant/Myconstant.dart';
 import '../Model/GetContractx_Model.dart';
 import '../Model/GetTranBill_model.dart';
@@ -46,7 +47,8 @@ class _SettringListMenuState extends State<SettringListMenu> {
       edit_data_nvat,
       edit_data_nwht,
       edit_data_docno,
-      edit_data_total;
+      edit_data_total,
+      con_pser;
   int edit_data = 0;
 
   @override
@@ -246,7 +248,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                         itemCount: contractxModels.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Material(
-                            color: ptype == contractxModels[index].expname
+                            color: con_pser == contractxModels[index].ser
                                 ? tappedIndex_Color.tappedIndex_Colors
                                 : null,
                             child: InkWell(
@@ -257,6 +259,8 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                     ptype = contractxModels[index]
                                         .expname
                                         .toString();
+                                    con_pser =
+                                        contractxModels[index].ser.toString();
                                     edit_data = 1;
                                     edit_data_ser = null;
                                     edit_data_date = null;
@@ -413,7 +417,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                 ),
                                 items: contractxModels
                                     .map((item) => DropdownMenuItem<String>(
-                                          value: '${item.expname}',
+                                          value: '${item.ser},${item.expname}',
                                           child: Text(
                                             item.expname!,
                                             style: const TextStyle(
@@ -427,8 +431,15 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                     .toList(),
 
                                 onChanged: (value) async {
+                                  var zones = value!.indexOf(',');
+                                  var zoneSer = value.substring(0, zones);
+                                  var zonesName = value.substring(zones + 1);
+                                  print(
+                                      'mmmmm ${zoneSer.toString()} $zonesName');
                                   setState(() {
-                                    ptype = value.toString();
+                                    con_pser = zoneSer;
+
+                                    ptype = zonesName.toString();
                                     edit_data = 1;
                                     edit_data_ser = null;
                                     edit_data_date = null;
@@ -440,7 +451,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                     edit_textall.clear();
                                     edit_textvat.clear();
                                     edit_textwht.clear();
-                                    red_Trans_billAll(value);
+                                    red_Trans_billAll(zonesName);
                                   });
                                 },
                               ),
@@ -564,377 +575,710 @@ class _SettringListMenuState extends State<SettringListMenu> {
                               )),
                         ],
                       ),
-                      Container(
-                        height: MediaQuery.of(context).size.width * 0.26,
-                        decoration: const BoxDecoration(
-                          color: AppbackgroundColor.Sub_Abg_Colors,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(0),
-                            bottomLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(0),
-                          ),
-                          // border: Border.all(
-                          //     color: Colors.grey, width: 1),
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView.builder(
-                          // controller: _scrollController1,
-                          // itemExtent: 50,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _TransBillModels.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Material(
-                              color:
-                                  edit_data_ser == _TransBillModels[index].ser
-                                      ? tappedIndex_Color.tappedIndex_Colors
-                                      : null,
-                              child: InkWell(
-                                onTap: () {},
-                                child: ListTile(
-                                  onTap: () {
-                                    setState(() {
-                                      edit_data = 2;
-                                      edit_data_ser =
-                                          _TransBillModels[index].ser!;
-                                      edit_data_date =
-                                          _TransBillModels[index].date!;
-                                      edit_data_vtype =
-                                          _TransBillModels[index].vtype!;
-                                      edit_data_nvat =
-                                          _TransBillModels[index].nvat!;
-                                      edit_textvat.text =
-                                          _TransBillModels[index].nvat!;
-                                      edit_data_nwht =
-                                          _TransBillModels[index].nwht!;
-                                      edit_textwht.text =
-                                          _TransBillModels[index].nwht!;
-                                      edit_data_docno =
-                                          _TransBillModels[index].docno!;
-                                      edit_data_total =
-                                          _TransBillModels[index].total!;
-                                      edit_textall.text =
-                                          _TransBillModels[index].total!;
-                                    });
+                      _TransBillModels.length == 0
+                          ? Container(
+                              height: MediaQuery.of(context).size.width * 0.26,
+                              decoration: const BoxDecoration(
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0),
+                                  topRight: Radius.circular(0),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0),
+                                ),
+                                // border: Border.all(
+                                //     color: Colors.grey, width: 1),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              child: Center(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Container(
+                                    width: 120,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                      ),
+                                      border: Border.all(
+                                          color: Colors.grey, width: 1),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        showDialog<String>(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0))),
+                                            title: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Center(
+                                                    child: Text(
+                                                      'ลบรายการ $ptype ', // Navigator.pop(context, 'OK');
+                                                      style: TextStyle(
+                                                          color:
+                                                              AdminScafScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              Formposlok_
+                                                                  .clear();
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          icon: Icon(
+                                                              Icons.close,
+                                                              color: Colors
+                                                                  .black)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            actions: <Widget>[
+                                              Form(
+                                                key: _formKey,
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: TextFormField(
+                                                        controller: Formposlok_,
+                                                        // obscureText:
+                                                        //     true,
+                                                        validator: (value) {
+                                                          if (value == null ||
+                                                              value.isEmpty) {
+                                                            return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                          }
+                                                          // if (int.parse(value.toString()) < 13) {
+                                                          //   return '< 13';
+                                                          // }
+                                                          return null;
+                                                        },
 
-                                    print(
-                                        '${_TransBillModels[index].ser} ${_TransBillModels[index].docno}');
-
-                                    // in_Trans_select(index);
-                                  },
-                                  title: Container(
-                                    //_TransModelsdocno
-                                    // color: edit_data_ser ==
-                                    //         _TransBillModels[index].ser
-                                    //     ? tappedIndex_Color.tappedIndex_Colors
-                                    //     : null,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: Tooltip(
-                                            richMessage: TextSpan(
-                                              text:
-                                                  '${_TransBillModels[index].docno}',
-                                              style: const TextStyle(
-                                                color: HomeScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                //fontSize: 10.0
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: Colors.grey[200],
-                                            ),
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${_TransBillModels[index].docno}',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Tooltip(
-                                            richMessage: TextSpan(
-                                              text:
-                                                  '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
-                                              style: const TextStyle(
-                                                color: HomeScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                //fontSize: 10.0
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: Colors.grey[200],
-                                            ),
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Tooltip(
-                                            richMessage: TextSpan(
-                                              text: (Responsive.isDesktop(
-                                                      context))
-                                                  ? _TransBillModels[index]
-                                                              .descr ==
-                                                          null
-                                                      ? '${_TransBillModels[index].expname}'
-                                                      : '${_TransBillModels[index].descr}'
-                                                  : _TransBillModels[index]
-                                                              .descr ==
-                                                          null
-                                                      ? '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543} \n ${_TransBillModels[index].expname}'
-                                                      : '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543} \n ${_TransBillModels[index].descr}',
-                                              style: const TextStyle(
-                                                color: HomeScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                //fontSize: 10.0
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: Colors.grey[200],
-                                            ),
-                                            child:
-                                                (Responsive.isDesktop(context))
-                                                    ? AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 25,
-                                                        maxLines: 2,
-                                                        _TransBillModels[index]
-                                                                    .descr ==
-                                                                null
-                                                            ? '${_TransBillModels[index].expname}'
-                                                            : '${_TransBillModels[index].descr}',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      )
-                                                    : Column(
+                                                        // maxLength: 13,
+                                                        cursorColor:
+                                                            Colors.green,
+                                                        decoration:
+                                                            InputDecoration(
+                                                                fillColor: Colors
+                                                                    .white
+                                                                    .withOpacity(
+                                                                        0.3),
+                                                                filled: true,
+                                                                // prefixIcon: const Icon(Icons.water,
+                                                                //     color: Colors.blue),
+                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                focusedBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            15),
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            15),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            15),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            15),
+                                                                  ),
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    width: 1,
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                enabledBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            15),
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            15),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            15),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            15),
+                                                                  ),
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    width: 1,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                                labelText:
+                                                                    'หมายเหตุ',
+                                                                labelStyle:
+                                                                    const TextStyle(
+                                                                  color: ManageScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight:
+                                                                  //     FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                )),
+                                                        // inputFormatters: <TextInputFormatter>[
+                                                        //   // for below version 2 use this
+                                                        //   FilteringTextInputFormatter.allow(
+                                                        //       RegExp(r'[0-9]')),
+                                                        //   // for version 2 and greater youcan also use this
+                                                        //   FilteringTextInputFormatter.digitsOnly
+                                                        // ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
                                                         children: [
-                                                          Row(
-                                                            children: [
-                                                              AutoSizeText(
-                                                                minFontSize: 6,
-                                                                maxFontSize: 12,
-                                                                maxLines: 2,
-                                                                '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                        color: Colors
-                                                                            .grey
-                                                                            .shade500,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
+                                                          Container(
+                                                            width: 150,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.black,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: TextButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                if (_formKey
+                                                                    .currentState!
+                                                                    .validate()) {
+                                                                  showDialog<
+                                                                          void>(
+                                                                      context:
+                                                                          context,
+                                                                      barrierDismissible:
+                                                                          false, // user must tap button!
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
+                                                                        return AlertDialog(
+                                                                          backgroundColor:
+                                                                              Colors.transparent,
+                                                                          title:
+                                                                              Container(
+                                                                            height:
+                                                                                150,
+                                                                            child:
+                                                                                const CircularProgressIndicator(),
+                                                                          ),
+                                                                        );
+                                                                      });
+
+                                                                  de_cons_item();
+                                                                }
+                                                              },
+                                                              child: const Text(
+                                                                'Submit',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T),
                                                               ),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 2,
-                                                                _TransBillModels[index]
-                                                                            .descr ==
-                                                                        null
-                                                                    ? '${_TransBillModels[index].expname}'
-                                                                    : '${_TransBillModels[index].descr}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: const TextStyle(
-                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily: Font_.Fonts_T),
-                                                              ),
-                                                            ],
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Tooltip(
-                                            richMessage: TextSpan(
-                                              text:
-                                                  '${_TransBillModels[index].vtype}',
-                                              style: const TextStyle(
-                                                color: HomeScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                //fontSize: 10.0
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: Colors.grey[200],
-                                            ),
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${_TransBillModels[index].vtype}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
+                                            ],
                                           ),
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: AutoSizeText(
+                                          'ลบรายการ',
+                                          minFontSize: 9,
+                                          maxFontSize: 24,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Tooltip(
-                                            richMessage: TextSpan(
-                                              text:
-                                                  '${_TransBillModels[index].nvat}',
-                                              style: const TextStyle(
-                                                color: HomeScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                //fontSize: 10.0
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: Colors.grey[200],
-                                            ),
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${_TransBillModels[index].nvat}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Tooltip(
-                                            richMessage: TextSpan(
-                                              text:
-                                                  '${_TransBillModels[index].nwht}',
-                                              style: const TextStyle(
-                                                color: HomeScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                //fontSize: 10.0
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: Colors.grey[200],
-                                            ),
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${_TransBillModels[index].nwht}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Tooltip(
-                                            richMessage: TextSpan(
-                                              text:
-                                                  '${_TransBillModels[index].total}',
-                                              style: const TextStyle(
-                                                color: HomeScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                //fontSize: 10.0
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: Colors.grey[200],
-                                            ),
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${_TransBillModels[index].total}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            )
+                          : Container(
+                              height: MediaQuery.of(context).size.width * 0.26,
+                              decoration: const BoxDecoration(
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0),
+                                  topRight: Radius.circular(0),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0),
+                                ),
+                                // border: Border.all(
+                                //     color: Colors.grey, width: 1),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                // controller: _scrollController1,
+                                // itemExtent: 50,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: _TransBillModels.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Material(
+                                    color: edit_data_ser ==
+                                            _TransBillModels[index].ser
+                                        ? tappedIndex_Color.tappedIndex_Colors
+                                        : null,
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: ListTile(
+                                        onTap: () {
+                                          setState(() {
+                                            edit_data = 2;
+                                            edit_data_ser =
+                                                _TransBillModels[index].ser!;
+                                            edit_data_date =
+                                                _TransBillModels[index].date!;
+                                            edit_data_vtype =
+                                                _TransBillModels[index].vtype!;
+                                            edit_data_nvat =
+                                                _TransBillModels[index].nvat!;
+                                            edit_textvat.text =
+                                                _TransBillModels[index].nvat!;
+                                            edit_data_nwht =
+                                                _TransBillModels[index].nwht!;
+                                            edit_textwht.text =
+                                                _TransBillModels[index].nwht!;
+                                            edit_data_docno =
+                                                _TransBillModels[index].docno!;
+                                            edit_data_total =
+                                                _TransBillModels[index].total!;
+                                            edit_textall.text =
+                                                _TransBillModels[index].total!;
+                                          });
+
+                                          print(
+                                              '${_TransBillModels[index].ser} ${_TransBillModels[index].docno}');
+
+                                          // in_Trans_select(index);
+                                        },
+                                        title: Container(
+                                          //_TransModelsdocno
+                                          // color: edit_data_ser ==
+                                          //         _TransBillModels[index].ser
+                                          //     ? tappedIndex_Color.tappedIndex_Colors
+                                          //     : null,
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: Tooltip(
+                                                  richMessage: TextSpan(
+                                                    text:
+                                                        '${_TransBillModels[index].docno}',
+                                                    style: const TextStyle(
+                                                      color: HomeScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      //fontSize: 10.0
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    color: Colors.grey[200],
+                                                  ),
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 25,
+                                                    maxLines: 1,
+                                                    '${_TransBillModels[index].docno}',
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: Tooltip(
+                                                  richMessage: TextSpan(
+                                                    text:
+                                                        '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
+                                                    style: const TextStyle(
+                                                      color: HomeScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      //fontSize: 10.0
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    color: Colors.grey[200],
+                                                  ),
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 25,
+                                                    maxLines: 1,
+                                                    '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: Tooltip(
+                                                  richMessage: TextSpan(
+                                                    text: (Responsive.isDesktop(
+                                                            context))
+                                                        ? _TransBillModels[
+                                                                        index]
+                                                                    .descr ==
+                                                                null
+                                                            ? '${_TransBillModels[index].expname}'
+                                                            : '${_TransBillModels[index].descr}'
+                                                        : _TransBillModels[
+                                                                        index]
+                                                                    .descr ==
+                                                                null
+                                                            ? '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543} \n ${_TransBillModels[index].expname}'
+                                                            : '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543} \n ${_TransBillModels[index].descr}',
+                                                    style: const TextStyle(
+                                                      color: HomeScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      //fontSize: 10.0
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    color: Colors.grey[200],
+                                                  ),
+                                                  child: (Responsive.isDesktop(
+                                                          context))
+                                                      ? AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 25,
+                                                          maxLines: 2,
+                                                          _TransBillModels[
+                                                                          index]
+                                                                      .descr ==
+                                                                  null
+                                                              ? '${_TransBillModels[index].expname}'
+                                                              : '${_TransBillModels[index].descr}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        )
+                                                      : Column(
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                AutoSizeText(
+                                                                  minFontSize:
+                                                                      6,
+                                                                  maxFontSize:
+                                                                      12,
+                                                                  maxLines: 2,
+                                                                  '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: TextStyle(
+                                                                      color: Colors.grey.shade500,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                AutoSizeText(
+                                                                  minFontSize:
+                                                                      10,
+                                                                  maxFontSize:
+                                                                      25,
+                                                                  maxLines: 2,
+                                                                  _TransBillModels[index]
+                                                                              .descr ==
+                                                                          null
+                                                                      ? '${_TransBillModels[index].expname}'
+                                                                      : '${_TransBillModels[index].descr}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Tooltip(
+                                                  richMessage: TextSpan(
+                                                    text:
+                                                        '${_TransBillModels[index].vtype}',
+                                                    style: const TextStyle(
+                                                      color: HomeScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      //fontSize: 10.0
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    color: Colors.grey[200],
+                                                  ),
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 25,
+                                                    maxLines: 1,
+                                                    '${_TransBillModels[index].vtype}',
+                                                    textAlign: TextAlign.end,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Tooltip(
+                                                  richMessage: TextSpan(
+                                                    text:
+                                                        '${_TransBillModels[index].nvat}',
+                                                    style: const TextStyle(
+                                                      color: HomeScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      //fontSize: 10.0
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    color: Colors.grey[200],
+                                                  ),
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 25,
+                                                    maxLines: 1,
+                                                    '${_TransBillModels[index].nvat}',
+                                                    textAlign: TextAlign.end,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Tooltip(
+                                                  richMessage: TextSpan(
+                                                    text:
+                                                        '${_TransBillModels[index].nwht}',
+                                                    style: const TextStyle(
+                                                      color: HomeScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      //fontSize: 10.0
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    color: Colors.grey[200],
+                                                  ),
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 25,
+                                                    maxLines: 1,
+                                                    '${_TransBillModels[index].nwht}',
+                                                    textAlign: TextAlign.end,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: Tooltip(
+                                                  richMessage: TextSpan(
+                                                    text:
+                                                        '${_TransBillModels[index].total}',
+                                                    style: const TextStyle(
+                                                      color: HomeScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      //fontSize: 10.0
+                                                    ),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    color: Colors.grey[200],
+                                                  ),
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 25,
+                                                    maxLines: 1,
+                                                    '${_TransBillModels[index].total}',
+                                                    textAlign: TextAlign.end,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                     ],
                   ),
                 ),
@@ -1530,7 +1874,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 8,
                                                                   bottom: 8),
                                                           child: Container(
@@ -1743,7 +2087,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                               child: Container(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         15.0),
                                                                 child:
                                                                     AutoSizeText(
@@ -1861,7 +2205,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
+                                                                .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: Container(
@@ -2038,7 +2382,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                             child: Container(
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .all(
+                                                                      .all(
                                                                       15.0),
                                                               child:
                                                                   AutoSizeText(
@@ -2372,7 +2716,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
+                                                                .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: TextFormField(
@@ -2620,7 +2964,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
+                                                                .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: TextFormField(
@@ -2867,7 +3211,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
+                                                                .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: TextFormField(
@@ -3217,8 +3561,9 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                                           ),
                                                                         ),
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:
@@ -3368,5 +3713,35 @@ class _SettringListMenuState extends State<SettringListMenu> {
         }
       } catch (e) {}
     }
+  }
+
+  Future<Null> de_cons_item() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var ciddoc = widget.Get_Value_cid;
+    var qutser = widget.Get_Value_NameShop_index;
+    var con_pserx = con_pser;
+    var poslok = Formposlok_.text;
+
+    print('tser >>.> $con_pserx');
+
+    String url =
+        '${MyConstant().domain}/De_tran_edit_item_main.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&con_pserx=$con_pserx&user=$user&poslok=$poslok';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() == 'true') {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        String? _route = preferences.getString('route');
+        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+            builder: (BuildContext context) => AdminScafScreen(route: _route));
+        Navigator.pushAndRemoveUntil(
+            context, materialPageRoute, (route) => false);
+        print('rrrrrrrrrrrrrr');
+      }
+    } catch (e) {}
   }
 }

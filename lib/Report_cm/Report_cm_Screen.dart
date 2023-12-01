@@ -2283,26 +2283,51 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
     }
   }
 
-  Dia_log() {
+ Dia_log() {
     return showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext builderContext) {
+        builder: (_) {
           Timer(Duration(seconds: 4), () {
             Navigator.of(context).pop();
           });
-
-          return AlertDialog(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            content: Container(
-              child: Center(
-                child: CircularProgressIndicator(),
+          return Dialog(
+            child: SizedBox(
+              height: 20,
+              width: 80,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Image.asset(
+                  "images/gif-LOGOchao.gif",
+                  fit: BoxFit.cover,
+                  height: 20,
+                  width: 80,
+                ),
               ),
             ),
           );
         });
+
+    // showDialog(
+    //     barrierDismissible: false,
+    //     context: context,
+    //     builder: (BuildContext builderContext) {
+    //       Timer(Duration(seconds: 3), () {
+    //         Navigator.of(context).pop();
+    //       });
+
+    //       return AlertDialog(
+    //         backgroundColor: Colors.transparent,
+    //         elevation: 0,
+    //         content: Container(
+    //           child: Center(
+    //             child: CircularProgressIndicator(),
+    //           ),
+    //         ),
+    //       );
+    //     });
   }
+
 
   Widget build(BuildContext context) {
     return SingleChildScrollView(

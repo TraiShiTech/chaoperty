@@ -42,8 +42,9 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
   List<TransReBillModelRECM> _TransReBillModels_GropType_Mon = [];
   List<TransReBillModelRECM> _TransReBillModels_GropType_Sub_zone = [];
 
-  // List<TransReBillModelRECM> _TransReBillModels_GropType_Daily = [];
-  // List<TransReBillModelRECM> _TransReBillModels_GropType_Daily_Sub_zone = [];
+  List<TransReBillModelRECM> _TransReBillModels_GropType_Daily = [];
+  List<TransReBillModelRECM> _TransReBillModels_GropType_Daily_Sub_zone = [];
+
   String? Value_selectDate_Daily_Type_;
   String? Value_select_lastDate_Daily_Type_;
   List<String> monthsInThai = [
@@ -656,15 +657,13 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
               ? 0.00
               : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) =>
                   (e.zser == null)
-                      ? double.parse(e.sub_zone ==
-                                  zoneModeels_report_Ser_Sub_zone[index2].ser &&
+                      ? double.parse(e.zser1 == zoneModels_report[index2].ser &&
                               e.expser! == '${expModels[index_exp].ser}'
                           ? e.total_expname == null || e.total_expname! == ''
                               ? 0.toString()
                               : e.total_expname.toString()
                           : 0.toString())
-                      : double.parse(e.sub_zone ==
-                                  zoneModeels_report_Ser_Sub_zone[index2].ser &&
+                      : double.parse(e.zser == zoneModels_report[index2].ser &&
                               e.expser! == '${expModels[index_exp].ser}'
                           ? e.total_expname == null || e.total_expname! == ''
                               ? 0.toString()
@@ -728,6 +727,8 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
               double.parse('${zoneModels_report[index1].b_3}');
     }
 
+    for (int index1 = 0; index1 < zoneModels_report.length; index1++) {}
+
 //////////------------------------------------------->
 
     return totalB3.toString();
@@ -736,28 +737,49 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
   String calculateTotal_B3_SubZone(Subzone) {
     double totalB3 = 0.0;
 
-    for (int index3 = 0;
-        index3 < zoneModeels_report_Ser_Sub_zone.length;
-        index3++) {
-      if (zoneModeels_report_Ser_Sub_zone[index3].sub_zone.toString() ==
+    for (int in_dex = 0;
+        in_dex < zoneModeels_report_Ser_Sub_zone.length;
+        in_dex++) {
+      if (zoneModeels_report_Ser_Sub_zone[in_dex].sub_zone.toString() ==
           '${Subzone}') {
-        (zoneModeels_report_Ser_Sub_zone[index3].jon! == '1' &&
-                zoneModeels_report_Ser_Sub_zone[index3].jon_book! == '3')
-            ? totalB3 += double.parse(calculateTotalBills_Zone_Sub(index3)!) -
-                ((double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+        (_TransReBillModels_GropType_Sub_zone.length == 0)
+            ? totalB3 += 0.00
+            : (zoneModeels_report_Ser_Sub_zone[in_dex].jon! == '1' &&
+                    zoneModeels_report_Ser_Sub_zone[in_dex].jon_book! == '3')
+                ? totalB3 += (double.parse(calculateTotalBills_Zone_Sub(in_dex)!) -
+                    ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                            double.parse(
+                                '${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) +
+                        (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                            double.parse(
+                                '${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) +
+                        (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                            double.parse(
+                                '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) +
+                        (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                            double.parse(
+                                '${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))
+                : totalB3 +=
+                    (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
                         double.parse(
-                            '${zoneModeels_report_Ser_Sub_zone[index3].b_1}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-                        double.parse(
-                            '${zoneModeels_report_Ser_Sub_zone[index3].b_2}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-                        double.parse(
-                            '${zoneModeels_report_Ser_Sub_zone[index3].b_3}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-                        double.parse(
-                            '${zoneModeels_report_Ser_Sub_zone[index3].b_4}')))
-            : totalB3 += double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-                double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_2}');
+                            '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}'));
+        // (zoneModeels_report_Ser_Sub_zone[index3].jon! == '1' &&
+        //         zoneModeels_report_Ser_Sub_zone[index3].jon_book! == '3')
+        //     ? totalB3 += double.parse(calculateTotalBills_Zone_Sub(index3)!) -
+        //         ((double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+        //                 double.parse(
+        //                     '${zoneModeels_report_Ser_Sub_zone[index3].b_1}')) +
+        //             (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+        //                 double.parse(
+        //                     '${zoneModeels_report_Ser_Sub_zone[index3].b_2}')) +
+        //             (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+        //                 double.parse(
+        //                     '${zoneModeels_report_Ser_Sub_zone[index3].b_3}')) +
+        //             (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+        //                 double.parse(
+        //                     '${zoneModeels_report_Ser_Sub_zone[index3].b_4}')))
+        //     : totalB3 += double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+        //         double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_2}');
       }
     }
 
@@ -835,7 +857,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      // print('result $ciddoc');
+      print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -866,7 +888,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      // print('result $ciddoc');
+      print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -923,6 +945,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
         var formatter = DateFormat('y-MM-d');
         print("${formatter.format(result!)}");
         setState(() {
+          Value_select_lastDate_Daily_Type_ = null;
           Value_selectDate_Daily_Type_ = "${formatter.format(result)}";
         });
         // red_Trans_bill();
@@ -931,13 +954,6 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
   }
 
   Future<Null> _select_LastDate_Daily_type(BuildContext context) async {
-    // Parse the first date
-    final DateTime initialDate =
-        DateTime.parse(Value_selectDate_Daily_Type_.toString());
-
-// Calculate the last date as 7 days after the initial date
-    final DateTime lastDate = initialDate.add(Duration(days: 7));
-
     final Future<DateTime?> picked = showDatePicker(
       // locale: const Locale('th', 'TH'),
       helpText: 'เลือกวันที่', confirmText: 'ตกลง',
@@ -946,9 +962,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       initialDate: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day),
       initialDatePickerMode: DatePickerMode.day,
-      firstDate: (Value_selectDate_Daily_Type_ != null)
-          ? initialDate
-          : DateTime(2023, 1, 1),
+      firstDate: DateTime(2023, 1, 1),
       lastDate: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day),
       // selectableDayPredicate: _decideWhichDayToEnable,
@@ -970,8 +984,12 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
         );
       },
     );
-    picked.then((result) {
+    picked.then((result) async {
+      var SDate =
+          DateFormat('dd-MM-yyyy').parse('$Value_selectDate_Daily_Type_');
+      var LDate = DateFormat('dd-MM-yyyy').parse('$result');
       if (picked != null) {
+        print('LDate is before SDate');
         // TransReBillModels = [];
 
         var formatter = DateFormat('y-MM-d');
@@ -981,6 +999,20 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
         });
         // red_Trans_bill();
       }
+      // if (LDate.isBefore(SDate)) {
+      // } else {
+      //   if (picked != null) {
+      //     print('LDate is before SDate');
+      //     // TransReBillModels = [];
+
+      //     var formatter = DateFormat('y-MM-d');
+      //     print("${formatter.format(result!)}");
+      //     setState(() {
+      //       Value_select_lastDate_Daily_Type_ = "${formatter.format(result)}";
+      //     });
+      //     // red_Trans_bill();
+      //   }
+      // }
     });
   }
 
@@ -989,21 +1021,45 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
     return showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext builderContext) {
+        builder: (_) {
           Timer(Duration(seconds: 4), () {
             Navigator.of(context).pop();
           });
-
-          return AlertDialog(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            content: Container(
-              child: Center(
-                child: CircularProgressIndicator(),
+          return Dialog(
+            child: SizedBox(
+              height: 20,
+              width: 80,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Image.asset(
+                  "images/gif-LOGOchao.gif",
+                  fit: BoxFit.cover,
+                  height: 20,
+                  width: 80,
+                ),
               ),
             ),
           );
         });
+
+    // showDialog(
+    //     barrierDismissible: false,
+    //     context: context,
+    //     builder: (BuildContext builderContext) {
+    //       Timer(Duration(seconds: 3), () {
+    //         Navigator.of(context).pop();
+    //       });
+
+    //       return AlertDialog(
+    //         backgroundColor: Colors.transparent,
+    //         elevation: 0,
+    //         content: Container(
+    //           child: Center(
+    //             child: CircularProgressIndicator(),
+    //           ),
+    //         ),
+    //       );
+    //     });
   }
 
   /////////////////---------------------------->
@@ -1287,10 +1343,13 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                               Value_selectDate_Daily_Type_ = null;
                               Value_select_lastDate_Daily_Type_ = null;
                             });
-                            red_Trans_bill_Groptype_Mon();
-                            red_Trans_bill_Groptype_Mon_Sub_zone();
 
-                            Dia_log();
+                            if (YE_Income_Type_Mon_User != null &&
+                                Mon_Income_Type_Mon_User != null) {
+                              Dia_log();
+                              red_Trans_bill_Groptype_Mon();
+                              red_Trans_bill_Groptype_Mon_Sub_zone();
+                            }
                           },
                           child: Container(
                               width: 100,
@@ -1353,22 +1412,46 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                         ),
                       ),
                     ),
-                    onTap: () {
-                      RE_IncomeMont_Type_Widget();
-                    },
+                    onTap: (_TransReBillModels_GropType_Mon.length == 0 &&
+                            _TransReBillModels_GropType_Sub_zone.length == 0 &&
+                            Value_selectDate_Daily_Type_ == null &&
+                            Value_select_lastDate_Daily_Type_ == null)
+                        ? null
+                        : (YE_Income_Type_Mon_User == null ||
+                                Mon_Income_Type_Mon_User == null)
+                            ? null
+                            : () {
+                                RE_IncomeMont_Type_Widget();
+                              },
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      (YE_Income_Type_Mon_User != null &&
-                              _TransReBillModels_GropType_Mon.length == 0 &&
-                              Mon_Income_Type_Mon_User != null)
-                          ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✖️)'
-                          : (YE_Income_Type_Mon_User != null &&
-                                  _TransReBillModels_GropType_Mon.length != 0 &&
-                                  Mon_Income_Type_Mon_User != null)
-                              ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✔️)'
+                      (Value_selectDate_Daily_Type_ != null ||
+                              Value_select_lastDate_Daily_Type_ != null)
+                          ? 'รายงาน รายรับแยกตามประเภท (รายเดือน)'
+                          : (_TransReBillModels_GropType_Mon.length != 0 ||
+                                  _TransReBillModels_GropType_Sub_zone.length !=
+                                      0)
+                              ? (YE_Income_Type_Mon_User != null &&
+                                          Mon_Income_Type_Mon_User != null ||
+                                      _TransReBillModels_GropType_Mon.length !=
+                                          0 ||
+                                      _TransReBillModels_GropType_Sub_zone
+                                              .length !=
+                                          0)
+                                  ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✔️)'
+                                  : 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✖️)'
                               : 'รายงาน รายรับแยกตามประเภท (รายเดือน)',
+                      // (YE_Income_Type_Mon_User != null &&
+                      //         _TransReBillModels_GropType_Mon.length == 0 &&
+                      //         Mon_Income_Type_Mon_User != null)
+                      //     ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✖️)'
+                      //     : (YE_Income_Type_Mon_User != null &&
+                      //             _TransReBillModels_GropType_Mon.length != 0 &&
+                      //             Mon_Income_Type_Mon_User != null)
+                      //         ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✔️)'
+                      //         : 'รายงาน รายรับแยกตามประเภท (รายเดือน)',
                       style: const TextStyle(
                         color: ReportScreen_Color.Colors_Text2_,
                         // fontWeight: FontWeight.bold,
@@ -1494,10 +1577,16 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                         setState(() {
                           YE_Income_Type_Mon_User = null;
                           Mon_Income_Type_Mon_User = null;
+                          _TransReBillModels_GropType_Mon.clear();
+                          _TransReBillModels_GropType_Sub_zone.clear();
                         });
-                        red_Trans_bill_Groptype_daly();
-                        red_Trans_bill_Groptype_daly_Sub_zone();
-                        Dia_log();
+
+                        if (Value_select_lastDate_Daily_Type_ != null &&
+                            Value_selectDate_Daily_Type_ != null) {
+                          Dia_log();
+                          red_Trans_bill_Groptype_daly();
+                          red_Trans_bill_Groptype_daly_Sub_zone();
+                        }
                       },
                       child: Container(
                           width: 100,
@@ -1558,26 +1647,35 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                         ),
                       ),
                     ),
-                    onTap: () {
-                      RE_Income_Daily_Type_Widget();
-                    },
+                    onTap: (YE_Income_Type_Mon_User != null ||
+                            Mon_Income_Type_Mon_User != null)
+                        ? null
+                        : (Value_selectDate_Daily_Type_ == null ||
+                                Value_select_lastDate_Daily_Type_ == null)
+                            ? null
+                            : () {
+                                RE_Income_Daily_Type_Widget();
+                              },
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      (Value_selectDate_Daily_Type_ != null &&
-                              Value_select_lastDate_Daily_Type_ != null &&
-                              _TransReBillModels_GropType_Mon.length == 0 &&
-                              _TransReBillModels_GropType_Sub_zone.length == 0)
-                          ? 'รายงาน รายรับแยกตามประเภท (รายวัน) (ไม่พบข้อมูล ✖️)'
-                          : (Value_selectDate_Daily_Type_ != null &&
-                                      Value_select_lastDate_Daily_Type_ !=
-                                          null &&
-                                      _TransReBillModels_GropType_Mon.length !=
-                                          0 ||
+                      (YE_Income_Type_Mon_User != null ||
+                              Mon_Income_Type_Mon_User != null)
+                          ? 'รายงาน รายรับแยกตามประเภท (รายวัน)'
+                          : (_TransReBillModels_GropType_Mon.length != 0 ||
                                   _TransReBillModels_GropType_Sub_zone.length !=
                                       0)
-                              ? 'รายงาน รายรับแยกตามประเภท (รายวัน) (ไม่พบข้อมูล ✔️)'
+                              ? (Value_selectDate_Daily_Type_ != null &&
+                                          Value_select_lastDate_Daily_Type_ !=
+                                              null ||
+                                      _TransReBillModels_GropType_Mon.length !=
+                                          0 ||
+                                      _TransReBillModels_GropType_Sub_zone
+                                              .length !=
+                                          0)
+                                  ? 'รายงาน รายรับแยกตามประเภท (รายวัน) (ไม่พบข้อมูล ✔️)'
+                                  : 'รายงาน รายรับแยกตามประเภท (รายวัน) (ไม่พบข้อมูล ✖️)'
                               : 'รายงาน รายรับแยกตามประเภท (รายวัน)',
                       style: const TextStyle(
                         color: ReportScreen_Color.Colors_Text2_,
@@ -1649,41 +1747,36 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
               stream: Stream.periodic(const Duration(seconds: 0)),
               builder: (context, snapshot) {
                 return ScrollConfiguration(
-                  behavior:
-                      ScrollConfiguration.of(context).copyWith(dragDevices: {
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.mouse,
-                  }),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Container(
-                          // color: Colors.grey[50],
-                          width: (Responsive.isDesktop(context))
-                              ? MediaQuery.of(context).size.width * 0.9
-                              : 800,
-
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: AppbackgroundColor.TiTile_Colors
-                                        .withOpacity(0.7),
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(0),
-                                        topRight: Radius.circular(0),
+                    behavior:
+                        ScrollConfiguration.of(context).copyWith(dragDevices: {
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.mouse,
+                    }),
+                    child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(children: [
+                          Container(
+                            // color: Colors.grey[50],
+                            width: (Responsive.isDesktop(context))
+                                ? MediaQuery.of(context).size.width * 0.925
+                                : (_TransReBillModels_GropType_Mon.length == 0)
+                                    ? MediaQuery.of(context).size.width
+                                    : 1200,
+                            child: Column(
+                              children: [
+                                Container(
+                                  // width: 1050,
+                                  decoration: const BoxDecoration(
+                                    color: AppbackgroundColor.TiTile_Colors,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
                                         bottomLeft: Radius.circular(0),
                                         bottomRight: Radius.circular(0)),
                                   ),
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: const Row(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
                                     children: [
-                                      SizedBox(
-                                        width: 20,
-                                      ),
                                       Expanded(
                                         flex: 1,
                                         child: Text(
@@ -1811,1086 +1904,1126 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                                     ],
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                  child:
-                                      // (_TransReBillModels_GropType_Mon
-                                      //                 .length <
-                                      //             1 &&
-                                      //         _TransReBillModels_GropType_Sub_zone
-                                      //                 .length <
-                                      //             1)
-                                      //     ? const Column(
-                                      //         mainAxisAlignment:
-                                      //             MainAxisAlignment.center,
-                                      //         children: [
-                                      //           Center(
-                                      //             child: Text(
-                                      //               'ไม่พบข้อมูล ',
-                                      //               style: TextStyle(
-                                      //                 color: ReportScreen_Color
-                                      //                     .Colors_Text1_,
-                                      //                 fontWeight: FontWeight.bold,
-                                      //                 fontFamily:
-                                      //                     FontWeight_.Fonts_T,
-                                      //               ),
-                                      //             ),
-                                      //           ),
-                                      //         ],
-                                      //       )
-                                      //     :
-                                      SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    for (int index1 = 0;
-                                        index1 < zoneModels_report.length;
-                                        index1++)
-                                      if (zoneModels_report[index1]
-                                              .sub_zone
-                                              .toString() ==
-                                          '0')
-                                        ListTile(
-                                          title: Container(
-                                            decoration: const BoxDecoration(
-                                              border: Border(
-                                                bottom: BorderSide(
-                                                  color: Colors.black12,
-                                                  width: 1,
+                                Expanded(
+                                    child:
+                                        // (_TransReBillModels_GropType_Mon
+                                        //                 .length <
+                                        //             1 &&
+                                        //         _TransReBillModels_GropType_Sub_zone
+                                        //                 .length <
+                                        //             1)
+                                        //     ? const Column(
+                                        //         mainAxisAlignment:
+                                        //             MainAxisAlignment.center,
+                                        //         children: [
+                                        //           Center(
+                                        //             child: Text(
+                                        //               'ไม่พบข้อมูล ',
+                                        //               style: TextStyle(
+                                        //                 color: ReportScreen_Color
+                                        //                     .Colors_Text1_,
+                                        //                 fontWeight: FontWeight.bold,
+                                        //                 fontFamily:
+                                        //                     FontWeight_.Fonts_T,
+                                        //               ),
+                                        //             ),
+                                        //           ),
+                                        //         ],
+                                        //       )
+                                        //     :
+                                        SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      for (int index1 = 0;
+                                          index1 < zoneModels_report.length;
+                                          index1++)
+                                        if (zoneModels_report[index1]
+                                                .sub_zone
+                                                .toString() ==
+                                            '0')
+                                          ListTile(
+                                            title: Container(
+                                              decoration: const BoxDecoration(
+                                                border: Border(
+                                                  bottom: BorderSide(
+                                                    color: Colors.black12,
+                                                    width: 1,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 0, 4),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '${zoneModels_report[index1].zn}',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          // fontWeight: FontWeight.w100,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 0, 4),
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '${zoneModels_report[index1].zn}',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            // fontWeight: FontWeight.w100,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        // '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}',
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          // '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}',
 
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    // Expanded(
-                                                    //   flex: 1,
-                                                    //   child: Text(
-                                                    //     '${nFormat.format(double.parse(calculateTotalBills_Sumdis_Zone(index1)!))}',
-                                                    //     textAlign: TextAlign.right,
-                                                    //     style: TextStyle(
-                                                    //       color: ('${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}' == '0.00') ? Colors.red[400] : ReportScreen_Color.Colors_Text1_,
-                                                    //       // fontWeight: FontWeight.bold,
-                                                    //       fontFamily: Font_.Fonts_T,
-                                                    //     ),
-                                                    //   ),
-                                                    // ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                      // Expanded(
+                                                      //   flex: 1,
+                                                      //   child: Text(
+                                                      //     '${nFormat.format(double.parse(calculateTotalBills_Sumdis_Zone(index1)!))}',
+                                                      //     textAlign: TextAlign.right,
+                                                      //     style: TextStyle(
+                                                      //       color: ('${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}' == '0.00') ? Colors.red[400] : ReportScreen_Color.Colors_Text1_,
+                                                      //       // fontWeight: FontWeight.bold,
+                                                      //       fontFamily: Font_.Fonts_T,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : (zoneModels_report[index1]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModels_report[index1]
-                                                                            .jon_book! ==
-                                                                        '1')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}'))}',
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : (zoneModels_report[index1]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModels_report[index1]
+                                                                              .jon_book! ==
+                                                                          '1')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}'))}',
 
-                                                        // 'คูณ ${zoneModels_report[index1].b_1}',
+                                                          // 'คูณ ${zoneModels_report[index1].b_1}',
 
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : (zoneModels_report[index1]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModels_report[index1]
-                                                                            .jon_book! ==
-                                                                        '2')
-                                                                ?
-                                                                //'${calculateTotalBills_Zone(index1)}'
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : (zoneModels_report[index1]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModels_report[index1]
+                                                                              .jon_book! ==
+                                                                          '2')
+                                                                  ?
+                                                                  //'${calculateTotalBills_Zone(index1)}'
 
-                                                                //'${calculateTotalBills_Zone(index1)} - [ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_1})+ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_2}) +( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_3}) + ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_4})'
-                                                                '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}'))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                                  //'${calculateTotalBills_Zone(index1)} - [ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_1})+ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_2}) +( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_3}) + ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_4})'
+                                                                  '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : (zoneModels_report[index1]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModels_report[index1]
-                                                                            .jon_book! ==
-                                                                        '3')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}'))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : (zoneModels_report[index1]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModels_report[index1]
+                                                                              .jon_book! ==
+                                                                          '3')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : (zoneModels_report[index1]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModels_report[index1]
-                                                                            .jon_book! ==
-                                                                        '4')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))}',
-                                                        // 'คูณ ${zoneModels_report[index1].b_4}',
-                                                        // '${TransReBillModels[index1].length}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : (zoneModels_report[index1]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModels_report[index1]
+                                                                              .jon_book! ==
+                                                                          '4')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))}',
+                                                          // 'คูณ ${zoneModels_report[index1].b_4}',
+                                                          // '${TransReBillModels[index1].length}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                //////////////------------------------------------------------>
+                                                    ],
+                                                  ),
+                                                  //////////////------------------------------------------------>
 
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '- ล็อคเสียบ/ขาจร',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                for (int index_exp = 0;
-                                                    index_exp <
-                                                        expModels.length;
-                                                    index_exp++)
-                                                  if (expModels[index_exp]
-                                                          .ser
-                                                          .toString() !=
-                                                      '1')
-                                                    Row(
-                                                      children: [
-                                                        const SizedBox(
-                                                          width: 20,
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '- ${expModels[index_exp].expname}',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '- ล็อคเสียบ/ขาจร',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        // const Expanded(
-                                                        //   flex: 1,
-                                                        //   child: Text(
-                                                        //     '',
-                                                        //     textAlign: TextAlign.right,
-                                                        //     style: TextStyle(
-                                                        //       color: ReportScreen_Color.Colors_Text1_,
-                                                        //       // fontWeight: FontWeight.bold,
-                                                        //       fontFamily: Font_.Fonts_T,
-                                                        //     ),
-                                                        //   ),
-                                                        // ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            (_TransReBillModels_GropType_Mon
-                                                                        .length <
-                                                                    1)
-                                                                ? '0.00'
-                                                                : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                    for (int index3 = 0;
-                                        index3 <
-                                            zoneModels_report_Sub_zone.length;
-                                        index3++)
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              color: Colors.black12,
-                                              width: 1,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  for (int index_exp = 0;
+                                                      index_exp <
+                                                          expModels.length;
+                                                      index_exp++)
+                                                    if (expModels[index_exp]
+                                                            .ser
+                                                            .toString() !=
+                                                        '1')
+                                                      Row(
+                                                        children: [
+                                                          const SizedBox(
+                                                            width: 20,
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '- ${expModels[index_exp].expname}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          // const Expanded(
+                                                          //   flex: 1,
+                                                          //   child: Text(
+                                                          //     '',
+                                                          //     textAlign: TextAlign.right,
+                                                          //     style: TextStyle(
+                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                          //       // fontWeight: FontWeight.bold,
+                                                          //       fontFamily: Font_.Fonts_T,
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              (_TransReBillModels_GropType_Mon
+                                                                          .length <
+                                                                      1)
+                                                                  ? '0.00'
+                                                                  : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                ],
+                                              ),
                                             ),
                                           ),
+                                      for (int index3 = 0;
+                                          index3 <
+                                              zoneModels_report_Sub_zone.length;
+                                          index3++)
+                                        Container(
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                color: Colors.black12,
+                                                width: 1,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      //  '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      '${zoneModels_report_Sub_zone[index3].zn} ',
+
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              for (int in_dex = 0;
+                                                  in_dex <
+                                                      zoneModeels_report_Ser_Sub_zone
+                                                          .length;
+                                                  in_dex++)
+                                                if (zoneModeels_report_Ser_Sub_zone[
+                                                            in_dex]
+                                                        .sub_zone
+                                                        .toString() ==
+                                                    zoneModels_report_Sub_zone[
+                                                            index3]
+                                                        .ser
+                                                        .toString())
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          //  '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          '** ${zoneModeels_report_Ser_Sub_zone[in_dex].zn} ',
+
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.w100,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : (zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon_book! ==
+                                                                          '1')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}'))}',
+
+                                                          // 'คูณ ${zoneModels_report[index1].b_1}',
+
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : (zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon_book! ==
+                                                                          '2')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : (zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon_book! ==
+                                                                          '3')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : (zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon_book! ==
+                                                                          '4')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))}',
+                                                          // 'คูณ ${zoneModels_report[index1].b_4}',
+                                                          // '${TransReBillModels[index1].length}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  const Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      // '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      'รวม :',
+
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : ' ${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse(calculateTotal_B1_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse(calculateTotal_B2_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse(calculateTotal_B3_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse(calculateTotal_B4_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '- ล็อคเสียบ/ขาจร',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              for (int index_exp = 0;
+                                                  index_exp < expModels.length;
+                                                  index_exp++)
+                                                if (expModels[index_exp]
+                                                        .ser
+                                                        .toString() !=
+                                                    '1')
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '- ${expModels[index_exp].expname}',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      // const Expanded(
+                                                      //   flex: 1,
+                                                      //   child: Text(
+                                                      //     '',
+                                                      //     textAlign: TextAlign.right,
+                                                      //     style: TextStyle(
+                                                      //       color: ReportScreen_Color.Colors_Text1_,
+                                                      //       // fontWeight: FontWeight.bold,
+                                                      //       fontFamily: Font_.Fonts_T,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          // (_TransReBillModels_GropType_Sub_zone
+                                                          //             .length ==
+                                                          //         0)
+                                                          //     ? '0.00'
+                                                          //     :
+                                                          '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                            ],
+                                          ),
                                         ),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    //  '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    '${zoneModels_report_Sub_zone[index3].zn} ',
-
-                                                    textAlign: TextAlign.start,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            for (int in_dex = 0;
-                                                in_dex <
-                                                    zoneModeels_report_Ser_Sub_zone
-                                                        .length;
-                                                in_dex++)
-                                              if (zoneModeels_report_Ser_Sub_zone[
-                                                          in_dex]
-                                                      .sub_zone
-                                                      .toString() ==
-                                                  zoneModels_report_Sub_zone[
-                                                          index3]
-                                                      .ser
-                                                      .toString())
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        //  '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        '** ${zoneModeels_report_Ser_Sub_zone[in_dex].zn} ',
-
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.w100,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon_book! ==
-                                                                        '1')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}'))}',
-
-                                                        // 'คูณ ${zoneModels_report[index1].b_1}',
-
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon_book! ==
-                                                                        '2')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}'))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon_book! ==
-                                                                        '3')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}'))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon_book! ==
-                                                                        '4')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))}',
-                                                        // 'คูณ ${zoneModels_report[index1].b_4}',
-                                                        // '${TransReBillModels[index1].length}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                            Row(
-                                              children: [
-                                                const SizedBox(
-                                                  width: 20,
-                                                ),
-                                                const Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    // '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    'รวม :',
-
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : ' ${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse(calculateTotal_B1_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse(calculateTotal_B2_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse(calculateTotal_B3_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse(calculateTotal_B4_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                const SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '- ล็อคเสียบ/ขาจร',
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            for (int index_exp = 0;
-                                                index_exp < expModels.length;
-                                                index_exp++)
-                                              if (expModels[index_exp]
-                                                      .ser
-                                                      .toString() !=
-                                                  '1')
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '- ${expModels[index_exp].expname}',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    // const Expanded(
-                                                    //   flex: 1,
-                                                    //   child: Text(
-                                                    //     '',
-                                                    //     textAlign: TextAlign.right,
-                                                    //     style: TextStyle(
-                                                    //       color: ReportScreen_Color.Colors_Text1_,
-                                                    //       // fontWeight: FontWeight.bold,
-                                                    //       fontFamily: Font_.Fonts_T,
-                                                    //     ),
-                                                    //   ),
-                                                    // ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == zoneModeels_report_Ser_Sub_zone[index3].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == zoneModeels_report_Ser_Sub_zone[index3].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                          ],
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              )),
-                            ],
+                                    ],
+                                  ),
+                                )),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                        ])));
               }),
           actions: <Widget>[
             StreamBuilder(
@@ -2912,11 +3045,11 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                             SizedBox(
                               height: 120,
                               width: (Responsive.isDesktop(context))
-                                  ? MediaQuery.of(context).size.width * 0.9
+                                  ? MediaQuery.of(context).size.width * 0.925
                                   : (_TransReBillModels_GropType_Mon.length ==
                                           0)
                                       ? MediaQuery.of(context).size.width
-                                      : 800,
+                                      : 1200,
                               child: Column(
                                 children: [
                                   Container(
@@ -2928,14 +3061,14 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                                           bottomLeft: Radius.circular(0),
                                           bottomRight: Radius.circular(0)),
                                     ),
-                                    child: const Padding(
+                                    child: Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: Row(
                                         children: [
                                           Expanded(
                                             flex: 1,
                                             child: Text(
-                                              'รวม',
+                                              'รวม ',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: ReportScreen_Color
@@ -3240,85 +3373,97 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (_TransReBillModels_GropType_Mon.length != 0)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          child: Container(
-                            width: 100,
-                            decoration: const BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10)),
+                child: StreamBuilder(
+                    stream: Stream.periodic(const Duration(seconds: 0)),
+                    builder: (context, snapshot) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ///_TransReBillModels_GropType_Sub_zone _TransReBillModels_GropType_Mon
+                          if (_TransReBillModels_GropType_Sub_zone.length !=
+                                  0 ||
+                              _TransReBillModels_GropType_Mon.length != 0)
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.blue,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: const Center(
+                                    child: Text(
+                                      'Export file',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  if (_TransReBillModels_GropType_Sub_zone
+                                              .length ==
+                                          0 &&
+                                      _TransReBillModels_GropType_Mon.length ==
+                                          0) {
+                                  } else {
+                                    setState(() {
+                                      Value_Report =
+                                          'รายงานรายรับแยกตามประเภทรายเดือน';
+                                      Pre_and_Dow = 'Download';
+                                    });
+                                    _showMyDialog_SAVE();
+                                  }
+                                },
+                              ),
                             ),
+                          Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: const Center(
-                              child: Text(
-                                'Export file',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T,
+                            child: InkWell(
+                              child: Container(
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Center(
+                                  child: Text(
+                                    'ปิด',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
                                 ),
                               ),
+                              onTap: () async {
+                                setState(() {
+                                  Mon_Income_Type_Mon_User = null;
+                                  YE_Income_Type_Mon_User = null;
+                                  _TransReBillModels_GropType_Mon.clear();
+                                  _TransReBillModels_GropType_Sub_zone.clear();
+                                });
+                                Navigator.of(context).pop();
+                              },
                             ),
                           ),
-                          onTap: () {
-                            if (_TransReBillModels_GropType_Mon.length == 0) {
-                            } else {
-                              setState(() {
-                                Value_Report =
-                                    'รายงานรายรับแยกตามประเภทรายเดือน';
-                                Pre_and_Dow = 'Download';
-                              });
-                              _showMyDialog_SAVE();
-                            }
-                          },
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        child: Container(
-                          width: 100,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                          ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: const Center(
-                            child: Text(
-                              'ปิด',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
-                          ),
-                        ),
-                        onTap: () async {
-                          setState(() {
-                            Mon_Income_Type_Mon_User = null;
-                            YE_Income_Type_Mon_User = null;
-                            _TransReBillModels_GropType_Mon.clear();
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                        ],
+                      );
+                    }),
               ),
             ),
           ],
@@ -3336,91 +3481,90 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
         return AlertDialog(
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          title: Column(
-            children: [
-              const Center(
-                  child: Text(
-                'รายงาน รายรับแยกตามประเภท (รายวัน)',
-                style: TextStyle(
-                  color: ReportScreen_Color.Colors_Text1_,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: FontWeight_.Fonts_T,
+          title: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: Column(
+              children: [
+                const Center(
+                    child: Text(
+                  'รายงาน รายรับแยกตามประเภท (รายวัน) ',
+                  style: TextStyle(
+                    color: ReportScreen_Color.Colors_Text1_,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: FontWeight_.Fonts_T,
+                  ),
+                )),
+                Row(
+                  children: [
+                    Expanded(
+                        flex: 1,
+                        child: Text(
+                          (Value_selectDate_Daily_Type_ == null ||
+                                  Value_select_lastDate_Daily_Type_ == null)
+                              ? 'วันที่: ?'
+                              : 'วันที่: ${Value_selectDate_Daily_Type_} ถึง $Value_select_lastDate_Daily_Type_',
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            color: ReportScreen_Color.Colors_Text1_,
+                            fontSize: 14,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T,
+                          ),
+                        )),
+                    Expanded(
+                        flex: 1,
+                        child: Text(
+                          'ทั้งหมด: ${zoneModels_report.length}',
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: ReportScreen_Color.Colors_Text1_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T,
+                          ),
+                        )),
+                  ],
                 ),
-              )),
-              Row(
-                children: [
-                  Expanded(
-                      flex: 1,
-                      child: Text(
-                        (YE_Income_Type_Mon_User == null)
-                            ? 'วันที่: ?'
-                            : 'วันที่: ${Value_selectDate_Daily_Type_}',
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                          color: ReportScreen_Color.Colors_Text1_,
-                          fontSize: 14,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: FontWeight_.Fonts_T,
-                        ),
-                      )),
-                  Expanded(
-                      flex: 1,
-                      child: Text(
-                        'ทั้งหมด: ${zoneModels_report.length}',
-                        textAlign: TextAlign.end,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: ReportScreen_Color.Colors_Text1_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: FontWeight_.Fonts_T,
-                        ),
-                      )),
-                ],
-              ),
-              const SizedBox(height: 1),
-              const Divider(),
-              const SizedBox(height: 1),
-            ],
+                const SizedBox(height: 1),
+                const Divider(),
+                const SizedBox(height: 1),
+              ],
+            ),
           ),
           content: StreamBuilder(
               stream: Stream.periodic(const Duration(seconds: 0)),
               builder: (context, snapshot) {
                 return ScrollConfiguration(
-                  behavior:
-                      ScrollConfiguration.of(context).copyWith(dragDevices: {
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.mouse,
-                  }),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Container(
-                          // color: Colors.grey[50],
-                          width: (Responsive.isDesktop(context))
-                              ? MediaQuery.of(context).size.width * 0.9
-                              : 800,
-
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: AppbackgroundColor.TiTile_Colors
-                                        .withOpacity(0.7),
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(0),
-                                        topRight: Radius.circular(0),
+                    behavior:
+                        ScrollConfiguration.of(context).copyWith(dragDevices: {
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.mouse,
+                    }),
+                    child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(children: [
+                          Container(
+                            // color: Colors.grey[50],
+                            width: (Responsive.isDesktop(context))
+                                ? MediaQuery.of(context).size.width * 0.925
+                                : (_TransReBillModels_GropType_Mon.length == 0)
+                                    ? MediaQuery.of(context).size.width
+                                    : 1200,
+                            child: Column(
+                              children: [
+                                Container(
+                                  // width: 1050,
+                                  decoration: const BoxDecoration(
+                                    color: AppbackgroundColor.TiTile_Colors,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
                                         bottomLeft: Radius.circular(0),
                                         bottomRight: Radius.circular(0)),
                                   ),
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: const Row(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
                                     children: [
-                                      SizedBox(
-                                        width: 20,
-                                      ),
                                       Expanded(
                                         flex: 1,
                                         child: Text(
@@ -3548,1086 +3692,1126 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                                     ],
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                  child:
-                                      // (_TransReBillModels_GropType_Mon
-                                      //                 .length <
-                                      //             1 &&
-                                      //         _TransReBillModels_GropType_Sub_zone
-                                      //                 .length <
-                                      //             1)
-                                      //     ? const Column(
-                                      //         mainAxisAlignment:
-                                      //             MainAxisAlignment.center,
-                                      //         children: [
-                                      //           Center(
-                                      //             child: Text(
-                                      //               'ไม่พบข้อมูล ',
-                                      //               style: TextStyle(
-                                      //                 color: ReportScreen_Color
-                                      //                     .Colors_Text1_,
-                                      //                 fontWeight: FontWeight.bold,
-                                      //                 fontFamily:
-                                      //                     FontWeight_.Fonts_T,
-                                      //               ),
-                                      //             ),
-                                      //           ),
-                                      //         ],
-                                      //       )
-                                      //     :
-                                      SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    for (int index1 = 0;
-                                        index1 < zoneModels_report.length;
-                                        index1++)
-                                      if (zoneModels_report[index1]
-                                              .sub_zone
-                                              .toString() ==
-                                          '0')
-                                        ListTile(
-                                          title: Container(
-                                            decoration: const BoxDecoration(
-                                              border: Border(
-                                                bottom: BorderSide(
-                                                  color: Colors.black12,
-                                                  width: 1,
+                                Expanded(
+                                    child:
+                                        // (_TransReBillModels_GropType_Mon
+                                        //                 .length <
+                                        //             1 &&
+                                        //         _TransReBillModels_GropType_Sub_zone
+                                        //                 .length <
+                                        //             1)
+                                        //     ? const Column(
+                                        //         mainAxisAlignment:
+                                        //             MainAxisAlignment.center,
+                                        //         children: [
+                                        //           Center(
+                                        //             child: Text(
+                                        //               'ไม่พบข้อมูล ',
+                                        //               style: TextStyle(
+                                        //                 color: ReportScreen_Color
+                                        //                     .Colors_Text1_,
+                                        //                 fontWeight: FontWeight.bold,
+                                        //                 fontFamily:
+                                        //                     FontWeight_.Fonts_T,
+                                        //               ),
+                                        //             ),
+                                        //           ),
+                                        //         ],
+                                        //       )
+                                        //     :
+                                        SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      for (int index1 = 0;
+                                          index1 < zoneModels_report.length;
+                                          index1++)
+                                        if (zoneModels_report[index1]
+                                                .sub_zone
+                                                .toString() ==
+                                            '0')
+                                          ListTile(
+                                            title: Container(
+                                              decoration: const BoxDecoration(
+                                                border: Border(
+                                                  bottom: BorderSide(
+                                                    color: Colors.black12,
+                                                    width: 1,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 0, 4),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '${zoneModels_report[index1].zn}',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          // fontWeight: FontWeight.w100,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 0, 4),
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '${zoneModels_report[index1].zn}',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            // fontWeight: FontWeight.w100,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        // '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}',
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          // '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}',
 
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    // Expanded(
-                                                    //   flex: 1,
-                                                    //   child: Text(
-                                                    //     '${nFormat.format(double.parse(calculateTotalBills_Sumdis_Zone(index1)!))}',
-                                                    //     textAlign: TextAlign.right,
-                                                    //     style: TextStyle(
-                                                    //       color: ('${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}' == '0.00') ? Colors.red[400] : ReportScreen_Color.Colors_Text1_,
-                                                    //       // fontWeight: FontWeight.bold,
-                                                    //       fontFamily: Font_.Fonts_T,
-                                                    //     ),
-                                                    //   ),
-                                                    // ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                      // Expanded(
+                                                      //   flex: 1,
+                                                      //   child: Text(
+                                                      //     '${nFormat.format(double.parse(calculateTotalBills_Sumdis_Zone(index1)!))}',
+                                                      //     textAlign: TextAlign.right,
+                                                      //     style: TextStyle(
+                                                      //       color: ('${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}' == '0.00') ? Colors.red[400] : ReportScreen_Color.Colors_Text1_,
+                                                      //       // fontWeight: FontWeight.bold,
+                                                      //       fontFamily: Font_.Fonts_T,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : (zoneModels_report[index1]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModels_report[index1]
-                                                                            .jon_book! ==
-                                                                        '1')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}'))}',
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : (zoneModels_report[index1]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModels_report[index1]
+                                                                              .jon_book! ==
+                                                                          '1')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}'))}',
 
-                                                        // 'คูณ ${zoneModels_report[index1].b_1}',
+                                                          // 'คูณ ${zoneModels_report[index1].b_1}',
 
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : (zoneModels_report[index1]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModels_report[index1]
-                                                                            .jon_book! ==
-                                                                        '2')
-                                                                ?
-                                                                //'${calculateTotalBills_Zone(index1)}'
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : (zoneModels_report[index1]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModels_report[index1]
+                                                                              .jon_book! ==
+                                                                          '2')
+                                                                  ?
+                                                                  //'${calculateTotalBills_Zone(index1)}'
 
-                                                                //'${calculateTotalBills_Zone(index1)} - [ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_1})+ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_2}) +( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_3}) + ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_4})'
-                                                                '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}'))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                                  //'${calculateTotalBills_Zone(index1)} - [ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_1})+ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_2}) +( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_3}) + ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_4})'
+                                                                  '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : (zoneModels_report[index1]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModels_report[index1]
-                                                                            .jon_book! ==
-                                                                        '3')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}'))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : (zoneModels_report[index1]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModels_report[index1]
+                                                                              .jon_book! ==
+                                                                          '3')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : (zoneModels_report[index1]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModels_report[index1]
-                                                                            .jon_book! ==
-                                                                        '4')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))}',
-                                                        // 'คูณ ${zoneModels_report[index1].b_4}',
-                                                        // '${TransReBillModels[index1].length}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : (zoneModels_report[index1]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModels_report[index1]
+                                                                              .jon_book! ==
+                                                                          '4')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))}',
+                                                          // 'คูณ ${zoneModels_report[index1].b_4}',
+                                                          // '${TransReBillModels[index1].length}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                //////////////------------------------------------------------>
+                                                    ],
+                                                  ),
+                                                  //////////////------------------------------------------------>
 
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '- ล็อคเสียบ/ขาจร',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Mon
-                                                                    .length <
-                                                                1)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                for (int index_exp = 0;
-                                                    index_exp <
-                                                        expModels.length;
-                                                    index_exp++)
-                                                  if (expModels[index_exp]
-                                                          .ser
-                                                          .toString() !=
-                                                      '1')
-                                                    Row(
-                                                      children: [
-                                                        const SizedBox(
-                                                          width: 20,
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '- ${expModels[index_exp].expname}',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '- ล็อคเสียบ/ขาจร',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        // const Expanded(
-                                                        //   flex: 1,
-                                                        //   child: Text(
-                                                        //     '',
-                                                        //     textAlign: TextAlign.right,
-                                                        //     style: TextStyle(
-                                                        //       color: ReportScreen_Color.Colors_Text1_,
-                                                        //       // fontWeight: FontWeight.bold,
-                                                        //       fontFamily: Font_.Fonts_T,
-                                                        //     ),
-                                                        //   ),
-                                                        // ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            (_TransReBillModels_GropType_Mon
-                                                                        .length <
-                                                                    1)
-                                                                ? '0.00'
-                                                                : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey[600],
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                    for (int index3 = 0;
-                                        index3 <
-                                            zoneModels_report_Sub_zone.length;
-                                        index3++)
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              color: Colors.black12,
-                                              width: 1,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  for (int index_exp = 0;
+                                                      index_exp <
+                                                          expModels.length;
+                                                      index_exp++)
+                                                    if (expModels[index_exp]
+                                                            .ser
+                                                            .toString() !=
+                                                        '1')
+                                                      Row(
+                                                        children: [
+                                                          const SizedBox(
+                                                            width: 20,
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '- ${expModels[index_exp].expname}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          // const Expanded(
+                                                          //   flex: 1,
+                                                          //   child: Text(
+                                                          //     '',
+                                                          //     textAlign: TextAlign.right,
+                                                          //     style: TextStyle(
+                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                          //       // fontWeight: FontWeight.bold,
+                                                          //       fontFamily: Font_.Fonts_T,
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              (_TransReBillModels_GropType_Mon
+                                                                          .length <
+                                                                      1)
+                                                                  ? '0.00'
+                                                                  : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey[600],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                ],
+                                              ),
                                             ),
                                           ),
+                                      for (int index3 = 0;
+                                          index3 <
+                                              zoneModels_report_Sub_zone.length;
+                                          index3++)
+                                        Container(
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                color: Colors.black12,
+                                                width: 1,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      //  '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      '${zoneModels_report_Sub_zone[index3].zn} ',
+
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              for (int in_dex = 0;
+                                                  in_dex <
+                                                      zoneModeels_report_Ser_Sub_zone
+                                                          .length;
+                                                  in_dex++)
+                                                if (zoneModeels_report_Ser_Sub_zone[
+                                                            in_dex]
+                                                        .sub_zone
+                                                        .toString() ==
+                                                    zoneModels_report_Sub_zone[
+                                                            index3]
+                                                        .ser
+                                                        .toString())
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          //  '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          '** ${zoneModeels_report_Ser_Sub_zone[in_dex].zn} ',
+
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.w100,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : (zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon_book! ==
+                                                                          '1')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}'))}',
+
+                                                          // 'คูณ ${zoneModels_report[index1].b_1}',
+
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : (zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon_book! ==
+                                                                          '2')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : (zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon_book! ==
+                                                                          '3')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : (zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon! ==
+                                                                          '1' &&
+                                                                      zoneModeels_report_Ser_Sub_zone[in_dex]
+                                                                              .jon_book! ==
+                                                                          '4')
+                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
+                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))}',
+                                                          // 'คูณ ${zoneModels_report[index1].b_4}',
+                                                          // '${TransReBillModels[index1].length}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  const Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      // '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      'รวม :',
+
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : ' ${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse(calculateTotal_B1_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse(calculateTotal_B2_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse(calculateTotal_B3_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse(calculateTotal_B4_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '- ล็อคเสียบ/ขาจร',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              for (int index_exp = 0;
+                                                  index_exp < expModels.length;
+                                                  index_exp++)
+                                                if (expModels[index_exp]
+                                                        .ser
+                                                        .toString() !=
+                                                    '1')
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '- ${expModels[index_exp].expname}',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      // const Expanded(
+                                                      //   flex: 1,
+                                                      //   child: Text(
+                                                      //     '',
+                                                      //     textAlign: TextAlign.right,
+                                                      //     style: TextStyle(
+                                                      //       color: ReportScreen_Color.Colors_Text1_,
+                                                      //       // fontWeight: FontWeight.bold,
+                                                      //       fontFamily: Font_.Fonts_T,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          // (_TransReBillModels_GropType_Sub_zone
+                                                          //             .length ==
+                                                          //         0)
+                                                          //     ? '0.00'
+                                                          //     :
+                                                          '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                            ],
+                                          ),
                                         ),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    //  '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    '${zoneModels_report_Sub_zone[index3].zn} ',
-
-                                                    textAlign: TextAlign.start,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            for (int in_dex = 0;
-                                                in_dex <
-                                                    zoneModeels_report_Ser_Sub_zone
-                                                        .length;
-                                                in_dex++)
-                                              if (zoneModeels_report_Ser_Sub_zone[
-                                                          in_dex]
-                                                      .sub_zone
-                                                      .toString() ==
-                                                  zoneModels_report_Sub_zone[
-                                                          index3]
-                                                      .ser
-                                                      .toString())
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        //  '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        '** ${zoneModeels_report_Ser_Sub_zone[in_dex].zn} ',
-
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.w100,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon_book! ==
-                                                                        '1')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}'))}',
-
-                                                        // 'คูณ ${zoneModels_report[index1].b_1}',
-
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon_book! ==
-                                                                        '2')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}'))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon_book! ==
-                                                                        '3')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}'))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon! ==
-                                                                        '1' &&
-                                                                    zoneModeels_report_Ser_Sub_zone[in_dex]
-                                                                            .jon_book! ==
-                                                                        '4')
-                                                                ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                                                : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))}',
-                                                        // 'คูณ ${zoneModels_report[index1].b_4}',
-                                                        // '${TransReBillModels[index1].length}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                            Row(
-                                              children: [
-                                                const SizedBox(
-                                                  width: 20,
-                                                ),
-                                                const Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    // '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    'รวม :',
-
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : ' ${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse(calculateTotal_B1_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse(calculateTotal_B2_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse(calculateTotal_B3_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse(calculateTotal_B4_SubZone('${zoneModels_report_Sub_zone[index3].ser}')))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                const SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '- ล็อคเสียบ/ขาจร',
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    (_TransReBillModels_GropType_Sub_zone
-                                                                .length ==
-                                                            0)
-                                                        ? '0.00'
-                                                        : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.right,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            for (int index_exp = 0;
-                                                index_exp < expModels.length;
-                                                index_exp++)
-                                              if (expModels[index_exp]
-                                                      .ser
-                                                      .toString() !=
-                                                  '1')
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '- ${expModels[index_exp].expname}',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    // const Expanded(
-                                                    //   flex: 1,
-                                                    //   child: Text(
-                                                    //     '',
-                                                    //     textAlign: TextAlign.right,
-                                                    //     style: TextStyle(
-                                                    //       color: ReportScreen_Color.Colors_Text1_,
-                                                    //       // fontWeight: FontWeight.bold,
-                                                    //       fontFamily: Font_.Fonts_T,
-                                                    //     ),
-                                                    //   ),
-                                                    // ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
-                                                                    .length ==
-                                                                0)
-                                                            ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == zoneModeels_report_Ser_Sub_zone[index3].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == zoneModeels_report_Ser_Sub_zone[index3].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                          ],
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              )),
-                            ],
+                                    ],
+                                  ),
+                                )),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                        ])));
               }),
           actions: <Widget>[
             StreamBuilder(
@@ -4649,11 +4833,11 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                             SizedBox(
                               height: 120,
                               width: (Responsive.isDesktop(context))
-                                  ? MediaQuery.of(context).size.width * 0.9
+                                  ? MediaQuery.of(context).size.width * 0.925
                                   : (_TransReBillModels_GropType_Mon.length ==
                                           0)
                                       ? MediaQuery.of(context).size.width
-                                      : 800,
+                                      : 1200,
                               child: Column(
                                 children: [
                                   Container(
@@ -4977,87 +5161,99 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (_TransReBillModels_GropType_Mon.length != 0 ||
-                        _TransReBillModels_GropType_Sub_zone.length != 0)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          child: Container(
-                            width: 100,
-                            decoration: const BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10)),
+                child: StreamBuilder(
+                    stream: Stream.periodic(const Duration(seconds: 0)),
+                    builder: (context, snapshot) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ///_TransReBillModels_GropType_Sub_zone _TransReBillModels_GropType_Mon
+                          if (_TransReBillModels_GropType_Sub_zone.length !=
+                                  0 ||
+                              _TransReBillModels_GropType_Mon.length != 0)
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.blue,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: const Center(
+                                    child: Text(
+                                      'Export file',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  if (_TransReBillModels_GropType_Sub_zone
+                                              .length ==
+                                          0 &&
+                                      _TransReBillModels_GropType_Mon.length ==
+                                          0) {
+                                  } else {
+                                    setState(() {
+                                      Value_Report =
+                                          'รายงานรายรับรายวันแยกตามประเภท';
+                                      Pre_and_Dow = 'Download';
+                                    });
+                                    _showMyDialog_SAVE();
+                                  }
+                                },
+                              ),
                             ),
+                          Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: const Center(
-                              child: Text(
-                                'Export file',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T,
+                            child: InkWell(
+                              child: Container(
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Center(
+                                  child: Text(
+                                    'ปิด',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
                                 ),
                               ),
+                              onTap: () async {
+                                setState(() {
+                                  Value_select_lastDate_Daily_Type_ = null;
+                                  Value_selectDate_Daily_Type_ = null;
+                                  Mon_Income_Type_Mon_User = null;
+                                  YE_Income_Type_Mon_User = null;
+                                  _TransReBillModels_GropType_Mon.clear();
+                                  _TransReBillModels_GropType_Sub_zone.clear();
+                                });
+                                Navigator.of(context).pop();
+                              },
                             ),
                           ),
-                          onTap: () {
-                            if (_TransReBillModels_GropType_Mon.length == 0 &&
-                                _TransReBillModels_GropType_Sub_zone.length ==
-                                    0) {
-                            } else {
-                              setState(() {
-                                Value_Report = 'รายงานรายรับรายวันแยกตามประเภท';
-                                Pre_and_Dow = 'Download';
-                              });
-                              _showMyDialog_SAVE();
-                            }
-                          },
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        child: Container(
-                          width: 100,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                          ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: const Center(
-                            child: Text(
-                              'ปิด',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
-                          ),
-                        ),
-                        onTap: () async {
-                          setState(() {
-                            Mon_Income_Type_Mon_User = null;
-                            YE_Income_Type_Mon_User = null;
-                            _TransReBillModels_GropType_Mon.clear();
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                        ],
+                      );
+                    }),
               ),
             ),
           ],
@@ -5281,7 +5477,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
               NameFile_,
               renTal_name,
               _verticalGroupValue_NameFile,
-              Value_selectDate_Daily_Type_,
+              '${Value_selectDate_Daily_Type_} ถึง ${Value_select_lastDate_Daily_Type_}',
               zoneModels_report,
               zoneModels_report_Sub_zone,
               zoneModeels_report_Ser_Sub_zone,

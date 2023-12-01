@@ -33,10 +33,11 @@ class Pdfgen_DataChaoArea {
     //     .asUint8List(fontData.offsetInBytes, fontData.lengthInBytes);
     // final PdfFont font = PdfFont.of(pdf, data: dataint);
     // final PdfFont font = PdfFont.of(pdf, data: dataint);
-    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
     var Colors_pd = PdfColors.black;
 
     final ttf = pw.Font.ttf(font);
+    double font_Size = 12.0;
     DateTime date = DateTime.now();
     var formatter = new DateFormat.MMMMd('th_TH');
     String thaiDate = formatter.format(date);
@@ -98,7 +99,7 @@ class Pdfgen_DataChaoArea {
                             '$renTal_name ',
                             maxLines: 1,
                             style: pw.TextStyle(
-                              fontSize: 8,
+                              fontSize: 10,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -126,7 +127,7 @@ class Pdfgen_DataChaoArea {
                         '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           color: Colors_pd,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
@@ -136,7 +137,7 @@ class Pdfgen_DataChaoArea {
                         'ที่อยู่: $bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           color: Colors_pd,
                           font: ttf,
                         ),
@@ -146,7 +147,7 @@ class Pdfgen_DataChaoArea {
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -156,7 +157,7 @@ class Pdfgen_DataChaoArea {
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -169,7 +170,7 @@ class Pdfgen_DataChaoArea {
                             : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -204,7 +205,7 @@ class Pdfgen_DataChaoArea {
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
-                          fontSize: 11.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -214,7 +215,7 @@ class Pdfgen_DataChaoArea {
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -224,7 +225,7 @@ class Pdfgen_DataChaoArea {
                         'ณ วันที่:  $thaiDate ${DateTime.now().year + 543}',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -253,7 +254,7 @@ class Pdfgen_DataChaoArea {
                         'ข้อมูลพื้นที่',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
+                            fontSize: font_Size,
                             font: ttf,
                             fontWeight: pw.FontWeight.bold,
                             color: PdfColors.green),
@@ -263,7 +264,7 @@ class Pdfgen_DataChaoArea {
                         'โซนพื้นที่ : ${NumberArea_}',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                           color: Colors_pd,
@@ -273,7 +274,7 @@ class Pdfgen_DataChaoArea {
                         'รหัสพื้นที่: ${NumberArea_}',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                           color: Colors_pd,
@@ -283,7 +284,7 @@ class Pdfgen_DataChaoArea {
                         'ชื้อพื้นที่ : ${NumberArea_}',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                           color: Colors_pd,
@@ -294,7 +295,7 @@ class Pdfgen_DataChaoArea {
                         'พื้นที่เช่า : ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
+                            fontSize: font_Size,
                             font: ttf,
                             fontWeight: pw.FontWeight.bold,
                             color: PdfColors.green),
@@ -304,7 +305,7 @@ class Pdfgen_DataChaoArea {
                         'รวมพื้นที่เช่า (ตร.ม.) : $QtyArea',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                           color: Colors_pd,
@@ -315,7 +316,7 @@ class Pdfgen_DataChaoArea {
                         'ระยะเวลาการเช่ามาตราฐาน : ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
+                            fontSize: font_Size,
                             font: ttf,
                             fontWeight: pw.FontWeight.bold,
                             color: PdfColors.green),
@@ -325,7 +326,7 @@ class Pdfgen_DataChaoArea {
                         'ประเภทการเช่า : รายเดือน ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                           color: Colors_pd,
@@ -335,7 +336,7 @@ class Pdfgen_DataChaoArea {
                         'อายุสัญญา : 12 เดือน',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
                           color: Colors_pd,
@@ -381,7 +382,7 @@ class Pdfgen_DataChaoArea {
               'ค่าบริการหลัก : ',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0,
+                  fontSize: font_Size,
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
                   color: PdfColors.green),
@@ -391,7 +392,7 @@ class Pdfgen_DataChaoArea {
               'ค่าเช่าต่องวด : 20,000',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                fontSize: 10.0,
+                fontSize: font_Size,
                 font: ttf,
                 fontWeight: pw.FontWeight.bold,
                 color: Colors_pd,
@@ -405,7 +406,7 @@ class Pdfgen_DataChaoArea {
                   'ภาพตัวอย่างพื้นที่เบื้องต้น',
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
-                      fontSize: 10.0,
+                      fontSize: font_Size,
                       font: ttf,
                       fontWeight: pw.FontWeight.bold,
                       color: PdfColors.green),
@@ -443,7 +444,7 @@ class Pdfgen_DataChaoArea {
                               'No Image',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10.0,
+                                  fontSize: font_Size,
                                   font: ttf,
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColors.white),
@@ -469,7 +470,7 @@ class Pdfgen_DataChaoArea {
                               'No Image',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10.0,
+                                  fontSize: font_Size,
                                   font: ttf,
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColors.white),
@@ -495,7 +496,7 @@ class Pdfgen_DataChaoArea {
                               'No Image',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10.0,
+                                  fontSize: font_Size,
                                   font: ttf,
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColors.white),
@@ -525,7 +526,7 @@ class Pdfgen_DataChaoArea {
                               'No Image',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10.0,
+                                  fontSize: font_Size,
                                   font: ttf,
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColors.white),
@@ -549,7 +550,7 @@ class Pdfgen_DataChaoArea {
                               'No Image',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10.0,
+                                  fontSize: font_Size,
                                   font: ttf,
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColors.white),
@@ -573,7 +574,7 @@ class Pdfgen_DataChaoArea {
                               'No Image',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10.0,
+                                  fontSize: font_Size,
                                   font: ttf,
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColors.white),
@@ -603,7 +604,7 @@ class Pdfgen_DataChaoArea {
                               'No Image',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10.0,
+                                  fontSize: font_Size,
                                   font: ttf,
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColors.white),
@@ -627,7 +628,7 @@ class Pdfgen_DataChaoArea {
                               'No Image',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10.0,
+                                  fontSize: font_Size,
                                   font: ttf,
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColors.white),
@@ -651,7 +652,7 @@ class Pdfgen_DataChaoArea {
                               'No Image',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10.0,
+                                  fontSize: font_Size,
                                   font: ttf,
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColors.white),

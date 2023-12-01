@@ -20,6 +20,7 @@ import 'package:tap_debouncer/tap_debouncer.dart';
 
 import '../Constant/Myconstant.dart';
 import '../Model/GetArea_Model.dart';
+import '../Model/GetC_Otp.dart';
 import '../Model/GetRentalType_Model.dart';
 import '../Model/GetTypeX_Model.dart';
 import '../Model/GetType_Model.dart';
@@ -61,6 +62,8 @@ class _SingUpScreen2State extends State<SingUpScreen2> {
   List<ZoneModel> zoneModels = [];
   List<AreaModel> areaModels = [];
   List<ZoneAllModel> zoneAllModels = [];
+  List<OtpModel> otpModels = [];
+  String? ser_id, tem_id, user_id;
   String? lncodeser, areaser, lnser, rentser, serUser, serzn, qtyzn;
   @override
   void initState() {
@@ -69,6 +72,40 @@ class _SingUpScreen2State extends State<SingUpScreen2> {
     read_GC_typex();
     read_GC_type();
     read_GC_rental_type();
+    read_GC_otp();
+  }
+
+  Future<Null> read_GC_otp() async {
+    if (otpModels.isNotEmpty) {
+      setState(() {
+        otpModels.clear();
+      });
+    }
+
+    String url = '${MyConstant().domain}/GC_otp.php?isAdd=true';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('read_GC_rental///// $result');
+      for (var map in result) {
+        OtpModel otpModel = OtpModel.fromJson(map);
+        var ser_idx = otpModel.ser_id;
+        var tem_idx = otpModel.tem_id;
+        var user_idx = otpModel.user_id;
+        var use_idx = otpModel.use_id;
+        setState(() {
+          if (use_idx == '1') {
+            ser_id = ser_idx;
+            tem_id = tem_idx;
+            user_id = user_idx;
+          }
+
+          otpModels.add(otpModel);
+        });
+      }
+    } catch (e) {}
   }
 
   Future<Null> checkPreferance() async {
@@ -741,7 +778,7 @@ class _SingUpScreen2State extends State<SingUpScreen2> {
                                                             BoxDecoration(
                                                           color: Colors.black,
                                                           borderRadius: const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -1056,24 +1093,18 @@ class _SingUpScreen2State extends State<SingUpScreen2> {
 
   Future SendEmail(String name, String email, String message) async {
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
-    // const serviceId = 'service_8x6ajr8';
-    // const templateId = 'template_ulify8d';
-    // const userId = 'Xb8OnrjEz8t0FUpOr';
-    const serviceId = 'service_5iiydjj';
-    const templateId = 'template_ulify8d';
-    const userId = '8vgTm3ROqseE-a1vE';
     final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json'
         }, //This line makes sure it works for all platforms.
         body: json.encode({
-          'service_id': serviceId,
-          'template_id': templateId,
-          'user_id': userId,
+          'service_id': ser_id,
+          'template_id': tem_id,
+          'user_id': user_id,
           'template_params': {
             'from_name': name,
             'from_email': email,
-            'message': message
+            'message': 'OTP : $message'
           }
         }));
     return response.statusCode;

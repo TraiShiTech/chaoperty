@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, prefer_const_constructors, unnecessary_import, implementation_imports, prefer_const_constructors_in_immutables, non_constant_identifier_names, avoid_init_to_null, prefer_void_to_null, unnecessary_brace_in_string_interps, avoid_print, empty_catches, sized_box_for_whitespace, use_build_context_synchronously, file_names, prefer_const_literals_to_create_immutables, prefer_const_declarations, unnecessary_string_interpolations, prefer_collection_literals, sort_child_properties_last, avoid_unnecessary_containers, prefer_is_empty, prefer_final_fields, camel_case_types, avoid_web_libraries_in_flutter, prefer_typing_uninitialized_variables, no_leading_underscores_for_local_identifiers, deprecated_member_use, depend_on_referenced_packages
 import 'dart:html';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
@@ -22,12 +23,14 @@ Future<List<AreaModel>> loadSvgImage(
     final paths = document.findAllElements('path');
     int index = 0;
     for (var element in paths) {
-      String partId = element.getAttribute('id').toString();
-      String partPath = element.getAttribute('d').toString();
-      String name = element.getAttribute('name').toString();
+      String partId = element.getAttribute('id').toString().trim();
+      String partPath = element.getAttribute('d').toString().trim();
+      String name = element.getAttribute('name').toString().trim();
       String color = element.getAttribute('color')?.toString() ?? 'D7D3D2';
 
-      // int index = areaModels.indexWhere((area) => area.id == partId);
+      int index =
+          areaModels.indexWhere((area) => area.ln.toString().trim() == name);
+
       maps.add(AreaModel(
           ser: areaModels[index].ser.toString(),
           rser: areaModels[index].rser.toString(),
@@ -143,44 +146,69 @@ Future<List<AreaModel>> loadSvgImage(
 
 //   return maps;
 // }
-
 class Clipper extends CustomClipper<Path> {
   Clipper({
     required this.svgPath,
-    required this.width,
-    required this.height,
   });
 
   String svgPath;
-  double width;
-  double height;
 
   @override
   Path getClip(Size size) {
     var path = parseSvgPathData(svgPath);
     final Matrix4 matrix4 = Matrix4.identity();
 
-    matrix4.scale(1.1, 1.1);
+    matrix4.scale(1.0, 1.0, 1.0);
 
-    // Calculate the scaling factors for width and height
-    double scaleX = width / size.width;
-    double scaleY = height / size.height;
-
-    // Apply the scaling transformation
-    matrix4.scale(scaleX, scaleY);
-
-    // Calculate the translation offsets to center the clipped image
-    double offsetX = (size.width - width) / 2;
-    double offsetY = (size.height - height) / 2;
-
-    // Apply the translation transformation
-    matrix4.translate(offsetX, offsetY);
-
-    return path.transform(matrix4.storage);
+    return path.transform(matrix4.storage).shift(const Offset(0, -15));
   }
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
+  bool shouldReclip(CustomClipper oldClipper) {
     return false;
   }
 }
+// class Clipper extends CustomClipper<Path> {
+//   Clipper({
+//     required this.svgPath,
+//     required this.width,
+//     required this.height,
+//   });
+
+//   String svgPath;
+//   double width;
+//   double height;
+
+//   @override
+//   Path getClip(Size size) {
+//     var path = parseSvgPathData(
+//       svgPath,
+//     );
+//     final Matrix4 matrix4 = Matrix4.identity();
+
+//     matrix4.scale(0.958, 0.90);
+
+//     // Calculate the scaling factors for width and height
+//     double scaleX = width / size.width;
+//     double scaleY = height / size.height;
+
+//     // Apply the scaling transformation
+//     matrix4.scale(scaleX, scaleY);
+
+//     // Calculate the translation offsets to center the clipped image
+//     double offsetX = (size.width - width) / 2;
+//     double offsetY = (size.height - height) / 2;
+
+//     // Apply the translation transformation
+//     matrix4.translate(offsetX, offsetY);
+
+//     return path.transform(
+//       matrix4.storage,
+//     );
+//   }
+
+//   @override
+//   bool shouldReclip(CustomClipper<Path> oldClipper) {
+//     return false;
+//   }
+// }

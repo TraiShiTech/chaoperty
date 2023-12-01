@@ -59,10 +59,11 @@ class PdfgenReceipt_PayPakan {
     ///////
     final pdf = pw.Document();
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
-    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
     var Colors_pd = PdfColors.black;
 
     final ttf = pw.Font.ttf(font);
+    double font_Size = 12.0;
     DateTime date = DateTime.now();
     var formatter = new DateFormat.MMMMd('th_TH');
     String thaiDate = formatter.format(date);
@@ -128,7 +129,7 @@ class PdfgenReceipt_PayPakan {
                             '$bill_name ',
                             maxLines: 2,
                             style: pw.TextStyle(
-                              fontSize: 8,
+                              fontSize: 10,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -156,37 +157,41 @@ class PdfgenReceipt_PayPakan {
                         '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                           color: Colors_pd,
                         ),
                       ),
                       pw.Text(
-                        'ที่อยู่: $bill_addr',
+                        (bill_addr == null ||
+                                bill_addr.toString() == 'null' ||
+                                bill_addr.toString() == '')
+                            ? 'ที่อยู่ : -'
+                            : 'ที่อยู่ : $bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           color: Colors_pd,
                           font: ttf,
                         ),
                       ),
                       pw.Text(
-                        'โทรศัพท์: $bill_tel',
+                        'โทรศัพท์ : $bill_tel',
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
                       ),
                       pw.Text(
-                        'อีเมล: $bill_email',
+                        'อีเมล : $bill_email',
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -195,11 +200,11 @@ class PdfgenReceipt_PayPakan {
                         (bill_tax.toString() == '' ||
                                 bill_tax == null ||
                                 bill_tax.toString() == 'null')
-                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
-                            : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
+                            ? 'เลขประจำตัวผู้เสียภาษี : 0'
+                            : 'เลขประจำตัวผู้เสียภาษี : $bill_tax',
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -217,7 +222,7 @@ class PdfgenReceipt_PayPakan {
                       pw.Text(
                         'ใบเสร็จคืนเงินประกัน',
                         style: pw.TextStyle(
-                          fontSize: 10.00,
+                          fontSize: font_Size,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                           color: Colors_pd,
@@ -225,11 +230,11 @@ class PdfgenReceipt_PayPakan {
                       ),
                       pw.Text(
                         (Slip_status.toString() == '1')
-                            ? 'เลขที่ใบแจ้งหนี้: $cFinn '
-                            : 'เลขที่รับชำระ: $cFinn ',
+                            ? 'เลขที่ใบแจ้งหนี้ : $cFinn'
+                            : 'เลขที่รับชำระ : $cFinn',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -239,7 +244,7 @@ class PdfgenReceipt_PayPakan {
                         // 'วันที่ออกบิล: $thaiDate ${DateTime.now().year + 543}',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -263,7 +268,7 @@ class PdfgenReceipt_PayPakan {
                       pw.Text(
                         'ลูกค้า',
                         style: pw.TextStyle(
-                          fontSize: 12.0,
+                          fontSize: font_Size,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                           color: Colors_pd,
@@ -277,7 +282,7 @@ class PdfgenReceipt_PayPakan {
                             : '$Form_bussshop',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -298,11 +303,11 @@ class PdfgenReceipt_PayPakan {
                         (Form_address.toString() == '' ||
                                 Form_address == null ||
                                 Form_address.toString() == 'null')
-                            ? 'ที่อยู่: -'
-                            : 'ที่อยู่: $Form_address',
+                            ? 'ที่อยู่ : -'
+                            : 'ที่อยู่ : $Form_address',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -311,11 +316,11 @@ class PdfgenReceipt_PayPakan {
                         (Form_tax.toString() == '' ||
                                 Form_tax == null ||
                                 Form_tax.toString() == 'null')
-                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
-                            : 'เลขประจำตัวผู้เสียภาษี: $Form_tax',
+                            ? 'เลขประจำตัวผู้เสียภาษี : 0'
+                            : 'เลขประจำตัวผู้เสียภาษี : $Form_tax',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -334,7 +339,7 @@ class PdfgenReceipt_PayPakan {
                     'รูปแบบชำระ ',
                     textAlign: pw.TextAlign.justify,
                     style: pw.TextStyle(
-                      fontSize: 10.0,
+                      fontSize: font_Size,
                       font: ttf,
                       fontWeight: pw.FontWeight.bold,
                       color: Colors_pd,
@@ -366,7 +371,7 @@ class PdfgenReceipt_PayPakan {
                                 : '1.เงินโอน : ${nFormat.format(double.parse('${sum_Pakan_KF + sum_ST}'))} บาท     (~${convertToThaiBaht(double.parse('${sum_Pakan_KF + sum_ST}'))}~)',
                             textAlign: pw.TextAlign.justify,
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               fontWeight: pw.FontWeight.bold,
                               color: Colors_pd,
@@ -380,7 +385,7 @@ class PdfgenReceipt_PayPakan {
                                 : '1.$paymentName1 : ${nFormat.format(double.parse(Form_payment1.text)) == '0.00' ? '${nFormat.format(sum_Pakan - sum_ST)}' : '${nFormat.format(double.parse(Form_payment1.text))}'} บาท     (~${convertToThaiBaht(double.parse('${nFormat.format(double.parse(Form_payment1.text)) == '0.00' ? sum_Pakan - sum_ST : Form_payment1.text}'))}~)',
                             textAlign: pw.TextAlign.justify,
                             style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               fontWeight: pw.FontWeight.bold,
                               color: Colors_pd,
@@ -408,7 +413,7 @@ class PdfgenReceipt_PayPakan {
                           maxLines: 1,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                            fontSize: 10.0,
+                            fontSize: font_Size,
                             fontWeight: pw.FontWeight.bold,
                             font: ttf,
                             color: Colors_pd,
@@ -427,7 +432,7 @@ class PdfgenReceipt_PayPakan {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -445,7 +450,7 @@ class PdfgenReceipt_PayPakan {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -475,7 +480,7 @@ class PdfgenReceipt_PayPakan {
                           maxLines: 2,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -499,7 +504,7 @@ class PdfgenReceipt_PayPakan {
                             maxLines: 2,
                             textAlign: pw.TextAlign.right,
                             style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 color: PdfColors.grey800),
                           ),
@@ -522,7 +527,7 @@ class PdfgenReceipt_PayPakan {
                             maxLines: 2,
                             textAlign: pw.TextAlign.right,
                             style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 color: PdfColors.grey800),
                           ),
@@ -549,7 +554,7 @@ class PdfgenReceipt_PayPakan {
                           maxLines: 2,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -573,7 +578,7 @@ class PdfgenReceipt_PayPakan {
                             maxLines: 2,
                             textAlign: pw.TextAlign.right,
                             style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 color: PdfColors.grey800),
                           ),
@@ -596,7 +601,7 @@ class PdfgenReceipt_PayPakan {
                             maxLines: 2,
                             textAlign: pw.TextAlign.right,
                             style: pw.TextStyle(
-                                fontSize: 10.0,
+                                fontSize: font_Size,
                                 font: ttf,
                                 color: PdfColors.grey800),
                           ),
@@ -622,7 +627,7 @@ class PdfgenReceipt_PayPakan {
                               child: pw.Text(
                                 'รวมราคาสินค้า/Sub Total',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -633,7 +638,7 @@ class PdfgenReceipt_PayPakan {
                               // '${sum_pvat}',
                               // '$SubTotal',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -646,7 +651,7 @@ class PdfgenReceipt_PayPakan {
                               child: pw.Text(
                                 'ภาษีมูลค่าเพิ่ม/Vat',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -657,7 +662,7 @@ class PdfgenReceipt_PayPakan {
                               // '${sum_vat}',
                               // '$Vat',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -670,7 +675,7 @@ class PdfgenReceipt_PayPakan {
                               child: pw.Text(
                                 'หัก ณ ที่จ่าย',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -681,7 +686,7 @@ class PdfgenReceipt_PayPakan {
                               // '${sum_wht}',
                               // '$Deduct',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -694,7 +699,7 @@ class PdfgenReceipt_PayPakan {
                               child: pw.Text(
                                 'ยอดรวม',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -704,7 +709,7 @@ class PdfgenReceipt_PayPakan {
                               '${nFormat.format(sum_Pakan_KF + sum_ST)}',
                               // '$Sum_SubTotal',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -717,7 +722,7 @@ class PdfgenReceipt_PayPakan {
                               child: pw.Text(
                                 'ส่วนลด/Discount',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -728,7 +733,7 @@ class PdfgenReceipt_PayPakan {
                               // '${sum_disamt}',
                               // '$DisC',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -746,7 +751,7 @@ class PdfgenReceipt_PayPakan {
                               child: pw.Text(
                                 'ยอดคืนเงินประกัน',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -763,7 +768,7 @@ class PdfgenReceipt_PayPakan {
                                       ? '0.00'
                                       : '${nFormat.format(sum_Pakan - sum_ST)}',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -776,7 +781,7 @@ class PdfgenReceipt_PayPakan {
                               child: pw.Text(
                                 'ยอดชำระ',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -790,7 +795,7 @@ class PdfgenReceipt_PayPakan {
                                   ? '${nFormat.format(sum_Pakan - sum_ST > 0 ? 0 : sum_ST - sum_Pakan)}'
                                   : '${nFormat.format(sum_ST - sum_Pakan)}',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -820,7 +825,7 @@ class PdfgenReceipt_PayPakan {
                       pw.Text(
                         'ตัวอักษร ',
                         style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: font_Size,
                             fontWeight: pw.FontWeight.bold,
                             font: ttf,
                             fontStyle: pw.FontStyle.italic,
@@ -842,7 +847,7 @@ class PdfgenReceipt_PayPakan {
                               ? '(~${convertToThaiBaht(double.parse(('${nFormat.format(sum_Pakan - sum_ST > 0 ? 0 : (sum_ST - sum_Pakan))}' == '0.00 ') ? '${sum_Pakan - sum_ST > 0 ? 0 : sum_ST - sum_Pakan}' : '${sum_ST - sum_Pakan}'))}~)'
                               : '(~${convertToThaiBaht(double.parse(transPakanModels.length == 0 ? _TransModels.length == 0 ? '0.00' : sum_Pakan - sum_ST < 0 ? '0.00' : '${sum_Pakan - sum_ST}' : sum_Pakan - sum_ST < 0 ? '0.00' : '${sum_Pakan - sum_ST}'))}~)',
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: font_Size,
                             fontWeight: pw.FontWeight.bold,
                             font: ttf,
                             fontStyle: pw.FontStyle.italic,
@@ -869,7 +874,7 @@ class PdfgenReceipt_PayPakan {
                                     style: pw.TextStyle(
                                         fontWeight: pw.FontWeight.bold,
                                         font: ttf,
-                                        fontSize: 10,
+                                        fontSize: font_Size,
                                         color: PdfColors.green900),
                                   ),
                                 ),
@@ -892,7 +897,7 @@ class PdfgenReceipt_PayPakan {
                                   style: pw.TextStyle(
                                       fontWeight: pw.FontWeight.bold,
                                       font: ttf,
-                                      fontSize: 10,
+                                      fontSize: font_Size,
                                       color: PdfColors.green900),
                                 ),
                               ],
@@ -931,7 +936,7 @@ class PdfgenReceipt_PayPakan {
                                       'หมายเหตุ',
                                       textAlign: pw.TextAlign.center,
                                       style: pw.TextStyle(
-                                          fontSize: 10,
+                                          fontSize: font_Size,
                                           font: ttf,
                                           color: Colors_pd,
                                           fontWeight: pw.FontWeight.bold),
@@ -942,7 +947,7 @@ class PdfgenReceipt_PayPakan {
                                       textAlign: pw.TextAlign.center,
                                       // maxLines: 1,
                                       style: pw.TextStyle(
-                                        fontSize: 10,
+                                        fontSize: font_Size,
                                         font: ttf,
                                         color: Colors_pd,
                                       ),
@@ -962,7 +967,7 @@ class PdfgenReceipt_PayPakan {
                                       'ผู้รับเงิน',
                                       textAlign: pw.TextAlign.left,
                                       style: pw.TextStyle(
-                                          fontSize: 10,
+                                          fontSize: font_Size,
                                           font: ttf,
                                           color: Colors_pd,
                                           fontWeight: pw.FontWeight.bold),
@@ -973,7 +978,7 @@ class PdfgenReceipt_PayPakan {
                                       textAlign: pw.TextAlign.left,
                                       maxLines: 1,
                                       style: pw.TextStyle(
-                                        fontSize: 10,
+                                        fontSize: font_Size,
                                         font: ttf,
                                         color: Colors_pd,
                                       ),
@@ -983,7 +988,7 @@ class PdfgenReceipt_PayPakan {
                                       'วันที่........../........../..........',
                                       textAlign: pw.TextAlign.center,
                                       style: pw.TextStyle(
-                                        fontSize: 10,
+                                        fontSize: font_Size,
                                         font: ttf,
                                         color: Colors_pd,
                                       ),

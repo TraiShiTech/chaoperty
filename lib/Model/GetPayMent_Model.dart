@@ -18,27 +18,36 @@ class PayMentModel {
   String? dataUpdate;
   String? auto;
   String? ser_payweb;
+  String? img;
+  String? fine;
+  String? fine_c;
+  String? fine_a;
 
-  PayMentModel(
-      {this.ser,
-      this.datex,
-      this.timex,
-      this.ptser,
-      this.ptname,
-      this.bser,
-      this.bank,
-      this.bno,
-      this.bname,
-      this.bsaka,
-      this.btser,
-      this.btype,
-      this.st,
-      this.rser,
-      this.accode,
-      this.co,
-      this.dataUpdate,
-      this.ser_payweb,
-      this.auto});
+  PayMentModel({
+    this.ser,
+    this.datex,
+    this.timex,
+    this.ptser,
+    this.ptname,
+    this.bser,
+    this.bank,
+    this.bno,
+    this.bname,
+    this.bsaka,
+    this.btser,
+    this.btype,
+    this.st,
+    this.rser,
+    this.accode,
+    this.co,
+    this.dataUpdate,
+    this.ser_payweb,
+    this.auto,
+    this.img,
+    this.fine,
+    this.fine_c,
+    this.fine_a,
+  });
 
   PayMentModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -60,6 +69,10 @@ class PayMentModel {
     dataUpdate = json['data_update'];
     auto = json['auto'];
     ser_payweb = json['ser_payweb'];
+    img = json['img'];
+    fine = json['fine'];
+    fine_c = json['fine_c'];
+    fine_a = json['fine_a'];
   }
 
   Map<String, dynamic> toJson() {
@@ -83,6 +96,10 @@ class PayMentModel {
     data['data_update'] = this.dataUpdate;
     data['auto'] = this.auto;
     data['ser_payweb'] = this.ser_payweb;
+    data['img'] = this.img;
+    data['fine'] = this.fine;
+    data['fine_c'] = this.fine_c;
+    data['fine_a'] = this.fine_a;
 
     return data;
   }

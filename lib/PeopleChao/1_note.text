@@ -3,24 +3,24 @@ Tap รับชำระ  >>>
 ||
 || 
 
-    (Default_Receipt_type == 1)
-            ? Show_Dialog()
-            :Receipt_Tempage(
-                tableData00, newValuePDFimg);
+ 
 ||||||||||||--------------- รายการยังไม่วางบิล  select_page = 0 ; ---------------------------------->
 
----> พิมพ์ใบเสร็จชั่วคราว    ==>> (ผ่าน) (  _TransModels  ) ==>> ( in_Trans_invoice_P ) ==>> ( Pdfgen_Temporary_receipt.exportPDF_Temporary_receipt ) 
----> รับชำระ  ==>> (ผ่าน) (  _TransModels  ) ==>> ( in_Trans_invoice ) ==>> ( Pdf_genReceipt.exportPDF_Receipt )  
+---> พิมพ์ใบเสร็จชั่วคราว    ==>> (ผ่าน) (  _TransModels  ) ==>> ( in_Trans_invoice_P ) ==>>  (Receipt_Tempage_Temporary) ==>> ( Pdfgen_Temporary_receipt.exportPDF_Temporary_receipt ) 
+
+---> รับชำระ  ==>> (ผ่าน) (  _TransModels  ) ==>> ( in_Trans_invoice ) ==>> (Receipt_Tempage) ==>> ( Pdf_genReceipt.exportPDF_Receipt )  
 
 
 ||||||||||||----------------- รายการวางบิล  select_page = 1 ;   ----------------------------------->
 
----> พิมพ์ใบเสร็จชั่วคราว  ==>> (ผ่าน) ( _InvoiceHistoryModels ) ==>> ( in_Trans_invoice_refno_p ) ==>>   ( Pdfgen_Temporary_receipt.exportPDF_Temporary_receipt )
----> รับชำระ           ==>>  (ผ่าน) ( _InvoiceHistoryModels ) ==>> ( in_Trans_invoice_refno )   ==>>  ( Pdf_genReceipt.exportPDF_Receipt )
+---> พิมพ์ใบเสร็จชั่วคราว  ==>> (ผ่าน) ( _InvoiceHistoryModels ) ==>> ( in_Trans_invoice_refno_p ) ==>>   (Receipt_Tempage_Temporary) ==>> ( Pdfgen_Temporary_receipt.exportPDF_Temporary_receipt )
+
+---> รับชำระ           ==>>  (ผ่าน) ( _InvoiceHistoryModels ) ==>> ( in_Trans_invoice_refno )   ==>>  (Receipt_Tempage) ==>> ( Pdf_genReceipt.exportPDF_Receipt )
 
 ||||||||||||------------------- ใบเสร็จชั่วคราว  select_page = 2 ; --------------------------------->
   
----> พิมพ์ซ้ำ   ==>>  (ผ่าน)  (_TransReBillHistoryModels)   ==>>     ( in_Trans_re_invoice_refno  )      ==>>  ( Pdfgen_Temporary_receipt.exportPDF_Temporary_receipt )
----> รับชำระ    ==>>  (ผ่าน)  (_TransReBillHistoryModels )    ==>>   (  in_Trans_re_invoice_refno )     ==>>   (  Pdf_genReceipt.exportPDF_Receipt   )
+---> พิมพ์ซ้ำ   ==>>  (ผ่าน)  (_TransReBillHistoryModels)   ==>>     ( in_Trans_re_invoice_refno  )   ==>>  (Receipt_Tempage_Temporary) ==>> ( Pdfgen_Temporary_receipt.exportPDF_Temporary_receipt )
+
+---> รับชำระ    ==>>  (ผ่าน)  (_TransReBillHistoryModels )    ==>>   (  in_Trans_re_invoice_refno )  ==>>   (Receipt_Tempage) ==>>    (  Pdf_genReceipt.exportPDF_Receipt   )
 
 ||||||||||||---------------------------------------------------->

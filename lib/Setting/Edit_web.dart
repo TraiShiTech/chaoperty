@@ -1126,8 +1126,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                           content:
                                                               SingleChildScrollView(
                                                             child: ListBody(
-                                                              children: const <
-                                                                  Widget>[
+                                                              children: const <Widget>[
                                                                 Text(
                                                                   'มีหน้าปก หากต้องการอัพโหลดกรุณาลบรูปหน้าปกที่มีอยู่แล้วก่อน',
                                                                   style: TextStyle(
@@ -1777,8 +1776,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                             content:
                                                                 SingleChildScrollView(
                                                               child: ListBody(
-                                                                children: const <
-                                                                    Widget>[
+                                                                children: const <Widget>[
                                                                   Text(
                                                                     'มีหน้าปก หากต้องการอัพโหลดกรุณาลบรูปหน้าปกที่มีอยู่แล้วก่อน',
                                                                     style: TextStyle(

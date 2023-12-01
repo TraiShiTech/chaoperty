@@ -40,10 +40,8 @@ import '../Model/GetUnit_Model.dart';
 import '../Model/GetUnitx_Model.dart';
 import '../Model/GetVat_Model.dart';
 import '../Model/GetWht_Model.dart';
-
 import '../PDF/PDF_Agreement/pdf_Agreement.dart';
-
-import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
+import '../PeopleChao/Pays_.dart';
 import '../PeopleChao/Rental_Information.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
@@ -830,267 +828,255 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                           children: <Widget>[
                                             StreamBuilder(
                                                 stream: Stream.periodic(
-                                                    const Duration(seconds: 1)),
+                                                    const Duration(seconds: 0)),
                                                 builder: (context, snapshot) {
-                                                  return Container(
-                                                    width: 500,
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                            // width: 1050,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color: AppbackgroundColor
-                                                                  .TiTile_Colors,
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          0),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          0)),
-                                                            ),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Row(
-                                                                children: [
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'รหัสพื้นที่',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              AccountScreen_Color.Colors_Text1_,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                          //fontSize: 10.0
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'ชื่อพื้นที่',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              AccountScreen_Color.Colors_Text1_,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                          //fontSize: 10.0
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'โซน',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              AccountScreen_Color.Colors_Text1_,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                          //fontSize: 10.0
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ])),
+                                                  // return Container(
+                                                  //   width:
+                                                  //       MediaQuery.of(context)
+                                                  //           .size
+                                                  //           .width,
+                                                  //   height: 600,
+                                                  //   child: GridView.builder(
+                                                  //     itemCount:
+                                                  //         areaModels.length,
+                                                  //     gridDelegate:
+                                                  //         SliverGridDelegateWithFixedCrossAxisCount(
+                                                  //       crossAxisCount: MediaQuery.of(
+                                                  //                       context)
+                                                  //                   .size
+                                                  //                   .shortestSide <
+                                                  //               MediaQuery.of(
+                                                  //                           context)
+                                                  //                       .size
+                                                  //                       .width *
+                                                  //                   1
+                                                  //           ? 14
+                                                  //           : 8,
+                                                  //     ),
+                                                  //     itemBuilder: (_, i) {
+                                                  //       return Column(
+                                                  //         crossAxisAlignment:
+                                                  //             CrossAxisAlignment
+                                                  //                 .center,
+                                                  //         mainAxisAlignment:
+                                                  //             MainAxisAlignment
+                                                  //                 .center,
+                                                  //         children: [
+                                                  //           Container(
+                                                  //             // color: _selecteSerbool
+                                                  //             //             .map((e) => e == areaModels[i].lncode
+                                                  //             //                 ? e
+                                                  //             //                 : '')
+                                                  //             //             .toString()
+                                                  //             //             .substring(
+                                                  //             //                 1,
+                                                  //             //                 _selecteSerbool.map((e) => e == areaModels[i].lncode ? e : '').toString().length -
+                                                  //             //                     1) ==
+                                                  //             //         areaModels[
+                                                  //             //                 i]
+                                                  //             //             .lncode
+                                                  //             //     ? Colors.green
+                                                  //             //         .shade300
+                                                  //             //     : Colors
+                                                  //             //         .white,
+                                                  //             child:
+                                                  //                 CheckboxGroup(
+                                                  //               checked:
+                                                  //                   _selecteSerbool,
+                                                  //               labels: <String>[
+                                                  //                 '${areaModels[i].lncode}',
+                                                  //               ],
+                                                  //               labelStyle:
+                                                  //                   const TextStyle(
+                                                  //                 color: PeopleChaoScreen_Color
+                                                  //                     .Colors_Text2_,
+                                                  //                 // fontWeight: FontWeight.bold,
+                                                  //                 fontFamily: Font_
+                                                  //                     .Fonts_T,
+                                                  //               ),
+                                                  //               onChange:
+                                                  //                   (isChecked,
+                                                  //                       label,
+                                                  //                       index) {
+                                                  //                 if (isChecked ==
+                                                  //                     false) {
+                                                  //                   _selecteSer.remove(
+                                                  //                       areaModels[index]
+                                                  //                           .ser);
+
+                                                  //                   double
+                                                  //                       areax =
+                                                  //                       double.parse(
+                                                  //                           areaModels[index].area!);
+                                                  //                   double
+                                                  //                       rentx =
+                                                  //                       double.parse(
+                                                  //                           areaModels[index].rent!);
+                                                  //                   _area_sum =
+                                                  //                       _area_sum -
+                                                  //                           areax;
+                                                  //                   _area_rent_sum =
+                                                  //                       _area_rent_sum -
+                                                  //                           rentx;
+
+                                                  //                   if (isChecked ==
+                                                  //                       true) {
+                                                  //                     setState(
+                                                  //                         () {
+                                                  //                       _area_sum =
+                                                  //                           _area_sum +
+                                                  //                               areax;
+                                                  //                       _area_rent_sum =
+                                                  //                           _area_rent_sum +
+                                                  //                               rentx;
+                                                  //                       _selecteSer
+                                                  //                           .add(areaModels[index].ser);
+                                                  //                     });
+                                                  //                   }
+                                                  //                 } else {
+                                                  //                   double
+                                                  //                       areax =
+                                                  //                       double.parse(
+                                                  //                           areaModels[index].area!);
+                                                  //                   double
+                                                  //                       rentx =
+                                                  //                       double.parse(
+                                                  //                           areaModels[index].rent!);
+                                                  //                   if (isChecked ==
+                                                  //                       true) {
+                                                  //                     setState(
+                                                  //                         () {
+                                                  //                       _area_sum =
+                                                  //                           _area_sum +
+                                                  //                               areax;
+                                                  //                       _area_rent_sum =
+                                                  //                           _area_rent_sum +
+                                                  //                               rentx;
+                                                  //                       _selecteSer
+                                                  //                           .add(areaModels[index].ser);
+                                                  //                     });
+                                                  //                   }
+                                                  //                 }
+                                                  //                 print(
+                                                  //                     'เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
+                                                  //               },
+                                                  //               onSelected: (List<
+                                                  //                       String>
+                                                  //                   selected) {
+                                                  //                 setState(() {
+                                                  //                   _selecteSerbool =
+                                                  //                       selected;
+                                                  //                 });
+                                                  //                 print(
+                                                  //                     'SerGetBankModels_ : ${_selecteSerbool}');
+                                                  //               },
+                                                  //             ),
+                                                  //           ),
+                                                  //         ],
+                                                  //       );
+                                                  //     },
+                                                  //   ),
+                                                  // );
+
+                                                  return CheckboxGroup(
+                                                      checked: _selecteSerbool,
+                                                      activeColor: Colors.red,
+                                                      checkColor: Colors.white,
+                                                      labels: <String>[
                                                         for (var i = 0;
                                                             i <
                                                                 areaModels
                                                                     .length;
                                                             i++)
-                                                          Row(
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    CheckboxGroup(
-                                                                        checked:
-                                                                            _selecteSerbool,
-                                                                        activeColor:
-                                                                            Colors
-                                                                                .red,
-                                                                        checkColor:
-                                                                            Colors
-                                                                                .white,
-                                                                        labels: <String>[
-                                                                          '${areaModels[i].ln}',
-                                                                        ],
-                                                                        labelStyle:
-                                                                            const TextStyle(
-                                                                          color:
-                                                                              PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T,
-                                                                        ),
-                                                                        onChange: (isChecked,
-                                                                            label,
-                                                                            index) {
-                                                                          print(
-                                                                              'index----index ---- > ${index}  // ${i}');
-
-                                                                          if (isChecked ==
-                                                                              false) {
-                                                                            print('false----ser ---- > ${areaModels[index].ser}');
-                                                                            _selecteSer.remove(areaModels[index].ser);
-
-                                                                            double
-                                                                                areax =
-                                                                                double.parse(areaModels[index].area!);
-                                                                            double
-                                                                                rentx =
-                                                                                double.parse(areaModels[index].rent!);
-                                                                            _area_sum =
-                                                                                _area_sum - areax;
-                                                                            _area_rent_sum =
-                                                                                _area_rent_sum - rentx;
-
-                                                                            if (isChecked ==
-                                                                                true) {
-                                                                              setState(() {
-                                                                                _area_sum = _area_sum + areax;
-                                                                                _area_rent_sum = _area_rent_sum + rentx;
-                                                                                _selecteSer.add(areaModels[index].ser);
-                                                                              });
-                                                                            }
-                                                                          } else {
-                                                                            print('true----ser ---- > ${areaModels[index].ser}');
-                                                                            double
-                                                                                areax =
-                                                                                double.parse(areaModels[index].area!);
-                                                                            double
-                                                                                rentx =
-                                                                                double.parse(areaModels[index].rent!);
-                                                                            if (isChecked ==
-                                                                                true) {
-                                                                              setState(() {
-                                                                                _area_sum = _area_sum + areax;
-                                                                                _area_rent_sum = _area_rent_sum + rentx;
-                                                                                _selecteSer.add(areaModels[index].ser);
-                                                                              });
-                                                                            }
-                                                                          }
-                                                                          print(
-                                                                              'เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
-                                                                        },
-                                                                        onSelected:
-                                                                            (List<String>
-                                                                                selected) {
-                                                                          // int selectedIndex = areaModels.indexWhere((item) =>
-                                                                          //     item.ln ==
-                                                                          //     selected);
-                                                                          setState(
-                                                                              () {
-                                                                            _selecteSerbool =
-                                                                                selected;
-                                                                          });
-                                                                          print(
-                                                                              'SerGetBankModels_ : ${_selecteSerbool}');
-                                                                        }),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              8.0),
-                                                                  child: Text(
-                                                                    '${areaModels[i].lncode}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AccountScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      // fontWeight:
-                                                                      //     FontWeight
-                                                                      //         .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
-                                                                      //fontSize: 10.0
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              8.0),
-                                                                  child: Text(
-                                                                    '${areaModels[i].zn} (${areaModels[i].ser})',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AccountScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      // fontWeight:
-                                                                      //     FontWeight
-                                                                      //         .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
-                                                                      //fontSize: 10.0
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
+                                                          '${areaModels[i].lncode}',
                                                       ],
-                                                    ),
-                                                  );
+                                                      labelStyle:
+                                                          const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                      onChange: (isChecked,
+                                                          label, index) {
+                                                        if (isChecked ==
+                                                            false) {
+                                                          _selecteSer.remove(
+                                                              areaModels[index]
+                                                                  .ser);
+
+                                                          double areax =
+                                                              double.parse(
+                                                                  areaModels[
+                                                                          index]
+                                                                      .area!);
+                                                          double rentx =
+                                                              double.parse(
+                                                                  areaModels[
+                                                                          index]
+                                                                      .rent!);
+                                                          _area_sum =
+                                                              _area_sum - areax;
+                                                          _area_rent_sum =
+                                                              _area_rent_sum -
+                                                                  rentx;
+
+                                                          if (isChecked ==
+                                                              true) {
+                                                            setState(() {
+                                                              _area_sum =
+                                                                  _area_sum +
+                                                                      areax;
+                                                              _area_rent_sum =
+                                                                  _area_rent_sum +
+                                                                      rentx;
+                                                              _selecteSer.add(
+                                                                  areaModels[
+                                                                          index]
+                                                                      .ser);
+                                                            });
+                                                          }
+                                                        } else {
+                                                          double areax =
+                                                              double.parse(
+                                                                  areaModels[
+                                                                          index]
+                                                                      .area!);
+                                                          double rentx =
+                                                              double.parse(
+                                                                  areaModels[
+                                                                          index]
+                                                                      .rent!);
+                                                          if (isChecked ==
+                                                              true) {
+                                                            setState(() {
+                                                              _area_sum =
+                                                                  _area_sum +
+                                                                      areax;
+                                                              _area_rent_sum =
+                                                                  _area_rent_sum +
+                                                                      rentx;
+                                                              _selecteSer.add(
+                                                                  areaModels[
+                                                                          index]
+                                                                      .ser);
+                                                            });
+                                                          }
+                                                        }
+                                                        print(
+                                                            'เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
+                                                      },
+                                                      onSelected: (List<String>
+                                                          selected) {
+                                                        setState(() {
+                                                          _selecteSerbool =
+                                                              selected;
+                                                        });
+                                                        print(
+                                                            'SerGetBankModels_ : ${_selecteSerbool}');
+                                                      });
                                                 })
                                           ],
                                         ),
@@ -1098,30 +1084,24 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                       actions: <Widget>[
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Column(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
                                             children: [
-                                              const SizedBox(height: 1),
-                                              const Divider(),
-                                              const SizedBox(height: 1),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Container(
-                                                          width: 100,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: Colors.green,
-                                                            borderRadius: BorderRadius.only(
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                      width: 100,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.green,
+                                                        borderRadius:
+                                                            BorderRadius.only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -1134,82 +1114,74 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 bottomRight: Radius
                                                                     .circular(
                                                                         10)),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: TextButton(
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            read_GC_areaSelectSer();
+                                                          });
+                                                          Navigator.pop(
+                                                              context, 'OK');
+                                                        },
+                                                        child: const Text(
+                                                          'บันทึก',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
                                                           ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: TextButton(
-                                                            onPressed: () {
-                                                              setState(() {
-                                                                read_GC_areaSelectSer();
-                                                              });
-                                                              Navigator.pop(
-                                                                  context,
-                                                                  'OK');
-                                                            },
-                                                            child: const Text(
-                                                              'บันทึก',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: 100,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.black,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: TextButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                        setState(() {
-                                                          cQuotModels.clear();
-                                                          _selecteSer.clear();
-                                                          _selecteSerbool
-                                                              .clear();
-                                                        });
-                                                      },
-                                                      child: const Text(
-                                                        'ยกเลิก',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
                                                         ),
                                                       ),
                                                     ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 100,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.black,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                      cQuotModels.clear();
+                                                      _selecteSer.clear();
+                                                      _selecteSerbool.clear();
+                                                    });
+                                                  },
+                                                  child: const Text(
+                                                    'ยกเลิก',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                    ),
                                                   ),
-                                                ],
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -6920,8 +6892,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       flex: 6,
                                                                       child:
                                                                           Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -6949,8 +6922,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       flex: 1,
                                                                       child:
                                                                           Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -6983,7 +6957,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .fromLTRB(
+                                                                        .fromLTRB(
                                                                         8,
                                                                         0,
                                                                         8,
@@ -10191,12 +10165,12 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                                                             color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                                                                             // fontWeight: FontWeight.bold,
                                                                                                                             fontFamily: Font_.Fonts_T)),
-                                                                                                                    inputFormatters: <TextInputFormatter>[
-                                                                                                                      // for below version 2 use this
-                                                                                                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                                                                                                      // for version 2 and greater youcan also use this
-                                                                                                                      FilteringTextInputFormatter.digitsOnly
-                                                                                                                    ],
+                                                                                                                    // inputFormatters: <TextInputFormatter>[
+                                                                                                                    //   // for below version 2 use this
+                                                                                                                    //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                                                    //   // for version 2 and greater youcan also use this
+                                                                                                                    //   FilteringTextInputFormatter.digitsOnly
+                                                                                                                    // ],
                                                                                                                   ),
                                                                                                                 ],
                                                                                                               ),
@@ -10793,7 +10767,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -10860,7 +10834,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -10937,7 +10911,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -11702,8 +11676,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -11729,8 +11704,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -11925,7 +11901,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -11992,7 +11968,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -12068,7 +12044,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -13137,7 +13113,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   // ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       AutoSizeText(
@@ -13466,6 +13442,12 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
             Sub_Body4_Web(),
             const SizedBox(
               height: 20,
+            ),
+            Pays(
+              Get_Value_cid: Get_Value_cid,
+              Get_Value_NameShop_index: '1',
+              namenew: _Form_nameshop,
+              can: 'A',
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -14263,7 +14245,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               color: Colors
                                                                   .red[600],
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -15333,7 +15315,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -15383,7 +15365,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                       color: Colors.white,
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(8),
                                                               topRight: Radius
@@ -15456,7 +15438,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -15465,7 +15447,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         decoration: BoxDecoration(
                                                                           color:
                                                                               Colors.red[600],
-                                                                          borderRadius: const BorderRadius.only(
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
                                                                               topLeft: Radius.circular(10),
                                                                               topRight: Radius.circular(10),
                                                                               bottomLeft: Radius.circular(10),
@@ -15500,7 +15483,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(

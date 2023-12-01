@@ -5,9 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_easy_table/flutter_easy_table.dart';
-
-import 'package:scroll_pos/scroll_pos.dart';
+// import 'package:flutter_easy_table/flutter_easy_table.dart';
 
 class Singleimage extends StatefulWidget {
   const Singleimage({

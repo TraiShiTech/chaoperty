@@ -20,6 +20,7 @@ import 'package:http/http.dart' as http;
 import '../CRC_16_Prompay/generate_qrcode.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
+import '../Man_PDF/Man_Pay_Receipt_PDF.dart';
 import '../Model/GetArea_Model.dart';
 import '../Model/GetCFinnancetrans_Model.dart';
 import '../Model/GetCustomer_Model.dart';
@@ -32,8 +33,13 @@ import '../Model/GetType_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/areak_model.dart';
 import '../Model/trans_re_bill_model.dart';
-import '../PDF/pdf_LockReceipt.dart';
-import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
+import '../PDF/PDF_Receipt/pdf_LockReceipt.dart';
+
+import '../PDF_TP2/PDF_Receipt_TP2/pdf_LockReceipt_TP2.dart';
+import '../PDF_TP3/PDF_Receipt_TP3/pdf_LockReceipt_TP3.dart';
+import '../PDF_TP4/PDF_Receipt_TP4/pdf_LockReceipt_TP4.dart';
+import '../PDF_TP5/PDF_Receipt_TP5/pdf_LockReceipt_TP5.dart';
+import '../PDF_TP6/PDF_Receipt_TP6/pdf_LockReceipt_TP6.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'dart:html' as html;
@@ -100,6 +106,20 @@ class _LockpayScreenState extends State<LockpayScreen> {
     'บิลธรรมดา',
     'ใบกำกับภาษี',
   ];
+  ////////------------------------------------>
+  int Default_Receipt_type = 0;
+  int TitleType_Default_Receipt = 0;
+  List Default_Receipt_ = [
+    'ออกใบเสร็จ',
+    'ไม่ออกใบเสร็จ',
+  ];
+
+  List TitleType_Default_Receipt_ = [
+    'ไม่ระบุ',
+    'ต้นฉบับ',
+    'สำเนา',
+  ];
+  ////////------------------------------------>
   String? teNantcid, teNantsname, teNantnamenew;
   String? rtname,
       type,
@@ -194,10 +214,11 @@ class _LockpayScreenState extends State<LockpayScreen> {
       Value_newDateY1 = '',
       Value_newDateD1 = '';
   DateTime newDatetime = DateTime.now();
-  String? name_slip, name_slip_ser;
+  String? name_slip, name_slip_ser, tem_page_ser;
   String? base64_Slip, fileName_Slip, Slip_status;
   List<ExpModel> expModels = [];
   List<TransModel> _TransModels = [];
+
   @override
   void initState() {
     super.initState();
@@ -549,6 +570,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
             bill_email = bill_emailx;
             bill_default = bill_defaultx;
             bill_tser = bill_tserx;
+            tem_page_ser = renTalModel.tem_page!.trim();
             renTalModels.add(renTalModel);
             if (bill_defaultx == 'P') {
               bills_name_ = 'บิลธรรมดา';
@@ -1732,7 +1754,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                 color: AppbackgroundColor
                                                                     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                    .only(
+                                                                        .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             10),
@@ -2331,8 +2353,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                           BoxDecoration(
                                                                         color: AppbackgroundColor
                                                                             .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius
-                                                                            .only(
+                                                                        borderRadius: const BorderRadius.only(
                                                                             topLeft:
                                                                                 Radius.circular(10),
                                                                             topRight: Radius.circular(10),
@@ -2343,9 +2364,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                                 Colors.black,
                                                                             width: 1),
                                                                       ),
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           AutoSizeText(
                                                                         minFontSize:
@@ -4862,10 +4883,199 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       height: 50,
                                       color: AppbackgroundColor.Sub_Abg_Colors,
                                       padding: const EdgeInsets.all(8.0),
-                                      child: const Center(
+                                      child: Text(
+                                        'ยอดชำระรวม',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Colors.red[50]!.withOpacity(0.5),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(8),
+                                            topRight: Radius.circular(8),
+                                            bottomLeft: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          ),
+                                          // border: Border.all(
+                                          //     color: Colors.grey, width: 1),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            '${nFormat.format(sum_amt - sum_disamt)}',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'ใบเสร็จ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: DropdownButtonFormField2(
+                                        alignment: Alignment.center,
+                                        focusColor: Colors.white,
+                                        autofocus: false,
+                                        decoration: InputDecoration(
+                                          enabled: true,
+                                          hoverColor: Colors.brown,
+                                          prefixIconColor: Colors.blue,
+                                          fillColor:
+                                              Colors.white.withOpacity(0.05),
+                                          filled: false,
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.zero,
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Colors.red),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(10),
+                                              topLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Color.fromARGB(
+                                                  255, 231, 227, 227),
+                                            ),
+                                          ),
+                                        ),
+                                        hint: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Text(
+                                            '${Default_Receipt_[Default_Receipt_type]}',
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+
+                                        isExpanded: false,
+                                        // value: Default_Receipt_type == 0 ?''
+                                        // :'',
+                                        icon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: Colors.black,
+                                        ),
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                        iconSize: 20,
+                                        buttonHeight: 40,
+                                        buttonWidth: 250,
+                                        // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                        dropdownDecoration: BoxDecoration(
+                                          // color: Colors
+                                          //     .amber,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: Colors.white, width: 1),
+                                        ),
+                                        items: Default_Receipt_.map((item) =>
+                                            DropdownMenuItem<String>(
+                                              value: '${item}',
+                                              child: Text(
+                                                '${item}',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            )).toList(),
+
+                                        onChanged: (value) async {
+                                          int selectedIndex =
+                                              Default_Receipt_.indexWhere(
+                                                  (item) => item == value);
+
+                                          setState(() {
+                                            Default_Receipt_type =
+                                                selectedIndex;
+                                            TitleType_Default_Receipt = 0;
+                                          });
+
+                                          print(
+                                              '${selectedIndex}////$value  ////----> $Default_Receipt_type');
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  if (Default_Receipt_[Default_Receipt_type]
+                                          .toString() ==
+                                      'ออกใบเสร็จ')
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        height: 40,
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          'ยอดชำระรวม',
-                                          textAlign: TextAlign.end,
+                                          'หัวบิล',
+                                          textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: PeopleChaoScreen_Color
                                                   .Colors_Text1_,
@@ -4876,29 +5086,122 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    flex: 4,
-                                    child: Container(
-                                      height: 50,
-                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text(
-                                          // '${nFormat.format(sum_amt - sum_disamt)}',
-                                          '${nFormat.format(sum_amt - sum_disamt)}',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              //fontSize: 10.0
+                                  if (Default_Receipt_[Default_Receipt_type]
+                                          .toString() ==
+                                      'ออกใบเสร็จ')
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        height: 40,
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropdownButtonFormField2(
+                                          alignment: Alignment.center,
+                                          focusColor: Colors.white,
+                                          autofocus: false,
+                                          decoration: InputDecoration(
+                                            enabled: true,
+                                            hoverColor: Colors.brown,
+                                            prefixIconColor: Colors.blue,
+                                            fillColor:
+                                                Colors.white.withOpacity(0.05),
+                                            filled: false,
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            border: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Colors.red),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(10),
+                                                topLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
                                               ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Color.fromARGB(
+                                                    255, 231, 227, 227),
+                                              ),
+                                            ),
+                                          ),
+                                          hint: Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: Text(
+                                              '${TitleType_Default_Receipt_[TitleType_Default_Receipt]}',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+
+                                          isExpanded: false,
+                                          // value: Default_Receipt_type == 0 ?''
+                                          // :'',
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.black,
+                                          ),
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                          iconSize: 20,
+                                          buttonHeight: 40,
+                                          buttonWidth: 250,
+                                          // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                          dropdownDecoration: BoxDecoration(
+                                            // color: Colors
+                                            //     .amber,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: Colors.white, width: 1),
+                                          ),
+                                          items: TitleType_Default_Receipt_.map(
+                                              (item) =>
+                                                  DropdownMenuItem<String>(
+                                                    value: '${item}',
+                                                    child: Text(
+                                                      '${item}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  )).toList(),
+
+                                          onChanged: (value) async {
+                                            int selectedIndex =
+                                                TitleType_Default_Receipt_
+                                                    .indexWhere((item) =>
+                                                        item == value);
+
+                                            setState(() {
+                                              TitleType_Default_Receipt =
+                                                  selectedIndex;
+                                            });
+
+                                            print(
+                                                '${selectedIndex}////$value  ////----> $TitleType_Default_Receipt');
+                                          },
                                         ),
                                       ),
                                     ),
-                                  ),
                                 ],
                               ),
                               Row(
@@ -6113,9 +6416,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                             .center,
                                                                     children: [
                                                                       Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             InkWell(
                                                                           child: Container(
@@ -6141,9 +6443,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                         ),
                                                                       ),
                                                                       Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             InkWell(
                                                                           child: Container(
@@ -6860,8 +7161,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                           Container(
                                                                         color: Colors
                                                                             .white,
-                                                                        padding: const EdgeInsets
-                                                                            .fromLTRB(
+                                                                        padding: const EdgeInsets.fromLTRB(
                                                                             4,
                                                                             8,
                                                                             4,
@@ -6993,9 +7293,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed:
@@ -7066,8 +7366,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                   ),
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child: Row(
                                                                       mainAxisAlignment:
@@ -7087,9 +7386,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                                 bottomLeft: Radius.circular(10),
                                                                                 bottomRight: Radius.circular(10)),
                                                                           ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               TextButton(
                                                                             onPressed: () =>
@@ -7609,20 +7907,19 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      height: 50,
-                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: const Center(
+                                  if (Default_Receipt_[Default_Receipt_type]
+                                          .toString() ==
+                                      'ออกใบเสร็จ')
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        height: 40,
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          'ยอดชำระรวม',
-                                          textAlign: TextAlign.end,
+                                          'หัวบิล',
+                                          textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: PeopleChaoScreen_Color
                                                   .Colors_Text1_,
@@ -7633,6 +7930,144 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                         ),
                                       ),
                                     ),
+                                  if (Default_Receipt_[Default_Receipt_type]
+                                          .toString() ==
+                                      'ออกใบเสร็จ')
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        height: 40,
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropdownButtonFormField2(
+                                          alignment: Alignment.center,
+                                          focusColor: Colors.white,
+                                          autofocus: false,
+                                          decoration: InputDecoration(
+                                            enabled: true,
+                                            hoverColor: Colors.brown,
+                                            prefixIconColor: Colors.blue,
+                                            fillColor:
+                                                Colors.white.withOpacity(0.05),
+                                            filled: false,
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            border: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Colors.red),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(10),
+                                                topLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Color.fromARGB(
+                                                    255, 231, 227, 227),
+                                              ),
+                                            ),
+                                          ),
+                                          hint: Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: Text(
+                                              '${TitleType_Default_Receipt_[TitleType_Default_Receipt]}',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+
+                                          isExpanded: false,
+                                          // value: Default_Receipt_type == 0 ?''
+                                          // :'',
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.black,
+                                          ),
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                          iconSize: 20,
+                                          buttonHeight: 40,
+                                          buttonWidth: 250,
+                                          // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                          dropdownDecoration: BoxDecoration(
+                                            // color: Colors
+                                            //     .amber,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: Colors.white, width: 1),
+                                          ),
+                                          items: TitleType_Default_Receipt_.map(
+                                              (item) =>
+                                                  DropdownMenuItem<String>(
+                                                    value: '${item}',
+                                                    child: Text(
+                                                      '${item}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  )).toList(),
+
+                                          onChanged: (value) async {
+                                            int selectedIndex =
+                                                TitleType_Default_Receipt_
+                                                    .indexWhere((item) =>
+                                                        item == value);
+
+                                            setState(() {
+                                              TitleType_Default_Receipt =
+                                                  selectedIndex;
+                                            });
+
+                                            print(
+                                                '${selectedIndex}////$value  ////----> $TitleType_Default_Receipt');
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'ยอดชำระรวม',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
                                   ),
                                   Expanded(
                                     flex: 4,
@@ -7640,19 +8075,164 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       height: 50,
                                       color: AppbackgroundColor.Sub_Abg_Colors,
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text(
-                                          // '${nFormat.format(sum_amt - sum_disamt)}',
-                                          '${nFormat.format(sum_amt - sum_disamt)}',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              //fontSize: 10.0
-                                              ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Colors.red[50]!.withOpacity(0.5),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(8),
+                                            topRight: Radius.circular(8),
+                                            bottomLeft: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          ),
+                                          // border: Border.all(
+                                          //     color: Colors.grey, width: 1),
                                         ),
+                                        child: Center(
+                                          child: Text(
+                                            '${nFormat.format(sum_amt - sum_disamt)}',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'ใบเสร็จ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: DropdownButtonFormField2(
+                                        alignment: Alignment.center,
+                                        focusColor: Colors.white,
+                                        autofocus: false,
+                                        decoration: InputDecoration(
+                                          enabled: true,
+                                          hoverColor: Colors.brown,
+                                          prefixIconColor: Colors.blue,
+                                          fillColor:
+                                              Colors.white.withOpacity(0.05),
+                                          filled: false,
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.zero,
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Colors.red),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(10),
+                                              topLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Color.fromARGB(
+                                                  255, 231, 227, 227),
+                                            ),
+                                          ),
+                                        ),
+                                        hint: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Text(
+                                            '${Default_Receipt_[Default_Receipt_type]}',
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+
+                                        isExpanded: false,
+                                        // value: Default_Receipt_type == 0 ?''
+                                        // :'',
+                                        icon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: Colors.black,
+                                        ),
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                        iconSize: 20,
+                                        buttonHeight: 40,
+                                        buttonWidth: 250,
+                                        // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                        dropdownDecoration: BoxDecoration(
+                                          // color: Colors
+                                          //     .amber,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: Colors.white, width: 1),
+                                        ),
+                                        items: Default_Receipt_.map((item) =>
+                                            DropdownMenuItem<String>(
+                                              value: '${item}',
+                                              child: Text(
+                                                '${item}',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            )).toList(),
+
+                                        onChanged: (value) async {
+                                          int selectedIndex =
+                                              Default_Receipt_.indexWhere(
+                                                  (item) => item == value);
+
+                                          setState(() {
+                                            Default_Receipt_type =
+                                                selectedIndex;
+                                            TitleType_Default_Receipt = 0;
+                                          });
+
+                                          print(
+                                              '${selectedIndex}////$value  ////----> $Default_Receipt_type');
+                                        },
                                       ),
                                     ),
                                   ),
@@ -8870,9 +9450,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                             .center,
                                                                     children: [
                                                                       Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             InkWell(
                                                                           child: Container(
@@ -8898,9 +9477,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                         ),
                                                                       ),
                                                                       Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             InkWell(
                                                                           child: Container(
@@ -9617,8 +10195,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                           Container(
                                                                         color: Colors
                                                                             .white,
-                                                                        padding: const EdgeInsets
-                                                                            .fromLTRB(
+                                                                        padding: const EdgeInsets.fromLTRB(
                                                                             4,
                                                                             8,
                                                                             4,
@@ -9750,9 +10327,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed:
@@ -9823,8 +10400,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                   ),
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child: Row(
                                                                       mainAxisAlignment:
@@ -9844,9 +10420,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                                 bottomLeft: Radius.circular(10),
                                                                                 bottomRight: Radius.circular(10)),
                                                                           ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               TextButton(
                                                                             onPressed: () =>
@@ -10110,27 +10685,27 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                 .trim() ==
                                                             'เงินโอน') {
                                                       if (base64_Slip != null) {
-                                                        final tableData00 = [
-                                                          for (int index = 0;
-                                                              index <
-                                                                  _TransModels
-                                                                      .length;
-                                                              index++)
-                                                            [
-                                                              '${index + 1}',
-                                                              '${_TransModels[index].name}',
-                                                              '${_TransModels[index].tqty}',
-                                                              '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
-                                                            ],
-                                                        ];
+                                                        // final tableData00 = [
+                                                        //   for (int index = 0;
+                                                        //       index <
+                                                        //           _TransModels
+                                                        //               .length;
+                                                        //       index++)
+                                                        //     [
+                                                        //       '${index + 1}',
+                                                        //       '${_TransModels[index].name}',
+                                                        //       '${_TransModels[index].tqty}',
+                                                        //       '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
+                                                        //     ],
+                                                        // ];
                                                         String Area_ =
                                                             '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
 
                                                         try {
-                                                          print(
-                                                              'tableData00.length');
-                                                          print(tableData00
-                                                              .length);
+                                                          // print(
+                                                          //     'tableData00.length');
+                                                          // print(tableData00
+                                                          //     .length);
                                                           in_Trans(
                                                               newValuePDFimg);
                                                         } catch (e) {}
@@ -10860,39 +11435,47 @@ class _LockpayScreenState extends State<LockpayScreen> {
   // }
 
   Future<Null> in_Trans(newValuePDFimg) async {
-    print(
-        ' ${_selecteZnSer.map((e) => e).toString().substring(1, _selecteZnSer.map((e) => e).toString().length - 1).trim()}');
+    // print(
+    //     ' ${_selecteZnSer.map((e) => e).toString().substring(1, _selecteZnSer.map((e) => e).toString().length - 1).trim()}');
     final tableData00 = [
       for (int index = 0; index < _TransModels.length; index++)
         [
           '${index + 1}',
-          '${_TransModels[index].name}',
-          '${_TransModels[index].tqty}',
-          '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
+          '${_TransModels[index].date}',
+          '${_TransModels[index].expname}',
+          // '${nFormat.format(double.parse(_TransModels[index].qty!))}',
+          '${nFormat.format(double.parse(_TransModels[index].nvat!))}',
+          '${nFormat.format(double.parse(_TransModels[index].vat!))}',
+          '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+          '${nFormat.format(double.parse(_TransModels[index].amt!))}',
+          // '${index + 1}',
+          // '${_TransModels[index].name}',
+          // '${_TransModels[index].tqty}',
+          // '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
         ],
     ];
-    String Area_ = (No_Area_ != '')
+    String Area_selecte = (No_Area_ != '')
         ? '$No_Area_(${Status5Form_NoArea_.text})'
         : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
-    print('tableData00.length');
-    print(tableData00.length);
-    print('---------------------------------->');
-    print(Value_AreaSer_);
-    print(_verticalGroupValue);
-    print('${typeModels.elementAt(Value_AreaSer_).type}');
+    // print('tableData00.length');
+    // print(tableData00.length);
+    // print('---------------------------------->');
+    // print(Value_AreaSer_);
+    // print(_verticalGroupValue);
+    // print('${typeModels.elementAt(Value_AreaSer_).type}');
 
-    print('---------------------------------->');
-    print(Status4Form_typeshop.text);
-    print(Status4Form_nameshop.text);
-    print(Status4Form_typeshop.text);
-    print(Status4Form_bussshop.text);
-    print(Status4Form_bussscontact.text);
-    print(Status4Form_address.text);
-    print(Status4Form_tel.text);
-    print(Status4Form_tax.text);
-    print('----------------------------------');
-    print(
-        '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}');
+    // print('---------------------------------->');
+    // print(Status4Form_typeshop.text);
+    // print(Status4Form_nameshop.text);
+    // print(Status4Form_typeshop.text);
+    // print(Status4Form_bussshop.text);
+    // print(Status4Form_bussscontact.text);
+    // print(Status4Form_address.text);
+    // print(Status4Form_tel.text);
+    // print(Status4Form_tax.text);
+    // print('----------------------------------');
+    // print(
+    //     '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}');
 
     var day = DateFormat('dd').format(newDatetime);
     var timex = DateFormat('mmss').format(newDatetime);
@@ -10993,44 +11576,48 @@ class _LockpayScreenState extends State<LockpayScreen> {
           }
         }
         Insert_log.Insert_logs('บัญชี', 'ล็อกเสียบ>>รับชำระ($cFinn)');
-        PdfgenReceiptLock.exportPDF_ReceiptLock2(
-            tableData00,
-            context,
-            Slip_status,
-            '$cFinn',
-            '$cFinn',
-            '${nFormat.format(sum_pvat)}',
-            '${nFormat.format(sum_vat)}',
-            '${nFormat.format(sum_wht)}',
-            '${nFormat.format(sum_amt)}',
-            '${sum_dispx.text.toString()}',
-            '$sum_disamt',
-            sum_disamtx.text == ''
-                ? '${sum_amt - 0}'
-                : '${sum_amt - double.parse(sum_disamtx.text.toString())}',
-        
-            renTal_name,
-            Status4Form_bussshop.text.toString(),
-            Status4Form_address.text.toString(),
-            Status4Form_tel.text.toString(),
-            Status4Form_email.text.toString(),
-            Status4Form_tax.text.toString(),
-            Status4Form_nameshop.text.toString(),
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            pamentpage,
-            paymentName1,
-            paymentName2,
-            Form_payment1.text,
-            Form_payment2.text,
-            numinvoice,
-            cFinn,
-            '${Area_}',
-            '${Value_newDateD}');
+///////--------------------->
+        Receipt_Tempage_LockPay(tableData00, newValuePDFimg, Area_selecte);
+///////--------------------->
+        // PdfgenReceiptLock.exportPDF_ReceiptLock2(
+        //     tableData00,
+        //     context,
+        //     Slip_status,
+        //     '$cFinn',
+        //     '$cFinn',
+        //     '${nFormat.format(sum_pvat)}',
+        //     '${nFormat.format(sum_vat)}',
+        //     '${nFormat.format(sum_wht)}',
+        //     '${nFormat.format(sum_amt)}',
+        //     '${sum_dispx.text.toString()}',
+        //     '$sum_disamt',
+        //     sum_disamtx.text == ''
+        //         ? '${sum_amt - 0}'
+        //         : '${sum_amt - double.parse(sum_disamtx.text.toString())}',
+        //     // ? '${nFormat.format(sum_amt - 0).toString()}'
+        //     // : '${nFormat.format(sum_amt - double.parse(sum_disamtx.text)).toString()}',
+        //     renTal_name,
+        //     Status4Form_bussshop.text.toString(),
+        //     Status4Form_address.text.toString(),
+        //     Status4Form_tel.text.toString(),
+        //     Status4Form_email.text.toString(),
+        //     Status4Form_tax.text.toString(),
+        //     Status4Form_nameshop.text.toString(),
+        //     bill_addr,
+        //     bill_email,
+        //     bill_tel,
+        //     bill_tax,
+        //     bill_name,
+        //     newValuePDFimg,
+        //     pamentpage,
+        //     paymentName1,
+        //     paymentName2,
+        //     Form_payment1.text,
+        //     Form_payment2.text,
+        //     numinvoice,
+        //     cFinn,
+        //     '${Area_}',
+        //     '${Value_newDateD}');
 
         setState(() async {
           await red_Trans_bill();
@@ -11077,5 +11664,57 @@ class _LockpayScreenState extends State<LockpayScreen> {
         red_Trans_select2();
       }
     });
+  }
+
+  Future<Null> Show_Dialog() async {
+    Dialog_Update();
+  }
+
+  Dialog_Update() async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          backgroundColor: Colors.green,
+          content: Text('ทำรายการเสร็จสิ้น ...!!',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontWeight_.Fonts_T))),
+    );
+  }
+
+  /////---------------------------------------------------------->  รับชำระ ( PDF Lock)
+  Future<Null> Receipt_Tempage_LockPay(
+      tableData00, newValuePDFimg, Area_selecte) async {
+    var Form_payment1_ = Form_payment1.text;
+    var Form_payment2_ = Form_payment2.text;
+    String? TitleType_Default_Receipt_Name;
+    /////////-------------->
+    if (TitleType_Default_Receipt == 0) {
+    } else {
+      setState(() {
+        TitleType_Default_Receipt_Name =
+            '${TitleType_Default_Receipt_[TitleType_Default_Receipt]}';
+      });
+    }
+    (Default_Receipt_type == 1)
+        ? Show_Dialog()
+        : ManPay_Receipt_PDF.ManPayReceipt_PDF(
+            cFinn,
+            context,
+            foder,
+            renTal_name,
+            // '${Status4Form_nameshop.text.toString()}',
+            // '${Status4Form_bussshop.text.toString()}',
+            // '${Status4Form_address.text.toString()}',
+            // '${Status4Form_tel.text.toString()}',
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            TitleType_Default_Receipt_Name,
+            tem_page_ser,
+            bills_name_);
   }
 }

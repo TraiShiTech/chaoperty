@@ -43,9 +43,18 @@ class _BillDocumentState extends State<BillDocument> {
     'บิลธรรมดา',
     'ใบกำกับภาษี',
   ];
+  List Default_Receipt = [
+    'ออกใบเสร็จ',
+    'ไม่ออกใบเสร็จ',
+  ];
   List Tap_ = [
     'ข้อมูลการออกบิล',
     'Template',
+  ];
+  List TitleType_Default_Receipt_ = [
+    'ไม่ระบุ',
+    'ต้นฉบับ',
+    'สำเนา',
   ];
   String tappedIndex_1 = '';
   String tappedIndex_2 = '';
@@ -62,8 +71,9 @@ class _BillDocumentState extends State<BillDocument> {
       expbill,
       expbill_name,
       bill_default,
-      bill_tser;
-
+      bill_tser,
+      Receipt_default;
+  int Receipt_defaultTitle = 0;
   String? rtname_Check,
       type_Check,
       typex_Check,
@@ -125,6 +135,8 @@ class _BillDocumentState extends State<BillDocument> {
             bill_tel = bill_telx;
             bill_email = bill_emailx;
             bill_default = bill_defaultx;
+            Receipt_default = renTalModel.printbill_default!;
+            Receipt_defaultTitle = int.parse(renTalModel.receipt_title!);
             bill_tser = bill_tserx;
             renTalModels.add(renTalModel);
             rtname_Check = rtnamex;
@@ -688,7 +700,7 @@ class _BillDocumentState extends State<BillDocument> {
                                 minFontSize: 10,
                                 maxFontSize: 20,
                                 '${Tap_[index]}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   // fontWeight: FontWeight.bold,
                                   fontFamily: FontWeight_.Fonts_T,
@@ -706,38 +718,50 @@ class _BillDocumentState extends State<BillDocument> {
           ),
         ),
         (ser_pang == 1)
-            ? Bill_DocumentTemplate()
+            ? const Bill_DocumentTemplate()
             : Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                 child: Column(
                   children: [
                     Container(
                       decoration: const BoxDecoration(
-                        // color: Colors.white30,
+                        color: AppbackgroundColor.Sub_Abg_Colors,
                         borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(0),
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
                             bottomLeft: Radius.circular(10),
                             bottomRight: Radius.circular(10)),
                         // border: Border.all(color: Colors.white, width: 1),
                       ),
                       child: Column(
                         children: [
-                          Row(
-                            children: const [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ข้อมูลการออกบิล',
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                    //fontSize: 10.0
+                          Container(
+                            decoration: const BoxDecoration(
+                              color: AppbackgroundColor.TiTile_Colors,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'ข้อมูลการออกบิล',
+                                    style: TextStyle(
+                                      color: SettingScreen_Color.Colors_Text1_,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      fontWeight: FontWeight.bold,
+                                      //fontSize: 10.0
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -809,8 +833,8 @@ class _BillDocumentState extends State<BillDocument> {
                                         // maxLength: 13,
                                         cursorColor: Colors.green,
                                         decoration: InputDecoration(
-                                          fillColor:
-                                              Colors.white.withOpacity(0.05),
+                                          fillColor: AppbackgroundColor
+                                              .Sub_Abg_Colors.withOpacity(0.5),
                                           filled: true,
                                           // prefixIcon:
                                           //     const Icon(Icons.key, color: Colors.black),
@@ -900,10 +924,9 @@ class _BillDocumentState extends State<BillDocument> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                             color: Colors.green,
-                                            borderRadius:
-                                                const BorderRadius.only(
+                                            borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(6),
                                               topRight: Radius.circular(6),
                                               bottomLeft: Radius.circular(6),
@@ -1058,8 +1081,8 @@ class _BillDocumentState extends State<BillDocument> {
                                         // maxLength: 13,
                                         cursorColor: Colors.green,
                                         decoration: InputDecoration(
-                                          fillColor:
-                                              Colors.white.withOpacity(0.05),
+                                          fillColor: AppbackgroundColor
+                                              .Sub_Abg_Colors.withOpacity(0.5),
                                           filled: true,
                                           // prefixIcon:
                                           //     const Icon(Icons.key, color: Colors.black),
@@ -1254,8 +1277,10 @@ class _BillDocumentState extends State<BillDocument> {
                                                   // maxLength: 13,
                                                   cursorColor: Colors.green,
                                                   decoration: InputDecoration(
-                                                    fillColor: Colors.white
-                                                        .withOpacity(0.05),
+                                                    fillColor:
+                                                        AppbackgroundColor
+                                                                .Sub_Abg_Colors
+                                                            .withOpacity(0.5),
                                                     filled: true,
                                                     // prefixIcon:
                                                     //     const Icon(Icons.key, color: Colors.black),
@@ -1456,8 +1481,10 @@ class _BillDocumentState extends State<BillDocument> {
                                                   maxLength: 10,
                                                   cursorColor: Colors.green,
                                                   decoration: InputDecoration(
-                                                    fillColor: Colors.white
-                                                        .withOpacity(0.05),
+                                                    fillColor:
+                                                        AppbackgroundColor
+                                                                .Sub_Abg_Colors
+                                                            .withOpacity(0.5),
                                                     filled: true,
                                                     // prefixIcon:;
                                                     //     const Icon(Icons.key, color: Colors.black),
@@ -1671,8 +1698,10 @@ class _BillDocumentState extends State<BillDocument> {
                                                   // maxLength: 13,
                                                   cursorColor: Colors.green,
                                                   decoration: InputDecoration(
-                                                    fillColor: Colors.white
-                                                        .withOpacity(0.05),
+                                                    fillColor:
+                                                        AppbackgroundColor
+                                                                .Sub_Abg_Colors
+                                                            .withOpacity(0.5),
                                                     filled: true,
                                                     // prefixIcon:
                                                     //     const Icon(Icons.key, color: Colors.black),
@@ -1818,9 +1847,9 @@ class _BillDocumentState extends State<BillDocument> {
                         ],
                       ),
                     ),
-                    Row(
+                    const Row(
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Text(
                             'การรับเลขเอกสาร',
@@ -2027,8 +2056,8 @@ class _BillDocumentState extends State<BillDocument> {
                                                                           //fontSize: 10.0
                                                                           ),
                                                                     )
-                                                                  : Column(
-                                                                      children: const [
+                                                                  : const Column(
+                                                                      children: [
                                                                         CircularProgressIndicator(),
                                                                         // Text(
                                                                         //   'Time : ${elapsed.toStringAsFixed(2)} seconds',
@@ -2069,124 +2098,141 @@ class _BillDocumentState extends State<BillDocument> {
                                                                     .toString();
                                                           });
                                                         },
-                                                        title: Row(
-                                                          children: [
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: Text(
-                                                                '${doctypeOneModels[index].bills}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: const TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    //fontSize: 10.0
-                                                                    ),
+                                                        title: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            // color: Colors.green[100]!
+                                                            //     .withOpacity(0.5),
+                                                            border: Border(
+                                                              bottom:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .black12,
+                                                                width: 1,
                                                               ),
                                                             ),
-                                                            Expanded(
-                                                              flex: 1,
-                                                              child: Text(
-                                                                '${doctypeOneModels[index].doccode}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: const TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    //fontSize: 10.0
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: Text(
-                                                                '${doctypeOneModels[index].startbill}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: const TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    //fontSize: 10.0
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 1,
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  InkWell(
-                                                                    onTap: () {
-                                                                      DialogEdit(
-                                                                        index,
-                                                                        '${doctypeOneModels[index].bills}',
-                                                                        '${doctypeOneModels[index].doccode}',
-                                                                        '${doctypeOneModels[index].startbill}',
-                                                                        '${doctypeOneModels[index].ser}',
-                                                                      );
-                                                                      print(
-                                                                          'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: Colors
-                                                                            .blueGrey
-                                                                            .shade100,
-                                                                        borderRadius:
-                                                                            const BorderRadius.only(
-                                                                          topLeft:
-                                                                              Radius.circular(10),
-                                                                          topRight:
-                                                                              Radius.circular(10),
-                                                                          bottomLeft:
-                                                                              Radius.circular(10),
-                                                                          bottomRight:
-                                                                              Radius.circular(10),
-                                                                        ),
-                                                                        // border: Border.all(
-                                                                        //     color: Colors.grey, width: 1),
+                                                          ),
+                                                          child: Row(
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 2,
+                                                                child: Text(
+                                                                  '${doctypeOneModels[index].bills}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: const TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      //fontSize: 10.0
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  '${doctypeOneModels[index].doccode}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: const TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      //fontSize: 10.0
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 2,
+                                                                child: Text(
+                                                                  '${doctypeOneModels[index].startbill}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: const TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      //fontSize: 10.0
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        DialogEdit(
+                                                                          index,
+                                                                          '${doctypeOneModels[index].bills}',
+                                                                          '${doctypeOneModels[index].doccode}',
+                                                                          '${doctypeOneModels[index].startbill}',
+                                                                          '${doctypeOneModels[index].ser}',
+                                                                        );
+                                                                        print(
+                                                                            'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
+                                                                      },
                                                                       child:
-                                                                          const Text(
-                                                                        'แก้ไข',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text2_,
-                                                                            fontFamily: Font_.Fonts_T
-                                                                            //fontWeight: FontWeight.bold,
-                                                                            //fontSize: 10.0
-                                                                            ),
+                                                                          Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: Colors
+                                                                              .blueGrey
+                                                                              .shade100,
+                                                                          borderRadius:
+                                                                              const BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(10),
+                                                                            topRight:
+                                                                                Radius.circular(10),
+                                                                            bottomLeft:
+                                                                                Radius.circular(10),
+                                                                            bottomRight:
+                                                                                Radius.circular(10),
+                                                                          ),
+                                                                          // border: Border.all(
+                                                                          //     color: Colors.grey, width: 1),
+                                                                        ),
+                                                                        padding:
+                                                                            const EdgeInsets.all(4.0),
+                                                                        child:
+                                                                            const Text(
+                                                                          'แก้ไข',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text2_,
+                                                                              fontFamily: Font_.Fonts_T
+                                                                              //fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                              ),
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                ],
+                                                                  ],
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ],
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -2368,8 +2414,8 @@ class _BillDocumentState extends State<BillDocument> {
                                                                           //fontSize: 10.0
                                                                           ),
                                                                     )
-                                                                  : Column(
-                                                                      children: const [
+                                                                  : const Column(
+                                                                      children: [
                                                                         CircularProgressIndicator(),
                                                                         // Text(
                                                                         //   'Time : ${elapsed.toStringAsFixed(2)} seconds',
@@ -2410,545 +2456,147 @@ class _BillDocumentState extends State<BillDocument> {
                                                                     .toString();
                                                           });
                                                         },
-                                                        title: Row(
-                                                          children: [
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: Text(
-                                                                '${doctypeTwoModels[index].bills}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: const TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    //fontSize: 10.0
-                                                                    ),
+                                                        title: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            // color: Colors.green[100]!
+                                                            //     .withOpacity(0.5),
+                                                            border: Border(
+                                                              bottom:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .black12,
+                                                                width: 1,
                                                               ),
                                                             ),
-                                                            Expanded(
-                                                              flex: 1,
-                                                              child: Text(
-                                                                '${doctypeTwoModels[index].doccode}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: const TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    //fontSize: 10.0
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: Text(
-                                                                '${doctypeTwoModels[index].startbill}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: const TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    //fontSize: 10.0
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 1,
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  InkWell(
-                                                                    onTap: () {
-                                                                      DialogEdit(
-                                                                        index,
-                                                                        '${doctypeTwoModels[index].bills}',
-                                                                        '${doctypeTwoModels[index].doccode}',
-                                                                        '${doctypeTwoModels[index].startbill}',
-                                                                        '${doctypeTwoModels[index].ser}',
-                                                                      );
-                                                                      print(
-                                                                          'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: Colors
-                                                                            .blueGrey
-                                                                            .shade100,
-                                                                        borderRadius:
-                                                                            const BorderRadius.only(
-                                                                          topLeft:
-                                                                              Radius.circular(10),
-                                                                          topRight:
-                                                                              Radius.circular(10),
-                                                                          bottomLeft:
-                                                                              Radius.circular(10),
-                                                                          bottomRight:
-                                                                              Radius.circular(10),
-                                                                        ),
-                                                                        // border: Border.all(
-                                                                        //     color: Colors.grey, width: 1),
+                                                          ),
+                                                          child: Row(
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 2,
+                                                                child: Text(
+                                                                  '${doctypeTwoModels[index].bills}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: const TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      //fontSize: 10.0
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  '${doctypeTwoModels[index].doccode}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: const TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      //fontSize: 10.0
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 2,
+                                                                child: Text(
+                                                                  '${doctypeTwoModels[index].startbill}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: const TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      //fontSize: 10.0
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        DialogEdit(
+                                                                          index,
+                                                                          '${doctypeTwoModels[index].bills}',
+                                                                          '${doctypeTwoModels[index].doccode}',
+                                                                          '${doctypeTwoModels[index].startbill}',
+                                                                          '${doctypeTwoModels[index].ser}',
+                                                                        );
+                                                                        print(
+                                                                            'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
+                                                                      },
                                                                       child:
-                                                                          const Text(
-                                                                        'แก้ไข',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text2_,
-                                                                            fontFamily: Font_.Fonts_T
-                                                                            //fontWeight: FontWeight.bold,
-                                                                            //fontSize: 10.0
-                                                                            ),
+                                                                          Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: Colors
+                                                                              .blueGrey
+                                                                              .shade100,
+                                                                          borderRadius:
+                                                                              const BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(10),
+                                                                            topRight:
+                                                                                Radius.circular(10),
+                                                                            bottomLeft:
+                                                                                Radius.circular(10),
+                                                                            bottomRight:
+                                                                                Radius.circular(10),
+                                                                          ),
+                                                                          // border: Border.all(
+                                                                          //     color: Colors.grey, width: 1),
+                                                                        ),
+                                                                        padding:
+                                                                            const EdgeInsets.all(4.0),
+                                                                        child:
+                                                                            const Text(
+                                                                          'แก้ไข',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text2_,
+                                                                              fontFamily: Font_.Fonts_T
+                                                                              //fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                              ),
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                ],
+                                                                  ],
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ],
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
                                                   );
                                           },
                                         ),
-
-                                        //  Column(
-                                        //   children: [
-                                        //     ListTile(
-                                        //       title: Row(
-                                        //         children: [
-                                        //           const Expanded(
-                                        //             flex: 2,
-                                        //             child: Text(
-                                        //               'ค่าเช่า/บริการหลัก',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           const Expanded(
-                                        //             flex: 1,
-                                        //             child: Text(
-                                        //               'R',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           Expanded(
-                                        //             flex: 1,
-                                        //             child: Row(
-                                        //               mainAxisAlignment:
-                                        //                   MainAxisAlignment.center,
-                                        //               children: [
-                                        //                 InkWell(
-                                        //                   onTap: () {},
-                                        //                   child: Container(
-                                        //                     decoration:
-                                        //                         const BoxDecoration(
-                                        //                       color: Colors.blueGrey,
-                                        //                       borderRadius:
-                                        //                           BorderRadius.only(
-                                        //                         topLeft:
-                                        //                             Radius.circular(10),
-                                        //                         topRight:
-                                        //                             Radius.circular(10),
-                                        //                         bottomLeft:
-                                        //                             Radius.circular(10),
-                                        //                         bottomRight:
-                                        //                             Radius.circular(10),
-                                        //                       ),
-                                        //                       // border: Border.all(
-                                        //                       //     color: Colors.grey, width: 1),
-                                        //                     ),
-                                        //                     padding:
-                                        //                         const EdgeInsets.all(
-                                        //                             8.0),
-                                        //                     child: const Text(
-                                        //                       'แก้ไข',
-                                        //                       textAlign:
-                                        //                           TextAlign.center,
-                                        //                       style: TextStyle(
-                                        //                           color:
-                                        //                               SettingScreen_Color
-                                        //                                   .Colors_Text2_,
-                                        //                           fontFamily:
-                                        //                               Font_.Fonts_T
-                                        //                           //fontWeight: FontWeight.bold,
-                                        //                           //fontSize: 10.0
-                                        //                           ),
-                                        //                     ),
-                                        //                   ),
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //     ),
-                                        //     ListTile(
-                                        //       title: Row(
-                                        //         children: [
-                                        //           const Expanded(
-                                        //             flex: 2,
-                                        //             child: Text(
-                                        //               'เงินประกัน',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           const Expanded(
-                                        //             flex: 1,
-                                        //             child: Text(
-                                        //               'D',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           Expanded(
-                                        //             flex: 1,
-                                        //             child: Row(
-                                        //               mainAxisAlignment:
-                                        //                   MainAxisAlignment.center,
-                                        //               children: [
-                                        //                 InkWell(
-                                        //                   onTap: () {},
-                                        //                   child: Container(
-                                        //                     decoration:
-                                        //                         const BoxDecoration(
-                                        //                       color: Colors.blueGrey,
-                                        //                       borderRadius:
-                                        //                           BorderRadius.only(
-                                        //                         topLeft:
-                                        //                             Radius.circular(10),
-                                        //                         topRight:
-                                        //                             Radius.circular(10),
-                                        //                         bottomLeft:
-                                        //                             Radius.circular(10),
-                                        //                         bottomRight:
-                                        //                             Radius.circular(10),
-                                        //                       ),
-                                        //                       // border: Border.all(
-                                        //                       //     color: Colors.grey, width: 1),
-                                        //                     ),
-                                        //                     padding:
-                                        //                         const EdgeInsets.all(
-                                        //                             8.0),
-                                        //                     child: const Text(
-                                        //                       'แก้ไข',
-                                        //                       textAlign:
-                                        //                           TextAlign.center,
-                                        //                       style: TextStyle(
-                                        //                           color:
-                                        //                               SettingScreen_Color
-                                        //                                   .Colors_Text2_,
-                                        //                           fontFamily:
-                                        //                               Font_.Fonts_T
-                                        //                           //fontWeight: FontWeight.bold,
-                                        //                           //fontSize: 10.0
-                                        //                           ),
-                                        //                     ),
-                                        //                   ),
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //     ),
-                                        //     ListTile(
-                                        //       title: Row(
-                                        //         children: [
-                                        //           const Expanded(
-                                        //             flex: 2,
-                                        //             child: Text(
-                                        //               'ค่าน้ำไฟ',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           const Expanded(
-                                        //             flex: 1,
-                                        //             child: Text(
-                                        //               'E',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           Expanded(
-                                        //             flex: 1,
-                                        //             child: Row(
-                                        //               mainAxisAlignment:
-                                        //                   MainAxisAlignment.center,
-                                        //               children: [
-                                        //                 InkWell(
-                                        //                   onTap: () {},
-                                        //                   child: Container(
-                                        //                     decoration:
-                                        //                         const BoxDecoration(
-                                        //                       color: Colors.blueGrey,
-                                        //                       borderRadius:
-                                        //                           BorderRadius.only(
-                                        //                         topLeft:
-                                        //                             Radius.circular(10),
-                                        //                         topRight:
-                                        //                             Radius.circular(10),
-                                        //                         bottomLeft:
-                                        //                             Radius.circular(10),
-                                        //                         bottomRight:
-                                        //                             Radius.circular(10),
-                                        //                       ),
-                                        //                       // border: Border.all(
-                                        //                       //     color: Colors.grey, width: 1),
-                                        //                     ),
-                                        //                     padding:
-                                        //                         const EdgeInsets.all(
-                                        //                             8.0),
-                                        //                     child: const Text(
-                                        //                       'แก้ไข',
-                                        //                       textAlign:
-                                        //                           TextAlign.center,
-                                        //                       style: TextStyle(
-                                        //                           color:
-                                        //                               SettingScreen_Color
-                                        //                                   .Colors_Text2_,
-                                        //                           fontFamily:
-                                        //                               Font_.Fonts_T
-                                        //                           //fontWeight: FontWeight.bold,
-                                        //                           //fontSize: 10.0
-                                        //                           ),
-                                        //                     ),
-                                        //                   ),
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //     ),
-                                        //     ListTile(
-                                        //       title: Row(
-                                        //         children: [
-                                        //           const Expanded(
-                                        //             flex: 2,
-                                        //             child: Text(
-                                        //               'อื่นๆ',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           const Expanded(
-                                        //             flex: 1,
-                                        //             child: Text(
-                                        //               'O',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           Expanded(
-                                        //             flex: 1,
-                                        //             child: Row(
-                                        //               mainAxisAlignment:
-                                        //                   MainAxisAlignment.center,
-                                        //               children: [
-                                        //                 InkWell(
-                                        //                   onTap: () {},
-                                        //                   child: Container(
-                                        //                     decoration:
-                                        //                         const BoxDecoration(
-                                        //                       color: Colors.blueGrey,
-                                        //                       borderRadius:
-                                        //                           BorderRadius.only(
-                                        //                         topLeft:
-                                        //                             Radius.circular(10),
-                                        //                         topRight:
-                                        //                             Radius.circular(10),
-                                        //                         bottomLeft:
-                                        //                             Radius.circular(10),
-                                        //                         bottomRight:
-                                        //                             Radius.circular(10),
-                                        //                       ),
-                                        //                       // border: Border.all(
-                                        //                       //     color: Colors.grey, width: 1),
-                                        //                     ),
-                                        //                     padding:
-                                        //                         const EdgeInsets.all(
-                                        //                             8.0),
-                                        //                     child: const Text(
-                                        //                       'แก้ไข',
-                                        //                       textAlign:
-                                        //                           TextAlign.center,
-                                        //                       style: TextStyle(
-                                        //                           color:
-                                        //                               SettingScreen_Color
-                                        //                                   .Colors_Text2_,
-                                        //                           fontFamily:
-                                        //                               Font_.Fonts_T
-                                        //                           //fontWeight: FontWeight.bold,
-                                        //                           //fontSize: 10.0
-                                        //                           ),
-                                        //                     ),
-                                        //                   ),
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //     ),
-                                        //     ListTile(
-                                        //       title: Row(
-                                        //         children: [
-                                        //           const Expanded(
-                                        //             flex: 2,
-                                        //             child: Text(
-                                        //               'ค่าปรับ',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           const Expanded(
-                                        //             flex: 1,
-                                        //             child: Text(
-                                        //               'F',
-                                        //               textAlign: TextAlign.center,
-                                        //               style: TextStyle(
-                                        //                   color: SettingScreen_Color
-                                        //                       .Colors_Text2_,
-                                        //                   fontFamily: Font_.Fonts_T
-                                        //                   //fontWeight: FontWeight.bold,
-                                        //                   //fontSize: 10.0
-                                        //                   ),
-                                        //             ),
-                                        //           ),
-                                        //           Expanded(
-                                        //             flex: 1,
-                                        //             child: Row(
-                                        //               mainAxisAlignment:
-                                        //                   MainAxisAlignment.center,
-                                        //               children: [
-                                        //                 InkWell(
-                                        //                   onTap: () {},
-                                        //                   child: Container(
-                                        //                     decoration:
-                                        //                         const BoxDecoration(
-                                        //                       color: Colors.blueGrey,
-                                        //                       borderRadius:
-                                        //                           BorderRadius.only(
-                                        //                         topLeft:
-                                        //                             Radius.circular(10),
-                                        //                         topRight:
-                                        //                             Radius.circular(10),
-                                        //                         bottomLeft:
-                                        //                             Radius.circular(10),
-                                        //                         bottomRight:
-                                        //                             Radius.circular(10),
-                                        //                       ),
-                                        //                       // border: Border.all(
-                                        //                       //     color: Colors.grey, width: 1),
-                                        //                     ),
-                                        //                     padding:
-                                        //                         const EdgeInsets.all(
-                                        //                             8.0),
-                                        //                     child: const Text(
-                                        //                       'แก้ไข',
-                                        //                       textAlign:
-                                        //                           TextAlign.center,
-                                        //                       style: TextStyle(
-                                        //                           color:
-                                        //                               SettingScreen_Color
-                                        //                                   .Colors_Text2_,
-                                        //                           fontFamily:
-                                        //                               Font_.Fonts_T
-                                        //                           //fontWeight: FontWeight.bold,
-                                        //                           //fontSize: 10.0
-                                        //                           ),
-                                        //                     ),
-                                        //                   ),
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //     ),
-                                        //   ],
-                                        // )
                                       ),
                                     ],
                                   ),
@@ -2956,242 +2604,820 @@ class _BillDocumentState extends State<BillDocument> {
                               ),
                             ],
                           ),
-                    Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 200,
-                              decoration: const BoxDecoration(
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                                // border: Border.all(
-                                //     color: Colors.grey, width: 1),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
+                    ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse,
+                      }),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: (!Responsive.isDesktop(context))
+                                  ? 500
+                                  : MediaQuery.of(context).size.width * 0.85,
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'ตัวอย่างรูปแบบเลขเอกสาร',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text2_,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontWeight: FontWeight.bold,
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '$expbill_name',
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text2_,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontWeight: FontWeight.bold,
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      color: Colors.blueGrey.shade100,
+                                  Expanded(
+                                    flex: 1,
+                                    child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        '$expbill/R-000001',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text2_,
-                                            fontFamily: Font_.Fonts_T
-                                            //fontWeight: FontWeight.bold,
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 200,
-                              decoration: const BoxDecoration(
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                                // border: Border.all(
-                                //     color: Colors.grey, width: 1),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'ค่า DEFAULT การออกบิล',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      child: Container(
+                                        height: 200,
+                                        decoration: const BoxDecoration(
                                           color:
-                                              SettingScreen_Color.Colors_Text2_,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontWeight: FontWeight.bold,
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color:
-                                            AppbackgroundColor.Sub_Abg_Colors,
-                                        borderRadius: const BorderRadius.only(
+                                              AppbackgroundColor.Sub_Abg_Colors,
+                                          borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
                                             topRight: Radius.circular(10),
                                             bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                        border: Border.all(
-                                            color: Colors.grey, width: 1),
-                                      ),
-                                      width: 200,
-                                      child: DropdownButtonFormField2(
-                                        decoration: InputDecoration(
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.zero,
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            bottomRight: Radius.circular(10),
                                           ),
+                                          // border: Border.all(
+                                          //     color: Colors.grey, width: 1),
                                         ),
-                                        isExpanded: true,
-                                        hint: Text(
-                                          bill_default == 'P'
-                                              ? 'บิลธรรมดา'
-                                              : 'ใบกำกับภาษี',
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                        icon: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Colors.white,
-                                        ),
-                                        style: const TextStyle(
-                                          color: Colors.green,
-                                        ),
-                                        iconSize: 30,
-                                        buttonHeight: 40,
-                                        // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                        dropdownDecoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        items: bill_tser == '1'
-                                            ? Default_.map((item) =>
-                                                DropdownMenuItem<String>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item,
-                                                    style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontSize: 14,
+                                        // padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              decoration: const BoxDecoration(
+                                                color: AppbackgroundColor
+                                                    .TiTile_Colors,
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(0),
+                                                    bottomRight:
+                                                        Radius.circular(0)),
+                                                // border: Border.all(color: Colors.white, width: 1),
+                                              ),
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Text(
+                                                      'ตัวอย่างรูปแบบเลขเอกสาร',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                      ),
                                                     ),
                                                   ),
-                                                )).toList()
-                                            : Default2_.map((item) =>
-                                                DropdownMenuItem<String>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item,
-                                                    style: const TextStyle(
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                '$expbill_name',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text2_,
+                                                    fontFamily: Font_.Fonts_T
+                                                    //fontWeight: FontWeight.bold,
+                                                    //fontSize: 10.0
+                                                    ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                color: Colors.blueGrey.shade100,
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  '$expbill/R-000001',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
                                                       color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontSize: 14,
+                                                          .Colors_Text2_,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontWeight: FontWeight.bold,
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 200,
+                                        decoration: const BoxDecoration(
+                                          color:
+                                              AppbackgroundColor.Sub_Abg_Colors,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10),
+                                          ),
+                                          // border: Border.all(
+                                          //     color: Colors.grey, width: 1),
+                                        ),
+                                        // padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              decoration: const BoxDecoration(
+                                                color: AppbackgroundColor
+                                                    .TiTile_Colors,
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(0),
+                                                    bottomRight:
+                                                        Radius.circular(0)),
+                                                // border: Border.all(color: Colors.white, width: 1),
+                                              ),
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Text(
+                                                      'ค่า DEFAULT การออกบิล',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                      ),
                                                     ),
                                                   ),
-                                                )).toList(),
-                                        // validator: (value) {
-                                        //   if (value == null) {
-                                        //     return 'ค้นหายี่ห้อ.';
-                                        //   } else {}
-                                        // },
-                                        onChanged: (value) async {
-                                          var bill_set =
-                                              value == 'บิลธรรมดา' ? 'P' : 'F';
-                                          SharedPreferences preferences =
-                                              await SharedPreferences
-                                                  .getInstance();
-                                          String? ren = preferences
-                                              .getString('renTalSer');
-                                          String? ser_user =
-                                              preferences.getString('ser');
+                                                ],
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          width: 80,
+                                                          child: const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    4.0),
+                                                            child: Text(
+                                                              'รูปแบบบิล',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: SettingScreen_Color
+                                                                    .Colors_Text2_,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                //fontSize: 10.0
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft:
+                                                                      Radius.circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 1),
+                                                            ),
+                                                            width: 200,
+                                                            child:
+                                                                DropdownButtonFormField2(
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                isDense: true,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                ),
+                                                              ),
+                                                              isExpanded: true,
+                                                              hint: Text(
+                                                                bill_default ==
+                                                                        'P'
+                                                                    ? 'บิลธรรมดา'
+                                                                    : 'ใบกำกับภาษี',
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: SettingScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                              ),
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_drop_down,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
+                                                              iconSize: 30,
+                                                              buttonHeight: 40,
+                                                              // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                              dropdownDecoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              items: bill_tser ==
+                                                                      '1'
+                                                                  ? Default_.map((item) =>
+                                                                          DropdownMenuItem<
+                                                                              String>(
+                                                                            value:
+                                                                                item,
+                                                                            child:
+                                                                                Text(
+                                                                              item,
+                                                                              style: const TextStyle(
+                                                                                color: SettingScreen_Color.Colors_Text1_,
+                                                                                fontSize: 14,
+                                                                              ),
+                                                                            ),
+                                                                          ))
+                                                                      .toList()
+                                                                  : Default2_.map((item) =>
+                                                                      DropdownMenuItem<
+                                                                          String>(
+                                                                        value:
+                                                                            item,
+                                                                        child:
+                                                                            Text(
+                                                                          item,
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                SettingScreen_Color.Colors_Text1_,
+                                                                            fontSize:
+                                                                                14,
+                                                                          ),
+                                                                        ),
+                                                                      )).toList(),
+                                                              // validator: (value) {
+                                                              //   if (value == null) {
+                                                              //     return 'ค้นหายี่ห้อ.';
+                                                              //   } else {}
+                                                              // },
+                                                              onChanged:
+                                                                  (value) async {
+                                                                var bill_set =
+                                                                    value ==
+                                                                            'บิลธรรมดา'
+                                                                        ? 'P'
+                                                                        : 'F';
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
 
-                                          String url =
-                                              '${MyConstant().domain}/UpC_rentel_bill_set.php?isAdd=true&ren=$ren&value=$bill_set&ser_user=$ser_user';
+                                                                String url =
+                                                                    '${MyConstant().domain}/UpC_rentel_bill_set.php?isAdd=true&ren=$ren&value=$bill_set&ser_user=$ser_user&sertype=0';
 
-                                          try {
-                                            var response =
-                                                await http.get(Uri.parse(url));
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
 
-                                            var result =
-                                                json.decode(response.body);
-                                            print(result);
-                                            if (result.toString() == 'true') {
-                                              Insert_log.Insert_logs('ตั้งค่า',
-                                                  'เอกสาร>>แก้ไข(DEFAULT การออกบิล)');
-                                              setState(() {
-                                                read_GC_rental();
-                                              });
-                                            } else {}
-                                            // ScaffoldMessenger.of(context).showSnackBar(
-                                            //   SnackBar(
-                                            //       content: Text('บันทึกสำเร็จ',
-                                            //           style: TextStyle(
-                                            //               color: Colors.white,
-                                            //               fontFamily: Font_.Fonts_T))),
-                                            // );
-                                          } catch (e) {}
-                                        },
-                                        onSaved: (value) {
-                                          // selectedValue = value.toString();
-                                        },
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    Insert_log.Insert_logs(
+                                                                        'ตั้งค่า',
+                                                                        'เอกสาร>>แก้ไข(DEFAULT การออกบิล)');
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_rental();
+                                                                    });
+                                                                  } else {}
+                                                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                                                  //   SnackBar(
+                                                                  //       content: Text('บันทึกสำเร็จ',
+                                                                  //           style: TextStyle(
+                                                                  //               color: Colors.white,
+                                                                  //               fontFamily: Font_.Fonts_T))),
+                                                                  // );
+                                                                } catch (e) {}
+                                                              },
+                                                              onSaved: (value) {
+                                                                // selectedValue = value.toString();
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: 80,
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    4.0),
+                                                            child: Text(
+                                                              'ใบเสร็จ',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: SettingScreen_Color
+                                                                    .Colors_Text2_,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                //fontSize: 10.0
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft:
+                                                                      Radius.circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 1),
+                                                            ),
+                                                            width: 200,
+                                                            child:
+                                                                DropdownButtonFormField2(
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                isDense: true,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                ),
+                                                              ),
+                                                              isExpanded: true,
+                                                              hint: Text(
+                                                                (Receipt_default ==
+                                                                        'N')
+                                                                    ? 'ไม่ออกใบเสร็จ'
+                                                                    : 'ออกใบเสร็จ',
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: SettingScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                              ),
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_drop_down,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
+                                                              iconSize: 30,
+                                                              buttonHeight: 40,
+                                                              // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                              dropdownDecoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              items: Default_Receipt
+                                                                  .map((item) =>
+                                                                      DropdownMenuItem<
+                                                                          String>(
+                                                                        value:
+                                                                            item,
+                                                                        child:
+                                                                            Text(
+                                                                          item,
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                SettingScreen_Color.Colors_Text1_,
+                                                                            fontSize:
+                                                                                14,
+                                                                          ),
+                                                                        ),
+                                                                      )).toList(),
+                                                              // validator: (value) {
+                                                              //   if (value == null) {
+                                                              //     return 'ค้นหายี่ห้อ.';
+                                                              //   } else {}
+                                                              // },
+                                                              onChanged:
+                                                                  (value) async {
+                                                                var bill_set =
+                                                                    value ==
+                                                                            'ออกใบเสร็จ'
+                                                                        ? 'Y'
+                                                                        : 'N';
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
+
+                                                                String url =
+                                                                    '${MyConstant().domain}/UpC_rentel_bill_set.php?isAdd=true&ren=$ren&printbill=$bill_set&sertype=1';
+
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
+
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    Insert_log.Insert_logs(
+                                                                        'ตั้งค่า',
+                                                                        'เอกสาร>>แก้ไข(DEFAULT การออกบิล)');
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_rental();
+                                                                    });
+                                                                  } else {}
+                                                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                                                  //   SnackBar(
+                                                                  //       content: Text('บันทึกสำเร็จ',
+                                                                  //           style: TextStyle(
+                                                                  //               color: Colors.white,
+                                                                  //               fontFamily: Font_.Fonts_T))),
+                                                                  // );
+                                                                } catch (e) {}
+                                                              },
+                                                              onSaved: (value) {
+                                                                // selectedValue = value.toString();
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: 80,
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    4.0),
+                                                            child: Text(
+                                                              'หัวบิล',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: SettingScreen_Color
+                                                                    .Colors_Text2_,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                //fontSize: 10.0
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft:
+                                                                      Radius.circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 1),
+                                                            ),
+                                                            width: 200,
+                                                            child:
+                                                                DropdownButtonFormField2(
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                isDense: true,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                ),
+                                                              ),
+                                                              isExpanded: true,
+                                                              hint: Text(
+                                                                '${TitleType_Default_Receipt_[Receipt_defaultTitle]}',
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: SettingScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                              ),
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_drop_down,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
+                                                              iconSize: 30,
+                                                              buttonHeight: 40,
+                                                              // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                              dropdownDecoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              items: TitleType_Default_Receipt_
+                                                                  .map((item) =>
+                                                                      DropdownMenuItem<
+                                                                          String>(
+                                                                        value:
+                                                                            item,
+                                                                        child:
+                                                                            Text(
+                                                                          item,
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                SettingScreen_Color.Colors_Text1_,
+                                                                            fontSize:
+                                                                                14,
+                                                                          ),
+                                                                        ),
+                                                                      )).toList(),
+                                                              // validator: (value) {
+                                                              //   if (value == null) {
+                                                              //     return 'ค้นหายี่ห้อ.';
+                                                              //   } else {}
+                                                              // },
+                                                              onChanged:
+                                                                  (value) async {
+                                                                var bill_set = (value
+                                                                            .toString()
+                                                                            .trim() ==
+                                                                        'ไม่ระบุ')
+                                                                    ? '0'
+                                                                    : (value.toString().trim() ==
+                                                                            'ต้นฉบับ')
+                                                                        ? '1'
+                                                                        : (value.toString().trim() ==
+                                                                                'สำเนา')
+                                                                            ? '2'
+                                                                            : '0';
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
+
+                                                                String url =
+                                                                    '${MyConstant().domain}/UpC_rentel_bill_set.php?isAdd=true&ren=$ren&valuetitle=$bill_set&sertype=2';
+
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
+
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    Insert_log.Insert_logs(
+                                                                        'ตั้งค่า',
+                                                                        'เอกสาร>>แก้ไข(DEFAULT การออกบิล)');
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_rental();
+                                                                    });
+                                                                  } else {}
+                                                                } catch (e) {}
+                                                              },
+                                                              onSaved: (value) {
+                                                                // selectedValue = value.toString();
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
@@ -3208,9 +3434,9 @@ class _BillDocumentState extends State<BillDocument> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Row(
+          const Row(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   'การรับเลขเอกสาร',
@@ -3372,8 +3598,8 @@ class _BillDocumentState extends State<BillDocument> {
                                                     //fontSize: 10.0
                                                     ),
                                               )
-                                            : Column(
-                                                children: const [
+                                            : const Column(
+                                                children: [
                                                   CircularProgressIndicator(),
                                                   // Text(
                                                   //   'Time : ${elapsed.toStringAsFixed(2)} seconds',
@@ -3408,105 +3634,119 @@ class _BillDocumentState extends State<BillDocument> {
                                       tappedIndex_1 = index.toString();
                                     });
                                   },
-                                  title: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 2,
-                                        child: Text(
-                                          '${doctypeOneModels[index].bills}',
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              //fontWeight: FontWeight.bold,
-                                              //fontSize: 10.0
-                                              ),
+                                  title: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          '${doctypeOneModels[index].doccode}',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              //fontWeight: FontWeight.bold,
-                                              //fontSize: 10.0
-                                              ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            '${doctypeOneModels[index].bills}',
+                                            textAlign: TextAlign.start,
+                                            style: const TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text2_,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Text(
-                                          '${doctypeOneModels[index].startbill}',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              //fontWeight: FontWeight.bold,
-                                              //fontSize: 10.0
-                                              ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            '${doctypeOneModels[index].doccode}',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text2_,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                DialogEdit(
-                                                  index,
-                                                  '${doctypeOneModels[index].bills}',
-                                                  '${doctypeOneModels[index].doccode}',
-                                                  '${doctypeOneModels[index].startbill}',
-                                                  '${doctypeOneModels[index].ser}',
-                                                );
-                                                print(
-                                                    'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      Colors.blueGrey.shade100,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(10),
-                                                    topRight:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(10),
-                                                    bottomRight:
-                                                        Radius.circular(10),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            '${doctypeOneModels[index].startbill}',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text2_,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  DialogEdit(
+                                                    index,
+                                                    '${doctypeOneModels[index].bills}',
+                                                    '${doctypeOneModels[index].doccode}',
+                                                    '${doctypeOneModels[index].startbill}',
+                                                    '${doctypeOneModels[index].ser}',
+                                                  );
+                                                  print(
+                                                      'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors
+                                                        .blueGrey.shade100,
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(10),
+                                                      topRight:
+                                                          Radius.circular(10),
+                                                      bottomLeft:
+                                                          Radius.circular(10),
+                                                      bottomRight:
+                                                          Radius.circular(10),
+                                                    ),
+                                                    // border: Border.all(
+                                                    //     color: Colors.grey, width: 1),
                                                   ),
-                                                  // border: Border.all(
-                                                  //     color: Colors.grey, width: 1),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: const Text(
-                                                  'แก้ไข',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: const Text(
+                                                    'แก้ไข',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -3650,8 +3890,8 @@ class _BillDocumentState extends State<BillDocument> {
                                                     //fontSize: 10.0
                                                     ),
                                               )
-                                            : Column(
-                                                children: const [
+                                            : const Column(
+                                                children: [
                                                   CircularProgressIndicator(),
                                                   // Text(
                                                   //   'Time : ${elapsed.toStringAsFixed(2)} seconds',
@@ -3686,105 +3926,121 @@ class _BillDocumentState extends State<BillDocument> {
                                       tappedIndex_2 = index.toString();
                                     });
                                   },
-                                  title: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 2,
-                                        child: Text(
-                                          '${doctypeTwoModels[index].bills}',
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              //fontWeight: FontWeight.bold,
-                                              //fontSize: 10.0
-                                              ),
+                                  title: Container(
+                                    decoration: const BoxDecoration(
+                                      // color: Colors.green[100]!
+                                      //     .withOpacity(0.5),
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          '${doctypeTwoModels[index].doccode}',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              //fontWeight: FontWeight.bold,
-                                              //fontSize: 10.0
-                                              ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            '${doctypeTwoModels[index].bills}',
+                                            textAlign: TextAlign.start,
+                                            style: const TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text2_,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Text(
-                                          '${doctypeTwoModels[index].startbill}',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              //fontWeight: FontWeight.bold,
-                                              //fontSize: 10.0
-                                              ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            '${doctypeTwoModels[index].doccode}',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text2_,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                DialogEdit(
-                                                  index,
-                                                  '${doctypeTwoModels[index].bills}',
-                                                  '${doctypeTwoModels[index].doccode}',
-                                                  '${doctypeTwoModels[index].startbill}',
-                                                  '${doctypeTwoModels[index].ser}',
-                                                );
-                                                print(
-                                                    'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      Colors.blueGrey.shade100,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(10),
-                                                    topRight:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(10),
-                                                    bottomRight:
-                                                        Radius.circular(10),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            '${doctypeTwoModels[index].startbill}',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text2_,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  DialogEdit(
+                                                    index,
+                                                    '${doctypeTwoModels[index].bills}',
+                                                    '${doctypeTwoModels[index].doccode}',
+                                                    '${doctypeTwoModels[index].startbill}',
+                                                    '${doctypeTwoModels[index].ser}',
+                                                  );
+                                                  print(
+                                                      'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors
+                                                        .blueGrey.shade100,
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(10),
+                                                      topRight:
+                                                          Radius.circular(10),
+                                                      bottomLeft:
+                                                          Radius.circular(10),
+                                                      bottomRight:
+                                                          Radius.circular(10),
+                                                    ),
+                                                    // border: Border.all(
+                                                    //     color: Colors.grey, width: 1),
                                                   ),
-                                                  // border: Border.all(
-                                                  //     color: Colors.grey, width: 1),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: const Text(
-                                                  'แก้ไข',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: const Text(
+                                                    'แก้ไข',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/basic.dart';
@@ -12,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
+import '../Man_PDF/Man_BillingNoteInvlice_PDF.dart';
 import '../Model/GetInvoice_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
 import '../Model/GetRenTal_Model.dart';
@@ -19,6 +21,11 @@ import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTranBill_model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../PDF/PDF_Billing/pdf_BillingNote_IV.dart';
+import '../PDF_TP2/PDF_Billing_TP2/pdf_BillingNote_IV_TP2.dart';
+import '../PDF_TP3/PDF_Billing_TP3/pdf_BillingNote_IV_TP3.dart';
+import '../PDF_TP4/PDF_Billing_TP4/pdf_BillingNote_IV_TP4.dart';
+import '../PDF_TP5/PDF_Billing_TP5/pdf_BillingNote_IV_TP5.dart';
+
 import '../Style/colors.dart';
 
 class BillsHistory extends StatefulWidget {
@@ -75,7 +82,16 @@ class _BillsHistoryState extends State<BillsHistory> {
   String? Form_aser;
   String? Form_qty;
   String? ADDR;
-  String? base64_Imgmap, foder;
+  String? base64_Imgmap, foder, tem_page_ser;
+  String? Datex_invoice;
+  String? payment_Ptser1, payment_Ptname1, payment_Bno1;
+  String? payment_Ptser2, payment_Ptname2, payment_Bno2;
+  int TitleType_Default_Receipt = 0;
+  List TitleType_Default_Receipt_ = [
+    'ไม่ระบุ',
+    'ต้นฉบับ',
+    'สำเนา',
+  ];
   @override
   void initState() {
     super.initState();
@@ -87,11 +103,14 @@ class _BillsHistoryState extends State<BillsHistory> {
   Future<Null> read_GC_rental() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    var seruser = preferences.getString('ser');
-    var utype = preferences.getString('utype');
-    String url =
-        '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
+    // var seruser = preferences.getString('ser');
+    // var utype = preferences.getString('utype');
+    // String url =
+    //     '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
 
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -111,6 +130,7 @@ class _BillsHistoryState extends State<BillsHistory> {
         var imglogo = renTalModel.imglogo;
         setState(() {
           foder = foderx;
+          tem_page_ser = renTalModel.tem_page!.trim();
           renTalModels.add(renTalModel);
         });
       }
@@ -237,7 +257,7 @@ class _BillsHistoryState extends State<BillsHistory> {
     var qutser = widget.Get_Value_NameShop_index;
 
     String url =
-        '${MyConstant().domain}/GC_bill_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser}';
+        '${MyConstant().domain}/GC_bill_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -513,6 +533,15 @@ class _BillsHistoryState extends State<BillsHistory> {
                               onTap: () {
                                 print(
                                     '${_InvoiceModels[index].ser} ${_InvoiceModels[index].docno}');
+
+                                setState(() {
+                                  payment_Ptser1 = _InvoiceModels[index].ptser;
+                                  payment_Ptname1 =
+                                      _InvoiceModels[index].ptname;
+                                  payment_Bno1 = _InvoiceModels[index].bno;
+
+                                  Datex_invoice = _InvoiceModels[index].daterec;
+                                });
 
                                 red_Trans_select(index);
                               },
@@ -1358,29 +1387,261 @@ class _BillsHistoryState extends State<BillsHistory> {
                             bottomRight: Radius.circular(10)),
                       ),
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppbackgroundColor.Sub_Abg_Colors,
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          border: Border.all(color: Colors.grey, width: 1),
-                        ),
-                        width: 120,
-                        child: Center(
-                          child: AutoSizeText(
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
                             minFontSize: 10,
                             maxFontSize: 15,
-                            textAlign: TextAlign.end,
-                            '${nFormat.format(sum_amt - sum_disamt)}',
+                            textAlign: TextAlign.start,
+                            'ยอดชำระรวม : ',
                             style: TextStyle(
                                 color: PeopleChaoScreen_Color.Colors_Text2_,
                                 //fontWeight: FontWeight.bold,
                                 fontFamily: Font_.Fonts_T),
                           ),
-                        ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.red[50]!.withOpacity(0.5),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              width: 120,
+                              child: Center(
+                                child: AutoSizeText(
+                                  minFontSize: 10,
+                                  maxFontSize: 15,
+                                  textAlign: TextAlign.end,
+                                  '${nFormat.format(sum_amt - sum_disamt)}',
+                                  style: TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text2_,
+                                      //fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: SizedBox(),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppbackgroundColor.Sub_Abg_Colors,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            minFontSize: 10,
+                            maxFontSize: 15,
+                            textAlign: TextAlign.start,
+                            'หัวบิล : ',
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              width: 120,
+                              child: DropdownButtonFormField2(
+                                alignment: Alignment.center,
+                                focusColor: Colors.white,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  enabled: true,
+                                  hoverColor: Colors.brown,
+                                  prefixIconColor: Colors.blue,
+                                  fillColor: Colors.white.withOpacity(0.05),
+                                  filled: false,
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.zero,
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                        const BorderSide(color: Colors.red),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(10),
+                                      topLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Color.fromARGB(255, 231, 227, 227),
+                                    ),
+                                  ),
+                                ),
+                                hint: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Text(
+                                    '${TitleType_Default_Receipt_[TitleType_Default_Receipt]}',
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+
+                                isExpanded: false,
+                                // value: Default_Receipt_type == 0 ?''
+                                // :'',
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.black,
+                                ),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                iconSize: 25,
+                                buttonHeight: 42,
+                                buttonPadding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                dropdownDecoration: BoxDecoration(
+                                  // color: Colors
+                                  //     .amber,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border:
+                                      Border.all(color: Colors.white, width: 1),
+                                ),
+                                items: TitleType_Default_Receipt_.map(
+                                    (item) => DropdownMenuItem<String>(
+                                          value: '${item}',
+                                          child: Text(
+                                            '${item}',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        )).toList(),
+
+                                onChanged: (value) async {
+                                  int selectedIndex =
+                                      TitleType_Default_Receipt_.indexWhere(
+                                          (item) => item == value);
+
+                                  setState(() {
+                                    TitleType_Default_Receipt = selectedIndex;
+                                  });
+
+                                  print(
+                                      '${selectedIndex}////$value  ////----> $TitleType_Default_Receipt');
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: SizedBox(),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppbackgroundColor.Sub_Abg_Colors,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            minFontSize: 10,
+                            maxFontSize: 15,
+                            textAlign: TextAlign.start,
+                            'รูปแบบชำระ : ',
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              width: 120,
+                              child: Center(
+                                child: AutoSizeText(
+                                  minFontSize: 8,
+                                  maxFontSize: 12,
+                                  textAlign: TextAlign.end,
+                                  (payment_Ptname1 == null)
+                                      ? 'รูปแบบ'
+                                      : (payment_Bno1 == null)
+                                          ? '${payment_Ptname1}  '
+                                          : '${payment_Ptname1} : ${payment_Bno1}',
+                                  style: TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text2_,
+                                      //fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -1411,31 +1672,55 @@ class _BillsHistoryState extends State<BillsHistory> {
                           SharedPreferences preferences =
                               await SharedPreferences.getInstance();
                           var renTal_name = preferences.getString('renTalName');
-                          Pdfgen_BillingNoteInvlice
-                              .exportPDF_HisBillingNoteInvlice(
-                                  context,
-                                  _InvoiceHistoryModels,
-                                  '$numinvoice',
-                                  '$renTal_name',
-                                  widget.namenew,
-                                  '$sum_pvat',
-                                  '$sum_vat',
-                                  '$sum_wht',
-                                  '$sum_amt',
-                                  '$sum_disp',
-                                  '$sum_disamt',
-                                  '${Form_bussshop}',
-                                  '${Form_address}',
-                                  '${Form_tel}',
-                                  '${Form_email}',
-                                  '${Form_tax}',
-                                  ' ${Form_nameshop}',
-                                  ' ${renTalModels[0].bill_addr}',
-                                  ' ${renTalModels[0].bill_email}',
-                                  ' ${renTalModels[0].bill_tel}',
-                                  ' ${renTalModels[0].bill_tax}',
-                                  ' ${renTalModels[0].bill_name}',
-                                  newValuePDFimg);
+
+                          final tableData003 = [
+                            for (int index = 0;
+                                index < _InvoiceHistoryModels.length;
+                                index++)
+                              [
+                                '${index + 1}',
+                                '${_InvoiceHistoryModels[index].date}',
+                                '${_InvoiceHistoryModels[index].descr}',
+                                // '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                              ],
+                          ];
+                          BillingNoteInvlice_History_Tempage(
+                              tableData003, newValuePDFimg, renTal_name);
+                          // BillingNoteInvlice_History_Tempage(
+                          //     tableData003, newValuePDFimg, renTal_name);
+                          //       Pdfgen_BillingNoteInvlice
+                          //           .exportPDF_BillingNoteInvlice(
+                          //               '2',
+                          //               tableData003,
+                          //               context,
+                          //               _InvoiceHistoryModels,
+                          //               '${widget.Get_Value_cid}',
+                          //               '${widget.namenew}',
+                          //               '${sum_pvat}',
+                          //               '${sum_vat}',
+                          //               '${sum_wht}',
+                          //               '${sum_amt}',
+                          //               ' $sum_dis',
+                          //  '${sum_amt - sum_disamt}',
+                          //               '$renTal_name',
+                          //               '${Form_bussshop}',
+                          //               '${Form_address}',
+                          //               '${Form_tel}',
+                          //               '${Form_email}',
+                          //               '${Form_tax}',
+                          //               ' ${Form_nameshop}',
+                          //               ' ${renTalModels[0].bill_addr}',
+                          //               ' ${renTalModels[0].bill_email}',
+                          //               ' ${renTalModels[0].bill_tel}',
+                          //               ' ${renTalModels[0].bill_tax}',
+                          //               ' ${renTalModels[0].bill_name}',
+                          //               newValuePDFimg,
+                          //               numinvoice,
+                          //               '${_InvoiceHistoryModels[0].daterec}');
                         },
                         child: Container(
                             height: 50,
@@ -1550,7 +1835,7 @@ class _BillsHistoryState extends State<BillsHistory> {
                                                         color: Colors
                                                             .green.shade500,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(6),
                                                             topRight:
@@ -1597,7 +1882,7 @@ class _BillsHistoryState extends State<BillsHistory> {
                                                       decoration: BoxDecoration(
                                                         color: Colors.black,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(6),
                                                             topRight:
@@ -1708,5 +1993,34 @@ class _BillsHistoryState extends State<BillsHistory> {
         print('rrrrrrrrrrrrrr');
       }
     } catch (e) {}
+  }
+
+  //////////////////////////------------------------------>
+  Future<Null> BillingNoteInvlice_History_Tempage(
+      tableData003, newValuePDFimg, renTal_name) async {
+    String? TitleType_Default_Receipt_Name;
+    if (TitleType_Default_Receipt == 0) {
+    } else {
+      setState(() {
+        TitleType_Default_Receipt_Name =
+            '${TitleType_Default_Receipt_[TitleType_Default_Receipt]}';
+      });
+    }
+    Man_BillingNoteInvlice_PDF.ManBillingNoteInvlice_PDF(
+      TitleType_Default_Receipt_Name,
+      foder,
+      '${widget.Get_Value_NameShop_index}',
+      tem_page_ser,
+      context,
+      '${widget.Get_Value_cid}',
+      '${widget.namenew}',
+      '${renTalModels[0].bill_addr}',
+      '${renTalModels[0].bill_email}',
+      '${renTalModels[0].bill_tel}',
+      '${renTalModels[0].bill_tax}',
+      '${renTalModels[0].bill_name}',
+      newValuePDFimg,
+      numinvoice,
+    );
   }
 }

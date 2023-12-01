@@ -16,7 +16,9 @@ class Pdfgen_his_statusbill {
 //////////---------------------------------------------------->(ใบเสร็จรับเงิน/ใบกำกับภาษี)   ใช้  //
 
   static void exportPDF_statusbill(
+      foder,
       tableData00,
+      tableData01,
       context,
       _TransReBillHistoryModels,
       Num_cid,
@@ -40,23 +42,35 @@ class Pdfgen_his_statusbill {
       bill_name,
       newValuePDFimg,
       numinvoice,
-      cFinn,
+      numdoctax,
       finnancetransModels,
-      dayfinpay
-      ) async {
+      date_Transaction,
+      dayfinpay,
+      type_bills,
+      dis_sum_Matjum,
+      TitleType_Default_Receipt_Name) async {
     ////
     //// ------------>(ใบเสร็จรับเงินชั่วคราว paySrsscreen_)
     ///////
     final pdf = pw.Document();
-    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
     var Colors_pd = PdfColors.black;
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
 
     int pageCount = 1; // Initialize the page count
     final ttf = pw.Font.ttf(font);
+    double font_Size = 10.0;
+    //////--------------------------------------------->
     DateTime date = DateTime.now();
-    var formatter = new DateFormat.MMMMd('th_TH');
-    String thaiDate = formatter.format(date);
+    // var formatter = new DateFormat.MMMMd('th_TH');
+    // String thaiDate = formatter.format(date);
+    final thaiDate = DateTime.parse(date_Transaction);
+    final formatter = DateFormat('d MMMM', 'th_TH');
+    final formattedDate = formatter.format(thaiDate);
+    //////--------------->พ.ศ.
+    DateTime dateTime = DateTime.parse(date_Transaction);
+    int newYear = dateTime.year + 543;
+    //////--------------------------------------------->
     var nFormat = NumberFormat("#,##0.00", "en_US");
     var nFormat2 = NumberFormat("###0.00", "en_US");
     final iconImage =
@@ -67,158 +81,17 @@ class Pdfgen_his_statusbill {
       netImage.add(await networkImage('${newValuePDFimg[i]}'));
     }
 
-    // final tableHeaders = [
-    //   'ลำดับ',
-    //   'กำหนดชำระ',
-    //   'รายการ',
-    //   'VAT%',
-    //   'หน่วย',
-    //   'VAT',
-    //   'ราคารวมก่อนVAT',
-    //   'ราคารวมvat',
-    // ];
-
-    // final tableData = [
-    //   for (int index = 0; index < _TransReBillHistoryModels.length; index++)
-    //     [
-    //       '${index + 1}',
-    //       '${_TransReBillHistoryModels[index].date}',
-    //       '${_TransReBillHistoryModels[index].expname}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].tqty!))}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].pvat!))}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
-    //     ],
-    // ];
 ///////////////////////------------------------------------------------->
-    final List<String> _digitThai = [
-      'ศูนย์',
-      'หนึ่ง',
-      'สอง',
-      'สาม',
-      'สี่',
-      'ห้า',
-      'หก',
-      'เจ็ด',
-      'แปด',
-      'เก้า'
-    ];
 
-    final List<String> _positionThai = [
-      '',
-      'สิบ',
-      'ร้อย',
-      'พัน',
-      'หมื่น',
-      'แสน',
-      'ล้าน'
-    ];
-/////////////////////////////------------------------>(จำนวนเต็ม)
-    String convertNumberToText(int number) {
-      String result = '';
-      int numberIntPart = number.toInt();
-      int numberDecimalPart = ((number - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
-
-/////////////////////////////------------------------>(จำนวนทศนิยม สตางค์)
-    String convertNumberToText2(int number2) {
-      String result = '';
-      int numberIntPart = number2.toInt();
-      int numberDecimalPart = ((number2 - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
-
-////////////////----------------------------->(ตัด หน้าจุดกับหลังจุดออกจากกัน)
-    var number_ = "${nFormat2.format(double.parse(Total.toString()))}";
-    var parts = number_.split('.');
-    var front = parts[0];
-    var back = parts[1];
-
-////////////////--------------------------------->(บาท)
-    double number = double.parse(front);
-    final int numberIntPart = number.toInt();
-    final double numberDecimalPart = (number - numberIntPart) * 100;
-    final String numberText = convertNumberToText(numberIntPart);
-    final String decimalText = convertNumberToText(numberDecimalPart.toInt());
-////////////////---------------------------------->(สตางค์)
-    double number2 = double.parse(number_);
-    final int numberIntPart2 = number.toInt();
-    final int numberDecimalPart2 = ((number2 - numberIntPart2) * 100).round();
-    final String numberText2 = convertNumberToText2(numberIntPart2);
-    final String decimalText2 =
-        convertNumberToText2(numberDecimalPart2.toInt());
-////////////////------------------------------->(เช็คและเพิ่มตัวอักษร)
-    final String formattedNumber = (decimalText2.replaceAll(
-                _digitThai[0], "") ==
-            '')
-        ? '$numberTextบาทถ้วน'
-        : (back[0].toString() == '0')
-            ? '$numberTextบาทจุดศูนย์${decimalText2.replaceAll(_digitThai[0], "")}สตางค์'
-            : '$numberTextบาทจุด${decimalText2.replaceAll(_digitThai[0], "")}สตางค์';
-
-    String text_Number1 = formattedNumber;
-    RegExp exp1 = RegExp(r"สองสิบ");
-    if (exp1.hasMatch(text_Number1)) {
-      text_Number1 = text_Number1.replaceAll(exp1, 'ยี่สิบ');
-    }
-    String text_Number2 = text_Number1;
-    RegExp exp2 = RegExp(r"สิบหนึ่ง");
-    if (exp2.hasMatch(text_Number2)) {
-      text_Number2 = text_Number2.replaceAll(exp2, 'สิบเอ็ด');
-    }
 //////////---------------------------------->
     pdf.addPage(
       pw.MultiPage(
+        pageFormat: PdfPageFormat.a4.copyWith(
+          marginBottom: 4.00,
+          marginLeft: 8.00,
+          marginRight: 8.00,
+          marginTop: 8.00,
+        ),
         header: (context) {
           return pw.Column(children: [
             pw.Row(
@@ -233,7 +106,7 @@ class Pdfgen_his_statusbill {
                             '$bill_name ',
                             maxLines: 1,
                             style: pw.TextStyle(
-                              fontSize: 8,
+                              fontSize: 10,
                               font: ttf,
                               color: Colors_pd,
                             ),
@@ -263,16 +136,20 @@ class Pdfgen_his_statusbill {
                         maxLines: 2,
                         style: pw.TextStyle(
                           color: Colors_pd,
-                          fontSize: 10.0,
-                          fontWeight: pw.FontWeight.bold,
+                          fontSize: font_Size,
+                          // fontWeight: pw.FontWeight.bold,
                           font: ttf,
                         ),
                       ),
                       pw.Text(
-                        '$bill_addr',
+                        (bill_addr == null ||
+                                bill_addr.toString() == 'null' ||
+                                bill_addr.toString() == '')
+                            ? 'ที่อยู่ : -'
+                            : 'ที่อยู่ : $bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           color: Colors_pd,
                           font: ttf,
                         ),
@@ -282,7 +159,7 @@ class Pdfgen_his_statusbill {
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -292,7 +169,7 @@ class Pdfgen_his_statusbill {
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -304,7 +181,7 @@ class Pdfgen_his_statusbill {
                         // textAlign: pw.TextAlign.justify,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -319,30 +196,50 @@ class Pdfgen_his_statusbill {
                     mainAxisSize: pw.MainAxisSize.min,
                     crossAxisAlignment: pw.CrossAxisAlignment.end,
                     children: [
+                      if (TitleType_Default_Receipt_Name != null)
+                        pw.Text(
+                          '[ $TitleType_Default_Receipt_Name ]',
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                            fontSize: font_Size,
+                            font: ttf,
+                            color: PdfColors.grey400,
+                          ),
+                        ),
+                      pw.SizedBox(
+                        height: 6,
+                      ),
                       pw.Text(
-                        'ใบเสร็จรับเงิน/ใบกำกับภาษี',
+                        (numdoctax.toString() == '')
+                            ? 'ใบเสร็จรับเงิน'
+                            : 'ใบเสร็จรับเงิน/ใบกำกับภาษี',
                         maxLines: 1,
+                        textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.00,
+                          fontSize: font_Size,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                           color: Colors_pd,
                         ),
                       ),
                       pw.Text(
-                        'เลขที่ชำระ : $numinvoice ',
+                        (numdoctax.toString() == '')
+                            ? 'เลขที่ชำระ : $numinvoice'
+                            : 'เลขที่ชำระ : $numdoctax',
                         maxLines: 2,
+                        textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
                       ),
                       pw.Text(
-                        'วันที่ออกบิล :  $thaiDate ${DateTime.now().year + 543}',
+                        'วันที่ทำรายการ : $formattedDate ${newYear}',
                         maxLines: 1,
+                        textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -361,42 +258,6 @@ class Pdfgen_his_statusbill {
           return [
             pw.Row(
               children: [
-                // pw.Expanded(
-                //   flex: 4,
-                //   child: pw.Column(
-                //     mainAxisSize: pw.MainAxisSize.min,
-                //     crossAxisAlignment: pw.CrossAxisAlignment.start,
-                //     children: [
-                //       pw.Text(
-                //         'ผู้ขาย',
-                //         style: pw.TextStyle(
-                //           fontSize: 10.0,
-                //           fontWeight: pw.FontWeight.bold,
-                //           font: ttf,
-                //         ),
-                //       ),
-                //       pw.Text(
-                //         '$renTal_name',
-                //         textAlign: pw.TextAlign.justify,
-                //         style: pw.TextStyle(
-                //             fontSize: 10.0, font: ttf, color: PdfColors.grey),
-                //       ),
-                //       pw.Text(
-                //         'ที่อยู่:$bill_addr',
-                //         textAlign: pw.TextAlign.left,
-                //         style: pw.TextStyle(
-                //             fontSize: 10.0, font: ttf, color: PdfColors.grey),
-                //       ),
-                //       pw.Text(
-                //         'เลขประจำตัวผู้เสียภาษี:$bill_tax,',
-                //         textAlign: pw.TextAlign.justify,
-                //         style: pw.TextStyle(
-                //             fontSize: 10.0, font: ttf, color: PdfColors.grey),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // pw.SizedBox(width: 10 * PdfPageFormat.mm),
                 pw.Expanded(
                   flex: 4,
                   child: pw.Column(
@@ -406,7 +267,7 @@ class Pdfgen_his_statusbill {
                       pw.Text(
                         'ลูกค้า',
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                           color: Colors_pd,
@@ -420,7 +281,7 @@ class Pdfgen_his_statusbill {
                             : '$sname',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -430,10 +291,10 @@ class Pdfgen_his_statusbill {
                                 addr.toString() == '' ||
                                 addr.toString() == 'null')
                             ? 'ที่อยู่ : -'
-                            : 'ที่อยู่: $addr',
+                            : 'ที่อยู่ : $addr',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -446,7 +307,7 @@ class Pdfgen_his_statusbill {
                             : 'เลขประจำตัวผู้เสียภาษี : $tax',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                          fontSize: 10.0,
+                          fontSize: font_Size,
                           font: ttf,
                           color: Colors_pd,
                         ),
@@ -454,13 +315,58 @@ class Pdfgen_his_statusbill {
                     ],
                   ),
                 ),
+                if (type_bills.toString().trim() != '' || type_bills != null)
+                  pw.SizedBox(width: 10 * PdfPageFormat.mm),
+                pw.Expanded(
+                  flex: 4,
+                  child: pw.Column(
+                    mainAxisSize: pw.MainAxisSize.min,
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text(
+                        (type_bills.toString().trim() == '' ||
+                                type_bills == null)
+                            ? ''
+                            : 'ประเภท ( ล็อคเสียบ )',
+                        textAlign: pw.TextAlign.justify,
+                        style: pw.TextStyle(
+                          fontSize: font_Size,
+                          font: ttf,
+                          fontWeight: pw.FontWeight.bold,
+                          color: Colors_pd,
+                        ),
+                      ),
+                      // pw.Row(children: [
+                      //   pw.Text(
+                      //     'พื้นที่ : ',
+                      //     textAlign: pw.TextAlign.justify,
+                      //     style: pw.TextStyle(
+                      //       fontSize: 8,
+                      //       font: ttf,
+                      //       fontWeight: pw.FontWeight.bold,
+                      //       color: Colors_pd,
+                      //     ),
+                      //   ),
+                      //   pw.Expanded(
+                      //     flex: 4,
+                      //     child: pw.Text(
+                      //       (area_ == null || area_.toString() == '')
+                      //           ? '-'
+                      //           : '${area_}',
+                      //       // textAlign: pw.TextAlign.justify,
+                      //       style: pw.TextStyle(
+                      //         fontSize: 8,
+                      //         font: ttf,
+                      //         color: Colors_pd,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ]),
+                    ],
+                  ),
+                ),
               ],
             ),
-            // pw.Text(
-            //   'Dear John,\nLorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit, tenetur error',
-            //   textAlign: pw.TextAlign.justify,
-            // ),
-
             pw.SizedBox(height: 3 * PdfPageFormat.mm),
             pw.Row(
               children: [
@@ -470,7 +376,7 @@ class Pdfgen_his_statusbill {
                     'รูปแบบชำระ',
                     textAlign: pw.TextAlign.justify,
                     style: pw.TextStyle(
-                      fontSize: 10.0,
+                      fontSize: font_Size,
                       font: ttf,
                       fontWeight: pw.FontWeight.bold,
                       color: Colors_pd,
@@ -484,81 +390,25 @@ class Pdfgen_his_statusbill {
                     mainAxisSize: pw.MainAxisSize.min,
                     crossAxisAlignment: pw.CrossAxisAlignment.end,
                     children: [
-                      if (dayfinpay.toString() == '' ||
-                          dayfinpay.toString() == 'null')
-                        pw.Text(
-                          'วันที่ชำระ : - ',
-                          style: pw.TextStyle(
-                            fontSize: 10.0,
-                            fontWeight: pw.FontWeight.bold,
-                            font: ttf,
-                            color: Colors_pd,
-                          ),
+                      pw.Text(
+                        (dayfinpay.toString() == '' ||
+                                dayfinpay.toString() == 'null' ||
+                                dayfinpay == null)
+                            ? 'วันที่ชำระ : - '
+                            : 'วันที่ชำระ : ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${dayfinpay}'))} ',
+                        style: pw.TextStyle(
+                          fontSize: font_Size,
+                          fontWeight: pw.FontWeight.bold,
+                          font: ttf,
+                          color: Colors_pd,
                         ),
-                      if (dayfinpay.toString() != '' ||
-                          dayfinpay.toString() != 'null')
-                        pw.Text(
-                          'วันที่ชำระ : $dayfinpay',
-                          textAlign: pw.TextAlign.justify,
-                          style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: Colors_pd,
-                          ),
-                        ),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
-
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            // pw.Row(children: [
-            //   for (var i = 0; i < finnancetransModels.length; i++)
-            //     pw.Row(
-            //       children: [
-            //         if (finnancetransModels[i].type.toString() == 'CASH')
-            //           pw.Text(
-            //             '${i + 1}.เงินสด : ',
-            //             textAlign: pw.TextAlign.justify,
-            //             style: pw.TextStyle(
-            //               fontSize: 10.0,
-            //               font: ttf,
-            //               fontWeight: pw.FontWeight.bold,
-            //             ),
-            //           ),
-            //         if (finnancetransModels[i].type.toString() != 'CASH')
-            //           pw.Text(
-            //             '${i + 1}.เงินโอน : ',
-            //             textAlign: pw.TextAlign.justify,
-            //             style: pw.TextStyle(
-            //               fontSize: 10.0,
-            //               font: ttf,
-            //               fontWeight: pw.FontWeight.bold,
-            //             ),
-            //           ),
-            //         pw.Text(
-            //           '${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท',
-            //           // '${Form_payment1.toString()} บาท',
-            //           // textAlign: pw.TextAlign.justify,
-            //           style: pw.TextStyle(
-            //               fontSize: 10.0, font: ttf, color: PdfColors.grey),
-            //         ),
-            //         // pw.Expanded(
-            //         //   flex: 4,
-            //         //   child:
-            //         // pw.Text(
-            //         //     '${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท',
-            //         //     // '${Form_payment1.toString()} บาท',
-            //         //     // textAlign: pw.TextAlign.justify,
-            //         //     style: pw.TextStyle(
-            //         //         fontSize: 10.0, font: ttf, color: PdfColors.grey),
-            //         //   ),
-            //         // ),
-            //       ],
-            //     )
-            // ]),
-
             pw.Row(
               children: [
                 pw.Expanded(
@@ -570,64 +420,64 @@ class Pdfgen_his_statusbill {
                       for (var i = 0; i < finnancetransModels.length; i++)
                         pw.Row(
                           children: [
-                            if (finnancetransModels[i].type.toString() ==
-                                'CASH')
-                              pw.Expanded(
-                                  flex: 1,
-                                  child: pw.Container(
-                                    // decoration: pw.BoxDecoration(
-                                    //   color: PdfColors.green100,
-                                    //   // border: pw.Border(
-                                    //   //   bottom: pw.BorderSide(
-                                    //   //       color: PdfColors.green900),
-                                    //   // ),
-                                    // ),
-                                    child: pw.Text(
-                                      '${i + 1}.เงินสด : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
-                                      textAlign: pw.TextAlign.justify,
-                                      style: pw.TextStyle(
-                                        fontSize: 10.0,
-                                        font: ttf,
-                                        fontWeight: pw.FontWeight.bold,
-                                        color: Colors_pd,
+                            (finnancetransModels[i].dtype.toString() == 'KP')
+                                ? pw.Expanded(
+                                    flex: 1,
+                                    child: pw.Container(
+                                      // decoration: pw.BoxDecoration(
+                                      //   color: PdfColors.green100,
+                                      //   // border: pw.Border(
+                                      //   //   bottom: pw.BorderSide(
+                                      //   //       color: PdfColors.green900),
+                                      //   // ),
+                                      // ),
+                                      child: pw.Text(
+                                        (finnancetransModels[i]
+                                                    .type
+                                                    .toString() ==
+                                                'CASH')
+                                            ? '${i + 1}.เงินสด : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)'
+                                            : '${i + 1}.เงินโอน : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท  (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
+                                        textAlign: pw.TextAlign.justify,
+                                        style: pw.TextStyle(
+                                          fontSize: font_Size,
+                                          font: ttf,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: Colors_pd,
+                                        ),
                                       ),
-                                    ),
-                                  )),
-                            if (finnancetransModels[i].type.toString() !=
-                                'CASH')
-                              pw.Expanded(
-                                  flex: 1,
-                                  child: pw.Container(
-                                    // decoration: pw.BoxDecoration(
-                                    //   color: PdfColors.green100,
-                                    //   // border: pw.Border(
-                                    //   //   bottom: pw.BorderSide(
-                                    //   //       color: PdfColors.green900),
-                                    //   // ),
-                                    // ),
-                                    child: pw.Text(
-                                      '${i + 1}.เงินโอน : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท  (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
-                                      textAlign: pw.TextAlign.justify,
-                                      style: pw.TextStyle(
-                                        fontSize: 10.0,
-                                        font: ttf,
-                                        fontWeight: pw.FontWeight.bold,
-                                        color: Colors_pd,
+                                    ))
+                                : pw.Expanded(
+                                    flex: 1,
+                                    child: pw.Container(
+                                      // decoration: pw.BoxDecoration(
+                                      //   color: PdfColors.green100,
+                                      //   // border: pw.Border(
+                                      //   //   bottom: pw.BorderSide(
+                                      //   //       color: PdfColors.green900),
+                                      //   // ),
+                                      // ),
+                                      child: pw.Text(
+                                        '${i + 1}.${finnancetransModels[i].remark} : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท  (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
+                                        textAlign: pw.TextAlign.justify,
+                                        style: pw.TextStyle(
+                                          fontSize: font_Size,
+                                          font: ttf,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: Colors_pd,
+                                        ),
                                       ),
-                                    ),
-                                  )),
+                                    )),
                           ],
                         )
                     ],
                   ),
                 ),
-                pw.SizedBox(width: 10 * PdfPageFormat.mm),
               ],
             ),
-            pw.SizedBox(height: 5 * PdfPageFormat.mm),
-
+            pw.SizedBox(height: 3 * PdfPageFormat.mm),
             pw.Container(
-              decoration: pw.BoxDecoration(
+              decoration: const pw.BoxDecoration(
                 color: PdfColors.green100,
                 border: pw.Border(
                   bottom: pw.BorderSide(color: PdfColors.green900),
@@ -645,7 +495,7 @@ class Pdfgen_his_statusbill {
                           maxLines: 1,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -663,7 +513,26 @@ class Pdfgen_his_statusbill {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  pw.Expanded(
+                    flex: 4,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'รายการ',
+                          textAlign: pw.TextAlign.center,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -678,65 +547,11 @@ class Pdfgen_his_statusbill {
                       height: 25,
                       child: pw.Center(
                         child: pw.Text(
-                          'รายการ',
-                          textAlign: pw.TextAlign.center,
-                          maxLines: 1,
-                          style: pw.TextStyle(
-                              fontSize: 10.0,
-                              fontWeight: pw.FontWeight.bold,
-                              font: ttf,
-                              color: PdfColors.green900),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // pw.Expanded(
-                  //   flex: 1,
-                  //   child: pw.Container(
-                  //     height: 25,
-                  //     child: pw.Center(
-                  //       child: pw.Text(
-                  //         'จำนวน',
-                  //         textAlign: pw.TextAlign.center,
-                  //         maxLines: 1,
-                  //         style: pw.TextStyle(
-                  //             fontSize: 10.0,
-                  //             fontWeight: pw.FontWeight.bold,
-                  //             font: ttf,
-                  //             color: PdfColors.green900),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // pw.Expanded(
-                  //   flex: 1,
-                  //   child: pw.Container(
-                  //     height: 25,
-                  //     child: pw.Center(
-                  //       child: pw.Text(
-                  //         'หน่วย',
-                  //         textAlign: pw.TextAlign.center,
-                  //         maxLines: 1,
-                  //         style: pw.TextStyle(
-                  //             fontSize: 10.0,
-                  //             fontWeight: pw.FontWeight.bold,
-                  //             font: ttf,
-                  //             color: PdfColors.green900),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  pw.Expanded(
-                    flex: 2,
-                    child: pw.Container(
-                      height: 25,
-                      child: pw.Center(
-                        child: pw.Text(
                           'VAT',
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -754,7 +569,7 @@ class Pdfgen_his_statusbill {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -772,7 +587,7 @@ class Pdfgen_his_statusbill {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -790,7 +605,7 @@ class Pdfgen_his_statusbill {
                           textAlign: pw.TextAlign.center,
                           maxLines: 1,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               fontWeight: pw.FontWeight.bold,
                               font: ttf,
                               color: PdfColors.green900),
@@ -825,7 +640,8 @@ class Pdfgen_his_statusbill {
                   pw.Expanded(
                     flex: 1,
                     child: pw.Container(
-                      height: 25,
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
                       decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
@@ -834,11 +650,11 @@ class Pdfgen_his_statusbill {
                       ),
                       child: pw.Center(
                         child: pw.Text(
-                          '${tableData00[index][0]}',
+                          '${index + 1}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -848,7 +664,8 @@ class Pdfgen_his_statusbill {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
                       decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
@@ -862,7 +679,7 @@ class Pdfgen_his_statusbill {
                           maxLines: 2,
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -870,9 +687,10 @@ class Pdfgen_his_statusbill {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 4,
                     child: pw.Container(
-                      height: 25,
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
                       decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
@@ -880,13 +698,13 @@ class Pdfgen_his_statusbill {
                         // ),
                       ),
                       child: pw.Align(
-                        alignment: pw.Alignment.centerRight,
+                        alignment: pw.Alignment.centerLeft,
                         child: pw.Text(
                           '${tableData00[index][2]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -896,7 +714,8 @@ class Pdfgen_his_statusbill {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
                       decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
@@ -910,7 +729,7 @@ class Pdfgen_his_statusbill {
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -920,7 +739,8 @@ class Pdfgen_his_statusbill {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
                       decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
@@ -934,7 +754,7 @@ class Pdfgen_his_statusbill {
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -944,8 +764,9 @@ class Pdfgen_his_statusbill {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
-                      decoration: pw.BoxDecoration(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -958,7 +779,7 @@ class Pdfgen_his_statusbill {
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -968,8 +789,9 @@ class Pdfgen_his_statusbill {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
-                      decoration: pw.BoxDecoration(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -982,7 +804,186 @@ class Pdfgen_his_statusbill {
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
-                              fontSize: 10.0,
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            for (int index = 0; index < tableData01.length; index++)
+              pw.Row(
+                children: [
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        // border: const pw.Border(
+                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
+                        // ),
+                      ),
+                      child: pw.Center(
+                        child: pw.Text(
+                          '${tableData00.length + 1}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.left,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        // border: const pw.Border(
+                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
+                        // ),
+                      ),
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          '${tableData01[index][1]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.center,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 4,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        // border: const pw.Border(
+                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
+                        // ),
+                      ),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          '${tableData01[index][2]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        // border: const pw.Border(
+                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
+                        // ),
+                      ),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData01[index][3]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        // border: const pw.Border(
+                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
+                        // ),
+                      ),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData01[index][4]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        // border: const pw.Border(
+                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
+                        // ),
+                      ),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData01[index][5]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        // border: const pw.Border(
+                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
+                        // ),
+                      ),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData01[index][6]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
                               font: ttf,
                               color: PdfColors.grey800),
                         ),
@@ -1009,7 +1010,7 @@ class Pdfgen_his_statusbill {
                               child: pw.Text(
                                 'รวมราคาสินค้า/Sub Total',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -1020,7 +1021,7 @@ class Pdfgen_his_statusbill {
                               // '${sum_pvat}',
                               // '$SubTotal',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -1033,7 +1034,7 @@ class Pdfgen_his_statusbill {
                               child: pw.Text(
                                 'ภาษีมูลค่าเพิ่ม/Vat',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -1044,7 +1045,7 @@ class Pdfgen_his_statusbill {
                               // '${sum_vat}',
                               // '$Vat',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -1057,7 +1058,7 @@ class Pdfgen_his_statusbill {
                               child: pw.Text(
                                 'หัก ณ ที่จ่าย',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -1068,7 +1069,7 @@ class Pdfgen_his_statusbill {
                               // '${sum_wht}',
                               // '$Deduct',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -1081,7 +1082,7 @@ class Pdfgen_his_statusbill {
                               child: pw.Text(
                                 'ยอดรวม',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -1091,7 +1092,7 @@ class Pdfgen_his_statusbill {
                               '${nFormat.format(double.parse(Sum_SubTotal.toString()))}',
                               // '$Sum_SubTotal',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -1104,7 +1105,7 @@ class Pdfgen_his_statusbill {
                               child: pw.Text(
                                 'ส่วนลด/Discount',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
@@ -1115,13 +1116,42 @@ class Pdfgen_his_statusbill {
                               // '${sum_disamt}',
                               // '$DisC',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
                             ),
                           ],
                         ),
+                        if (nFormat
+                                .format(double.parse(dis_sum_Matjum.toString()))
+                                .toString() !=
+                            '0.00')
+                          pw.Row(
+                            children: [
+                              pw.Expanded(
+                                child: pw.Text(
+                                  'เงินมัดจำ(ตัดมัดจำ)',
+                                  //  'เงินมัดจำ(${nFormat.format(sum_matjum)})',
+                                  style: pw.TextStyle(
+                                      fontSize: font_Size,
+                                      fontWeight: pw.FontWeight.bold,
+                                      font: ttf,
+                                      color: PdfColors.green900),
+                                ),
+                              ),
+                              pw.Text(
+                                dis_sum_Matjum == 0.00
+                                    ? '${nFormat.format(double.parse(dis_sum_Matjum.toString()))}'
+                                    : '${nFormat.format(double.parse(dis_sum_Matjum.toString()))}',
+                                style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    fontWeight: pw.FontWeight.bold,
+                                    font: ttf,
+                                    color: PdfColors.green900),
+                              ),
+                            ],
+                          ),
                         pw.Divider(color: PdfColors.grey),
                         pw.Row(
                           children: [
@@ -1129,16 +1159,16 @@ class Pdfgen_his_statusbill {
                               child: pw.Text(
                                 'ยอดชำระ',
                                 style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: font_Size,
                                     fontWeight: pw.FontWeight.bold,
                                     font: ttf,
                                     color: PdfColors.green900),
                               ),
                             ),
                             pw.Text(
-                              '${nFormat.format(double.parse(Total.toString()))}',
+                              '${nFormat.format(double.parse(Total.toString()) - double.parse(dis_sum_Matjum.toString()))}',
                               style: pw.TextStyle(
-                                  fontSize: 10,
+                                  fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
                                   font: ttf,
                                   color: PdfColors.green900),
@@ -1168,7 +1198,7 @@ class Pdfgen_his_statusbill {
                       pw.Text(
                         'ตัวอักษร ',
                         style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: font_Size,
                             fontWeight: pw.FontWeight.bold,
                             font: ttf,
                             fontStyle: pw.FontStyle.italic,
@@ -1177,9 +1207,10 @@ class Pdfgen_his_statusbill {
                       pw.Expanded(
                         flex: 4,
                         child: pw.Text(
-                          '(~${text_Number2}~)',
+                          //"${nFormat2.format(double.parse(Total.toString()))}";
+                          '(~${convertToThaiBaht(double.parse(Total.toString()))}~)',
                           style: pw.TextStyle(
-                            fontSize: 10,
+                            fontSize: font_Size,
                             fontWeight: pw.FontWeight.bold,
                             font: ttf,
                             fontStyle: pw.FontStyle.italic,
@@ -1206,7 +1237,7 @@ class Pdfgen_his_statusbill {
                                     style: pw.TextStyle(
                                         fontWeight: pw.FontWeight.bold,
                                         font: ttf,
-                                        fontSize: 10,
+                                        fontSize: font_Size,
                                         color: PdfColors.green900),
                                   ),
                                 ),
@@ -1216,7 +1247,7 @@ class Pdfgen_his_statusbill {
                                   style: pw.TextStyle(
                                       fontWeight: pw.FontWeight.bold,
                                       font: ttf,
-                                      fontSize: 10,
+                                      fontSize: font_Size,
                                       color: PdfColors.green900),
                                 ),
                               ],
@@ -1252,21 +1283,21 @@ class Pdfgen_his_statusbill {
                                 child: pw.Column(
                                   children: [
                                     pw.Text(
-                                      'หมายเหตุ',
+                                      'หมายเหตุ ',
                                       textAlign: pw.TextAlign.center,
                                       style: pw.TextStyle(
-                                          fontSize: 10,
+                                          fontSize: font_Size,
                                           font: ttf,
                                           color: Colors_pd,
                                           fontWeight: pw.FontWeight.bold),
                                     ),
                                     pw.SizedBox(height: 2 * PdfPageFormat.mm),
                                     pw.Text(
-                                      '................................................................................................................................................................................',
+                                      '.....................................................................................................................................................................................................................................................................................................................',
                                       textAlign: pw.TextAlign.center,
-                                      // maxLines: 1,
+                                      maxLines: 2,
                                       style: pw.TextStyle(
-                                        fontSize: 10,
+                                        fontSize: font_Size,
                                         font: ttf,
                                         color: Colors_pd,
                                       ),
@@ -1286,7 +1317,7 @@ class Pdfgen_his_statusbill {
                                       'ผู้รับเงิน',
                                       textAlign: pw.TextAlign.left,
                                       style: pw.TextStyle(
-                                          fontSize: 10,
+                                          fontSize: font_Size,
                                           font: ttf,
                                           color: Colors_pd,
                                           fontWeight: pw.FontWeight.bold),
@@ -1297,7 +1328,7 @@ class Pdfgen_his_statusbill {
                                       textAlign: pw.TextAlign.left,
                                       maxLines: 1,
                                       style: pw.TextStyle(
-                                        fontSize: 10,
+                                        fontSize: font_Size,
                                         font: ttf,
                                         color: Colors_pd,
                                       ),
@@ -1307,7 +1338,7 @@ class Pdfgen_his_statusbill {
                                       'วันที่........../........../..........',
                                       textAlign: pw.TextAlign.center,
                                       style: pw.TextStyle(
-                                        fontSize: 10,
+                                        fontSize: font_Size,
                                         font: ttf,
                                         color: Colors_pd,
                                       ),

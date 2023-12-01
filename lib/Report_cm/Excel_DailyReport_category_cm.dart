@@ -205,22 +205,6 @@ class Excgen_DailyReport_category_cm {
     sheet.getRangeByName('F3').columnWidth = 18;
     sheet.getRangeByName('G3').columnWidth = 18;
 
-    sheet.getRangeByName('A4').cellStyle = globalStyle1;
-    sheet.getRangeByName('B4').cellStyle = globalStyle1;
-    sheet.getRangeByName('C4').cellStyle = globalStyle1;
-    sheet.getRangeByName('D4').cellStyle = globalStyle1;
-    sheet.getRangeByName('E4').cellStyle = globalStyle1;
-    sheet.getRangeByName('F4').cellStyle = globalStyle1;
-    sheet.getRangeByName('G4').cellStyle = globalStyle1;
-    // sheet.getRangeByName('H4').cellStyle = globalStyle1;
-    // sheet.getRangeByName('I4').cellStyle = globalStyle1;
-    // sheet.getRangeByName('J4').cellStyle = globalStyle1;
-    // sheet.getRangeByName('K4').cellStyle = globalStyle1;
-    // sheet.getRangeByName('L4').cellStyle = globalStyle1;
-    // sheet.getRangeByName('M4').cellStyle = globalStyle1;
-    // sheet.getRangeByName('N4').cellStyle = globalStyle1;
-    // sheet.getRangeByName('O4').cellStyle = globalStyle1;
-
     sheet.getRangeByName('A4').columnWidth = 18;
     sheet.getRangeByName('B4').columnWidth = 18;
     sheet.getRangeByName('C4').columnWidth = 18;
@@ -236,6 +220,13 @@ class Excgen_DailyReport_category_cm {
     sheet.getRangeByName('E4').setText('บริหาร');
     sheet.getRangeByName('F4').setText('บ.3');
     sheet.getRangeByName('G4').setText('บ.4');
+    sheet.getRangeByName('A4').cellStyle = globalStyle1;
+    sheet.getRangeByName('B4').cellStyle = globalStyle1;
+    sheet.getRangeByName('C4').cellStyle = globalStyle1;
+    sheet.getRangeByName('D4').cellStyle = globalStyle1;
+    sheet.getRangeByName('E4').cellStyle = globalStyle1;
+    sheet.getRangeByName('F4').cellStyle = globalStyle1;
+    sheet.getRangeByName('G4').cellStyle = globalStyle1;
 
     String calculateTotalBills_Zone(int index1) {
       Set<String> uniqueDocnos = {};
@@ -377,7 +368,7 @@ class Excgen_DailyReport_category_cm {
       return totalArea.toString();
     }
 
-    int indextotol = 0;
+    int indextotol = 1;
     int indextotol_ = 0;
 
     for (var index1 = 0; index1 < zoneModels_report.length; index1++) {
@@ -603,7 +594,7 @@ class Excgen_DailyReport_category_cm {
       dynamic numberColor_ss =
           index3 % 2 == 0 ? globalStyle220D : globalStyle2220D;
 
-      indextotol = indextotol + 1;
+      // indextotol = indextotol + 1;
       sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
@@ -611,6 +602,7 @@ class Excgen_DailyReport_category_cm {
       sheet.getRangeByName('E${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('F${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('G${indextotol + 5 - 1}').cellStyle = numberColor;
+
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
             '${zoneModels_report_Sub_zone[index3].zn} ',
           );
@@ -618,9 +610,9 @@ class Excgen_DailyReport_category_cm {
       for (int in_dex = 0;
           in_dex < zoneModeels_report_Ser_Sub_zone.length;
           in_dex++) {
-        indextotol = indextotol + 1;
         if (zoneModeels_report_Ser_Sub_zone[in_dex].sub_zone.toString() ==
             zoneModels_report_Sub_zone[index3].ser.toString()) {
+          indextotol = indextotol + 1;
           sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
                 '- ${zoneModeels_report_Ser_Sub_zone[in_dex].zn} ',
               );
@@ -816,29 +808,26 @@ class Excgen_DailyReport_category_cm {
               .setText('- ${expModels[index_exp].expname}');
 
           sheet.getRangeByName('E${indextotol + 5 - 1}').setNumber(
-              (_TransReBillModels_GropType_Sub_zone.length == 0)
-                  ? 0.00
-                  : double.parse((_TransReBillModels_GropType_Sub_zone.map(
-                      (e) => (e.zser == null)
-                          ? double.parse(e.sub_zone ==
-                                      zoneModeels_report_Ser_Sub_zone[index3]
-                                          .ser &&
-                                  e.expser! == '${expModels[index_exp].ser}'
-                              ? e.total_expname == null ||
-                                      e.total_expname! == ''
-                                  ? 0.toString()
-                                  : e.total_expname.toString()
-                              : 0.toString())
-                          : double.parse(e.sub_zone ==
-                                      zoneModeels_report_Ser_Sub_zone[index3]
-                                          .ser &&
-                                  e.expser! == '${expModels[index_exp].ser}'
-                              ? e.total_expname == null ||
-                                      e.total_expname! == ''
-                                  ? 0.toString()
-                                  : e.total_expname.toString()
-                              : 0.toString())).reduce(
-                      (a, b) => a + b)).toString()));
+              // (_TransReBillModels_GropType_Sub_zone.length == 0)
+              //     ? 0.00
+              //     :
+              double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e
+                          .zser ==
+                      null)
+                  ? double.parse(e.sub_zone! ==
+                              '${zoneModels_report_Sub_zone[index3].ser}' &&
+                          e.expser! == '${expModels[index_exp].ser}'
+                      ? e.total_expname == null || e.total_expname! == ''
+                          ? 0.toString()
+                          : e.total_expname.toString()
+                      : 0.toString())
+                  : double.parse(e.sub_zone! ==
+                              '${zoneModels_report_Sub_zone[index3].ser}' &&
+                          e.expser! == '${expModels[index_exp].ser}'
+                      ? e.total_expname == null || e.total_expname! == ''
+                          ? 0.toString()
+                          : e.total_expname.toString()
+                      : 0.toString())).reduce((a, b) => a + b)).toString()));
         }
       }
     }

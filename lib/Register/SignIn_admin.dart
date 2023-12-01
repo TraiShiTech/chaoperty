@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, prefer_const_constructors, unnecessary_import, implementation_imports, prefer_const_constructors_in_immutables, non_constant_identifier_names, avoid_init_to_null, prefer_void_to_null, unnecessary_brace_in_string_interps, avoid_print, empty_catches, sized_box_for_whitespace, use_build_context_synchronously, file_names, prefer_const_literals_to_create_immutables, prefer_const_declarations, unnecessary_string_interpolations, prefer_collection_literals, sort_child_properties_last, avoid_unnecessary_containers, prefer_is_empty, prefer_final_fields, camel_case_types, avoid_web_libraries_in_flutter, prefer_typing_uninitialized_variables, no_leading_underscores_for_local_identifiers, deprecated_member_use
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -6,6 +7,7 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +15,9 @@ import '../AdminScaffold/AdminScaffold.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GC_package_model.dart';
+import '../Model/GetC_Otp.dart';
 import '../Model/GetLicensekey_Modely.dart';
+import '../Model/GetLicensekey_Modely_up.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Responsive/responsive.dart';
@@ -30,9 +34,21 @@ class _SignUnAdminState extends State<SignUnAdmin> {
   List<RenTalModel> renTalModels = [];
   List<PackageModel> packageModels = [];
   List<LicensekeyModel> licensekeyModels = [];
-
-  String? packSelext;
-  int? packint;
+  List<LicensekeyUPModel> licensekeyUPModels = [];
+  List<OtpModel> otpModels = [];
+  DateTime datenow = DateTime.now();
+  String? packSelext,
+      day_date = 'D',
+      _Licens,
+      _pk_sdate,
+      _pk_ldate,
+      r_email,
+      ser_id,
+      tem_id,
+      user_id;
+  int? packint, num_date = 0;
+  final Form1_text = TextEditingController();
+  final Form2_text = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -40,8 +56,41 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     read_GC_rental();
     read_GC_package();
     read_GC_packageGen();
+    read_GC_otp();
   }
 
+  Future<Null> read_GC_otp() async {
+    if (otpModels.isNotEmpty) {
+      setState(() {
+        otpModels.clear();
+      });
+    }
+
+    String url = '${MyConstant().domain}/GC_otp.php?isAdd=true';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('read_GC_rental///// $result');
+      for (var map in result) {
+        OtpModel otpModel = OtpModel.fromJson(map);
+        var ser_idx = otpModel.ser_id;
+        var tem_idx = otpModel.tem_id;
+        var user_idx = otpModel.user_id;
+        var use_idx = otpModel.use_id;
+        setState(() {
+          if (use_idx == '2') {
+            ser_id = ser_idx;
+            tem_id = tem_idx;
+            user_id = user_idx;
+          }
+
+          otpModels.add(otpModel);
+        });
+      }
+    } catch (e) {}
+  }
   // String _chars =
   //     'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
 
@@ -179,8 +228,10 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                 color: Colors.white,
                                 child: InkWell(
                                   onTap: () async {
-                                    var serren = renTalModels[i].ser;
-                                    signInThread(serren);
+                                    setState(() {
+                                      _Licens = null;
+                                    });
+                                    genORsign(i);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -223,13 +274,62 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                                 minFontSize: 10,
                                                 maxFontSize: 15,
                                                 maxLines: 1,
-                                                '( ${renTalModels[i].pkldate} )',
+                                                renTalModels[i].pkldate ==
+                                                        '0000-00-00'
+                                                    ? '( Free )'
+                                                    : '( ${renTalModels[i].pkldate} )',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                    color: Colors.black,
+                                                    color: renTalModels[i]
+                                                                .pkldate ==
+                                                            '0000-00-00'
+                                                        ? Colors.blue.shade900
+                                                        : Colors.black,
                                                     //fontWeight: FontWeight.bold,
                                                     fontFamily: Font_.Fonts_T),
                                               ),
+                                              datenow.isAfter(DateTime.parse(renTalModels[i]
+                                                                      .pkldate ==
+                                                                  '0000-00-00'
+                                                              ? '${renTalModels[i].data_update}'
+                                                              : '${renTalModels[i].pkldate} 00:00:00.000')
+                                                          .subtract(const Duration(
+                                                              days: 7))) ==
+                                                      true
+                                                  ? AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      '- ใกล้หมดอายุ -',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.red,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    )
+                                                  : datenow.isAfter(DateTime.parse(renTalModels[i]
+                                                                          .pkldate ==
+                                                                      '0000-00-00'
+                                                                  ? '${renTalModels[i].data_update}'
+                                                                  : '${renTalModels[i].pkldate} 00:00:00.000')
+                                                              .subtract(const Duration(days: 0))) ==
+                                                          true
+                                                      ? AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 15,
+                                                          maxLines: 1,
+                                                          '- หมดอายุ -',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: Colors.red,
+                                                              //fontWeight: FontWeight.bold,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        )
+                                                      : SizedBox(),
                                             ],
                                           ),
                                         )
@@ -658,7 +758,6 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                                       ? SelectableText(
                                                           '${licensekeyModels[index].key}',
                                                           maxLines: 1,
-                                                          // ignore: deprecated_member_use
                                                           toolbarOptions:
                                                               ToolbarOptions(
                                                                   copy: true,
@@ -732,7 +831,1213 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     );
   }
 
+  Future<Null> read_packageGen(ser) async {
+    if (licensekeyUPModels.isNotEmpty) {
+      setState(() {
+        licensekeyUPModels.clear();
+      });
+    }
+    String url = '${MyConstant().domain}/GC_package_up.php?isAdd=true&ser=$ser';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      licensekeyUPModels.clear();
+      for (var map in result) {
+        LicensekeyUPModel licensekeyUPModel = LicensekeyUPModel.fromJson(map);
+        var use = licensekeyUPModel.use;
+        var kk = licensekeyUPModel.key;
+        var sd = licensekeyUPModel.sdate;
+        var ld = licensekeyUPModel.ldate;
+        setState(() {
+          if (use == '2') {
+            _Licens = kk;
+            _pk_sdate = sd;
+            _pk_ldate = ld;
+          }
+          licensekeyUPModels.add(licensekeyUPModel);
+        });
+      }
+    } catch (e) {}
+  }
+
+  Future<String?> genORsign(int i) {
+    print('renTalModels ser ${renTalModels[i].ser}');
+    setState(() {
+      var ser = renTalModels[i].ser;
+      r_email =
+          renTalModels[i].bill_email == null ? '' : renTalModels[i].bill_email;
+      Form2_text.text = renTalModels[i].bill_email == null
+          ? ''
+          : renTalModels[i].bill_email.toString();
+      read_packageGen(ser);
+    });
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        title: Center(
+            child: Column(
+          children: [
+            Text(
+              'Sign in or Generator Licens Key',
+              style: TextStyle(
+                  color: AdminScafScreen_Color.Colors_Text1_,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontWeight_.Fonts_T),
+            ),
+            Text(
+              '${renTalModels[i].pn}',
+              style: TextStyle(
+                  color: Colors.blue.shade900,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontWeight_.Fonts_T),
+            ),
+          ],
+        )),
+        actions: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).size.width * 0.3,
+            child: StreamBuilder(
+                stream: Stream.periodic(const Duration(seconds: 0)),
+                builder: (context, snapshot) {
+                  return Column(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.width * 0.23,
+                        child: Column(
+                          children: [
+                            datenow.isAfter(DateTime.parse(renTalModels[i]
+                                                    .pkldate ==
+                                                '0000-00-00'
+                                            ? '${renTalModels[i].data_update}'
+                                            : '${renTalModels[i].pkldate} 00:00:00.000')
+                                        .subtract(const Duration(days: 7))) ==
+                                    true
+                                ? AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    maxLines: 1,
+                                    'อายุการใช้งานใกล้จะหมดอายุ กรุณาต่ออายุการใช้งาน',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        //fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  )
+                                : datenow.isAfter(DateTime.parse(renTalModels[i]
+                                                        .pkldate ==
+                                                    '0000-00-00'
+                                                ? '${renTalModels[i].data_update}'
+                                                : '${renTalModels[i].pkldate} 00:00:00.000')
+                                            .subtract(
+                                                const Duration(days: 0))) ==
+                                        true
+                                    ? AutoSizeText(
+                                        minFontSize: 10,
+                                        maxFontSize: 15,
+                                        maxLines: 1,
+                                        'อายุการใช้งานหมดอายุแล้ว กรุณาต่ออายุการใช้งาน',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            //fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T),
+                                      )
+                                    : SizedBox(),
+                            Divider(),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    maxLines: 1,
+                                    'Name',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    maxLines: 1,
+                                    'Chao Name',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    maxLines: 1,
+                                    'Start Date',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    maxLines: 1,
+                                    'Last Date',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    maxLines: 1,
+                                    '${renTalModels[i].pn}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    maxLines: 1,
+                                    '${renTalModels[i].bill_name}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    maxLines: 1,
+                                    renTalModels[i].pksdate == '0000-00-00'
+                                        ? 'Free 7 Day'
+                                        : '${renTalModels[i].pksdate}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    maxLines: 1,
+                                    renTalModels[i].pkldate == '0000-00-00'
+                                        ? '${renTalModels[i].datex}'
+                                        : '${renTalModels[i].pkldate}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Divider(),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Card(
+                                    color: day_date == 'D' && num_date == 7
+                                        ? Colors.green.shade900
+                                        : Colors.white,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          day_date = 'D';
+                                          num_date = 7;
+                                          Form1_text.clear();
+                                        });
+                                      },
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.04,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 15,
+                                                maxLines: 1,
+                                                '+7 Day',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: day_date == 'D' &&
+                                                            num_date == 7
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Card(
+                                    color: day_date == 'M' && num_date == 1
+                                        ? Colors.green.shade900
+                                        : Colors.white,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          day_date = 'M';
+                                          num_date = 1;
+                                          Form1_text.clear();
+                                        });
+                                      },
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.04,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 15,
+                                                maxLines: 1,
+                                                '+1 Month',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: day_date == 'M' &&
+                                                            num_date == 1
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Card(
+                                    color: day_date == 'Y' && num_date == 1
+                                        ? Colors.green.shade900
+                                        : Colors.white,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          day_date = 'Y';
+                                          num_date = 1;
+                                          Form1_text.clear();
+                                        });
+                                      },
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.04,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 15,
+                                                maxLines: 1,
+                                                '+1 Year',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: day_date == 'Y' &&
+                                                            num_date == 1
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Card(
+                                          color: Colors.white,
+                                          child: TextFormField(
+                                            controller: Form1_text,
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (value) async {
+                                              setState(() {
+                                                num_date = int.parse(value);
+                                              });
+                                            },
+                                            cursorColor: Colors.green,
+                                            decoration: InputDecoration(
+                                                fillColor: Colors.white
+                                                    .withOpacity(0.3),
+                                                filled: true,
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                enabledBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                // labelText: 'Password',
+                                                labelStyle: const TextStyle(
+                                                  color: ManageScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight:
+                                                  //     FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T,
+                                                )),
+                                            inputFormatters: <TextInputFormatter>[
+                                              // for below version 2 use this
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'[0-9]')),
+                                              // for version 2 and greater youcan also use this
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Column(
+                                            children: [
+                                              TextButton(
+                                                  style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          day_date == 'D'
+                                                              ? Colors.green
+                                                              : Colors.white),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      day_date = 'D';
+                                                    });
+                                                  },
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 15,
+                                                    maxLines: 1,
+                                                    'Day',
+                                                    textAlign: TextAlign.end,
+                                                    style: TextStyle(
+                                                        color: day_date == 'D'
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  )),
+                                              TextButton(
+                                                  style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          day_date == 'M'
+                                                              ? Colors.green
+                                                              : Colors.white),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      day_date = 'M';
+                                                    });
+                                                  },
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 15,
+                                                    maxLines: 1,
+                                                    'Month',
+                                                    textAlign: TextAlign.end,
+                                                    style: TextStyle(
+                                                        color: day_date == 'M'
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  )),
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        day_date == 'Y'
+                                                            ? Colors.green
+                                                            : Colors.white),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    day_date = 'Y';
+                                                  });
+                                                },
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  'Year',
+                                                  textAlign: TextAlign.end,
+                                                  style: TextStyle(
+                                                      color: day_date == 'Y'
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                            ],
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                    flex: 4,
+                                    child: Container(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.03,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 1,
+                                        ),
+                                        color: Colors.white,
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(15),
+                                            topRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15)),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Center(
+                                            child: _Licens == null
+                                                ? AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 15,
+                                                    maxLines: 1,
+                                                    '',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  )
+                                                : SelectableText(
+                                                    '$_Licens',
+                                                    maxLines: 1,
+                                                    toolbarOptions:
+                                                        ToolbarOptions(
+                                                            copy: true,
+                                                            selectAll: true,
+                                                            cut: false,
+                                                            paste: false),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      // fontWeight: FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                    ),
+                                                  )),
+                                      ),
+                                    )),
+                                Expanded(
+                                  flex: 2,
+                                  child: Card(
+                                    color: Colors.black,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        var ser = renTalModels[i].ser;
+                                        if (_Licens == null) {
+                                          if (day_date != null &&
+                                              num_date != 0) {
+                                            String vv = getRandomString(16);
+                                            // setState(() {
+                                            //   _Licens = vv;
+                                            // });
+                                            var nd = num_date;
+                                            var dd = day_date;
+                                            var ld = renTalModels[i].pkldate ==
+                                                    '0000-00-00'
+                                                ? renTalModels[i].datex
+                                                : renTalModels[i].pkldate;
+
+                                            var sta = 'Y';
+                                            var ema = Form2_text.text;
+                                            var pack = '0';
+                                            var fileName_Slip_ = '';
+                                            var pri = '0';
+                                            print(
+                                                'serren=$ser&lisen=$vv&num_date=$nd&day_date=$dd&ldate=$ld');
+                                            String url =
+                                                '${MyConstant().domain}/In_Package_put.php?isAdd=true&serren=$ser&lisen=$vv&num_date=$nd&day_date=$dd&ldate=$ld&sta=$sta&ema=$ema&pack=$pack&Slip=$fileName_Slip_&pri=$pri';
+
+                                            try {
+                                              var response = await http
+                                                  .get(Uri.parse(url));
+
+                                              var result =
+                                                  json.decode(response.body);
+                                              print(result);
+                                              if (result.toString() == 'true') {
+                                                setState(() {
+                                                  read_packageGen(ser);
+                                                });
+                                              }
+                                            } catch (e) {}
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      'อายุการใช้งานไม่ถูกต้อง!')),
+                                            );
+                                          }
+                                        } else {
+                                          if (day_date != null &&
+                                              num_date != 0) {
+                                            String vv = getRandomString(16);
+                                            // setState(() {
+                                            //   _Licens = vv;
+                                            // });
+                                            var nd = num_date;
+                                            var dd = day_date;
+                                            var ld = renTalModels[i].pkldate ==
+                                                    '0000-00-00'
+                                                ? renTalModels[i].datex
+                                                : renTalModels[i].pkldate;
+
+                                            print(
+                                                'Up_Package_put >>> serren=$ser&lisen=$vv&num_date=$nd&day_date=$dd&ldate=$ld');
+                                            String url =
+                                                '${MyConstant().domain}/Up_Package_put.php?isAdd=true&serren=$ser&lisen=$vv&num_date=$nd&day_date=$dd&ldate=$ld';
+
+                                            try {
+                                              var response = await http
+                                                  .get(Uri.parse(url));
+
+                                              var result =
+                                                  json.decode(response.body);
+                                              print(result);
+                                              if (result.toString() == 'true') {
+                                                setState(() {
+                                                  read_packageGen(ser);
+                                                });
+                                              }
+                                            } catch (e) {}
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      'อายุการใช้งานไม่ถูกต้อง!')),
+                                            );
+                                          }
+                                        }
+                                        setState(() {
+                                          read_packageGen(ser);
+                                        });
+                                      },
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.03,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 15,
+                                                maxLines: 1,
+                                                _Licens == null
+                                                    ? 'Generator'
+                                                    : 'Generator New',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text3_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _Licens == null
+                                ? SizedBox()
+                                : Row(
+                                    children: [
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 15,
+                                          maxLines: 1,
+                                          'Start : $_pk_sdate',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 15,
+                                          maxLines: 1,
+                                          'End : $_pk_ldate',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _Licens == null
+                                ? SizedBox()
+                                : Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Card(
+                                          color: Colors.orange.shade900,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              if (_Licens != null) {
+                                                var ser = renTalModels[i].ser;
+                                                var lc = _Licens;
+                                                var sd = _pk_sdate;
+                                                var ld = _pk_ldate;
+
+                                                String url =
+                                                    '${MyConstant().domain}/up_rentel_pac.php?isAdd=true&serren=$ser&lisen=$lc&pk_sdate=$sd&pk_ldate=$ld';
+
+                                                try {
+                                                  var response = await http
+                                                      .get(Uri.parse(url));
+
+                                                  var result = json
+                                                      .decode(response.body);
+                                                  print(result);
+                                                  if (result.toString() ==
+                                                      'true') {
+                                                    MaterialPageRoute route =
+                                                        MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SignUnAdmin(),
+                                                    );
+                                                    Navigator
+                                                        .pushAndRemoveUntil(
+                                                            context,
+                                                            route,
+                                                            (route) => true);
+                                                  }
+                                                } catch (e) {}
+                                                MaterialPageRoute route =
+                                                    MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SignUnAdmin(),
+                                                );
+                                                Navigator.pushAndRemoveUntil(
+                                                    context,
+                                                    route,
+                                                    (route) => false);
+                                              }
+                                            },
+                                            child: Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.03,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      'Update Now',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text3_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                          flex: 4,
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.03,
+                                            decoration: BoxDecoration(
+                                                // border: Border.all(
+                                                //   width: 1,
+                                                // ),
+                                                // color: Colors.white,
+                                                // borderRadius:
+                                                //     const BorderRadius.only(
+                                                //         topLeft:
+                                                //             Radius.circular(15),
+                                                //         topRight:
+                                                //             Radius.circular(15),
+                                                //         bottomLeft:
+                                                //             Radius.circular(15),
+                                                //         bottomRight:
+                                                //             Radius.circular(15)),
+                                                ),
+                                            child: TextFormField(
+                                              controller: Form2_text,
+                                              onChanged: (value) async {
+                                                setState(() {
+                                                  r_email = value;
+                                                });
+                                              },
+                                              cursorColor: Colors.green,
+                                              decoration: InputDecoration(
+                                                  fillColor: Colors.white
+                                                      .withOpacity(0.3),
+                                                  filled: true,
+                                                  focusedBorder:
+                                                      const OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      bottomRight:
+                                                          Radius.circular(15),
+                                                      bottomLeft:
+                                                          Radius.circular(15),
+                                                    ),
+                                                    borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  enabledBorder:
+                                                      const OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      bottomRight:
+                                                          Radius.circular(15),
+                                                      bottomLeft:
+                                                          Radius.circular(15),
+                                                    ),
+                                                    borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  // labelText: 'Password',
+                                                  labelStyle: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  )),
+                                            ),
+                                          )),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Card(
+                                          color: Colors.orange.shade900,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              final response = await SendEmail(
+                                                  '${renTalModels[i].pn}',
+                                                  Form2_text.text,
+                                                  '$_Licens');
+
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                response == 200
+                                                    ? const SnackBar(
+                                                        content: Text(
+                                                            'ส่ง Licens Key ไปยัง Email ของท่านแล้ว!!',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T)),
+                                                        backgroundColor:
+                                                            Colors.green)
+                                                    : const SnackBar(
+                                                        content: Text(
+                                                            'Failed to send message!',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T)),
+                                                        backgroundColor:
+                                                            Colors.red),
+                                              );
+                                              Navigator.pop(context);
+                                            },
+                                            child: Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.03,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      'Sene Mail',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text3_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Icon(Icons.send_outlined,
+                                                        color: Colors.white),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                AutoSizeText(
+                                  minFontSize: 10,
+                                  maxFontSize: 15,
+                                  maxLines: 1,
+                                  '',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text3_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                AutoSizeText(
+                                  minFontSize: 10,
+                                  maxFontSize: 15,
+                                  maxLines: 1,
+                                  '',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text3_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Card(
+                                  color: Colors.blue.shade900,
+                                  child: InkWell(
+                                    onTap: () {
+                                      var serren = renTalModels[i].ser;
+                                      signInThread(serren);
+                                    },
+                                    child: Container(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.035,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              'Sign in',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text3_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Card(
+                                  color: Colors.black,
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.035,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              'Close',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text3_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }),
+          )
+        ],
+      ),
+    );
+  }
+
+  Future SendEmail(String name, String email, String message) async {
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json'
+        }, //This line makes sure it works for all platforms.
+        body: json.encode({
+          'service_id': ser_id,
+          'template_id': tem_id,
+          'user_id': user_id,
+          'template_params': {
+            'from_name': name,
+            'from_email': email,
+            'message': 'License Key : $message'
+          }
+        }));
+    return response.statusCode;
+  }
+
   Future<Null> signInThread(serren) async {
+    String url =
+        '${MyConstant().domain}/GC_user.php?isAdd=true&email=dzentric.com@gmail.com';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      for (var map in result) {
+        UserModel userModel = UserModel.fromJson(map);
+        print('serren>>>>$serren');
+        routeToService(AdminScafScreen(route: 'หน้าหลัก'), userModel, serren);
+      }
+    } catch (e) {
+      Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ ผิดพลาด');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Username ผิดพลาด กรุณาลองใหม่!',
+                style:
+                    TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      );
+    }
+  }
+
+  Future<Null> in_Package_put(serren) async {
     String url =
         '${MyConstant().domain}/GC_user.php?isAdd=true&email=dzentric.com@gmail.com';
 

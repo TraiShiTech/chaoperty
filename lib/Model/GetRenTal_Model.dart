@@ -34,6 +34,10 @@ class RenTalModel {
   String? acc2;
   String? his;
   String? tem_page;
+  String? html;
+  String? Floor_plans;
+  String? printbill_default;
+  String? receipt_title;
 
   RenTalModel(
       {this.ser,
@@ -70,7 +74,11 @@ class RenTalModel {
       this.acc2,
       this.pkldate,
       this.his,
-      this.tem_page});
+      this.tem_page,
+      this.html,
+      this.Floor_plans,
+      this.printbill_default,
+      this.receipt_title});
 
   RenTalModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -92,7 +100,7 @@ class RenTalModel {
     dbp = json['dbp'];
     dbn = json['dbn'];
     dbno = json['dbno'];
-    dbno = json['datex'];
+    datex = json['datex'];
     rtname = json['rtname'];
     type = json['type'];
     typex = json['typex'];
@@ -108,6 +116,10 @@ class RenTalModel {
     acc2 = json['acc2'];
     his = json['his'];
     tem_page = json['tem_page'];
+    html = json['html'];
+    Floor_plans = json['Floor_plans'];
+    printbill_default = json['printbill_default'];
+    receipt_title = json['receipt_title'];
   }
 
   Map<String, dynamic> toJson() {
@@ -147,6 +159,10 @@ class RenTalModel {
     data['acc2'] = this.acc2;
     data['his'] = this.his;
     data['tem_page'] = this.tem_page;
+    data['html'] = this.html;
+    data['Floor_plans'] = this.Floor_plans;
+    data['printbill_default'] = this.printbill_default;
+    data['receipt_title'] = this.receipt_title;
     return data;
   }
 }

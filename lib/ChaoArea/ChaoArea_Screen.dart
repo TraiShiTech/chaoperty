@@ -1,13 +1,17 @@
 // ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member
 import 'dart:convert';
 import 'dart:html';
+import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:chaoperty/AdminScaffold/AdminScaffold.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'package:intl/intl.dart';
+import 'package:popup_menu_plus/popup_menu_plus.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slide_switcher/slide_switcher.dart';
@@ -16,7 +20,9 @@ import '../Constant/Myconstant.dart';
 
 import '../Model/GetArea_Model.dart';
 import '../Model/GetArea_quot.dart';
+import '../Model/GetAreax_con_Model.dart';
 import '../Model/GetRenTal_Model.dart';
+import '../Model/GetSubZone_Model.dart';
 import '../Model/GetZone_Model.dart';
 
 import '../PeopleChao/PeopleChao_Screen2.dart';
@@ -39,6 +45,7 @@ class ChaoAreaScreen extends StatefulWidget {
 }
 
 class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
+  List<GlobalKey> _btnKeys = [];
   var nFormat = NumberFormat("#,##0.00", "en_US");
   DateTime datex = DateTime.now();
   int switcherIndex1 = 0;
@@ -48,14 +55,15 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   ///////---------------------------------------------------->
   String tappedIndex_ = '';
   ///////---------------------------------------------------->
-
+  String? ser_Floor_plans;
   List<ZoneModel> zoneModels = [];
   List<AreaModel> areaModels = [];
   List<AreaQuotModel> areaQuotModels = [];
   List<AreaModel> areaFloorplanModels = [];
   List<AreaModel> _areaModels = <AreaModel>[];
   List<RenTalModel> renTalModels = [];
-
+  List<SubZoneModel> subzoneModels = [];
+  List<AreaxConModel> areaxConModels = [];
   List Area_ = [
     'คอมมูนิตี้มอลล์',
     'ออฟฟิศให้เช่า',
@@ -93,7 +101,10 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
       Value_cid,
       Ln_name,
       Img_Zone,
-      Imgfloorplan;
+      Imgfloorplan,
+      zone_Subser,
+      zone_Subname,
+      Value_stasus;
   String? ser_user,
       foder,
       position_user,
@@ -127,10 +138,51 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   void initState() {
     super.initState();
     checkPreferance();
+    read_GC_Sub_zone();
     read_GC_zone();
     read_GC_area();
     read_GC_rental();
+
     _areaModels = areaModels;
+  }
+
+  Future<Null> read_GC_Sub_zone() async {
+    if (subzoneModels.length != 0) {
+      setState(() {
+        subzoneModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+
+    String url = '${MyConstant().domain}/GC_zone_sub.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      Map<String, dynamic> map = Map();
+      map['ser'] = '0';
+      map['rser'] = '0';
+      map['zn'] = 'ทั้งหมด';
+      map['qty'] = '0';
+      map['img'] = '0';
+      map['data_update'] = '0';
+
+      SubZoneModel subzoneModelx = SubZoneModel.fromJson(map);
+
+      setState(() {
+        subzoneModels.add(subzoneModelx);
+      });
+
+      for (var map in result) {
+        SubZoneModel subzoneModel = SubZoneModel.fromJson(map);
+        setState(() {
+          subzoneModels.add(subzoneModel);
+        });
+      }
+    } catch (e) {}
   }
 
   Future<Null> checkPreferance() async {
@@ -154,7 +206,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      //  print(result);
       if (result != null) {
         for (var map in result) {
           RenTalModel renTalModel = RenTalModel.fromJson(map);
@@ -180,6 +232,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
             pkname = pkx;
             img_ = img;
             img_logo = imglogo;
+            ser_Floor_plans = renTalModel.Floor_plans!;
             renTalModels.add(renTalModel);
           });
         }
@@ -194,6 +247,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
+    var zoneSubSer = preferences.getString('zoneSubSer');
+    var zonesSubName = preferences.getString('zonesSubName');
     var ren = preferences.getString('renTalSer');
 
     String url = '${MyConstant().domain}/GC_zone.php?isAdd=true&ren=$ren';
@@ -202,7 +257,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      //print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -219,14 +274,54 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
 
       for (var map in result) {
         ZoneModel zoneModel = ZoneModel.fromJson(map);
+        var sub = zoneModel.sub_zone;
         setState(() {
-          zoneModels.add(zoneModel);
+          if (zoneSubSer == null || zoneSubSer == '0') {
+            zoneModels.add(zoneModel);
+          } else {
+            if (sub == zoneSubSer) {
+              zoneModels.add(zoneModel);
+            }
+          }
         });
       }
-
-      print(
-          'zoneModels >>. ${zoneModels.length} ${areaModels.map((e) => e.zser).toString()}');
+      zoneModels.sort((a, b) {
+        if (a.zn == 'ทั้งหมด') {
+          return -1; // 'all' should come before other elements
+        } else if (b.zn == 'ทั้งหมด') {
+          return 1; // 'all' should come after other elements
+        } else {
+          return a.zn!
+              .compareTo(b.zn!); // sort other elements in ascending order
+        }
+      });
     } catch (e) {}
+
+    setState(() {
+      zone_ser = preferences.getString('zoneSer');
+      zone_name = preferences.getString('zonesName');
+      zone_Subser = preferences.getString('zoneSubSer');
+      zone_Subname = preferences.getString('zonesSubName');
+    });
+
+    int selectedIndex = zoneModels.indexWhere(
+        (element) => element.ser == zone_ser && element.zn == zone_name);
+
+    // print('Selected index: $selectedIndex');
+    if (selectedIndex == 0) {
+    } else {
+      Img_Zone =
+          '${MyConstant().domain}/files/${DBN_}/zone/${zoneModels[selectedIndex].img}';
+      // Img_Zone =
+      //     'https://dzentric.com/chao_perty/chao_api/files/${DBN_}/zone/${zoneModels[selectedIndex].img}';
+      Imgfloorplan =
+          '${MyConstant().domain}/files/${DBN_}/zone/${zoneModels[selectedIndex].img_floorplan}';
+    }
+
+    setState(() {
+      areaFloorplanModels.clear;
+      read_GC_area();
+    });
   }
 
   Future<Null> read_GC_area() async {
@@ -241,7 +336,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('zone >>>>>> $zone');
+    //print('zone >>>>>> $zone');
 
     String url = zone == null
         ? '${MyConstant().domain}/GC_areaAll.php?isAdd=true&ren=$ren&zone=$zone'
@@ -253,7 +348,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           AreaModel areaModel = AreaModel.fromJson(map);
@@ -262,7 +357,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
             areaModels.add(areaModel);
           });
 
-          if (areaModel.quantity == '2') {
+          if (areaModel.quantity == '2' || areaModel.quantity == '3') {
             var qin = areaModel.ln_q;
             var qinser = areaModel.ser;
             String url =
@@ -284,11 +379,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
             } catch (e) {}
           }
         }
-        print(
-            'areaQuotModels.length>>>>>>>> ${areaQuotModels.length} ${areaQuotModels.map((e) => '152' == e.ser ? e.docno : '0').toString()}');
-        setState(() {
-          loadSvg();
-        });
+        // print(
+        //     'areaQuotModels.length>>>>>>>> ${areaQuotModels.length} ${areaQuotModels.map((e) => '152' == e.ser ? e.docno : '0').toString()}');
+        if (zone == null || zone == '0') {
+          setState(() {
+            areaFloorplanModels.clear();
+          });
+        } else {
+          setState(() {
+            loadSvg();
+          });
+        }
       } else {
         setState(() {
           if (areaModels.isEmpty) {
@@ -304,7 +405,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         zone_ser = preferences.getString('zoneSer');
         zone_name = preferences.getString('zonesName');
       });
-
+      _btnKeys = List.generate(areaModels.length, (_) => GlobalKey());
       print(
           'zoneModels >>. ${zoneModels.length} ${areaModels.map((e) => e.zser).toString()}');
     } catch (e) {}
@@ -312,6 +413,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
 
   void loadSvg() async {
     setState(() {
+      areaFloorplanModels.clear();
       areaFloorplanModels.clear();
     });
 
@@ -528,7 +630,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
-            if (int.parse(areaModel.quantity!) == 1) {
+
+            if (areaModel.quantity == '1') {
               setState(() {
                 areaModels.add(areaModel);
               });
@@ -661,9 +764,11 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
             var notTitle = areaModel.lncode.toString().toLowerCase();
             var notsname = areaModel.sname.toString().toLowerCase();
             var notcname = areaModel.cname.toString().toLowerCase();
+            var notcid = areaModel.cid.toString().toLowerCase();
             return notTitle.contains(text) ||
                 notsname.contains(text) ||
-                notcname.contains(text);
+                notcname.contains(text) ||
+                notcid.contains(text);
           }).toList();
         });
       },
@@ -847,6 +952,138 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
+                    subzoneModels.length == 1
+                        ? SizedBox()
+                        : MediaQuery.of(context).size.shortestSide <
+                                MediaQuery.of(context).size.width * 1
+                            ? const Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'โซน:',
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T),
+                                  ),
+                                ))
+                            : const SizedBox(),
+
+                    subzoneModels.length == 1
+                        ? SizedBox()
+                        : Expanded(
+                            flex: MediaQuery.of(context).size.shortestSide <
+                                    MediaQuery.of(context).size.width * 1
+                                ? 2
+                                : 3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
+                                ),
+                                width: 200,
+                                child: DropdownButtonFormField2(
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  isExpanded: true,
+                                  hint: Text(
+                                    zone_Subname == null
+                                        ? 'ทั้งหมด'
+                                        : '$zone_Subname',
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: TextHome_Color.TextHome_Colors,
+                                  ),
+                                  style: const TextStyle(
+                                      color: Colors.green,
+                                      fontFamily: Font_.Fonts_T),
+                                  iconSize: 30,
+                                  buttonHeight: 40,
+                                  // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                  dropdownDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  items: subzoneModels
+                                      .map((item) => DropdownMenuItem<String>(
+                                            value: '${item.ser},${item.zn}',
+                                            child: Text(
+                                              item.zn!,
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ))
+                                      .toList(),
+
+                                  onChanged: (value) async {
+                                    var zones = value!.indexOf(',');
+                                    var zoneSer = value.substring(0, zones);
+                                    var zonesName = value.substring(zones + 1);
+                                    print(
+                                        'mmmmm ${zoneSer.toString()} $zonesName');
+
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    preferences.setString(
+                                        'zoneSubSer', zoneSer.toString());
+                                    preferences.setString(
+                                        'zonesSubName', zonesName.toString());
+                                    preferences.remove("zoneSer");
+                                    preferences.remove("zonesName");
+
+                                    // setState(() {
+                                    //   zoneModels.clear();
+                                    //   zone_ser =
+                                    //       preferences.getString('zoneSer');
+                                    //   zone_name =
+                                    //       preferences.getString('zonesName');
+                                    //   zone_Subser =
+                                    //       preferences.getString('zoneSubSer');
+                                    //   zone_Subname =
+                                    //       preferences.getString('zonesSubName');
+                                    //   read_GC_Sub_zone().then((value) =>
+                                    //       read_GC_zone()
+                                    //           .then((value) => read_GC_area()));
+                                    // });
+
+                                    String? _route =
+                                        preferences.getString('route');
+                                    MaterialPageRoute materialPageRoute =
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                AdminScafScreen(route: _route));
+                                    Navigator.pushAndRemoveUntil(context,
+                                        materialPageRoute, (route) => false);
+                                  },
+                                  // onSaved: (value) {
+                                  //   // selectedValue = value.toString();
+                                  // },
+                                ),
+                              ),
+                            ),
+                          ),
                     MediaQuery.of(context).size.shortestSide <
                             MediaQuery.of(context).size.width * 1
                         ? const Expanded(
@@ -943,12 +1180,15 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               if (selectedIndex == 0) {
                               } else {
                                 Img_Zone =
-                                    'https://dzentric.com/chao_perty/chao_api/files/${DBN_}/zone/${zoneModels[selectedIndex].img}';
+                                    '${MyConstant().domain}/files/${DBN_}/zone/${zoneModels[selectedIndex].img}';
+                                // Img_Zone =
+                                //     'https://dzentric.com/chao_perty/chao_api/files/${DBN_}/zone/${zoneModels[selectedIndex].img}';
                                 Imgfloorplan =
                                     '${MyConstant().domain}/files/${DBN_}/zone/${zoneModels[selectedIndex].img_floorplan}';
                               }
 
                               setState(() {
+                                areaFloorplanModels.clear;
                                 read_GC_area();
                               });
                               print(selectedIndex);
@@ -1701,20 +1941,21 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                       onSelect: (index) async {
                                         setState(() {
                                           switcherIndex1 = index;
-                                          if (index + 1 == 1) {
-                                            setState(() {
-                                              Visit_ = 'grid';
-                                            });
-                                          } else if (index + 1 == 2) {
-                                            setState(() {
-                                              Visit_ = 'list';
-                                            });
-                                          } else {
-                                            setState(() {
-                                              Visit_ = 'map';
-                                            });
-                                          }
                                         });
+                                        if (index + 1 == 1) {
+                                          setState(() {
+                                            Visit_ = 'grid';
+                                          });
+                                        } else if (index + 1 == 2) {
+                                          setState(() {
+                                            Visit_ = 'list';
+                                          });
+                                        } else {
+                                          setState(() {
+                                            Visit_ = 'map';
+                                          });
+                                          read_GC_area();
+                                        }
                                       },
                                       containerHeight: 40,
                                       containerWight: 100,
@@ -1766,14 +2007,14 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                           ? PeopleChaoScreen2(
                               Get_Value_cid: Value_cid,
                               Get_Value_NameShop_index: ser_cidtan,
-                              Get_Value_status: 1,
+                              Get_Value_status: Value_stasus,
                               Get_Value_indexpage: '0',
                               updateMessage: updateMessage,
                             )
                           : PeopleChaoScreen2(
                               Get_Value_cid: Value_cid,
                               Get_Value_NameShop_index: ser_cidtan,
-                              Get_Value_status: 1,
+                              Get_Value_status: Value_stasus,
                               Get_Value_indexpage: '3',
                               updateMessage: updateMessage,
                             )
@@ -1965,8 +2206,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                   children: [
                     Container(
                         height: (!Responsive.isDesktop(context))
-                            ? MediaQuery.of(context).size.width * 0.85
-                            : MediaQuery.of(context).size.width * 0.3,
+                            ? MediaQuery.of(context).size.height * 0.85
+                            : MediaQuery.of(context).size.height * 0.6,
                         width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
                           color: AppbackgroundColor.Sub_Abg_Colors,
@@ -2063,104 +2304,114 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                               tappedIndex_ = index.toString();
                                             });
                                           },
-                                          title: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              // Expanded(
-                                              //   flex: 1,
-                                              //   child: Row(
-                                              //     mainAxisAlignment:
-                                              //         MainAxisAlignment.center,
-                                              //     children: [
-                                              //       Container(
-                                              //         decoration: BoxDecoration(
-                                              //           color:
-                                              //               Colors.grey.shade300,
-                                              //           borderRadius:
-                                              //               BorderRadius.only(
-                                              //                   topLeft: Radius
-                                              //                       .circular(10),
-                                              //                   topRight: Radius
-                                              //                       .circular(10),
-                                              //                   bottomLeft: Radius
-                                              //                       .circular(10),
-                                              //                   bottomRight:
-                                              //                       Radius
-                                              //                           .circular(
-                                              //                               10)),
-                                              //           // border: Border.all(color: Colors.grey, width: 1),
-                                              //         ),
-                                              //         padding:
-                                              //             EdgeInsets.all(8.0),
-                                              //         child: PopupMenuButton(
-                                              //           child: Center(
-                                              //               child: Row(
-                                              //             children: const [
-                                              //               Text(
-                                              //                 'เรียกดู',
-                                              //                 style: TextStyle(
-                                              //                   color: TextHome_Color
-                                              //                       .TextHome_Colors,
-
-                                              //                   //fontSize: 10.0
-                                              //                 ),
-                                              //               ),
-                                              //               Icon(
-                                              //                 Icons.navigate_next,
-                                              //                 color: TextHome_Color
-                                              //                     .TextHome_Colors,
-                                              //               )
-                                              //             ],
-                                              //           )),
-                                              //           itemBuilder: (context) {
-                                              //             return List.generate(
-                                              //                 buttonview_.length,
-                                              //                 (index) {
-                                              //               return PopupMenuItem(
-                                              //                 child: Text(
-                                              //                   buttonview_[
-                                              //                       index],
-                                              //                   style:
-                                              //                       const TextStyle(
-                                              //                     color: Colors
-                                              //                         .black,
-
-                                              //                     //fontSize: 10.0
-                                              //                   ),
-                                              //                 ),
-                                              //               );
-                                              //             });
-                                              //           },
-                                              //         ),
-                                              //       ),
-                                              //     ],
-                                              //   ),
-                                              // ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    '${areaModels[index].zn}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontSize: 10.0
-                                                        ),
-                                                  ),
+                                          title: Container(
+                                            decoration: BoxDecoration(
+                                              // color: Colors.green[100]!
+                                              //     .withOpacity(0.5),
+                                              border: Border(
+                                                bottom: BorderSide(
+                                                  color: Colors.black12,
+                                                  width: 1,
                                                 ),
                                               ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                // Expanded(
+                                                //   flex: 1,
+                                                //   child: Row(
+                                                //     mainAxisAlignment:
+                                                //         MainAxisAlignment.center,
+                                                //     children: [
+                                                //       Container(
+                                                //         decoration: BoxDecoration(
+                                                //           color:
+                                                //               Colors.grey.shade300,
+                                                //           borderRadius:
+                                                //               BorderRadius.only(
+                                                //                   topLeft: Radius
+                                                //                       .circular(10),
+                                                //                   topRight: Radius
+                                                //                       .circular(10),
+                                                //                   bottomLeft: Radius
+                                                //                       .circular(10),
+                                                //                   bottomRight:
+                                                //                       Radius
+                                                //                           .circular(
+                                                //                               10)),
+                                                //           // border: Border.all(color: Colors.grey, width: 1),
+                                                //         ),
+                                                //         padding:
+                                                //             EdgeInsets.all(8.0),
+                                                //         child: PopupMenuButton(
+                                                //           child: Center(
+                                                //               child: Row(
+                                                //             children: const [
+                                                //               Text(
+                                                //                 'เรียกดู',
+                                                //                 style: TextStyle(
+                                                //                   color: TextHome_Color
+                                                //                       .TextHome_Colors,
+
+                                                //                   //fontSize: 10.0
+                                                //                 ),
+                                                //               ),
+                                                //               Icon(
+                                                //                 Icons.navigate_next,
+                                                //                 color: TextHome_Color
+                                                //                     .TextHome_Colors,
+                                                //               )
+                                                //             ],
+                                                //           )),
+                                                //           itemBuilder: (context) {
+                                                //             return List.generate(
+                                                //                 buttonview_.length,
+                                                //                 (index) {
+                                                //               return PopupMenuItem(
+                                                //                 child: Text(
+                                                //                   buttonview_[
+                                                //                       index],
+                                                //                   style:
+                                                //                       const TextStyle(
+                                                //                     color: Colors
+                                                //                         .black,
+
+                                                //                     //fontSize: 10.0
+                                                //                   ),
+                                                //                 ),
+                                                //               );
+                                                //             });
+                                                //           },
+                                                //         ),
+                                                //       ),
+                                                //     ],
+                                                //   ),
+                                                // ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      '${areaModels[index].zn}',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
                                                   child: Text(
                                                     areaModels[index].ln_c ==
                                                             null
@@ -2170,7 +2421,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                             ? '${areaModels[index].lncode}'
                                                             : '${areaModels[index].ln_q}'
                                                         : '${areaModels[index].ln_c}',
-                                                    textAlign: TextAlign.center,
+                                                    textAlign: TextAlign.start,
                                                     style: const TextStyle(
                                                         color:
                                                             PeopleChaoScreen_Color
@@ -2181,122 +2432,111 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                         ),
                                                   ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  areaModels[index].area_c ==
-                                                          null
-                                                      ? areaModels[index].ln_q ==
-                                                              null
-                                                          ? nFormat.format(
-                                                              double.parse(
-                                                                  areaModels[index]
-                                                                      .area!))
-                                                          : nFormat.format(
-                                                              double.parse(
-                                                                  areaModels[
-                                                                          index]
-                                                                      .area_q!))
-                                                      : nFormat.format(
-                                                          double.parse(
-                                                              areaModels[index]
-                                                                  .area_c!)),
-                                                  textAlign: TextAlign.end,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    areaModels[index].area_c ==
+                                                            null
+                                                        ? areaModels[index]
+                                                                    .ln_q ==
+                                                                null
+                                                            ? nFormat.format(
+                                                                double.parse(
+                                                                    areaModels[index]
+                                                                        .area!))
+                                                            : nFormat.format(
+                                                                double.parse(
+                                                                    areaModels[index]
+                                                                        .area_q!))
+                                                        : nFormat.format(
+                                                            double.parse(
+                                                                areaModels[index]
+                                                                    .area_c!)),
+                                                    textAlign: TextAlign.end,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  areaModels[index].total ==
-                                                          null
-                                                      ? areaModels[index]
-                                                                  .total_q ==
-                                                              null
-                                                          ? nFormat.format(
-                                                              double.parse(
-                                                                  areaModels[index]
-                                                                      .rent!))
-                                                          : nFormat.format(
-                                                              double.parse(
-                                                                  areaModels[index]
-                                                                      .total_q!))
-                                                      : nFormat.format(
-                                                          double.parse(
-                                                              areaModels[index]
-                                                                  .total!)),
-                                                  textAlign: TextAlign.end,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    areaModels[index].total ==
+                                                            null
+                                                        ? areaModels[index]
+                                                                    .total_q ==
+                                                                null
+                                                            ? nFormat.format(
+                                                                double.parse(
+                                                                    areaModels[index]
+                                                                        .rent!))
+                                                            : nFormat.format(
+                                                                double.parse(
+                                                                    areaModels[index]
+                                                                        .total_q!))
+                                                        : nFormat.format(
+                                                            double.parse(
+                                                                areaModels[index]
+                                                                    .total!)),
+                                                    textAlign: TextAlign.end,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      areaModels[index].cid ==
-                                                              null
-                                                          ? ''
-                                                          : '${areaModels[index].cid}',
-                                                      maxLines: 1,
-                                                      textAlign: TextAlign.end,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    )),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      areaModels[index].docno ==
-                                                              null
-                                                          ? ''
-                                                          : '${areaModels[index].docno}',
-                                                      maxLines: 1,
-                                                      textAlign: TextAlign.end,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          color: areaModels[
-                                                                          index]
-                                                                      .docno !=
-                                                                  null
-                                                              ? Colors.blue
-                                                              : PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    )),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    areaModels[index].cid ==
+                                                            null
+                                                        ? ''
+                                                        : '${areaModels[index].cid}',
+                                                    maxLines: 1,
+                                                    textAlign: TextAlign.end,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    areaModels[index].docno ==
+                                                            null
+                                                        ? ''
+                                                        : '${areaModels[index].docno}',
+                                                    maxLines: 1,
+                                                    textAlign: TextAlign.end,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color: areaModels[index]
+                                                                    .docno !=
+                                                                null
+                                                            ? Colors.blue
+                                                            : PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
                                                   child: Text(
                                                     areaModels[index].ldate ==
                                                             null
@@ -2348,67 +2588,68 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                         fontFamily: Font_.Fonts_T),
                                                   ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  areaModels[index].quantity ==
-                                                          '1'
-                                                      ? datex.isAfter(DateTime.parse(
-                                                                      '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
-                                                                  .subtract(const Duration(
-                                                                      days:
-                                                                          0))) ==
-                                                              true
-                                                          ? 'หมดสัญญา'
-                                                          : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
-                                                                      const Duration(
-                                                                          days:
-                                                                              30))) ==
-                                                                  true
-                                                              ? 'ใกล้หมดสัญญา'
-                                                              : 'เช่าอยู่'
-                                                      : areaModels[index].quantity ==
-                                                              '2'
-                                                          ? 'เสนอราคา'
-                                                          : areaModels[index]
-                                                                      .quantity ==
-                                                                  '3'
-                                                              ? 'เสนอราคา(มัดจำ)'
-                                                              : 'ว่าง',
-                                                  textAlign: TextAlign.end,
-                                                  style: TextStyle(
-                                                      color: areaModels[index]
-                                                                  .quantity ==
-                                                              '1'
-                                                          ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
-                                                                      const Duration(
-                                                                          days:
-                                                                              0))) ==
-                                                                  true
-                                                              ? Colors.red
-                                                              : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
-                                                                      true
-                                                                  ? Colors
-                                                                      .orange
-                                                                      .shade900
-                                                                  : Colors.black
-                                                          : areaModels[index]
-                                                                      .quantity ==
-                                                                  '2'
-                                                              ? Colors.blue
-                                                              : areaModels[index]
-                                                                          .quantity ==
-                                                                      '3'
-                                                                  ? Colors.blue
-                                                                  : Colors
-                                                                      .green,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    areaModels[index].quantity ==
+                                                            '1'
+                                                        ? datex.isAfter(DateTime.parse(
+                                                                        '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+                                                                    .subtract(const Duration(
+                                                                        days:
+                                                                            0))) ==
+                                                                true
+                                                            ? 'หมดสัญญา'
+                                                            : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
+                                                                        const Duration(
+                                                                            days:
+                                                                                30))) ==
+                                                                    true
+                                                                ? 'ใกล้หมดสัญญา'
+                                                                : 'เช่าอยู่'
+                                                        : areaModels[index]
+                                                                    .quantity ==
+                                                                '2'
+                                                            ? 'เสนอราคา'
+                                                            : areaModels[index]
+                                                                        .quantity ==
+                                                                    '3'
+                                                                ? 'เสนอราคา(มัดจำ)'
+                                                                : 'ว่าง',
+                                                    textAlign: TextAlign.end,
+                                                    style: TextStyle(
+                                                        color: areaModels[index]
+                                                                    .quantity ==
+                                                                '1'
+                                                            ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
+                                                                        const Duration(
+                                                                            days:
+                                                                                0))) ==
+                                                                    true
+                                                                ? Colors.red
+                                                                : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                        true
+                                                                    ? Colors
+                                                                        .orange
+                                                                        .shade900
+                                                                    : Colors
+                                                                        .black
+                                                            : areaModels[index]
+                                                                        .quantity ==
+                                                                    '2'
+                                                                ? Colors.blue
+                                                                : areaModels[index]
+                                                                            .quantity ==
+                                                                        '3'
+                                                                    ? Colors.blue
+                                                                    : Colors.green,
+                                                        fontFamily: Font_.Fonts_T
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           )),
                                     ),
                                   );
@@ -2564,560 +2805,647 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         : (Visit_ == 'grid')
             ? Column(
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                      // border: Border.all(color: Colors.grey, width: 1),
-                    ),
-                    padding: const EdgeInsets.all(20),
-                    // color: Colors.white,
-                    child: zone_ser == '0' || zone_ser == '' || zone_ser == null
-                        ? ListView.builder(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: zoneModels.length,
-                            itemBuilder: (BuildContext context, int zindex) {
-                              return zoneModels[zindex].ser == '0'
-                                  ? const SizedBox()
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                  child: Text(
-                                                    'โซน (${zoneModels[zindex].zn})',
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T
-
-                                                        //fontSize: 10.0
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: AppbackgroundColor.Sub_Abg_Colors,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        // border: Border.all(color: Colors.grey, width: 1),
+                      ),
+                      padding: const EdgeInsets.all(20),
+                      // color: Colors.white,
+                      child: zone_ser == '0' ||
+                              zone_ser == '' ||
+                              zone_ser == null
+                          ? ListView.builder(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: zoneModels.length,
+                              itemBuilder: (BuildContext context, int zindex) {
+                                return zoneModels[zindex].ser == '0'
+                                    ? const SizedBox()
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              AppbackgroundColor
+                                                                  .TiTile_Colors,
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                          ),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.white,
+                                                              width: 2),
                                                         ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5.0),
+                                                        child: Text(
+                                                          'โซน :  ${zoneModels[zindex].zn}  ',
+                                                          style: const TextStyle(
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T
+
+                                                              //fontSize: 10.0
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                                Expanded(
+                                                    flex: 1, child: Text('')),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: ScrollConfiguration(
-                                              behavior: ScrollConfiguration.of(
-                                                      context)
-                                                  .copyWith(dragDevices: {
-                                                PointerDeviceKind.touch,
-                                                PointerDeviceKind.mouse,
-                                              }),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .shortestSide <
-                                                            MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                1
-                                                        ? 500
-                                                        : 350,
-                                                    child: GridView.count(
-                                                      crossAxisCount: MediaQuery
-                                                                      .of(
-                                                                          context)
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: ScrollConfiguration(
+                                                behavior:
+                                                    ScrollConfiguration.of(
+                                                            context)
+                                                        .copyWith(dragDevices: {
+                                                  PointerDeviceKind.touch,
+                                                  PointerDeviceKind.mouse,
+                                                }),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      height: MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .shortestSide <
                                                               MediaQuery.of(
                                                                           context)
                                                                       .size
-                                                                      .width *
+                                                                      .height *
                                                                   1
-                                                          ? 12
-                                                          : 6,
+                                                          ? 420
+                                                          : 320,
+                                                      child: GridView.count(
+                                                        crossAxisCount: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .shortestSide <
+                                                                MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    1
+                                                            ? 12
+                                                            : 6,
+                                                        children: [
+                                                          for (int i = 0;
+                                                              i <
+                                                                  areaModels
+                                                                      .length;
+                                                              i++)
+                                                            if (zoneModels[
+                                                                        zindex]
+                                                                    .ser ==
+                                                                areaModels[i]
+                                                                    .zser)
+                                                              createCard(
+                                                                  i, context),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5.0,
+                                                    ),
+                                                    Row(
                                                       children: [
-                                                        for (int i = 0;
-                                                            i <
-                                                                areaModels
-                                                                    .length;
-                                                            i++)
-                                                          if (zoneModels[zindex]
-                                                                  .ser ==
-                                                              areaModels[i]
-                                                                  .zser)
-                                                            createCard(i),
+                                                        Expanded(
+                                                          child: Divider(
+                                                            color: Colors
+                                                                .grey[300],
+                                                            height: 4.0,
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
-                                                  )
+                                                    const SizedBox(
+                                                      height: 5.0,
+                                                    ),
 
-                                                  // SizedBox(
-                                                  //   width: 300,
-                                                  // )
+                                                    // SizedBox(
+                                                    //   width: 300,
+                                                    // )
 
-                                                  // ScrollConfiguration(
-                                                  //   behavior: ScrollConfiguration
-                                                  //           .of(context)
-                                                  //       .copyWith(
-                                                  //           dragDevices: {
-                                                  //         PointerDeviceKind
-                                                  //             .touch,
-                                                  //         PointerDeviceKind
-                                                  //             .mouse,
-                                                  //       }),
-                                                  //   child:
-                                                  //       SingleChildScrollView(
-                                                  //     scrollDirection:
-                                                  //         Axis.vertical,
-                                                  //     dragStartBehavior:
-                                                  //         DragStartBehavior
-                                                  //             .start,
-                                                  //     child: Row(
-                                                  //         mainAxisAlignment:
-                                                  //             MainAxisAlignment
-                                                  //                 .start,
-                                                  //         children: [
-                                                  //           for (int i =
-                                                  //                   0;
-                                                  //               i <
-                                                  //                   areaModels
-                                                  //                       .length;
-                                                  //               i++)
-                                                  //             zoneModels[zindex].ser ==
-                                                  //                     areaModels[i].zser
-                                                  //                 ? Column(
-                                                  //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                                  //                     children: [
-                                                  //                       areaModels[i].quantity == null
-                                                  //                           ? Row(
-                                                  //                               mainAxisAlignment: MainAxisAlignment.start,
-                                                  //                               children: [
-                                                  //                                 createCard(i),
-                                                  //                               ],
-                                                  //                             )
-                                                  //                           : SizedBox()
-                                                  //                     ],
-                                                  //                   )
-                                                  //                 : SizedBox(),
-                                                  //           SizedBox(
-                                                  //             width:
-                                                  //                 300,
-                                                  //           )
-                                                  //         ]),
-                                                  //   ),
-                                                  // ),
-                                                  // ScrollConfiguration(
-                                                  //   behavior: ScrollConfiguration
-                                                  //           .of(context)
-                                                  //       .copyWith(
-                                                  //           dragDevices: {
-                                                  //         PointerDeviceKind
-                                                  //             .touch,
-                                                  //         PointerDeviceKind
-                                                  //             .mouse,
-                                                  //       }),
-                                                  //   child:
-                                                  //       SingleChildScrollView(
-                                                  //     scrollDirection:
-                                                  //         Axis.horizontal,
-                                                  //     dragStartBehavior:
-                                                  //         DragStartBehavior
-                                                  //             .start,
-                                                  //     child: Row(
-                                                  //         mainAxisAlignment:
-                                                  //             MainAxisAlignment
-                                                  //                 .start,
-                                                  //         children: [
-                                                  //           for (int i =
-                                                  //                   0;
-                                                  //               i <
-                                                  //                   areaModels
-                                                  //                       .length;
-                                                  //               i++)
-                                                  //             zoneModels[zindex].ser ==
-                                                  //                     areaModels[i].zser
-                                                  //                 ? Column(
-                                                  //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                                  //                     children: [
-                                                  //                       areaModels[i].quantity == '2'
-                                                  //                           ? Row(
-                                                  //                               mainAxisAlignment: MainAxisAlignment.start,
-                                                  //                               children: [
-                                                  //                                 createCard(i),
-                                                  //                               ],
-                                                  //                             )
-                                                  //                           : SizedBox(),
-                                                  //                     ],
-                                                  //                   )
-                                                  //                 : SizedBox(),
-                                                  //           SizedBox(
-                                                  //             width:
-                                                  //                 300,
-                                                  //           )
-                                                  //         ]),
-                                                  //   ),
-                                                  // ),
-                                                  // ScrollConfiguration(
-                                                  //   behavior: ScrollConfiguration
-                                                  //           .of(context)
-                                                  //       .copyWith(
-                                                  //           dragDevices: {
-                                                  //         PointerDeviceKind
-                                                  //             .touch,
-                                                  //         PointerDeviceKind
-                                                  //             .mouse,
-                                                  //       }),
-                                                  //   child:
-                                                  //       SingleChildScrollView(
-                                                  //     scrollDirection:
-                                                  //         Axis.horizontal,
-                                                  //     dragStartBehavior:
-                                                  //         DragStartBehavior
-                                                  //             .start,
-                                                  //     child: Row(
-                                                  //         mainAxisAlignment:
-                                                  //             MainAxisAlignment
-                                                  //                 .start,
-                                                  //         children: [
-                                                  //           for (int i =
-                                                  //                   0;
-                                                  //               i <
-                                                  //                   areaModels
-                                                  //                       .length;
-                                                  //               i++)
-                                                  //             zoneModels[zindex].ser ==
-                                                  //                     areaModels[i].zser
-                                                  //                 ? Column(
-                                                  //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                                  //                     children: [
-                                                  //                       areaModels[i].quantity == '1'
-                                                  //                           ? Row(
-                                                  //                               mainAxisAlignment: MainAxisAlignment.start,
-                                                  //                               children: [
-                                                  //                                 createCard(i),
-                                                  //                               ],
-                                                  //                             )
-                                                  //                           : SizedBox(),
-                                                  //                     ],
-                                                  //                   )
-                                                  //                 : SizedBox(),
-                                                  //           SizedBox(
-                                                  //             width:
-                                                  //                 300,
-                                                  //           )
-                                                  //         ]),
-                                                  //   ),
-                                                  // ),
-                                                  // ScrollConfiguration(
-                                                  //   behavior: ScrollConfiguration
-                                                  //           .of(context)
-                                                  //       .copyWith(
-                                                  //           dragDevices: {
-                                                  //         PointerDeviceKind
-                                                  //             .touch,
-                                                  //         PointerDeviceKind
-                                                  //             .mouse,
-                                                  //       }),
-                                                  //   child:
-                                                  //       SingleChildScrollView(
-                                                  //     scrollDirection:
-                                                  //         Axis.horizontal,
-                                                  //     dragStartBehavior:
-                                                  //         DragStartBehavior
-                                                  //             .start,
-                                                  //     child: Row(
-                                                  //         mainAxisAlignment:
-                                                  //             MainAxisAlignment
-                                                  //                 .start,
-                                                  //         children: [
-                                                  //           for (int i =
-                                                  //                   0;
-                                                  //               i <
-                                                  //                   areaModels
-                                                  //                       .length;
-                                                  //               i++)
-                                                  //             zoneModels[zindex].ser ==
-                                                  //                     areaModels[i].zser
-                                                  //                 ? Column(
-                                                  //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                                  //                     children: [
-                                                  //                       areaModels[i].quantity == '3'
-                                                  //                           ? Row(
-                                                  //                               mainAxisAlignment: MainAxisAlignment.start,
-                                                  //                               children: [
-                                                  //                                 createCard(i),
-                                                  //                               ],
-                                                  //                             )
-                                                  //                           : SizedBox(),
-                                                  //                     ],
-                                                  //                   )
-                                                  //                 : SizedBox(),
-                                                  //           SizedBox(
-                                                  //             width:
-                                                  //                 300,
-                                                  //           )
-                                                  //         ]),
-                                                  //   ),
-                                                  // ),
-                                                ],
+                                                    // ScrollConfiguration(
+                                                    //   behavior: ScrollConfiguration
+                                                    //           .of(context)
+                                                    //       .copyWith(
+                                                    //           dragDevices: {
+                                                    //         PointerDeviceKind
+                                                    //             .touch,
+                                                    //         PointerDeviceKind
+                                                    //             .mouse,
+                                                    //       }),
+                                                    //   child:
+                                                    //       SingleChildScrollView(
+                                                    //     scrollDirection:
+                                                    //         Axis.vertical,
+                                                    //     dragStartBehavior:
+                                                    //         DragStartBehavior
+                                                    //             .start,
+                                                    //     child: Row(
+                                                    //         mainAxisAlignment:
+                                                    //             MainAxisAlignment
+                                                    //                 .start,
+                                                    //         children: [
+                                                    //           for (int i =
+                                                    //                   0;
+                                                    //               i <
+                                                    //                   areaModels
+                                                    //                       .length;
+                                                    //               i++)
+                                                    //             zoneModels[zindex].ser ==
+                                                    //                     areaModels[i].zser
+                                                    //                 ? Column(
+                                                    //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                    //                     children: [
+                                                    //                       areaModels[i].quantity == null
+                                                    //                           ? Row(
+                                                    //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                    //                               children: [
+                                                    //                                 createCard(i),
+                                                    //                               ],
+                                                    //                             )
+                                                    //                           : SizedBox()
+                                                    //                     ],
+                                                    //                   )
+                                                    //                 : SizedBox(),
+                                                    //           SizedBox(
+                                                    //             width:
+                                                    //                 300,
+                                                    //           )
+                                                    //         ]),
+                                                    //   ),
+                                                    // ),
+                                                    // ScrollConfiguration(
+                                                    //   behavior: ScrollConfiguration
+                                                    //           .of(context)
+                                                    //       .copyWith(
+                                                    //           dragDevices: {
+                                                    //         PointerDeviceKind
+                                                    //             .touch,
+                                                    //         PointerDeviceKind
+                                                    //             .mouse,
+                                                    //       }),
+                                                    //   child:
+                                                    //       SingleChildScrollView(
+                                                    //     scrollDirection:
+                                                    //         Axis.horizontal,
+                                                    //     dragStartBehavior:
+                                                    //         DragStartBehavior
+                                                    //             .start,
+                                                    //     child: Row(
+                                                    //         mainAxisAlignment:
+                                                    //             MainAxisAlignment
+                                                    //                 .start,
+                                                    //         children: [
+                                                    //           for (int i =
+                                                    //                   0;
+                                                    //               i <
+                                                    //                   areaModels
+                                                    //                       .length;
+                                                    //               i++)
+                                                    //             zoneModels[zindex].ser ==
+                                                    //                     areaModels[i].zser
+                                                    //                 ? Column(
+                                                    //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                    //                     children: [
+                                                    //                       areaModels[i].quantity == '2'
+                                                    //                           ? Row(
+                                                    //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                    //                               children: [
+                                                    //                                 createCard(i),
+                                                    //                               ],
+                                                    //                             )
+                                                    //                           : SizedBox(),
+                                                    //                     ],
+                                                    //                   )
+                                                    //                 : SizedBox(),
+                                                    //           SizedBox(
+                                                    //             width:
+                                                    //                 300,
+                                                    //           )
+                                                    //         ]),
+                                                    //   ),
+                                                    // ),
+                                                    // ScrollConfiguration(
+                                                    //   behavior: ScrollConfiguration
+                                                    //           .of(context)
+                                                    //       .copyWith(
+                                                    //           dragDevices: {
+                                                    //         PointerDeviceKind
+                                                    //             .touch,
+                                                    //         PointerDeviceKind
+                                                    //             .mouse,
+                                                    //       }),
+                                                    //   child:
+                                                    //       SingleChildScrollView(
+                                                    //     scrollDirection:
+                                                    //         Axis.horizontal,
+                                                    //     dragStartBehavior:
+                                                    //         DragStartBehavior
+                                                    //             .start,
+                                                    //     child: Row(
+                                                    //         mainAxisAlignment:
+                                                    //             MainAxisAlignment
+                                                    //                 .start,
+                                                    //         children: [
+                                                    //           for (int i =
+                                                    //                   0;
+                                                    //               i <
+                                                    //                   areaModels
+                                                    //                       .length;
+                                                    //               i++)
+                                                    //             zoneModels[zindex].ser ==
+                                                    //                     areaModels[i].zser
+                                                    //                 ? Column(
+                                                    //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                    //                     children: [
+                                                    //                       areaModels[i].quantity == '1'
+                                                    //                           ? Row(
+                                                    //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                    //                               children: [
+                                                    //                                 createCard(i),
+                                                    //                               ],
+                                                    //                             )
+                                                    //                           : SizedBox(),
+                                                    //                     ],
+                                                    //                   )
+                                                    //                 : SizedBox(),
+                                                    //           SizedBox(
+                                                    //             width:
+                                                    //                 300,
+                                                    //           )
+                                                    //         ]),
+                                                    //   ),
+                                                    // ),
+                                                    // ScrollConfiguration(
+                                                    //   behavior: ScrollConfiguration
+                                                    //           .of(context)
+                                                    //       .copyWith(
+                                                    //           dragDevices: {
+                                                    //         PointerDeviceKind
+                                                    //             .touch,
+                                                    //         PointerDeviceKind
+                                                    //             .mouse,
+                                                    //       }),
+                                                    //   child:
+                                                    //       SingleChildScrollView(
+                                                    //     scrollDirection:
+                                                    //         Axis.horizontal,
+                                                    //     dragStartBehavior:
+                                                    //         DragStartBehavior
+                                                    //             .start,
+                                                    //     child: Row(
+                                                    //         mainAxisAlignment:
+                                                    //             MainAxisAlignment
+                                                    //                 .start,
+                                                    //         children: [
+                                                    //           for (int i =
+                                                    //                   0;
+                                                    //               i <
+                                                    //                   areaModels
+                                                    //                       .length;
+                                                    //               i++)
+                                                    //             zoneModels[zindex].ser ==
+                                                    //                     areaModels[i].zser
+                                                    //                 ? Column(
+                                                    //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                    //                     children: [
+                                                    //                       areaModels[i].quantity == '3'
+                                                    //                           ? Row(
+                                                    //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                    //                               children: [
+                                                    //                                 createCard(i),
+                                                    //                               ],
+                                                    //                             )
+                                                    //                           : SizedBox(),
+                                                    //                     ],
+                                                    //                   )
+                                                    //                 : SizedBox(),
+                                                    //           SizedBox(
+                                                    //             width:
+                                                    //                 300,
+                                                    //           )
+                                                    //         ]),
+                                                    //   ),
+                                                    // ),
+                                                  ],
+                                                ),
+                                              ))
+                                        ],
+                                      );
+                              })
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: AppbackgroundColor
+                                                    .TiTile_Colors,
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                ),
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 2),
                                               ),
-                                            ))
-                                      ],
-                                    );
-                            })
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        child: Text(
-                                          zone_ser == null
-                                              ? 'โซน ทั้งหมด'
-                                              : 'โซน ($zone_name)',
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Text(
+                                                zone_ser == null
+                                                    ? 'โซน ทั้งหมด'
+                                                    : 'โซน ($zone_name)',
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
 
-                                              //fontSize: 10.0
+                                                    //fontSize: 10.0
+                                                    ),
                                               ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Expanded(flex: 1, child: Text('')),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ScrollConfiguration(
-                                    behavior: ScrollConfiguration.of(context)
-                                        .copyWith(dragDevices: {
-                                      PointerDeviceKind.touch,
-                                      PointerDeviceKind.mouse,
-                                    }),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 600,
-                                          child: GridView.count(
-                                            crossAxisCount:
-                                                MediaQuery.of(context)
-                                                            .size
-                                                            .shortestSide <
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            1
-                                                    ? 12
-                                                    : 6,
-                                            children: [
-                                              for (int i = 0;
-                                                  i < areaModels.length;
-                                                  i++)
-                                                createCard(i),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                              // Container(
-                              //   width: MediaQuery.of(context).size.width,
-                              //   height: 500,
-                              //   child: Column(
-                              //     crossAxisAlignment: CrossAxisAlignment.start,
-                              //     children: [
-                              //       ScrollConfiguration(
-                              //         behavior: ScrollConfiguration.of(context)
-                              //             .copyWith(dragDevices: {
-                              //           PointerDeviceKind.touch,
-                              //           PointerDeviceKind.mouse,
-                              //         }),
-                              //         child: SingleChildScrollView(
-                              //           scrollDirection: Axis.horizontal,
-                              //           dragStartBehavior: DragStartBehavior.start,
-                              //           child: Row(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.start,
-                              //               children: [
-                              //                 for (int i = 0;
-                              //                     i < areaModels.length;
-                              //                     i++)
-                              //                   Column(
-                              //                     crossAxisAlignment:
-                              //                         CrossAxisAlignment.start,
-                              //                     children: [
-                              //                       areaModels[i].quantity == null
-                              //                           ? Row(
-                              //                               mainAxisAlignment:
-                              //                                   MainAxisAlignment
-                              //                                       .start,
-                              //                               children: [
-                              //                                 createCard(i),
-                              //                               ],
-                              //                             )
-                              //                           : SizedBox()
-                              //                     ],
-                              //                   ),
-                              //                 SizedBox(
-                              //                   width: 300,
-                              //                 )
-                              //               ]),
-                              //         ),
-                              //       ),
-                              //       ScrollConfiguration(
-                              //         behavior: ScrollConfiguration.of(context)
-                              //             .copyWith(dragDevices: {
-                              //           PointerDeviceKind.touch,
-                              //           PointerDeviceKind.mouse,
-                              //         }),
-                              //         child: SingleChildScrollView(
-                              //           scrollDirection: Axis.horizontal,
-                              //           dragStartBehavior: DragStartBehavior.start,
-                              //           child: Row(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.start,
-                              //               children: [
-                              //                 for (int i = 0;
-                              //                     i < areaModels.length;
-                              //                     i++)
-                              //                   Column(
-                              //                     crossAxisAlignment:
-                              //                         CrossAxisAlignment.start,
-                              //                     children: [
-                              //                       areaModels[i].quantity == '2'
-                              //                           ? Row(
-                              //                               mainAxisAlignment:
-                              //                                   MainAxisAlignment
-                              //                                       .start,
-                              //                               children: [
-                              //                                 createCard(i),
-                              //                               ],
-                              //                             )
-                              //                           : SizedBox(),
-                              //                     ],
-                              //                   ),
-                              //                 SizedBox(
-                              //                   width: 300,
-                              //                 )
-                              //               ]),
-                              //         ),
-                              //       ),
-                              //       ScrollConfiguration(
-                              //         behavior: ScrollConfiguration.of(context)
-                              //             .copyWith(dragDevices: {
-                              //           PointerDeviceKind.touch,
-                              //           PointerDeviceKind.mouse,
-                              //         }),
-                              //         child: SingleChildScrollView(
-                              //           scrollDirection: Axis.horizontal,
-                              //           dragStartBehavior: DragStartBehavior.start,
-                              //           child: Row(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.start,
-                              //               children: [
-                              //                 for (int i = 0;
-                              //                     i < areaModels.length;
-                              //                     i++)
-                              //                   Column(
-                              //                     crossAxisAlignment:
-                              //                         CrossAxisAlignment.start,
-                              //                     children: [
-                              //                       areaModels[i].quantity == '1'
-                              //                           ? Row(
-                              //                               mainAxisAlignment:
-                              //                                   MainAxisAlignment
-                              //                                       .start,
-                              //                               children: [
-                              //                                 createCard(i),
-                              //                               ],
-                              //                             )
-                              //                           : SizedBox(),
-                              //                     ],
-                              //                   ),
-                              //                 const SizedBox(
-                              //                   width: 300,
-                              //                 )
-                              //               ]),
-                              //         ),
-                              //       ),
-                              //       ScrollConfiguration(
-                              //         behavior: ScrollConfiguration.of(context)
-                              //             .copyWith(dragDevices: {
-                              //           PointerDeviceKind.touch,
-                              //           PointerDeviceKind.mouse,
-                              //         }),
-                              //         child: SingleChildScrollView(
-                              //           scrollDirection: Axis.horizontal,
-                              //           dragStartBehavior: DragStartBehavior.start,
-                              //           child: Row(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.start,
-                              //               children: [
-                              //                 for (int i = 0;
-                              //                     i < areaModels.length;
-                              //                     i++)
-                              //                   Column(
-                              //                     crossAxisAlignment:
-                              //                         CrossAxisAlignment.start,
-                              //                     children: [
-                              //                       areaModels[i].quantity == '3'
-                              //                           ? Row(
-                              //                               mainAxisAlignment:
-                              //                                   MainAxisAlignment
-                              //                                       .start,
-                              //                               children: [
-                              //                                 createCard(i),
-                              //                               ],
-                              //                             )
-                              //                           : SizedBox(),
-                              //                     ],
-                              //                   ),
-                              //                 SizedBox(
-                              //                   width: 300,
-                              //                 )
-                              //               ]),
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
-                            ],
-                          ),
+                                Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ScrollConfiguration(
+                                      behavior: ScrollConfiguration.of(context)
+                                          .copyWith(dragDevices: {
+                                        PointerDeviceKind.touch,
+                                        PointerDeviceKind.mouse,
+                                      }),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 600,
+                                            child: GridView.count(
+                                              crossAxisCount:
+                                                  MediaQuery.of(context)
+                                                              .size
+                                                              .shortestSide <
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              1
+                                                      ? 12
+                                                      : 6,
+                                              children: [
+                                                for (int i = 0;
+                                                    i < areaModels.length;
+                                                    i++)
+                                                  createCard(i, context),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )),
+                                // Container(
+                                //   width: MediaQuery.of(context).size.width,
+                                //   height: 500,
+                                //   child: Column(
+                                //     crossAxisAlignment: CrossAxisAlignment.start,
+                                //     children: [
+                                //       ScrollConfiguration(
+                                //         behavior: ScrollConfiguration.of(context)
+                                //             .copyWith(dragDevices: {
+                                //           PointerDeviceKind.touch,
+                                //           PointerDeviceKind.mouse,
+                                //         }),
+                                //         child: SingleChildScrollView(
+                                //           scrollDirection: Axis.horizontal,
+                                //           dragStartBehavior: DragStartBehavior.start,
+                                //           child: Row(
+                                //               mainAxisAlignment:
+                                //                   MainAxisAlignment.start,
+                                //               children: [
+                                //                 for (int i = 0;
+                                //                     i < areaModels.length;
+                                //                     i++)
+                                //                   Column(
+                                //                     crossAxisAlignment:
+                                //                         CrossAxisAlignment.start,
+                                //                     children: [
+                                //                       areaModels[i].quantity == null
+                                //                           ? Row(
+                                //                               mainAxisAlignment:
+                                //                                   MainAxisAlignment
+                                //                                       .start,
+                                //                               children: [
+                                //                                 createCard(i),
+                                //                               ],
+                                //                             )
+                                //                           : SizedBox()
+                                //                     ],
+                                //                   ),
+                                //                 SizedBox(
+                                //                   width: 300,
+                                //                 )
+                                //               ]),
+                                //         ),
+                                //       ),
+                                //       ScrollConfiguration(
+                                //         behavior: ScrollConfiguration.of(context)
+                                //             .copyWith(dragDevices: {
+                                //           PointerDeviceKind.touch,
+                                //           PointerDeviceKind.mouse,
+                                //         }),
+                                //         child: SingleChildScrollView(
+                                //           scrollDirection: Axis.horizontal,
+                                //           dragStartBehavior: DragStartBehavior.start,
+                                //           child: Row(
+                                //               mainAxisAlignment:
+                                //                   MainAxisAlignment.start,
+                                //               children: [
+                                //                 for (int i = 0;
+                                //                     i < areaModels.length;
+                                //                     i++)
+                                //                   Column(
+                                //                     crossAxisAlignment:
+                                //                         CrossAxisAlignment.start,
+                                //                     children: [
+                                //                       areaModels[i].quantity == '2'
+                                //                           ? Row(
+                                //                               mainAxisAlignment:
+                                //                                   MainAxisAlignment
+                                //                                       .start,
+                                //                               children: [
+                                //                                 createCard(i),
+                                //                               ],
+                                //                             )
+                                //                           : SizedBox(),
+                                //                     ],
+                                //                   ),
+                                //                 SizedBox(
+                                //                   width: 300,
+                                //                 )
+                                //               ]),
+                                //         ),
+                                //       ),
+                                //       ScrollConfiguration(
+                                //         behavior: ScrollConfiguration.of(context)
+                                //             .copyWith(dragDevices: {
+                                //           PointerDeviceKind.touch,
+                                //           PointerDeviceKind.mouse,
+                                //         }),
+                                //         child: SingleChildScrollView(
+                                //           scrollDirection: Axis.horizontal,
+                                //           dragStartBehavior: DragStartBehavior.start,
+                                //           child: Row(
+                                //               mainAxisAlignment:
+                                //                   MainAxisAlignment.start,
+                                //               children: [
+                                //                 for (int i = 0;
+                                //                     i < areaModels.length;
+                                //                     i++)
+                                //                   Column(
+                                //                     crossAxisAlignment:
+                                //                         CrossAxisAlignment.start,
+                                //                     children: [
+                                //                       areaModels[i].quantity == '1'
+                                //                           ? Row(
+                                //                               mainAxisAlignment:
+                                //                                   MainAxisAlignment
+                                //                                       .start,
+                                //                               children: [
+                                //                                 createCard(i),
+                                //                               ],
+                                //                             )
+                                //                           : SizedBox(),
+                                //                     ],
+                                //                   ),
+                                //                 const SizedBox(
+                                //                   width: 300,
+                                //                 )
+                                //               ]),
+                                //         ),
+                                //       ),
+                                //       ScrollConfiguration(
+                                //         behavior: ScrollConfiguration.of(context)
+                                //             .copyWith(dragDevices: {
+                                //           PointerDeviceKind.touch,
+                                //           PointerDeviceKind.mouse,
+                                //         }),
+                                //         child: SingleChildScrollView(
+                                //           scrollDirection: Axis.horizontal,
+                                //           dragStartBehavior: DragStartBehavior.start,
+                                //           child: Row(
+                                //               mainAxisAlignment:
+                                //                   MainAxisAlignment.start,
+                                //               children: [
+                                //                 for (int i = 0;
+                                //                     i < areaModels.length;
+                                //                     i++)
+                                //                   Column(
+                                //                     crossAxisAlignment:
+                                //                         CrossAxisAlignment.start,
+                                //                     children: [
+                                //                       areaModels[i].quantity == '3'
+                                //                           ? Row(
+                                //                               mainAxisAlignment:
+                                //                                   MainAxisAlignment
+                                //                                       .start,
+                                //                               children: [
+                                //                                 createCard(i),
+                                //                               ],
+                                //                             )
+                                //                           : SizedBox(),
+                                //                     ],
+                                //                   ),
+                                //                 SizedBox(
+                                //                   width: 300,
+                                //                 )
+                                //               ]),
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                    ),
                   )
                 ],
               )
-            : (renTal_user != '72')
+            : (ser_Floor_plans == '0')
                 ? Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -3185,7 +3513,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                     true,
                                                                 boundaryMargin:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         double
                                                                             .infinity),
                                                                 child: Stack(
@@ -3741,7 +4069,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                         color:
                                                             Colors.orange[600],
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -3820,7 +4148,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                           constrained: true,
                                                           boundaryMargin:
                                                               const EdgeInsets
-                                                                  .all(double
+                                                                      .all(
+                                                                  double
                                                                       .infinity),
                                                           child: Stack(
                                                             children: [
@@ -4378,441 +4707,371 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                   )
                 : Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 510,
-                          color: Colors.white,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: ScrollConfiguration(
-                              behavior: ScrollConfiguration.of(context)
-                                  .copyWith(dragDevices: {
-                                PointerDeviceKind.touch,
-                                PointerDeviceKind.mouse,
-                              }),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
+                    child: (zone_ser == '0' || zone_ser == null)
+                        ? Column(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                child: Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Stack(
-                                          children: [
-                                            InteractiveViewer(
-                                              alignment: Alignment.center,
-                                              scaleEnabled: false,
-                                              trackpadScrollCausesScale: false,
-                                              transformationController:
-                                                  _controller,
-                                              minScale: 0.8,
-                                              maxScale: 2.0,
-                                              constrained: true,
-                                              boundaryMargin:
-                                                  const EdgeInsets.all(
-                                                      double.infinity),
-                                              child: Container(
-                                                height: 520,
-                                                width: 850,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        "$Img_Zone"),
-                                                    // fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                child: Align(
-                                                  alignment: Alignment.center,
-                                                  child: KeyedSubtree(
-                                                      key: _countriesKey,
-                                                      child: Container(
-                                                        child: Stack(children: [
-                                                          for (var areaModels
-                                                              in areaFloorplanModels)
-                                                            Center(
-                                                              child: ClipPath(
-                                                                clipper:
-                                                                    Clipper(
-                                                                  svgPath:
-                                                                      areaModels
-                                                                          .path!,
-                                                                  height: 15.0,
-                                                                  width: 23.2,
-                                                                ),
-                                                                child: InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    onCountrySelected
-                                                                        .call(
-                                                                            areaModels);
-                                                                    print(
-                                                                        '${areaModels.id}  ');
-                                                                    setState(
-                                                                        () {
-                                                                      Ln_name =
-                                                                          '${areaModels.lncode} (${areaModels.ln})';
-                                                                      // Ln_name = '${country.}//${areaModels.length}';
-                                                                    });
-                                                                    showDialog<
-                                                                        String>(
-                                                                      context:
-                                                                          context,
-                                                                      builder: (BuildContext
-                                                                              context) =>
-                                                                          AlertDialog(
-                                                                        shape: const RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.all(Radius.circular(20.0))),
-                                                                        title: Center(
-                                                                            child: Column(
-                                                                          children: [
-                                                                            Text(
-                                                                              '$Ln_name',
-                                                                              style: const TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              height: 5.0,
-                                                                            ),
-                                                                            Divider(
-                                                                              color: Colors.grey[100],
-                                                                              height: 4.0,
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              height: 5.0,
-                                                                            ),
-                                                                          ],
-                                                                        )),
-                                                                        content:
-                                                                            SingleChildScrollView(
-                                                                          child:
-                                                                              Column(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: <Widget>[
-                                                                              if (areaModels.quantity != '1')
-                                                                                ListTile(
-                                                                                    onTap: () async {
-                                                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                      preferences.setString('zoneSer', areaModels.zser.toString());
-                                                                                      preferences.setString('zonesName', areaModels.zn.toString());
-                                                                                      setState(() {
-                                                                                        Ser_Body = 1;
-                                                                                        a_ln = areaModels.lncode;
-                                                                                        a_ser = areaModels.ser;
-                                                                                        a_area = areaModels.area;
-                                                                                        a_rent = areaModels.rent;
-                                                                                        a_page = '1';
-                                                                                      });
-
-                                                                                      Navigator.pop(context);
-                                                                                    },
-                                                                                    title: Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: Colors.grey[100],
-                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        ),
-                                                                                        padding: const EdgeInsets.all(10),
-                                                                                        // width: MediaQuery.of(context).size.width,
-                                                                                        child: Row(
-                                                                                          children: [
-                                                                                            Expanded(
-                                                                                                child: Text(
-                                                                                              'เสนอราคา: ${areaModels.lncode} (${areaModels.ln})',
-                                                                                              overflow: TextOverflow.ellipsis,
-                                                                                              style: const TextStyle(
-                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                  //fontWeight: FontWeight.bold,
-                                                                                                  fontFamily: Font_.Fonts_T),
-                                                                                            ))
-                                                                                          ],
-                                                                                        ))),
-                                                                              if (areaModels.quantity != '1')
-                                                                                ListTile(
-                                                                                    onTap: () async {
-                                                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                      preferences.setString('zoneSer', areaModels.zser.toString());
-                                                                                      preferences.setString('zonesName', areaModels.zn.toString());
-
-                                                                                      setState(() {
-                                                                                        Ser_Body = 2;
-                                                                                        a_ln = areaModels.lncode;
-                                                                                        a_ser = areaModels.ser;
-                                                                                        a_area = areaModels.area;
-                                                                                        a_rent = areaModels.rent;
-                                                                                        a_page = '1';
-                                                                                      });
-                                                                                      Navigator.pop(context);
-                                                                                    },
-                                                                                    title: Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: Colors.grey[100],
-                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        ),
-                                                                                        padding: const EdgeInsets.all(10),
-                                                                                        // width: MediaQuery.of(context).size.width,
-                                                                                        child: Row(
-                                                                                          children: [
-                                                                                            Expanded(
-                                                                                                child: Text(
-                                                                                              'ทำสัญญา: ${areaModels.lncode} (${areaModels.ln})',
-                                                                                              overflow: TextOverflow.ellipsis,
-                                                                                              style: const TextStyle(
-                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                  //fontWeight: FontWeight.bold,
-                                                                                                  fontFamily: Font_.Fonts_T),
-                                                                                            ))
-                                                                                          ],
-                                                                                        ))),
-                                                                              if (areaModels.quantity == '1')
-                                                                                ListTile(
-                                                                                    onTap: () async {
-                                                                                      setState(() {
-                                                                                        Ser_Body = 3;
-                                                                                        Value_cid = areaModels.cid;
-                                                                                        ser_cidtan = '1';
-                                                                                      });
-                                                                                      Navigator.pop(context);
-                                                                                    },
-                                                                                    title: Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: Colors.grey[100],
-                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        ),
-                                                                                        padding: const EdgeInsets.all(10),
-                                                                                        // width: MediaQuery.of(context).size.width,
-                                                                                        child: Row(
-                                                                                          children: [
-                                                                                            Expanded(
-                                                                                                child: Text(
-                                                                                              'เช่าอยู่: ${areaModels.cid}',
-                                                                                              overflow: TextOverflow.ellipsis,
-                                                                                              style: const TextStyle(
-                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                  //fontWeight: FontWeight.bold,
-                                                                                                  fontFamily: Font_.Fonts_T),
-                                                                                            ))
-                                                                                          ],
-                                                                                        ))),
-                                                                              if (areaModels.quantity == '1')
-                                                                                ListTile(
-                                                                                    onTap: () async {
-                                                                                      setState(() {
-                                                                                        Ser_Body = 4;
-                                                                                        Value_cid = areaModels.cid;
-                                                                                        ser_cidtan = '1';
-                                                                                      });
-                                                                                      Navigator.pop(context);
-                                                                                    },
-                                                                                    title: Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: Colors.grey[100],
-                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        ),
-                                                                                        padding: const EdgeInsets.all(10),
-                                                                                        // width: MediaQuery.of(context).size.width,
-                                                                                        child: Row(
-                                                                                          children: [
-                                                                                            Expanded(
-                                                                                                child: Text(
-                                                                                              'รับชำระ: ${areaModels.cid}',
-                                                                                              overflow: TextOverflow.ellipsis,
-                                                                                              style: const TextStyle(
-                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                  //fontWeight: FontWeight.bold,
-                                                                                                  fontFamily: Font_.Fonts_T),
-                                                                                            ))
-                                                                                          ],
-                                                                                        ))),
-                                                                              if (areaModels.quantity == '2')
-                                                                                ListTile(
-                                                                                    onTap: () async {
-                                                                                      setState(() {
-                                                                                        Ser_Body = 3;
-                                                                                        Value_cid = areaModels.docno;
-                                                                                        ser_cidtan = '2';
-                                                                                      });
-                                                                                      Navigator.pop(context);
-                                                                                    },
-                                                                                    title: Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: Colors.grey[100],
-                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        ),
-                                                                                        padding: const EdgeInsets.all(10),
-                                                                                        // width: MediaQuery.of(context).size.width,
-                                                                                        child: Row(
-                                                                                          children: [
-                                                                                            Expanded(
-                                                                                                child: Text(
-                                                                                              'เสนอราคา: ${areaModels.docno}',
-                                                                                              overflow: TextOverflow.ellipsis,
-                                                                                              style: const TextStyle(
-                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                  //fontWeight: FontWeight.bold,
-                                                                                                  fontFamily: Font_.Fonts_T),
-                                                                                            ))
-                                                                                          ],
-                                                                                        ))),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                        actions: <Widget>[
-                                                                          Column(
-                                                                            children: [
-                                                                              const SizedBox(
-                                                                                height: 2.0,
-                                                                              ),
-                                                                              const Divider(
-                                                                                color: Colors.grey,
-                                                                                height: 4.0,
-                                                                              ),
-                                                                              const SizedBox(
-                                                                                height: 2.0,
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                                  children: [
-                                                                                    Padding(
-                                                                                      padding: const EdgeInsets.all(4.0),
-                                                                                      child: Row(
-                                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                                        children: [
-                                                                                          Container(
-                                                                                            width: 100,
-                                                                                            decoration: const BoxDecoration(
-                                                                                              color: Colors.redAccent,
-                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                            ),
-                                                                                            padding: const EdgeInsets.all(5.0),
-                                                                                            child: TextButton(
-                                                                                              onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                              child: const Text(
-                                                                                                'ปิด',
-                                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: (areaFloorplanModelss?.id ==
-                                                                              areaModels.id)
-                                                                          ? areaModels.quantity == '1'
-                                                                              ? Colors.red[800]!.withOpacity(0.5)
-                                                                              : areaModels.quantity == '2'
-                                                                                  ? Colors.blue[800]!.withOpacity(0.5)
-                                                                                  : areaModels.quantity == '3'
-                                                                                      ? Colors.purple[800]!.withOpacity(0.5)
-                                                                                      : Colors.green[800]!.withOpacity(0.5)
-                                                                          : areaModels.quantity == '1'
-                                                                              ? Colors.red[200]!.withOpacity(0.5)
-                                                                              : areaModels.quantity == '2'
-                                                                                  ? Colors.blue[200]!.withOpacity(0.5)
-                                                                                  : areaModels.quantity == '3'
-                                                                                      ? Colors.purple[200]!.withOpacity(0.5)
-                                                                                      : Colors.green[200]!.withOpacity(0.5),
-                                                                      //  color: (areaFloorplanModelss?.id == areaModels.id) ? Colors.deepPurple[400]!.withOpacity(0.5) : Colors.blue[600]!.withOpacity(0.5),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                        ]),
-                                                      )),
-                                                ),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            height: 520,
+                                            width: 850,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                              border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 5),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                'กรุณาเลือกโซนพื้นที่',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 20.0,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
+                                    ),
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                          // color: AppBarColors.ABar_Colors,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(100),
+                                              topRight: Radius.circular(100),
+                                              bottomLeft: Radius.circular(0),
+                                              bottomRight: Radius.circular(0)),
+                                          // border: Border.all(color: Colors.grey, width: 1),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.white,
+                                              // Color.fromARGB(255, 244, 245, 242),
+                                              Color.fromARGB(
+                                                  255, 216, 231, 199),
+                                              Color.fromARGB(
+                                                  255, 199, 219, 175),
+                                              AppBarColors.ABar_Colors,
+                                            ],
+                                          )),
+                                      height: 80,
                                     )
                                   ],
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 10,
-                          right: 10,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.blueGrey.withOpacity(0.5),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                topRight: Radius.circular(5),
-                                bottomLeft: Radius.circular(5),
-                                bottomRight: Radius.circular(5),
+                            ],
+                          )
+                        : Stack(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                decoration: BoxDecoration(
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            height: 510,
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: ScrollConfiguration(
+                                                behavior:
+                                                    ScrollConfiguration.of(
+                                                            context)
+                                                        .copyWith(dragDevices: {
+                                                  PointerDeviceKind.touch,
+                                                  PointerDeviceKind.mouse,
+                                                }),
+                                                child: SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  child: Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Stack(
+                                                            children: [
+                                                              Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                  border: Border.all(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      width: 5),
+                                                                ),
+                                                                child:
+                                                                    InteractiveViewer(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  scaleEnabled:
+                                                                      false,
+                                                                  trackpadScrollCausesScale:
+                                                                      false,
+                                                                  transformationController:
+                                                                      _controller,
+                                                                  minScale: 0.8,
+                                                                  maxScale: 2.0,
+                                                                  constrained:
+                                                                      true,
+                                                                  boundaryMargin:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              150.0),
+                                                                  // boundaryMargin:
+                                                                  //     const EdgeInsets.all(
+                                                                  //         double.infinity),
+                                                                  child: Stack(
+                                                                    children: [
+                                                                      Container(
+                                                                        // color: Colors.purple,
+                                                                        height:
+                                                                            520,
+                                                                        width:
+                                                                            850,
+                                                                        child: KeyedSubtree(
+                                                                            key: _countriesKey,
+                                                                            child: Container(
+                                                                              decoration: BoxDecoration(
+                                                                                image: DecorationImage(
+                                                                                  image: NetworkImage("$Img_Zone"),
+                                                                                  fit: BoxFit.cover,
+                                                                                ),
+                                                                              ),
+                                                                              child: Stack(alignment: Alignment.center, children: [
+                                                                                for (var areaModel in areaFloorplanModels)
+                                                                                  Stack(
+                                                                                    children: [
+                                                                                      ClipPath(
+                                                                                        clipper: Clipper(
+                                                                                          svgPath: areaModel.path!,
+                                                                                          // height:
+                                                                                          //     17.0,
+                                                                                          // width:
+                                                                                          //     26.2,
+                                                                                        ),
+                                                                                        child: InkWell(
+                                                                                          onTap: () async {
+                                                                                            int index = areaModels.indexWhere((area) => area.ser.toString().trim() == areaModel.ser);
+                                                                                            onCountrySelected.call(areaModel);
+                                                                                            print('${areaModel.id}  ');
+                                                                                            Future.delayed(const Duration(milliseconds: 200), () {
+                                                                                              dialog_svg(index, context);
+                                                                                            });
+                                                                                          },
+                                                                                          child: Container(
+                                                                                            decoration: BoxDecoration(
+                                                                                              color: (areaFloorplanModelss?.id == areaModel.id)
+                                                                                                  ? areaModel.quantity == '1'
+                                                                                                      ? Colors.red[900]!.withOpacity(0.5)
+                                                                                                      : areaModel.quantity == '2'
+                                                                                                          ? Colors.blue[900]!.withOpacity(0.5)
+                                                                                                          : areaModel.quantity == '3'
+                                                                                                              ? Colors.purple[900]!.withOpacity(0.5)
+                                                                                                              : Colors.green[900]!.withOpacity(0.5)
+                                                                                                  : (areaFloorplanModelss != null)
+                                                                                                      ? Colors.grey[200]!.withOpacity(0.4)
+                                                                                                      : areaModel.quantity == '1'
+                                                                                                          ? Colors.red[200]!.withOpacity(0.4)
+                                                                                                          : areaModel.quantity == '2'
+                                                                                                              ? Colors.blue[200]!.withOpacity(0.4)
+                                                                                                              : areaModel.quantity == '3'
+                                                                                                                  ? Colors.purple[200]!.withOpacity(0.4)
+                                                                                                                  : Colors.green[200]!.withOpacity(0.4),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                              ]),
+                                                                            )),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                          // color: AppBarColors.ABar_Colors,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(100),
+                                              topRight: Radius.circular(100),
+                                              bottomLeft: Radius.circular(0),
+                                              bottomRight: Radius.circular(0)),
+                                          // border: Border.all(color: Colors.grey, width: 1),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.white,
+                                              // Color.fromARGB(255, 244, 245, 242),
+                                              Color.fromARGB(
+                                                  255, 216, 231, 199),
+                                              Color.fromARGB(
+                                                  255, 199, 219, 175),
+                                              AppBarColors.ABar_Colors,
+                                            ],
+                                          )),
+                                      height: 80,
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            padding: const EdgeInsets.all(2.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.zoom_in,
-                                    color: Colors.white,
+                              Positioned(
+                                top: 10,
+                                left: 10,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueGrey.withOpacity(0.5),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(5),
+                                      topRight: Radius.circular(5),
+                                      bottomLeft: Radius.circular(5),
+                                      bottomRight: Radius.circular(5),
+                                    ),
                                   ),
-                                  onPressed: _zoomInSVG,
-                                ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.zoom_out,
-                                    color: Colors.white,
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Center(
+                                    child: Text(
+                                      'Floorplans แผนผังพื้นที่',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20.0,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
                                   ),
-                                  onPressed: _zoomOutSVG,
                                 ),
-                                // Container(
-                                //   decoration: BoxDecoration(
-                                //     color: Colors.grey,
-                                //     borderRadius: const BorderRadius.only(
-                                //       topLeft: Radius.circular(5),
-                                //       topRight: Radius.circular(5),
-                                //       bottomLeft: Radius.circular(5),
-                                //       bottomRight: Radius.circular(5),
-                                //     ),
-                                //   ),
-                                //   child: Text(
-                                //     '${MediaQuery.of(context).size.width}',
-                                //     overflow: TextOverflow.ellipsis,
-                                //     // minFontSize: 1,
-                                //     // maxFontSize: 12,
-                                //     maxLines: 1,
-                                //     textAlign: TextAlign.left,
-                                //     style: TextStyle(
-                                //       color: Colors.white,
-                                //       fontFamily: Font_.Fonts_T,
+                              ),
+                              Positioned(
+                                top: 10,
+                                right: 10,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueGrey.withOpacity(0.5),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(5),
+                                      topRight: Radius.circular(5),
+                                      bottomLeft: Radius.circular(5),
+                                      bottomRight: Radius.circular(5),
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.zoom_in,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: _zoomInSVG,
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.zoom_out,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: _zoomOutSVG,
+                                      ),
+                                      // Container(
+                                      //   decoration: BoxDecoration(
+                                      //     color: Colors.grey,
+                                      //     borderRadius: const BorderRadius.only(
+                                      //       topLeft: Radius.circular(5),
+                                      //       topRight: Radius.circular(5),
+                                      //       bottomLeft: Radius.circular(5),
+                                      //       bottomRight: Radius.circular(5),
+                                      //     ),
+                                      //   ),
+                                      //   child: Text(
+                                      //     '${MediaQuery.of(context).size.width}',
+                                      //     overflow: TextOverflow.ellipsis,
+                                      //     // minFontSize: 1,
+                                      //     // maxFontSize: 12,
+                                      //     maxLines: 1,
+                                      //     textAlign: TextAlign.left,
+                                      //     style: TextStyle(
+                                      //       color: Colors.white,
+                                      //       fontFamily: Font_.Fonts_T,
 
-                                //       //fontSize: 10.0s
-                                //     ),
-                                //   ),
-                                // ),
-                              ],
-                            ),
+                                      //       //fontSize: 10.0s
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        )
-                      ],
-                    ),
                   );
 
     // Column(children: [
@@ -5362,176 +5621,962 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     //   ]);
   }
 
-  Widget createCard(int index) {
-    return PopupMenuButton(
-      itemBuilder: (BuildContext context) => [
-        if (areaModels[index].quantity != '1')
-          PopupMenuItem(
-            child: InkWell(
-                onTap: () async {
-                  SharedPreferences preferences =
-                      await SharedPreferences.getInstance();
-                  preferences.setString(
-                      'zoneSer', areaModels[index].zser.toString());
-                  preferences.setString(
-                      'zonesName', areaModels[index].zn.toString());
-                  setState(() {
-                    Ser_Body = 1;
-                    a_ln = areaModels[index].lncode;
-                    a_ser = areaModels[index].ser;
-                    a_area = areaModels[index].area;
-                    a_rent = areaModels[index].rent;
-                    a_page = '1';
-                  });
+  Future<Null> read_GC_con_area(int index) async {
+    if (areaxConModels.length != 0) {
+      setState(() {
+        areaxConModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
 
-                  Navigator.pop(context);
-                },
-                child: Container(
-                    padding: const EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                          'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                              //fontWeight: FontWeight.bold,
-                              fontFamily: Font_.Fonts_T),
-                        ))
-                      ],
-                    ))),
-          ),
-        if (areaModels[index].quantity != '1')
-          PopupMenuItem(
-            child: InkWell(
-                onTap: () async {
-                  SharedPreferences preferences =
-                      await SharedPreferences.getInstance();
-                  preferences.setString(
-                      'zoneSer', areaModels[index].zser.toString());
-                  preferences.setString(
-                      'zonesName', areaModels[index].zn.toString());
+    var zoneSubSer = preferences.getString('zoneSubSer');
+    var zonesSubName = preferences.getString('zonesSubName');
+    var ren = preferences.getString('renTalSer');
+    var aser = areaModels[index].ser.toString();
 
-                  setState(() {
-                    Ser_Body = 2;
-                    a_ln = areaModels[index].lncode;
-                    a_ser = areaModels[index].ser;
-                    a_area = areaModels[index].area;
-                    a_rent = areaModels[index].rent;
-                    a_page = '1';
-                  });
-                  Navigator.pop(context);
-                },
-                child: Container(
-                    padding: const EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                          'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                              //fontWeight: FontWeight.bold,
-                              fontFamily: Font_.Fonts_T),
-                        ))
-                      ],
-                    ))),
-          ),
-        if (areaModels[index].quantity == '1')
-          PopupMenuItem(
-            child: InkWell(
-                onTap: () async {
-                  setState(() {
-                    Ser_Body = 3;
-                    Value_cid = areaModels[index].cid;
-                    ser_cidtan = '1';
-                  });
-                  Navigator.pop(context);
-                },
-                child: Container(
-                    padding: const EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                          'เช่าอยู่: ${areaModels[index].cid}',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                              //fontWeight: FontWeight.bold,
-                              fontFamily: Font_.Fonts_T),
-                        ))
-                      ],
-                    ))),
-          ),
-        if (areaModels[index].quantity == '1')
-          PopupMenuItem(
-            child: InkWell(
-                onTap: () async {
-                  setState(() {
-                    Ser_Body = 4;
-                    Value_cid = areaModels[index].cid;
-                    ser_cidtan = '1';
-                  });
-                  Navigator.pop(context);
-                },
-                child: Container(
-                    padding: const EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                          'รับชำระ: ${areaModels[index].cid}',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                              //fontWeight: FontWeight.bold,
-                              fontFamily: Font_.Fonts_T),
-                        ))
-                      ],
-                    ))),
-          ),
-        if (areaModels[index].quantity == '2')
-          for (int i = 0; i < areaQuotModels.length; i++)
-            if (areaModels[index].ser == areaQuotModels[i].ser)
-              PopupMenuItem(
-                child: InkWell(
+    String url =
+        '${MyConstant().domain}/GC_areax_con.php?isAdd=true&ren=$ren&aser=$aser';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      areaxConModels.clear();
+      for (var map in result) {
+        AreaxConModel areaxConModel = AreaxConModel.fromJson(map);
+        var cid = areaModels[index].cid;
+        var cser = areaxConModel.cser;
+        setState(() {
+          if (cid != cser) {
+            areaxConModels.add(areaxConModel);
+          }
+        });
+      }
+    } catch (e) {}
+  }
+
+/////-------------------------------------------->
+  Color getRandomColor(index) {
+    final random = Random();
+    return areaModels[index].quantity == '1'
+        ? Colors.red.shade700
+        : areaModels[index].quantity == '2'
+            ? Colors.blue.shade700
+            : areaModels[index].quantity == '3'
+                ? Colors.purple.shade700
+                : Colors.green.shade700;
+  }
+
+  dialog_svg(int index, context) {
+    return showDialog<String>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Colors.white.withOpacity(0.91),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        title: Center(
+            child: Column(
+          children: [
+            Text(
+              ' ${areaModels[index].lncode} (${areaModels[index].ln})',
+              style: const TextStyle(
+                  color: AdminScafScreen_Color.Colors_Text1_,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontWeight_.Fonts_T),
+            ),
+            const SizedBox(
+              height: 2.0,
+            ),
+            Divider(
+              color: Colors.grey[100],
+              height: 3.0,
+            ),
+            const SizedBox(
+              height: 2.0,
+            ),
+          ],
+        )),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              if (areaModels[index].quantity != '1')
+                ListTile(
                     onTap: () async {
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                      preferences.setString(
+                          'zoneSer', areaModels[index].zser.toString());
+                      preferences.setString(
+                          'zonesName', areaModels[index].zn.toString());
                       setState(() {
-                        Ser_Body = 3;
-                        Value_cid = areaQuotModels[i].docno;
-                        ser_cidtan = '2';
+                        Ser_Body = 1;
+                        a_ln = areaModels[index].lncode;
+                        a_ser = areaModels[index].ser;
+                        a_area = areaModels[index].area;
+                        a_rent = areaModels[index].rent;
+                        a_page = '1';
                       });
-                      Navigator.pop(context);
+                      Navigator.pop(context, 'OK');
                     },
-                    child: Container(
-                        padding: const EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Text(
-                              'เสนอราคา: ${areaQuotModels[i].docno}',
+                    title: Container(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                        bottom: BorderSide(
+                          //                    <--- top side
+                          width: 0.5,
+                        ),
+                      )),
+                      padding: const EdgeInsets.all(4.0),
+                      width: 270,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                   color: PeopleChaoScreen_Color.Colors_Text2_,
                                   //fontWeight: FontWeight.bold,
                                   fontFamily: Font_.Fonts_T),
-                            ))
+                            ),
+                          ),
+                          Icon(Iconsax.arrow_circle_right,
+                              color: getRandomColor(index)),
+                        ],
+                      ),
+                    )),
+////////////-------------------------->
+              if (areaModels[index].quantity != '1')
+                ListTile(
+                    onTap: () async {
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                      preferences.setString(
+                          'zoneSer', areaModels[index].zser.toString());
+                      preferences.setString(
+                          'zonesName', areaModels[index].zn.toString());
+
+                      setState(() {
+                        Ser_Body = 2;
+                        a_ln = areaModels[index].lncode;
+                        a_ser = areaModels[index].ser;
+                        a_area = areaModels[index].area;
+                        a_rent = areaModels[index].rent;
+                        a_page = '1';
+                      });
+                      Navigator.pop(context, 'OK');
+                    },
+                    title: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                        bottom: BorderSide(
+                          //                    <--- top side
+                          color: Colors.grey,
+                          width: 0.5,
+                        ),
+                      )),
+                      padding: const EdgeInsets.all(4.0),
+                      width: 270,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  //fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Icon(Iconsax.arrow_circle_right,
+                              color: getRandomColor(index)),
+                        ],
+                      ),
+                    )),
+////////////-------------------------->
+              if (areaModels[index].quantity == '1')
+                for (int i = 0; i < areaxConModels.length; i++)
+                  ListTile(
+                      onTap: () async {
+                        setState(() {
+                          Ser_Body = 3;
+                          Value_stasus = '0';
+                          Value_cid = areaxConModels[i].cser;
+                          ser_cidtan = '1';
+                        });
+                        Navigator.pop(context, 'OK');
+                      },
+                      // title: '${areaxConModels[i].cser} (${areaxConModels[i].cname})',
+                      // textStyle: const TextStyle(
+                      //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                      //     //fontWeight: FontWeight.bold,
+                      //     fontFamily: Font_.Fonts_T),
+                      title: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                          bottom: BorderSide(
+                            //                    <--- top side
+                            color: Colors.grey,
+                            width: 0.5,
+                          ),
+                        )),
+                        padding: const EdgeInsets.all(4.0),
+                        width: 270,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${areaxConModels[i].cser} (${areaxConModels[i].cname})',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    //fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Icon(Iconsax.arrow_circle_right,
+                                color: getRandomColor(index)),
                           ],
-                        ))),
+                        ),
+                      )),
+
+////////////-------------------------->
+              if (areaModels[index].quantity == '1')
+                ListTile(
+                    onTap: () async {
+                      setState(() {
+                        Ser_Body = 3;
+                        Value_stasus = areaModels[index].quantity == '1'
+                            ? datex.isAfter(DateTime.parse(
+                                            '${areaModels[index].ldate} 00:00:00.000')
+                                        .subtract(const Duration(days: 0))) ==
+                                    true
+                                ? 'หมดสัญญา'
+                                : datex.isAfter(DateTime.parse(
+                                                '${areaModels[index].ldate} 00:00:00.000')
+                                            .subtract(
+                                                const Duration(days: 30))) ==
+                                        true
+                                    ? 'ใกล้หมดสัญญา'
+                                    : 'เช่าอยู่'
+                            : areaModels[index].quantity == '2'
+                                ? 'เสนอราคา'
+                                : areaModels[index].quantity == '3'
+                                    ? 'เสนอราคา(มัดจำ)'
+                                    : 'ว่าง';
+                        Value_cid = areaModels[index].cid;
+                        ser_cidtan = '1';
+                      });
+                      Navigator.pop(context, 'OK');
+                    },
+                    // title:
+                    //     'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+                    // textStyle: const TextStyle(
+                    //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                    //     //fontWeight: FontWeight.bold,
+                    //     fontFamily: Font_.Fonts_T),
+                    title: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                        bottom: BorderSide(
+                          //                    <--- top side
+                          color: Colors.grey,
+                          width: 0.5,
+                        ),
+                      )),
+                      padding: const EdgeInsets.all(4.0),
+                      width: 270,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  //fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Icon(Iconsax.arrow_circle_right,
+                              color: getRandomColor(index)),
+                        ],
+                      ),
+                    )),
+////////////-------------------------->
+              if (areaModels[index].quantity == '1')
+                ListTile(
+                    onTap: () async {
+                      setState(() {
+                        Value_stasus = areaModels[index].quantity == '1'
+                            ? datex.isAfter(DateTime.parse(
+                                            '${areaModels[index].ldate} 00:00:00.000')
+                                        .subtract(const Duration(days: 0))) ==
+                                    true
+                                ? 'หมดสัญญา'
+                                : datex.isAfter(DateTime.parse(
+                                                '${areaModels[index].ldate} 00:00:00.000')
+                                            .subtract(
+                                                const Duration(days: 30))) ==
+                                        true
+                                    ? 'ใกล้หมดสัญญา'
+                                    : 'เช่าอยู่'
+                            : areaModels[index].quantity == '2'
+                                ? 'เสนอราคา'
+                                : areaModels[index].quantity == '3'
+                                    ? 'เสนอราคา(มัดจำ)'
+                                    : 'ว่าง';
+                        Ser_Body = 4;
+                        Value_cid = areaModels[index].cid;
+                        ser_cidtan = '1';
+                      });
+                      Navigator.pop(context, 'OK');
+                    },
+                    // title:
+                    //     'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
+                    // textStyle: const TextStyle(
+                    //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                    //     //fontWeight: FontWeight.bold,
+                    //     fontFamily: Font_.Fonts_T),
+                    title: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                        bottom: BorderSide(
+                          //                    <--- top side
+                          color: Colors.grey,
+                          width: 0.5,
+                        ),
+                      )),
+                      padding: const EdgeInsets.all(4.0),
+                      width: 270,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  //fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Icon(Iconsax.arrow_circle_right,
+                              color: getRandomColor(index)),
+                        ],
+                      ),
+                    )),
+              ////////////-------------------------->
+              if (areaModels[index].quantity == '2')
+                for (int i = 0; i < areaQuotModels.length; i++)
+                  if (areaModels[index].ser == areaQuotModels[i].ser)
+                    ListTile(
+                        onTap: () async {
+                          setState(() {
+                            Ser_Body = 3;
+                            Value_stasus = '1';
+                            Value_cid = areaQuotModels[i].docno;
+                            ser_cidtan = '2';
+                          });
+                          Navigator.pop(context, 'OK');
+                        },
+                        // title: 'เสนอราคา: ${areaQuotModels[i].docno}',
+                        // textStyle: const TextStyle(
+                        //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                        //     //fontWeight: FontWeight.bold,
+                        //     fontFamily: Font_.Fonts_T),
+                        title: Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                            bottom: BorderSide(
+                              //                    <--- top side
+                              color: Colors.grey,
+                              width: 0.5,
+                            ),
+                          )),
+                          padding: const EdgeInsets.all(4.0),
+                          width: 270,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'เสนอราคา: ${areaQuotModels[i].docno}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text2_,
+                                      //fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T),
+                                ),
+                              ),
+                              Icon(Iconsax.arrow_circle_right,
+                                  color: getRandomColor(index)),
+                            ],
+                          ),
+                        )),
+              ////////////-------------------------->
+              if (areaModels[index].quantity == '3')
+                for (int i = 0; i < areaQuotModels.length; i++)
+                  for (int i = 0; i < areaQuotModels.length; i++)
+                    ListTile(
+                        onTap: () async {
+                          setState(() {
+                            Ser_Body = 3;
+                            Value_stasus = '1';
+                            Value_cid = areaQuotModels[i].docno;
+                            ser_cidtan = '2';
+                          });
+                          Navigator.pop(context, 'OK');
+                        },
+                        // title: 'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
+                        // textStyle: const TextStyle(
+                        //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                        //     //fontWeight: FontWeight.bold,
+                        //     fontFamily: Font_.Fonts_T),
+                        title: Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                            bottom: BorderSide(
+                              //                    <--- top side
+                              color: Colors.grey,
+                              width: 0.5,
+                            ),
+                          )),
+                          padding: const EdgeInsets.all(4.0),
+                          width: 270,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text2_,
+                                      //fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T),
+                                ),
+                              ),
+                              Icon(Iconsax.arrow_circle_right,
+                                  color: getRandomColor(index)),
+                            ],
+                          ),
+                        )),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          Column(
+            children: [
+              const SizedBox(
+                height: 2.0,
               ),
+              const Divider(
+                color: Colors.grey,
+                height: 4.0,
+              ),
+              const SizedBox(
+                height: 2.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(5.0),
+                            child: TextButton(
+                              onPressed: () async {
+                                setState(() {
+                                  areaFloorplanModelss = null;
+                                });
+
+                                Navigator.pop(context, 'OK');
+                              },
+                              child: const Text(
+                                'ปิด',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  PopupMenu? menu;
+  maxColumn(int index, context) {
+    menu = PopupMenu(
+      context: context,
+      // config: const MenuConfig(
+      //   type: MenuType.custom,
+      //   itemHeight: 200,
+      //   itemWidth: 200,
+      //   backgroundColor: Colors.green,
+      // ),
+      config: MenuConfig(
+          border: BorderConfig(
+            color: Color.fromARGB(255, 56, 56, 56),
+          ),
+          itemWidth: 300,
+          backgroundColor: Color.fromARGB(255, 252, 251, 251),
+          type: MenuType.list,
+          lineColor: Colors.greenAccent,
+          maxColumn: 10),
+      items: [
+        if (areaModels[index].quantity != '1')
+          PopUpMenuItem(
+              // title:
+              //     'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+              // textStyle: const TextStyle(
+              //     color: PeopleChaoScreen_Color.Colors_Text2_,
+              //     //fontWeight: FontWeight.bold,
+              //     fontFamily: Font_.Fonts_T),
+              image: InkWell(
+                  onTap: () async {
+                    SharedPreferences preferences =
+                        await SharedPreferences.getInstance();
+                    preferences.setString(
+                        'zoneSer', areaModels[index].zser.toString());
+                    preferences.setString(
+                        'zonesName', areaModels[index].zn.toString());
+                    setState(() {
+                      Ser_Body = 1;
+                      a_ln = areaModels[index].lncode;
+                      a_ser = areaModels[index].ser;
+                      a_area = areaModels[index].area;
+                      a_rent = areaModels[index].rent;
+                      a_page = '1';
+                    });
+                    menu!.dismiss();
+                    // Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(
+                        //                    <--- top side
+                        width: 0.5,
+                      ),
+                    )),
+                    padding: const EdgeInsets.all(4.0),
+                    width: 270,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Icon(Iconsax.arrow_circle_right,
+                            color: getRandomColor(index)),
+                      ],
+                    ),
+                  ))),
+////////////-------------------------->
+        if (areaModels[index].quantity != '1')
+          PopUpMenuItem(
+              // title:
+              //     'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+              // textStyle: const TextStyle(
+              //     color: PeopleChaoScreen_Color.Colors_Text2_,
+              //     //fontWeight: FontWeight.bold,
+              //     fontFamily: Font_.Fonts_T),
+              image: InkWell(
+                  onTap: () async {
+                    SharedPreferences preferences =
+                        await SharedPreferences.getInstance();
+                    preferences.setString(
+                        'zoneSer', areaModels[index].zser.toString());
+                    preferences.setString(
+                        'zonesName', areaModels[index].zn.toString());
+
+                    setState(() {
+                      Ser_Body = 2;
+                      a_ln = areaModels[index].lncode;
+                      a_ser = areaModels[index].ser;
+                      a_area = areaModels[index].area;
+                      a_rent = areaModels[index].rent;
+                      a_page = '1';
+                    });
+                    menu!.dismiss();
+                    // Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(
+                        //                    <--- top side
+                        color: Colors.grey,
+                        width: 0.5,
+                      ),
+                    )),
+                    padding: const EdgeInsets.all(4.0),
+                    width: 270,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Icon(Iconsax.arrow_circle_right,
+                            color: getRandomColor(index)),
+                      ],
+                    ),
+                  ))),
+////////////-------------------------->
+        if (areaModels[index].quantity == '1')
+          for (int i = 0; i < areaxConModels.length; i++)
+            PopUpMenuItem(
+                // title: '${areaxConModels[i].cser} (${areaxConModels[i].cname})',
+                // textStyle: const TextStyle(
+                //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                //     //fontWeight: FontWeight.bold,
+                //     fontFamily: Font_.Fonts_T),
+                image: InkWell(
+                    onTap: () async {
+                      setState(() {
+                        Ser_Body = 3;
+                        Value_stasus = '0';
+                        Value_cid = areaxConModels[i].cser;
+                        ser_cidtan = '1';
+                      });
+                      menu!.dismiss();
+                      // Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                        bottom: BorderSide(
+                          //                    <--- top side
+                          color: Colors.grey,
+                          width: 0.5,
+                        ),
+                      )),
+                      padding: const EdgeInsets.all(4.0),
+                      width: 270,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${areaxConModels[i].cser} (${areaxConModels[i].cname})',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  //fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Icon(Iconsax.arrow_circle_right,
+                              color: getRandomColor(index)),
+                        ],
+                      ),
+                    ))),
+
+////////////-------------------------->
+        if (areaModels[index].quantity == '1')
+          PopUpMenuItem(
+              // title:
+              //     'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+              // textStyle: const TextStyle(
+              //     color: PeopleChaoScreen_Color.Colors_Text2_,
+              //     //fontWeight: FontWeight.bold,
+              //     fontFamily: Font_.Fonts_T),
+              image: InkWell(
+                  onTap: () async {
+                    setState(() {
+                      Ser_Body = 3;
+                      Value_stasus = areaModels[index].quantity == '1'
+                          ? datex.isAfter(DateTime.parse(
+                                          '${areaModels[index].ldate} 00:00:00.000')
+                                      .subtract(const Duration(days: 0))) ==
+                                  true
+                              ? 'หมดสัญญา'
+                              : datex.isAfter(DateTime.parse(
+                                              '${areaModels[index].ldate} 00:00:00.000')
+                                          .subtract(
+                                              const Duration(days: 30))) ==
+                                      true
+                                  ? 'ใกล้หมดสัญญา'
+                                  : 'เช่าอยู่'
+                          : areaModels[index].quantity == '2'
+                              ? 'เสนอราคา'
+                              : areaModels[index].quantity == '3'
+                                  ? 'เสนอราคา(มัดจำ)'
+                                  : 'ว่าง';
+                      Value_cid = areaModels[index].cid;
+                      ser_cidtan = '1';
+                    });
+                    menu!.dismiss();
+                    // Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(
+                        //                    <--- top side
+                        color: Colors.grey,
+                        width: 0.5,
+                      ),
+                    )),
+                    padding: const EdgeInsets.all(4.0),
+                    width: 270,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Icon(Iconsax.arrow_circle_right,
+                            color: getRandomColor(index)),
+                      ],
+                    ),
+                  ))),
+////////////-------------------------->
+        if (areaModels[index].quantity == '1')
+          PopUpMenuItem(
+              // title:
+              //     'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
+              // textStyle: const TextStyle(
+              //     color: PeopleChaoScreen_Color.Colors_Text2_,
+              //     //fontWeight: FontWeight.bold,
+              //     fontFamily: Font_.Fonts_T),
+              image: InkWell(
+                  onTap: () async {
+                    setState(() {
+                      Value_stasus = areaModels[index].quantity == '1'
+                          ? datex.isAfter(DateTime.parse(
+                                          '${areaModels[index].ldate} 00:00:00.000')
+                                      .subtract(const Duration(days: 0))) ==
+                                  true
+                              ? 'หมดสัญญา'
+                              : datex.isAfter(DateTime.parse(
+                                              '${areaModels[index].ldate} 00:00:00.000')
+                                          .subtract(
+                                              const Duration(days: 30))) ==
+                                      true
+                                  ? 'ใกล้หมดสัญญา'
+                                  : 'เช่าอยู่'
+                          : areaModels[index].quantity == '2'
+                              ? 'เสนอราคา'
+                              : areaModels[index].quantity == '3'
+                                  ? 'เสนอราคา(มัดจำ)'
+                                  : 'ว่าง';
+                      Ser_Body = 4;
+                      Value_cid = areaModels[index].cid;
+                      ser_cidtan = '1';
+                    });
+                    menu!.dismiss();
+                    // Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(
+                        //                    <--- top side
+                        color: Colors.grey,
+                        width: 0.5,
+                      ),
+                    )),
+                    padding: const EdgeInsets.all(4.0),
+                    width: 270,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Icon(Iconsax.arrow_circle_right,
+                            color: getRandomColor(index)),
+                      ],
+                    ),
+                  ))),
+        ////////////-------------------------->
+        if (areaModels[index].quantity == '2')
+          for (int i = 0; i < areaQuotModels.length; i++)
+            if (areaModels[index].ser == areaQuotModels[i].ser)
+              PopUpMenuItem(
+                  // title: 'เสนอราคา: ${areaQuotModels[i].docno}',
+                  // textStyle: const TextStyle(
+                  //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                  //     //fontWeight: FontWeight.bold,
+                  //     fontFamily: Font_.Fonts_T),
+                  image: InkWell(
+                      onTap: () async {
+                        setState(() {
+                          Ser_Body = 3;
+                          Value_stasus = '1';
+                          Value_cid = areaQuotModels[i].docno;
+                          ser_cidtan = '2';
+                        });
+                        menu!.dismiss();
+                        // Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                          bottom: BorderSide(
+                            //                    <--- top side
+                            color: Colors.grey,
+                            width: 0.5,
+                          ),
+                        )),
+                        padding: const EdgeInsets.all(4.0),
+                        width: 270,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'เสนอราคา: ${areaQuotModels[i].docno}',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    //fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Icon(Iconsax.arrow_circle_right,
+                                color: getRandomColor(index)),
+                          ],
+                        ),
+                      ))),
+        ////////////-------------------------->
+        if (areaModels[index].quantity == '3')
+          for (int i = 0; i < areaQuotModels.length; i++)
+            for (int i = 0; i < areaQuotModels.length; i++)
+              PopUpMenuItem(
+                  // title: 'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
+                  // textStyle: const TextStyle(
+                  //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                  //     //fontWeight: FontWeight.bold,
+                  //     fontFamily: Font_.Fonts_T),
+                  image: InkWell(
+                      onTap: () async {
+                        setState(() {
+                          Ser_Body = 3;
+                          Value_stasus = '1';
+                          Value_cid = areaQuotModels[i].docno;
+                          ser_cidtan = '2';
+                        });
+                        menu!.dismiss();
+                        // Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                          bottom: BorderSide(
+                            //                    <--- top side
+                            color: Colors.grey,
+                            width: 0.5,
+                          ),
+                        )),
+                        padding: const EdgeInsets.all(4.0),
+                        width: 270,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    //fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Icon(Iconsax.arrow_circle_right,
+                                color: getRandomColor(index)),
+                          ],
+                        ),
+                      ))),
       ],
-      child: Card(
-          child: InkWell(
-        // onTap: () async {},
-        child: Container(
+
+      // onDismiss: onDismiss,
+    );
+    menu!.show(widgetKey: _btnKeys[index]);
+
+    // Future.delayed(const Duration(seconds: 1), () {
+
+    //   menu!.dismiss();
+    // });
+  }
+
+  void showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Container(
+        height: 50,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
+
+    showDialog(
+      barrierDismissible:
+          false, // Set to true if you want to allow dismissing the dialog by tapping outside
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Widget createCard(int index, context) {
+    return (_btnKeys.length == 0)
+        ? SizedBox()
+        : Card(
             color: areaModels[index].quantity == '1'
                 ? Colors.red.shade200
                 : areaModels[index].quantity == '2'
@@ -5539,24 +6584,409 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                     : areaModels[index].quantity == '3'
                         ? Colors.purple.shade200
                         : Colors.green.shade200,
-            width: MediaQuery.of(context).size.width * 0.1,
-            height: 50,
-            child: Center(
-                child: AutoSizeText(
-              '${areaModels[index].lncode} (${areaModels[index].ln})',
-              minFontSize: 10,
-              maxFontSize: 18,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                // fontSize: 20,
-                fontFamily: Font_.Fonts_T,
-                color: PeopleChaoScreen_Color.Colors_Text2_,
-              ),
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
-            ))),
-      )),
-    );
+            child: MaterialButton(
+              key: _btnKeys[index],
+              onPressed: () async {
+                setState(() {
+                  read_GC_con_area(index);
+                });
+                // showLoaderDialog(context);
+                Future.delayed(const Duration(milliseconds: 400), () {
+                  maxColumn(index, context);
+                });
+              },
+              child: Container(
+                  color: areaModels[index].quantity == '1'
+                      ? Colors.red.shade200
+                      : areaModels[index].quantity == '2'
+                          ? Colors.blue.shade200
+                          : areaModels[index].quantity == '3'
+                              ? Colors.purple.shade200
+                              : Colors.green.shade200,
+                  width: MediaQuery.of(context).size.width * 0.1,
+                  height: 70,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                          child: AutoSizeText(
+                        '${areaModels[index].lncode} (${areaModels[index].ln})',
+                        minFontSize: 10,
+                        maxFontSize: 18,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          // fontSize: 20,
+                          fontFamily: Font_.Fonts_T,
+                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                        ),
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                      AutoSizeText(
+                        areaModels[index].quantity == '1'
+                            ? datex.isAfter(DateTime.parse(
+                                            '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+                                        .subtract(const Duration(days: 0))) ==
+                                    true
+                                ? 'หมดสัญญา'
+                                : datex.isAfter(DateTime.parse(
+                                                '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+                                            .subtract(
+                                                const Duration(days: 30))) ==
+                                        true
+                                    ? 'ใกล้หมดสัญญา'
+                                    : 'เช่าอยู่'
+                            : areaModels[index].quantity == '2'
+                                ? 'เสนอราคา'
+                                : areaModels[index].quantity == '3'
+                                    ? 'เสนอราคา(มัดจำ)'
+                                    : 'ว่าง',
+                        minFontSize: 8,
+                        maxFontSize: 12,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          // fontSize: 20,
+                          fontFamily: Font_.Fonts_T,
+                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  )),
+            ));
+
+    // PopupMenuButton(
+    //   onOpened: () {
+    //     setState(() {
+    //       read_GC_con_area(index);
+    //     });
+    //   },
+    //   itemBuilder: (BuildContext context) => [
+    //     if (areaModels[index].quantity != '1')
+    //       PopupMenuItem(
+    //         child: InkWell(
+    //             onTap: () async {
+    //               SharedPreferences preferences =
+    //                   await SharedPreferences.getInstance();
+    //               preferences.setString(
+    //                   'zoneSer', areaModels[index].zser.toString());
+    //               preferences.setString(
+    //                   'zonesName', areaModels[index].zn.toString());
+    //               setState(() {
+    //                 Ser_Body = 1;
+    //                 a_ln = areaModels[index].lncode;
+    //                 a_ser = areaModels[index].ser;
+    //                 a_area = areaModels[index].area;
+    //                 a_rent = areaModels[index].rent;
+    //                 a_page = '1';
+    //               });
+
+    //               Navigator.pop(context);
+    //             },
+    //             child: Container(
+    //                 padding: const EdgeInsets.all(10),
+    //                 width: MediaQuery.of(context).size.width,
+    //                 child: Row(
+    //                   children: [
+    //                     Expanded(
+    //                         child:
+    // Text(
+    //                       'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+    //                       overflow: TextOverflow.ellipsis,
+    //                       style: const TextStyle(
+    //                           color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                           //fontWeight: FontWeight.bold,
+    //                           fontFamily: Font_.Fonts_T),
+    //                     )
+    // )
+    //                   ],
+    //                 ))),
+    //       ),
+    //     if (areaModels[index].quantity != '1')
+    //       PopupMenuItem(
+    //         child: InkWell(
+    //             onTap: () async {
+    //               SharedPreferences preferences =
+    //                   await SharedPreferences.getInstance();
+    //               preferences.setString(
+    //                   'zoneSer', areaModels[index].zser.toString());
+    //               preferences.setString(
+    //                   'zonesName', areaModels[index].zn.toString());
+
+    //               setState(() {
+    //                 Ser_Body = 2;
+    //                 a_ln = areaModels[index].lncode;
+    //                 a_ser = areaModels[index].ser;
+    //                 a_area = areaModels[index].area;
+    //                 a_rent = areaModels[index].rent;
+    //                 a_page = '1';
+    //               });
+    //               Navigator.pop(context);
+    //             },
+    //             child: Container(
+    //                 padding: const EdgeInsets.all(10),
+    //                 width: MediaQuery.of(context).size.width,
+    //                 child: Row(
+    //                   children: [
+    //                     Expanded(
+    //                         child: Text(
+    //                       'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+    //                       overflow: TextOverflow.ellipsis,
+    //                       style: const TextStyle(
+    //                           color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                           //fontWeight: FontWeight.bold,
+    //                           fontFamily: Font_.Fonts_T),
+    //                     ))
+    //                   ],
+    //                 ))),
+    //       ),
+    //     if (areaModels[index].quantity == '1')
+    //       for (int i = 0; i < areaxConModels.length; i++)
+    //         PopupMenuItem(
+    //           child: InkWell(
+    //               onTap: () async {
+    //                 setState(() {
+    //                   Ser_Body = 3;
+    //                   Value_stasus = '0';
+    //                   Value_cid = areaxConModels[i].cser;
+    //                   ser_cidtan = '1';
+    //                 });
+    //                 Navigator.pop(context);
+    //               },
+    //               child: Container(
+    //                   padding: const EdgeInsets.all(10),
+    //                   width: MediaQuery.of(context).size.width,
+    //                   child: Row(
+    //                     children: [
+    //                       Expanded(
+    //                           child: Text(
+    //                         '${areaxConModels[i].cser} (${areaxConModels[i].cname})',
+    //                         overflow: TextOverflow.ellipsis,
+    //                         style: const TextStyle(
+    //                             color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                             //fontWeight: FontWeight.bold,
+    //                             fontFamily: Font_.Fonts_T),
+    //                       ))
+    //                     ],
+    //                   ))),
+    //         ),
+    //     if (areaModels[index].quantity == '1')
+    //       PopupMenuItem(
+    //         child: InkWell(
+    //             onTap: () async {
+    //               setState(() {
+    //                 Ser_Body = 3;
+    //                 Value_stasus = areaModels[index].quantity == '1'
+    //                     ? datex.isAfter(DateTime.parse(
+    //                                     '${areaModels[index].ldate} 00:00:00.000')
+    //                                 .subtract(const Duration(days: 0))) ==
+    //                             true
+    //                         ? 'หมดสัญญา'
+    //                         : datex.isAfter(DateTime.parse(
+    //                                         '${areaModels[index].ldate} 00:00:00.000')
+    //                                     .subtract(const Duration(days: 30))) ==
+    //                                 true
+    //                             ? 'ใกล้หมดสัญญา'
+    //                             : 'เช่าอยู่'
+    //                     : areaModels[index].quantity == '2'
+    //                         ? 'เสนอราคา'
+    //                         : areaModels[index].quantity == '3'
+    //                             ? 'เสนอราคา(มัดจำ)'
+    //                             : 'ว่าง';
+    //                 Value_cid = areaModels[index].cid;
+    //                 ser_cidtan = '1';
+    //               });
+    //               Navigator.pop(context);
+    //             },
+    //             child: Container(
+    //                 padding: const EdgeInsets.all(10),
+    //                 width: MediaQuery.of(context).size.width,
+    //                 child: Row(
+    //                   children: [
+    //                     Expanded(
+    //                         child: Text(
+    //                       'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+    //                       overflow: TextOverflow.ellipsis,
+    //                       style: const TextStyle(
+    //                           color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                           //fontWeight: FontWeight.bold,
+    //                           fontFamily: Font_.Fonts_T),
+    //                     ))
+    //                   ],
+    //                 ))),
+    //       ),
+    //     if (areaModels[index].quantity == '1')
+    //       PopupMenuItem(
+    //         child: InkWell(
+    //             onTap: () async {
+    //               setState(() {
+    //                 Value_stasus = areaModels[index].quantity == '1'
+    //                     ? datex.isAfter(DateTime.parse(
+    //                                     '${areaModels[index].ldate} 00:00:00.000')
+    //                                 .subtract(const Duration(days: 0))) ==
+    //                             true
+    //                         ? 'หมดสัญญา'
+    //                         : datex.isAfter(DateTime.parse(
+    //                                         '${areaModels[index].ldate} 00:00:00.000')
+    //                                     .subtract(const Duration(days: 30))) ==
+    //                                 true
+    //                             ? 'ใกล้หมดสัญญา'
+    //                             : 'เช่าอยู่'
+    //                     : areaModels[index].quantity == '2'
+    //                         ? 'เสนอราคา'
+    //                         : areaModels[index].quantity == '3'
+    //                             ? 'เสนอราคา(มัดจำ)'
+    //                             : 'ว่าง';
+    //                 Ser_Body = 4;
+    //                 Value_cid = areaModels[index].cid;
+    //                 ser_cidtan = '1';
+    //               });
+    //               Navigator.pop(context);
+    //             },
+    //             child: Container(
+    //                 padding: const EdgeInsets.all(10),
+    //                 width: MediaQuery.of(context).size.width,
+    //                 child: Row(
+    //                   children: [
+    //                     Expanded(
+    //                         child: Text(
+    //                       'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
+    //                       overflow: TextOverflow.ellipsis,
+    //                       style: const TextStyle(
+    //                           color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                           //fontWeight: FontWeight.bold,
+    //                           fontFamily: Font_.Fonts_T),
+    //                     ))
+    //                   ],
+    //                 ))),
+    //       ),
+    //     if (areaModels[index].quantity == '2')
+    //       for (int i = 0; i < areaQuotModels.length; i++)
+    //         if (areaModels[index].ser == areaQuotModels[i].ser)
+    //           PopupMenuItem(
+    //             child: InkWell(
+    //                 onTap: () async {
+    //                   setState(() {
+    //                     Ser_Body = 3;
+    //                     Value_stasus = '1';
+    //                     Value_cid = areaQuotModels[i].docno;
+    //                     ser_cidtan = '2';
+    //                   });
+    //                   Navigator.pop(context);
+    //                 },
+    //                 child: Container(
+    //                     padding: const EdgeInsets.all(10),
+    //                     width: MediaQuery.of(context).size.width,
+    //                     child: Row(
+    //                       children: [
+    //                         Expanded(
+    //                             child: Text(
+    //                           'เสนอราคา: ${areaQuotModels[i].docno}',
+    //                           overflow: TextOverflow.ellipsis,
+    //                           style: const TextStyle(
+    //                               color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                               //fontWeight: FontWeight.bold,
+    //                               fontFamily: Font_.Fonts_T),
+    //                         ))
+    //                       ],
+    //                     ))),
+    //           ),
+    //     if (areaModels[index].quantity == '3')
+    //       for (int i = 0; i < areaQuotModels.length; i++)
+    //         if (areaModels[index].ser == areaQuotModels[i].ser)
+    //           PopupMenuItem(
+    //             child: InkWell(
+    //                 onTap: () async {
+    //                   setState(() {
+    //                     Ser_Body = 3;
+    //                     Value_stasus = '1';
+    //                     Value_cid = areaQuotModels[i].docno;
+    //                     ser_cidtan = '2';
+    //                   });
+    //                   Navigator.pop(context);
+    //                 },
+    //                 child: Container(
+    //                     padding: const EdgeInsets.all(10),
+    //                     width: MediaQuery.of(context).size.width,
+    //                     child: Row(
+    //                       children: [
+    //                         Expanded(
+    //                             child: Text(
+    //                           'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
+    //                           overflow: TextOverflow.ellipsis,
+    //                           style: const TextStyle(
+    //                               color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                               //fontWeight: FontWeight.bold,
+    //                               fontFamily: Font_.Fonts_T),
+    //                         ))
+    //                       ],
+    //                     ))),
+    //           ),
+    //   ],
+    //   child: Card(
+    //       child: InkWell(
+    //     // onTap: () async {},
+    //     child: Container(
+    //         color: areaModels[index].quantity == '1'
+    //             ? Colors.red.shade200
+    //             : areaModels[index].quantity == '2'
+    //                 ? Colors.blue.shade200
+    //                 : areaModels[index].quantity == '3'
+    //                     ? Colors.purple.shade200
+    //                     : Colors.green.shade200,
+    //         width: MediaQuery.of(context).size.width * 0.1,
+    //         height: 50,
+    //         child: Column(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           children: [
+    //             Center(
+    //                 child: AutoSizeText(
+    //               '${areaModels[index].lncode} (${areaModels[index].ln})',
+    //               minFontSize: 10,
+    //               maxFontSize: 18,
+    //               textAlign: TextAlign.center,
+    //               style: const TextStyle(
+    //                 // fontSize: 20,
+    //                 fontFamily: Font_.Fonts_T,
+    //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+    //               ),
+    //               maxLines: 4,
+    //               overflow: TextOverflow.ellipsis,
+    //             )),
+    //             AutoSizeText(
+    //               areaModels[index].quantity == '1'
+    //                   ? datex.isAfter(DateTime.parse(
+    //                                   '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+    //                               .subtract(const Duration(days: 0))) ==
+    //                           true
+    //                       ? 'หมดสัญญา'
+    //                       : datex.isAfter(DateTime.parse(
+    //                                       '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+    //                                   .subtract(const Duration(days: 30))) ==
+    //                               true
+    //                           ? 'ใกล้หมดสัญญา'
+    //                           : 'เช่าอยู่'
+    //                   : areaModels[index].quantity == '2'
+    //                       ? 'เสนอราคา'
+    //                       : areaModels[index].quantity == '3'
+    //                           ? 'เสนอราคา(มัดจำ)'
+    //                           : 'ว่าง',
+    //               minFontSize: 8,
+    //               maxFontSize: 12,
+    //               textAlign: TextAlign.center,
+    //               style: const TextStyle(
+    //                 // fontSize: 20,
+    //                 fontFamily: Font_.Fonts_T,
+    //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+    //               ),
+    //               maxLines: 1,
+    //               overflow: TextOverflow.ellipsis,
+    //             )
+    //           ],
+    //         )),
+    //   )),
+    // );
   }
 
   Widget createCardNull(value) {

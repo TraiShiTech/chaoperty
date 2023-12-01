@@ -10,6 +10,7 @@ import '../Style/colors.dart';
 import 'Add_Custo_Screen.dart';
 import 'Customer_Screen.dart';
 import 'Meter_Screen.dart';
+import 'Read_Card.dart';
 import 'Systemlog_Screen.dart';
 
 class BureauScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _BureauScreenState extends State<BureauScreen> {
   }
 
   // List Status = ['ทะเบียนลูกค้า', 'ทะเบียนมิเตอร์', 'ประวัติการใช้งาน'];
-  List Status = ['ทะเบียนลูกค้า', 'ประวัติการใช้งาน'];
+  List Status = ['ทะเบียนลูกค้า', 'ประวัติการใช้งาน', 'อ่านบัตรประชาชน'];
   Widget build(BuildContext context) {
     return Container(
       // color: AppbackgroundColor.Sub_Abg_Colors,
@@ -161,15 +162,16 @@ class _BureauScreenState extends State<BureauScreen> {
             ),
           ),
         ),
-        (Status_ == 1)
+        Status_ == 1
             ? CustomerScreen()
-            :
-            // (Status_ == 2)
-            //     ? Add_Custo_Screen(
-            //         updateMessage: updateMessage,
-            //       )
-            //     :
-            SystemlogScreen()
+            : Status_ == 2
+                ?
+                //     ? Add_Custo_Screen(
+                //         updateMessage: updateMessage,
+                //       )
+                //     :
+                SystemlogScreen()
+                : ReadCard()
       ]),
     );
   }

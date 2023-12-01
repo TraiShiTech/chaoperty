@@ -625,6 +625,22 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AutoSizeText(
+                  minFontSize: 6,
+                  maxFontSize: 12,
+                  '**คำเตือน ( ในExcel จะต้องกรอกทุกช่อง หากไม่มีข้อมูลช่องไหน กรุณาระบุว่า ไม่มี, -, หรือ N/A และหากมีชื่ออยู่ในระบบแล้วระบบจะไม่ทำการเพิ่ม )',
+                  style: TextStyle(
+                    color: Colors.red,
+                    // fontWeight: FontWeight.bold,
+                    // fontFamily: FontWeight_.Fonts_T,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
             ScrollConfiguration(
               behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
                 PointerDeviceKind.touch,
@@ -681,7 +697,11 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                                     child: InkWell(
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Colors.blueGrey[300],
+                                          color: (Select_Cus_index.length ==
+                                                      customerModels.length &&
+                                                  Select_Cus_index.length != 0)
+                                              ? Colors.red
+                                              : Colors.blueGrey[300],
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(8),
                                               topRight: Radius.circular(8),
@@ -692,7 +712,11 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                                         child: AutoSizeText(
                                           minFontSize: 8,
                                           maxFontSize: 14,
-                                          'เลือกทั้งหมด',
+                                          (Select_Cus_index.length ==
+                                                      customerModels.length &&
+                                                  Select_Cus_index.length != 0)
+                                              ? 'ยกเลิกเลือกทั้งหมด'
+                                              : 'เลือกทั้งหมด',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.white,
@@ -703,19 +727,27 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                                               ),
                                         ),
                                       ),
-                                      onTap: () {
-                                        for (int index = 0;
-                                            index < customerModels.length;
-                                            index++) {
-                                          if (Select_Cus_index.contains(
-                                                  index) !=
-                                              true) {
-                                            setState(() {
-                                              Select_Cus_index.add(index);
-                                            });
-                                          }
-                                        }
-                                      },
+                                      onTap: (Select_Cus_index.length ==
+                                                  customerModels.length &&
+                                              Select_Cus_index.length != 0)
+                                          ? () {
+                                              setState(() {
+                                                Select_Cus_index.clear();
+                                              });
+                                            }
+                                          : () {
+                                              for (int index = 0;
+                                                  index < customerModels.length;
+                                                  index++) {
+                                                if (Select_Cus_index.contains(
+                                                        index) !=
+                                                    true) {
+                                                  setState(() {
+                                                    Select_Cus_index.add(index);
+                                                  });
+                                                }
+                                              }
+                                            },
                                     ),
                                   ),
                                   Expanded(

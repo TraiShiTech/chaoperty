@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/basic.dart';
@@ -14,14 +15,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
+import '../Man_PDF/Man_BillingNoteInvlice_PDF.dart';
 import '../Model/GetCFinnancetrans_Model.dart';
+import '../Model/GetPayMent_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTranBill_model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../PDF/PDF_Billing/pdf_BillingNote_IV.dart';
+import '../PDF_TP2/PDF_Billing_TP2/pdf_BillingNote_IV_TP2.dart';
+import '../PDF_TP3/PDF_Billing_TP3/pdf_BillingNote_IV_TP3.dart';
+import '../PDF_TP4/PDF_Billing_TP4/pdf_BillingNote_IV_TP4.dart';
+import '../PDF_TP5/PDF_Billing_TP5/pdf_BillingNote_IV_TP5.dart';
 
-import '../PDF/PDF_Temporary_Receipt/pdf_Receipt.dart';
 import '../Style/colors.dart';
 import 'Bills_history.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -63,6 +69,7 @@ class _BillsState extends State<Bills> {
   List<TransModel> _TransModels = [];
   List<TeNantModel> teNantModels = [];
   List<RenTalModel> renTalModels = [];
+  List<PayMentModel> _PayMentModels = [];
   final sum_disamt = TextEditingController();
   final sum_disp = TextEditingController();
   double sum_pvat = 0.00,
@@ -94,7 +101,15 @@ class _BillsState extends State<Bills> {
   String? rtname, type, typex, renname, pkname, ser_Zonex;
   int? pkqty, pkuser, countarae;
   String? base64_Imgmap, foder;
-  String? tel_user, img_, img_logo;
+  String? tel_user, img_, img_logo, tem_page_ser;
+  String? selectedValue;
+  String? paymentSer1, paymentName1, paymentSer2, paymentName2;
+  int TitleType_Default_Receipt = 0;
+  List TitleType_Default_Receipt_ = [
+    'ไม่ระบุ',
+    'ต้นฉบับ',
+    'สำเนา',
+  ];
   @override
   void initState() {
     super.initState();
@@ -103,6 +118,72 @@ class _BillsState extends State<Bills> {
     sum_disamt.text = '0.00';
     read_data();
     read_GC_rental();
+    red_payMent();
+  }
+
+  Future<Null> red_payMent() async {
+    if (_PayMentModels.length != 0) {
+      setState(() {
+        _PayMentModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+
+    String url = '${MyConstant().domain}/GC_payMent.php?isAdd=true&ren=$ren}';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'null') {
+        Map<String, dynamic> map = Map();
+        map['ser'] = '0';
+        map['datex'] = '';
+        map['timex'] = '';
+        map['ptser'] = '';
+        map['ptname'] = 'เลือก';
+        map['bser'] = '';
+        map['bank'] = '';
+        map['bno'] = '';
+        map['bname'] = '';
+        map['bsaka'] = '';
+        map['btser'] = '';
+        map['btype'] = '';
+        map['st'] = '1';
+        map['rser'] = '';
+        map['accode'] = '';
+        map['co'] = '';
+        map['data_update'] = '';
+        map['auto'] = '0';
+
+        PayMentModel _PayMentModel = PayMentModel.fromJson(map);
+        setState(() {
+          _PayMentModels.add(_PayMentModel);
+        });
+
+        for (var map in result) {
+          PayMentModel _PayMentModel = PayMentModel.fromJson(map);
+          var autox = _PayMentModel.auto;
+          var serx = _PayMentModel.ser;
+          var ptnamex = _PayMentModel.ptname;
+          setState(() {
+            _PayMentModels.add(_PayMentModel);
+            if (autox == '1') {
+              paymentSer1 = serx.toString();
+              paymentName1 = ptnamex.toString();
+            }
+          });
+          if (_PayMentModel.btser.toString() == '1') {
+          } else {}
+        }
+
+        if (paymentName1 == null) {
+          paymentSer1 = 0.toString();
+          paymentName1 = 'เลือก'.toString();
+        }
+      }
+    } catch (e) {}
   }
 
   Future<Null> read_GC_rental() async {
@@ -110,11 +191,13 @@ class _BillsState extends State<Bills> {
       renTalModels.clear();
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
-
-    var seruser = preferences.getString('ser');
-    var utype = preferences.getString('utype');
+    var ren = preferences.getString('renTalSer');
     String url =
-        '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
+        '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
+    // var seruser = preferences.getString('ser');
+    // var utype = preferences.getString('utype');
+    // String url =
+    //     '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -145,6 +228,7 @@ class _BillsState extends State<Bills> {
             pkname = pkx;
             img_ = img;
             img_logo = imglogo;
+            tem_page_ser = renTalModel.tem_page!.trim();
             renTalModels.add(renTalModel);
           });
         }
@@ -291,7 +375,7 @@ class _BillsState extends State<Bills> {
     var qutser = widget.Get_Value_NameShop_index;
 
     String url =
-        '${MyConstant().domain}/GC_tran_bill.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser}';
+        '${MyConstant().domain}/GC_tran_bill.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -320,7 +404,7 @@ class _BillsState extends State<Bills> {
     var qutser = widget.Get_Value_NameShop_index;
 
     String url =
-        '${MyConstant().domain}/GC_tran_bill_All.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser}';
+        '${MyConstant().domain}/GC_tran_bill_All.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -1033,7 +1117,7 @@ class _BillsState extends State<Bills> {
                                                         color: Colors
                                                             .grey.shade300,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -1086,7 +1170,7 @@ class _BillsState extends State<Bills> {
                                                         color: Colors
                                                             .yellow.shade700,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -2057,7 +2141,7 @@ class _BillsState extends State<Bills> {
                         Expanded(
                           flex: 2,
                           child: Container(
-                            height: 50,
+                            height: 160,
                             decoration: BoxDecoration(
                               color: AppbackgroundColor.Sub_Abg_Colors,
                               borderRadius: const BorderRadius.only(
@@ -2065,33 +2149,345 @@ class _BillsState extends State<Bills> {
                                   topRight: Radius.circular(0),
                                   bottomLeft: Radius.circular(10),
                                   bottomRight: Radius.circular(10)),
+                              border: Border.all(color: Colors.grey, width: 1),
                             ),
                             padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                                border:
-                                    Border.all(color: Colors.grey, width: 1),
-                              ),
-                              width: 120,
-                              child: Center(
-                                child: AutoSizeText(
-                                  minFontSize: 10,
-                                  maxFontSize: 15,
-                                  textAlign: TextAlign.end,
-                                  '${nFormat.format(sum_amt - double.parse(sum_disamt.text))}',
-                                  style: const TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      //fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    const AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      textAlign: TextAlign.start,
+                                      'ยอดชำระรวม : ',
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Colors.red[50]!.withOpacity(0.5),
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                          border: Border.all(
+                                              color: Colors.grey, width: 1),
+                                        ),
+                                        // width: 120,
+                                        child: Center(
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 15,
+                                            textAlign: TextAlign.end,
+                                            '${nFormat.format(sum_amt - double.parse(sum_disamt.text))}',
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                //fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
+                                Row(children: [
+                                  const AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 15,
+                                    textAlign: TextAlign.start,
+                                    'หัวบิล :',
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        //fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: DropdownButtonFormField2(
+                                        alignment: Alignment.center,
+                                        focusColor: Colors.white,
+                                        autofocus: false,
+                                        decoration: InputDecoration(
+                                          enabled: true,
+                                          hoverColor: Colors.brown,
+                                          prefixIconColor: Colors.blue,
+                                          fillColor:
+                                              Colors.white.withOpacity(0.05),
+                                          filled: false,
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.zero,
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Colors.red),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(10),
+                                              topLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Color.fromARGB(
+                                                  255, 231, 227, 227),
+                                            ),
+                                          ),
+                                        ),
+                                        hint: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Text(
+                                            '${TitleType_Default_Receipt_[TitleType_Default_Receipt]}',
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+
+                                        isExpanded: false,
+                                        // value: Default_Receipt_type == 0 ?''
+                                        // :'',
+                                        icon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: Colors.black,
+                                        ),
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                        iconSize: 25,
+                                        buttonHeight: 42,
+                                        buttonPadding: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        dropdownDecoration: BoxDecoration(
+                                          // color: Colors
+                                          //     .amber,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: Colors.white, width: 1),
+                                        ),
+                                        items: TitleType_Default_Receipt_.map(
+                                            (item) => DropdownMenuItem<String>(
+                                                  value: '${item}',
+                                                  child: Text(
+                                                    '${item}',
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                )).toList(),
+
+                                        onChanged: (value) async {
+                                          int selectedIndex =
+                                              TitleType_Default_Receipt_
+                                                  .indexWhere(
+                                                      (item) => item == value);
+
+                                          setState(() {
+                                            TitleType_Default_Receipt =
+                                                selectedIndex;
+                                          });
+
+                                          print(
+                                              '${selectedIndex}////$value  ////----> $TitleType_Default_Receipt');
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                                Row(
+                                  children: [
+                                    AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      textAlign: TextAlign.start,
+                                      'รูปแบบชำระ :',
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        height: 50,
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            borderRadius: const BorderRadius
+                                                    .only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                            // border: Border.all(
+                                            //     color: Colors.grey, width: 1),
+                                          ),
+                                          width: 120,
+                                          child: DropdownButtonFormField2(
+                                            decoration: InputDecoration(
+                                              //Add isDense true and zero Padding.
+                                              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                              isDense: true,
+                                              contentPadding: EdgeInsets.zero,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              //Add more decoration as you want here
+                                              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                            ),
+                                            isExpanded: true,
+                                            // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                            hint: Row(
+                                              children: [
+                                                Text(
+                                                  '$paymentName1',
+                                                  style: const TextStyle(
+                                                      fontSize: 14,
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      // fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ],
+                                            ),
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down,
+                                              color: Colors.black45,
+                                            ),
+                                            iconSize: 25,
+                                            buttonHeight: 42,
+                                            buttonPadding:
+                                                const EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                            dropdownDecoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            items: _PayMentModels.map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedValue = item.bno!;
+                                                    });
+                                                    print(
+                                                        '**/*/*   --- ${selectedValue}');
+                                                  },
+                                                  value:
+                                                      '${item.ser}:${item.ptname}',
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          '${item.ptname!}',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Text(
+                                                          '${item.bno!}',
+                                                          textAlign:
+                                                              TextAlign.end,
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )).toList(),
+                                            onChanged: (value) async {
+                                              print(value);
+                                              // Do something when changing the item if you want.
+
+                                              var zones = value!.indexOf(':');
+                                              var rtnameSer =
+                                                  value.substring(0, zones);
+                                              var rtnameName =
+                                                  value.substring(zones + 1);
+                                              // print(
+                                              //     'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                              setState(() {
+                                                paymentSer1 =
+                                                    rtnameSer.toString();
+
+                                                if (rtnameSer.toString() ==
+                                                    '0') {
+                                                  paymentName1 = null;
+                                                } else {
+                                                  paymentName1 =
+                                                      rtnameName.toString();
+                                                }
+                                                paymentSer1 = rtnameSer;
+                                              });
+                                              print(
+                                                  'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                              // print(
+                                              //     'pppppp $paymentSer1 $paymentName1');
+                                              // print('Form_payment1.text');
+                                              // print(Form_payment1.text);
+                                              // print(Form_payment2.text);
+                                              // print('Form_payment1.text');
+                                            },
+                                            // onSaved: (value) {
+
+                                            // },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -2108,60 +2504,65 @@ class _BillsState extends State<Bills> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
-                              onTap: () async {
-                                List newValuePDFimg = [];
-                                for (int index = 0; index < 1; index++) {
-                                  if (renTalModels[0].imglogo!.trim() == '') {
-                                    // newValuePDFimg.add(
-                                    //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                  } else {
-                                    newValuePDFimg.add(
-                                        '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                  }
-                                }
+                              onTap: (paymentName1 == null ||
+                                      paymentName1.toString() == 'เลือก')
+                                  ? null
+                                  : () async {
+                                      List newValuePDFimg = [];
+                                      for (int index = 0; index < 1; index++) {
+                                        if (renTalModels[0].imglogo!.trim() ==
+                                            '') {
+                                          // newValuePDFimg.add(
+                                          //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                        } else {
+                                          newValuePDFimg.add(
+                                              '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                        }
+                                      }
 
-                                final tableData003 = [
-                                  for (int index = 0;
-                                      index < _TransModels.length;
-                                      index++)
-                                    [
-                                      '${index + 1}',
-                                      '${_TransModels[index].name}',
-                                      '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
-                                      "${nFormat.format(double.parse('${_TransModels[index].tqty}'))}",
-                                      // '${_TransModels[index].tqty}',
-                                      '${_TransModels[index].unit_con}',
-                                      "${nFormat.format(double.parse('${_TransModels[index].vat}'))}",
-                                      _TransModels[index].qty_con == '0.00'
-                                          ? "${nFormat.format(double.parse('${_TransModels[index].amt_con}'))}"
-                                          // '${_TransModels[index].amt_con}'
-                                          : "${nFormat.format(double.parse('${_TransModels[index].qty_con}'))}",
-                                      //  '${_TransModels[index].qty_con}',
-                                      "${nFormat.format(double.parse('${_TransModels[index].pvat}'))}",
-                                      // '${_TransModels[index].pvat}',
-                                    ],
-                                ];
-                                // final tableData003 = [
-                                //   for (int index = 0;
-                                //       index < _TransModels.length;
-                                //       index++)
-                                //     [
-                                //       '${index + 1}',
-                                //       '${_TransModels[index].name}',
-                                //       '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
-                                //       "${nFormat.format(double.parse('${_TransModels[index].qty}'))}",
-                                //       "${nFormat.format(double.parse('${_TransModels[index].nvat}'))}",
-                                //       "${nFormat.format(double.parse('${_TransModels[index].vat}'))}",
-                                //       "${nFormat.format(double.parse('${_TransModels[index].pvat}'))}",
-                                //       "${nFormat.format(double.parse('${_TransModels[index].amt}'))}"
-                                //     ],
-                                // ];
-                                in_Trans_invoice2(tableData003, newValuePDFimg);
-                              },
+                                      final tableData003 = [
+                                        for (int index = 0;
+                                            index < _TransModels.length;
+                                            index++)
+                                          [
+                                            '${index + 1}',
+                                            '${_TransModels[index].date}',
+                                            '${_TransModels[index].expname}',
+                                            // '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                            '${nFormat.format(double.parse(_TransModels[index].nvat!))}',
+                                            '${nFormat.format(double.parse(_TransModels[index].vat!))}',
+                                            '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+                                            '${nFormat.format(double.parse(_TransModels[index].amt!))}',
+                                            // '${index + 1}',
+                                            // '${_TransModels[index].name}',
+                                            // '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
+                                            // "${nFormat.format(double.parse('${_TransModels[index].tqty}'))}",
+
+                                            // '${_TransModels[index].unit_con}',
+                                            // "${nFormat.format(double.parse('${_TransModels[index].vat}'))}",
+                                            // _TransModels[index].qty_con == '0.00'
+                                            //     ? "${nFormat.format(double.parse('${_TransModels[index].amt_con}'))}"
+
+                                            //     : "${nFormat.format(double.parse('${_TransModels[index].qty_con}'))}",
+
+                                            // "${nFormat.format(double.parse('${_TransModels[index].pvat}'))}",
+                                          ],
+                                      ];
+
+                                      if (paymentName1 == null ||
+                                          paymentName1.toString() == 'เลือก') {
+                                      } else {
+                                        in_Trans_invoice2(
+                                            tableData003, newValuePDFimg);
+                                      }
+                                    },
                               child: Container(
                                   height: 50,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.orange,
+                                  decoration: BoxDecoration(
+                                    color: (paymentName1 == null ||
+                                            paymentName1.toString() == 'เลือก')
+                                        ? Colors.orange[300]
+                                        : Colors.orange,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
                                         topRight: Radius.circular(10),
@@ -2294,8 +2695,8 @@ class _BillsState extends State<Bills> {
         );
         print('rrrrrrrrrrrrrr');
       }
-    } catch (e) {}  
-     Future.delayed(const Duration(milliseconds: 200), () async {
+    } catch (e) {}
+    Future.delayed(const Duration(milliseconds: 200), () async {
       setState(() {
         red_Trans_bill();
         red_Trans_select();
@@ -2314,9 +2715,10 @@ class _BillsState extends State<Bills> {
     var qutser = widget.Get_Value_NameShop_index;
     var sumdis = sum_disamt.text;
     var sumdisp = sum_disp.text;
+    var c_payment_Ser = paymentSer1;
     String? cFinn;
     String url =
-        '${MyConstant().domain}/In_tran_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp';
+        '${MyConstant().domain}/In_tran_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&pay_Ser1=$c_payment_Ser';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -2333,32 +2735,36 @@ class _BillsState extends State<Bills> {
         }
         Insert_log.Insert_logs(
             'ผู้เช่า', 'วางบิล>>บันทึก(${ciddoc.toString()})');
-        Pdfgen_BillingNoteInvlice.exportPDF_BillingNoteInvlice(
-            tableData003,
-            context,
-            _TransModels,
-            '${widget.Get_Value_cid}',
-            '${widget.namenew}',
-            '${sum_pvat}',
-            '${sum_vat}',
-            '${sum_wht}',
-            '${sum_amt}',
-            ' $sum_dis',
-            '${sum_amt - double.parse(sum_disamt.text)}',
-            '$renTal_name',
-            '${Form_bussshop}',
-            '${Form_address}',
-            '${Form_tel}',
-            '${Form_email}',
-            '${Form_tax}',
-            ' ${Form_nameshop}',
-            ' ${renTalModels[0].bill_addr}',
-            ' ${renTalModels[0].bill_email}',
-            ' ${renTalModels[0].bill_tel}',
-            ' ${renTalModels[0].bill_tax}',
-            ' ${renTalModels[0].bill_name}',
-            newValuePDFimg,
-            cFinn);
+        //////////----------------------->
+        BillingNoteInvlice_Tempage(
+            tableData003, newValuePDFimg, cFinn, renTal_name);
+        //////////*////////////----------------------->
+        // Pdfgen_BillingNoteInvlice.exportPDF_BillingNoteInvlice(
+        //     tableData003,
+        //     context,
+        //     _TransModels,
+        //     '${widget.Get_Value_cid}',
+        //     '${widget.namenew}',
+        //     '${sum_pvat}',
+        //     '${sum_vat}',
+        //     '${sum_wht}',
+        //     '${sum_amt}',
+        //     ' $sum_dis',
+        //     '${sum_amt - double.parse(sum_disamt.text)}',
+        //     '$renTal_name',
+        //     '${Form_bussshop}',
+        //     '${Form_address}',
+        //     '${Form_tel}',
+        //     '${Form_email}',
+        //     '${Form_tax}',
+        //     ' ${Form_nameshop}',
+        //     ' ${renTalModels[0].bill_addr}',
+        //     ' ${renTalModels[0].bill_email}',
+        //     ' ${renTalModels[0].bill_tel}',
+        //     ' ${renTalModels[0].bill_tax}',
+        //     ' ${renTalModels[0].bill_name}',
+        //     newValuePDFimg,
+        //     cFinn);
 
         setState(() async {
           await red_Trans_bill();
@@ -2369,6 +2775,36 @@ class _BillsState extends State<Bills> {
         print('rrrrrrrrrrrrrr');
       }
     } catch (e) {}
+  }
+
+//////////////////////////------------------------------>
+  Future<Null> BillingNoteInvlice_Tempage(
+      tableData003, newValuePDFimg, cFinn, renTal_name) async {
+    String? TitleType_Default_Receipt_Name;
+    if (TitleType_Default_Receipt == 0) {
+    } else {
+      setState(() {
+        TitleType_Default_Receipt_Name =
+            '${TitleType_Default_Receipt_[TitleType_Default_Receipt]}';
+      });
+    }
+    var selectedValue_bank_bno = selectedValue;
+    Man_BillingNoteInvlice_PDF.ManBillingNoteInvlice_PDF(
+      TitleType_Default_Receipt_Name,
+      foder,
+      '${widget.Get_Value_NameShop_index}',
+      tem_page_ser,
+      context,
+      '${widget.Get_Value_cid}',
+      '${widget.namenew}',
+      '${renTalModels[0].bill_addr}',
+      '${renTalModels[0].bill_email}',
+      '${renTalModels[0].bill_tel}',
+      '${renTalModels[0].bill_tax}',
+      '${renTalModels[0].bill_name}',
+      newValuePDFimg,
+      cFinn,
+    );
   }
 }
 

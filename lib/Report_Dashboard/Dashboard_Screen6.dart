@@ -1,15 +1,14 @@
 import 'dart:convert';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'package:slide_switcher/slide_switcher.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:http/http.dart' as http;
 import '../Constant/Myconstant.dart';
+import '../Model/GetArea_Model.dart';
 import '../Model/GetZone_Model.dart';
-import '../Model/Get_maintenance_model.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
 
@@ -30,7 +29,7 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
   List<String> Mont_Th = [];
   List<ZoneModel> zoneModels_report = [];
   List<ZoneModel> zoneModels = [];
-  List<MaintenanceModel> maintenanceModels = [];
+  List<AreaModel> areaModels = [];
   String? renTal_user,
       renTal_name,
       Status_pe,
@@ -41,36 +40,14 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
       Value_Chang_Zone_People_Ser_Cancel,
       Visit_1,
       Visit_2;
-  String? Mon_maintenance_Mon;
-  String? YE_maintenance_Mon;
-  String? zone_ser_maintenance,
-      zone_name_maintenance,
-      Status_maintenance_,
-      Status_maintenance_ser;
-  // late List<_Maintenance> data_tatol_Maintenance = [];
 
-  late List<List<_Maintenance>> data_tatol_Maintenance;
-
-  List maintenance_Status = [
-    'ทั้งหมด',
-    'รอดำเนินการ',
-    'เสร็จสิ้น',
+  List Status = [
+    'ใกล้หมดสัญญา',
+    'เสนอราคา',
+    'ว่าง',
+    'เช่าอยู่',
   ];
-  List<String> monthsInThai = [
-    'ม.ค.',
-    'ก.พ',
-    'มี.ค',
-    'เม.ย',
-    'พ.ค',
-    'มิ.ย',
-    'ก.ค',
-    'ส.ค',
-    'ก.ย',
-    'ต.ค',
-    'พ.ย.',
-    'ธ.ค',
-  ];
-
+  late List<_areaData> data_tatol_area = [];
   @override
   void initState() {
     super.initState();
@@ -109,7 +86,7 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       // Map<String, dynamic> map = Map();
       // map['ser'] = '0';
       // map['rser'] = '0';
@@ -146,64 +123,257 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
         zoneModels.length,
       );
     } catch (e) {}
-    data_tatol_Maintenance = List.generate(zoneModels_report.length, (_) => []);
   }
 
-  //////////--------------------------------------------->
-  Future<Null> red_Trans_c_maintenance() async {
+  //////////------------------------------------------------------->(รายงาน ข้อมูลพื้นที่เช่า)
+
+  Future<Null> read_GC_areaSelect(context1) async {
+    setState(() {
+      areaModels.clear();
+      data_tatol_area.clear;
+      data_tatol_area = [];
+    });
     SharedPreferences preferences = await SharedPreferences.getInstance();
+
     var ren = preferences.getString('renTalSer');
-
+    int total1 = 0;
+    int total2 = 0;
+    int total3 = 0;
+    int total4 = 0;
+    int total5 = 0;
+    int total6 = 0;
+    int total7 = 0;
     for (int index1 = 0; index1 < zoneModels_report.length; index1++) {
+      if (index1 == 0) {
+        Dialog_(context1);
+      } else {}
       setState(() {
-        data_tatol_Maintenance[index1].clear();
+        total1 = 0;
+        total2 = 0;
+        total3 = 0;
+        total4 = 0;
+        total5 = 0;
+        total6 = 0;
+        total7 = 0;
       });
-      for (int index2 = 0; index2 < monthsInThai.length; index2++) {
-        setState(() {
-          maintenanceModels.clear();
-        });
-        String url =
-            '${MyConstant().domain}/GC_maintenance_mst_Zone_Report.php?isAdd=true&ren=$ren&serZone=${zoneModels_report[index1].ser}&monx=${index2 + 1}&yex=$YE_maintenance_Mon';
+      for (int index2 = 0; index2 < Status.length; index2++) {
+        if (index2 + 1 == 1) {
+          String url =
+              '${MyConstant().domain}/GC_area.php?isAdd=true&ren=$ren&zone=${zoneModels_report[index1].ser}';
+          try {
+            var response = await http.get(Uri.parse(url));
 
-        try {
-          var response = await http.get(Uri.parse(url));
-
-          var result = json.decode(response.body);
-          // print('result $ciddoc');
-          if (result.toString() != 'null') {
-            for (var map in result) {
-              MaintenanceModel maintenanceModel =
-                  MaintenanceModel.fromJson(map);
-              if (Status_maintenance_ser == '0') {
+            var result = json.decode(response.body);
+            // print(result);
+            if (result != null) {
+              for (var map in result) {
+                AreaModel areaModel = AreaModel.fromJson(map);
                 setState(() {
-                  maintenanceModels.add(maintenanceModel);
+                  total1++;
+                  // areaModels.add(areaModel);
                 });
-              } else {
-                if (Status_maintenance_ser.toString() ==
-                    maintenanceModel.mst.toString()) {
-                  setState(() {
-                    maintenanceModels.add(maintenanceModel);
-                  });
-                } else {}
               }
-            }
-          }
-          await Future.delayed(Duration(milliseconds: 100));
-          print(
-              '${index2 + 1}  :   ${maintenanceModels.length} || ${zoneModels_report[index1].zn}');
+            } else {}
+          } catch (e) {}
+        } else if (index2 + 1 == 2) {
+          String url =
+              '${MyConstant().domain}/GC_area.php?isAdd=true&ren=$ren&zone=${zoneModels_report[index1].ser}';
 
-          setState(() {
-            data_tatol_Maintenance[index1].add(_Maintenance(
-                '${monthsInThai[index2]}',
-                double.parse('${maintenanceModels.length}')));
-          });
-        } catch (e) {}
+          try {
+            var response = await http.get(Uri.parse(url));
+
+            var result = json.decode(response.body);
+            // print(result);
+            if (result != null) {
+              for (var map in result) {
+                AreaModel areaModel = AreaModel.fromJson(map);
+                var daterx = areaModel.ldate;
+
+                if (daterx != null) {
+                  int daysBetween(DateTime from, DateTime to) {
+                    from = DateTime(from.year, from.month, from.day);
+                    to = DateTime(to.year, to.month, to.day);
+                    return (to.difference(from).inHours / 24).round();
+                  }
+
+                  var birthday = DateTime.parse('$daterx 00:00:00.000')
+                      .add(const Duration(days: -30));
+                  var date2 = DateTime.now();
+                  var difference = daysBetween(birthday, date2);
+
+                  print('difference == $difference');
+
+                  if (difference < 30 && difference > 0) {
+                    setState(() {
+                      total2++;
+                      // areaModels.add(areaModel);
+                    });
+                  }
+                }
+              }
+            } else {}
+          } catch (e) {}
+        } else if (index2 + 1 == 3) {
+          String url =
+              '${MyConstant().domain}/GC_area.php?isAdd=true&ren=$ren&zone=${zoneModels_report[index1].ser}';
+
+          try {
+            var response = await http.get(Uri.parse(url));
+
+            var result = json.decode(response.body);
+            // print(result);
+            if (result != null) {
+              for (var map in result) {
+                AreaModel areaModel = AreaModel.fromJson(map);
+                if (areaModel.quantity == '2' || areaModel.quantity == '3') {
+                  setState(() {
+                    total3++;
+                    // areaModels.add(areaModel);
+                  });
+                }
+              }
+            } else {}
+          } catch (e) {}
+        } else if (index2 + 1 == 4) {
+          String url =
+              '${MyConstant().domain}/GC_area.php?isAdd=true&ren=$ren&zone=${zoneModels_report[index1].ser}';
+
+          try {
+            var response = await http.get(Uri.parse(url));
+
+            var result = json.decode(response.body);
+            // print(result);
+            if (result != null) {
+              for (var map in result) {
+                AreaModel areaModel = AreaModel.fromJson(map);
+                if (areaModel.quantity == null) {
+                  setState(() {
+                    total4++;
+                    // areaModels.add(areaModel);
+                  });
+                }
+              }
+            } else {}
+          } catch (e) {}
+        } else if (index2 + 1 == 5) {
+          String url =
+              '${MyConstant().domain}/GC_area.php?isAdd=true&ren=$ren&zone=${zoneModels_report[index1].ser}';
+          try {
+            var response = await http.get(Uri.parse(url));
+
+            var result = json.decode(response.body);
+            // print(result);
+            if (result != null) {
+              for (var map in result) {
+                AreaModel areaModel = AreaModel.fromJson(map);
+                if (int.parse(areaModel.quantity!) == 1) {
+                  setState(() {
+                    total5++;
+                    // areaModels.add(areaModel);
+                  });
+                }
+              }
+            } else {}
+          } catch (e) {}
+        } else if (index2 + 1 == 6) {
+          String url =
+              '${MyConstant().domain}/GC_area.php?isAdd=true&ren=$ren&zone=${zoneModels_report[index1].ser}';
+          try {
+            var response = await http.get(Uri.parse(url));
+
+            var result = json.decode(response.body);
+            // print(result);
+            if (result != null) {
+              for (var map in result) {
+                AreaModel areaModel = AreaModel.fromJson(map);
+                if (areaModel.quantity != '1') {
+                  setState(() {
+                    total6++;
+                    // areaModels.add(areaModel);
+                  });
+                }
+              }
+            } else {}
+          } catch (e) {}
+        } else if (index2 + 1 == 7) {
+          String url =
+              '${MyConstant().domain}/GC_area.php?isAdd=true&ren=$ren&zone=${zoneModels_report[index1].ser}';
+
+          try {
+            var response = await http.get(Uri.parse(url));
+
+            var result = json.decode(response.body);
+            // print(result);
+            if (result != null) {
+              for (var map in result) {
+                AreaModel areaModel = AreaModel.fromJson(map);
+                if (areaModel.quantity == '1' || areaModel.quantity == null) {
+                  setState(() {
+                    total7++;
+                    // areaModels.add(areaModel);
+                  });
+                }
+              }
+            } else {}
+          } catch (e) {}
+        }
       }
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 100));
+      setState(() {
+        data_tatol_area.add(
+          _areaData(
+              '${zoneModels_report[index1].zn}',
+              double.parse('${total1}'),
+              double.parse('${total2}'),
+              double.parse('${total3}'),
+              double.parse('${total4}'),
+              double.parse('${total5}'),
+              double.parse('${total6}'),
+              double.parse('${total7}')),
+        );
+      });
     }
+    await Future.delayed(const Duration(milliseconds: 100));
+    Navigator.of(context1).pop();
   }
 
-  ///----------------------------------------------------------->
+  Dialog_(context) {
+    // if (index1 + 1 == zoneModels_report.length) {
+    //   setState(() {
+    //     YE_Income = null;
+    //   });
+    // }
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          // Future.delayed(
+          //     const Duration(
+          //         seconds:
+          //             1),
+          //     () {
+          //   Navigator.of(
+          //           context)
+          //       .pop();
+          // });
+          return Dialog(
+            child: SizedBox(
+              height: 20,
+              width: 80,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Image.asset(
+                  "images/gif-LOGOchao.gif",
+                  fit: BoxFit.cover,
+                  height: 20,
+                  width: 80,
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -241,7 +411,7 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                           const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              'รายงาน ข้อมูลการแจ้งซ่อม  : ',
+                              'รายงาน ข้อมูลพื้นที่เช่า : ',
                               style: TextStyle(
                                 color: ReportScreen_Color.Colors_Text2_,
                                 fontWeight: FontWeight.bold,
@@ -249,355 +419,11 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                               ),
                             ),
                           ),
-                          // const Padding(
-                          //   padding: EdgeInsets.all(8.0),
-                          //   child: Text(
-                          //     'เดือน :',
-                          //     style: TextStyle(
-                          //       color: ReportScreen_Color.Colors_Text2_,
-                          //       // fontWeight: FontWeight.bold,
-                          //       fontFamily: Font_.Fonts_T,
-                          //     ),
-                          //   ),
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.all(8.0),
-                          //   child: Container(
-                          //     decoration: const BoxDecoration(
-                          //       color: AppbackgroundColor.Sub_Abg_Colors,
-                          //       borderRadius: BorderRadius.only(
-                          //           topLeft: Radius.circular(10),
-                          //           topRight: Radius.circular(10),
-                          //           bottomLeft: Radius.circular(10),
-                          //           bottomRight: Radius.circular(10)),
-                          //       // border: Border.all(color: Colors.grey, width: 1),
-                          //     ),
-                          //     width: 120,
-                          //     padding: const EdgeInsets.all(8.0),
-                          //     child: DropdownButtonFormField2(
-                          //       alignment: Alignment.center,
-                          //       focusColor: Colors.white,
-                          //       autofocus: false,
-                          //       decoration: InputDecoration(
-                          //         floatingLabelAlignment:
-                          //             FloatingLabelAlignment.center,
-                          //         enabled: true,
-                          //         hoverColor: Colors.brown,
-                          //         prefixIconColor: Colors.blue,
-                          //         fillColor: Colors.white.withOpacity(0.05),
-                          //         filled: false,
-                          //         isDense: true,
-                          //         contentPadding: EdgeInsets.zero,
-                          //         border: OutlineInputBorder(
-                          //           borderSide:
-                          //               const BorderSide(color: Colors.red),
-                          //           borderRadius: BorderRadius.circular(10),
-                          //         ),
-                          //         focusedBorder: const OutlineInputBorder(
-                          //           borderRadius: BorderRadius.only(
-                          //             topRight: Radius.circular(10),
-                          //             topLeft: Radius.circular(10),
-                          //             bottomRight: Radius.circular(10),
-                          //             bottomLeft: Radius.circular(10),
-                          //           ),
-                          //           borderSide: BorderSide(
-                          //             width: 1,
-                          //             color: Color.fromARGB(255, 231, 227, 227),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //       isExpanded: false,
-                          //       value: Mon_maintenance_Mon,
-                          //       // hint: Text(
-                          //       //   Mon_Income == null
-                          //       //       ? 'เลือก'
-                          //       //       : '$Mon_Income',
-                          //       //   maxLines: 2,
-                          //       //   textAlign: TextAlign.center,
-                          //       //   style: const TextStyle(
-                          //       //     overflow:
-                          //       //         TextOverflow.ellipsis,
-                          //       //     fontSize: 14,
-                          //       //     color: Colors.grey,
-                          //       //   ),
-                          //       // ),
-                          //       icon: const Icon(
-                          //         Icons.arrow_drop_down,
-                          //         color: Colors.black,
-                          //       ),
-                          //       style: const TextStyle(
-                          //         color: Colors.grey,
-                          //       ),
-                          //       iconSize: 20,
-                          //       buttonHeight: 40,
-                          //       buttonWidth: 200,
-                          //       // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                          //       dropdownDecoration: BoxDecoration(
-                          //         // color: Colors
-                          //         //     .amber,
-                          //         borderRadius: BorderRadius.circular(10),
-                          //         border:
-                          //             Border.all(color: Colors.white, width: 1),
-                          //       ),
-                          //       items: [
-                          //         for (int item = 1; item < 13; item++)
-                          //           DropdownMenuItem<String>(
-                          //             value: '${item}',
-                          //             child: Text(
-                          //               '${monthsInThai[item - 1]}',
-                          //               //'${item}',
-                          //               textAlign: TextAlign.center,
-                          //               style: const TextStyle(
-                          //                 overflow: TextOverflow.ellipsis,
-                          //                 fontSize: 14,
-                          //                 color: Colors.grey,
-                          //               ),
-                          //             ),
-                          //           )
-                          //       ],
-
-                          //       onChanged: (value) async {
-                          //         Mon_maintenance_Mon = value;
-
-                          //         // if (Value_Chang_Zone_Income !=
-                          //         //     null) {
-                          //         //   red_Trans_billIncome();
-                          //         //   red_Trans_billMovemen();
-                          //         // }
-                          //       },
-                          //     ),
-                          //   ),
-                          // ),
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'ปี :',
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                                // border: Border.all(color: Colors.grey, width: 1),
-                              ),
-                              width: 120,
-                              padding: const EdgeInsets.all(8.0),
-                              child: DropdownButtonFormField2(
-                                alignment: Alignment.center,
-                                focusColor: Colors.white,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  floatingLabelAlignment:
-                                      FloatingLabelAlignment.center,
-                                  enabled: true,
-                                  hoverColor: Colors.brown,
-                                  prefixIconColor: Colors.blue,
-                                  fillColor: Colors.white.withOpacity(0.05),
-                                  filled: false,
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.zero,
-                                  border: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(10),
-                                      topLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                      color: Color.fromARGB(255, 231, 227, 227),
-                                    ),
-                                  ),
-                                ),
-                                isExpanded: false,
-                                value: YE_maintenance_Mon,
-                                // hint: Text(
-                                //   YE_Income == null
-                                //       ? 'เลือก'
-                                //       : '$YE_Income',
-                                //   maxLines: 2,
-                                //   textAlign: TextAlign.center,
-                                //   style: const TextStyle(
-                                //     overflow:
-                                //         TextOverflow.ellipsis,
-                                //     fontSize: 14,
-                                //     color: Colors.grey,
-                                //   ),
-                                // ),
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.black,
-                                ),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                iconSize: 20,
-                                buttonHeight: 40,
-                                buttonWidth: 200,
-                                // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                dropdownDecoration: BoxDecoration(
-                                  // color: Colors
-                                  //     .amber,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border:
-                                      Border.all(color: Colors.white, width: 1),
-                                ),
-                                items: YE_Th.map(
-                                    (item) => DropdownMenuItem<String>(
-                                          value: '${item}',
-                                          child: Text(
-                                            '${item}',
-                                            // '${int.parse(item) + 543}',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              overflow: TextOverflow.ellipsis,
-                                              fontSize: 14,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        )).toList(),
-
-                                onChanged: (value) async {
-                                  YE_maintenance_Mon = value;
-
-                                  // if (Value_Chang_Zone_Income !=
-                                  //     null) {
-                                  //   red_Trans_billIncome();
-                                  //   red_Trans_billMovemen();
-                                  // }
-                                },
-                              ),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'สถานะ :',
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                                // border: Border.all(color: Colors.grey, width: 1),
-                              ),
-                              width: 140,
-                              padding: const EdgeInsets.all(8.0),
-                              child: DropdownButtonFormField2(
-                                value: Status_maintenance_,
-
-                                alignment: Alignment.center,
-                                focusColor: Colors.white,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  enabled: true,
-                                  hoverColor: Colors.brown,
-                                  prefixIconColor: Colors.blue,
-                                  fillColor: Colors.white.withOpacity(0.05),
-                                  filled: false,
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.zero,
-                                  border: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(10),
-                                      topLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                      color: Color.fromARGB(255, 231, 227, 227),
-                                    ),
-                                  ),
-                                ),
-                                isExpanded: false,
-
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.black,
-                                ),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                iconSize: 20,
-                                buttonHeight: 40,
-                                buttonWidth: 240,
-                                // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                dropdownDecoration: BoxDecoration(
-                                  // color: Colors
-                                  //     .amber,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border:
-                                      Border.all(color: Colors.white, width: 1),
-                                ),
-                                items: maintenance_Status
-                                    .map((item) => DropdownMenuItem<String>(
-                                          value: '${item}',
-                                          child: Text(
-                                            '${item}',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              overflow: TextOverflow.ellipsis,
-                                              fontSize: 14,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ))
-                                    .toList(),
-
-                                onChanged: (value) async {
-                                  int selectedIndex = maintenance_Status
-                                      .indexWhere((item) => item == value);
-                                  setState(() {
-                                    Status_maintenance_ = value!;
-                                    Status_maintenance_ser = '${selectedIndex}';
-                                  });
-                                  print(Status_maintenance_ser);
-                                },
-                              ),
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
                               onTap: () async {
-                                if (zone_name_maintenance != null &&
-                                    Status_maintenance_ != null &&
-                                    Mon_maintenance_Mon != null &&
-                                    YE_maintenance_Mon != null) {}
-                                red_Trans_c_maintenance();
+                                read_GC_areaSelect(context);
                               },
                               child: Container(
                                   width: 100,
@@ -610,7 +436,7 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                         bottomLeft: Radius.circular(10),
                                         bottomRight: Radius.circular(10)),
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       'ค้นหา',
                                       style: TextStyle(
@@ -629,7 +455,7 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                       decoration: BoxDecoration(
                         color:
                             AppbackgroundColor.TiTile_Colors.withOpacity(0.4),
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(0),
                             topRight: Radius.circular(0),
                             bottomLeft: Radius.circular(10),
@@ -702,11 +528,11 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                     enable: true,
                                     tooltipDisplayMode:
                                         TrackballDisplayMode.groupAllPoints,
-                                    tooltipSettings: InteractiveTooltip(
-                                        format: 'point.y',
+                                    tooltipSettings: const InteractiveTooltip(
+                                        format: 'point.y พื้นที่',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: TrackballMarkerSettings(
+                                    markerSettings: const TrackballMarkerSettings(
                                         markerVisibility:
                                             TrackballVisibilityMode.visible),
                                   ),
@@ -719,23 +545,23 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                       enableSelectionZooming: true,
                                       enableDoubleTapZooming: true),
                                   // trackballBehavior: TrackballBehavior(),
-                                  title: ChartTitle(text: 'รายงานการแจ้งซ่อม'),
+                                  title: ChartTitle(text: 'รายงานพื้นที่เช่า'),
                                   legend: Legend(
                                       isVisible: true,
                                       textStyle:
-                                          TextStyle(color: Colors.black)),
+                                          const TextStyle(color: Colors.black)),
                                   // primaryYAxis: NumericAxis(isInversed: false),
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
-                                        text: 'เดือน',
-                                        textStyle: TextStyle(fontSize: 16)),
-                                    labelStyle: TextStyle(
+                                        text: 'โซน',
+                                        textStyle: const TextStyle(fontSize: 16)),
+                                    labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
-                                        text: 'หน่วย (ครั้ง)',
-                                        textStyle: TextStyle(fontSize: 16)),
+                                        text: 'หน่วย (พื้นที่)',
+                                        textStyle: const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -743,68 +569,112 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                     isVisible:
                                         true, // Set isVisible to false to hide the left y-axis   116
                                   ),
-                                  series: <ChartSeries<_Maintenance, String>>[
-                                    for (int index = 0;
-                                        index < data_tatol_Maintenance.length;
-                                        index++)
-                                      LineSeries<_Maintenance, String>(
-                                        // color: Colors.green,
-                                        animationDuration: 100,
-                                        onRendererCreated:
-                                            (ChartSeriesController controller) {
-                                          _chartSeriesController1 = controller;
-                                        },
-                                        dataSource:
-                                            data_tatol_Maintenance[index],
-                                        xValueMapper: (_Maintenance data, _) =>
-                                            data.monts,
-                                        yValueMapper: (_Maintenance data, _) =>
-                                            data.total,
-                                        name: '${zoneModels_report[index].zn}',
-                                      ),
+                                  // axes: <ChartAxis>[
+                                  //   NumericAxis(
+                                  //       numberFormat: NumberFormat.compact(),
+                                  //       majorGridLines: const MajorGridLines(width: 0),
+                                  //       opposedPosition: true,
+                                  //       name: 'yAxis1',
+                                  //       interval: 1000,
+                                  //       minimum: 0,
+                                  //       labelAlignment: LabelAlignment.start
+                                  //       // maximum: 1000000
+                                  //       ),
+                                  // ],
+                                  series: <ChartSeries<_areaData, String>>[
+                                    LineSeries<_areaData, String>(
+                                      color: Colors.green,
+                                      animationDuration: 100,
+                                      onRendererCreated:
+                                          (ChartSeriesController controller) {
+                                        _chartSeriesController1 = controller;
+                                      },
+                                      dataSource: data_tatol_area,
+                                      xValueMapper: (_areaData data, _) =>
+                                          data.zone,
+                                      yValueMapper: (_areaData data, _) =>
+                                          data.status1,
+                                      name: '${Status[0]} ',
+                                    ),
+                                    LineSeries<_areaData, String>(
+                                      color: Colors.orange,
+                                      animationDuration: 100,
+                                      onRendererCreated:
+                                          (ChartSeriesController controller) {
+                                        _chartSeriesController1 = controller;
+                                      },
+                                      dataSource: data_tatol_area,
+                                      xValueMapper: (_areaData data, _) =>
+                                          data.zone,
+                                      yValueMapper: (_areaData data, _) =>
+                                          data.status2,
+                                      name: '${Status[1]} ',
+                                    ),
+                                    LineSeries<_areaData, String>(
+                                      color: Colors.blue,
+                                      animationDuration: 100,
+                                      onRendererCreated:
+                                          (ChartSeriesController controller) {
+                                        _chartSeriesController1 = controller;
+                                      },
+                                      dataSource: data_tatol_area,
+                                      xValueMapper: (_areaData data, _) =>
+                                          data.zone,
+                                      yValueMapper: (_areaData data, _) =>
+                                          data.status3,
+                                      name: '${Status[2]} ',
+                                    ),
+                                    LineSeries<_areaData, String>(
+                                      color: Colors.red,
+                                      animationDuration: 100,
+                                      onRendererCreated:
+                                          (ChartSeriesController controller) {
+                                        _chartSeriesController1 = controller;
+                                      },
+                                      dataSource: data_tatol_area,
+                                      xValueMapper: (_areaData data, _) =>
+                                          data.zone,
+                                      yValueMapper: (_areaData data, _) =>
+                                          data.status4,
+                                      name: '${Status[3]} ',
+                                    ),
                                   ]))
                           : RepaintBoundary(
                               key: chartKey2,
                               child: SfCartesianChart(
+                                  title: ChartTitle(text: 'รายงานพื้นที่เช่า'),
+                                  zoomPanBehavior: ZoomPanBehavior(
+                                      enableMouseWheelZooming: true,
+                                      maximumZoomLevel: 0.05,
+                                      enablePinching: true,
+                                      zoomMode: ZoomMode.x,
+                                      enablePanning: true,
+                                      enableSelectionZooming: true,
+                                      enableDoubleTapZooming: true),
                                   trackballBehavior: TrackballBehavior(
                                     activationMode: ActivationMode.singleTap,
                                     enable: true,
                                     tooltipDisplayMode:
                                         TrackballDisplayMode.groupAllPoints,
-                                    tooltipSettings: InteractiveTooltip(
-                                        format: 'point.y ',
+                                    tooltipSettings: const InteractiveTooltip(
+                                        format: 'point.y  พื้นที่',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: TrackballMarkerSettings(
+                                    markerSettings: const TrackballMarkerSettings(
                                         markerVisibility:
                                             TrackballVisibilityMode.visible),
                                   ),
-                                  zoomPanBehavior: ZoomPanBehavior(
-                                      enableMouseWheelZooming: true,
-                                      maximumZoomLevel: 0.5,
-                                      enablePinching: true,
-                                      zoomMode: ZoomMode.x,
-                                      enablePanning: true,
-                                      enableSelectionZooming: true,
-                                      enableDoubleTapZooming: true),
-                                  // trackballBehavior: TrackballBehavior(),
-                                  title: ChartTitle(text: 'รายงานการแจ้งซ่อม'),
-                                  legend: Legend(
-                                      isVisible: true,
-                                      textStyle:
-                                          TextStyle(color: Colors.black)),
-                                  // primaryYAxis: NumericAxis(isInversed: false),
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
-                                        text: 'เดือน',
-                                        textStyle: TextStyle(fontSize: 16)),
-                                    labelStyle: TextStyle(
+                                        text: 'โซน',
+                                        textStyle: const TextStyle(fontSize: 16)),
+                                    labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
-                                        text: 'หน่วย (ครั้ง)',
-                                        textStyle: TextStyle(fontSize: 16)),
+                                        text: 'หน่วย (พื้นที่)',
+                                        textStyle: const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -812,26 +682,81 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                     isVisible:
                                         true, // Set isVisible to false to hide the left y-axis   116
                                   ),
-                                  series: <ChartSeries<_Maintenance, String>>[
-                                    for (int index = 0;
-                                        index < data_tatol_Maintenance.length;
-                                        index++)
-                                      ColumnSeries<_Maintenance, String>(
-                                        // color: Colors.green,
-                                        // trackColor: Colors.green,
-                                        animationDuration: 100,
-                                        onRendererCreated:
-                                            (ChartSeriesController controller) {
-                                          _chartSeriesController2 = controller;
-                                        },
-                                        dataSource:
-                                            data_tatol_Maintenance[index],
-                                        xValueMapper: (_Maintenance data, _) =>
-                                            data.monts,
-                                        yValueMapper: (_Maintenance data, _) =>
-                                            data.total,
-                                        name: '${zoneModels_report[index].zn}',
-                                      ),
+                                  // axes: <ChartAxis>[
+                                  //   NumericAxis(
+                                  //     numberFormat: NumberFormat.compact(),
+                                  //     majorGridLines: const MajorGridLines(width: 0),
+                                  //     opposedPosition: true,
+                                  //     name: 'yAxis1',
+                                  //     interval: 10,
+                                  //     minimum: 0,
+                                  //   )
+                                  // ],
+                                  legend: Legend(
+                                      isVisible: true,
+                                      textStyle:
+                                          const TextStyle(color: Colors.black)),
+                                  series: <ChartSeries<_areaData, String>>[
+                                    ColumnSeries<_areaData, String>(
+                                      color: Colors.green,
+                                      trackColor: Colors.green,
+                                      animationDuration: 100,
+                                      onRendererCreated:
+                                          (ChartSeriesController controller) {
+                                        _chartSeriesController1 = controller;
+                                      },
+                                      dataSource: data_tatol_area,
+                                      xValueMapper: (_areaData data, _) =>
+                                          data.zone,
+                                      yValueMapper: (_areaData data, _) =>
+                                          data.status1,
+                                      name: '${Status[0]} ',
+                                    ),
+                                    ColumnSeries<_areaData, String>(
+                                      color: Colors.orange,
+                                      trackColor: Colors.orange,
+                                      animationDuration: 100,
+                                      onRendererCreated:
+                                          (ChartSeriesController controller) {
+                                        _chartSeriesController1 = controller;
+                                      },
+                                      dataSource: data_tatol_area,
+                                      xValueMapper: (_areaData data, _) =>
+                                          data.zone,
+                                      yValueMapper: (_areaData data, _) =>
+                                          data.status2,
+                                      name: '${Status[1]} ',
+                                    ),
+                                    ColumnSeries<_areaData, String>(
+                                      color: Colors.blue,
+                                      trackColor: Colors.blue,
+                                      animationDuration: 100,
+                                      onRendererCreated:
+                                          (ChartSeriesController controller) {
+                                        _chartSeriesController1 = controller;
+                                      },
+                                      dataSource: data_tatol_area,
+                                      xValueMapper: (_areaData data, _) =>
+                                          data.zone,
+                                      yValueMapper: (_areaData data, _) =>
+                                          data.status3,
+                                      name: '${Status[2]} ',
+                                    ),
+                                    ColumnSeries<_areaData, String>(
+                                      color: Colors.red,
+                                      trackColor: Colors.red,
+                                      animationDuration: 100,
+                                      onRendererCreated:
+                                          (ChartSeriesController controller) {
+                                        _chartSeriesController1 = controller;
+                                      },
+                                      dataSource: data_tatol_area,
+                                      xValueMapper: (_areaData data, _) =>
+                                          data.zone,
+                                      yValueMapper: (_areaData data, _) =>
+                                          data.status4,
+                                      name: '${Status[3]} ',
+                                    ),
                                   ]),
                             ),
                       Row(
@@ -860,7 +785,7 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                             bottomLeft: Radius.circular(8),
                                             bottomRight: Radius.circular(8)),
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: Text(
                                           'SAVE(.PNG)',
                                           style: TextStyle(
@@ -884,9 +809,16 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
   }
 }
 
-class _Maintenance {
-  _Maintenance(this.monts, this.total);
+class _areaData {
+  _areaData(this.zone, this.status1, this.status2, this.status3, this.status4,
+      this.status5, this.status6, this.status7);
 
-  final String monts;
-  final double total;
+  final String zone;
+  final double status1;
+  final double status2;
+  final double status3;
+  final double status4;
+  final double status5;
+  final double status6;
+  final double status7;
 }

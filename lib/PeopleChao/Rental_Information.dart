@@ -20,7 +20,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_limited_checkbox/flutter_limited_checkbox.dart';
 import 'package:group_radio_button/group_radio_button.dart';
-import 'package:hand_signature/signature.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -32,7 +32,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
+
 
 import '../ChaoArea/ChaoRe_contact_add.dart';
 import '../Constant/Myconstant.dart';
@@ -44,7 +44,6 @@ import '../Model/GetCustomer_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
-
 import '../PDF/PDF_Agreement/pdf_Agreement.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement2.dart';
 import '../PDF/PDF_Agreement/pdf_RentalInforma.dart';
@@ -7574,7 +7573,13 @@ class _RentalInformationState extends State<RentalInformation> {
                                                             maxLines: 2,
                                                             minFontSize: 8,
                                                             // maxFontSize: 15,
-                                                            '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                quotxSelectModels[
+                                                                            index]
+                                                                        .qty ==
+                                                                    '0.00'
+                                                                ? '${nFormat.format(double.parse(quotxSelectModels[index].total!))} / งวด'
+                                                                : '${nFormat.format(double.parse(quotxSelectModels[index].qty!))} / หน่วย',
+                                                            // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
                                                             textAlign:
                                                                 TextAlign.end,
                                                             style:
@@ -9055,10 +9060,7 @@ class RentalInforman_Agreement extends StatelessWidget {
       900: Color(0xFF7A9B54),
     },
   );
-  GlobalKey<SfSignaturePadState> _signaturePadKey1 = GlobalKey();
-  GlobalKey<SfSignaturePadState> _signaturePadKey2 = GlobalKey();
-  GlobalKey<SfSignaturePadState> _signaturePadKey3 = GlobalKey();
-  GlobalKey<SfSignaturePadState> _signaturePadKey4 = GlobalKey();
+
   final _formKey = GlobalKey<FormState>();
   final _Form1 = TextEditingController();
   final _Form2 = TextEditingController();
@@ -9068,121 +9070,8 @@ class RentalInforman_Agreement extends StatelessWidget {
   var base64Image_2;
   var base64Image_3;
   var base64Image_4;
-  String CheckBase =
-      'iVBORw0KGgoAAAANSUhEUgAAAMgAAABkCAYAAADDhn8LAAAAAXNSR0IArs4c6QAAAARzQklUCAgICHwIZIgAAABkSURBVHic7cExAQAAAMKg9U9tDB+gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgYzjzAAF6bUzDAAAAAElFTkSuQmCC';
 
-  Future<void> _saveSignature() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    //////////-------------------------------------->
-    final ui.Image image = await _signaturePadKey1.currentState!.toImage();
-    final ByteData? byteData =
-        await image.toByteData(format: ui.ImageByteFormat.png);
 
-    if (byteData != null) {
-      final Uint8List pngBytes1 = byteData.buffer.asUint8List();
-      // final String base64Image = base64Encode(pngBytes1);
-      // print(base64Image);
-      base64Image_1 = pngBytes1;
-
-      // preferences.setString('base64Image1', base64Image_1.toString());
-      // String? base64Image1_ = preferences.getString('base64Image1');
-      // print('base64Image1_');
-      // print(base64Image1_);
-      // Navigator.pop(context);
-
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) =>
-      //           RentalInforman_Agreement2(doc: doc, context: context),
-      //     ));
-    } else {
-      base64Image_1 = null;
-    }
-//////////-------------------------------------->
-    final ui.Image image2 = await _signaturePadKey2.currentState!.toImage();
-    final ByteData? byteData2 =
-        await image2.toByteData(format: ui.ImageByteFormat.png);
-    if (byteData2 != null) {
-      final Uint8List pngBytes2 = byteData2.buffer.asUint8List();
-      // final String base64Image = base64Encode(pngBytes1);
-      // print(base64Image);
-      base64Image_2 = pngBytes2;
-
-      // preferences.setString('base64Image1', base64Image_1.toString());
-      // String? base64Image1_ = preferences.getString('base64Image1');
-      // print('base64Image1_');
-      // print(base64Image1_);
-      // Navigator.pop(context);
-
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) =>
-      //           RentalInforman_Agreement2(doc: doc, context: context),
-      //     ));
-    } else {
-      base64Image_2 = null;
-    }
-
-    //////////-------------------------------------->
-    final ui.Image image3 = await _signaturePadKey3.currentState!.toImage();
-    final ByteData? byteData3 =
-        await image3.toByteData(format: ui.ImageByteFormat.png);
-    if (byteData3 != null) {
-      final Uint8List pngBytes3 = byteData3.buffer.asUint8List();
-      final String base64Image3 = base64Encode(pngBytes3);
-      // print(base64Image);
-      base64Image_3 = pngBytes3;
-
-      // preferences.setString('base64Image3', base64Image_3.toString());
-      // String? base64Image3_ = preferences.getString('base64Image3');
-      // print('base64Image3_');
-      // print(base64Image3_);
-    } else {
-      base64Image_3 = null;
-    }
-    //////////-------------------------------------->
-    final ui.Image image4 = await _signaturePadKey4.currentState!.toImage();
-    final ByteData? byteData4 =
-        await image4.toByteData(format: ui.ImageByteFormat.png);
-    if (byteData4 != null) {
-      final Uint8List pngBytes4 = byteData4.buffer.asUint8List();
-      final String base64Image4 = base64Encode(pngBytes4);
-      // print(base64Image);
-      base64Image_4 = pngBytes4;
-
-      // preferences.setString('base64Image4', base64Image_4.toString());
-      // String? base64Image4_ = preferences.getString('base64Image4');
-      // print('base64Image4_');
-      // print(base64Image4_);
-    } else {
-      base64Image_4 = '';
-    }
-    print(base64Image_1);
-    // Navigator.pop(context);
-  }
-
-  HandSignatureControl control1 = new HandSignatureControl(
-    threshold: 0.01,
-    smoothRatio: 0.65,
-    velocityRange: 2.0,
-  );
-  HandSignatureControl control2 = new HandSignatureControl(
-    threshold: 0.01,
-    smoothRatio: 0.65,
-    velocityRange: 2.0,
-  );
-  HandSignatureControl control3 = new HandSignatureControl(
-    threshold: 0.01,
-    smoothRatio: 0.65,
-    velocityRange: 2.0,
-  );
-  HandSignatureControl control4 = new HandSignatureControl(
-    threshold: 0.01,
-    smoothRatio: 0.65,
-    velocityRange: 2.0,
-  );
   ValueNotifier<ByteData?> rawImage1 = ValueNotifier<ByteData?>(null);
   ValueNotifier<ByteData?> rawImage2 = ValueNotifier<ByteData?>(null);
   ValueNotifier<ByteData?> rawImage3 = ValueNotifier<ByteData?>(null);

@@ -38,7 +38,7 @@ import '../Model/GetUnitx_Model.dart';
 import '../Model/GetVat_Model.dart';
 import '../Model/GetWht_Model.dart';
 import '../PDF/PDF_Agreement/pdf_DataChaoArea.dart';
-
+import '../PeopleChao/Pays_.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'package:pdf/pdf.dart';
@@ -82,7 +82,8 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
       number_custno,
       fname_user,
       lname_user,
-      Value_D_read;
+      Value_D_read,
+      cser_;
 
   List _selecteSer = [];
   List<String> _selecteSerbool = [];
@@ -1725,6 +1726,9 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
 
       case 2:
         return Body3(); //Stepper 3
+
+      case 3:
+        return Body4();
 
       default:
         return Body2();
@@ -5189,6 +5193,72 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
           ])),
     );
   }
+
+  Widget Body4() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+          // color: Colors.red,
+          width: MediaQuery.of(context).size.width,
+          // height: 450,
+          child: Column(children: [
+            Pays(
+              Get_Value_cid: cser_,
+              Get_Value_NameShop_index: '2',
+              namenew: _Form_nameshop,
+              can: 'A',
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    setState(() {
+                      cser_ = null;
+                    });
+                    SharedPreferences preferences =
+                        await SharedPreferences.getInstance();
+                    String? _route = preferences.getString('route');
+                    MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            AdminScafScreen(route: _route));
+                    Navigator.pushAndRemoveUntil(
+                        context, materialPageRoute, (route) => false);
+                  },
+                  child: Container(
+                    width: 130,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20)),
+                    ),
+                    child: const Center(
+                      child: Text('เสร็จสิ้น',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T,
+                          )),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 50,
+            )
+          ])),
+    );
+  }
+
 //  onTap: () async {
 //                               setState(() {
 //                                 newValuePDF = [];
@@ -5384,7 +5454,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
           // QuotxModel quotxSelectModel = QuotxModel.fromJson(result);
 
           var qser = value.body;
-          var cser_;
+
           for (var i = 0; i < _selecteSer.length; i++) {
             var serAx = _selecteSer[i];
 
@@ -5465,12 +5535,16 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
           }
           Insert_log.Insert_logs('พื้นที่เช่า',
               'เสนอราคา>>เสนอราคา(${cser_},พื้นที่:${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)})');
-          String? _route = preferences.getString('route');
-          MaterialPageRoute materialPageRoute = MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  AdminScafScreen(route: _route));
-          Navigator.pushAndRemoveUntil(
-              context, materialPageRoute, (route) => false);
+          setState(() {
+            activeStep = activeStep + 1;
+          });
+          // String? _route = preferences.getString('route');
+          // MaterialPageRoute materialPageRoute = MaterialPageRoute(
+          //     builder: (BuildContext context) =>
+          //         AdminScafScreen(route: _route));
+          // Navigator.pushAndRemoveUntil(
+          //     context, materialPageRoute, (route) => false);
+
           // Pdfgen_Quotation2.exportPDF_Quotation2(
           //     context,
           //     '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
@@ -5755,6 +5829,8 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
             : _area_rent_sum; //ราคาพื้นที่
     var ser_expt = serex;
 
+    var etype = expModels[index].etype;
+
     String url =
         '${MyConstant().domain}/In_Qootx_select.php?isAdd=true&ren=$ren';
     await http.post(Uri.parse(url), body: {
@@ -5930,7 +6006,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                         color: Colors
                                                             .grey.shade300,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -6105,9 +6181,8 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                       flex: 6,
                                                                       child:
                                                                           Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             AutoSizeText(
                                                                           maxLines:
@@ -8422,12 +8497,12 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                                                                       color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                                                                       // fontWeight: FontWeight.bold,
                                                                                                                       fontFamily: Font_.Fonts_T)),
-                                                                                                              inputFormatters: <TextInputFormatter>[
-                                                                                                                // for below version 2 use this
-                                                                                                                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                                                                                                // for version 2 and greater youcan also use this
-                                                                                                                FilteringTextInputFormatter.digitsOnly
-                                                                                                              ],
+                                                                                                              // inputFormatters: <TextInputFormatter>[
+                                                                                                              //   // for below version 2 use this
+                                                                                                              //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                                              //   // for version 2 and greater youcan also use this
+                                                                                                              //   FilteringTextInputFormatter.digitsOnly
+                                                                                                              // ],
                                                                                                             ),
                                                                                                           ],
                                                                                                         ),
@@ -9289,7 +9364,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                         // color: AppbackgroundColor
                                                         //     .TiTile_Colors,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(6),
                                                             topRight:
@@ -9345,7 +9420,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                       //     .TiTile_Colors,
                                                       borderRadius:
                                                           const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius
@@ -9527,283 +9602,326 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
                           onPressed: () {
-                            // read_GC_Exp(expTypeModels[Ser_Sub].ser);
-                            // showDialog<String>(
-                            //     barrierDismissible: false,
-                            //     context: context,
-                            //     builder: (BuildContext context) {
-                            //       return StreamBuilder(
-                            //           stream: Stream.periodic(
-                            //               const Duration(seconds: 0)),
-                            //           builder: (context, snapshot) {
-                            //             return AlertDialog(
-                            //                 shape:
-                            //                     const RoundedRectangleBorder(
-                            //                         borderRadius:
-                            //                             BorderRadius.all(
-                            //                                 Radius.circular(
-                            //                                     20.0))),
-                            //                 title: Row(
-                            //                   mainAxisAlignment:
-                            //                       MainAxisAlignment
-                            //                           .spaceAround,
-                            //                   children: [
-                            //                     Expanded(
-                            //                       flex: 6,
-                            //                       child: Text(
-                            //                         '${expTypeModels[Ser_Sub].bills}',
-                            //                         style: TextStyle(
-                            //                           color: Colors.black,
-                            //                           fontWeight:
-                            //                               FontWeight.bold,
-                            //                         ),
-                            //                       ),
-                            //                     ),
-                            //                     Expanded(
-                            //                         flex: 6,
-                            //                         child: Row(
-                            //                           mainAxisAlignment:
-                            //                               MainAxisAlignment
-                            //                                   .end,
-                            //                           children: [
-                            //                             IconButton(
-                            //                                 onPressed:
-                            //                                     () {
-                            //                                   Navigator
-                            //                                       .pop(
-                            //                                     context,
-                            //                                   );
-                            //                                 },
-                            //                                 icon: Icon(
-                            //                                     Icons
-                            //                                         .close,
-                            //                                     color: Colors
-                            //                                         .black)),
-                            //                           ],
-                            //                         )),
-                            //                   ],
-                            //                 ),
-                            //                 content: Container(
-                            //                   height:
-                            //                       MediaQuery.of(context)
-                            //                               .size
-                            //                               .height /
-                            //                           1.5,
-                            //                   width:
-                            //                       MediaQuery.of(context)
-                            //                               .size
-                            //                               .width /
-                            //                           1.2,
-                            //                   child: Column(
-                            //                     children: [
-                            //                       Container(
-                            //                         color: Colors
-                            //                             .grey.shade300,
-                            //                         child: Row(
-                            //                           mainAxisAlignment:
-                            //                               MainAxisAlignment
-                            //                                   .spaceBetween,
-                            //                           children: [
-                            //                             Expanded(
-                            //                               flex: 6,
-                            //                               child:
-                            //                                   Container(
-                            //                                 padding:
-                            //                                     const EdgeInsets
-                            //                                             .all(
-                            //                                         8.0),
-                            //                                 child:
-                            //                                     AutoSizeText(
-                            //                                   maxLines: 2,
-                            //                                   minFontSize:
-                            //                                       8,
-                            //                                   // maxFontSize: 15,
-                            //                                   'รายการ',
-                            //                                   textAlign:
-                            //                                       TextAlign
-                            //                                           .start,
-                            //                                   style:
-                            //                                       const TextStyle(
-                            //                                     color: TextHome_Color
-                            //                                         .TextHome_Colors,
+                            read_GC_Exp(expTypeModels[Ser_Sub].ser);
+                            showDialog<String>(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return StreamBuilder(
+                                      stream: Stream.periodic(
+                                          const Duration(seconds: 0)),
+                                      builder: (context, snapshot) {
+                                        return AlertDialog(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0))),
+                                            title: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Expanded(
+                                                  flex: 6,
+                                                  child: Text(
+                                                    '${expTypeModels[Ser_Sub].bills}',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                    flex: 6,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        IconButton(
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                context,
+                                                              );
+                                                            },
+                                                            icon: Icon(
+                                                                Icons.close,
+                                                                color: Colors
+                                                                    .black)),
+                                                      ],
+                                                    )),
+                                              ],
+                                            ),
+                                            content: Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  1.5,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  1.2,
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    color: Colors.grey.shade300,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 6,
+                                                          child: Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: AutoSizeText(
+                                                              maxLines: 2,
+                                                              minFontSize: 8,
+                                                              // maxFontSize: 15,
+                                                              'รายการ',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: TextHome_Color
+                                                                    .TextHome_Colors,
 
-                            //                                     //fontSize: 10.0
-                            //                                   ),
-                            //                                 ),
-                            //                               ),
-                            //                             ),
-                            //                             Expanded(
-                            //                               flex: 1,
-                            //                               child:
-                            //                                   Container(
-                            //                                 padding:
-                            //                                     EdgeInsets
-                            //                                         .all(
-                            //                                             8.0),
-                            //                                 child:
-                            //                                     AutoSizeText(
-                            //                                   maxLines: 2,
-                            //                                   minFontSize:
-                            //                                       8,
-                            //                                   // maxFontSize: 15,
-                            //                                   'หน่วย',
-                            //                                   textAlign:
-                            //                                       TextAlign
-                            //                                           .center,
-                            //                                   style:
-                            //                                       const TextStyle(
-                            //                                     color: TextHome_Color
-                            //                                         .TextHome_Colors,
+                                                                //fontSize: 10.0
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Container(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: AutoSizeText(
+                                                              maxLines: 2,
+                                                              minFontSize: 8,
+                                                              // maxFontSize: 15,
+                                                              'เกินกำหนดชำระ',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: TextHome_Color
+                                                                    .TextHome_Colors,
 
-                            //                                     //fontSize: 10.0
-                            //                                   ),
-                            //                                 ),
-                            //                               ),
-                            //                             ),
-                            //                           ],
-                            //                         ),
-                            //                       ),
-                            //                       Padding(
-                            //                         padding:
-                            //                             const EdgeInsets
-                            //                                     .fromLTRB(
-                            //                                 8, 0, 8, 8),
-                            //                         child: Column(
-                            //                           children: [
-                            //                             Container(
-                            //                               height: MediaQuery.of(
-                            //                                           context)
-                            //                                       .size
-                            //                                       .height /
-                            //                                   1.8,
-                            //                               width: MediaQuery.of(
-                            //                                       context)
-                            //                                   .size
-                            //                                   .width,
-                            //                               // height: 250,
+                                                                //fontSize: 10.0
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Container(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: AutoSizeText(
+                                                              maxLines: 2,
+                                                              minFontSize: 8,
+                                                              // maxFontSize: 15,
+                                                              'ยอดหัก (บาท/%)',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: TextHome_Color
+                                                                    .TextHome_Colors,
 
-                            //                               decoration:
-                            //                                   const BoxDecoration(
-                            //                                 color: AppbackgroundColor
-                            //                                     .Sub_Abg_Colors,
-                            //                                 borderRadius: BorderRadius.only(
-                            //                                     topLeft: Radius
-                            //                                         .circular(
-                            //                                             0),
-                            //                                     topRight:
-                            //                                         Radius.circular(
-                            //                                             0),
-                            //                                     bottomLeft:
-                            //                                         Radius.circular(
-                            //                                             0),
-                            //                                     bottomRight:
-                            //                                         Radius.circular(
-                            //                                             0)),
-                            //                                 // border: Border.all(color: Colors.grey, width: 1),
-                            //                               ),
-                            //                               child: ListView
-                            //                                   .builder(
-                            //                                 // controller: expModels.length,
-                            //                                 // itemExtent: 50,
-                            //                                 physics:
-                            //                                     const NeverScrollableScrollPhysics(),
-                            //                                 shrinkWrap:
-                            //                                     true,
-                            //                                 itemCount:
-                            //                                     expModels
-                            //                                         .length,
-                            //                                 itemBuilder:
-                            //                                     (BuildContext
-                            //                                             context,
-                            //                                         int index) {
-                            //                                   return Container(
-                            //                                     child: ListTile(
-                            //                                         onTap: () {
-                            //                                           var serex =
-                            //                                               expModels[index].ser;
-                            //                                           String
-                            //                                               _Date =
-                            //                                               DateFormat('dd').format(DateTime.parse('${expModels[index].sdate!} 00:00:00'));
-                            //                                           // Value_AreaSer_ +
-                            //                                           //     1; // ser ประเภท
-                            //                                           // _verticalGroupValue; // ประเภท
-                            //                                           // _Form_nameshop; //ชื่อร้าน
-                            //                                           // _Form_typeshop; //ประเภทร้าน
-                            //                                           // _Form_bussshop; //ชื่อผู้เช่า
-                            //                                           // _Form_bussscontact; //ชื่อผู้ติดต่อ
-                            //                                           // _Form_address; //ที่อยู่
-                            //                                           // _Form_tel; //เบอร์โทร
-                            //                                           // _Form_email; //email
-                            //                                           // _Form_tax; //เลข tax
-                            //                                           // Value_DateTime_Step2; //เลือก ว-ด-ป
-                            //                                           // Value_rental_type_; //รายวัน เดือน ปี
-                            //                                           // Value_rental_type_2; //วัน เดือน ปี
-                            //                                           // Value_DateTime_end; //หมดสัญญา ว-ด-ป
-                            //                                           // Value_D_start; //เริ่มสัญญา ป/ด/ว
-                            //                                           // Value_D_end; //หมดสัญญา ป/ด/ว
-                            //                                           // Value_rental_count_; //จำนวน วัน เดือน ปี
-                            //                                           // _selecteSer.map((e) => e).toString().substring(1,
-                            //                                           //     _selecteSer.map((e) => e).toString().length - 1); // serพื้นที่
-                            //                                           // _selecteSerbool.map((e) => e).toString().substring(1,
-                            //                                           //     _selecteSerbool.map((e) => e).toString().length - 1); //พื้นที่
+                                                                //fontSize: 10.0
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(8, 0, 8, 8),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              1.8,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          // height: 250,
 
-                            //                                           add_quot(serex,
-                            //                                               _Date);
-                            //                                         },
-                            //                                         title: Row(
-                            //                                           mainAxisAlignment:
-                            //                                               MainAxisAlignment.spaceBetween,
-                            //                                           children: [
-                            //                                             Expanded(
-                            //                                               flex: 6,
-                            //                                               child: Container(
-                            //                                                 padding: const EdgeInsets.all(8.0),
-                            //                                                 child: AutoSizeText(
-                            //                                                   maxLines: 2,
-                            //                                                   minFontSize: 8,
-                            //                                                   // maxFontSize: 15,
-                            //                                                   '${expModels[index].expname}',
-                            //                                                   textAlign: TextAlign.start,
-                            //                                                   style: const TextStyle(
-                            //                                                     color: TextHome_Color.TextHome_Colors,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: AppbackgroundColor
+                                                                .Sub_Abg_Colors,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            0)),
+                                                            // border: Border.all(color: Colors.grey, width: 1),
+                                                          ),
+                                                          child:
+                                                              ListView.builder(
+                                                            // controller: expModels.length,
+                                                            // itemExtent: 50,
+                                                            physics:
+                                                                const NeverScrollableScrollPhysics(),
+                                                            shrinkWrap: true,
+                                                            itemCount: expModels
+                                                                .length,
+                                                            itemBuilder:
+                                                                (BuildContext
+                                                                        context,
+                                                                    int index) {
+                                                              return Container(
+                                                                child: ListTile(
+                                                                    onTap: () {
+                                                                      var serex =
+                                                                          expModels[index]
+                                                                              .ser;
+                                                                      var sdate =
+                                                                          expModels[index]
+                                                                              .sday;
 
-                            //                                                     //fontSize: 10.0
-                            //                                                   ),
-                            //                                                 ),
-                            //                                               ),
-                            //                                             ),
-                            //                                             Expanded(
-                            //                                               flex: 1,
-                            //                                               child: Padding(
-                            //                                                 padding: EdgeInsets.all(8.0),
-                            //                                                 child: AutoSizeText(
-                            //                                                   maxLines: 2,
-                            //                                                   minFontSize: 8,
-                            //                                                   // maxFontSize: 15,
-                            //                                                   '${expModels[index].unit}',
-                            //                                                   textAlign: TextAlign.center,
-                            //                                                   style: const TextStyle(
-                            //                                                     color: TextHome_Color.TextHome_Colors,
+                                                                      DateTime
+                                                                          dateTime =
+                                                                          DateTime
+                                                                              .now();
+                                                                      // String
+                                                                      // _Date =
+                                                                      // DateFormat('dd').format(DateTime.parse('${expModels[index].sdate!} 00:00:00'));
+                                                                      // Value_AreaSer_ +
+                                                                      //     1; // ser ประเภท
+                                                                      // _verticalGroupValue; // ประเภท
+                                                                      // _Form_nameshop; //ชื่อร้าน
+                                                                      // _Form_typeshop; //ประเภทร้าน
+                                                                      // _Form_bussshop; //ชื่อผู้เช่า
+                                                                      // _Form_bussscontact; //ชื่อผู้ติดต่อ
+                                                                      // _Form_address; //ที่อยู่
+                                                                      // _Form_tel; //เบอร์โทร
+                                                                      // _Form_email; //email
+                                                                      // _Form_tax; //เลข tax
+                                                                      // Value_DateTime_Step2; //เลือก ว-ด-ป
+                                                                      // Value_rental_type_; //รายวัน เดือน ปี
+                                                                      // Value_rental_type_2; //วัน เดือน ปี
+                                                                      // Value_DateTime_end; //หมดสัญญา ว-ด-ป
+                                                                      // Value_D_start; //เริ่มสัญญา ป/ด/ว
+                                                                      // Value_D_end; //หมดสัญญา ป/ด/ว
+                                                                      // Value_rental_count_; //จำนวน วัน เดือน ปี
+                                                                      // _selecteSer.map((e) => e).toString().substring(1,
+                                                                      //     _selecteSer.map((e) => e).toString().length - 1); // serพื้นที่
+                                                                      // _selecteSerbool.map((e) => e).toString().substring(1,
+                                                                      //     _selecteSerbool.map((e) => e).toString().length - 1); //พื้นที่
+                                                                      add_quot(
+                                                                          serex,
+                                                                          sdate,
+                                                                          index);
+                                                                    },
+                                                                    title: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              6,
+                                                                          child:
+                                                                              Container(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              maxLines: 2,
+                                                                              minFontSize: 8,
+                                                                              // maxFontSize: 15,
+                                                                              '${expModels[index].expname}',
+                                                                              textAlign: TextAlign.start,
+                                                                              style: const TextStyle(
+                                                                                color: TextHome_Color.TextHome_Colors,
 
-                            //                                                     //fontSize: 10.0
-                            //                                                   ),
-                            //                                                 ),
-                            //                                               ),
-                            //                                             ),
-                            //                                           ],
-                            //                                         )),
-                            //                                   );
-                            //                                 },
-                            //                               ),
-                            //                             ),
-                            //                           ],
-                            //                         ),
-                            //                       ),
-                            //                     ],
-                            //                   ),
-                            //                 ));
-                            //           });
-                            //     });
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              maxLines: 2,
+                                                                              minFontSize: 8,
+                                                                              // maxFontSize: 15,
+                                                                              '${expModels[index].sday} วัน',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(
+                                                                                color: TextHome_Color.TextHome_Colors,
+
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              maxLines: 2,
+                                                                              minFontSize: 8,
+                                                                              // maxFontSize: 15,
+                                                                              expModels[index].fine_cal != '0.00' ? '${expModels[index].fine_cal} %' : '${expModels[index].fine_pri} บาท',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: const TextStyle(
+                                                                                color: TextHome_Color.TextHome_Colors,
+
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    )),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ));
+                                      });
+                                });
                             // print('555');
                           },
                           icon: const Icon(Icons.add, color: Colors.green)),
@@ -10119,9 +10237,8 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                                 bottomRight: Radius.circular(10)),
                                                                             // border: Border.all(color: Colors.grey, width: 1),
                                                                           ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -10145,9 +10262,9 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                     flex: 1,
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           AutoSizeText(
                                                                         maxLines:
@@ -10169,9 +10286,9 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                     flex: 1,
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           AutoSizeText(
                                                                         maxLines:
@@ -10556,7 +10673,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .fromLTRB(
+                                                                    .fromLTRB(
                                                                 8, 8, 8, 0),
                                                         child: Container(
                                                             width: (!Responsive
@@ -10620,7 +10737,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .fromLTRB(
+                                                                    .fromLTRB(
                                                                 8, 0, 8, 0),
                                                         child: Container(
                                                             width: (!Responsive
@@ -10894,7 +11011,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .fromLTRB(
+                                                                    .fromLTRB(
                                                                 8, 0, 8, 8),
                                                         child: Column(
                                                           children: [

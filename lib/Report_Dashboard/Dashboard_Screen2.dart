@@ -84,7 +84,7 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
       builder: (BuildContext context) => AlertDialog(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        title: Text(
+        title: const Text(
           '📢ขออภัย !!!!',
           textAlign: TextAlign.end,
           style: TextStyle(
@@ -94,17 +94,17 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
           ),
         ),
         content: Container(
-          decoration: BoxDecoration(
-            image: const DecorationImage(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
               image: AssetImage("images/pngegg.png"),
               // fit: BoxFit.cover,
             ),
           ),
-          child: SingleChildScrollView(
+          child: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'ขออภัย ขณะนี้ฟังก์ชั่นก์ DashBoard อยู่ในช่วงทดสอบ ..!!!!!!',
                     textAlign: TextAlign.center,
@@ -230,29 +230,33 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
 
   double cash_total = 0.00;
   double Bank_total = 0.00;
-  Future<Null> red_Trans_billIncome() async {
+  Future<Null> red_Trans_billIncome(context1) async {
     Total_Incomes.clear();
-    if (_TransReBillModels_Income.length != 0) {
-      setState(() {
-        _TransReBillModels_Income.clear();
-      });
-    }
+    setState(() {
+      data_tatol_income.clear();
+      _TransReBillModels_Income.clear();
+      data_tatol_income = List.generate(zoneModels_report.length, (_) => []);
+    });
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
 
     for (int index1 = 0; index1 < zoneModels_report.length; index1++) {
+      if (index1 == 0) {
+        Dialog_(context1, index1);
+      } else {}
       for (int index2 = 0; index2 < thaiMonthNames.length; index2++) {
         setState(() {
           Total_Incomes.clear();
           Total_Incomes = [];
           _TransReBillModels_Income.clear();
         });
-        print('${zoneModels_report.length}  //  ${thaiMonthNames.length}');
-        print(
-            '${index2 + 1}mont_h : ${thaiMonthNames[index2]} , YE_Income : $YE_Income , serzone : ${zoneModels_report[index1].ser}');
+        // print('${zoneModels_report.length}  //  ${thaiMonthNames.length}');
+        // print(
+        //     '${index2 + 1}mont_h : ${thaiMonthNames[index2]} , YE_Income : $YE_Income , serzone : ${zoneModels_report[index1].ser}');
 
         String url =
-            '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport.php?isAdd=true&ren=$ren&mont_h=${index2 + 1}&yea_r=$YE_Income&serzone=${zoneModels_report[index1].ser}';
+            '${MyConstant().domain}/GC_bill_pay_BC_IncomeDisReport.php?isAdd=true&ren=$ren&mont_h=${index2 + 1}&yea_r=$YE_Income&serzone=${zoneModels_report[index1].ser}';
+        //  '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport.php?isAdd=true&ren=$ren&mont_h=${index2 + 1}&yea_r=$YE_Income&serzone=${zoneModels_report[index1].ser}';
         try {
           var response = await http.get(Uri.parse(url));
 
@@ -276,7 +280,7 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
           }
         } catch (e) {}
 
-        await Future.delayed(Duration(milliseconds: 200));
+        await Future.delayed(const Duration(milliseconds: 200));
         setState(() {
           data_tatol_income[index1].add(
             _SalesData(
@@ -288,11 +292,17 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                             previousValue +
                             (element.total_dis != null
                                 ? double.parse(element.total_dis!)
-                                : double.parse(element.total_bill!)),
+                                : (element.total_bill == null)
+                                    ? 0.00
+                                    : double.parse(element.total_bill!)),
                       ).toString())}'}'}')),
           );
         });
       }
+      if (index1 + 1 == zoneModels_report.length) {
+        await Future.delayed(const Duration(milliseconds: 100));
+        Dialog_(context1, index1);
+      } else {}
     }
   }
 
@@ -308,8 +318,9 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
         Bank_total = 0.00;
       });
       String url =
-          '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport_All.php?isAdd=true&ren=$ren&mont_h=${index2 + 1}&yea_r=$YE_Income&serzone=';
-      // '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport.php?isAdd=true&ren=$ren&mont_h=${index2 + 1}&yea_r=$YE_Income&serzone=${zoneModels_report[index1].ser}';
+          '${MyConstant().domain}/GC_bill_pay_BC_IncomeDisReport_All.php?isAdd=true&ren=$ren&mont_h=${index2 + 1}&yea_r=$YE_Income&serzone=';
+      // '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport_All.php?isAdd=true&ren=$ren&mont_h=${index2 + 1}&yea_r=$YE_Income&serzone=';
+
       try {
         var response = await http.get(Uri.parse(url));
 
@@ -342,7 +353,7 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
           print('result ${_TransReBillModels_Income.length}');
         }
       } catch (e) {}
-      await Future.delayed(Duration(milliseconds: 200));
+      await Future.delayed(const Duration(milliseconds: 200));
 
       setState(() {
         data_tatol_income2.add(
@@ -351,54 +362,48 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
       });
     }
   }
-///////////--------------------------------------------->(รายงานรายรับ)
-  // Future<Null> red_Trans_selectIncome() async {
-  //   for (int index = 0; index < _TransReBillModels_Income.length; index++) {
-  //     if (_TransReBillHistoryModels_Income.length != 0) {
-  //       setState(() {
-  //         _TransReBillHistoryModels_Income.clear();
-  //       });
-  //     }
-  //     if (TransReBillModels_Income[index].length != 0) {
-  //       TransReBillModels_Income[index].clear();
-  //     }
 
-  //     SharedPreferences preferences = await SharedPreferences.getInstance();
-  //     var ren = preferences.getString('renTalSer');
-  //     var user = preferences.getString('ser');
-  //     var ciddoc = _TransReBillModels_Income[index].ser;
-  //     var qutser = _TransReBillModels_Income[index].ser_in;
-  //     var docnoin = (_TransReBillModels_Income[index].docno == null)
-  //         ? _TransReBillModels_Income[index].refno
-  //         : _TransReBillModels_Income[index].docno;
-  //     String url =
-  //         '${MyConstant().domain}/GC_bill_pay_history_DailyReport.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
-  //     try {
-  //       var response = await http.get(Uri.parse(url));
+  Dialog_(context, index1) {
+    // if (index1 + 1 == zoneModels_report.length) {
+    //   setState(() {
+    //     YE_Income = null;
+    //   });
+    // }
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          if (index1 + 1 == zoneModels_report.length) {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          } else {}
+          // Future.delayed(
+          //     const Duration(
+          //         seconds:
+          //             1),
+          //     () {
+          //   Navigator.of(
+          //           context)
+          //       .pop();
+          // });
+          return Dialog(
+            child: SizedBox(
+              height: 20,
+              width: 80,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Image.asset(
+                  "images/gif-LOGOchao.gif",
+                  fit: BoxFit.cover,
+                  height: 20,
+                  width: 80,
+                ),
+              ),
+            ),
+          );
+        });
+  }
 
-  //       var result = json.decode(response.body);
-  //       print(result);
-  //       if (result.toString() != 'null') {
-  //         for (var map in result) {
-  //           TransReBillHistoryModel _TransReBillHistoryModels_Incomes =
-  //               TransReBillHistoryModel.fromJson(map);
-
-  //           var numinvoiceent = _TransReBillHistoryModels_Incomes.docno;
-  //           setState(() {
-  //             _TransReBillHistoryModels_Income.add(
-  //                 _TransReBillHistoryModels_Incomes);
-  //             TransReBillModels_Income[index]
-  //                 .add(_TransReBillHistoryModels_Incomes);
-  //           });
-  //         }
-  //         // PDf_AdddataList_bill_Income();
-  //       }
-  //       // setState(() {
-  //       //   red_Invoice();
-  //       // });
-  //     } catch (e) {}
-  //   }
-  // }
   String formatTooltip(dynamic dataPoint) {
     final numberFormat = NumberFormat("#,##0", "en_US");
     final formattedValue = numberFormat.format(dataPoint.sales);
@@ -490,6 +495,7 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                 child: Column(
                   children: [
                     Container(
+                      width: MediaQuery.of(context).size.width,
                       decoration: const BoxDecoration(
                         color: AppbackgroundColor.TiTile_Colors,
                         borderRadius: BorderRadius.only(
@@ -499,223 +505,117 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                             bottomRight: Radius.circular(0)),
                         // border: Border.all(color: Colors.grey, width: 1),
                       ),
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'รายงานรายรับ (เฉพาะรายการที่มีส่วนลด): ',
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
-                          ),
-                          // const Padding(
-                          //   padding: EdgeInsets.all(8.0),
-                          //   child: Text(
-                          //     'เดือน :',
-                          //     style: TextStyle(
-                          //       color: ReportScreen_Color.Colors_Text2_,
-                          //       // fontWeight: FontWeight.bold,
-                          //       fontFamily: Font_.Fonts_T,
-                          //     ),
-                          //   ),
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.all(8.0),
-                          //   child: Container(
-                          //     decoration: const BoxDecoration(
-                          //       color: AppbackgroundColor.Sub_Abg_Colors,
-                          //       borderRadius: BorderRadius.only(
-                          //           topLeft: Radius.circular(10),
-                          //           topRight: Radius.circular(10),
-                          //           bottomLeft: Radius.circular(10),
-                          //           bottomRight: Radius.circular(10)),
-                          //       // border: Border.all(color: Colors.grey, width: 1),
-                          //     ),
-                          //     width: 150,
-                          //     padding: const EdgeInsets.all(8.0),
-                          //     child: DropdownButtonFormField2(
-                          //       alignment: Alignment.center,
-                          //       focusColor: Colors.white,
-                          //       autofocus: false,
-                          //       decoration: InputDecoration(
-                          //         floatingLabelAlignment:
-                          //             FloatingLabelAlignment.center,
-                          //         enabled: true,
-                          //         hoverColor: Colors.brown,
-                          //         prefixIconColor: Colors.blue,
-                          //         fillColor: Colors.white.withOpacity(0.05),
-                          //         filled: false,
-                          //         isDense: true,
-                          //         contentPadding: EdgeInsets.zero,
-                          //         border: OutlineInputBorder(
-                          //           borderSide:
-                          //               const BorderSide(color: Colors.red),
-                          //           borderRadius: BorderRadius.circular(10),
-                          //         ),
-                          //         focusedBorder: const OutlineInputBorder(
-                          //           borderRadius: BorderRadius.only(
-                          //             topRight: Radius.circular(10),
-                          //             topLeft: Radius.circular(10),
-                          //             bottomRight: Radius.circular(10),
-                          //             bottomLeft: Radius.circular(10),
-                          //           ),
-                          //           borderSide: BorderSide(
-                          //             width: 1,
-                          //             color: Color.fromARGB(255, 231, 227, 227),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //       isExpanded: false,
-                          //       hint: Text(
-                          //         Mon_Income == null ? 'เลือก' : '$Mon_Income',
-                          //         maxLines: 2,
-                          //         textAlign: TextAlign.center,
-                          //         style: const TextStyle(
-                          //           overflow: TextOverflow.ellipsis,
-                          //           fontSize: 14,
-                          //           color: Colors.grey,
-                          //         ),
-                          //       ),
-                          //       icon: const Icon(
-                          //         Icons.arrow_drop_down,
-                          //         color: Colors.black,
-                          //       ),
-                          //       style: const TextStyle(
-                          //         color: Colors.grey,
-                          //       ),
-                          //       iconSize: 20,
-                          //       buttonHeight: 40,
-                          //       buttonWidth: 200,
-                          //       // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                          //       dropdownDecoration: BoxDecoration(
-                          //         // color: Colors
-                          //         //     .amber,
-                          //         borderRadius: BorderRadius.circular(10),
-                          //         border:
-                          //             Border.all(color: Colors.white, width: 1),
-                          //       ),
-                          //       items: [
-                          //         for (int item = 0; item < 13; item++)
-                          //           DropdownMenuItem<String>(
-                          //             value: '${item}',
-                          //             child: Text(
-                          //               (item.toString() == '0')
-                          //                   ? '$item.ทั้งหมด'
-                          //                   : '$item.${thaiMonthNames[item - 1]}',
-                          //               textAlign: TextAlign.center,
-                          //               style: const TextStyle(
-                          //                 overflow: TextOverflow.ellipsis,
-                          //                 fontSize: 14,
-                          //                 color: Colors.grey,
-                          //               ),
-                          //             ),
-                          //           )
-                          //       ],
-
-                          //       onChanged: (value) async {
-                          //         Mon_Income = value;
-                          //         print(Mon_Income);
-
-                          //         // if (Value_Chang_Zone_Income != null) {
-                          //         //   red_Trans_billIncome();
-                          //         //   // red_Trans_billMovemen();
-                          //         // }
-                          //       },
-                          //     ),
-                          //   ),
-                          // ),
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'ปี :',
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                                // border: Border.all(color: Colors.grey, width: 1),
-                              ),
-                              width: 120,
-                              padding: const EdgeInsets.all(8.0),
-                              child: DropdownButtonFormField2(
-                                alignment: Alignment.center,
-                                focusColor: Colors.white,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  floatingLabelAlignment:
-                                      FloatingLabelAlignment.center,
-                                  enabled: true,
-                                  hoverColor: Colors.brown,
-                                  prefixIconColor: Colors.blue,
-                                  fillColor: Colors.white.withOpacity(0.05),
-                                  filled: false,
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.zero,
-                                  border: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(10),
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        }),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'รายงาน รายรับ (เฉพาะรายการที่มีส่วนลด): ',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
                                   ),
-                                  focusedBorder: const OutlineInputBorder(
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'ปี :',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: AppbackgroundColor.Sub_Abg_Colors,
                                     borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(10),
-                                      topLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                      color: Color.fromARGB(255, 231, 227, 227),
-                                    ),
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    // border: Border.all(color: Colors.grey, width: 1),
                                   ),
-                                ),
-                                isExpanded: false,
-                                hint: Text(
-                                  YE_Income == null ? 'เลือก' : '$YE_Income',
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.black,
-                                ),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                iconSize: 20,
-                                buttonHeight: 40,
-                                buttonWidth: 200,
-                                // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                dropdownDecoration: BoxDecoration(
-                                  // color: Colors
-                                  //     .amber,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border:
-                                      Border.all(color: Colors.white, width: 1),
-                                ),
-                                items: YE_Th.map(
-                                    (item) => DropdownMenuItem<String>(
+                                  width: 120,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: DropdownButtonFormField2(
+                                    alignment: Alignment.center,
+                                    focusColor: Colors.white,
+                                    autofocus: false,
+                                    decoration: InputDecoration(
+                                      floatingLabelAlignment:
+                                          FloatingLabelAlignment.center,
+                                      enabled: true,
+                                      hoverColor: Colors.brown,
+                                      prefixIconColor: Colors.blue,
+                                      fillColor: Colors.white.withOpacity(0.05),
+                                      filled: false,
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderSide:
+                                            const BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(10),
+                                          topLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                        ),
+                                        borderSide: BorderSide(
+                                          width: 1,
+                                          color: Color.fromARGB(
+                                              255, 231, 227, 227),
+                                        ),
+                                      ),
+                                    ),
+                                    isExpanded: false,
+                                    value: YE_Income,
+                                    // hint: Text(
+                                    //   YE_Income == null ? 'เลือก' : '$YE_Income',
+                                    //   maxLines: 2,
+                                    //   textAlign: TextAlign.center,
+                                    //   style: const TextStyle(
+                                    //     overflow: TextOverflow.ellipsis,
+                                    //     fontSize: 14,
+                                    //     color: Colors.grey,
+                                    //   ),
+                                    // ),
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Colors.black,
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                    iconSize: 20,
+                                    buttonHeight: 40,
+                                    buttonWidth: 200,
+                                    // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                    dropdownDecoration: BoxDecoration(
+                                      // color: Colors
+                                      //     .amber,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: Colors.white, width: 1),
+                                    ),
+                                    items: YE_Th.map((item) =>
+                                        DropdownMenuItem<String>(
                                           value: '${item}',
                                           child: Text(
                                             '${item}',
@@ -728,168 +628,57 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                           ),
                                         )).toList(),
 
-                                onChanged: (value) async {
-                                  YE_Income = value;
+                                    onChanged: (value) async {
+                                      YE_Income = value;
 
-                                  // if (Value_Chang_Zone_Income != null) {
-                                  //   red_Trans_billIncome();
-                                  //   // red_Trans_billMovemen();
-                                  // }
-                                },
-                              ),
-                            ),
-                          ),
-                          // const Padding(
-                          //   padding: EdgeInsets.all(8.0),
-                          //   child: Text(
-                          //     'โซน :',
-                          //     style: TextStyle(
-                          //       color: ReportScreen_Color.Colors_Text2_,
-                          //       // fontWeight: FontWeight.bold,
-                          //       fontFamily: Font_.Fonts_T,
-                          //     ),
-                          //   ),
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.all(8.0),
-                          //   child: Container(
-                          //     decoration: const BoxDecoration(
-                          //       color: AppbackgroundColor.Sub_Abg_Colors,
-                          //       borderRadius: BorderRadius.only(
-                          //           topLeft: Radius.circular(10),
-                          //           topRight: Radius.circular(10),
-                          //           bottomLeft: Radius.circular(10),
-                          //           bottomRight: Radius.circular(10)),
-                          //       // border: Border.all(color: Colors.grey, width: 1),
-                          //     ),
-                          //     width: 260,
-                          //     padding: const EdgeInsets.all(8.0),
-                          //     child: DropdownButtonFormField2(
-                          //       alignment: Alignment.center,
-                          //       focusColor: Colors.white,
-                          //       autofocus: false,
-                          //       decoration: InputDecoration(
-                          //         enabled: true,
-                          //         hoverColor: Colors.brown,
-                          //         prefixIconColor: Colors.blue,
-                          //         fillColor: Colors.white.withOpacity(0.05),
-                          //         filled: false,
-                          //         isDense: true,
-                          //         contentPadding: EdgeInsets.zero,
-                          //         border: OutlineInputBorder(
-                          //           borderSide:
-                          //               const BorderSide(color: Colors.red),
-                          //           borderRadius: BorderRadius.circular(10),
-                          //         ),
-                          //         focusedBorder: const OutlineInputBorder(
-                          //           borderRadius: BorderRadius.only(
-                          //             topRight: Radius.circular(10),
-                          //             topLeft: Radius.circular(10),
-                          //             bottomRight: Radius.circular(10),
-                          //             bottomLeft: Radius.circular(10),
-                          //           ),
-                          //           borderSide: BorderSide(
-                          //             width: 1,
-                          //             color: Color.fromARGB(255, 231, 227, 227),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //       isExpanded: false,
-                          //       hint: Text(
-                          //         Value_Chang_Zone_Income == null
-                          //             ? 'เลือก'
-                          //             : '$Value_Chang_Zone_Income',
-                          //         maxLines: 2,
-                          //         textAlign: TextAlign.center,
-                          //         style: const TextStyle(
-                          //           overflow: TextOverflow.ellipsis,
-                          //           fontSize: 14,
-                          //           color: Colors.grey,
-                          //         ),
-                          //       ),
-                          //       icon: const Icon(
-                          //         Icons.arrow_drop_down,
-                          //         color: Colors.black,
-                          //       ),
-                          //       style: const TextStyle(
-                          //         color: Colors.grey,
-                          //       ),
-                          //       iconSize: 20,
-                          //       buttonHeight: 40,
-                          //       buttonWidth: 250,
-                          //       // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                          //       dropdownDecoration: BoxDecoration(
-                          //         // color: Colors
-                          //         //     .amber,
-                          //         borderRadius: BorderRadius.circular(10),
-                          //         border:
-                          //             Border.all(color: Colors.white, width: 1),
-                          //       ),
-                          //       items: zoneModels
-                          //           .map((item) => DropdownMenuItem<String>(
-                          //                 value: '${item.zn}',
-                          //                 child: Text(
-                          //                   '${item.zn}',
-                          //                   textAlign: TextAlign.center,
-                          //                   style: const TextStyle(
-                          //                     overflow: TextOverflow.ellipsis,
-                          //                     fontSize: 14,
-                          //                     color: Colors.grey,
-                          //                   ),
-                          //                 ),
-                          //               ))
-                          //           .toList(),
-
-                          //       onChanged: (value) async {
-                          //         int selectedIndex = zoneModels
-                          //             .indexWhere((item) => item.zn == value);
-
-                          //         setState(() {
-                          //           Value_Chang_Zone_Income = value!;
-                          //           Value_Chang_Zone_Ser_Income =
-                          //               zoneModels[selectedIndex].ser!;
-                          //         });
-                          //         print(
-                          //             'Selected Index: $Value_Chang_Zone_Income  //${Value_Chang_Zone_Ser_Income}');
-                          //       },
-                          //     ),
-                          //   ),
-                          // ),
-                          InkWell(
-                            onTap: () async {
-                              red_Trans_billIncome();
-                              red_Trans_billIncome_cash_Bank();
-                            },
-                            child: Container(
-                                width: 100,
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.green[700],
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10)),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'ค้นหา',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
+                                      // if (Value_Chang_Zone_Income != null) {
+                                      //   red_Trans_billIncome();
+                                      //   // red_Trans_billMovemen();
+                                      // }
+                                    },
                                   ),
-                                )),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  if (YE_Income == null) {
+                                  } else {
+                                    red_Trans_billIncome(context);
+                                    red_Trans_billIncome_cash_Bank();
+                                  }
+                                },
+                                child: Container(
+                                    width: 100,
+                                    padding: const EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[700],
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'ค้นหา',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                     Container(
                       decoration: BoxDecoration(
                         color:
                             AppbackgroundColor.TiTile_Colors.withOpacity(0.4),
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(0),
                             topRight: Radius.circular(0),
                             bottomLeft: Radius.circular(10),
@@ -963,13 +752,15 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                     enable: true,
                                     tooltipDisplayMode:
                                         TrackballDisplayMode.groupAllPoints,
-                                    tooltipSettings: InteractiveTooltip(
+                                    tooltipSettings: const InteractiveTooltip(
                                         format: 'point.y ',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: TrackballMarkerSettings(
-                                        markerVisibility:
-                                            TrackballVisibilityMode.visible),
+                                    markerSettings:
+                                        const TrackballMarkerSettings(
+                                            markerVisibility:
+                                                TrackballVisibilityMode
+                                                    .visible),
                                   ),
                                   zoomPanBehavior: ZoomPanBehavior(
                                       enableMouseWheelZooming: true,
@@ -983,23 +774,25 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                   title: ChartTitle(
                                       text: (YE_Income == null)
                                           ? 'รายงานรายรับ (เฉพาะรายการที่มีส่วนลด)'
-                                          : 'รายงานรายรับ (เฉพาะรายการที่มีส่วนลด)'),
+                                          : 'รายงานรายรับ (เฉพาะรายการที่มีส่วนลด) $YE_Income'),
                                   legend: Legend(
                                       isVisible: true,
                                       textStyle:
-                                          TextStyle(color: Colors.black)),
+                                          const TextStyle(color: Colors.black)),
                                   // primaryYAxis: NumericAxis(isInversed: false),
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
                                         text: 'เดือน',
-                                        textStyle: TextStyle(fontSize: 16)),
-                                    labelStyle: TextStyle(
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
+                                    labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
                                         text: 'หน่วย (บาท)',
-                                        textStyle: TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -1082,25 +875,29 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                     enable: true,
                                     tooltipDisplayMode:
                                         TrackballDisplayMode.groupAllPoints,
-                                    tooltipSettings: InteractiveTooltip(
+                                    tooltipSettings: const InteractiveTooltip(
                                         format: 'point.y ',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: TrackballMarkerSettings(
-                                        markerVisibility:
-                                            TrackballVisibilityMode.visible),
+                                    markerSettings:
+                                        const TrackballMarkerSettings(
+                                            markerVisibility:
+                                                TrackballVisibilityMode
+                                                    .visible),
                                   ),
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
                                         text: 'เดือน',
-                                        textStyle: TextStyle(fontSize: 16)),
-                                    labelStyle: TextStyle(
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
+                                    labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
                                         text: 'หน่วย (บาท)',
-                                        textStyle: TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -1121,7 +918,7 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                   legend: Legend(
                                       isVisible: true,
                                       textStyle:
-                                          TextStyle(color: Colors.black)),
+                                          const TextStyle(color: Colors.black)),
                                   series: <ChartSeries<_SalesData, String>>[
                                     for (int index = 0;
                                         index < data_tatol_income.length;
@@ -1167,7 +964,7 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                             bottomLeft: Radius.circular(8),
                                             bottomRight: Radius.circular(8)),
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: Text(
                                           'SAVE(.PNG)',
                                           style: TextStyle(
@@ -1205,13 +1002,15 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                     enable: true,
                                     tooltipDisplayMode:
                                         TrackballDisplayMode.groupAllPoints,
-                                    tooltipSettings: InteractiveTooltip(
+                                    tooltipSettings: const InteractiveTooltip(
                                         format: 'point.y ',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: TrackballMarkerSettings(
-                                        markerVisibility:
-                                            TrackballVisibilityMode.visible),
+                                    markerSettings:
+                                        const TrackballMarkerSettings(
+                                            markerVisibility:
+                                                TrackballVisibilityMode
+                                                    .visible),
                                   ),
                                   zoomPanBehavior: ZoomPanBehavior(
                                       enableMouseWheelZooming: true,
@@ -1229,19 +1028,21 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                   legend: Legend(
                                       isVisible: true,
                                       textStyle:
-                                          TextStyle(color: Colors.black)),
+                                          const TextStyle(color: Colors.black)),
                                   // primaryYAxis: NumericAxis(isInversed: false),
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
                                         text: 'เดือน',
-                                        textStyle: TextStyle(fontSize: 16)),
-                                    labelStyle: TextStyle(
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
+                                    labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
                                         text: 'หน่วย (บาท)',
-                                        textStyle: TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -1336,25 +1137,29 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                     enable: true,
                                     tooltipDisplayMode:
                                         TrackballDisplayMode.groupAllPoints,
-                                    tooltipSettings: InteractiveTooltip(
+                                    tooltipSettings: const InteractiveTooltip(
                                         format: 'point.y ',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: TrackballMarkerSettings(
-                                        markerVisibility:
-                                            TrackballVisibilityMode.visible),
+                                    markerSettings:
+                                        const TrackballMarkerSettings(
+                                            markerVisibility:
+                                                TrackballVisibilityMode
+                                                    .visible),
                                   ),
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
                                         text: 'เดือน',
-                                        textStyle: TextStyle(fontSize: 16)),
-                                    labelStyle: TextStyle(
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
+                                    labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
                                         text: 'หน่วย (บาท)',
-                                        textStyle: TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -1375,7 +1180,7 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                   legend: Legend(
                                       isVisible: true,
                                       textStyle:
-                                          TextStyle(color: Colors.black)),
+                                          const TextStyle(color: Colors.black)),
                                   series: <ChartSeries<_SalesData2, String>>[
                                     ColumnSeries<_SalesData2, String>(
                                       animationDuration: 100,
@@ -1431,7 +1236,7 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                             bottomLeft: Radius.circular(8),
                                             bottomRight: Radius.circular(8)),
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: Text(
                                           'SAVE(.PNG)',
                                           style: TextStyle(

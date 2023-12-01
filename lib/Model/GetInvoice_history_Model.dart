@@ -38,6 +38,11 @@ class InvoiceHistoryModel {
   String? total_t;
   String? wht_t;
   String? cid;
+  String? unitser;
+  String? zn;
+  String? zser;
+  String? scname;
+  String? ln;
 
   InvoiceHistoryModel(
       {this.ser,
@@ -78,7 +83,12 @@ class InvoiceHistoryModel {
       this.pvat_t,
       this.total_t,
       this.wht_t,
-      this.cid});
+      this.cid,
+      this.unitser,
+      this.zn,
+      this.zser,
+      this.scname,
+      this.ln});
 
   InvoiceHistoryModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -120,6 +130,11 @@ class InvoiceHistoryModel {
     total_t = json['total_t'];
     wht_t = json['wht_t'];
     cid = json['cid'];
+    unitser = json['unitser'];
+    zn = json['zn'];
+    zser = json['zser'];
+    scname = json['scname'];
+    ln = json['ln'];
   }
 
   Map<String, dynamic> toJson() {
@@ -163,7 +178,11 @@ class InvoiceHistoryModel {
     data['total_t'] = this.total_t;
     data['wht_t'] = this.wht_t;
     data['cid'] = this.cid;
-
+    data['unitser'] = this.unitser;
+    data['zn'] = this.zn;
+    data['zser'] = this.zser;
+    data['scname'] = this.scname;
+    data['ln'] = this.ln;
 
     return data;
   }

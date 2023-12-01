@@ -21,13 +21,13 @@ class Mini_Ex_IncomeReport {
       NameFile_,
       _verticalGroupValue_NameFile,
       Value_Report,
-      _TransReBillModels_Income,
-      TransReBillModels_Income,
+      TransReBillModels,
+      TranHisBillModels,
       renTal_name,
       zoneModels_report,
-      Value_Chang_Zone_Income,
-      Mon_Income,
-      YE_Income) async {
+      zone_name_Trans_Mon,
+      Mon_Trans_Mon,
+      YE_Trans_Mon) async {
     final x.Workbook workbook = x.Workbook();
 
     final x.Worksheet sheet = workbook.worksheets[0];
@@ -169,10 +169,13 @@ class Mini_Ex_IncomeReport {
 
     final x.Range range = sheet.getRangeByName('E1');
     range.setText((ser_type_repro == '1')
-        ? 'รายงานรายรับแบบย่อ ( โซน : $Value_Chang_Zone_Income)'
+        ? 'รายงานรายรับแบบย่อ ( โซน : $zone_name_Trans_Mon)'
         : (ser_type_repro == '2')
-            ? 'รายงานรายรับแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Income)'
-            : 'รายงานรายรับแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Income)');
+            ? 'รายงานรายรับแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $zone_name_Trans_Mon)'
+            : (ser_type_repro == '3')
+                ? 'รายงานรายรับแบบย่อ เฉพาะล็อคเสียบ ( โซน : $zone_name_Trans_Mon)'
+                : 'รายงานรายรับแบบย่อ เฉพาะรายการที่ออกใบกำกับภาษี ( โซน : $zone_name_Trans_Mon)');
+
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -193,7 +196,9 @@ class Mini_Ex_IncomeReport {
     sheet.getRangeByName('L2').cellStyle = globalStyle22;
 
     sheet.getRangeByName('A2').setText('${renTal_name}');
-    sheet.getRangeByName('K2').setText('เดือน : ${Mon_Income} (${YE_Income}) ');
+    sheet
+        .getRangeByName('K2')
+        .setText('เดือน : ${Mon_Trans_Mon} (${YE_Trans_Mon}) ');
 
     globalStyle2.hAlign = x.HAlignType.center;
     sheet.getRangeByName('A2').cellStyle = globalStyle22;
@@ -211,9 +216,7 @@ class Mini_Ex_IncomeReport {
     sheet.getRangeByName('K3').cellStyle = globalStyle22;
     sheet.getRangeByName('L3').cellStyle = globalStyle22;
 
-    sheet
-        .getRangeByName('A3')
-        .setText('ใบเสร็จ : ${_TransReBillModels_Income.length}');
+    sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillModels.length}');
 
     sheet.getRangeByName('A3').columnWidth = 18;
     sheet.getRangeByName('B3').columnWidth = 18;
@@ -273,7 +276,7 @@ class Mini_Ex_IncomeReport {
     int indextotol = 0;
     int indextotol_ = 0;
 
-    for (var index1 = 0; index1 < _TransReBillModels_Income.length; index1++) {
+    for (var index1 = 0; index1 < TransReBillModels.length; index1++) {
       var index = indextotol;
       dynamic numberColor = index1 % 2 == 0 ? globalStyle22 : globalStyle222;
 
@@ -298,62 +301,61 @@ class Mini_Ex_IncomeReport {
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${index1 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
-            _TransReBillModels_Income[index1].docno == ''
-                ? '${_TransReBillModels_Income[index1].docno}'
-                : '${_TransReBillModels_Income[index1].refno}',
+            (TransReBillModels[index1].doctax != '')
+                ? '${TransReBillModels[index1].doctax}'
+                : TransReBillModels[index1].docno == ''
+                    ? '${TransReBillModels[index1].refno}'
+                    : '${TransReBillModels[index1].docno}',
           );
       sheet.getRangeByName('C${indextotol + 5 - 1}').setText(
-            '${_TransReBillModels_Income[index1].daterec}',
+            '${TransReBillModels[index1].daterec}',
           );
 
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
-            (_TransReBillModels_Income[index1].zser == null)
-                ? '${_TransReBillModels_Income[index1].zser1}'
-                : '${_TransReBillModels_Income[index1].zser}',
+            (TransReBillModels[index1].zser == null)
+                ? '${TransReBillModels[index1].zser1}'
+                : '${TransReBillModels[index1].zser}',
           );
       sheet.getRangeByName('E${indextotol + 5 - 1}').setText(
-            (_TransReBillModels_Income[index1].zn == null)
-                ? '${_TransReBillModels_Income[index1].znn}'
-                : '${_TransReBillModels_Income[index1].zn}',
+            (TransReBillModels[index1].zn == null)
+                ? '${TransReBillModels[index1].znn}'
+                : '${TransReBillModels[index1].zn}',
           );
       sheet.getRangeByName('F${indextotol + 5 - 1}').setText(
-          (_TransReBillModels_Income[index1].ln == null)
-              ? '${_TransReBillModels_Income[index1].room_number}'
-              : '${_TransReBillModels_Income[index1].ln}');
+          (TransReBillModels[index1].ln == null)
+              ? '${TransReBillModels[index1].room_number}'
+              : '${TransReBillModels[index1].ln}');
 
       sheet.getRangeByName('G${indextotol + 5 - 1}').setText(
-            (_TransReBillModels_Income[index1].sname == null ||
-                    _TransReBillModels_Income[index1].sname.toString() == '' ||
-                    _TransReBillModels_Income[index1].sname.toString() ==
-                        'null')
-                ? '${_TransReBillModels_Income[index1].remark}'
-                : '${_TransReBillModels_Income[index1].sname}',
+            (TransReBillModels[index1].sname == null ||
+                    TransReBillModels[index1].sname.toString() == '' ||
+                    TransReBillModels[index1].sname.toString() == 'null')
+                ? '${TransReBillModels[index1].remark}'
+                : '${TransReBillModels[index1].sname}',
           );
       sheet.getRangeByName('H${indextotol + 5 - 1}').setText(
-            '${_TransReBillModels_Income[index1].type}',
+            '${TransReBillModels[index1].type}',
           );
       sheet.getRangeByName('I${indextotol + 5 - 1}').setNumber(
-            (TransReBillModels_Income[index1].length == null ||
-                    TransReBillModels_Income.isEmpty)
+            (TransReBillModels[index1].sum_items == null)
                 ? 0
-                : double.parse(
-                    TransReBillModels_Income[index1].length.toString()),
+                : double.parse(TransReBillModels[index1].sum_items!),
           );
       sheet.getRangeByName('J${indextotol + 5 - 1}').setNumber(
-          (_TransReBillModels_Income[index1].total_dis == null)
+          (TransReBillModels[index1].total_dis == null)
               ? 0
-              : double.parse(_TransReBillModels_Income[index1].total_bill!) -
-                  double.parse(_TransReBillModels_Income[index1].total_dis!));
+              : double.parse(TransReBillModels[index1].total_bill!) -
+                  double.parse(TransReBillModels[index1].total_dis!));
 
       sheet.getRangeByName('K${indextotol + 5 - 1}').setNumber(
-            (_TransReBillModels_Income[index1].total_bill == null)
+            (TransReBillModels[index1].total_bill == null)
                 ? 0
-                : double.parse(_TransReBillModels_Income[index1].total_bill!),
+                : double.parse(TransReBillModels[index1].total_bill!),
           );
       sheet.getRangeByName('L${indextotol + 5 - 1}').setNumber(
-            (_TransReBillModels_Income[index1].total_dis == null)
-                ? double.parse(_TransReBillModels_Income[index1].total_bill!)
-                : double.parse(_TransReBillModels_Income[index1].total_dis!),
+            (TransReBillModels[index1].total_dis == null)
+                ? double.parse(TransReBillModels[index1].total_bill!)
+                : double.parse(TransReBillModels[index1].total_dis!),
           );
 
       print('-------------------------');
@@ -434,10 +436,12 @@ class Mini_Ex_IncomeReport {
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
       String path = await FileSaver.instance.saveFile(
           (ser_type_repro == '1')
-              ? 'รายงานรายรับแบบย่อ ( โซน : $Value_Chang_Zone_Income)'
+              ? 'รายงานรายรับแบบย่อ ( โซน : $zone_name_Trans_Mon)'
               : (ser_type_repro == '2')
-                  ? 'รายงานรายรับแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Income)'
-                  : 'รายงานรายรับแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Income)',
+                  ? 'รายงานรายรับแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $zone_name_Trans_Mon)'
+                  : (ser_type_repro == '3')
+                      ? 'รายงานรายรับแบบย่อ เฉพาะล็อคเสียบ ( โซน : $zone_name_Trans_Mon)'
+                      : 'รายงานรายรับแบบย่อ เฉพาะรายการที่ออกใบกำกับภาษี ( โซน : $zone_name_Trans_Mon)',
           // "รายงานรายรับแบบย่อ",
 
           data,

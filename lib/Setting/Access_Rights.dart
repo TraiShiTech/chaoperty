@@ -1472,7 +1472,7 @@ class _AccessrightsState extends State<Accessrights> {
                                   Padding(
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
-                                      'Lavel',
+                                      'Level',
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         color:
@@ -1498,7 +1498,7 @@ class _AccessrightsState extends State<Accessrights> {
                                     ),
                                     isExpanded: true,
                                     hint: Text(
-                                      'Lavel $laveluid',
+                                      'Level $laveluid',
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontSize: 14,
@@ -1524,7 +1524,7 @@ class _AccessrightsState extends State<Accessrights> {
                                       DropdownMenuItem<String>(
                                         value: '1',
                                         child: Text(
-                                          'Lavel 1',
+                                          'Level 1',
                                           style: const TextStyle(
                                               fontSize: 14,
                                               color: PeopleChaoScreen_Color
@@ -1536,7 +1536,7 @@ class _AccessrightsState extends State<Accessrights> {
                                       DropdownMenuItem<String>(
                                         value: '2',
                                         child: Text(
-                                          'Lavel 2',
+                                          'Level 2',
                                           style: const TextStyle(
                                               fontSize: 14,
                                               color: PeopleChaoScreen_Color
@@ -1548,7 +1548,7 @@ class _AccessrightsState extends State<Accessrights> {
                                       DropdownMenuItem<String>(
                                         value: '3',
                                         child: Text(
-                                          'Lavel 3',
+                                          'Level 3',
                                           style: const TextStyle(
                                               fontSize: 14,
                                               color: PeopleChaoScreen_Color
@@ -2463,7 +2463,7 @@ class _AccessrightsState extends State<Accessrights> {
                           ),
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height * 0.6,
+                          height: MediaQuery.of(context).size.height * 0.55,
                           decoration: const BoxDecoration(
                             color: AppbackgroundColor.Sub_Abg_Colors,
                             borderRadius: BorderRadius.only(
@@ -2573,133 +2573,151 @@ class _AccessrightsState extends State<Accessrights> {
                                               tappedIndex_ = index.toString();
                                             });
                                           },
-                                          title: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  '${userModels[index].fname} ${userModels[index].lname}',
-                                                  textAlign: TextAlign.center,
-                                                  maxLines: 2,
-                                                  style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                          title: Container(
+                                            decoration: BoxDecoration(
+                                              // color: Colors.green[100]!
+                                              //     .withOpacity(0.5),
+                                              border: Border(
+                                                bottom: BorderSide(
+                                                  color: Colors.black12,
+                                                  width: 1,
                                                 ),
                                               ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  '${userModels[index].email} ',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    '${userModels[index].fname} ${userModels[index].lname}',
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 2,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  '${userModels[index].position} ',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    '${userModels[index].email} ',
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Text(
-                                                  '${newValue}',
-                                                  // '${userModels[index].permission} ',
-                                                  // (newValue.endsWith(','))
-                                                  //     ? '${newValue.substring(0, newValue.length - 1)}'
-                                                  //     : '${newValue}',
-                                                  //  'ผู้เช่า',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    '${userModels[index].position} ',
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: InkWell(
-                                                      child: Container(
-                                                        width: 100,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.blueGrey
-                                                              .shade100,
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Text(
+                                                    '${newValue}',
+                                                    // '${userModels[index].permission} ',
+                                                    // (newValue.endsWith(','))
+                                                    //     ? '${newValue.substring(0, newValue.length - 1)}'
+                                                    //     : '${newValue}',
+                                                    //  'ผู้เช่า',
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Center(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              0.0),
+                                                      child: InkWell(
+                                                        child: Container(
+                                                          width: 100,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.red,
+                                                            borderRadius:
+                                                                const BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10),
+                                                            ),
+                                                            // border: Border.all(
+                                                            //     color: Colors.grey, width: 1),
                                                           ),
-                                                          // border: Border.all(
-                                                          //     color: Colors.grey, width: 1),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(1.0),
+                                                          child: const Text(
+                                                            'แก้ไข',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color: SettingScreen_Color
+                                                                    .Colors_Text2_,
+                                                                fontFamily:
+                                                                    Font_
+                                                                        .Fonts_T
+                                                                //fontWeight: FontWeight.bold,
+                                                                //fontSize: 10.0
+                                                                ),
+                                                          ),
                                                         ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: const Text(
-                                                          'แก้ไข',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text2_,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T
-                                                              //fontWeight: FontWeight.bold,
-                                                              //fontSize: 10.0
-                                                              ),
-                                                        ),
+                                                        onTap: () {
+                                                          Edit_userAcess(index);
+                                                          // Edit_userAcess(index,
+                                                          //     '${newValue.substring(0, newValue.length - 1)}');
+                                                        },
                                                       ),
-                                                      onTap: () {
-                                                        Edit_userAcess(index);
-                                                        // Edit_userAcess(index,
-                                                        //     '${newValue.substring(0, newValue.length - 1)}');
-                                                      },
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),

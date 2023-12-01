@@ -19,7 +19,9 @@ class Bill_DocumentTemplate extends StatefulWidget {
 
 class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
   List<RenTalModel> renTalModels = [];
+  int serfor_tem = 7;
   var renTal_name;
+  String rtser = '';
   String? rtname,
       type,
       typex,
@@ -36,6 +38,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
       foder,
       tem_page_ser;
   String? bills_name_;
+  int sertap_dialog_tempage = 0;
   @override
   void initState() {
     super.initState();
@@ -185,6 +188,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
           var name = renTalModel.pn!.trim();
           var foderx = renTalModel.dbn;
           setState(() {
+            rtser = renTalModel.ser!.trim();
             foder = foderx;
             rtname = rtnamex;
             type = typexs;
@@ -207,11 +211,31 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
           });
         }
       } else {}
+      if (rtser.toString() == '72' ||
+          rtser.toString() == '92' ||
+          rtser.toString() == '93' ||
+          rtser.toString() == '94') {
+        setState(() {
+          serfor_tem = 8;
+        });
+      }
     } catch (e) {}
+
     print('name>>>>>  $renname');
   }
 
 //////////////////////////////------------------------------------->
+  TransformationController _controller = TransformationController();
+  void _zoomInSVG() {
+    _controller.value *= Matrix4.identity()..scale(1.2);
+  }
+
+  void _zoomOutSVG() {
+    _controller.value *= Matrix4.identity()..scale(0.8);
+  }
+
+  List name_bill_png = ['B1', 'B2', 'B3'];
+
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
@@ -236,7 +260,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (int index = 0; index < 6; index++)
+                    for (int index = 0; index < 8; index++)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -257,27 +281,30 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                   // border: Border.all(
                                   //     color: Colors.grey, width: 1),
                                 ),
-                                child: Row(
+                                child: Column(
                                   children: [
-                                    Text(
-                                      (index + 1 == 1)
-                                          ? 'เทมเพลต ${index + 1} ( Standard )'
-                                          : 'เทมเพลต ${index + 1} ',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color:
-                                            SettingScreen_Color.Colors_Text1_,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                        fontWeight: FontWeight.bold,
-                                        //fontSize: 10.0
-                                      ),
-                                    ),
-                                    Expanded(
-                                        child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                    if (index + 1 == 8)
+                                      (rtser.toString() == '72' ||
+                                              rtser.toString() == '92' ||
+                                              rtser.toString() == '93' ||
+                                              rtser.toString() == '94')
+                                          ? Text(
+                                              'พิเศษเฉพาะเครือ องค์การตลาด กระทรวงมหาดไทย [อ.ต.]',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.orange[900],
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13.0),
+                                            )
+                                          : SizedBox(),
+                                    Row(
                                       children: [
                                         Text(
-                                          'เลือก :  ',
+                                          (index + 1 == 1)
+                                              ? 'เทมเพลต ${index + 1} ( Standard )'
+                                              : 'เทมเพลต ${index + 1} ',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             color: SettingScreen_Color
@@ -287,38 +314,84 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                             //fontSize: 10.0
                                           ),
                                         ),
-                                        IconButton(
-                                            onPressed: () {
-                                              print('check_box ${index + 1}');
-                                            },
-                                            icon: (index.toString().trim() ==
-                                                    tem_page_ser
-                                                        .toString()
-                                                        .trim())
-                                                ? Icon(
-                                                    Icons.check_box,
-                                                    color: Colors.green,
-                                                  )
-                                                : Icon(
-                                                    Icons
-                                                        .check_box_outline_blank,
-                                                    color: Colors.grey,
-                                                  ))
-                                        // Container(
-                                        //   width: 100,
-                                        //   padding: const EdgeInsets.all(8.0),
-                                        //   decoration: const BoxDecoration(
-                                        //     color: Colors.white,
-                                        //     borderRadius: BorderRadius.only(
-                                        //       topLeft: Radius.circular(10),
-                                        //       topRight: Radius.circular(10),
-                                        //       bottomLeft: Radius.circular(10),
-                                        //       bottomRight: Radius.circular(10),
-                                        //     ),
-                                        //   ),
-                                        // )
+                                        Expanded(
+                                            child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              'เลือก :  ',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                                fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                              ),
+                                            ),
+                                            IconButton(
+                                                onPressed: () async {
+                                                  ///-------------------------------->
+                                                  SharedPreferences
+                                                      preferences =
+                                                      await SharedPreferences
+                                                          .getInstance();
+                                                  String? ren = preferences
+                                                      .getString('renTalSer');
+
+                                                  String url =
+                                                      '${MyConstant().domain}/UP_Tempage.php?isAdd=true&ren=$ren&tempage_ser=${index}';
+
+                                                  try {
+                                                    var response = await http
+                                                        .get(Uri.parse(url));
+
+                                                    var result = json
+                                                        .decode(response.body);
+                                                    if (result.toString() ==
+                                                        'true') {
+                                                      print(
+                                                          'check_box ${index + 1}  ///$ren');
+                                                      setState(() {
+                                                        read_GC_rental();
+                                                      });
+                                                    }
+                                                  } catch (e) {
+                                                    print(e);
+                                                  }
+                                                },
+                                                icon:
+                                                    (index.toString().trim() ==
+                                                            tem_page_ser
+                                                                .toString()
+                                                                .trim())
+                                                        ? Icon(
+                                                            Icons.check_box,
+                                                            color: Colors.green,
+                                                          )
+                                                        : Icon(
+                                                            Icons
+                                                                .check_box_outline_blank,
+                                                            color: Colors.grey,
+                                                          ))
+                                            // Container(
+                                            //   width: 100,
+                                            //   padding: const EdgeInsets.all(8.0),
+                                            //   decoration: const BoxDecoration(
+                                            //     color: Colors.white,
+                                            //     borderRadius: BorderRadius.only(
+                                            //       topLeft: Radius.circular(10),
+                                            //       topRight: Radius.circular(10),
+                                            //       bottomLeft: Radius.circular(10),
+                                            //       bottomRight: Radius.circular(10),
+                                            //     ),
+                                            //   ),
+                                            // )
+                                          ],
+                                        ))
                                       ],
-                                    ))
+                                    ),
                                   ],
                                 ),
                               ),
@@ -337,7 +410,15 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                     ),
                                     child: Image(
                                       image: AssetImage(
-                                          'images/Receip_Template_${index + 1}.png'),
+                                        (index + 1 == 8)
+                                            ? (rtser.toString() == '72' ||
+                                                    rtser.toString() == '92' ||
+                                                    rtser.toString() == '93' ||
+                                                    rtser.toString() == '94')
+                                                ? 'images/TP${index + 1}_1/B1_TP${index + 1}_1.png'
+                                                : 'images/TP${index + 1}/B1_TP${index + 1}.png'
+                                            : 'images/TP${index + 1}/B1_TP${index + 1}.png',
+                                      ),
                                     ),
                                   ),
                                   Positioned(
@@ -350,47 +431,264 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                               barrierDismissible:
                                                   false, // user must tap button!
                                               builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                    (index + 1 == 1)
-                                                        ? 'ตัวอย่าง เทมเพลต ${index + 1} ( Standard )'
-                                                        : 'ตัวอย่าง เทมเพลต ${index + 1} ',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.black,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                  content:
-                                                      SingleChildScrollView(
-                                                    child: ListBody(
-                                                      children: <Widget>[
-                                                        Image(
-                                                          image: AssetImage(
-                                                              'images/Receip_Template_${index + 1}.png'),
+                                                return StreamBuilder(
+                                                    stream: Stream.periodic(
+                                                        const Duration(
+                                                            milliseconds: 400)),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      return AlertDialog(
+                                                        backgroundColor:
+                                                            Colors.grey[200],
+                                                        title: Column(
+                                                          children: [
+                                                            if (index + 1 == 8)
+                                                              Text(
+                                                                (rtser.toString() == '72' ||
+                                                                        rtser.toString() ==
+                                                                            '92' ||
+                                                                        rtser.toString() ==
+                                                                            '93' ||
+                                                                        rtser.toString() ==
+                                                                            '94')
+                                                                    ? 'พิเศษเฉพาะเครือ องค์การตลาด กระทรวงมหาดไทย [อ.ต.] '
+                                                                    : '',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                            .orange[
+                                                                        900],
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        13.0),
+                                                              ),
+                                                            Text(
+                                                              (index + 1 == 1)
+                                                                  ? 'ตัวอย่าง เทมเพลต ${index + 1} ( Standard )'
+                                                                  : 'ตัวอย่าง เทมเพลต ${index + 1} ',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                for (int i = 0;
+                                                                    i < 3;
+                                                                    i++)
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            2.0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () async {
+                                                                        setState(
+                                                                            () {
+                                                                          sertap_dialog_tempage =
+                                                                              i;
+                                                                          _controller
+                                                                              .value = Matrix4.identity()
+                                                                            ..scale(1.0);
+                                                                        });
+                                                                        // print(
+                                                                        //     '${'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png'}');
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: (sertap_dialog_tempage != i)
+                                                                              ? null
+                                                                              : Colors.blue[200],
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                        ),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            Text(
+                                                                          '${i + 1}',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                Colors.blue,
+                                                                            fontFamily:
+                                                                                Font_.Fonts_T,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                              ],
+                                                            )
+                                                          ],
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      child: const Text(
-                                                        'ปิด',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.black,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                        content:
+                                                            InteractiveViewer(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          scaleEnabled: false,
+                                                          trackpadScrollCausesScale:
+                                                              false,
+                                                          transformationController:
+                                                              _controller,
+                                                          minScale: 0.9,
+                                                          maxScale: 2.0,
+                                                          constrained: true,
+                                                          boundaryMargin:
+                                                              const EdgeInsets
+                                                                      .all(
+                                                                  double
+                                                                      .infinity),
+                                                          child:
+                                                              SingleChildScrollView(
+                                                            child: ListBody(
+                                                              children: <Widget>[
+                                                                Image(
+                                                                  image:
+                                                                      AssetImage(
+                                                                    (index + 1 ==
+                                                                            8)
+                                                                        ? (rtser.toString() == '72' ||
+                                                                                rtser.toString() == '92' ||
+                                                                                rtser.toString() == '93' ||
+                                                                                rtser.toString() == '94')
+                                                                            ? 'images/TP${index + 1}_1/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}_1.png'
+                                                                            : 'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png'
+                                                                        : 'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png',
+                                                                    // 'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png'
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
+                                                        actions: <Widget>[
+                                                          Column(
+                                                            children: [
+                                                              Divider(
+                                                                color: Colors
+                                                                    .grey[300],
+                                                                height: 1.0,
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5.0,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color: Colors
+                                                                          .grey,
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                    ),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        IconButton(
+                                                                          icon:
+                                                                              const Icon(
+                                                                            Icons.zoom_in,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                          onPressed:
+                                                                              _zoomInSVG,
+                                                                        ),
+                                                                        IconButton(
+                                                                          icon:
+                                                                              const Icon(
+                                                                            Icons.zoom_out,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                          onPressed:
+                                                                              _zoomOutSVG,
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    child:
+                                                                        Align(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .centerRight,
+                                                                      child:
+                                                                          Container(
+                                                                        width:
+                                                                            80,
+                                                                        decoration:
+                                                                            const BoxDecoration(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                        ),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            TextButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            setState(() {
+                                                                              _controller.value = Matrix4.identity()..scale(1.0);
+                                                                            });
+                                                                            Navigator.pop(context,
+                                                                                'OK');
+                                                                          },
+                                                                          child:
+                                                                              const Text(
+                                                                            'ปิด',
+                                                                            style: TextStyle(
+                                                                                color: Colors.white,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      );
+                                                    });
                                               },
                                             );
                                           },

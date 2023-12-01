@@ -1,9 +1,14 @@
 // ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
+import 'dart:io';
+import 'dart:js_interop';
+
+import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chaoperty/Constant/Myconstant.dart';
 import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:flutter/material.dart';
@@ -16,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../AdminScaffold/AdminScaffold.dart';
 import '../Home/Home_Screen.dart';
 import '../INSERT_Log/Insert_log.dart';
+import '../Model/GetC_Otp.dart';
 import '../Model/GetUser_Model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
@@ -34,33 +40,63 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   DateTime datex = DateTime.now();
   final Formbecause_ = TextEditingController();
+  List<OtpModel> otpModels = [];
+  String? ser_id, tem_id, user_id, Value_randomNumber, text_card = 'ID Card';
   // EmailOTP myauth = EmailOTP();
   @override
   void initState() {
     super.initState();
     checkPreferance();
+    read_GC_otp();
+  }
+
+  Future<Null> read_GC_otp() async {
+    if (otpModels.isNotEmpty) {
+      setState(() {
+        otpModels.clear();
+      });
+    }
+
+    String url = '${MyConstant().domain}/GC_otp.php?isAdd=true';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('read_GC_rental///// $result');
+      for (var map in result) {
+        OtpModel otpModel = OtpModel.fromJson(map);
+        var ser_idx = otpModel.ser_id;
+        var tem_idx = otpModel.tem_id;
+        var user_idx = otpModel.user_id;
+        var use_idx = otpModel.use_id;
+        setState(() {
+          if (use_idx == '1') {
+            ser_id = ser_idx;
+            tem_id = tem_idx;
+            user_id = user_idx;
+          }
+
+          otpModels.add(otpModel);
+        });
+      }
+    } catch (e) {}
   }
 
   Future SendEmail(String name, String email, String message) async {
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
-    // const serviceId = 'service_8x6ajr8';
-    // const templateId = 'template_ulify8d';
-    // const userId = 'Xb8OnrjEz8t0FUpOr';
-    const serviceId = 'service_njccq3b';
-    const templateId = 'template_ulify8d';
-    const userId = '8vgTm3ROqseE-a1vE';
     final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json'
         }, //This line makes sure it works for all platforms.
         body: json.encode({
-          'service_id': serviceId,
-          'template_id': templateId,
-          'user_id': userId,
+          'service_id': ser_id,
+          'template_id': tem_id,
+          'user_id': user_id,
           'template_params': {
             'from_name': name,
             'from_email': email,
-            'message': message
+            'message': 'OTP : $message'
           }
         }));
     return response.statusCode;
@@ -489,7 +525,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: TextFormField(
-                                        keyboardType: TextInputType.number,
+                                        // keyboardType: TextInputType.number,
                                         controller: Formbecause_,
                                         obscureText: true,
                                         validator: (value) {
@@ -1072,6 +1108,12 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Future<Null> signInThread() async {
+    Random random = Random();
+    int c = random.nextInt(9000) + 1000;
+    setState(() {
+      Value_randomNumber = c.toString();
+    });
+
     String url =
         '${MyConstant().domain}/GC_user.php?isAdd=true&email=$email_username';
 
@@ -1098,8 +1140,9 @@ class _SignInScreenState extends State<SignInScreen> {
               // Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
               routeToService(AdminScafScreen(route: 'หน้าหลัก'), userModel);
               var on = '1';
+              var randomNumber = Value_randomNumber;
               String url =
-                  '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
+                  '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on&randomNumber=$randomNumber';
 
               try {
                 var response = await http.get(Uri.parse(url));
@@ -1164,33 +1207,65 @@ class _SignInScreenState extends State<SignInScreen> {
                       height: 5.0,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 100,
-                              decoration: const BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
+                          Expanded(
+                            child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: TextButton(
-                                onPressed: () async {
-                                  Navigator.pop(context, 'OK');
-                                },
-                                child: const Text(
-                                  'ยืนยัน',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T),
+                              child: Container(
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextButton(
+                                  onPressed: () async {
+                                    changLoginOut();
+                                    Navigator.pop(context, 'OK');
+                                  },
+                                  child: const Text(
+                                    'ออกระบบจากเครื่องอื่นๆ',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextButton(
+                                  onPressed: () async {
+                                    Navigator.pop(context, 'OK');
+                                  },
+                                  child: const Text(
+                                    'ยืนยัน',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T),
+                                  ),
                                 ),
                               ),
                             ),
@@ -1222,6 +1297,47 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
+  Future<Null> changLoginOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = email_username;
+
+    String url =
+        '${MyConstant().domain}/changLoginOutAll.php?isAdd=true&ren=$ren&user=$user';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print('changLoginOut>>>>${result.toString()}');
+      if (result.toString() == 'true') {
+        signInThread();
+        // deall_Trans_select();
+        // SharedPreferences preferences = await SharedPreferences.getInstance();
+        // var ser = preferences.getString('ser');
+        // var on = '0';
+        // String url =
+        //     '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
+
+        // try {
+        //   var response = await http.get(Uri.parse(url));
+
+        //   var result = json.decode(response.body);
+        //   print(result);
+        //   if (result.toString() == 'true') {
+        //     SharedPreferences preferences =
+        //         await SharedPreferences.getInstance();
+        //     preferences.clear();
+        //     routToService(SignInScreen());
+        //   } else {
+        //     // ScaffoldMessenger.of(context).showSnackBar(
+        //     //   SnackBar(content: Text('(ผิดพลาด)')),
+        //     // );
+        //   }
+        // } catch (e) {}
+      }
+    } catch (e) {}
+  }
+
   Future<Null> routeToService(
     Widget myWidget,
     UserModel userModel,
@@ -1239,6 +1355,7 @@ class _SignInScreenState extends State<SignInScreen> {
     preferences.setString('lavel', userModel.user_id.toString());
     preferences.setString('route', 'หน้าหลัก');
     preferences.setString('pakanPay', 0.toString());
+    preferences.setString('login', Value_randomNumber.toString());
     Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => myWidget,

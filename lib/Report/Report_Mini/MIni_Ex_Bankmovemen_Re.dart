@@ -21,13 +21,13 @@ class Mini_Ex_BankmovemenReport {
       NameFile_,
       _verticalGroupValue_NameFile,
       Value_Report,
-      _TransReBillModels_Bankmovemen,
-      TransReBillModels_Bankmovemen,
+      TransReBillBank,
+      TransHisBillBank,
       renTal_name,
       zoneModels_report,
-      Value_Chang_Zone_Income,
-      Mon_Income,
-      YE_Income,
+      zone_name_Trans_Mon,
+      Mon_Trans_Mon,
+      YE_Trans_Mon,
       payMentModels) async {
     final x.Workbook workbook = x.Workbook();
 
@@ -174,10 +174,14 @@ class Mini_Ex_BankmovemenReport {
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
       (ser_type_repro == '1')
-          ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ ( โซน : $Value_Chang_Zone_Income)'
+          ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ ( โซน : $zone_name_Trans_Mon)'
           : (ser_type_repro == '2')
-              ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Income)'
-              : 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Income)',
+              ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $zone_name_Trans_Mon)'
+              : (ser_type_repro == '3')
+                  ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะล็อคเสียบ ( โซน : $zone_name_Trans_Mon)'
+                  : (ser_type_repro == '4')
+                      ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะรายการที่ออกใบกำกับภาษี ( โซน : $zone_name_Trans_Mon)'
+                      : 'รายงานประวัติชำระรอตรวจสอบแบบย่อ ( โซน : $zone_name_Trans_Mon)',
       // 'รายงานการเคลื่อนไหวธนาคารแบบย่อ ( โซน : $Value_Chang_Zone_Income)'
     );
 // ExcelSheetProtectionOption
@@ -202,7 +206,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('N2').cellStyle = globalStyle22;
     // sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
-    sheet.getRangeByName('K2').setText('เดือน : ${Mon_Income} (${YE_Income}) ');
+    sheet
+        .getRangeByName('K2')
+        .setText('เดือน : ${Mon_Trans_Mon} (${YE_Trans_Mon}) ');
 
     globalStyle2.hAlign = x.HAlignType.center;
     sheet.getRangeByName('A2').cellStyle = globalStyle22;
@@ -222,9 +228,7 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('M3').cellStyle = globalStyle22;
     sheet.getRangeByName('N3').cellStyle = globalStyle22;
     // sheet.getRangeByName('O3').cellStyle = globalStyle22;
-    sheet
-        .getRangeByName('A3')
-        .setText('ใบเสร็จ : ${_TransReBillModels_Bankmovemen.length}');
+    sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillBank.length}');
 
     sheet.getRangeByName('A3').columnWidth = 18;
     sheet.getRangeByName('B3').columnWidth = 18;
@@ -304,9 +308,7 @@ class Mini_Ex_BankmovemenReport {
     int indextotol_ = 0;
     int ser_dis = 0;
 
-    for (var index1 = 0;
-        index1 < _TransReBillModels_Bankmovemen.length;
-        index1++) {
+    for (var index1 = 0; index1 < TransReBillBank.length; index1++) {
       all_Total = all_Total + 1;
       var index = indextotol;
       dynamic numberColor = index1 % 2 == 0 ? globalStyle22 : globalStyle222;
@@ -334,71 +336,67 @@ class Mini_Ex_BankmovemenReport {
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${index1 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
-            _TransReBillModels_Bankmovemen[index1].doctax != ''
-                ? '${_TransReBillModels_Bankmovemen[index1].docno}'
-                : '${_TransReBillModels_Bankmovemen[index1].refno}',
+            (TransReBillBank[index1].doctax != '')
+                ? '${TransReBillBank[index1].doctax}'
+                : TransReBillBank[index1].docno != ''
+                    ? '${TransReBillBank[index1].docno}'
+                    : '${TransReBillBank[index1].refno}',
           );
 
       sheet
           .getRangeByName('C${indextotol + 5 - 1}')
-          .setText('${_TransReBillModels_Bankmovemen[index1].daterec}');
+          .setText('${TransReBillBank[index1].daterec}');
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
-          (_TransReBillModels_Bankmovemen[index1].zser == null)
-              ? '${_TransReBillModels_Bankmovemen[index1].zser1}'
-              : '${_TransReBillModels_Bankmovemen[index1].zser}');
+          (TransReBillBank[index1].zser == null)
+              ? '${TransReBillBank[index1].zser1}'
+              : '${TransReBillBank[index1].zser}');
 
       sheet.getRangeByName('E${indextotol + 5 - 1}').setText(
-            (_TransReBillModels_Bankmovemen[index1].zn == null)
-                ? '${_TransReBillModels_Bankmovemen[index1].znn}'
-                : '${_TransReBillModels_Bankmovemen[index1].zn}',
+            (TransReBillBank[index1].zn == null)
+                ? '${TransReBillBank[index1].znn}'
+                : '${TransReBillBank[index1].zn}',
           );
       sheet.getRangeByName('F${indextotol + 5 - 1}').setText(
-          (_TransReBillModels_Bankmovemen[index1].ln == null)
-              ? '${_TransReBillModels_Bankmovemen[index1].room_number}'
-              : '${_TransReBillModels_Bankmovemen[index1].ln}');
+          (TransReBillBank[index1].ln == null)
+              ? '${TransReBillBank[index1].room_number}'
+              : '${TransReBillBank[index1].ln}');
       sheet.getRangeByName('G${indextotol + 5 - 1}').setText(
-            (_TransReBillModels_Bankmovemen[index1].sname == null ||
-                    _TransReBillModels_Bankmovemen[index1].sname.toString() ==
-                        '' ||
-                    _TransReBillModels_Bankmovemen[index1].sname.toString() ==
-                        'null')
-                ? '${_TransReBillModels_Bankmovemen[index1].remark}'
-                : '${_TransReBillModels_Bankmovemen[index1].sname}',
+            (TransReBillBank[index1].sname == null ||
+                    TransReBillBank[index1].sname.toString() == '' ||
+                    TransReBillBank[index1].sname.toString() == 'null')
+                ? '${TransReBillBank[index1].remark}'
+                : '${TransReBillBank[index1].sname}',
           );
       sheet.getRangeByName('H${indextotol + 5 - 1}').setText(
-            '${_TransReBillModels_Bankmovemen[index1].type}',
+            '${TransReBillBank[index1].type}',
           );
       sheet.getRangeByName('I${indextotol + 5 - 1}').setText(
-          (_TransReBillModels_Bankmovemen[index1].bank == null)
+          (TransReBillBank[index1].bank == null)
               ? ''
-              : '${_TransReBillModels_Bankmovemen[index1].bank!}');
+              : '${TransReBillBank[index1].bank!}');
       sheet.getRangeByName('J${indextotol + 5 - 1}').setText(
-          (_TransReBillModels_Bankmovemen[index1].bno == null)
+          (TransReBillBank[index1].bno == null)
               ? ''
-              : '${_TransReBillModels_Bankmovemen[index1].bno!}');
+              : '${TransReBillBank[index1].bno!}');
       sheet.getRangeByName('K${indextotol + 5 - 1}').setText(
-          (_TransReBillModels_Bankmovemen[index1].slip == null ||
-                  _TransReBillModels_Bankmovemen[index1].slip! == 'null')
+          (TransReBillBank[index1].slip == null ||
+                  TransReBillBank[index1].slip! == 'null')
               ? ''
-              : '${_TransReBillModels_Bankmovemen[index1].slip}');
+              : '${TransReBillBank[index1].slip}');
       sheet.getRangeByName('L${indextotol + 5 - 1}').setNumber(
-          (_TransReBillModels_Bankmovemen[index1].total_dis == null)
+          (TransReBillBank[index1].total_dis == null)
               ? 0
-              : double.parse(
-                      _TransReBillModels_Bankmovemen[index1].total_bill!) -
-                  double.parse(
-                      _TransReBillModels_Bankmovemen[index1].total_dis!));
+              : double.parse(TransReBillBank[index1].total_bill!) -
+                  double.parse(TransReBillBank[index1].total_dis!));
       sheet.getRangeByName('M${indextotol + 5 - 1}').setNumber(
-          (_TransReBillModels_Bankmovemen[index1].total_bill == null)
+          (TransReBillBank[index1].total_bill == null)
               ? 0
-              : double.parse(
-                  _TransReBillModels_Bankmovemen[index1].total_bill!));
+              : double.parse(TransReBillBank[index1].total_bill!));
 
       sheet.getRangeByName('N${indextotol + 5 - 1}').setNumber(
-          (_TransReBillModels_Bankmovemen[index1].total_dis == null)
-              ? double.parse(_TransReBillModels_Bankmovemen[index1].total_bill!)
-              : double.parse(
-                  _TransReBillModels_Bankmovemen[index1].total_dis!));
+          (TransReBillBank[index1].total_dis == null)
+              ? double.parse(TransReBillBank[index1].total_bill!)
+              : double.parse(TransReBillBank[index1].total_dis!));
       print('-------------------------');
     }
     // sheet
@@ -509,10 +507,14 @@ class Mini_Ex_BankmovemenReport {
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
       String path = await FileSaver.instance.saveFile(
           (ser_type_repro == '1')
-              ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ ( โซน : $Value_Chang_Zone_Income)'
+              ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ ( โซน : $zone_name_Trans_Mon)'
               : (ser_type_repro == '2')
-                  ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $Value_Chang_Zone_Income)'
-                  : 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะล็อคเสียบ ( โซน : $Value_Chang_Zone_Income)',
+                  ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะรายการที่มีส่วนลด ( โซน : $zone_name_Trans_Mon)'
+                  : (ser_type_repro == '3')
+                      ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะล็อคเสียบ ( โซน : $zone_name_Trans_Mon)'
+                      : (ser_type_repro == '4')
+                          ? 'รายงานการเคลื่อนไหวธนาคารแบบย่อ เฉพาะรายการที่ออกใบกำกับภาษี ( โซน : $zone_name_Trans_Mon)'
+                          : 'รายงานประวัติชำระรอตรวจสอบแบบย่อ ( โซน : $zone_name_Trans_Mon)',
           // "รายงานการเคลื่อนไหวธนาคารแบบย่อ",
           data,
           "xlsx",

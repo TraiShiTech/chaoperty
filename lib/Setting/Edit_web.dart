@@ -22,6 +22,7 @@ import '../Model/GetPerMission_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetRenTalimg_Model.dart';
 import '../Model/GetUser_Model.dart';
+import '../Model/GetZone_Model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 
@@ -114,7 +115,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
     'อุทัยธานี',
     'อุบลราชธานี',
   ];
-
+  List<String> Show_Titel_webmarket = [
+    'โซนพื้นที่',
+    'ชื้อพื้นที่',
+    'ขนาดพื้นที่(ต.ร.ม.)',
+    'ค่าเช่าต่องวด',
+    'เลขที่ใบสัญญา',
+    'เลขที่ใบเสนอราคา',
+    'วันสิ้นสุดสัญญา',
+    'สถานะ',
+  ];
+  List<ZoneModel> zoneModels = [];
   List<RenTalModel> renTalModels = [];
   List<PerMissionModel> perMissionModels = [];
   List<RenTaldataModel> renTaldataModels = [];
@@ -122,6 +133,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
   List<RenTalimgModel> renTalimgModels = [];
   List<dynamic> facilities = [];
   List<dynamic> nearby_places = [];
+  List<dynamic> title_webs_list = [];
   String? ser_user,
       position_user,
       fname_user,
@@ -141,7 +153,8 @@ class _EditwebScreenState extends State<EditwebScreen> {
       qr_img_,
       n_places_,
       f_lities,
-      renTal_statusweb;
+      renTal_statusweb,
+      title_webs;
 
   final rental_name_text = TextEditingController();
   final rental_Line_text = TextEditingController();
@@ -161,6 +174,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
     read_GC_area();
     read_GC_rentaldata();
     read_GC_rental_img();
+    read_GC_zone();
     super.initState();
   }
 
@@ -171,6 +185,55 @@ class _EditwebScreenState extends State<EditwebScreen> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  Future<Null> read_GC_zone() async {
+    if (zoneModels.length != 0) {
+      zoneModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+
+    String url = '${MyConstant().domain}/GC_zone.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      // Map<String, dynamic> map = Map();
+      // map['ser'] = '0';
+      // map['rser'] = '0';
+      // map['zn'] = 'ทั้งหมด';
+      // map['qty'] = '0';
+      // map['img'] = '0';
+      // map['data_update'] = '0';
+
+      // ZoneModel zoneModelx = ZoneModel.fromJson(map);
+
+      // setState(() {
+      //   zoneModels.add(zoneModelx);
+      // });
+
+      for (var map in result) {
+        ZoneModel zoneModel = ZoneModel.fromJson(map);
+        setState(() {
+          zoneModels.add(zoneModel);
+        });
+      }
+
+      zoneModels.sort((a, b) {
+        if (a.zn == 'ทั้งหมด') {
+          return -1; // 'all' should come before other elements
+        } else if (b.zn == 'ทั้งหมด') {
+          return 1; // 'all' should come after other elements
+        } else {
+          return a.zn!
+              .compareTo(b.zn!); // sort other elements in ascending order
+        }
+      });
+    } catch (e) {}
   }
 
   Future<Null> signInThread() async {
@@ -307,9 +370,12 @@ class _EditwebScreenState extends State<EditwebScreen> {
           renTal_statusweb = renTaldataModel.status_Web.toString();
           man_img_ = renTaldataModel.man_Image.toString();
           qr_img_ = renTaldataModel.qr_Image.toString();
+          title_webs = renTaldataModel.title_web.toString();
           renTaldataModels.add(renTaldataModel);
         });
       }
+
+      ///title_webs_list
       for (int index = 0; index < renTaldataModels.length; index++) {
         String nearbyPlacesStr = n_places_.toString();
         List<String> nearbyPlacesList = nearbyPlacesStr.split(",");
@@ -326,9 +392,28 @@ class _EditwebScreenState extends State<EditwebScreen> {
             .map((faci) => faci.trim())
             .where((faci) => faci.isNotEmpty)
             .toList();
+
+        //////////----------------------------------
+        String titlewebs = title_webs.toString();
+        List<String> titlewebsList = titlewebs.split(",");
+        // List<dynamic> faciliTies =
+        //     facilitiesList.map((place) => place.trim()).toList();
+        List<dynamic> titlewebsListTies = titlewebsList
+            .map((faci) => faci.trim())
+            .where((faci) => faci.isNotEmpty)
+            .toList();
         setState(() {
+          title_webs_list = titlewebsListTies;
           nearby_places = nearbyPlaces;
           facilities = faciliTies;
+        });
+        title_webs_list.sort((a, b) {
+          if (a is Comparable && b is Comparable) {
+            return a.compareTo(b);
+          } else {
+            // Handle non-comparable elements if needed
+            return 0;
+          }
         });
       }
     } catch (e) {}
@@ -551,24 +636,36 @@ class _EditwebScreenState extends State<EditwebScreen> {
         String? ren = preferences.getString('renTalSer');
         String? ser_user = preferences.getString('ser');
         //UpC_rental_data_editweb
+        var response = await http.get(Uri.parse(url));
 
-        try {
-          var response = await http.get(Uri.parse(url));
+        var result = await json.decode(response.body);
 
-          var result = await json.decode(response.body);
+        if (result.toString() == 'true') {
+          setState(() {
+            signInThread();
+            read_GC_rental();
+            read_GC_area();
+            read_GC_rentaldata();
+            read_GC_rental_img();
+          });
+        } else {}
+        // try {
+        //   var response = await http.get(Uri.parse(url));
 
-          if (result.toString() == 'true') {
-            setState(() {
-              signInThread();
-              read_GC_rental();
-              read_GC_area();
-              read_GC_rentaldata();
-              read_GC_rental_img();
-            });
-          } else {}
-        } catch (e) {
-          print(e);
-        }
+        //   var result = await json.decode(response.body);
+
+        //   if (result.toString() == 'true') {
+        //     setState(() {
+        //       signInThread();
+        //       read_GC_rental();
+        //       read_GC_area();
+        //       read_GC_rentaldata();
+        //       read_GC_rental_img();
+        //     });
+        //   } else {}
+        // } catch (e) {
+        //   print(e);
+        // }
         // UpImg(context, fileName, Path_, Ser_);
       } else {
         print('File upload failed with status code: ${request.status}');
@@ -580,7 +677,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
 
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: Column(children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
@@ -600,13 +697,13 @@ class _EditwebScreenState extends State<EditwebScreen> {
           Container(
             width: (!Responsive.isDesktop(context))
                 ? 800
-                : MediaQuery.of(context).size.width * 0.84,
+                : MediaQuery.of(context).size.width * 0.85,
             height: MediaQuery.of(context).size.height,
             decoration: const BoxDecoration(
               color: AppbackgroundColor.Sub_Abg_Colors,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(0),
-                topRight: Radius.circular(0),
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
                 bottomRight: Radius.circular(10),
               ),
@@ -619,13 +716,13 @@ class _EditwebScreenState extends State<EditwebScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
+                      const Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Text(
                               'ตั้งค่าหน้าเว็ป ',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: SettingScreen_Color.Colors_Text1_,
                                 fontFamily: FontWeight_.Fonts_T,
                                 fontWeight: FontWeight.bold,
@@ -641,8 +738,8 @@ class _EditwebScreenState extends State<EditwebScreen> {
                           onTap: () => _launchURL(),
                           child: Container(
                             padding: const EdgeInsets.all(4.0),
-                            decoration: const BoxDecoration(
-                              color: Colors.brown,
+                            decoration: BoxDecoration(
+                              color: Colors.brown.withOpacity(0.5),
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
                                   topRight: Radius.circular(8),
@@ -653,9 +750,10 @@ class _EditwebScreenState extends State<EditwebScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                '🌍 เปิดเว็ปไซต์ $foder',
+                                '🌍 เปิดเว็ปไซต์ $renTal_name',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.red[900],
                                   fontFamily: FontWeight_.Fonts_T,
                                   fontWeight: FontWeight.bold,
                                   //fontSize: 10.0
@@ -802,7 +900,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                             size: 35.0,
                                                           ),
                                                   ),
-                                                  Text(
+                                                  const Text(
                                                     'เปิดร้าน',
                                                     style: TextStyle(
                                                       color: SettingScreen_Color
@@ -835,7 +933,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                 ),
                                                 child: (man_img_ == null ||
                                                         man_img_ == '')
-                                                    ? Icon(Icons
+                                                    ? const Icon(Icons
                                                         .image_not_supported)
                                                     : Image.network(
                                                         '${MyConstant().domain}/files/$foder/webfont/manimg/$man_img_',
@@ -1040,8 +1138,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                   .subtitle1
                                                   ?.copyWith(
                                                     fontSize: 15.0,
-                                                    // fontWeight:
-                                                    //     FontWeight.w700,
+                                                    fontWeight: FontWeight.w700,
                                                   ),
                                             ),
                                           ),
@@ -1110,7 +1207,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                   .all(Radius
                                                                       .circular(
                                                                           10.0))),
-                                                          title: Center(
+                                                          title: const Center(
                                                               child: Text(
                                                             'มีรูปหน้าปกอยู่แล้ว ',
                                                             style: TextStyle(
@@ -1124,9 +1221,9 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                         .Fonts_T),
                                                           )),
                                                           content:
-                                                              SingleChildScrollView(
+                                                              const SingleChildScrollView(
                                                             child: ListBody(
-                                                              children: const <Widget>[
+                                                              children: <Widget>[
                                                                 Text(
                                                                   'มีหน้าปก หากต้องการอัพโหลดกรุณาลบรูปหน้าปกที่มีอยู่แล้วก่อน',
                                                                   style: TextStyle(
@@ -1250,8 +1347,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                   .subtitle1
                                                   ?.copyWith(
                                                     fontSize: 15.0,
-                                                    // fontWeight:
-                                                    //     FontWeight.w700,
+                                                    fontWeight: FontWeight.w700,
                                                   ),
                                             ),
                                           ),
@@ -1438,8 +1534,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                   .subtitle1
                                                   ?.copyWith(
                                                     fontSize: 15.0,
-                                                    // fontWeight:
-                                                    //     FontWeight.w700,
+                                                    fontWeight: FontWeight.w700,
                                                   ),
                                             ),
                                           ),
@@ -1620,95 +1715,156 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                        child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topCenter,
-                                          child: Text(
-                                            '📠 ช่องทางการติดต่อ',
-
-                                            overflow: TextOverflow.ellipsis,
-                                            // minFontSize: 1,
-                                            // maxFontSize: 12,
-                                            maxLines: 1,
-                                            textAlign: TextAlign.left,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle1
-                                                ?.copyWith(
-                                                  fontSize: 15.0,
-                                                  // fontWeight:
-                                                  //     FontWeight.w700,
-                                                ),
-                                          ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[100]!
+                                              .withOpacity(0.5),
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                          border: Border.all(
+                                              color: Colors.grey, width: 0.5),
                                         ),
-                                        Stack(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
-                                            Container(
-                                              height: 190,
-                                              width: 210,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[100]!
-                                                    .withOpacity(0.5),
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10),
-                                                ),
-                                                border: Border.all(
-                                                    color: Colors.grey,
-                                                    width: 1),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(3.0),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(8.0),
-                                                    topRight:
-                                                        Radius.circular(8.0),
-                                                    bottomLeft:
-                                                        Radius.circular(8.0),
-                                                    bottomRight:
-                                                        Radius.circular(8.0),
-                                                  ),
-                                                  child: (qr_img_ == null ||
-                                                          qr_img_ == '')
-                                                      ? Icon(Icons
-                                                          .image_not_supported)
-                                                      : Image.network(
-                                                          '${MyConstant().domain}/files/$foder/webfont/qrimg/$qr_img_',
-                                                          fit: BoxFit.fill,
-                                                          height: 180,
-                                                          width: 200,
-                                                        ),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 0,
-                                              left: 20,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: InkWell(
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
                                                   child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: AppbackgroundColor
+                                                              .TiTile_Colors
+                                                          .withOpacity(0.7),
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(0),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          0)),
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 0.5),
+                                                    ),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topCenter,
+                                                      child: Text(
+                                                        '📠 ช่องทางการติดต่อ',
+
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        // minFontSize: 1,
+                                                        // maxFontSize: 12,
+                                                        maxLines: 1,
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .subtitle1
+                                                            ?.copyWith(
+                                                              fontSize: 15.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Stack(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Container(
+                                                    height: 190,
+                                                    width: 210,
+                                                    decoration: BoxDecoration(
+                                                      color: AppbackgroundColor
+                                                              .TiTile_Colors
+                                                          .withOpacity(0.7),
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 1),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              3.0),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8.0),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8.0),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  8.0),
+                                                        ),
+                                                        child: (qr_img_ ==
+                                                                    null ||
+                                                                qr_img_ == '')
+                                                            ? const Icon(Icons
+                                                                .image_not_supported)
+                                                            : Image.network(
+                                                                '${MyConstant().domain}/files/$foder/webfont/qrimg/$qr_img_',
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                                height: 180,
+                                                                width: 200,
+                                                              ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  bottom: 0,
+                                                  left: 20,
+                                                  child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
-                                                            4.0),
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.green,
-                                                      borderRadius:
-                                                          BorderRadius.only(
+                                                            8.0),
+                                                    child: InkWell(
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(4.0),
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color: Colors.green,
+                                                          borderRadius: BorderRadius.only(
                                                               topLeft: Radius
                                                                   .circular(8),
                                                               topRight: Radius
@@ -1719,603 +1875,620 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                   Radius
                                                                       .circular(
                                                                           8)),
-                                                      // border: Border.all(
-                                                      //     color: Colors.grey, width: 3),
-                                                    ),
-                                                    width: 150,
-                                                    child: Center(
-                                                      child: Text(
-                                                        (qr_img_ == null ||
-                                                                qr_img_ == '')
-                                                            ? 'เพิ่ม'
-                                                            : 'แก้ไข',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          //fontSize: 10.0
+                                                          // border: Border.all(
+                                                          //     color: Colors.grey, width: 3),
+                                                        ),
+                                                        width: 150,
+                                                        child: Center(
+                                                          child: Text(
+                                                            (qr_img_ == null ||
+                                                                    qr_img_ ==
+                                                                        '')
+                                                                ? 'เพิ่ม'
+                                                                : 'แก้ไข',
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              //fontSize: 10.0
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  onTap: () async {
-                                                    if (qr_img_ == null ||
-                                                        qr_img_.toString() ==
-                                                            '') {
-                                                      uploadFile_Imgman(
-                                                          'qrimg');
-                                                    } else {
-                                                      showDialog<void>(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            false, // user must tap button!
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            shape: const RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            10.0))),
-                                                            title: Center(
-                                                                child: Text(
-                                                              'มีรูป QR Code อยู่แล้ว',
-                                                              style: TextStyle(
-                                                                  color: SettingScreen_Color
-                                                                      .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T),
-                                                            )),
-                                                            content:
-                                                                SingleChildScrollView(
-                                                              child: ListBody(
-                                                                children: const <Widget>[
-                                                                  Text(
-                                                                    'มีหน้าปก หากต้องการอัพโหลดกรุณาลบรูปหน้าปกที่มีอยู่แล้วก่อน',
-                                                                    style: TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            actions: <Widget>[
-                                                              Column(
-                                                                children: [
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  const Divider(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    height: 4.0,
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                      onTap: () async {
+                                                        if (qr_img_ == null ||
+                                                            qr_img_.toString() ==
+                                                                '') {
+                                                          uploadFile_Imgman(
+                                                              'qrimg');
+                                                        } else {
+                                                          showDialog<void>(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                false, // user must tap button!
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                shape: const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(10.0))),
+                                                                title:
+                                                                    const Center(
                                                                         child:
-                                                                            InkWell(
-                                                                          child: Container(
-                                                                              width: 50,
-                                                                              decoration: BoxDecoration(
-                                                                                color: Colors.red[600],
-                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                // border: Border.all(color: Colors.white, width: 1),
-                                                                              ),
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: const Center(
-                                                                                  child: Text(
-                                                                                'ลบรูป',
-                                                                                style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                              ))),
-                                                                          onTap:
-                                                                              () async {
-                                                                            // String url =
-                                                                            //     await '${MyConstant().domain}/files/$foder/logo/$img_logo';
-                                                                            deletedFile_(
-                                                                              'qrimg',
-                                                                              '$qr_img_',
-                                                                            );
-
-                                                                            Navigator.of(context).pop();
-                                                                          },
-                                                                        ),
+                                                                            Text(
+                                                                  'มีรูป QR Code อยู่แล้ว',
+                                                                  style: TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                )),
+                                                                content:
+                                                                    const SingleChildScrollView(
+                                                                  child:
+                                                                      ListBody(
+                                                                    children: <Widget>[
+                                                                      Text(
+                                                                        'มีหน้าปก หากต้องการอัพโหลดกรุณาลบรูปหน้าปกที่มีอยู่แล้วก่อน',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                SettingScreen_Color.Colors_Text2_,
+                                                                            fontFamily: Font_.Fonts_T),
                                                                       ),
-                                                                      SizedBox(
-                                                                        child:
-                                                                            Row(
-                                                                          children: [
-                                                                            Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: InkWell(
-                                                                                child: Container(
-                                                                                    width: 50,
-                                                                                    decoration: const BoxDecoration(
-                                                                                      color: Colors.black,
-                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                      // border: Border.all(color: Colors.white, width: 1),
-                                                                                    ),
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: const Center(
-                                                                                        child: Text(
-                                                                                      'ปิด',
-                                                                                      style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                    ))),
-                                                                                onTap: () {
-                                                                                  Navigator.of(context).pop();
-                                                                                },
-                                                                              ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                actions: <Widget>[
+                                                                  Column(
+                                                                    children: [
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5.0,
+                                                                      ),
+                                                                      const Divider(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        height:
+                                                                            4.0,
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            5.0,
+                                                                      ),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                InkWell(
+                                                                              child: Container(
+                                                                                  width: 50,
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: Colors.red[600],
+                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    // border: Border.all(color: Colors.white, width: 1),
+                                                                                  ),
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: const Center(
+                                                                                      child: Text(
+                                                                                    'ลบรูป',
+                                                                                    style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                  ))),
+                                                                              onTap: () async {
+                                                                                // String url =
+                                                                                //     await '${MyConstant().domain}/files/$foder/logo/$img_logo';
+                                                                                deletedFile_(
+                                                                                  'qrimg',
+                                                                                  '$qr_img_',
+                                                                                );
+
+                                                                                Navigator.of(context).pop();
+                                                                              },
                                                                             ),
-                                                                          ],
-                                                                        ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: InkWell(
+                                                                                    child: Container(
+                                                                                        width: 50,
+                                                                                        decoration: const BoxDecoration(
+                                                                                          color: Colors.black,
+                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: const Center(
+                                                                                            child: Text(
+                                                                                          'ปิด',
+                                                                                          style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                        ))),
+                                                                                    onTap: () {
+                                                                                      Navigator.of(context).pop();
+                                                                                    },
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
                                                                       ),
                                                                     ],
                                                                   ),
                                                                 ],
-                                                              ),
-                                                            ],
+                                                              );
+                                                            },
                                                           );
-                                                        },
-                                                      );
-                                                    }
+                                                        }
 
-                                                    // Navigator.pop(context);
-                                                  },
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SizedBox(
-                                            // width: 200,
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Column(
-                                                      children: [
-                                                        Align(
-                                                          alignment:
-                                                              Alignment.topLeft,
-                                                          child: Text(
-                                                            'Line',
-
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            // minFontSize: 1,
-                                                            // maxFontSize: 12,
-                                                            maxLines: 1,
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .subtitle1
-                                                                ?.copyWith(
-                                                                  fontSize:
-                                                                      15.0,
-                                                                  // fontWeight:
-                                                                  //     FontWeight.w700,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                        TextFormField(
-                                                          // keyboardType: TextInputType.number,
-                                                          controller:
-                                                              rental_Line_text,
-
-                                                          // maxLength: 13,
-                                                          cursorColor:
-                                                              Colors.green,
-                                                          decoration:
-                                                              InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle:
-                                                                      const TextStyle(
-                                                                    color: Colors
-                                                                        .black54,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                  )),
-                                                          // inputFormatters: <TextInputFormatter>[
-                                                          //   // for below version 2 use this
-                                                          //   // FilteringTextInputFormatter.allow(
-                                                          //   //     RegExp(r'[0-9]')),
-                                                          //   // for version 2 and greater youcan also use this
-                                                          //   FilteringTextInputFormatter.digitsOnly
-                                                          // ],
-                                                        ),
-                                                      ],
+                                                        // Navigator.pop(context);
+                                                      },
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Column(
-                                                      children: [
-                                                        Align(
-                                                          alignment:
-                                                              Alignment.topLeft,
-                                                          child: Text(
-                                                            'Facebook',
-
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            // minFontSize: 1,
-                                                            // maxFontSize: 12,
-                                                            maxLines: 1,
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .subtitle1
-                                                                ?.copyWith(
-                                                                  fontSize:
-                                                                      15.0,
-                                                                  // fontWeight:
-                                                                  //     FontWeight.w700,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                        TextFormField(
-                                                          // keyboardType: TextInputType.number,
-                                                          controller:
-                                                              rental_Facebook_text,
-
-                                                          // maxLength: 13,
-                                                          cursorColor:
-                                                              Colors.green,
-                                                          decoration:
-                                                              InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle:
-                                                                      const TextStyle(
-                                                                    color: Colors
-                                                                        .black54,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                  )),
-                                                          // inputFormatters: <TextInputFormatter>[
-                                                          //   // for below version 2 use this
-                                                          //   // FilteringTextInputFormatter.allow(
-                                                          //   //     RegExp(r'[0-9]')),
-                                                          //   // for version 2 and greater youcan also use this
-                                                          //   FilteringTextInputFormatter.digitsOnly
-                                                          // ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
+                                                )
                                               ],
                                             ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  'Url Youtube',
-
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  // minFontSize: 1,
-                                                  // maxFontSize: 12,
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.left,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle1
-                                                      ?.copyWith(
-                                                        fontSize: 15.0,
-                                                        // fontWeight:
-                                                        //     FontWeight.w700,
-                                                      ),
-                                                ),
-                                              ),
-                                              TextFormField(
-                                                // keyboardType: TextInputType.number,
-                                                controller:
-                                                    rental_UrlYoutube_text,
-                                                maxLines: 2,
-                                                style: TextStyle(
-                                                  color: Colors.blue[300],
-                                                  fontFamily: Font_.Fonts_T,
-                                                  // fontWeight: FontWeight.bold,
-                                                  //fontSize: 10.0
-                                                ),
-                                                // maxLength: 13,
-                                                cursorColor: Colors.green,
-                                                decoration: InputDecoration(
-                                                  fillColor: Colors.white
-                                                      .withOpacity(0.3),
-                                                  filled: true,
-                                                  // prefixIcon:
-                                                  //     const Icon(Icons.person_pin, color: Colors.black),
-                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                  focusedBorder:
-                                                      const OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      topRight:
-                                                          Radius.circular(15),
-                                                      topLeft:
-                                                          Radius.circular(15),
-                                                      bottomRight:
-                                                          Radius.circular(15),
-                                                      bottomLeft:
-                                                          Radius.circular(15),
-                                                    ),
-                                                    borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  enabledBorder:
-                                                      const OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      topRight:
-                                                          Radius.circular(15),
-                                                      topLeft:
-                                                          Radius.circular(15),
-                                                      bottomRight:
-                                                          Radius.circular(15),
-                                                      bottomLeft:
-                                                          Radius.circular(15),
-                                                    ),
-                                                    borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                  labelStyle: const TextStyle(
-                                                    color: Colors.black54,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                                // inputFormatters: <TextInputFormatter>[
-                                                //   // for below version 2 use this
-                                                //   // FilteringTextInputFormatter.allow(
-                                                //   //     RegExp(r'[0-9]')),
-                                                //   // for version 2 and greater youcan also use this
-                                                //   FilteringTextInputFormatter.digitsOnly
-                                                // ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                            child: Container(
+                                            Padding(
                                               padding:
-                                                  const EdgeInsets.all(4.0),
-                                              decoration: const BoxDecoration(
-                                                color: Colors.green,
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    topRight:
-                                                        Radius.circular(8),
-                                                    bottomLeft:
-                                                        Radius.circular(8),
-                                                    bottomRight:
-                                                        Radius.circular(8)),
-                                                // border: Border.all(
-                                                //     color: Colors.grey, width: 3),
-                                              ),
-                                              width: 150,
-                                              child: const Center(
-                                                child: Text(
-                                                  'บันทึก',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
+                                                  const EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                // width: 200,
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Column(
+                                                          children: [
+                                                            Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topLeft,
+                                                              child: Text(
+                                                                'Line',
+
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                // minFontSize: 1,
+                                                                // maxFontSize: 12,
+                                                                maxLines: 1,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .left,
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .subtitle1
+                                                                    ?.copyWith(
+                                                                      fontSize:
+                                                                          15.0,
+                                                                      // fontWeight:
+                                                                      //     FontWeight.w700,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            TextFormField(
+                                                              // keyboardType: TextInputType.number,
+                                                              controller:
+                                                                  rental_Line_text,
+
+                                                              // maxLength: 13,
+                                                              cursorColor:
+                                                                  Colors.green,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                      fillColor: Colors
+                                                                          .white
+                                                                          .withOpacity(
+                                                                              0.3),
+                                                                      filled:
+                                                                          true,
+                                                                      // prefixIcon:
+                                                                      //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                      focusedBorder:
+                                                                          const OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                      enabledBorder:
+                                                                          const OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              Colors.grey,
+                                                                        ),
+                                                                      ),
+                                                                      labelStyle:
+                                                                          const TextStyle(
+                                                                        color: Colors
+                                                                            .black54,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      )),
+                                                              // inputFormatters: <TextInputFormatter>[
+                                                              //   // for below version 2 use this
+                                                              //   // FilteringTextInputFormatter.allow(
+                                                              //   //     RegExp(r'[0-9]')),
+                                                              //   // for version 2 and greater youcan also use this
+                                                              //   FilteringTextInputFormatter.digitsOnly
+                                                              // ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Column(
+                                                          children: [
+                                                            Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topLeft,
+                                                              child: Text(
+                                                                'Facebook',
+
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                // minFontSize: 1,
+                                                                // maxFontSize: 12,
+                                                                maxLines: 1,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .left,
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .subtitle1
+                                                                    ?.copyWith(
+                                                                      fontSize:
+                                                                          15.0,
+                                                                      // fontWeight:
+                                                                      //     FontWeight.w700,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            TextFormField(
+                                                              // keyboardType: TextInputType.number,
+                                                              controller:
+                                                                  rental_Facebook_text,
+
+                                                              // maxLength: 13,
+                                                              cursorColor:
+                                                                  Colors.green,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                      fillColor: Colors
+                                                                          .white
+                                                                          .withOpacity(
+                                                                              0.3),
+                                                                      filled:
+                                                                          true,
+                                                                      // prefixIcon:
+                                                                      //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                      focusedBorder:
+                                                                          const OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                      enabledBorder:
+                                                                          const OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              Colors.grey,
+                                                                        ),
+                                                                      ),
+                                                                      labelStyle:
+                                                                          const TextStyle(
+                                                                        color: Colors
+                                                                            .black54,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      )),
+                                                              // inputFormatters: <TextInputFormatter>[
+                                                              //   // for below version 2 use this
+                                                              //   // FilteringTextInputFormatter.allow(
+                                                              //   //     RegExp(r'[0-9]')),
+                                                              //   // for version 2 and greater youcan also use this
+                                                              //   FilteringTextInputFormatter.digitsOnly
+                                                              // ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
-                                            onTap: () async {
-                                              ///-------------------------------->
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(
+                                                      'Url Youtube',
 
-                                              String line_ =
-                                                  '${rental_Line_text.text}';
-                                              String face_ =
-                                                  '${rental_Facebook_text.text}';
-                                              String yout_ =
-                                                  '${rental_UrlYoutube_text.text}';
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      // minFontSize: 1,
+                                                      // maxFontSize: 12,
+                                                      maxLines: 1,
+                                                      textAlign: TextAlign.left,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .subtitle1
+                                                          ?.copyWith(
+                                                            fontSize: 15.0,
+                                                            // fontWeight:
+                                                            //     FontWeight.w700,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  TextFormField(
+                                                    // keyboardType: TextInputType.number,
+                                                    controller:
+                                                        rental_UrlYoutube_text,
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                      color: Colors.blue[300],
+                                                      fontFamily: Font_.Fonts_T,
+                                                      // fontWeight: FontWeight.bold,
+                                                      //fontSize: 10.0
+                                                    ),
+                                                    // maxLength: 13,
+                                                    cursorColor: Colors.green,
+                                                    decoration: InputDecoration(
+                                                      fillColor: Colors.white
+                                                          .withOpacity(0.3),
+                                                      filled: true,
+                                                      // prefixIcon:
+                                                      //     const Icon(Icons.person_pin, color: Colors.black),
+                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                      focusedBorder:
+                                                          const OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  15),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  15),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  15),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  15),
+                                                        ),
+                                                        borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                      enabledBorder:
+                                                          const OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  15),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  15),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  15),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  15),
+                                                        ),
+                                                        borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                      labelStyle:
+                                                          const TextStyle(
+                                                        color: Colors.black54,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                    // inputFormatters: <TextInputFormatter>[
+                                                    //   // for below version 2 use this
+                                                    //   // FilteringTextInputFormatter.allow(
+                                                    //   //     RegExp(r'[0-9]')),
+                                                    //   // for version 2 and greater youcan also use this
+                                                    //   FilteringTextInputFormatter.digitsOnly
+                                                    // ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: InkWell(
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    8),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    8),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    8)),
+                                                    // border: Border.all(
+                                                    //     color: Colors.grey, width: 3),
+                                                  ),
+                                                  width: 150,
+                                                  child: const Center(
+                                                    child: Text(
+                                                      'บันทึก',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                onTap: () async {
+                                                  ///-------------------------------->
 
-                                              ///-------------------------------->
-                                              SharedPreferences preferences =
-                                                  await SharedPreferences
-                                                      .getInstance();
-                                              String? ren = preferences
-                                                  .getString('renTalSer');
-                                              String? ser_user =
-                                                  preferences.getString('ser');
-                                              //UpC_rental_data_editweb
-                                              String url =
-                                                  '${MyConstant().domain}/UpC_rental_data_editweb.php?isAdd=true&ren=$ren&ser=$ser_user&value='
-                                                  '&lines=$line_&faces=$face_&youts=$yout_&typevalue=4';
+                                                  String line_ =
+                                                      '${rental_Line_text.text}';
+                                                  String face_ =
+                                                      '${rental_Facebook_text.text}';
+                                                  String yout_ =
+                                                      '${rental_UrlYoutube_text.text}';
 
-                                              try {
-                                                var response = await http
-                                                    .get(Uri.parse(url));
+                                                  ///-------------------------------->
+                                                  SharedPreferences
+                                                      preferences =
+                                                      await SharedPreferences
+                                                          .getInstance();
+                                                  String? ren = preferences
+                                                      .getString('renTalSer');
+                                                  String? ser_user = preferences
+                                                      .getString('ser');
+                                                  //UpC_rental_data_editweb
+                                                  String url =
+                                                      '${MyConstant().domain}/UpC_rental_data_editweb.php?isAdd=true&ren=$ren&ser=$ser_user&value='
+                                                      '&lines=$line_&faces=$face_&youts=$yout_&typevalue=4';
 
-                                                var result = await json
-                                                    .decode(response.body);
+                                                  try {
+                                                    var response = await http
+                                                        .get(Uri.parse(url));
 
-                                                if (result.toString() ==
-                                                    'true') {
-                                                  setState(() {
-                                                    signInThread();
-                                                    read_GC_rental();
-                                                    read_GC_area();
-                                                    read_GC_rentaldata();
-                                                    read_GC_rental_img();
-                                                  });
-                                                } else {}
-                                              } catch (e) {
-                                                print(e);
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    )),
+                                                    var result = await json
+                                                        .decode(response.body);
+
+                                                    if (result.toString() ==
+                                                        'true') {
+                                                      setState(() {
+                                                        signInThread();
+                                                        read_GC_rental();
+                                                        read_GC_area();
+                                                        read_GC_rentaldata();
+                                                        read_GC_rental_img();
+                                                      });
+                                                    } else {}
+                                                  } catch (e) {
+                                                    print(e);
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        )),
                                   ),
                                 )
                               ],
@@ -2328,56 +2501,80 @@ class _EditwebScreenState extends State<EditwebScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ตั้งค่ารูปอื่นๆ',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                            //fontSize: 10.0
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
                           child: Container(
-                            padding: const EdgeInsets.all(4.0),
-                            decoration: const BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8)),
-                              // border: Border.all(
-                              //     color: Colors.grey, width: 3),
+                            decoration: BoxDecoration(
+                              color:
+                                  AppbackgroundColor.TiTile_Colors.withOpacity(
+                                      0.7),
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0)),
+                              border:
+                                  Border.all(color: Colors.grey, width: 0.5),
                             ),
-                            child: const Center(
-                              child: Text(
-                                '+เพิ่ม',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                  //fontSize: 10.0
+                            child: Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'ตั้งค่ารูปอื่นๆ',
+                                    style: TextStyle(
+                                      color: SettingScreen_Color.Colors_Text1_,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      fontWeight: FontWeight.bold,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: InkWell(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(8),
+                                            topRight: Radius.circular(8),
+                                            bottomLeft: Radius.circular(8),
+                                            bottomRight: Radius.circular(8)),
+                                        // border: Border.all(
+                                        //     color: Colors.grey, width: 3),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          '+เพิ่ม',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontWeight: FontWeight.bold,
+                                            //fontSize: 10.0
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      uploadFile_Imgman('abountimg');
+                                    },
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-                          onTap: () {
-                            uploadFile_Imgman('abountimg');
-                          },
                         ),
-                      )
-                    ],
+                      ],
+                    ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                     child:
                         // Container(
                         //     height: 120,
@@ -2394,7 +2591,16 @@ class _EditwebScreenState extends State<EditwebScreen> {
                       height: 200,
                       width: (!Responsive.isDesktop(context))
                           ? 800
-                          : MediaQuery.of(context).size.width * 0.8,
+                          : MediaQuery.of(context).size.width * 0.85,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100]!.withOpacity(0.5),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0),
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8)),
+                        border: Border.all(color: Colors.grey, width: 0.5),
+                      ),
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context)
                             .copyWith(dragDevices: {
@@ -2438,7 +2644,8 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                       null ||
                                                   renTalimgModels[index].img ==
                                                       '')
-                                              ? Icon(Icons.image_not_supported)
+                                              ? const Icon(
+                                                  Icons.image_not_supported)
                                               : Image.network(
                                                   '${MyConstant().domain}/files/$foder/webfont/abountimg/${renTalimgModels[index].img}',
                                                   fit: BoxFit.fill,
@@ -2530,9 +2737,9 @@ class _EditwebScreenState extends State<EditwebScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
+                  const Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
                           'ตั้งค่ารายละเอียดพื้นที่',
@@ -2546,421 +2753,542 @@ class _EditwebScreenState extends State<EditwebScreen> {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            const Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                                child: Text(
-                                  'เวลาทำการ',
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                    //fontSize: 10.0
-                                  ),
-                                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100]!.withOpacity(0.5),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 0.5),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      // keyboardType: TextInputType.number,
-                                      controller: Stimeinput,
-
-                                      // maxLength: 13,
-                                      cursorColor: Colors.green,
-
-                                      readOnly:
-                                          true, //set it true, so that user will not able to edit text
-                                      decoration: InputDecoration(
-                                          labelText:
-                                              "เวลาเปิด", //label text of field
-                                          fillColor:
-                                              Colors.white.withOpacity(0.3),
-                                          filled: true,
-                                          // prefixIcon:
-                                          //     const Icon(Icons.person_pin, color: Colors.black),
-                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                          focusedBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: AppbackgroundColor
+                                                      .TiTile_Colors
+                                                  .withOpacity(0.7),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(5),
+                                                      topRight:
+                                                          Radius.circular(5),
+                                                      bottomLeft:
+                                                          Radius.circular(0),
+                                                      bottomRight:
+                                                          Radius.circular(0)),
                                             ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          enabledBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                            ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.grey,
+                                            child: const Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    20, 8, 8, 8),
+                                                child: Text(
+                                                  'เวลาทำการ',
+                                                  style: TextStyle(
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    fontWeight: FontWeight.bold,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          labelStyle: const TextStyle(
-                                            color: Colors.black54,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          )),
-                                      onTap: () async {
-                                        TimeOfDay? pickedTime =
-                                            await showTimePicker(
-                                          initialTime: TimeOfDay.now(),
-                                          context: context,
-                                        );
-
-                                        if (pickedTime != null) {
-                                          print(pickedTime.format(
-                                              context)); //output 10:51 PM
-                                          DateTime parsedTime = DateFormat.jm()
-                                              .parse(pickedTime
-                                                  .format(context)
-                                                  .toString());
-                                          //converting to DateTime so that we can further format on different pattern.
-                                          print(
-                                              parsedTime); //output 1970-01-01 22:53:00.000
-                                          String formattedTime =
-                                              DateFormat('HH:mm:ss')
-                                                  .format(parsedTime);
-                                          print(
-                                              formattedTime); //output 14:59:00
-                                          //DateFormat() is from intl package, you can format the time on any pattern you need.
-
-                                          setState(() {
-                                            Stimeinput.text =
-                                                formattedTime; //set the value of text field.
-                                          });
-                                        } else {
-                                          print("Time is not selected");
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      // keyboardType: TextInputType.number,
-                                      controller: ltimeinput,
-
-                                      // maxLength: 13,
-                                      cursorColor: Colors.green,
-
-                                      readOnly:
-                                          true, //set it true, so that user will not able to edit text
-                                      decoration: InputDecoration(
-                                          labelText:
-                                              "เวลาปิด", //label text of field
-                                          fillColor:
-                                              Colors.white.withOpacity(0.3),
-                                          filled: true,
-                                          // prefixIcon:
-                                          //     const Icon(Icons.person_pin, color: Colors.black),
-                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                          focusedBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                            ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          enabledBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                            ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                          labelStyle: const TextStyle(
-                                            color: Colors.black54,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          )),
-                                      onTap: () async {
-                                        TimeOfDay? pickedTime =
-                                            await showTimePicker(
-                                          initialTime: TimeOfDay.now(),
-                                          context: context,
-                                        );
-
-                                        if (pickedTime != null) {
-                                          print(pickedTime.format(
-                                              context)); //output 10:51 PM
-                                          DateTime parsedTime = DateFormat.jm()
-                                              .parse(pickedTime
-                                                  .format(context)
-                                                  .toString());
-                                          //converting to DateTime so that we can further format on different pattern.
-                                          print(
-                                              parsedTime); //output 1970-01-01 22:53:00.000
-                                          String formattedTime =
-                                              DateFormat('HH:mm:ss')
-                                                  .format(parsedTime);
-                                          print(
-                                              formattedTime); //output 14:59:00
-                                          //DateFormat() is from intl package, you can format the time on any pattern you need.
-
-                                          setState(() {
-                                            ltimeinput.text =
-                                                formattedTime; //set the value of text field.
-                                          });
-                                        } else {
-                                          print("Time is not selected");
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(4.0),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(8),
-                                          topRight: Radius.circular(8),
-                                          bottomLeft: Radius.circular(8),
-                                          bottomRight: Radius.circular(8)),
-                                      // border: Border.all(
-                                      //     color: Colors.grey, width: 3),
-                                    ),
-                                    width: 150,
-                                    child: const Center(
-                                      child: Text(
-                                        'บันทึก',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                          //fontSize: 10.0
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                  onTap: () async {
-                                    ///-------------------------------->
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextFormField(
+                                            // keyboardType: TextInputType.number,
+                                            controller: Stimeinput,
 
-                                    String Stime_ = '${Stimeinput.text}';
-                                    String ltime_ = '${ltimeinput.text}';
+                                            // maxLength: 13,
+                                            cursorColor: Colors.green,
 
-                                    ///-------------------------------->
-                                    SharedPreferences preferences =
-                                        await SharedPreferences.getInstance();
-                                    String? ren =
-                                        preferences.getString('renTalSer');
-                                    String? ser_user =
-                                        preferences.getString('ser');
-                                    //UpC_rental_data_editweb
-                                    String url =
-                                        '${MyConstant().domain}/UpC_rental_data_editweb.php?isAdd=true&ren=$ren&ser=$ser_user&value='
-                                        '&stime=$Stime_&ltime=$ltime_&typevalue=3';
+                                            readOnly:
+                                                true, //set it true, so that user will not able to edit text
+                                            decoration: InputDecoration(
+                                                labelText:
+                                                    "เวลาเปิด", //label text of field
+                                                fillColor: Colors.white
+                                                    .withOpacity(0.3),
+                                                filled: true,
+                                                // prefixIcon:
+                                                //     const Icon(Icons.person_pin, color: Colors.black),
+                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                enabledBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                labelStyle: const TextStyle(
+                                                  color: Colors.black54,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                )),
+                                            onTap: () async {
+                                              TimeOfDay? pickedTime =
+                                                  await showTimePicker(
+                                                initialTime: TimeOfDay.now(),
+                                                context: context,
+                                              );
 
-                                    try {
-                                      var response =
-                                          await http.get(Uri.parse(url));
+                                              if (pickedTime != null) {
+                                                print(pickedTime.format(
+                                                    context)); //output 10:51 PM
+                                                DateTime parsedTime =
+                                                    DateFormat.jm().parse(
+                                                        pickedTime
+                                                            .format(context)
+                                                            .toString());
+                                                //converting to DateTime so that we can further format on different pattern.
+                                                print(
+                                                    parsedTime); //output 1970-01-01 22:53:00.000
+                                                String formattedTime =
+                                                    DateFormat('HH:mm:ss')
+                                                        .format(parsedTime);
+                                                print(
+                                                    formattedTime); //output 14:59:00
+                                                //DateFormat() is from intl package, you can format the time on any pattern you need.
 
-                                      var result =
-                                          await json.decode(response.body);
+                                                setState(() {
+                                                  Stimeinput.text =
+                                                      formattedTime; //set the value of text field.
+                                                });
+                                              } else {
+                                                print("Time is not selected");
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextFormField(
+                                            // keyboardType: TextInputType.number,
+                                            controller: ltimeinput,
 
-                                      if (result.toString() == 'true') {
-                                        setState(() {
-                                          signInThread();
-                                          read_GC_rental();
-                                          read_GC_area();
-                                          read_GC_rentaldata();
-                                          read_GC_rental_img();
-                                        });
-                                      } else {}
-                                    } catch (e) {
-                                      print(e);
-                                    }
-                                  },
-                                )),
-                          ],
+                                            // maxLength: 13,
+                                            cursorColor: Colors.green,
+
+                                            readOnly:
+                                                true, //set it true, so that user will not able to edit text
+                                            decoration: InputDecoration(
+                                                labelText:
+                                                    "เวลาปิด", //label text of field
+                                                fillColor: Colors.white
+                                                    .withOpacity(0.3),
+                                                filled: true,
+                                                // prefixIcon:
+                                                //     const Icon(Icons.person_pin, color: Colors.black),
+                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                enabledBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                labelStyle: const TextStyle(
+                                                  color: Colors.black54,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                )),
+                                            onTap: () async {
+                                              TimeOfDay? pickedTime =
+                                                  await showTimePicker(
+                                                initialTime: TimeOfDay.now(),
+                                                context: context,
+                                              );
+
+                                              if (pickedTime != null) {
+                                                print(pickedTime.format(
+                                                    context)); //output 10:51 PM
+                                                DateTime parsedTime =
+                                                    DateFormat.jm().parse(
+                                                        pickedTime
+                                                            .format(context)
+                                                            .toString());
+                                                //converting to DateTime so that we can further format on different pattern.
+                                                print(
+                                                    parsedTime); //output 1970-01-01 22:53:00.000
+                                                String formattedTime =
+                                                    DateFormat('HH:mm:ss')
+                                                        .format(parsedTime);
+                                                print(
+                                                    formattedTime); //output 14:59:00
+                                                //DateFormat() is from intl package, you can format the time on any pattern you need.
+
+                                                setState(() {
+                                                  ltimeinput.text =
+                                                      formattedTime; //set the value of text field.
+                                                });
+                                              } else {
+                                                print("Time is not selected");
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4.0),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                topRight: Radius.circular(8),
+                                                bottomLeft: Radius.circular(8),
+                                                bottomRight:
+                                                    Radius.circular(8)),
+                                            // border: Border.all(
+                                            //     color: Colors.grey, width: 3),
+                                          ),
+                                          width: 150,
+                                          child: const Center(
+                                            child: Text(
+                                              'บันทึก',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                                fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () async {
+                                          ///-------------------------------->
+
+                                          String Stime_ = '${Stimeinput.text}';
+                                          String ltime_ = '${ltimeinput.text}';
+
+                                          ///-------------------------------->
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          String? ren = preferences
+                                              .getString('renTalSer');
+                                          String? ser_user =
+                                              preferences.getString('ser');
+                                          //UpC_rental_data_editweb
+                                          String url =
+                                              '${MyConstant().domain}/UpC_rental_data_editweb.php?isAdd=true&ren=$ren&ser=$ser_user&value='
+                                              '&stime=$Stime_&ltime=$ltime_&typevalue=3';
+
+                                          try {
+                                            var response =
+                                                await http.get(Uri.parse(url));
+
+                                            var result = await json
+                                                .decode(response.body);
+
+                                            if (result.toString() == 'true') {
+                                              setState(() {
+                                                signInThread();
+                                                read_GC_rental();
+                                                read_GC_area();
+                                                read_GC_rentaldata();
+                                                read_GC_rental_img();
+                                              });
+                                            } else {}
+                                          } catch (e) {
+                                            print(e);
+                                          }
+                                        },
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            const Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                                child: Text(
-                                  'Url Google Map  ที่อยู่',
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                    //fontSize: 10.0
-                                  ),
-                                ),
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100]!.withOpacity(0.5),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 0.5),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextFormField(
-                                // keyboardType: TextInputType.number,
-                                controller: rental_Urladdr_text,
-                                style: TextStyle(
-                                  color: Colors.blue[300],
-                                  fontFamily: Font_.Fonts_T,
-                                  // fontWeight: FontWeight.bold,
-                                  //fontSize: 10.0
-                                ),
-                                // maxLength: 13,
-                                cursorColor: Colors.green,
-                                decoration: InputDecoration(
-                                    fillColor: Colors.white.withOpacity(0.3),
-                                    filled: true,
-                                    // prefixIcon:
-                                    //     const Icon(Icons.person_pin, color: Colors.black),
-                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        topLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: AppbackgroundColor
+                                                      .TiTile_Colors
+                                                  .withOpacity(0.7),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(5),
+                                                      topRight:
+                                                          Radius.circular(5),
+                                                      bottomLeft:
+                                                          Radius.circular(0),
+                                                      bottomRight:
+                                                          Radius.circular(0)),
+                                            ),
+                                            child: const Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    20, 8, 8, 8),
+                                                child: Text(
+                                                  'Url Google Map',
+                                                  style: TextStyle(
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    fontWeight: FontWeight.bold,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        topLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15),
-                                      ),
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    labelStyle: const TextStyle(
-                                      color: Colors.black54,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    )),
-                                // inputFormatters: <TextInputFormatter>[
-                                //   // for below version 2 use this
-                                //   // FilteringTextInputFormatter.allow(
-                                //   //     RegExp(r'[0-9]')),
-                                //   // for version 2 and greater youcan also use this
-                                //   FilteringTextInputFormatter.digitsOnly
-                                // ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                child: Container(
-                                  padding: const EdgeInsets.all(4.0),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(8),
-                                        topRight: Radius.circular(8),
-                                        bottomLeft: Radius.circular(8),
-                                        bottomRight: Radius.circular(8)),
-                                    // border: Border.all(
-                                    //     color: Colors.grey, width: 3),
+                                    ],
                                   ),
-                                  width: 150,
-                                  child: const Center(
-                                    child: Text(
-                                      'บันทึก',
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      // keyboardType: TextInputType.number,
+                                      controller: rental_Urladdr_text,
                                       style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue[300],
+                                        fontFamily: Font_.Fonts_T,
+                                        // fontWeight: FontWeight.bold,
                                         //fontSize: 10.0
                                       ),
+                                      // maxLength: 13,
+                                      cursorColor: Colors.green,
+                                      decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person_pin, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelStyle: const TextStyle(
+                                            color: Colors.black54,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                          )),
+                                      // inputFormatters: <TextInputFormatter>[
+                                      //   // for below version 2 use this
+                                      //   // FilteringTextInputFormatter.allow(
+                                      //   //     RegExp(r'[0-9]')),
+                                      //   // for version 2 and greater youcan also use this
+                                      //   FilteringTextInputFormatter.digitsOnly
+                                      // ],
                                     ),
                                   ),
-                                ),
-                                onTap: () async {
-                                  ///-------------------------------->
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4.0),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8),
+                                              bottomLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(8)),
+                                          // border: Border.all(
+                                          //     color: Colors.grey, width: 3),
+                                        ),
+                                        width: 150,
+                                        child: const Center(
+                                          child: Text(
+                                            'บันทึก',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontWeight_.Fonts_T,
+                                              fontWeight: FontWeight.bold,
+                                              //fontSize: 10.0
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      onTap: () async {
+                                        ///-------------------------------->
 
-                                  String new_value =
-                                      '${rental_Urladdr_text.text}';
+                                        String new_value =
+                                            '${rental_Urladdr_text.text}';
 
-                                  ///-------------------------------->
-                                  SharedPreferences preferences =
-                                      await SharedPreferences.getInstance();
-                                  String? ren =
-                                      preferences.getString('renTalSer');
-                                  String? ser_user =
-                                      preferences.getString('ser');
-                                  //UpC_rental_data_editweb
-                                  String url =
-                                      '${MyConstant().domain}/UpC_rental_data_editweb.php?isAdd=true&ren=$ren&ser=$ser_user&value=${new_value}&typevalue=2';
+                                        ///-------------------------------->
+                                        SharedPreferences preferences =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        String? ren =
+                                            preferences.getString('renTalSer');
+                                        String? ser_user =
+                                            preferences.getString('ser');
+                                        //UpC_rental_data_editweb
+                                        String url =
+                                            '${MyConstant().domain}/UpC_rental_data_editweb.php?isAdd=true&ren=$ren&ser=$ser_user&value=${new_value}&typevalue=2';
 
-                                  try {
-                                    var response =
-                                        await http.get(Uri.parse(url));
+                                        try {
+                                          var response =
+                                              await http.get(Uri.parse(url));
 
-                                    var result =
-                                        await json.decode(response.body);
+                                          var result =
+                                              await json.decode(response.body);
 
-                                    if (result.toString() == 'true') {
-                                      setState(() {
-                                        signInThread();
-                                        read_GC_rental();
-                                        read_GC_area();
-                                        read_GC_rentaldata();
-                                        read_GC_rental_img();
-                                      });
-                                    } else {}
-                                  } catch (e) {
-                                    print(e);
-                                  }
-                                },
+                                          if (result.toString() == 'true') {
+                                            setState(() {
+                                              signInThread();
+                                              read_GC_rental();
+                                              read_GC_area();
+                                              read_GC_rentaldata();
+                                              read_GC_rental_img();
+                                            });
+                                          } else {}
+                                        } catch (e) {
+                                          print(e);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Row(
                     children: [
@@ -3328,13 +3656,13 @@ class _EditwebScreenState extends State<EditwebScreen> {
                       // height: 50,
                       padding: const EdgeInsets.all(4.0),
                       decoration: BoxDecoration(
-                        // color: Colors.green,
+                        color: Colors.grey[100]!.withOpacity(0.5),
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(8),
                             topRight: Radius.circular(8),
                             bottomLeft: Radius.circular(8),
                             bottomRight: Radius.circular(8)),
-                        border: Border.all(color: Colors.grey, width: 2),
+                        border: Border.all(color: Colors.grey, width: 0.5),
                       ),
                       child: Row(
                         children: [
@@ -3346,7 +3674,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                      color: Colors.grey[300],
+                                      decoration: BoxDecoration(
+                                        color: AppbackgroundColor.TiTile_Colors
+                                            .withOpacity(0.7),
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(5),
+                                            topRight: Radius.circular(5),
+                                            bottomLeft: Radius.circular(5),
+                                            bottomRight: Radius.circular(5)),
+                                      ),
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text('${facilities[index]}')),
                                 ),
@@ -3488,7 +3824,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                           padding: const EdgeInsets.all(5.0),
                                           child: const Center(
                                               child: Text(
-                                            'สิ่งอำนวยความสะดวก',
+                                            'สถานที่ใกล้เคียง',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
@@ -3782,13 +4118,13 @@ class _EditwebScreenState extends State<EditwebScreen> {
                       // height: 50,
                       padding: const EdgeInsets.all(4.0),
                       decoration: BoxDecoration(
-                        // color: Colors.green,
+                        color: Colors.grey[100]!.withOpacity(0.5),
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(8),
                             topRight: Radius.circular(8),
                             bottomLeft: Radius.circular(8),
                             bottomRight: Radius.circular(8)),
-                        border: Border.all(color: Colors.grey, width: 2),
+                        border: Border.all(color: Colors.grey, width: 0.5),
                       ),
                       child: Row(
                         children: [
@@ -3800,16 +4136,79 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                      color: Colors.grey[300],
+                                      decoration: BoxDecoration(
+                                        color: AppbackgroundColor.TiTile_Colors
+                                            .withOpacity(0.7),
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(5),
+                                            topRight: Radius.circular(5),
+                                            bottomLeft: Radius.circular(5),
+                                            bottomRight: Radius.circular(5)),
+                                      ),
+
+                                      // color: Colors.grey[300],
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text('${nearby_places[index]}')),
                                 ),
-                                const Positioned(
+                                Positioned(
                                     top: 0,
                                     right: 2,
-                                    child: Icon(
-                                      Icons.close_rounded,
-                                      color: Colors.red,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          nearby_places.remove(
+                                              '${nearby_places[index]}');
+                                        });
+
+                                        ///-------------------------------->
+                                        String n_nearby_new = '';
+                                        String new_value = '';
+
+                                        for (int index = 0;
+                                            index < nearby_places.length;
+                                            index++) {
+                                          setState(() {
+                                            n_nearby_new +=
+                                                '${nearby_places[index]},';
+                                          });
+                                        }
+
+                                        ///-------------------------------->
+                                        SharedPreferences preferences =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        String? ren =
+                                            preferences.getString('renTalSer');
+                                        String? ser_user =
+                                            preferences.getString('ser');
+                                        //UpC_rental_data_editweb
+                                        String url =
+                                            '${MyConstant().domain}/UpC_rental_data_Fac_AND_places.php?isAdd=true&ren=$ren&ser=$ser_user&value=${n_nearby_new}&typevalue=2';
+
+                                        try {
+                                          var response =
+                                              await http.get(Uri.parse(url));
+
+                                          var result =
+                                              await json.decode(response.body);
+
+                                          if (result.toString() == 'true') {
+                                            setState(() {
+                                              // signInThread();
+                                              // read_GC_rental();
+                                              // read_GC_area();
+                                              // read_GC_rentaldata();
+                                              // read_GC_rental_img();
+                                            });
+                                          } else {}
+                                        } catch (e) {
+                                          print(e);
+                                        }
+                                      },
+                                      child: Icon(
+                                        Icons.close_rounded,
+                                        color: Colors.red,
+                                      ),
                                     ))
                               ],
                             ),
@@ -3820,6 +4219,461 @@ class _EditwebScreenState extends State<EditwebScreen> {
                   Row(
                     children: [
                       const Padding(
+                        padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
+                        child: Text(
+                          'โซนพื้นที่',
+                          style: TextStyle(
+                            color: SettingScreen_Color.Colors_Text1_,
+                            fontFamily: FontWeight_.Fonts_T,
+                            fontWeight: FontWeight.bold,
+                            //fontSize: 10.0
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                    child: Container(
+                      child: GridView.count(
+                          padding: ((MediaQuery.of(context).size.width) < 650)
+                              ? const EdgeInsets.all(2)
+                              : const EdgeInsets.all(5),
+                          crossAxisSpacing:
+                              ((MediaQuery.of(context).size.width) < 650)
+                                  ? 10.00
+                                  : 16.0,
+                          mainAxisSpacing:
+                              ((MediaQuery.of(context).size.width) < 650)
+                                  ? 10.00
+                                  : 16.0,
+                          crossAxisCount:
+                              (MediaQuery.of(context).size.width) < 650 ? 2 : 6,
+                          childAspectRatio:
+                              ((MediaQuery.of(context).size.width) < 650 &&
+                                      (MediaQuery.of(context).size.width) > 500)
+                                  ? 2.2
+                                  : ((MediaQuery.of(context).size.width) < 500)
+                                      ? 1.5
+                                      : 2.5,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: <Widget>[
+                            for (int index = 0;
+                                index < zoneModels.length;
+                                index++)
+                              Container(
+                                decoration: BoxDecoration(
+                                  // boxShadow: [
+                                  //   BoxShadow(
+                                  //     color: Colors.grey.withOpacity(0.5),
+                                  //     spreadRadius: 2,
+                                  //     blurRadius: 7,
+                                  //     offset: Offset(
+                                  //         0, 3), // changes position of shadow
+                                  //   ),
+                                  // ],
+                                  // color:
+                                  //     const Color.fromARGB(255, 226, 230, 233)!
+                                  //         .withOpacity(0.5),
+
+                                  color: (zoneModels[index].status.toString() ==
+                                          '0')
+                                      ? Colors.grey[100]!.withOpacity(0.5)
+                                      : Colors.red[100]!.withOpacity(0.2),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                  border: Border.all(
+                                      color: Colors.grey, width: 0.5),
+                                ),
+                                padding: const EdgeInsets.all(0.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: AppbackgroundColor
+                                                  .TiTile_Colors,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                              ),
+                                              border: Border.all(
+                                                  color: Colors.grey,
+                                                  width: 0.5),
+                                            ),
+                                            child: Align(
+                                              alignment: Alignment.topRight,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  SharedPreferences
+                                                      preferences =
+                                                      await SharedPreferences
+                                                          .getInstance();
+                                                  String? ren = preferences
+                                                      .getString('renTalSer');
+                                                  String? ser_user = preferences
+                                                      .getString('ser');
+                                                  var values =
+                                                      (zoneModels[index]
+                                                                  .status
+                                                                  .toString() ==
+                                                              '0')
+                                                          ? '1'
+                                                          : '0';
+
+                                                  String url =
+                                                      '${MyConstant().domain}/UP_c_zone_onoff.php?isAdd=true&ren=$ren&zser=${zoneModels[index].ser}&va_lue=$values';
+
+                                                  try {
+                                                    var response = await http
+                                                        .get(Uri.parse(url));
+
+                                                    var result = json
+                                                        .decode(response.body);
+                                                    print(result);
+                                                    if (result.toString() ==
+                                                        'true') {
+                                                      // Insert_log.Insert_logs(
+                                                      //     'ตั้งค่า',
+                                                      //     'ตั้งค่าพิเศษ>>ปรับ >> ${zoneModels[index].zn.toString()} >> Acc3 >> $value');
+                                                      setState(() {
+                                                        read_GC_zone();
+                                                      });
+                                                    } else {}
+                                                  } catch (e) {}
+                                                },
+                                                child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            0.0),
+                                                    child: (zoneModels[index]
+                                                                .status
+                                                                .toString() ==
+                                                            '0')
+                                                        ? const Icon(
+                                                            Icons.toggle_on,
+                                                            color: Colors.green,
+                                                            size: 40,
+                                                          )
+                                                        : const Icon(
+                                                            Icons.toggle_off,
+                                                            size: 40,
+                                                          )),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topCenter,
+                                      child: Container(
+                                        child: Text(
+                                          '${zoneModels[index].zn}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ]),
+                    ),
+
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     for (int index = 0; index < zoneModels.length; index++)
+                    //       Expanded(
+                    //         flex: 1,
+                    //         child:
+                    // Padding(
+                    //           padding: const EdgeInsets.all(8.0),
+                    //           child: Container(
+                    //             decoration: const BoxDecoration(
+                    //               color: Color.fromARGB(255, 193, 210, 224),
+                    //               // color: AppbackgroundColor
+                    //               //     .TiTile_Colors,
+                    //               borderRadius: BorderRadius.only(
+                    //                   topLeft: Radius.circular(10),
+                    //                   topRight: Radius.circular(10),
+                    //                   bottomLeft: Radius.circular(10),
+                    //                   bottomRight: Radius.circular(10)),
+                    //             ),
+                    //             padding: const EdgeInsets.all(8.0),
+                    //             child: Text(
+                    //               '${zoneModels[index].zn}',
+                    //               textAlign: TextAlign.center,
+                    //               style: const TextStyle(
+                    //                   color:
+                    //                       PeopleChaoScreen_Color.Colors_Text1_,
+                    //                   fontWeight: FontWeight.bold,
+                    //                   fontFamily: FontWeight_.Fonts_T
+                    //                   //fontSize: 10.0
+                    //                   ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //   ],
+                    // ),
+                  ),
+                  Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
+                        child: Text(
+                          'ข้อมูลพื้นที่',
+                          style: TextStyle(
+                            color: SettingScreen_Color.Colors_Text1_,
+                            fontFamily: FontWeight_.Fonts_T,
+                            fontWeight: FontWeight.bold,
+                            //fontSize: 10.0
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                          child: Container(
+                              // width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                // color: Color.fromARGB(255, 193, 210, 224),
+                                color: AppbackgroundColor.TiTile_Colors,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(0),
+                                    bottomRight: Radius.circular(0)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 0.5),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  for (int index = 0;
+                                      index < Show_Titel_webmarket.length;
+                                      index++)
+                                    Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          '${Show_Titel_webmarket[index]}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          child: Container(
+                              // width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                color: AppbackgroundColor.TiTile_Colors
+                                    .withOpacity(0.1),
+                                // color: const Color.fromARGB(255, 226, 230, 233)!
+                                //     .withOpacity(0.5),
+                                // color: AppbackgroundColor
+                                //     .TiTile_Colors,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(0),
+                                    topRight: Radius.circular(0),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 0.5),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  for (int index = 0;
+                                      index < Show_Titel_webmarket.length;
+                                      index++)
+                                    Expanded(
+                                      flex: 1,
+                                      child: StreamBuilder(
+                                          stream: Stream.periodic(
+                                              const Duration(seconds: 0)),
+                                          builder: (context, snapshot) {
+                                            return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: InkWell(
+                                                  child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: (title_webs_list
+                                                                .toString()
+                                                                .contains(index
+                                                                    .toString()))
+                                                            ? Colors.grey[100]!
+                                                                .withOpacity(
+                                                                    0.5)
+                                                            : Colors.red[100]!
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                        ),
+                                                        // border: Border.all(
+                                                        //     color: Colors.grey, width: 1),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              0.0),
+                                                      child: (title_webs_list
+                                                              .toString()
+                                                              .contains(index
+                                                                  .toString()))
+                                                          ? const Icon(
+                                                              Icons.toggle_on,
+                                                              color:
+                                                                  Colors.green,
+                                                              size: 50,
+                                                            )
+                                                          : const Icon(
+                                                              Icons.toggle_off,
+                                                              size: 50,
+                                                            )),
+                                                  onTap: () async {
+                                                    ///-------------------------------->
+                                                    String Titel_webmarket_new =
+                                                        '';
+                                                    String new_value =
+                                                        rental_Nearbyplaces_text
+                                                            .text
+                                                            .toString();
+                                                    if (!title_webs_list
+                                                        .toString()
+                                                        .contains(
+                                                            index.toString())) {
+                                                      title_webs_list.add(
+                                                          index.toString());
+                                                    } else {
+                                                      title_webs_list.remove(
+                                                          index.toString());
+                                                    }
+                                                    title_webs_list
+                                                        .sort((a, b) {
+                                                      if (a is Comparable &&
+                                                          b is Comparable) {
+                                                        return a.compareTo(b);
+                                                      } else {
+                                                        // Handle non-comparable elements if needed
+                                                        return 0;
+                                                      }
+                                                    });
+
+                                                    await Future.delayed(
+                                                        const Duration(
+                                                            milliseconds: 200));
+
+                                                    for (int index = 0;
+                                                        index <
+                                                            title_webs_list
+                                                                .length;
+                                                        index++) {
+                                                      Titel_webmarket_new +=
+                                                          '${title_webs_list[index]},';
+                                                    }
+
+                                                    Titel_webmarket_new +=
+                                                        new_value;
+                                                    print(Titel_webmarket_new);
+
+                                                    ///-------------------------------->
+                                                    SharedPreferences
+                                                        preferences =
+                                                        await SharedPreferences
+                                                            .getInstance();
+                                                    String? ren = preferences
+                                                        .getString('renTalSer');
+                                                    String? ser_user =
+                                                        preferences
+                                                            .getString('ser');
+                                                    //UpC_rental_data_editweb
+                                                    String url =
+                                                        '${MyConstant().domain}/UpC_rental_data_Fac_AND_places.php?isAdd=true&ren=$ren&ser=$ser_user&value=${Titel_webmarket_new}&typevalue=3';
+
+                                                    try {
+                                                      var response = await http
+                                                          .get(Uri.parse(url));
+
+                                                      var result =
+                                                          await json.decode(
+                                                              response.body);
+
+                                                      if (result.toString() ==
+                                                          'true') {
+                                                        setState(() {
+                                                          // read_GC_area();
+                                                          // signInThread();
+                                                          // read_GC_rental();
+                                                          // read_GC_area();
+                                                          read_GC_rentaldata();
+                                                          // read_GC_rental_img();
+                                                        });
+                                                      } else {}
+                                                    } catch (e) {
+                                                      print(e);
+                                                    }
+                                                  },
+                                                ));
+                                          }),
+                                    ),
+                                ],
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
                         padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
                         child: Text(
                           'คำอธิบายเพิ่มเติมเกี่ยวกับพื้นที่',
@@ -3834,7 +4688,39 @@ class _EditwebScreenState extends State<EditwebScreen> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: AppbackgroundColor.TiTile_Colors,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(0),
+                        ),
+                        // border: Border.all(
+                        //     color: Colors.grey, width: 1),
+                      ),
+                      child: const Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
+                            child: Text(
+                              'คำอธิบาย',
+                              style: TextStyle(
+                                color: SettingScreen_Color.Colors_Text1_,
+                                fontFamily: FontWeight_.Fonts_T,
+                                fontWeight: FontWeight.bold,
+                                //fontSize: 10.0
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                     child: Container(
                       height: 200,
                       decoration: const BoxDecoration(
@@ -3856,32 +4742,32 @@ class _EditwebScreenState extends State<EditwebScreen> {
                         // maxLength: 13,
                         cursorColor: Colors.green,
                         decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
+                            fillColor: Colors.grey[100]!.withOpacity(0.5),
                             filled: true,
                             // prefixIcon:
                             //     const Icon(Icons.person, color: Colors.black),
                             // suffixIcon: Icon(Icons.clear, color: Colors.black),
                             focusedBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(0),
+                                topLeft: Radius.circular(0),
                                 bottomRight: Radius.circular(15),
                                 bottomLeft: Radius.circular(15),
                               ),
                               borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
+                                width: 0.5,
+                                color: Colors.grey,
                               ),
                             ),
                             enabledBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(0),
+                                topLeft: Radius.circular(0),
                                 bottomRight: Radius.circular(15),
                                 bottomLeft: Radius.circular(15),
                               ),
                               borderSide: BorderSide(
-                                width: 1,
+                                width: 0.5,
                                 color: Colors.grey,
                               ),
                             ),

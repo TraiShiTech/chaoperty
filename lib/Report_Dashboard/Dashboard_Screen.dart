@@ -1451,33 +1451,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             stream: Stream.periodic(const Duration(seconds: 0)),
                             builder: (context, snapshot) {
                               return GridView.count(
-                                  padding:
-                                      ((MediaQuery.of(context).size.width) <
-                                              650)
-                                          ? const EdgeInsets.all(2)
-                                          : const EdgeInsets.all(5),
+                                  padding: ((MediaQuery.of(context).size.width) <
+                                          650)
+                                      ? const EdgeInsets.all(2)
+                                      : const EdgeInsets.all(5),
                                   crossAxisSpacing:
+                                      ((MediaQuery.of(context).size.width) < 650)
+                                          ? 10.00
+                                          : 16.0,
+                                  mainAxisSpacing:
                                       ((MediaQuery.of(context).size.width) <
                                               650)
                                           ? 10.00
                                           : 16.0,
-                                  mainAxisSpacing: ((MediaQuery
-                                                  .of(context)
-                                              .size
-                                              .width) <
-                                          650)
-                                      ? 10.00
-                                      : 16.0,
-                                  crossAxisCount: (MediaQuery
-                                                  .of(context)
-                                              .size
-                                              .width) <
-                                          650
-                                      ? 2
-                                      : 4,
-                                  childAspectRatio:
+                                  crossAxisCount:
                                       (MediaQuery.of(context).size.width) < 650
-                                          ? 0.7
+                                          ? 2
+                                          : 4,
+                                  childAspectRatio: ((MediaQuery.of(context)
+                                                  .size
+                                                  .width) <
+                                              650 &&
+                                          (MediaQuery.of(context).size.width) >
+                                              500)
+                                      ? 1.2
+                                      : ((MediaQuery.of(context).size.width) <
+                                              500)
+                                          ? 0.8
                                           : 2,
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
@@ -1499,17 +1499,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                              color: Colors.orange[700],
-                                            ),
-                                            child: const Icon(
-                                              Icons.map_outlined,
-                                              color: Colors.white,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 8, 8),
+                                            child: Container(
+                                              height: 40,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                                color: Colors.orange[700],
+                                              ),
+                                              child: const Icon(
+                                                Icons.map_outlined,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                           const Text(
@@ -1517,10 +1521,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontSize: 14.5,
-                                              color: Colors.black,
+                                              shadows: [
+                                                Shadow(
+                                                    color: Colors.black,
+                                                    offset: Offset(0, -5))
+                                              ],
+                                              color: Colors.transparent,
+                                              // decoration: TextDecoration
+                                              //     .underline,
+                                              decorationColor: Colors.grey,
+                                              decorationThickness: 4,
+                                              // decorationStyle:
+                                              //     TextDecorationStyle
+                                              //         .dashed,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T,
+                                              fontFamily: FontWeight_.Fonts_T,
                                             ),
                                           ),
                                           Container(
@@ -1718,17 +1734,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                              color: Colors.blue[700],
-                                            ),
-                                            child: const Icon(
-                                              Icons.people,
-                                              color: Colors.white,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 8, 8),
+                                            child: Container(
+                                              height: 40,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                                color: Colors.blue[700],
+                                              ),
+                                              child: const Icon(
+                                                Icons.people,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                           const Text(
@@ -1736,10 +1756,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontSize: 14.5,
-                                              color: Colors.black,
+                                              shadows: [
+                                                Shadow(
+                                                    color: Colors.black,
+                                                    offset: Offset(0, -5))
+                                              ],
+                                              color: Colors.transparent,
+                                              // decoration: TextDecoration
+                                              //     .underline,
+                                              decorationColor: Colors.grey,
+                                              decorationThickness: 4,
+                                              // decorationStyle:
+                                              //     TextDecorationStyle
+                                              //         .dashed,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T,
+                                              fontFamily: FontWeight_.Fonts_T,
                                             ),
                                           ),
                                           Row(
@@ -1919,28 +1951,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                              color: Colors.red[700],
-                                            ),
-                                            child: const Icon(
-                                              Icons.account_balance_wallet,
-                                              color: Colors.white,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 8, 8),
+                                            child: Container(
+                                              height: 40,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                                color: Colors.red[700],
+                                              ),
+                                              child: const Icon(
+                                                Icons.account_balance_wallet,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                           const Text(
                                             'รวมรายรับ (ชำระแล้ว Cash/Bank)',
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              fontSize: 14.5,
-                                              color: Colors.black,
+                                            style: TextStyle(
+                                              shadows: [
+                                                Shadow(
+                                                    color: Colors.black,
+                                                    offset: Offset(0, -5))
+                                              ],
+                                              color: Colors.transparent,
+                                              // decoration: TextDecoration
+                                              //     .underline,
+                                              decorationColor: Colors.grey,
+                                              decorationThickness: 4,
+                                              // decorationStyle:
+                                              //     TextDecorationStyle
+                                              //         .dashed,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T,
+                                              fontFamily: FontWeight_.Fonts_T,
                                             ),
                                           ),
                                           Container(
@@ -2128,28 +2176,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                              color: Colors.teal[700],
-                                            ),
-                                            child: const Icon(
-                                              Icons.monetization_on_rounded,
-                                              color: Colors.white,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 8, 8),
+                                            child: Container(
+                                              height: 40,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                                color: Colors.teal[700],
+                                              ),
+                                              child: const Icon(
+                                                Icons.monetization_on_rounded,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                           const Text(
                                             'รวมรายรับ (ชำระแล้ว )',
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              fontSize: 14.5,
-                                              color: Colors.black,
+                                            style: TextStyle(
+                                              shadows: [
+                                                Shadow(
+                                                    color: Colors.black,
+                                                    offset: Offset(0, -5))
+                                              ],
+                                              color: Colors.transparent,
+                                              // decoration: TextDecoration
+                                              //     .underline,
+                                              decorationColor: Colors.grey,
+                                              decorationThickness: 4,
+                                              // decorationStyle:
+                                              //     TextDecorationStyle
+                                              //         .dashed,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T,
+                                              fontFamily: FontWeight_.Fonts_T,
                                             ),
                                           ),
                                           Row(

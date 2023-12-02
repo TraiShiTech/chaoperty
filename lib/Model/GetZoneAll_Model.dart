@@ -16,6 +16,7 @@ class ZoneAllModel {
   String? number_zn;
   String? jon_book;
   String? sub_zone;
+  String? status;
 
   ZoneAllModel({
     this.ser,
@@ -35,6 +36,7 @@ class ZoneAllModel {
     this.number_zn,
     this.jon_book,
     this.sub_zone,
+    this.status,
   });
 
   ZoneAllModel.fromJson(Map<String, dynamic> json) {
@@ -55,6 +57,7 @@ class ZoneAllModel {
     number_zn = json['number_zn'];
     jon_book = json['jon_book'];
     sub_zone = json['sub_zone'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +79,7 @@ class ZoneAllModel {
     data['number_zn'] = this.number_zn;
     data['jon_book'] = this.jon_book;
     data['sub_zone'] = this.sub_zone;
+    data['status'] = this.status;
     return data;
   }
 }

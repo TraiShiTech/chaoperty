@@ -26,6 +26,7 @@ class RenTaldataModel {
   String? man_Image;
   String? qr_Image;
   String? status_Web;
+  String? title_web;
 
   RenTaldataModel(
       {this.ser,
@@ -54,7 +55,8 @@ class RenTaldataModel {
       this.a_About,
       this.man_Image,
       this.qr_Image,
-      this.status_Web});
+      this.status_Web,
+      this.title_web});
 
   RenTaldataModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -84,6 +86,7 @@ class RenTaldataModel {
     man_Image = json['man_image'];
     qr_Image = json['qr_image'];
     status_Web = json['status_web'];
+    title_web = json['title_web'];
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +118,7 @@ class RenTaldataModel {
     data['man_image'] = this.man_Image;
     data['qr_image'] = this.qr_Image;
     data['status_web'] = this.status_Web;
+    data['title_web'] = this.title_web;
     return data;
   }
 }

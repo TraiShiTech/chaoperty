@@ -27,36 +27,55 @@ class RenTaldataModel {
   String? qr_Image;
   String? status_Web;
   String? title_web;
+  String? pn_TH;
+  String? range_lowpri;
+  String? range_heipri;
+  String? dialog;
+  String? dialog_tex;
+  String? rt_view;
+  String? r_tel;
+  String? par_king;
+  String? a_aboutAll;
 
-  RenTaldataModel(
-      {this.ser,
-      this.datex,
-      this.timex,
-      this.user,
-      this.rser,
-      this.tser,
-      this.rtser,
-      this.pn,
-      this.dbn,
-      this.dataUpdate,
-      this.province,
-      this.lat,
-      this.longi,
-      this.customerID,
-      this.purchaseDate,
-      this.url_You,
-      this.url_Map,
-      this.r_Line,
-      this.r_Facebook,
-      this.stime,
-      this.ltime,
-      this.n_Places,
-      this.f_Lities,
-      this.a_About,
-      this.man_Image,
-      this.qr_Image,
-      this.status_Web,
-      this.title_web});
+  RenTaldataModel({
+    this.ser,
+    this.datex,
+    this.timex,
+    this.user,
+    this.rser,
+    this.tser,
+    this.rtser,
+    this.pn,
+    this.dbn,
+    this.dataUpdate,
+    this.province,
+    this.lat,
+    this.longi,
+    this.customerID,
+    this.purchaseDate,
+    this.url_You,
+    this.url_Map,
+    this.r_Line,
+    this.r_Facebook,
+    this.stime,
+    this.ltime,
+    this.n_Places,
+    this.f_Lities,
+    this.a_About,
+    this.man_Image,
+    this.qr_Image,
+    this.status_Web,
+    this.title_web,
+    this.pn_TH,
+    this.range_lowpri,
+    this.range_heipri,
+    this.dialog,
+    this.dialog_tex,
+    this.rt_view,
+    this.r_tel,
+    this.par_king,
+    this.a_aboutAll,
+  });
 
   RenTaldataModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -87,6 +106,15 @@ class RenTaldataModel {
     qr_Image = json['qr_image'];
     status_Web = json['status_web'];
     title_web = json['title_web'];
+    pn_TH = json['pn_TH'];
+    range_lowpri = json['range_lowpri'];
+    range_heipri = json['range_heipri'];
+    dialog = json['dialog'];
+    dialog_tex = json['dialog_tex'];
+    rt_view = json['rt_view'];
+    r_tel = json['r_tel'];
+    par_king = json['par_king'];
+    a_aboutAll = json['a_aboutAll'];
   }
 
   Map<String, dynamic> toJson() {
@@ -119,6 +147,15 @@ class RenTaldataModel {
     data['qr_image'] = this.qr_Image;
     data['status_web'] = this.status_Web;
     data['title_web'] = this.title_web;
+    data['pn_TH'] = this.pn_TH;
+    data['range_lowpri'] = this.range_lowpri;
+    data['range_heipri'] = this.range_heipri;
+    data['dialog'] = this.dialog;
+    data['dialog_tex'] = this.dialog_tex;
+    data['rt_view'] = this.rt_view;
+    data['r_tel'] = this.r_tel;
+    data['par_king'] = this.par_king;
+    data['a_aboutAll'] = this.a_aboutAll;
     return data;
   }
 }

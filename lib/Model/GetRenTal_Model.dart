@@ -38,6 +38,7 @@ class RenTalModel {
   String? Floor_plans;
   String? printbill_default;
   String? receipt_title;
+  String? pn_TH;
 
   RenTalModel(
       {this.ser,
@@ -78,7 +79,8 @@ class RenTalModel {
       this.html,
       this.Floor_plans,
       this.printbill_default,
-      this.receipt_title});
+      this.receipt_title,
+      this.pn_TH});
 
   RenTalModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -120,6 +122,7 @@ class RenTalModel {
     Floor_plans = json['Floor_plans'];
     printbill_default = json['printbill_default'];
     receipt_title = json['receipt_title'];
+    pn_TH = json['pn_TH'];
   }
 
   Map<String, dynamic> toJson() {
@@ -163,6 +166,7 @@ class RenTalModel {
     data['Floor_plans'] = this.Floor_plans;
     data['printbill_default'] = this.printbill_default;
     data['receipt_title'] = this.receipt_title;
+     data['pn_TH'] = this.pn_TH;
     return data;
   }
 }

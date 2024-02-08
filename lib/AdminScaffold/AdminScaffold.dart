@@ -27,6 +27,7 @@ import '../Manage/Manage_Screen.dart';
 import '../Model/GetPerMission_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
+import '../Model/Get_Chat_Model.dart';
 import '../Model/areak_model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../Register/SignIn_License.dart';
@@ -42,6 +43,7 @@ import '../Setting/SettingScreen.dart';
 import '../Setting/SettingScreen_user.dart';
 import '../Setting/ttt.dart';
 import '../Style/colors.dart';
+import 'Chat_Screen.dart';
 
 class AdminScafScreen extends StatefulWidget {
   // const AdminScafScreen({super.key});
@@ -76,6 +78,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   List<PerMissionModel> perMissionModels = [];
   List<AreakModel> areakModels = [];
   List<UserModel> userModels = [];
+  List<UserModel> userModels_chat = [];
   int? timeoutper = null;
   DateTime? alert;
   Timer? timer;
@@ -89,6 +92,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   String deviceNames = "Unknown";
   String deviceNamesFromModel = "Unknown";
   final _keybar = GlobalKey<ScaffoldState>();
+  ///////////------------------------------------------->
+
+  List<ChatModel> chatModel = [];
+  List<ChatModel> chatModel_new = [];
+  // List<ChatModel> _chatModel = <ChatModel>[];
+  late StreamController<int> _streamController;
+  late int _counter;
+  late Timer _timer;
+
 ///////////------------------------------------------->
   @override
   void initState() {
@@ -101,7 +113,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     readTime();
     read_GC_areak();
     initPlugin();
-    changLogin();
+    // changLogin();
   }
 
   String? system_datex_;
@@ -519,6 +531,9 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           Duration difference = currentTime.difference(connectedTime);
 
           int minutesPassed = difference.inMinutes;
+          setState(() {
+            userModels_chat.add(userModel);
+          });
           if (minutesPassed > 15) {
           } else {
             setState(() {
@@ -594,6 +609,8 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           setState(() {
             preferences.setString(
                 'renTalName', renTalModel.pn!.trim().toString());
+            preferences.setString(
+                'renTalEmail', renTalModel.bill_email!.trim().toString());
             renTal_name = preferences.getString('renTalName');
             renTal_Email = renTalModel.bill_email.toString();
             foder = foderx;
@@ -775,19 +792,38 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   Future<Null> checkPreferance() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var rser = preferences.getString('rser');
-    if (rser == '0') {
-      setState(() {
-        renTal_user = preferences.getString('renTalSer');
-        renTal_name = preferences.getString('renTalName');
-        renTal_lavel = int.parse(preferences.getString('lavel').toString());
-      });
+    var utype = preferences.getString('utype');
+    var muser = preferences.getString('Muser');
+    if (utype == 'MS') {
+      if (preferences.getString('renTalSer') == null) {
+        setState(() {
+          preferences.setString('renTalSer', rser.toString());
+          renTal_user = preferences.getString('renTalSer');
+          renTal_lavel = int.parse(preferences.getString('lavel').toString());
+        });
+      } else {
+        setState(() {
+          renTal_user = preferences.getString('renTalSer');
+          renTal_name = preferences.getString('renTalName');
+          renTal_lavel = int.parse(preferences.getString('lavel').toString());
+        });
+      }
     } else {
-      setState(() {
-        preferences.setString('renTalSer', rser.toString());
-        renTal_user = preferences.getString('renTalSer');
-        renTal_lavel = int.parse(preferences.getString('lavel').toString());
-      });
+      if (rser == '0') {
+        setState(() {
+          renTal_user = preferences.getString('renTalSer');
+          renTal_name = preferences.getString('renTalName');
+          renTal_lavel = int.parse(preferences.getString('lavel').toString());
+        });
+      } else {
+        setState(() {
+          preferences.setString('renTalSer', rser.toString());
+          renTal_user = preferences.getString('renTalSer');
+          renTal_lavel = int.parse(preferences.getString('lavel').toString());
+        });
+      }
     }
+
     print('renTal_lavel>>> $renTal_lavel');
     setState(() {
       passcode_in();
@@ -1284,7 +1320,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           renTal_name == null ? ' ภาพรวม' : ' $renTal_name',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              color: AdminScafScreen_Color.Colors_Text1_,
+                              color: Colors.white,
                               fontWeight: (Responsive.isDesktop(context))
                                   ? FontWeight.bold
                                   : null,
@@ -1396,23 +1432,40 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                     ),
                   ),
                 ),
+              // ChatScreen(
+              //     ser_user: ser_user,
+              //     userModels_chat_: userModels_chat,
+              //     userModels_: userModels),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.lightGreen[200],
+                  color: Colors.white.withOpacity(0.7),
+                  // Colors.lightGreen[200],
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
+                      topRight: Radius.circular(0),
                       bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
+                      bottomRight: Radius.circular(0)),
+                  // border: Border.all(color: Colors.grey, width: 0.5),
                 ),
                 padding: const EdgeInsets.all(0.5),
                 child: Row(
                   children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(4, 1, 0, 1),
+                      child: StreamBuilder(
+                          stream: Stream.periodic(const Duration(seconds: 4)),
+                          builder: (context, snapshot) {
+                            return ChatScreen(
+                                ser_user: ser_user,
+                                userModels_chat_: userModels_chat,
+                                userModels_: userModels);
+                          }),
+                    ),
                     StreamBuilder(
                         stream: Stream.periodic(const Duration(seconds: 0)),
                         builder: (context, snapshot) {
                           return Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
                             child: InkWell(
                                 onTap: renTal_name == null
                                     ? null
@@ -1865,11 +1918,22 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                 child: Stack(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.people,
-                                        color: Colors.red,
-                                        size: 16,
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white54,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20),
+                                              topRight: Radius.circular(20),
+                                              bottomLeft: Radius.circular(20),
+                                              bottomRight: Radius.circular(20)),
+                                        ),
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Icon(
+                                          Icons.people,
+                                          color: Colors.red,
+                                          size: 18,
+                                        ),
                                       ),
                                     ),
                                     Positioned(
@@ -1892,7 +1956,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                             // '${userModels.length}***/$connected_Minutes/$ser_user/$email_user',
                                             style: TextStyle(
                                                 fontSize: 12,
-                                                color: Colors.white,
+                                                color: Colors.blue,
                                                 fontFamily:
                                                     FontWeight_.Fonts_T),
                                           ),
@@ -1902,175 +1966,195 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           );
                         }),
                     Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(4.0),
                       child: StreamBuilder(
                           stream: Stream.periodic(const Duration(seconds: 0)),
                           builder: (context, snapshot) {
                             return Text(
-                              'สวัสดีคุณ $fname_user',
+                              'Hi คุณ $fname_user ...',
                               style: TextStyle(
                                   color: AdminScafScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
                                   fontFamily: FontWeight_.Fonts_T),
                             );
                           }),
                     ),
-                    InkWell(
-                      onTap: () {
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0))),
-                            title: const Center(
-                                child: Text(
-                              'ออกจากระบบ',
-                              style: TextStyle(
-                                  color: AdminScafScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T),
-                            )),
-                            actions: <Widget>[
-                              Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  const Divider(
-                                    color: Colors.grey,
-                                    height: 4.0,
-                                  ),
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            width: 100,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.green,
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10)),
-                                            ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.lightGreen[200]!.withOpacity(0.7),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(0),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(0)),
+                      ),
+                      padding: const EdgeInsets.all(2.0),
+                      child: InkWell(
+                        onTap: () {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              title: const Center(
+                                  child: Text(
+                                'ออกจากระบบ',
+                                style: TextStyle(
+                                    color: AdminScafScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              )),
+                              actions: <Widget>[
+                                Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                      height: 4.0,
+                                    ),
+                                    const SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: TextButton(
-                                              onPressed: () async {
-                                                deall_Trans_select();
-                                                SharedPreferences preferences =
-                                                    await SharedPreferences
-                                                        .getInstance();
-                                                var ser = preferences
-                                                    .getString('ser');
-                                                var on = '0';
-                                                String url =
-                                                    '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
+                                            child: Container(
+                                              width: 100,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: TextButton(
+                                                onPressed: () async {
+                                                  deall_Trans_select();
+                                                  SharedPreferences
+                                                      preferences =
+                                                      await SharedPreferences
+                                                          .getInstance();
+                                                  var ser = preferences
+                                                      .getString('ser');
+                                                  var on = '0';
+                                                  String url =
+                                                      '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
 
-                                                try {
-                                                  var response = await http
-                                                      .get(Uri.parse(url));
+                                                  try {
+                                                    var response = await http
+                                                        .get(Uri.parse(url));
 
-                                                  var result = json
-                                                      .decode(response.body);
-                                                  print(result);
-                                                  if (result.toString() ==
-                                                      'true') {
-                                                    SharedPreferences
-                                                        preferences =
-                                                        await SharedPreferences
-                                                            .getInstance();
-                                                    preferences.clear();
-                                                    routToService(
-                                                        SignInScreen());
-                                                  } else {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                          content: Text(
-                                                              '(ผิดพลาด)')),
-                                                    );
-                                                  }
-                                                } catch (e) {}
-                                              },
-                                              child: const Text(
-                                                'ยืนยัน',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T),
+                                                    var result = json
+                                                        .decode(response.body);
+                                                    print(result);
+                                                    if (result.toString() ==
+                                                        'true') {
+                                                      SharedPreferences
+                                                          preferences =
+                                                          await SharedPreferences
+                                                              .getInstance();
+                                                      preferences.clear();
+                                                      routToService(
+                                                          SignInScreen());
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                            content: Text(
+                                                                '(ผิดพลาด)')),
+                                                      );
+                                                    }
+                                                  } catch (e) {}
+                                                },
+                                                child: const Text(
+                                                  'ยืนยัน',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                width: 100,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.redAccent,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10)),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          context, 'OK'),
-                                                  child: const Text(
-                                                    'ยกเลิก',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: FontWeight_
-                                                            .Fonts_T),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 100,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.redAccent,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            context, 'OK'),
+                                                    child: const Text(
+                                                      'ยกเลิก',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.logout_rounded),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Icon(Icons.logout_rounded),
+                        ),
                       ),
                     ),
                     // TimerBuilder.scheduled([alert!], builder: (context) {
@@ -2124,7 +2208,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           ),
         ],
         elevation: 0,
-        backgroundColor: AppBarColors.ABar_Colors,
+        backgroundColor: AppBarColors.hexColor,
       ),
       sideBar: SideBar(
         key: _keybar,
@@ -2260,16 +2344,18 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           child: Column(
             children: [
               Container(
+                // width: 200,
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: AppBarColors.ABar_Colors,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(0),
                       topRight: Radius.circular(0),
                       bottomLeft: Radius.circular(0),
                       bottomRight: Radius.circular(0)),
                 ),
+                padding: const EdgeInsets.all(8.0),
                 child: const Image(
-                  image: AssetImage('images/LOGO.png'),
+                  image: AssetImage('images/chaoperty_dark.png'),
                 ),
               ),
               InkWell(
@@ -2536,21 +2622,33 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                 ),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.lightGreen[200],
+                  color: Colors.white.withOpacity(0.7),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
+                      topRight: Radius.circular(0),
                       bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
+                      bottomRight: Radius.circular(0)),
+                  // border: Border.all(color: Colors.grey, width: 0.5),
                 ),
                 padding: const EdgeInsets.all(0.5),
                 child: Row(
                   children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(4, 1, 0, 1),
+                      child: StreamBuilder(
+                          stream: Stream.periodic(const Duration(seconds: 0)),
+                          builder: (context, snapshot) {
+                            return ChatScreen(
+                                ser_user: ser_user,
+                                userModels_chat_: userModels_chat,
+                                userModels_: userModels);
+                          }),
+                    ),
                     StreamBuilder(
                         stream: Stream.periodic(const Duration(seconds: 0)),
                         builder: (context, snapshot) {
                           return Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.fromLTRB(4, 8, 0, 8),
                             child: InkWell(
                                 onTap: renTal_name == null
                                     ? null
@@ -3003,11 +3101,22 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                 child: Stack(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.people,
-                                        color: Colors.red,
-                                        size: 16,
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white54,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20),
+                                              topRight: Radius.circular(20),
+                                              bottomLeft: Radius.circular(20),
+                                              bottomRight: Radius.circular(20)),
+                                        ),
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Icon(
+                                          Icons.people,
+                                          color: Colors.red,
+                                          size: 18,
+                                        ),
                                       ),
                                     ),
                                     Positioned(
@@ -3030,7 +3139,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                             // '${userModels.length}***/$connected_Minutes/$ser_user/$email_user',
                                             style: TextStyle(
                                                 fontSize: 12,
-                                                color: Colors.white,
+                                                color: Colors.blue,
                                                 fontFamily:
                                                     FontWeight_.Fonts_T),
                                           ),
@@ -3040,175 +3149,195 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           );
                         }),
                     Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(4.0),
                       child: StreamBuilder(
                           stream: Stream.periodic(const Duration(seconds: 0)),
                           builder: (context, snapshot) {
                             return Text(
-                              'สวัสดีคุณ $fname_user',
+                              'คุณ $fname_user ..',
                               style: TextStyle(
                                   color: AdminScafScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                  fontFamily: Font_.Fonts_T),
                             );
                           }),
                     ),
-                    InkWell(
-                      onTap: () {
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0))),
-                            title: const Center(
-                                child: Text(
-                              'ออกจากระบบ',
-                              style: TextStyle(
-                                  color: AdminScafScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T),
-                            )),
-                            actions: <Widget>[
-                              Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  const Divider(
-                                    color: Colors.grey,
-                                    height: 4.0,
-                                  ),
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            width: 100,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.green,
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10)),
-                                            ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.lightGreen[200]!.withOpacity(0.7),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(0),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(0)),
+                      ),
+                      padding: const EdgeInsets.all(2.0),
+                      child: InkWell(
+                        onTap: () {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              title: const Center(
+                                  child: Text(
+                                'ออกจากระบบ',
+                                style: TextStyle(
+                                    color: AdminScafScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              )),
+                              actions: <Widget>[
+                                Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                      height: 4.0,
+                                    ),
+                                    const SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: TextButton(
-                                              onPressed: () async {
-                                                deall_Trans_select();
-                                                SharedPreferences preferences =
-                                                    await SharedPreferences
-                                                        .getInstance();
-                                                var ser = preferences
-                                                    .getString('ser');
-                                                var on = '0';
-                                                String url =
-                                                    '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
+                                            child: Container(
+                                              width: 100,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: TextButton(
+                                                onPressed: () async {
+                                                  deall_Trans_select();
+                                                  SharedPreferences
+                                                      preferences =
+                                                      await SharedPreferences
+                                                          .getInstance();
+                                                  var ser = preferences
+                                                      .getString('ser');
+                                                  var on = '0';
+                                                  String url =
+                                                      '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
 
-                                                try {
-                                                  var response = await http
-                                                      .get(Uri.parse(url));
+                                                  try {
+                                                    var response = await http
+                                                        .get(Uri.parse(url));
 
-                                                  var result = json
-                                                      .decode(response.body);
-                                                  print(result);
-                                                  if (result.toString() ==
-                                                      'true') {
-                                                    SharedPreferences
-                                                        preferences =
-                                                        await SharedPreferences
-                                                            .getInstance();
-                                                    preferences.clear();
-                                                    routToService(
-                                                        SignInScreen());
-                                                  } else {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                          content: Text(
-                                                              '(ผิดพลาด)')),
-                                                    );
-                                                  }
-                                                } catch (e) {}
-                                              },
-                                              child: const Text(
-                                                'ยืนยัน',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T),
+                                                    var result = json
+                                                        .decode(response.body);
+                                                    print(result);
+                                                    if (result.toString() ==
+                                                        'true') {
+                                                      SharedPreferences
+                                                          preferences =
+                                                          await SharedPreferences
+                                                              .getInstance();
+                                                      preferences.clear();
+                                                      routToService(
+                                                          SignInScreen());
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                            content: Text(
+                                                                '(ผิดพลาด)')),
+                                                      );
+                                                    }
+                                                  } catch (e) {}
+                                                },
+                                                child: const Text(
+                                                  'ยืนยัน',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                width: 100,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.redAccent,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10)),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          context, 'OK'),
-                                                  child: const Text(
-                                                    'ยกเลิก',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: FontWeight_
-                                                            .Fonts_T),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 100,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.redAccent,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            context, 'OK'),
+                                                    child: const Text(
+                                                      'ยกเลิก',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.logout_rounded),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Icon(Icons.logout_rounded),
+                        ),
                       ),
                     ),
                   ],
@@ -3218,7 +3347,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           ),
         ],
         elevation: 0,
-        backgroundColor: AppBarColors.ABar_Colors,
+        backgroundColor: AppBarColors.hexColor,
       ),
       drawer: SideBar(
         textStyle:
@@ -3293,8 +3422,9 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           child: Column(
             children: [
               Container(
+                padding: const EdgeInsets.all(4.0),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: AppBarColors.ABar_Colors,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(0),
                       topRight: Radius.circular(0),
@@ -3302,7 +3432,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       bottomRight: Radius.circular(0)),
                 ),
                 child: const Image(
-                  image: AssetImage('images/LOGO.png'),
+                  image: AssetImage('images/chaoperty_dark.png'),
                 ),
               ),
               InkWell(

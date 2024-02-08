@@ -36,6 +36,7 @@ import 'ChaoAreaRenew_Screen.dart';
 import 'package:xml/xml.dart';
 
 import 'loadSvgImage.dart';
+import '../Style/view_pagenow.dart';
 
 class ChaoAreaScreen extends StatefulWidget {
   const ChaoAreaScreen({super.key});
@@ -52,6 +53,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   int Status_ = 1;
   int Ser_Body = 0;
   String Visit_ = 'grid'; //มุมมอง Visit_ = 'grid';
+  String Ser_nowpage = '1';
   ///////---------------------------------------------------->
   String tappedIndex_ = '';
   ///////---------------------------------------------------->
@@ -88,6 +90,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     'เสนอราคา',
     'ว่าง',
     'เช่าอยู่',
+    'หมดสัญญา',
   ];
   List Year_ = [
     'ทั้งหมด',
@@ -134,6 +137,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
 
   //////////////---------------------------------------------->
   String? Name_, Img_, Img_logo_, Province_, DBN_, Typex_, Img_rental_;
+  int open_set_date = 30;
   @override
   void initState() {
     super.initState();
@@ -220,7 +224,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
           var foderx = renTalModel.dbn;
           var img = renTalModel.img;
           var imglogo = renTalModel.imglogo;
+          var open_set_datex = int.parse(renTalModel.open_set_date!);
           setState(() {
+            open_set_date = open_set_datex == 0 ? 30 : open_set_datex;
             foder = foderx;
             rtname = rtnamex;
             type = typexs;
@@ -320,15 +326,18 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
 
     setState(() {
       areaFloorplanModels.clear;
-      read_GC_area();
+      areaModels.clear();
+      _areaModels.clear();
+      // read_GC_area();
     });
   }
 
   Future<Null> read_GC_area() async {
-    if (areaModels.length != 0) {
+    if (areaModels.isNotEmpty) {
       setState(() {
         areaQuotModels.clear();
         areaModels.clear();
+        _areaModels.clear();
       });
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -357,7 +366,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
             areaModels.add(areaModel);
           });
 
-          if (areaModel.quantity == '2' || areaModel.quantity == '3') {
+          if (areaModel.quantity != '1') {
             var qin = areaModel.ln_q;
             var qinser = areaModel.ser;
             String url =
@@ -411,6 +420,40 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     } catch (e) {}
   }
 
+  Future<Null> loadareaQuot(index) async {
+    if (areaQuotModels.isNotEmpty) {
+      setState(() {
+        areaQuotModels.clear();
+      });
+
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+
+      var ren = preferences.getString('renTalSer');
+      var zone = preferences.getString('zoneSer');
+
+      var qin = areaModels[index].ln_q;
+      var qinser = areaModels[index].ser;
+
+      String url =
+          '${MyConstant().domain}/GC_area_quot.php?isAdd=true&ren=$ren&qin=$qin&qinser=$qinser';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        print(result);
+        if (result != null) {
+          for (var map in result) {
+            AreaQuotModel areaQuotModel = AreaQuotModel.fromJson(map);
+            setState(() {
+              areaQuotModels.add(areaQuotModel);
+            });
+          }
+        }
+      } catch (e) {}
+    }
+  }
+
   void loadSvg() async {
     setState(() {
       areaFloorplanModels.clear();
@@ -444,6 +487,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   Future<Null> read_GC_areaSelect(int select) async {
     if (areaModels.length != 0) {
       areaModels.clear();
+      _areaModels.clear();
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -633,7 +677,16 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
 
             if (areaModel.quantity == '1') {
               setState(() {
-                areaModels.add(areaModel);
+                if (datex.isAfter(
+                            DateTime.parse('${areaModel.ldate} 00:00:00.000')
+                                .subtract(const Duration(days: 0))) !=
+                        true ||
+                    datex.isAfter(
+                            DateTime.parse('${areaModel.ldate} 00:00:00.000')
+                                .subtract(Duration(days: open_set_date))) !=
+                        true) {
+                  areaModels.add(areaModel);
+                }
               });
             }
           }
@@ -668,9 +721,14 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
-            if (areaModel.quantity != '1') {
+            if (areaModel.quantity == '1') {
               setState(() {
-                areaModels.add(areaModel);
+                if (datex.isAfter(
+                        DateTime.parse('${areaModel.ldate} 00:00:00.000')
+                            .subtract(const Duration(days: 0))) ==
+                    true) {
+                  areaModels.add(areaModel);
+                }
               });
             }
           }
@@ -765,10 +823,12 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
             var notsname = areaModel.sname.toString().toLowerCase();
             var notcname = areaModel.cname.toString().toLowerCase();
             var notcid = areaModel.cid.toString().toLowerCase();
+            var notfid = areaModel.fid.toString().toLowerCase();
             return notTitle.contains(text) ||
                 notsname.contains(text) ||
                 notcname.contains(text) ||
-                notcid.contains(text);
+                notcid.contains(text) ||
+                notfid.contains(text);
           }).toList();
         });
       },
@@ -811,57 +871,76 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
       child: Column(
         children: [
           if ((Ser_Body == 0))
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: AppbackgroundColor.TiTile_Colors,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
+                        child: Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                            color: AppbackgroundColor.TiTile_Box,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                          padding: const EdgeInsets.all(5.0),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AutoSizeText(
+                                'พื้นที่เช่า ',
+                                overflow: TextOverflow.ellipsis,
+                                minFontSize: 8,
+                                maxFontSize: 20,
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: ReportScreen_Color.Colors_Text1_,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T,
+                                ),
+                              ),
+                              AutoSizeText(
+                                ' > > ',
+                                overflow: TextOverflow.ellipsis,
+                                minFontSize: 8,
+                                maxFontSize: 20,
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    padding: const EdgeInsets.all(5.0),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AutoSizeText(
-                          'พื้นที่เช่า ',
-                          overflow: TextOverflow.ellipsis,
-                          minFontSize: 8,
-                          maxFontSize: 20,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: ReportScreen_Color.Colors_Text1_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T,
-                          ),
-                        ),
-                        AutoSizeText(
-                          ' > > ',
-                          overflow: TextOverflow.ellipsis,
-                          minFontSize: 8,
-                          maxFontSize: 20,
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ),
-              ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: viewpage(context, '$Ser_nowpage'),
+                ),
+              ],
             ),
+          //      if ((Ser_Body == 0))  Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     Align(
+          //       alignment: Alignment.topLeft,
+          //       child: viewpage(context, '$Ser_nowpage'),
+          //     ),
+          //   ],
+          // ),
           if ((Ser_Body != 0))
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -941,15 +1020,15 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
               child: Container(
                 decoration: const BoxDecoration(
-                  color: AppbackgroundColor.TiTile_Colors,
+                  color: AppbackgroundColor.TiTile_Box,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(0)),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
                   // border: Border.all(color: Colors.white, width: 1),
                 ),
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Row(
                   children: [
                     subzoneModels.length == 1
@@ -1159,6 +1238,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                 .toList(),
 
                             onChanged: (value) async {
+                              //   var zones = value!.indexOf(',');
+                              // var zoneSer = value.substring(0, zones);
+                              // var zonesName = value.substring(zones + 1);
+                              // var zonesNames = zonesName.indexOf(',');
+                              // var zonesNamenew =
+                              //     zonesName.substring(0, zonesNames);
+                              // var zonesNamesub =
+                              //     zonesName.substring(zonesNames + 1);
+                              // print(
+                              //     'mmmmm>> zoneSer $zoneSer mmmm>>zonesName $zonesName mmmm>>zonesNames $zonesNames mmmm>>zonesNamenew $zonesNamenew mmmm>>zonesNamesub $zonesNamesub');
+
                               var zones = value!.indexOf(',');
                               var zoneSer = value.substring(0, zones);
                               var zonesName = value.substring(zones + 1);
@@ -1238,7 +1328,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                             border: Border.all(color: Colors.grey, width: 1),
                           ),
                           // width: 120,
-                          // height: 35,
+                          height: 40,
                           child: _searchBar(),
                         ),
                       ),
@@ -1525,7 +1615,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                           child: const Center(
                               child: Icon(
                             Icons.add,
-                            color: TextHome_Color.TextHome_Colors,
+                            color: Colors.white,
                           )),
                           itemBuilder: (BuildContext context) => [
                             PopupMenuItem(
@@ -1634,17 +1724,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
             ),
           if ((Ser_Body == 0))
             Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              padding: const EdgeInsets.fromLTRB(8, 5, 8, 0),
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
-                    color: Colors.white30,
+                    color: Colors.white60,
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(0),
-                        topRight: Radius.circular(0),
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10)),
-                    // border: Border.all(color: Colors.white, width: 1),
+                    // border: Border.all(color: Colors.grey, width: 1),
                   ),
                   // padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -1685,16 +1775,37 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: (i + 1 == 1)
-                                                  ? Colors.grey.shade400
+                                                  ? (Status_ == i + 1)
+                                                      ? Colors.grey[700]
+                                                      : Colors.grey[300]
                                                   : (i + 1 == 2)
-                                                      ? Colors.orange.shade400
+                                                      ? (Status_ == i + 1)
+                                                          ? Colors.orange[700]
+                                                          : Colors.orange[200]
                                                       : (i + 1 == 3)
-                                                          ? Colors.blue.shade400
+                                                          ? (Status_ == i + 1)
+                                                              ? Colors.blue[700]
+                                                              : Colors.blue[200]
                                                           : (i + 1 == 4)
-                                                              ? Colors.green
-                                                                  .shade300
-                                                              : Colors
-                                                                  .red.shade300,
+                                                              ? (Status_ ==
+                                                                      i + 1)
+                                                                  ? Colors.green[
+                                                                      700]
+                                                                  : Colors.green[
+                                                                      200]
+                                                              : (i + 1 == 4)
+                                                                  ? (Status_ ==
+                                                                          i + 1)
+                                                                      ? Colors.red[
+                                                                          700]
+                                                                      : Colors.red[
+                                                                          200]
+                                                                  : (Status_ ==
+                                                                          i + 1)
+                                                                      ? Colors.grey[
+                                                                          700]
+                                                                      : Colors.grey[
+                                                                          300],
                                               borderRadius:
                                                   const BorderRadius.only(
                                                       topLeft:
@@ -1858,19 +1969,39 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                     color: (i + 1 == 1)
-                                                        ? Colors.grey.shade400
+                                                        ? (Status_ == i + 1)
+                                                            ? Colors.grey[700]
+                                                            : Colors.grey[300]
                                                         : (i + 1 == 2)
-                                                            ? Colors
-                                                                .orange.shade400
+                                                            ? (Status_ == i + 1)
+                                                                ? Colors
+                                                                    .orange[700]
+                                                                : Colors
+                                                                    .orange[200]
                                                             : (i + 1 == 3)
-                                                                ? Colors.blue
-                                                                    .shade400
+                                                                ? (Status_ ==
+                                                                        i + 1)
+                                                                    ? Colors.blue[
+                                                                        700]
+                                                                    : Colors.blue[
+                                                                        200]
                                                                 : (i + 1 == 4)
-                                                                    ? Colors
-                                                                        .green
-                                                                        .shade300
-                                                                    : Colors.red
-                                                                        .shade300,
+                                                                    ? (Status_ ==
+                                                                            i +
+                                                                                1)
+                                                                        ? Colors.green[
+                                                                            700]
+                                                                        : Colors.green[
+                                                                            200]
+                                                                    : (i + 1 ==
+                                                                            5)
+                                                                        ? (Status_ ==
+                                                                                i + 1)
+                                                                            ? Colors.red[700]
+                                                                            : Colors.red[200]
+                                                                        : (Status_ == i + 1)
+                                                                            ? Colors.grey[700]
+                                                                            : Colors.grey[300],
                                                     borderRadius:
                                                         const BorderRadius.only(
                                                             topLeft:
@@ -2015,7 +2146,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               Get_Value_cid: Value_cid,
                               Get_Value_NameShop_index: ser_cidtan,
                               Get_Value_status: Value_stasus,
-                              Get_Value_indexpage: '3',
+                              Get_Value_indexpage: '4',
                               updateMessage: updateMessage,
                             )
         ],
@@ -2569,7 +2700,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                                 0))) ==
                                                                     true
                                                                 ? Colors.red
-                                                                : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) ==
                                                                         true
                                                                     ? Colors
                                                                         .orange
@@ -2601,9 +2732,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                 true
                                                             ? 'หมดสัญญา'
                                                             : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
-                                                                        const Duration(
+                                                                        Duration(
                                                                             days:
-                                                                                30))) ==
+                                                                                open_set_date))) ==
                                                                     true
                                                                 ? 'ใกล้หมดสัญญา'
                                                                 : 'เช่าอยู่'
@@ -2627,7 +2758,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                                 0))) ==
                                                                     true
                                                                 ? Colors.red
-                                                                : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) ==
                                                                         true
                                                                     ? Colors
                                                                         .orange
@@ -4917,7 +5048,11 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                                             decoration: BoxDecoration(
                                                                                               color: (areaFloorplanModelss?.id == areaModel.id)
                                                                                                   ? areaModel.quantity == '1'
-                                                                                                      ? Colors.red[900]!.withOpacity(0.5)
+                                                                                                      ? datex.isAfter(DateTime.parse('${areaModel.ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) == true //datex
+                                                                                                          ? datex.isAfter(DateTime.parse('${areaModel.ldate} 00:00:00.000').subtract(Duration(days: 0))) == false
+                                                                                                              ? Colors.orange[900]!.withOpacity(0.5)
+                                                                                                              : Colors.grey[900]!.withOpacity(0.5)
+                                                                                                          : Colors.red[900]!.withOpacity(0.5)
                                                                                                       : areaModel.quantity == '2'
                                                                                                           ? Colors.blue[900]!.withOpacity(0.5)
                                                                                                           : areaModel.quantity == '3'
@@ -4926,7 +5061,11 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                                                   : (areaFloorplanModelss != null)
                                                                                                       ? Colors.grey[200]!.withOpacity(0.4)
                                                                                                       : areaModel.quantity == '1'
-                                                                                                          ? Colors.red[200]!.withOpacity(0.4)
+                                                                                                          ? datex.isAfter(DateTime.parse('${areaModel.ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) == true //datex
+                                                                                                              ? datex.isAfter(DateTime.parse('${areaModel.ldate} 00:00:00.000').subtract(Duration(days: 0))) == false
+                                                                                                                  ? Colors.orange[900]!.withOpacity(0.4)
+                                                                                                                  : Colors.grey[900]!.withOpacity(0.4)
+                                                                                                              : Colors.red[200]!.withOpacity(0.4)
                                                                                                           : areaModel.quantity == '2'
                                                                                                               ? Colors.blue[200]!.withOpacity(0.4)
                                                                                                               : areaModel.quantity == '3'
@@ -5660,7 +5799,12 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   Color getRandomColor(index) {
     final random = Random();
     return areaModels[index].quantity == '1'
-        ? Colors.red.shade700
+        ? datex.isAfter(
+                    DateTime.parse('${areaModels[index].ldate} 00:00:00.000')
+                        .subtract(Duration(days: open_set_date))) ==
+                true
+            ? Colors.grey.shade700
+            : Colors.red.shade700
         : areaModels[index].quantity == '2'
             ? Colors.blue.shade700
             : areaModels[index].quantity == '3'
@@ -5843,6 +5987,69 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                           ],
                         ),
                       )),
+              if (areaModels[index].quantity == '1')
+                if (areaModels[index].cid != areaModels[index].fid)
+                  ListTile(
+                      onTap: () async {
+                        setState(() {
+                          Ser_Body = 3;
+                          Value_stasus = areaModels[index].quantity == '1'
+                              ? datex.isAfter(DateTime.parse(
+                                              '${areaModels[index].ldate} 00:00:00.000')
+                                          .subtract(const Duration(days: 0))) ==
+                                      true
+                                  ? 'หมดสัญญา'
+                                  : datex.isAfter(DateTime.parse(
+                                                  '${areaModels[index].ldate} 00:00:00.000')
+                                              .subtract(Duration(
+                                                  days: open_set_date))) ==
+                                          true
+                                      ? 'ใกล้หมดสัญญา'
+                                      : 'เช่าอยู่'
+                              : areaModels[index].quantity == '2'
+                                  ? 'เสนอราคา'
+                                  : areaModels[index].quantity == '3'
+                                      ? 'เสนอราคา(มัดจำ)'
+                                      : 'ว่าง';
+                          Value_cid = areaModels[index].fid;
+                          ser_cidtan = '1';
+                        });
+                        Navigator.pop(context, 'OK');
+                      },
+                      // title:
+                      //     'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+                      // textStyle: const TextStyle(
+                      //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                      //     //fontWeight: FontWeight.bold,
+                      //     fontFamily: Font_.Fonts_T),
+                      title: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                          bottom: BorderSide(
+                            //                    <--- top side
+                            color: Colors.grey,
+                            width: 0.5,
+                          ),
+                        )),
+                        padding: const EdgeInsets.all(4.0),
+                        width: 270,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'สัญญาเดิม: ${areaModels[index].fid} (${areaModels[index].cname})',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    //fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Icon(Iconsax.arrow_circle_right,
+                                color: getRandomColor(index)),
+                          ],
+                        ),
+                      )),
 
 ////////////-------------------------->
               if (areaModels[index].quantity == '1')
@@ -5858,8 +6065,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                 ? 'หมดสัญญา'
                                 : datex.isAfter(DateTime.parse(
                                                 '${areaModels[index].ldate} 00:00:00.000')
-                                            .subtract(
-                                                const Duration(days: 30))) ==
+                                            .subtract(Duration(
+                                                days: open_set_date))) ==
                                         true
                                     ? 'ใกล้หมดสัญญา'
                                     : 'เช่าอยู่'
@@ -5907,6 +6114,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                         ],
                       ),
                     )),
+
 ////////////-------------------------->
               if (areaModels[index].quantity == '1')
                 ListTile(
@@ -5920,8 +6128,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                 ? 'หมดสัญญา'
                                 : datex.isAfter(DateTime.parse(
                                                 '${areaModels[index].ldate} 00:00:00.000')
-                                            .subtract(
-                                                const Duration(days: 30))) ==
+                                            .subtract(Duration(
+                                                days: open_set_date))) ==
                                         true
                                     ? 'ใกล้หมดสัญญา'
                                     : 'เช่าอยู่'
@@ -5973,7 +6181,10 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               ////////////-------------------------->
               if (areaModels[index].quantity == '2')
                 for (int i = 0; i < areaQuotModels.length; i++)
-                  if (areaModels[index].ser == areaQuotModels[i].ser)
+                  if (areaQuotModels[i]
+                          .ln_q!
+                          .contains(areaModels[index].ln.toString()) ==
+                      true)
                     ListTile(
                         onTap: () async {
                           setState(() {
@@ -6020,8 +6231,12 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                         )),
               ////////////-------------------------->
               if (areaModels[index].quantity == '3')
+                // for (int i = 0; i < areaQuotModels.length; i++)
                 for (int i = 0; i < areaQuotModels.length; i++)
-                  for (int i = 0; i < areaQuotModels.length; i++)
+                  if (areaQuotModels[i]
+                          .ln_q!
+                          .contains(areaModels[index].ln.toString()) ==
+                      true)
                     ListTile(
                         onTap: () async {
                           setState(() {
@@ -6312,7 +6527,71 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                         ],
                       ),
                     ))),
-
+        if (areaModels[index].quantity == '1')
+          if (areaModels[index].cid != areaModels[index].fid)
+            PopUpMenuItem(
+                // title:
+                //     'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+                // textStyle: const TextStyle(
+                //     color: PeopleChaoScreen_Color.Colors_Text2_,
+                //     //fontWeight: FontWeight.bold,
+                //     fontFamily: Font_.Fonts_T),
+                image: InkWell(
+                    onTap: () async {
+                      setState(() {
+                        Ser_Body = 3;
+                        Value_stasus = areaModels[index].quantity == '1'
+                            ? datex.isAfter(DateTime.parse(
+                                            '${areaModels[index].ldate} 00:00:00.000')
+                                        .subtract(const Duration(days: 0))) ==
+                                    true
+                                ? 'หมดสัญญา'
+                                : datex.isAfter(DateTime.parse(
+                                                '${areaModels[index].ldate} 00:00:00.000')
+                                            .subtract(Duration(
+                                                days: open_set_date))) ==
+                                        true
+                                    ? 'ใกล้หมดสัญญา'
+                                    : 'เช่าอยู่'
+                            : areaModels[index].quantity == '2'
+                                ? 'เสนอราคา'
+                                : areaModels[index].quantity == '3'
+                                    ? 'เสนอราคา(มัดจำ)'
+                                    : 'ว่าง';
+                        Value_cid = areaModels[index].fid;
+                        ser_cidtan = '1';
+                      });
+                      menu!.dismiss();
+                      // Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                        bottom: BorderSide(
+                          //                    <--- top side
+                          color: Colors.grey,
+                          width: 0.5,
+                        ),
+                      )),
+                      padding: const EdgeInsets.all(4.0),
+                      width: 270,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'สัญญาเดิม: ${areaModels[index].fid} (${areaModels[index].cname})',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  //fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Icon(Iconsax.arrow_circle_right,
+                              color: getRandomColor(index)),
+                        ],
+                      ),
+                    ))),
 ////////////-------------------------->
         if (areaModels[index].quantity == '1')
           PopUpMenuItem(
@@ -6335,7 +6614,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               : datex.isAfter(DateTime.parse(
                                               '${areaModels[index].ldate} 00:00:00.000')
                                           .subtract(
-                                              const Duration(days: 30))) ==
+                                              Duration(days: open_set_date))) ==
                                       true
                                   ? 'ใกล้หมดสัญญา'
                                   : 'เช่าอยู่'
@@ -6378,6 +6657,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       ],
                     ),
                   ))),
+
 ////////////-------------------------->
         if (areaModels[index].quantity == '1')
           PopUpMenuItem(
@@ -6399,7 +6679,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               : datex.isAfter(DateTime.parse(
                                               '${areaModels[index].ldate} 00:00:00.000')
                                           .subtract(
-                                              const Duration(days: 30))) ==
+                                              Duration(days: open_set_date))) ==
                                       true
                                   ? 'ใกล้หมดสัญญา'
                                   : 'เช่าอยู่'
@@ -6446,7 +6726,10 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         ////////////-------------------------->
         if (areaModels[index].quantity == '2')
           for (int i = 0; i < areaQuotModels.length; i++)
-            if (areaModels[index].ser == areaQuotModels[i].ser)
+            if (areaQuotModels[i]
+                    .ln_q!
+                    .contains(areaModels[index].ln.toString()) ==
+                true)
               PopUpMenuItem(
                   // title: 'เสนอราคา: ${areaQuotModels[i].docno}',
                   // textStyle: const TextStyle(
@@ -6494,8 +6777,12 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       ))),
         ////////////-------------------------->
         if (areaModels[index].quantity == '3')
+          // for (int i = 0; i < areaQuotModels.length; i++)
           for (int i = 0; i < areaQuotModels.length; i++)
-            for (int i = 0; i < areaQuotModels.length; i++)
+            if (areaQuotModels[i]
+                    .ln_q!
+                    .contains(areaModels[index].ln.toString()) ==
+                true)
               PopUpMenuItem(
                   // title: 'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
                   // textStyle: const TextStyle(
@@ -6578,7 +6865,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         ? SizedBox()
         : Card(
             color: areaModels[index].quantity == '1'
-                ? Colors.red.shade200
+                ? datex.isAfter(DateTime.parse(
+                                '${areaModels[index].ldate} 00:00:00.000')
+                            .subtract(Duration(days: open_set_date))) ==
+                        true //datex
+                    ? datex.isAfter(DateTime.parse(
+                                    '${areaModels[index].ldate} 00:00:00.000')
+                                .subtract(Duration(days: 0))) ==
+                            false
+                        ? Colors.orange.shade200
+                        : Colors.grey.shade200
+                    : Colors.red.shade200
                 : areaModels[index].quantity == '2'
                     ? Colors.blue.shade200
                     : areaModels[index].quantity == '3'
@@ -6589,7 +6886,22 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               onPressed: () async {
                 setState(() {
                   read_GC_con_area(index);
+                  // if (areaModels[index].quantity == '2' ||
+                  //     areaModels[index].quantity == '3') {
+                  //   loadareaQuot(index);
+                  // }
                 });
+                if (areaModels[index].quantity != '1') {
+                  for (int i = 0; i < areaQuotModels.length; i++) {
+                    var oo = areaQuotModels[i]
+                        .ln_q!
+                        .contains(areaModels[index].ln.toString());
+                    print('$oo');
+                    print('${areaQuotModels[i].ln_q}');
+                    print('${areaModels[index].ln}');
+                  }
+                }
+
                 // showLoaderDialog(context);
                 Future.delayed(const Duration(milliseconds: 400), () {
                   maxColumn(index, context);
@@ -6597,7 +6909,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               },
               child: Container(
                   color: areaModels[index].quantity == '1'
-                      ? Colors.red.shade200
+                      ? datex.isAfter(DateTime.parse(
+                                      '${areaModels[index].ldate} 00:00:00.000')
+                                  .subtract(Duration(days: open_set_date))) ==
+                              true //datex
+                          ? datex.isAfter(DateTime.parse(
+                                          '${areaModels[index].ldate} 00:00:00.000')
+                                      .subtract(Duration(days: 0))) ==
+                                  false
+                              ? Colors.orange.shade200
+                              : Colors.grey.shade200
+                          : Colors.red.shade200
                       : areaModels[index].quantity == '2'
                           ? Colors.blue.shade200
                           : areaModels[index].quantity == '3'
@@ -6631,8 +6953,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                 ? 'หมดสัญญา'
                                 : datex.isAfter(DateTime.parse(
                                                 '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
-                                            .subtract(
-                                                const Duration(days: 30))) ==
+                                            .subtract(Duration(
+                                                days: open_set_date))) ==
                                         true
                                     ? 'ใกล้หมดสัญญา'
                                     : 'เช่าอยู่'
@@ -6785,7 +7107,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     //                         ? 'หมดสัญญา'
     //                         : datex.isAfter(DateTime.parse(
     //                                         '${areaModels[index].ldate} 00:00:00.000')
-    //                                     .subtract(const Duration(days: 30))) ==
+    //                                     .subtract(const Duration(days: open_set_date))) ==
     //                                 true
     //                             ? 'ใกล้หมดสัญญา'
     //                             : 'เช่าอยู่'
@@ -6829,7 +7151,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     //                         ? 'หมดสัญญา'
     //                         : datex.isAfter(DateTime.parse(
     //                                         '${areaModels[index].ldate} 00:00:00.000')
-    //                                     .subtract(const Duration(days: 30))) ==
+    //                                     .subtract(const Duration(days: open_set_date))) ==
     //                                 true
     //                             ? 'ใกล้หมดสัญญา'
     //                             : 'เช่าอยู่'
@@ -6963,7 +7285,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     //                       ? 'หมดสัญญา'
     //                       : datex.isAfter(DateTime.parse(
     //                                       '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
-    //                                   .subtract(const Duration(days: 30))) ==
+    //                                   .subtract(const Duration(days: open_set_date))) ==
     //                               true
     //                           ? 'ใกล้หมดสัญญา'
     //                           : 'เช่าอยู่'
@@ -7518,7 +7840,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   //                                                                             true
   //                                                                         ? Colors
   //                                                                             .red
-  //                                                                         : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+  //                                                                         : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: open_set_date))) ==
   //                                                                                 true
   //                                                                             ? Colors
   //                                                                                 .orange.shade900
@@ -7550,7 +7872,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   //                                                                               0))) ==
   //                                                                       true
   //                                                                   ? 'หมดสัญญา'
-  //                                                                   : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+  //                                                                   : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: open_set_date))) ==
   //                                                                           true
   //                                                                       ? 'ใกล้หมดสัญญา'
   //                                                                       : 'เช่าอยู่'
@@ -7572,7 +7894,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   //                                                                           true
   //                                                                       ? Colors
   //                                                                           .red
-  //                                                                       : datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+  //                                                                       : datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: open_set_date))) ==
   //                                                                               true
   //                                                                           ? Colors
   //                                                                               .orange.shade900

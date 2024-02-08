@@ -75,14 +75,14 @@ class Mini_Ex_BankmovemenReport {
     globalStyle22.numberFormat = '_(\* #,##0.00_)';
     globalStyle22.fontSize = 12;
     globalStyle22.numberFormat;
-    globalStyle22.hAlign = x.HAlignType.center;
+    globalStyle22.hAlign = x.HAlignType.left;
 
     x.Style globalStyle222 = workbook.styles.add('style222');
     globalStyle222.backColorRgb = Color(0xC7E1E2E6);
     globalStyle222.numberFormat = '_(\* #,##0.00_)';
     // globalStyle222.numberFormat;
     globalStyle222.fontSize = 12;
-    globalStyle222.hAlign = x.HAlignType.center;
+    globalStyle222.hAlign = x.HAlignType.left;
 ////////////-------------------------------------------------------->
     x.Style globalStyle220 = workbook.styles.add('style220');
     globalStyle220.backColorRgb = Color(0xC7F5F7FA);
@@ -170,6 +170,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('L1').cellStyle = globalStyle22;
     sheet.getRangeByName('M1').cellStyle = globalStyle22;
     sheet.getRangeByName('N1').cellStyle = globalStyle22;
+    sheet.getRangeByName('O1').cellStyle = globalStyle22;
+    sheet.getRangeByName('P1').cellStyle = globalStyle22;
+    sheet.getRangeByName('Q1').cellStyle = globalStyle22;
     // sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
@@ -204,6 +207,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('L2').cellStyle = globalStyle22;
     sheet.getRangeByName('M2').cellStyle = globalStyle22;
     sheet.getRangeByName('N2').cellStyle = globalStyle22;
+    sheet.getRangeByName('O2').cellStyle = globalStyle22;
+    sheet.getRangeByName('P2').cellStyle = globalStyle22;
+    sheet.getRangeByName('Q2').cellStyle = globalStyle22;
     // sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
     sheet
@@ -227,6 +233,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('L3').cellStyle = globalStyle22;
     sheet.getRangeByName('M3').cellStyle = globalStyle22;
     sheet.getRangeByName('N3').cellStyle = globalStyle22;
+    sheet.getRangeByName('O3').cellStyle = globalStyle22;
+    sheet.getRangeByName('P3').cellStyle = globalStyle22;
+    sheet.getRangeByName('Q3').cellStyle = globalStyle22;
     // sheet.getRangeByName('O3').cellStyle = globalStyle22;
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillBank.length}');
 
@@ -245,6 +254,8 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('M3').columnWidth = 18;
     sheet.getRangeByName('N3').columnWidth = 18;
     sheet.getRangeByName('O3').columnWidth = 18;
+    sheet.getRangeByName('P3').columnWidth = 18;
+    sheet.getRangeByName('Q3').columnWidth = 18;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
@@ -260,6 +271,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('L4').cellStyle = globalStyle1;
     sheet.getRangeByName('M4').cellStyle = globalStyle1;
     sheet.getRangeByName('N4').cellStyle = globalStyle1;
+    sheet.getRangeByName('O4').cellStyle = globalStyle1;
+    sheet.getRangeByName('P4').cellStyle = globalStyle1;
+    sheet.getRangeByName('Q4').cellStyle = globalStyle1;
     // sheet.getRangeByName('O4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('A4').columnWidth = 18;
@@ -268,9 +282,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('D4').columnWidth = 18;
     sheet.getRangeByName('E4').columnWidth = 18;
     sheet.getRangeByName('F4').columnWidth = 18;
-    sheet.getRangeByName('G4').columnWidth = 18;
-    sheet.getRangeByName('H4').columnWidth = 18;
-    sheet.getRangeByName('I4').columnWidth = 18;
+    sheet.getRangeByName('G4').columnWidth = 25;
+    sheet.getRangeByName('H4').columnWidth = 25;
+    sheet.getRangeByName('I4').columnWidth = 25;
     sheet.getRangeByName('J4').columnWidth = 18;
     sheet.getRangeByName('K4').columnWidth = 18;
     sheet.getRangeByName('L4').columnWidth = 18;
@@ -300,7 +314,10 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('K4').setText('Slip');
     sheet.getRangeByName('L4').setText('ส่วนลด');
     sheet.getRangeByName('M4').setText('ราคารวม');
-    sheet.getRangeByName('N4').setText('หักส่วนลด');
+    sheet.getRangeByName('N4').setText('ส่วนลด');
+    sheet.getRangeByName('O4').setText('หักส่วนลด');
+    sheet.getRangeByName('P4').setText('ประเภท');
+    sheet.getRangeByName('Q4').setText('สถานะ');
 
     ///---------------------------------------------------------->
     int all_Total = 0;
@@ -333,23 +350,26 @@ class Mini_Ex_BankmovemenReport {
       sheet.getRangeByName('L${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('M${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('N${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('P${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('Q${indextotol + 5 - 1}').cellStyle = numberColor;
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${index1 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
             (TransReBillBank[index1].doctax != '')
                 ? '${TransReBillBank[index1].doctax}'
-                : TransReBillBank[index1].docno != ''
-                    ? '${TransReBillBank[index1].docno}'
-                    : '${TransReBillBank[index1].refno}',
+                : TransReBillBank[index1].docno == ''
+                    ? '${TransReBillBank[index1].refno}'
+                    : '${TransReBillBank[index1].docno}',
           );
-
       sheet
           .getRangeByName('C${indextotol + 5 - 1}')
           .setText('${TransReBillBank[index1].daterec}');
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
-          (TransReBillBank[index1].zser == null)
-              ? '${TransReBillBank[index1].zser1}'
-              : '${TransReBillBank[index1].zser}');
+            (TransReBillBank[index1].zser1 == null)
+                ? '${TransReBillBank[index1].zser}'
+                : '${TransReBillBank[index1].zser1}',
+          );
 
       sheet.getRangeByName('E${indextotol + 5 - 1}').setText(
             (TransReBillBank[index1].zn == null)
@@ -374,34 +394,54 @@ class Mini_Ex_BankmovemenReport {
           (TransReBillBank[index1].bank == null)
               ? ''
               : '${TransReBillBank[index1].bank!}');
+
       sheet.getRangeByName('J${indextotol + 5 - 1}').setText(
           (TransReBillBank[index1].bno == null)
               ? ''
               : '${TransReBillBank[index1].bno!}');
+
       sheet.getRangeByName('K${indextotol + 5 - 1}').setText(
           (TransReBillBank[index1].slip == null ||
                   TransReBillBank[index1].slip! == 'null')
               ? ''
               : '${TransReBillBank[index1].slip}');
-      sheet.getRangeByName('L${indextotol + 5 - 1}').setNumber(
-          (TransReBillBank[index1].total_dis == null)
-              ? 0
-              : double.parse(TransReBillBank[index1].total_bill!) -
-                  double.parse(TransReBillBank[index1].total_dis!));
-      sheet.getRangeByName('M${indextotol + 5 - 1}').setNumber(
-          (TransReBillBank[index1].total_bill == null)
-              ? 0
-              : double.parse(TransReBillBank[index1].total_bill!));
 
+      sheet.getRangeByName('L${indextotol + 5 - 1}').setNumber(
+          (TransReBillBank[index1].total_duesbill == null)
+              ? 0
+              : double.parse(TransReBillBank[index1].total_duesbill!));
+
+      sheet.getRangeByName('M${indextotol + 5 - 1}').setNumber(
+            (TransReBillBank[index1].total_bill == null)
+                ? 0
+                : double.parse(TransReBillBank[index1].total_bill!),
+          );
       sheet.getRangeByName('N${indextotol + 5 - 1}').setNumber(
-          (TransReBillBank[index1].total_dis == null)
-              ? double.parse(TransReBillBank[index1].total_bill!)
-              : double.parse(TransReBillBank[index1].total_dis!));
+            (TransReBillBank[index1].total_dis == null)
+                ? 0.00
+                : double.parse(TransReBillBank[index1].total_dis!),
+          );
+      sheet.getRangeByName('O${indextotol + 5 - 1}').setNumber(
+            (TransReBillBank[index1].total_dis == null)
+                ? double.parse(TransReBillBank[index1].total_bill!)
+                : double.parse(TransReBillBank[index1].total_bill!) -
+                    double.parse(TransReBillBank[index1].total_dis!),
+          );
+      sheet.getRangeByName('P${indextotol + 5 - 1}').setText(
+            (TransReBillBank[index1].room_number.toString() == '' ||
+                    TransReBillBank[index1].room_number == null)
+                ? ''
+                : 'ล็อคเสียบ',
+          );
+      sheet.getRangeByName('Q${indextotol + 5 - 1}').setText(
+            (TransReBillBank[index1].doctax == '' ||
+                    TransReBillBank[index1].doctax == null)
+                ? ''
+                : 'ใบกำกับภาษี',
+          );
       print('-------------------------');
     }
-    // sheet
-    //     .getRangeByName('B3')
-    //     .setText('รายการ : ${_TransReBillModels_Bankmovemen.length}');
+
     /////////////////////////////////------------------------------------------------>
     ///
 
@@ -410,9 +450,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('K${indextotol + 5 + 2}').setText('รวมทั้งหมด: ');
 
     sheet.getRangeByName('L${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",L5:L${indextotol + 5 - 1})');
+        '=SUMIF(P5:P${indextotol + 5 - 1}, "ล็อคเสียบ",L5:L${indextotol + 5 - 1})');
     sheet.getRangeByName('L${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ",L5:L${indextotol + 5 - 1})');
+        '=SUMIF(P5:P${indextotol + 5 - 1}, "<>ล็อคเสียบ",L5:L${indextotol + 5 - 1})');
     sheet
         .getRangeByName('L${indextotol + 5 + 2}')
         .setFormula('=SUM(L5:L${indextotol + 5 - 1})');
@@ -420,23 +460,31 @@ class Mini_Ex_BankmovemenReport {
     ///---------->
     ///
     sheet.getRangeByName('M${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",M5:M${indextotol + 5 - 1})');
+        '=SUMIF(P5:P${indextotol + 5 - 1}, "ล็อคเสียบ",M5:M${indextotol + 5 - 1})');
     sheet.getRangeByName('M${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ",M5:M${indextotol + 5 - 1})');
+        '=SUMIF(P5:P${indextotol + 5 - 1}, "<>ล็อคเสียบ",M5:M${indextotol + 5 - 1})');
     sheet
         .getRangeByName('M${indextotol + 5 + 2}')
         .setFormula('=SUM(M5:M${indextotol + 5 - 1})');
 
     ///---------->
     sheet.getRangeByName('N${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",N5:N${indextotol + 5 - 1})');
+        '=SUMIF(P5:P${indextotol + 5 - 1}, "ล็อคเสียบ",N5:N${indextotol + 5 - 1})');
     sheet.getRangeByName('N${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ",N5:N${indextotol + 5 - 1})');
+        '=SUMIF(P5:P${indextotol + 5 - 1}, "<>ล็อคเสียบ",N5:N${indextotol + 5 - 1})');
     sheet
         .getRangeByName('N${indextotol + 5 + 2}')
         .setFormula('=SUM(N5:N${indextotol + 5 - 1})');
 
-///////-------------------------------------------------------------------->
+    ///---------->
+    sheet.getRangeByName('O${indextotol + 5 + 0}').setFormula(
+        '=SUMIF(P5:P${indextotol + 5 - 1}, "ล็อคเสียบ",O5:O${indextotol + 5 - 1})');
+    sheet.getRangeByName('O${indextotol + 5 + 1}').setFormula(
+        '=SUMIF(P5:P${indextotol + 5 - 1}, "<>ล็อคเสียบ",O5:O${indextotol + 5 - 1})');
+    sheet
+        .getRangeByName('O${indextotol + 5 + 2}')
+        .setFormula('=SUM(O5:O${indextotol + 5 - 1})');
+    ///////-------------------------------------------------------------------->
 
     for (var index = 0; index < 3; index++) {
       sheet.getRangeByName('K${indextotol + 5 + index}').cellStyle =
@@ -447,43 +495,54 @@ class Mini_Ex_BankmovemenReport {
           globalStyle7;
       sheet.getRangeByName('N${indextotol + 5 + index}').cellStyle =
           globalStyle7;
+      sheet.getRangeByName('O${indextotol + 5 + index}').cellStyle =
+          globalStyle7;
     }
-
 /////////////////////////////////------------------------------------------------>
-    sheet.getRangeByName('I${indextotol + 5 + 5}').setText('ธนาคาร');
-    sheet.getRangeByName('J${indextotol + 5 + 5}').setText('ชื่อบช.');
-    sheet.getRangeByName('K${indextotol + 5 + 5}').setText('เลขบช.');
-    sheet.getRangeByName('L${indextotol + 5 + 5}').setText('สาขา');
+    sheet.getRangeByName('H${indextotol + 5 + 5}').setText('ธนาคาร');
+    sheet.getRangeByName('I${indextotol + 5 + 5}').setText('ชื่อบช.');
+    sheet.getRangeByName('J${indextotol + 5 + 5}').setText('เลขบช.');
+    sheet.getRangeByName('K${indextotol + 5 + 5}').setText('สาขา');
 
+    sheet.getRangeByName('L${indextotol + 5 + 5}').setText('รวมค่าธรรมเนียม');
     sheet.getRangeByName('M${indextotol + 5 + 5}').setText('ราคารวม');
-    sheet.getRangeByName('N${indextotol + 5 + 5}').setText('ราคารวมหักส่วนลด');
+    sheet.getRangeByName('N${indextotol + 5 + 5}').setText('รวมส่วนลด');
+    sheet.getRangeByName('O${indextotol + 5 + 5}').setText('ราคารวมหักส่วนลด');
+    sheet.getRangeByName('H${indextotol + 5 + 5}').cellStyle = globalStyle1;
     sheet.getRangeByName('I${indextotol + 5 + 5}').cellStyle = globalStyle1;
     sheet.getRangeByName('J${indextotol + 5 + 5}').cellStyle = globalStyle1;
     sheet.getRangeByName('K${indextotol + 5 + 5}').cellStyle = globalStyle1;
     sheet.getRangeByName('L${indextotol + 5 + 5}').cellStyle = globalStyle1;
     sheet.getRangeByName('M${indextotol + 5 + 5}').cellStyle = globalStyle1;
     sheet.getRangeByName('N${indextotol + 5 + 5}').cellStyle = globalStyle1;
+    sheet.getRangeByName('O${indextotol + 5 + 5}').cellStyle = globalStyle1;
 
     for (var index = 0; index < payMentModels.length; index++) {
       sheet
-          .getRangeByName('I${indextotol + 5 + 6 + index}')
+          .getRangeByName('H${indextotol + 5 + 6 + index}')
           .setText('${payMentModels[index].bank}');
       sheet
-          .getRangeByName('J${indextotol + 5 + 6 + index}')
+          .getRangeByName('I${indextotol + 5 + 6 + index}')
           .setText('${payMentModels[index].bname}');
       sheet
-          .getRangeByName('K${indextotol + 5 + 6 + index}')
+          .getRangeByName('J${indextotol + 5 + 6 + index}')
           .setText('${payMentModels[index].bno}');
       sheet
-          .getRangeByName('L${indextotol + 5 + 6 + index}')
+          .getRangeByName('K${indextotol + 5 + 6 + index}')
           .setText('${payMentModels[index].bsaka}');
 
+      sheet.getRangeByName('L${indextotol + 5 + 6 + index}').setFormula(
+          '=SUMIF(J5:J${indextotol + 5 - 1}, "${payMentModels[index].bno}",L5:L${indextotol + 5 - 1})');
       sheet.getRangeByName('M${indextotol + 5 + 6 + index}').setFormula(
           '=SUMIF(J5:J${indextotol + 5 - 1}, "${payMentModels[index].bno}",M5:M${indextotol + 5 - 1})');
 
       sheet.getRangeByName('N${indextotol + 5 + 6 + index}').setFormula(
           '=SUMIF(J5:J${indextotol + 5 - 1}, "${payMentModels[index].bno}", N5:N${indextotol + 5 - 1})');
+      sheet.getRangeByName('O${indextotol + 5 + 6 + index}').setFormula(
+          '=SUMIF(J5:J${indextotol + 5 - 1}, "${payMentModels[index].bno}", O5:O${indextotol + 5 - 1})');
 
+      sheet.getRangeByName('H${indextotol + 5 + 6 + index}').cellStyle =
+          globalStyle22;
       sheet.getRangeByName('I${indextotol + 5 + 6 + index}').cellStyle =
           globalStyle22;
       sheet.getRangeByName('J${indextotol + 5 + 6 + index}').cellStyle =
@@ -495,6 +554,8 @@ class Mini_Ex_BankmovemenReport {
       sheet.getRangeByName('M${indextotol + 5 + 6 + index}').cellStyle =
           globalStyle22;
       sheet.getRangeByName('N${indextotol + 5 + 6 + index}').cellStyle =
+          globalStyle22;
+      sheet.getRangeByName('O${indextotol + 5 + 6 + index}').cellStyle =
           globalStyle22;
     }
 /////////////////////////////////------------------------------------------------>

@@ -55,7 +55,8 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
       dayfinpay,
       type_bills,
       dis_sum_Matjum,
-      TitleType_Default_Receipt_Name) async {
+      TitleType_Default_Receipt_Name,
+      dis_sum_Pakan) async {
     ////
     //// ------------>(ใบเสร็จรับเงินชั่วคราว paySrsscreen_)
     ///////
@@ -128,7 +129,15 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                 ? pw.Container(
                     height: 60,
                     width: 60,
-                    color: PdfColors.grey200,
+                    decoration: const pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      border: pw.Border(
+                        right: pw.BorderSide(color: PdfColors.grey300),
+                        left: pw.BorderSide(color: PdfColors.grey300),
+                        top: pw.BorderSide(color: PdfColors.grey300),
+                        bottom: pw.BorderSide(color: PdfColors.grey300),
+                      ),
+                    ),
                     child: pw.Center(
                       child: pw.Text(
                         '$bill_name ',
@@ -146,12 +155,24 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                 //     height: 72,
                 //     width: 70,
                 //   )
-                : pw.Image(
-                    (netImage[0]),
-                    // fit: pw.BoxFit.fill,
+                : pw.Container(
                     height: 60,
                     width: 60,
-                  ),
+                    decoration: const pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      border: pw.Border(
+                        right: pw.BorderSide(color: PdfColors.grey300),
+                        left: pw.BorderSide(color: PdfColors.grey300),
+                        top: pw.BorderSide(color: PdfColors.grey300),
+                        bottom: pw.BorderSide(color: PdfColors.grey300),
+                      ),
+                    ),
+                    child: pw.Image(
+                      (netImage[0]),
+                      // fit: pw.BoxFit.fill,
+                      height: 60,
+                      width: 60,
+                    )),
             pw.SizedBox(width: 1 * PdfPageFormat.mm),
             pw.Container(
               // color: PdfColors.grey200,
@@ -284,7 +305,7 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
             // ),
           ],
         ),
-        pw.SizedBox(height: 1 * PdfPageFormat.mm),
+        pw.SizedBox(height: 1 * PdfPageFormat.mm + 3),
         // pw.SizedBox(height: 1 * PdfPageFormat.mm),
         // pw.Divider(),
         // pw.SizedBox(height: 1 * PdfPageFormat.mm),
@@ -961,7 +982,7 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
               child: pw.Row(
                 children: [
                   pw.Container(
-                    width: 57,
+                    width: 45,
                     decoration: const pw.BoxDecoration(
                       // color: PdfColors.green100,
                       border: pw.Border(
@@ -1149,6 +1170,44 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                     ),
                   ),
                   pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      decoration: const pw.BoxDecoration(
+                        // color: PdfColors.green100,
+                        border: pw.Border(
+                          right: pw.BorderSide(color: PdfColors.grey600),
+                          top: pw.BorderSide(color: PdfColors.grey600),
+                          bottom: pw.BorderSide(color: PdfColors.grey600),
+                        ),
+                      ),
+                      height: 30,
+                      child: pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                            'ส่วนลด',
+                            maxLines: 1,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                                fontSize: font_Size,
+                                font: ttf,
+                                color: PdfColors.black),
+                          ),
+                          pw.Text(
+                            'Dis',
+                            maxLines: 1,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                                fontSize: font_Size,
+                                font: ttf,
+                                color: PdfColors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
                     flex: 2,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
@@ -1206,7 +1265,7 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                   for (int index = 0; index < tableData00.length; index++)
                     pw.TableRow(children: [
                       pw.Container(
-                        width: 57,
+                        width: 45,
                         padding: const pw.EdgeInsets.all(2.0),
                         child: pw.Align(
                           alignment: pw.Alignment.topCenter,
@@ -1297,13 +1356,30 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                             ),
                           )),
                       pw.Expanded(
+                          flex: 1,
+                          child: pw.Container(
+                            padding: const pw.EdgeInsets.all(2.0),
+                            child: pw.Align(
+                              alignment: pw.Alignment.topRight,
+                              child: pw.Text(
+                                '${tableData00[index][12]}',
+                                maxLines: 2,
+                                textAlign: pw.TextAlign.right,
+                                style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    color: PdfColors.grey800),
+                              ),
+                            ),
+                          )),
+                      pw.Expanded(
                           flex: 2,
                           child: pw.Container(
                             padding: const pw.EdgeInsets.all(2.0),
                             child: pw.Align(
                               alignment: pw.Alignment.topRight,
                               child: pw.Text(
-                                '${tableData00[index][6]}',
+                                '${tableData00[index][13]}',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.right,
                                 style: pw.TextStyle(
@@ -1317,7 +1393,7 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                   for (int index = 0; index < tableData01.length; index++)
                     pw.TableRow(children: [
                       pw.Container(
-                        width: 57,
+                        width: 45,
                         padding: const pw.EdgeInsets.all(2.0),
                         child: pw.Align(
                           alignment: pw.Alignment.topCenter,
@@ -1398,6 +1474,23 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                                 (tableData01[index][7].toString() == '0.00')
                                     ? '${tableData01[index][5]}'
                                     : '${tableData01[index][7]}',
+                                maxLines: 2,
+                                textAlign: pw.TextAlign.right,
+                                style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    color: PdfColors.grey800),
+                              ),
+                            ),
+                          )),
+                      pw.Expanded(
+                          flex: 1,
+                          child: pw.Container(
+                            padding: const pw.EdgeInsets.all(2.0),
+                            child: pw.Align(
+                              alignment: pw.Alignment.topRight,
+                              child: pw.Text(
+                                '0.00',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.right,
                                 style: pw.TextStyle(
@@ -1821,6 +1914,72 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                               ),
                             ],
                           ),
+                        if (nFormat
+                                .format(double.parse(dis_sum_Pakan.toString()))
+                                .toString() !=
+                            '0.00')
+                          pw.Row(
+                            children: [
+                              pw.Expanded(
+                                flex: 1,
+                                child: pw.Container(
+                                  decoration: const pw.BoxDecoration(
+                                    color: PdfColors.white,
+                                    border: const pw.Border(
+                                      top: pw.BorderSide(
+                                          color: PdfColors.grey600),
+                                      left: pw.BorderSide(
+                                          color: PdfColors.grey600),
+                                      bottom: pw.BorderSide(
+                                          color: PdfColors.grey600),
+                                      right: pw.BorderSide(
+                                          color: PdfColors.grey600),
+                                    ),
+                                  ),
+                                  padding: const pw.EdgeInsets.all(2.0),
+                                  child: pw.Text(
+                                    'เงินประกัน(ตัดเงินประกัน) / insurance',
+                                    //  'เงินมัดจำ(${nFormat.format(sum_matjum)})',
+                                    style: pw.TextStyle(
+                                        fontSize: font_Size,
+                                        fontWeight: pw.FontWeight.bold,
+                                        font: ttf,
+                                        color: PdfColors.grey800),
+                                  ),
+                                ),
+                              ),
+                              pw.Expanded(
+                                flex: 1,
+                                child: pw.Container(
+                                  decoration: const pw.BoxDecoration(
+                                    color: PdfColors.white,
+                                    border: const pw.Border(
+                                      left: pw.BorderSide(
+                                          color: PdfColors.grey600),
+                                      top: pw.BorderSide(
+                                          color: PdfColors.grey600),
+                                      bottom: pw.BorderSide(
+                                          color: PdfColors.grey600),
+                                      right: pw.BorderSide(
+                                          color: PdfColors.grey600),
+                                    ),
+                                  ),
+                                  padding: const pw.EdgeInsets.all(2.0),
+                                  child: pw.Text(
+                                    dis_sum_Pakan == 0.00
+                                        ? '${nFormat.format(double.parse(dis_sum_Pakan.toString()))}'
+                                        : '${nFormat.format(double.parse(dis_sum_Pakan.toString()))}',
+                                    textAlign: pw.TextAlign.right,
+                                    style: pw.TextStyle(
+                                        fontSize: font_Size,
+                                        fontWeight: pw.FontWeight.bold,
+                                        font: ttf,
+                                        color: PdfColors.grey800),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         pw.Row(
                           children: [
                             pw.Expanded(
@@ -1868,7 +2027,7 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                                 ),
                                 padding: const pw.EdgeInsets.all(2.0),
                                 child: pw.Text(
-                                  '${nFormat.format(double.parse(Total.toString()) - double.parse(dis_sum_Matjum.toString()))}',
+                                  '${nFormat.format(double.parse(Total.toString()) - double.parse(dis_sum_Matjum.toString()) - double.parse(dis_sum_Pakan.toString()))}',
                                   textAlign: pw.TextAlign.right,
                                   style: pw.TextStyle(
                                       fontSize: font_Size,
@@ -2034,7 +2193,7 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                               // crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text(
-                                  'ผู้รับเงิน /Collector :',
+                                  'ลงชื่อ : ผู้รับเงิน',
                                   textAlign: pw.TextAlign.left,
                                   style: pw.TextStyle(
                                     fontSize: font_Size,
@@ -2081,7 +2240,7 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                               // crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text(
-                                  'ผู้จัดการ /Manager :',
+                                  'ลงชื่อ : ผู้จัดการ',
                                   textAlign: pw.TextAlign.left,
                                   style: pw.TextStyle(
                                     fontSize: font_Size,

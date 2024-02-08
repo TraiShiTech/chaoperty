@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:universal_html/html.dart' as html;
 import '../Constant/Myconstant.dart';
+import '../Man_PDF/Man_ChartReport_Generate.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../Style/colors.dart';
@@ -938,48 +939,48 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                       ),
                                   ]),
                             ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (Visit_1 == '1' || Visit_1 == null) {
-                                      captureAndConvertToBase64(chartKey1, '');
-                                    } else {
-                                      captureAndConvertToBase64(chartKey2, '');
-                                    }
-                                  },
-                                  child: Container(
-                                      width: 120,
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red[700],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8)),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'SAVE(.PNG)',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
-                                      )),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child: Align(
+                      //         alignment: Alignment.centerRight,
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: InkWell(
+                      //             onTap: () async {
+                      //               if (Visit_1 == '1' || Visit_1 == null) {
+                      //                 captureAndConvertToBase64(chartKey1, '');
+                      //               } else {
+                      //                 captureAndConvertToBase64(chartKey2, '');
+                      //               }
+                      //             },
+                      //             child: Container(
+                      //                 width: 120,
+                      //                 padding: const EdgeInsets.all(8.0),
+                      //                 decoration: BoxDecoration(
+                      //                   color: Colors.red[700],
+                      //                   borderRadius: const BorderRadius.only(
+                      //                       topLeft: Radius.circular(8),
+                      //                       topRight: Radius.circular(8),
+                      //                       bottomLeft: Radius.circular(8),
+                      //                       bottomRight: Radius.circular(8)),
+                      //                 ),
+                      //                 child: const Center(
+                      //                   child: Text(
+                      //                     'SAVE(.PNG)',
+                      //                     style: TextStyle(
+                      //                       color: Colors.white,
+                      //                       fontWeight: FontWeight.bold,
+                      //                       fontFamily: FontWeight_.Fonts_T,
+                      //                     ),
+                      //                   ),
+                      //                 )),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
@@ -1210,54 +1211,95 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                     ),
                                   ]),
                             ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (Visit_1 == '1' || Visit_1 == null) {
-                                      captureAndConvertToBase64(chartKey3, '');
-                                    } else {
-                                      captureAndConvertToBase64(chartKey4, '');
-                                    }
-                                  },
-                                  child: Container(
-                                      width: 120,
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red[700],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8)),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'SAVE(.PNG)',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
-                                      )),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child: Align(
+                      //         alignment: Alignment.centerRight,
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: InkWell(
+                      //             onTap: () async {
+                      //               if (Visit_1 == '1' || Visit_1 == null) {
+                      //                 captureAndConvertToBase64(chartKey3, '');
+                      //               } else {
+                      //                 captureAndConvertToBase64(chartKey4, '');
+                      //               }
+                      //             },
+                      //             child: Container(
+                      //                 width: 120,
+                      //                 padding: const EdgeInsets.all(8.0),
+                      //                 decoration: BoxDecoration(
+                      //                   color: Colors.red[700],
+                      //                   borderRadius: const BorderRadius.only(
+                      //                       topLeft: Radius.circular(8),
+                      //                       topRight: Radius.circular(8),
+                      //                       bottomLeft: Radius.circular(8),
+                      //                       bottomRight: Radius.circular(8)),
+                      //                 ),
+                      //                 child: const Center(
+                      //                   child: Text(
+                      //                     'SAVE(.PNG)',
+                      //                     style: TextStyle(
+                      //                       color: Colors.white,
+                      //                       fontWeight: FontWeight.bold,
+                      //                       fontFamily: FontWeight_.Fonts_T,
+                      //                     ),
+                      //                   ),
+                      //                 )),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
               ),
 
-              ///
+              Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            if (Visit_1 == '1' || Visit_1 == null) {
+                              capture(chartKey1, chartKey3);
+                            } else {
+                              capture(chartKey2, chartKey4);
+                            }
+                          },
+                          child: Container(
+                              width: 120,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green[700],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'พิมพ์',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -1266,43 +1308,30 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
   }
 
   late GlobalKey<SfCartesianChartState> _cartesianChartKey;
-  late TooltipBehavior _tooltip;
+  dynamic capture(chartKey01, chartKey02) async {
+    final boundary01 =
+        chartKey01.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    final image01 = await boundary01.toImage(
+        pixelRatio: 3.0); // Adjust pixelRatio as needed
 
-  // Future<void> _renderPDF() async {
-  //   try {
-  //     final boundary = _cartesianChartKey.currentContext!.findRenderObject()
-  //         as RenderRepaintBoundary;
-  //     final image = await boundary.toImage(
-  //         pixelRatio: 3.0); // Adjust pixelRatio as needed
+    // Convert the captured image to bytes
+    final byteData01 = await image01.toByteData(format: ImageByteFormat.png);
+    final buffer01 = byteData01!.buffer.asUint8List();
+/////////------------------------------->
+    final boundary02 =
+        chartKey02.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    final image02 = await boundary02.toImage(
+        pixelRatio: 3.0); // Adjust pixelRatio as needed
 
-  //     final ByteData? byteData =
-  //         await image.toByteData(format: ImageByteFormat.png);
-  //     if (byteData == null) {
-  //       return;
-  //     }
+    // Convert the captured image to bytes
+    final byteData02 = await image02.toByteData(format: ImageByteFormat.png);
+    final buffer02 = byteData02!.buffer.asUint8List();
 
-  //     final buffer = byteData.buffer.asUint8List();
+    // generatePDF(buffer01, buffer02);
 
-  //     final PdfDocument document = PdfDocument();
-  //     final PdfPage page = document.pages.add();
-  //     final Size pageSize = page.getClientSize();
-
-  //     // Create a PdfBitmap object from the captured image bytes
-  //     final PdfBitmap pdfBitmap = PdfBitmap(Uint8List.fromList(buffer));
-
-  //     // Draw the image onto the PDF page
-  //     page.graphics.drawImage(pdfBitmap, Rect.fromLTWH(0, 0, 842, 595));
-  //     final List<int> bytes = await document.save();
-  //     final Uint8List data = Uint8List.fromList(bytes);
-
-  //     // Save the PDF file using file_saver
-  //     final MimeType type = MimeType.PDF;
-  //     await FileSaver.instance
-  //         .saveFile("PDF data", data, "pdf", mimeType: type);
-  //   } catch (e) {
-  //     print('Error rendering PDF: $e');
-  //   }
-  // }
+    Man_ChartReport_GeneratePDF.man_chartReport_GeneratePDF(
+        context, buffer01, buffer02, '2');
+  }
 }
 
 class _SalesData {

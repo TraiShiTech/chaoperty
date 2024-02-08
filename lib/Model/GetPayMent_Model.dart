@@ -22,6 +22,7 @@ class PayMentModel {
   String? fine;
   String? fine_c;
   String? fine_a;
+  String?  ser_han;
 
   PayMentModel({
     this.ser,
@@ -46,7 +47,7 @@ class PayMentModel {
     this.img,
     this.fine,
     this.fine_c,
-    this.fine_a,
+    this.fine_a,this.ser_han
   });
 
   PayMentModel.fromJson(Map<String, dynamic> json) {
@@ -73,6 +74,7 @@ class PayMentModel {
     fine = json['fine'];
     fine_c = json['fine_c'];
     fine_a = json['fine_a'];
+    ser_han= json['ser_han'];
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +102,7 @@ class PayMentModel {
     data['fine'] = this.fine;
     data['fine_c'] = this.fine_c;
     data['fine_a'] = this.fine_a;
+    data['ser_han'] = this.ser_han;
 
     return data;
   }

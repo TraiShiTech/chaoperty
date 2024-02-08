@@ -72,14 +72,14 @@ class Mini_Ex_DailyReport {
     globalStyle22.numberFormat = '_(\* #,##0.00_)';
     globalStyle22.fontSize = 12;
     globalStyle22.numberFormat;
-    globalStyle22.hAlign = x.HAlignType.center;
+    globalStyle22.hAlign = x.HAlignType.left;
 
     x.Style globalStyle222 = workbook.styles.add('style222');
     globalStyle222.backColorRgb = Color(0xC7E1E2E6);
     globalStyle222.numberFormat = '_(\* #,##0.00_)';
     // globalStyle222.numberFormat;
     globalStyle222.fontSize = 12;
-    globalStyle222.hAlign = x.HAlignType.center;
+    globalStyle222.hAlign = x.HAlignType.left;
 ////////////-------------------------------------------------------->
     x.Style globalStyle220 = workbook.styles.add('style220');
     globalStyle220.backColorRgb = Color(0xC7F5F7FA);
@@ -165,6 +165,9 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('J1').cellStyle = globalStyle22;
     sheet.getRangeByName('K1').cellStyle = globalStyle22;
     sheet.getRangeByName('L1').cellStyle = globalStyle22;
+    sheet.getRangeByName('M1').cellStyle = globalStyle22;
+    sheet.getRangeByName('N1').cellStyle = globalStyle22;
+    sheet.getRangeByName('O1').cellStyle = globalStyle22;
 
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
@@ -195,6 +198,9 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('K1').cellStyle = globalStyle22;
     sheet.getRangeByName('J2').cellStyle = globalStyle22;
     sheet.getRangeByName('L2').cellStyle = globalStyle22;
+    sheet.getRangeByName('M2').cellStyle = globalStyle22;
+    sheet.getRangeByName('N2').cellStyle = globalStyle22;
+    sheet.getRangeByName('O2').cellStyle = globalStyle22;
 
     sheet.getRangeByName('A2').setText('${renTal_name}');
     sheet.getRangeByName('K2').setText('วันที่ : ${Value_TransDate_Daily} ');
@@ -214,6 +220,9 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('J3').cellStyle = globalStyle22;
     sheet.getRangeByName('K3').cellStyle = globalStyle22;
     sheet.getRangeByName('L3').cellStyle = globalStyle22;
+    sheet.getRangeByName('M3').cellStyle = globalStyle22;
+    sheet.getRangeByName('N3').cellStyle = globalStyle22;
+    sheet.getRangeByName('O3').cellStyle = globalStyle22;
 
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillModels.length}');
 
@@ -229,6 +238,9 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('J3').columnWidth = 18;
     sheet.getRangeByName('K3').columnWidth = 18;
     sheet.getRangeByName('L3').columnWidth = 18;
+    sheet.getRangeByName('M3').columnWidth = 18;
+    sheet.getRangeByName('N3').columnWidth = 18;
+    sheet.getRangeByName('O3').columnWidth = 18;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
@@ -242,6 +254,9 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('J4').cellStyle = globalStyle1;
     sheet.getRangeByName('K4').cellStyle = globalStyle1;
     sheet.getRangeByName('L4').cellStyle = globalStyle1;
+    sheet.getRangeByName('M4').cellStyle = globalStyle1;
+    sheet.getRangeByName('N4').cellStyle = globalStyle1;
+    sheet.getRangeByName('O4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('A4').columnWidth = 18;
     sheet.getRangeByName('B4').columnWidth = 18;
@@ -249,12 +264,15 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('D4').columnWidth = 18;
     sheet.getRangeByName('E4').columnWidth = 18;
     sheet.getRangeByName('F4').columnWidth = 18;
-    sheet.getRangeByName('G4').columnWidth = 18;
+    sheet.getRangeByName('G4').columnWidth = 25;
     sheet.getRangeByName('H4').columnWidth = 18;
     sheet.getRangeByName('I4').columnWidth = 18;
     sheet.getRangeByName('J4').columnWidth = 18;
     sheet.getRangeByName('K4').columnWidth = 18;
     sheet.getRangeByName('L4').columnWidth = 18;
+    sheet.getRangeByName('M4').columnWidth = 18;
+    sheet.getRangeByName('N4').columnWidth = 18;
+    sheet.getRangeByName('O4').columnWidth = 18;
 
     sheet.getRangeByName('A4').setText('ลำดับ');
     sheet.getRangeByName('B4').setText('เลขที่');
@@ -265,10 +283,12 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('G4').setText('ร้าน');
     sheet.getRangeByName('H4').setText('รูปแบบชำระ');
     sheet.getRangeByName('I4').setText('รายการทั้งหมด');
-    sheet.getRangeByName('J4').setText('ส่วนลด');
+    sheet.getRangeByName('J4').setText('ค่าธรรมเนียม');
     sheet.getRangeByName('K4').setText('ราคารวม');
-    sheet.getRangeByName('L4').setText('หักส่วนลด');
-    // sheet.getRangeByName('M4').setText('ราคารวม');
+    sheet.getRangeByName('L4').setText('ส่วนลด');
+    sheet.getRangeByName('M4').setText('หักส่วนลด');
+    sheet.getRangeByName('N4').setText('ประเภท');
+    sheet.getRangeByName('O4').setText('สถานะ');
     // sheet.getRangeByName('N4').setText('ส่วนลด');
     // sheet.getRangeByName('O4').setText('ราคารามส่วนลด');
 
@@ -297,6 +317,9 @@ class Mini_Ex_DailyReport {
       sheet.getRangeByName('J${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('K${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('L${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('M${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('N${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle = numberColor;
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${index1 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
@@ -311,9 +334,9 @@ class Mini_Ex_DailyReport {
           );
 
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
-            (TransReBillModels[index1].zser == null)
-                ? '${TransReBillModels[index1].zser1}'
-                : '${TransReBillModels[index1].zser}',
+            (TransReBillModels[index1].zser1 == null)
+                ? '${TransReBillModels[index1].zser}'
+                : '${TransReBillModels[index1].zser1}',
           );
       sheet.getRangeByName('E${indextotol + 5 - 1}').setText(
             (TransReBillModels[index1].zn == null)
@@ -339,11 +362,11 @@ class Mini_Ex_DailyReport {
           (TransReBillModels[index1].sum_items == null)
               ? 0
               : double.parse(TransReBillModels[index1].sum_items.toString()));
+
       sheet.getRangeByName('J${indextotol + 5 - 1}').setNumber(
-          (TransReBillModels[index1].total_dis == null)
+          (TransReBillModels[index1].total_duesbill == null)
               ? 0
-              : double.parse(TransReBillModels[index1].total_bill!) -
-                  double.parse(TransReBillModels[index1].total_dis!));
+              : double.parse(TransReBillModels[index1].total_duesbill!));
 
       sheet.getRangeByName('K${indextotol + 5 - 1}').setNumber(
             (TransReBillModels[index1].total_bill == null)
@@ -352,8 +375,26 @@ class Mini_Ex_DailyReport {
           );
       sheet.getRangeByName('L${indextotol + 5 - 1}').setNumber(
             (TransReBillModels[index1].total_dis == null)
-                ? double.parse(TransReBillModels[index1].total_bill!)
+                ? 0.00
                 : double.parse(TransReBillModels[index1].total_dis!),
+          );
+      sheet.getRangeByName('M${indextotol + 5 - 1}').setNumber(
+            (TransReBillModels[index1].total_dis == null)
+                ? double.parse(TransReBillModels[index1].total_bill!)
+                : double.parse(TransReBillModels[index1].total_bill!) -
+                    double.parse(TransReBillModels[index1].total_dis!),
+          );
+      sheet.getRangeByName('N${indextotol + 5 - 1}').setText(
+            (TransReBillModels[index1].room_number.toString() == '' ||
+                    TransReBillModels[index1].room_number == null)
+                ? ''
+                : 'ล็อคเสียบ',
+          );
+      sheet.getRangeByName('O${indextotol + 5 - 1}').setText(
+            (TransReBillModels[index1].doctax == '' ||
+                    TransReBillModels[index1].doctax == null)
+                ? ''
+                : 'ใบกำกับภาษี',
           );
 
       print('-------------------------');
@@ -365,41 +406,50 @@ class Mini_Ex_DailyReport {
     sheet.getRangeByName('H${indextotol + 5 + 2}').setText('รวมทั้งหมด: ');
 
     sheet.getRangeByName('I${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",I5:I${indextotol + 5 - 1})');
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "ล็อคเสียบ",I5:I${indextotol + 5 - 1})');
     sheet.getRangeByName('I${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ",I5:I${indextotol + 5 - 1})');
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "<>ล็อคเสียบ",I5:I${indextotol + 5 - 1})');
     sheet
         .getRangeByName('I${indextotol + 5 + 2}')
         .setFormula('=SUM(I5:I${indextotol + 5 - 1})');
 
     // ///---------->
     sheet.getRangeByName('J${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",J5:J${indextotol + 5 - 1})');
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "ล็อคเสียบ",J5:J${indextotol + 5 - 1})');
     sheet.getRangeByName('J${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ",J5:J${indextotol + 5 - 1})');
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "<>ล็อคเสียบ",J5:J${indextotol + 5 - 1})');
     sheet
         .getRangeByName('J${indextotol + 5 + 2}')
         .setFormula('=SUM(J5:J${indextotol + 5 - 1})');
 
     ///---------->
     sheet.getRangeByName('K${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",K5:K${indextotol + 5 - 1})');
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "ล็อคเสียบ",K5:K${indextotol + 5 - 1})');
     sheet.getRangeByName('K${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ",K5:K${indextotol + 5 - 1})');
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "<>ล็อคเสียบ",K5:K${indextotol + 5 - 1})');
     sheet
         .getRangeByName('K${indextotol + 5 + 2}')
         .setFormula('=SUM(K5:K${indextotol + 5 - 1})');
 
     ///---------->
     sheet.getRangeByName('L${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",L5:L${indextotol + 5 - 1})');
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "ล็อคเสียบ",L5:L${indextotol + 5 - 1})');
     sheet.getRangeByName('L${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ", L5:L${indextotol + 5 - 1})');
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "<>ล็อคเสียบ", L5:L${indextotol + 5 - 1})');
 
     sheet
         .getRangeByName('L${indextotol + 5 + 2}')
         .setFormula('=SUM(L5:L${indextotol + 5 - 1})');
 
+    ///---------->
+    sheet.getRangeByName('M${indextotol + 5 + 0}').setFormula(
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "ล็อคเสียบ",M5:M${indextotol + 5 - 1})');
+    sheet.getRangeByName('M${indextotol + 5 + 1}').setFormula(
+        '=SUMIF(N5:N${indextotol + 5 - 1}, "<>ล็อคเสียบ", M5:M${indextotol + 5 - 1})');
+
+    sheet
+        .getRangeByName('M${indextotol + 5 + 2}')
+        .setFormula('=SUM(M5:M${indextotol + 5 - 1})');
 ///////-------------------------------------------------------------------->
 
     for (var index = 0; index < 3; index++) {
@@ -412,6 +462,8 @@ class Mini_Ex_DailyReport {
       sheet.getRangeByName('K${indextotol + 5 + index}').cellStyle =
           globalStyle7;
       sheet.getRangeByName('L${indextotol + 5 + index}').cellStyle =
+          globalStyle7;
+      sheet.getRangeByName('M${indextotol + 5 + index}').cellStyle =
           globalStyle7;
     }
 

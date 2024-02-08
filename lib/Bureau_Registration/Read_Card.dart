@@ -1,5 +1,6 @@
-// ignore_for_file: body_might_complete_normally_catch_error
+// ignore_for_file: body_might_complete_normally_catch_error, prefer_const_constructors, unnecessary_string_interpolations, prefer_interpolation_to_compose_strings, non_constant_identifier_names, prefer_const_literals_to_create_immutables, prefer_is_empty, avoid_print, unused_local_variable, sized_box_for_whitespace, empty_catches, prefer_void_to_null, deprecated_member_use, use_build_context_synchronously, unnecessary_brace_in_string_interps, unused_field, unused_import, avoid_web_libraries_in_flutter
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'dart:io';
@@ -14,6 +15,7 @@ import 'package:http/http.dart' as http;
 import '../Constant/Myconstant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/GetCustomer_Model.dart';
+import '../Model/GetCustomer_tex_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Model/GetType_Model.dart';
@@ -32,9 +34,10 @@ class _ReadCardState extends State<ReadCard> {
   List<CerdModel> cerdModels = [];
   List<TypeModel> typeModels = [];
   List<TransModel> _TransModels = [];
+  List<CustomerTexModel> customerTexModels = [];
   String? read_card, id_card;
   int page_open = 0;
-
+  final GlobalKey globalKey_Img = GlobalKey();
   final _formKey = GlobalKey<FormState>();
   final Status4Form_nameshop = TextEditingController();
   final Status4Form_typeshop = TextEditingController();
@@ -70,9 +73,10 @@ class _ReadCardState extends State<ReadCard> {
       permission_user,
       tel_user,
       img_,
-      img_logo;
+      img_logo,
+      Form_Img_;
   String _verticalGroupValue = '';
-  int Value_AreaSer_ = 0;
+  int Value_AreaSer_ = 0, show_but = 0;
 
   @override
   void initState() {
@@ -140,7 +144,7 @@ class _ReadCardState extends State<ReadCard> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+
       if (result != null) {
         for (var map in result) {
           TypeModel typeModel = TypeModel.fromJson(map);
@@ -148,21 +152,11 @@ class _ReadCardState extends State<ReadCard> {
             typeModels.add(typeModel);
           });
         }
-        // setState(() {
-        //   for (var i = 0; i < typeModels.length; i++) {
-        //     _verticalGroupValue = typeModels[i].type!;
-        //   }
-        // });
       } else {}
     } catch (e) {}
   }
 
   Future<Null> red_card() async {
-    if (cerdModels.length != 0) {
-      setState(() {
-        cerdModels.clear();
-      });
-    }
     Map<String, String> requestHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': 'true',
@@ -185,6 +179,18 @@ class _ReadCardState extends State<ReadCard> {
         id_card = null;
         read_card =
             'คุณอาจยังไม่ติดตั้ง หรือ เปิดโปรแกรม Smartdcard Reader หรือ ยังไม่เปิดใช้งาน Cors Unblock';
+        Form_Img_ = null;
+        Status4Form_nameshop.clear();
+        Status4Form_typeshop.clear();
+        Value_AreaSer_ = 0;
+        _verticalGroupValue = 'ส่วนตัว/บุคคลธรรมดา';
+        Status4Form_bussshop.clear();
+        Status4Form_bussscontact.clear();
+
+        Status4Form_address.clear();
+        Status4Form_tel.clear();
+        Status4Form_email.clear();
+        Status4Form_tax.clear();
       });
     });
 
@@ -202,8 +208,49 @@ class _ReadCardState extends State<ReadCard> {
           for (var map in result) {
             CerdModel cerdModel = CerdModel.fromJson(map);
             var id_cardx = cerdModel.citizenNo;
+
+            // String url =
+            //     '${MyConstant().domain}/Gc_customer_tex.php?isAdd=true&idcard=$id_cardx';
+
+            // try {
+            //   var response = await http.get(Uri.parse(url));
+
+            //   var result = json.decode(response.body);
+
+            //   if (result != null) {
+            //     for (var map in result) {
+            //       CustomerTexModel customerTexModel =
+            //           CustomerTexModel.fromJson(map);
+            //       setState(() {
+            //         show_but = 1;
+            //       });
+            //     }
+            //   } else {
+            //     setState(() {
+            //       show_but = 0;
+            //     });
+            //   }
+            // } catch (e) {}
+
             setState(() {
               id_card = id_cardx;
+
+              Status4Form_bussshop.text =
+                  '${cerdModel.titleNameTh} ${cerdModel.firstNameTh} ${cerdModel.lastNameTh}';
+
+              if (Value_AreaSer_ + 1 == 1) {
+                Status4Form_bussscontact.text =
+                    '${cerdModel.titleNameTh} ${cerdModel.firstNameTh} ${cerdModel.lastNameTh}';
+              } else {
+                Status4Form_bussscontact.text = '';
+              }
+
+              Status4Form_address.text =
+                  '${cerdModel.homeNo} ${cerdModel.moo} ต.${cerdModel.tumbol} อ.${cerdModel.amphur} จ.${cerdModel.province}';
+              Status4Form_tel.text = '-';
+              Status4Form_email.text = '-';
+              Status4Form_tax.text = '${cerdModel.citizenNo}';
+
               cerdModels.add(cerdModel);
             });
           }
@@ -211,6 +258,18 @@ class _ReadCardState extends State<ReadCard> {
           setState(() {
             id_card = null;
             read_card = 'ตรวจสอบ บัตรประชาชนเสียบแล้ว หรือไม่??';
+            Form_Img_ = null;
+            Status4Form_nameshop.clear();
+            Status4Form_typeshop.clear();
+            Value_AreaSer_ = 0;
+            _verticalGroupValue = 'ส่วนตัว/บุคคลธรรมดา';
+            Status4Form_bussshop.clear();
+            Status4Form_bussscontact.clear();
+
+            Status4Form_address.clear();
+            Status4Form_tel.clear();
+            Status4Form_email.clear();
+            Status4Form_tax.clear();
           });
         }
       }
@@ -219,8 +278,78 @@ class _ReadCardState extends State<ReadCard> {
         id_card = null;
         read_card =
             'คุณอาจยังไม่ติดตั้ง หรือ ลงโปรแกรม Smartdcard Reader หรือ ยังไม่เปิดใช้งาน Cors Unblock';
+        Form_Img_ = null;
+        Status4Form_nameshop.clear();
+        Status4Form_typeshop.clear();
+        Value_AreaSer_ = 0;
+        _verticalGroupValue = 'ส่วนตัว/บุคคลธรรมดา';
+        Status4Form_bussshop.clear();
+        Status4Form_bussscontact.clear();
+
+        Status4Form_address.clear();
+        Status4Form_tel.clear();
+        Status4Form_email.clear();
+        Status4Form_tax.clear();
       });
     }
+    if (id_card != null) {
+      red_card_tex();
+    }
+  }
+
+  Future<Null> red_card_tex() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/Gc_customer_tex.php?isAdd=true&ren=$ren&idcard=$id_card';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print('object>>>>>>>>>>>123>>>>>$result');
+      if (result != null) {
+        customerTexModels.clear();
+        for (var map in result) {
+          CustomerTexModel customerTexModel = CustomerTexModel.fromJson(map);
+          setState(() {
+            show_but = 1;
+            customerTexModels.add(customerTexModel);
+            Form_Img_ = customerTexModel.addr2;
+            Status4Form_nameshop.text = '${customerTexModel.scname}';
+            Status4Form_typeshop.text = '${customerTexModel.scname}';
+            Value_AreaSer_ = int.parse(customerTexModel.type!) - 1;
+            _verticalGroupValue = customerTexModel.type!;
+            Status4Form_bussshop.text = '${customerTexModel.cname}';
+            Status4Form_bussscontact.text = '${customerTexModel.attn}';
+
+            Status4Form_address.text = '${customerTexModel.addr1}';
+            Status4Form_tel.text = '${customerTexModel.tel}';
+            Status4Form_email.text = '${customerTexModel.email}';
+            Status4Form_tax.text = '${customerTexModel.tax}';
+          });
+        }
+      } else {
+        setState(() {
+          show_but = 0;
+          //   Status4Form_bussshop.text =
+          //       '${cerdModel.titleNameTh} ${cerdModel.firstNameTh} ${cerdModel.lastNameTh}';
+
+          //   if (Value_AreaSer_ + 1 == 1) {
+          //     Status4Form_bussscontact.text =
+          //         '${cerdModel.titleNameTh} ${cerdModel.firstNameTh} ${cerdModel.lastNameTh}';
+          //   } else {
+          //     Status4Form_bussscontact.text = '';
+          //   }
+
+          //   Status4Form_address.text =
+          //       '${cerdModel.homeNo} ${cerdModel.moo} ต.${cerdModel.tumbol} อ.${cerdModel.amphur} จ.${cerdModel.province}';
+          //   Status4Form_tel.text = '-';
+          //   Status4Form_email.text = '-';
+          //   Status4Form_tax.text = '${cerdModel.citizenNo}';
+        });
+      }
+    } catch (e) {}
   }
 
   String? fileName_Slip;
@@ -312,18 +441,26 @@ class _ReadCardState extends State<ReadCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Timer.periodic(const Duration(seconds: 3), (timer) {
+    //   red_card().then((value) {
+    //     if (id_card != null) {
+    //       timer.cancel();
+    //     }
+    //   });
+    // });
     return SafeArea(
       child: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
         child: Container(
           color: Colors.white,
-          height: MediaQuery.of(context).size.width / 3,
+          height: MediaQuery.of(context).size.width / 2.5,
           child: Column(
             children: [
               StreamBuilder(
                   stream: Stream.periodic(const Duration(seconds: 3)),
                   builder: (context, snapshot) {
                     red_card();
+
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
@@ -840,18 +977,22 @@ class _ReadCardState extends State<ReadCard> {
                                                           fontFamily:
                                                               Font_.Fonts_T),
                                                     ),
-                                                    IconButton(
-                                                      onPressed: () async {
-                                                        convert_base64(
-                                                            ImageSource
-                                                                .gallery);
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons
-                                                            .add_a_photo_outlined,
-                                                        color: Colors.green,
-                                                      ),
-                                                    ),
+                                                    show_but == 1
+                                                        ? SizedBox()
+                                                        : IconButton(
+                                                            onPressed:
+                                                                () async {
+                                                              convert_base64(
+                                                                  ImageSource
+                                                                      .gallery);
+                                                            },
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .add_a_photo_outlined,
+                                                              color:
+                                                                  Colors.green,
+                                                            ),
+                                                          ),
                                                   ],
                                                 ),
                                               ),
@@ -867,6 +1008,21 @@ class _ReadCardState extends State<ReadCard> {
                                                             width: 80,
                                                             height: 80,
                                                             color: Colors.white,
+                                                            child: Form_Img_ ==
+                                                                        null ||
+                                                                    Form_Img_ ==
+                                                                        ''
+                                                                ? SizedBox()
+                                                                : RepaintBoundary(
+                                                                    key:
+                                                                        globalKey_Img,
+                                                                    child: Image
+                                                                        .network(
+                                                                      '${MyConstant().domain}/files/$foder/contract/$Form_Img_',
+                                                                      fit: BoxFit
+                                                                          .contain,
+                                                                    ),
+                                                                  ),
                                                           ),
                                                         ],
                                                       )
@@ -889,87 +1045,71 @@ class _ReadCardState extends State<ReadCard> {
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white
-                                                            .withOpacity(0.3),
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  15),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  15),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  15),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  15),
-                                                        ),
-                                                        border: Border.all(
-                                                            color: Colors.grey,
-                                                            width: 1),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white
+                                                          .withOpacity(0.3),
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(15),
+                                                        topRight:
+                                                            Radius.circular(15),
+                                                        bottomLeft:
+                                                            Radius.circular(15),
+                                                        bottomRight:
+                                                            Radius.circular(15),
                                                       ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: StreamBuilder(
-                                                          stream:
-                                                              Stream.periodic(
-                                                                  const Duration(
-                                                                      seconds:
-                                                                          0)),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            return RadioGroup<
-                                                                TypeModel>.builder(
-                                                              direction: Axis
-                                                                  .horizontal,
-                                                              groupValue: typeModels
-                                                                  .elementAt(
-                                                                      Value_AreaSer_),
-                                                              horizontalAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceAround,
-                                                              onChanged:
-                                                                  (value) {
-                                                                Status4Form_nameshop
-                                                                    .clear();
-                                                                Status4Form_bussshop
-                                                                    .clear();
-                                                                Status4Form_bussscontact
-                                                                    .clear();
-                                                                setState(() {
-                                                                  Value_AreaSer_ =
-                                                                      int.parse(
-                                                                              value!.ser!) -
-                                                                          1;
-                                                                  _verticalGroupValue =
-                                                                      value
-                                                                          .type!;
-                                                                  _TransModels =
-                                                                      [];
-                                                                });
-                                                                print(
-                                                                    Value_AreaSer_);
-                                                              },
-                                                              items: typeModels,
-                                                              textStyle:
-                                                                  const TextStyle(
-                                                                fontSize: 15,
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                              ),
-                                                              itemBuilder:
-                                                                  (typeXModels) =>
-                                                                      RadioButtonBuilder(
-                                                                typeXModels
-                                                                    .type!,
-                                                              ),
-                                                            );
-                                                          })),
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 1),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: RadioGroup<
+                                                        TypeModel>.builder(
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      groupValue:
+                                                          typeModels.elementAt(
+                                                              Value_AreaSer_),
+                                                      horizontalAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      onChanged: (value) {
+                                                        Status4Form_nameshop
+                                                            .clear();
+                                                        Status4Form_bussshop
+                                                            .clear();
+                                                        Status4Form_bussscontact
+                                                            .clear();
+                                                        setState(() {
+                                                          Value_AreaSer_ =
+                                                              int.parse(value!
+                                                                      .ser!) -
+                                                                  1;
+                                                          _verticalGroupValue =
+                                                              value.type!;
+                                                          _TransModels = [];
+                                                        });
+                                                        print(Value_AreaSer_);
+                                                      },
+                                                      items: typeModels,
+                                                      textStyle:
+                                                          const TextStyle(
+                                                        fontSize: 15,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                      ),
+                                                      itemBuilder:
+                                                          (typeXModels) =>
+                                                              RadioButtonBuilder(
+                                                        typeXModels.type!,
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -1478,7 +1618,7 @@ class _ReadCardState extends State<ReadCard> {
 
                                                       return null;
                                                     },
-                                                    maxLength: 2,
+                                                    // maxLength: 2,
                                                     cursorColor: Colors.green,
                                                     decoration: InputDecoration(
                                                         fillColor: Colors.white
@@ -1900,265 +2040,292 @@ class _ReadCardState extends State<ReadCard> {
                                               ),
                                               Expanded(
                                                 flex: 4,
-                                                child: InkWell(
-                                                  onTap: () async {
-                                                    if (_formKey.currentState!
-                                                        .validate()) {
-                                                      print(
-                                                          '---------------------------------->');
-                                                      print(Value_AreaSer_);
-                                                      print(
-                                                          _verticalGroupValue);
-                                                      print(
-                                                          '${typeModels.elementAt(Value_AreaSer_).type}');
+                                                child: show_but == 1
+                                                    ? SizedBox()
+                                                    : InkWell(
+                                                        onTap: () async {
+                                                          if (_formKey
+                                                              .currentState!
+                                                              .validate()) {
+                                                            print(
+                                                                '---------------------------------->');
+                                                            print(
+                                                                Value_AreaSer_);
+                                                            print(
+                                                                _verticalGroupValue);
+                                                            print(
+                                                                '${typeModels.elementAt(Value_AreaSer_).type}');
 
-                                                      print(
-                                                          '---------------------------------->');
+                                                            print(
+                                                                '---------------------------------->');
 
-                                                      print(Status4Form_nameshop
-                                                          .text);
-                                                      print(Status4Form_typeshop
-                                                          .text);
-                                                      print(Status4Form_nameshop
-                                                          .text);
-                                                      print(Status4Form_bussshop
-                                                          .text);
-                                                      print(
-                                                          Status4Form_bussscontact
-                                                              .text);
+                                                            print(
+                                                                Status4Form_nameshop
+                                                                    .text);
+                                                            print(
+                                                                Status4Form_typeshop
+                                                                    .text);
+                                                            print(
+                                                                Status4Form_nameshop
+                                                                    .text);
+                                                            print(
+                                                                Status4Form_bussshop
+                                                                    .text);
+                                                            print(
+                                                                Status4Form_bussscontact
+                                                                    .text);
 
-                                                      print(Status4Form_address
-                                                          .text);
-                                                      print(Status4Form_email
-                                                          .text);
-                                                      print(
-                                                          Status4Form_tax.text);
-                                                      print(
-                                                          '----------------------------------');
-                                                      // Value_AreaSer_ = int.parse(value!.ser!) - 1;
-                                                      // _verticalGroupValue = value.type!;
-                                                      SharedPreferences
-                                                          preferences =
-                                                          await SharedPreferences
-                                                              .getInstance();
-                                                      var ren =
-                                                          preferences.getString(
-                                                              'renTalSer');
-                                                      var user = preferences
-                                                          .getString('ser');
+                                                            print(
+                                                                Status4Form_address
+                                                                    .text);
+                                                            print(
+                                                                Status4Form_email
+                                                                    .text);
+                                                            print(
+                                                                Status4Form_tax
+                                                                    .text);
+                                                            print(
+                                                                '----------------------------------');
+                                                            // Value_AreaSer_ = int.parse(value!.ser!) - 1;
+                                                            // _verticalGroupValue = value.type!;
+                                                            SharedPreferences
+                                                                preferences =
+                                                                await SharedPreferences
+                                                                    .getInstance();
+                                                            var ren = preferences
+                                                                .getString(
+                                                                    'renTalSer');
+                                                            var user =
+                                                                preferences
+                                                                    .getString(
+                                                                        'ser');
 
-                                                      String? nameshop =
-                                                          Status4Form_nameshop
-                                                              .text
-                                                              .toString();
-                                                      String? typeshop =
-                                                          Status4Form_typeshop
-                                                              .text
-                                                              .toString();
-                                                      String? bussshop =
-                                                          Status4Form_bussshop
-                                                              .text
-                                                              .toString();
-                                                      String? bussscontact =
-                                                          (_verticalGroupValue
-                                                                      .toString()
-                                                                      .trim() ==
-                                                                  'ส่วนตัว/บุคคลธรรมดา')
-                                                              ? Status4Form_bussshop
-                                                                  .text
-                                                                  .toString()
-                                                              : Status4Form_bussscontact
-                                                                  .text
-                                                                  .toString();
-                                                      String? address =
-                                                          Status4Form_address
-                                                              .text
-                                                              .toString();
-                                                      String? tel =
-                                                          Status4Form_tel.text
-                                                              .toString();
-                                                      String? email =
-                                                          Status4Form_email.text
-                                                              .toString();
-                                                      String? tax =
-                                                          Status4Form_tax.text
-                                                              .toString();
-
-                                                      String url =
-                                                          '${MyConstant().domain}/InC_CustoAdd_Bureau.php?isAdd=true&ren=$ren';
-
-                                                      var response = await http
-                                                          .post(Uri.parse(url),
-                                                              body: {
-                                                            'ciddoc': '',
-                                                            'qutser': '',
-                                                            'user': '',
-                                                            'sumdis': '',
-                                                            'sumdisp': '',
-                                                            'dateY': '',
-                                                            'dateY1': '',
-                                                            'time': '',
-                                                            'payment1': '',
-                                                            'payment2': '',
-                                                            'pSer1': '',
-                                                            'pSer2': '',
-                                                            'sum_whta': '',
-                                                            'bill': '',
-                                                            'fileNameSlip': '',
-                                                            'areaSer': (typeModels
-                                                                        .elementAt(
-                                                                            Value_AreaSer_)
-                                                                        .type
+                                                            String? nameshop =
+                                                                Status4Form_nameshop
+                                                                    .text
+                                                                    .toString();
+                                                            String? typeshop =
+                                                                Status4Form_typeshop
+                                                                    .text
+                                                                    .toString();
+                                                            String? bussshop =
+                                                                Status4Form_bussshop
+                                                                    .text
+                                                                    .toString();
+                                                            String? bussscontact = (_verticalGroupValue
                                                                         .toString()
                                                                         .trim() ==
                                                                     'ส่วนตัว/บุคคลธรรมดา')
-                                                                ? '1'
-                                                                : '2',
-                                                            'typeModels':
-                                                                '${typeModels.elementAt(Value_AreaSer_).type}',
-                                                            'typeshop':
-                                                                Status4Form_typeshop
-                                                                    .text
-                                                                    .toString(),
-                                                            'nameshop':
-                                                                Status4Form_nameshop
-                                                                    .text
-                                                                    .toString(),
-                                                            'bussshop':
-                                                                Status4Form_bussshop
-                                                                    .text
-                                                                    .toString(),
-                                                            'bussscontact': (Value_AreaSer_ +
-                                                                        1) ==
-                                                                    1
                                                                 ? Status4Form_bussshop
                                                                     .text
                                                                     .toString()
                                                                 : Status4Form_bussscontact
                                                                     .text
-                                                                    .toString(),
-                                                            'address':
+                                                                    .toString();
+                                                            String? address =
                                                                 Status4Form_address
                                                                     .text
-                                                                    .toString(),
-                                                            'tel':
+                                                                    .toString();
+                                                            String? tel =
                                                                 Status4Form_tel
                                                                     .text
-                                                                    .toString(),
-                                                            'tax':
-                                                                Status4Form_tax
-                                                                    .text
-                                                                    .toString(),
-                                                            'email':
+                                                                    .toString();
+                                                            String? email =
                                                                 Status4Form_email
                                                                     .text
-                                                                    .toString(),
-                                                            'Serbool': '',
-                                                            'area_rent_sum': '',
-                                                            'comment': '',
-                                                            'zser': ''
-                                                                .trim()
-                                                                .toString(),
-                                                          }).then(
-                                                              (value) async {
-                                                        setState(() {
-                                                          Status4Form_nameshop
-                                                              .clear();
-                                                          Status4Form_typeshop
-                                                              .clear();
-                                                          Status4Form_nameshop
-                                                              .clear();
-                                                          Status4Form_bussshop
-                                                              .clear();
-                                                          Status4Form_bussscontact
-                                                              .clear();
-                                                          Status4Form_address
-                                                              .clear();
-                                                          Status4Form_email
-                                                              .clear();
-                                                          Status4Form_tax
-                                                              .clear();
-                                                        });
-                                                        // print('$value');
-                                                        var result = json
-                                                            .decode(value.body);
-                                                        // print('$result ');
-                                                        for (var map
-                                                            in result) {
-                                                          CustomerModel
-                                                              CustomerModels =
-                                                              CustomerModel
-                                                                  .fromJson(
-                                                                      map);
-                                                          print(CustomerModels
-                                                              .custno);
-                                                          print(CustomerModels
-                                                              .custno);
-                                                          setState(() {
-                                                            cust_no_ =
-                                                                CustomerModels
-                                                                    .custno!;
-                                                          });
-                                                          uploadImage();
-                                                        }
+                                                                    .toString();
+                                                            String? tax =
+                                                                Status4Form_tax
+                                                                    .text
+                                                                    .toString();
 
-                                                        setState(() {
-                                                          Status4Form_nameshop
-                                                              .clear();
-                                                          Status4Form_typeshop
-                                                              .clear();
-                                                          Status4Form_nameshop
-                                                              .clear();
-                                                          Status4Form_bussshop
-                                                              .clear();
-                                                          Status4Form_bussscontact
-                                                              .clear();
-                                                          Status4Form_address
-                                                              .clear();
-                                                          Status4Form_email
-                                                              .clear();
-                                                          Status4Form_tax
-                                                              .clear();
-                                                        });
-                                                      });
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    width: 150,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.green[900],
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                    ),
-                                                    child: Text(
-                                                      'บันทึก',
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      softWrap: false,
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    ),
-                                                  ),
-                                                ),
+                                                            String url =
+                                                                '${MyConstant().domain}/InC_CustoAdd_Bureau.php?isAdd=true&ren=$ren';
+
+                                                            var response =
+                                                                await http.post(
+                                                                    Uri.parse(
+                                                                        url),
+                                                                    body: {
+                                                                  'ciddoc': '',
+                                                                  'qutser': '',
+                                                                  'user': '',
+                                                                  'sumdis': '',
+                                                                  'sumdisp': '',
+                                                                  'dateY': '',
+                                                                  'dateY1': '',
+                                                                  'time': '',
+                                                                  'payment1':
+                                                                      '',
+                                                                  'payment2':
+                                                                      '',
+                                                                  'pSer1': '',
+                                                                  'pSer2': '',
+                                                                  'sum_whta':
+                                                                      '',
+                                                                  'bill': '',
+                                                                  'fileNameSlip':
+                                                                      '',
+                                                                  'areaSer': (typeModels
+                                                                              .elementAt(Value_AreaSer_)
+                                                                              .type
+                                                                              .toString()
+                                                                              .trim() ==
+                                                                          'ส่วนตัว/บุคคลธรรมดา')
+                                                                      ? '1'
+                                                                      : '2',
+                                                                  'typeModels':
+                                                                      '${typeModels.elementAt(Value_AreaSer_).type}',
+                                                                  'typeshop':
+                                                                      Status4Form_typeshop
+                                                                          .text
+                                                                          .toString(),
+                                                                  'nameshop':
+                                                                      Status4Form_nameshop
+                                                                          .text
+                                                                          .toString(),
+                                                                  'bussshop':
+                                                                      Status4Form_bussshop
+                                                                          .text
+                                                                          .toString(),
+                                                                  'bussscontact': (Value_AreaSer_ +
+                                                                              1) ==
+                                                                          1
+                                                                      ? Status4Form_bussshop
+                                                                          .text
+                                                                          .toString()
+                                                                      : Status4Form_bussscontact
+                                                                          .text
+                                                                          .toString(),
+                                                                  'address':
+                                                                      Status4Form_address
+                                                                          .text
+                                                                          .toString(),
+                                                                  'tel': Status4Form_tel
+                                                                      .text
+                                                                      .toString(),
+                                                                  'tax': Status4Form_tax
+                                                                      .text
+                                                                      .toString(),
+                                                                  'email':
+                                                                      Status4Form_email
+                                                                          .text
+                                                                          .toString(),
+                                                                  'Serbool': '',
+                                                                  'area_rent_sum':
+                                                                      '',
+                                                                  'comment': '',
+                                                                  'zser': ''
+                                                                      .trim()
+                                                                      .toString(),
+                                                                }).then(
+                                                                    (value) async {
+                                                              setState(() {
+                                                                Status4Form_nameshop
+                                                                    .clear();
+                                                                Status4Form_typeshop
+                                                                    .clear();
+                                                                Status4Form_nameshop
+                                                                    .clear();
+                                                                Status4Form_bussshop
+                                                                    .clear();
+                                                                Status4Form_bussscontact
+                                                                    .clear();
+                                                                Status4Form_address
+                                                                    .clear();
+                                                                Status4Form_email
+                                                                    .clear();
+                                                                Status4Form_tax
+                                                                    .clear();
+                                                              });
+                                                              // print('$value');
+                                                              var result = json
+                                                                  .decode(value
+                                                                      .body);
+                                                              // print('$result ');
+                                                              for (var map
+                                                                  in result) {
+                                                                CustomerModel
+                                                                    CustomerModels =
+                                                                    CustomerModel
+                                                                        .fromJson(
+                                                                            map);
+                                                                print(
+                                                                    CustomerModels
+                                                                        .custno);
+                                                                print(
+                                                                    CustomerModels
+                                                                        .custno);
+                                                                setState(() {
+                                                                  cust_no_ =
+                                                                      CustomerModels
+                                                                          .custno!;
+                                                                });
+                                                                uploadImage();
+                                                              }
+
+                                                              setState(() {
+                                                                Status4Form_nameshop
+                                                                    .clear();
+                                                                Status4Form_typeshop
+                                                                    .clear();
+                                                                Status4Form_nameshop
+                                                                    .clear();
+                                                                Status4Form_bussshop
+                                                                    .clear();
+                                                                Status4Form_bussscontact
+                                                                    .clear();
+                                                                Status4Form_address
+                                                                    .clear();
+                                                                Status4Form_email
+                                                                    .clear();
+                                                                Status4Form_tax
+                                                                    .clear();
+                                                              });
+                                                            });
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          width: 150,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors
+                                                                .green[900],
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                          ),
+                                                          child: Text(
+                                                            'บันทึก',
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            softWrap: false,
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
                                               ),
                                             ],
                                           ),
@@ -2230,24 +2397,6 @@ class _ReadCardState extends State<ReadCard> {
                                                     setState(() {
                                                       page_open = 1;
                                                     });
-                                                    // // Open the file
-                                                    // var bytes = await rootBundle.load(
-                                                    //     'images/card/Smartdcard_Reader.exe');
-                                                    // // Create a new anchor element
-                                                    // var anchor = AnchorElement(
-                                                    //     href: Url.createObjectUrlFromBlob(
-                                                    //         Blob([
-                                                    //   bytes.buffer.asUint8List()
-                                                    // ], 'application/exe')))
-                                                    //   ..setAttribute("download",
-                                                    //       "Smartdcard_Reader.exe")
-                                                    //   ..style.display = "none";
-                                                    // // Add the anchor element to the body
-                                                    // document.body!.append(anchor);
-                                                    // // Click the anchor element to start the download
-                                                    // anchor.click();
-                                                    // // Remove the anchor element from the body
-                                                    // anchor.remove();
                                                   },
                                                   child: Container(
                                                     color: page_open == 1
@@ -2284,9 +2433,6 @@ class _ReadCardState extends State<ReadCard> {
                                                     setState(() {
                                                       page_open = 2;
                                                     });
-                                                    // js.context.callMethod('open', [
-                                                    //   'https://localhost:8182/thaiid/read.jsonp?&section1=true&section2a=true&section2b=true'
-                                                    // ]);
                                                   },
                                                   child: Container(
                                                     color: page_open == 2
@@ -2712,6 +2858,9 @@ class _ReadCardState extends State<ReadCard> {
                                                                             fontFamily: Font_.Fonts_T)),
                                                                   ],
                                                                 ),
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
                                                                 Row(
                                                                   children: [
                                                                     Text(
@@ -2759,6 +2908,9 @@ class _ReadCardState extends State<ReadCard> {
                                                                     ),
                                                                   ],
                                                                 ),
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
                                                                 Row(
                                                                   mainAxisAlignment:
                                                                       MainAxisAlignment
@@ -2802,6 +2954,9 @@ class _ReadCardState extends State<ReadCard> {
                                                                       ),
                                                                     ),
                                                                   ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 10,
                                                                 ),
                                                                 Row(
                                                                   mainAxisAlignment:
@@ -2847,6 +3002,9 @@ class _ReadCardState extends State<ReadCard> {
                                                                     ),
                                                                   ],
                                                                 ),
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
                                                                 Row(
                                                                   mainAxisAlignment:
                                                                       MainAxisAlignment
@@ -2878,6 +3036,10 @@ class _ReadCardState extends State<ReadCard> {
                                                                           .start,
                                                                   children: [
                                                                     Container(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width *
+                                                                          0.8,
                                                                       decoration:
                                                                           const BoxDecoration(
                                                                         color: Colors

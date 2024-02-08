@@ -1682,8 +1682,6 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                                             });
                                           });
                                         }
-
-
                                         // if (base64_Image == null) {
                                         //   print('กรุณาอัพโหลดรูปภาพ');
                                         //   ScaffoldMessenger.of(context)

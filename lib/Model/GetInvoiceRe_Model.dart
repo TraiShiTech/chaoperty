@@ -52,6 +52,8 @@ class InvoiceReModel {
   String? exp_array;
   String? cid;
   String? zn;
+  String? total_vat;
+  String? total_wht;
 
   InvoiceReModel({
     this.ser,
@@ -107,6 +109,8 @@ class InvoiceReModel {
     this.exp_array,
     this.cid,
     this.zn,
+    this.total_vat,
+    this.total_wht,
   });
 
   InvoiceReModel.fromJson(Map<String, dynamic> json) {
@@ -163,6 +167,8 @@ class InvoiceReModel {
     exp_array = json['exp_array'];
     cid = json['cid'];
     zn = json['zn'];
+    total_vat = json['total_vat'];
+    total_wht = json['total_wht'];
   }
 
   Map<String, dynamic> toJson() {
@@ -221,6 +227,8 @@ class InvoiceReModel {
     data['exp_array'] = this.exp_array;
     data['cid'] = this.cid;
     data['zn'] = this.zn;
+    data['total_vat'] = this.total_vat;
+    data['total_wht'] = this.total_wht;
     return data;
   }
 }

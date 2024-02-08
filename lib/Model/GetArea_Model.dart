@@ -37,7 +37,7 @@ class AreaModel {
   String? id;
   String? path;
   String? color;
-  String? name;
+  String? name; String? fid;
 
   AreaModel(
       {this.ser,
@@ -78,7 +78,7 @@ class AreaModel {
       this.id,
       this.path,
       this.color,
-      this.name});
+      this.name,this.fid,});
 
   AreaModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -121,6 +121,7 @@ class AreaModel {
     path = json['path'];
     color = json['color'];
     name = json['name'];
+    fid = json['fid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -164,6 +165,8 @@ class AreaModel {
     data['path'] = this.path;
     data['color'] = this.color;
     data['name'] = this.name;
+     data['fid'] = this.fid;
+    
     return data;
   }
 }

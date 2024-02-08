@@ -1994,7 +1994,6 @@ class _BillsHistoryState extends State<BillsHistory> {
       }
     } catch (e) {}
   }
-
   //////////////////////////------------------------------>
   Future<Null> BillingNoteInvlice_History_Tempage(
       tableData003, newValuePDFimg, renTal_name) async {
@@ -2020,7 +2019,7 @@ class _BillsHistoryState extends State<BillsHistory> {
       '${renTalModels[0].bill_tax}',
       '${renTalModels[0].bill_name}',
       newValuePDFimg,
-      numinvoice,
+      numinvoice,'0'
     );
   }
 }

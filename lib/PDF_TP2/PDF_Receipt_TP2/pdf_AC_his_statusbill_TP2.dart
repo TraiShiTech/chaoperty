@@ -578,7 +578,7 @@ class Pdfgen_his_statusbill_TP2 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       height: 25,
                       decoration: const pw.BoxDecoration(
@@ -745,6 +745,32 @@ class Pdfgen_his_statusbill_TP2 {
                     ),
                   ),
                   pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      decoration: const pw.BoxDecoration(
+                        // color: PdfColors.green100,
+                        border: pw.Border(
+                          left: pw.BorderSide(color: PdfColors.grey800),
+                          top: pw.BorderSide(color: PdfColors.grey800),
+                          bottom: pw.BorderSide(color: PdfColors.grey800),
+                        ),
+                      ),
+                      child: pw.Center(
+                        child: pw.Text(
+                          'ส่วนลด',
+                          textAlign: pw.TextAlign.center,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
                     flex: 2,
                     child: pw.Container(
                       height: 25,
@@ -821,7 +847,7 @@ class Pdfgen_his_statusbill_TP2 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -951,6 +977,33 @@ class Pdfgen_his_statusbill_TP2 {
                     ),
                   ),
                   pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        border: pw.Border(
+                          left: pw.BorderSide(color: PdfColors.grey600),
+                          right: pw.BorderSide(color: PdfColors.grey600),
+                          bottom: pw.BorderSide(color: PdfColors.grey600),
+                        ),
+                      ),
+                      padding: const pw.EdgeInsets.all(2.0),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData00[index][12]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
                     flex: 2,
                     child: pw.Container(
                       // height: 25,
@@ -966,7 +1019,7 @@ class Pdfgen_his_statusbill_TP2 {
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
-                          '${tableData00[index][6]}',
+                          '${tableData00[index][13]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
@@ -1009,7 +1062,7 @@ class Pdfgen_his_statusbill_TP2 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -1128,6 +1181,33 @@ class Pdfgen_his_statusbill_TP2 {
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
                           '${tableData01[index][5]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        border: pw.Border(
+                          left: pw.BorderSide(color: PdfColors.grey600),
+                          right: pw.BorderSide(color: PdfColors.grey600),
+                          bottom: pw.BorderSide(color: PdfColors.grey600),
+                        ),
+                      ),
+                      padding: const pw.EdgeInsets.all(2.0),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '0.00',
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(

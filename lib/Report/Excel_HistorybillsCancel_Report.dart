@@ -153,6 +153,10 @@ class Excgen_Historybills_Cancel_Report {
     sheet.getRangeByName('K1').cellStyle = globalStyle22;
     sheet.getRangeByName('L1').cellStyle = globalStyle22;
 
+    sheet.getRangeByName('M1').cellStyle = globalStyle22;
+    sheet.getRangeByName('N1').cellStyle = globalStyle22;
+    sheet.getRangeByName('O1').cellStyle = globalStyle22;
+
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
         'รายงานประวัติบิล(ยกเลิก) (โซน : $Value_Chang_Zone_historybill)');
@@ -174,6 +178,9 @@ class Excgen_Historybills_Cancel_Report {
     sheet.getRangeByName('J2').cellStyle = globalStyle22;
     sheet.getRangeByName('K2').cellStyle = globalStyle22;
     sheet.getRangeByName('L2').cellStyle = globalStyle22;
+    sheet.getRangeByName('M2').cellStyle = globalStyle22;
+    sheet.getRangeByName('N2').cellStyle = globalStyle22;
+    sheet.getRangeByName('N2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
 
     sheet.getRangeByName('A3').cellStyle = globalStyle22;
@@ -188,6 +195,9 @@ class Excgen_Historybills_Cancel_Report {
     sheet.getRangeByName('J3').cellStyle = globalStyle22;
     sheet.getRangeByName('K3').cellStyle = globalStyle22;
     sheet.getRangeByName('L3').cellStyle = globalStyle22;
+    sheet.getRangeByName('M3').cellStyle = globalStyle22;
+    sheet.getRangeByName('N3').cellStyle = globalStyle22;
+    sheet.getRangeByName('O3').cellStyle = globalStyle22;
     sheet.getRangeByName('J2').setText(
           'วันที่ : ${Value_selectDate_Historybills}',
         );
@@ -204,6 +214,9 @@ class Excgen_Historybills_Cancel_Report {
     sheet.getRangeByName('J4').cellStyle = globalStyle1;
     sheet.getRangeByName('K4').cellStyle = globalStyle1;
     sheet.getRangeByName('L4').cellStyle = globalStyle1;
+    sheet.getRangeByName('M4').cellStyle = globalStyle1;
+    sheet.getRangeByName('N4').cellStyle = globalStyle1;
+    sheet.getRangeByName('O4').cellStyle = globalStyle1;
     sheet.getRangeByName('A4').columnWidth = 10;
     sheet.getRangeByName('B4').columnWidth = 18;
     sheet.getRangeByName('C4').columnWidth = 18;
@@ -216,6 +229,9 @@ class Excgen_Historybills_Cancel_Report {
     sheet.getRangeByName('J4').columnWidth = 18;
     sheet.getRangeByName('K4').columnWidth = 18;
     sheet.getRangeByName('L4').columnWidth = 18;
+    sheet.getRangeByName('M4').columnWidth = 18;
+    sheet.getRangeByName('N4').columnWidth = 18;
+    sheet.getRangeByName('O4').columnWidth = 18;
 
     sheet.getRangeByName('A4').setText('เลขที่สัญญา');
     sheet.getRangeByName('B4').setText('วันที้ทำรายการ');
@@ -230,6 +246,9 @@ class Excgen_Historybills_Cancel_Report {
     sheet.getRangeByName('J4').setText('กำหนดชำระ');
     sheet.getRangeByName('K4').setText('สถานะ');
     sheet.getRangeByName('L4').setText('เหตุผล');
+    sheet.getRangeByName('M4').setText('รูปแบบชำระ');
+    sheet.getRangeByName('N4').setText('ทำรายการ');
+    sheet.getRangeByName('O4').setText('ประเภท');
     int index1 = 0;
     for (int index = 0; index < _TransReBillModels_cancel.length; index++) {
       dynamic numberColor =
@@ -248,6 +267,9 @@ class Excgen_Historybills_Cancel_Report {
       sheet.getRangeByName('J${index + 5}').cellStyle = numberColor;
       sheet.getRangeByName('K${index + 5}').cellStyle = numberColor;
       sheet.getRangeByName('L${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('M${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('N${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('O${index + 5}').cellStyle = numberColor;
 
       sheet.getRangeByName('A${index + 5}').setText(
             '${_TransReBillModels_cancel[index].cid}',
@@ -308,6 +330,22 @@ class Excgen_Historybills_Cancel_Report {
           );
       sheet.getRangeByName('L${index + 5}').setText(
             '${_TransReBillModels_cancel[index].remark}',
+          );
+      sheet.getRangeByName('M${index + 5}').setText(
+            (_TransReBillModels_cancel[index].type == '')
+                ? ' '
+                : '${_TransReBillModels_cancel[index].type}',
+          );
+      sheet.getRangeByName('N${index + 5}').setText(
+            (_TransReBillModels_cancel[index].shopno == '1')
+                ? 'ผ่านระบบผู้เช่า'
+                : 'ผ่านระบบแอดมิน',
+          );
+      sheet.getRangeByName('O${index + 5}').setText(
+            (_TransReBillModels_cancel[index].room_number.toString() == '' ||
+                    _TransReBillModels_cancel[index].room_number == null)
+                ? ''
+                : 'ล็อคเสียบ',
           );
     }
 

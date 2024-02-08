@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../Style/colors.dart';
+import '../Style/view_pagenow.dart';
 import 'Add_Custo_Screen.dart';
 import 'Customer_Screen.dart';
 import 'Meter_Screen.dart';
@@ -23,7 +24,7 @@ class BureauScreen extends StatefulWidget {
 class _BureauScreenState extends State<BureauScreen> {
   @override
   int Status_ = 1;
-
+  String Ser_nowpage = '6';
   int? _message1;
 
   void updateMessage(int newMessage) {
@@ -41,68 +42,87 @@ class _BureauScreenState extends State<BureauScreen> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
-              child: Container(
-                width: 100,
-                decoration: BoxDecoration(
-                  color: AppbackgroundColor.TiTile_Colors,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
+                    child: Container(
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: AppbackgroundColor.TiTile_Box,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          AutoSizeText(
+                            'ทะเบียน ',
+                            overflow: TextOverflow.ellipsis,
+                            minFontSize: 8,
+                            maxFontSize: 20,
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: ReportScreen_Color.Colors_Text1_,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T,
+                            ),
+                          ),
+                          AutoSizeText(
+                            ' > >',
+                            overflow: TextOverflow.ellipsis,
+                            minFontSize: 8,
+                            maxFontSize: 20,
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                padding: const EdgeInsets.all(5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    AutoSizeText(
-                      'ทะเบียน ',
-                      overflow: TextOverflow.ellipsis,
-                      minFontSize: 8,
-                      maxFontSize: 20,
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: ReportScreen_Color.Colors_Text1_,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: FontWeight_.Fonts_T,
-                      ),
-                    ),
-                    AutoSizeText(
-                      ' > >',
-                      overflow: TextOverflow.ellipsis,
-                      minFontSize: 8,
-                      maxFontSize: 20,
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: FontWeight_.Fonts_T,
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ),
-          ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: viewpage(context, '$Ser_nowpage'),
+            ),
+          ],
         ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.end,
+        //   children: [
+        //     Align(
+        //       alignment: Alignment.topLeft,
+        //       child: viewpage(context, '$Ser_nowpage'),
+        //     ),
+        //   ],
+        // ),
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
-              color: AppbackgroundColor.TiTile_Colors,
+              color: AppbackgroundColor.TiTile_Box,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(0),
-                  bottomRight: Radius.circular(0)),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
               // border: Border.all(color: Colors.grey, width: 1),
             ),
             child: Padding(
@@ -118,7 +138,7 @@ class _BureauScreenState extends State<BureauScreen> {
                     child: Row(children: [
                       for (int i = 0; i < Status.length; i++)
                         Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                             child: InkWell(
                               onTap: () {
                                 setState(() {

@@ -62,9 +62,12 @@ class ManPay_Receipt_PDF {
         sum_dis = 0.00,
         sum_disamt = 0.00,
         sum_disp = 0,
-        dis_sum_Matjum = 0.00;
+        dis_sum_Matjum = 0.00,
+        dis_sum_Pakan = 0.00,
+        sum_fee = 0.00;
     String numinvoice = '';
     String numdoctax = '';
+    String com_ment = '';
     var scname_, cname_, addr_, tax_, tel_, email_, stype_, type_, ser_user;
     var docno_,
         doctax_,
@@ -93,7 +96,9 @@ class ManPay_Receipt_PDF {
           Read_DataONBill_PDFModel readDataONBillPDFModels =
               Read_DataONBill_PDFModel.fromJson(map);
 
-          scname_ = (readDataONBillPDFModels.scname == null)
+          scname_ = (readDataONBillPDFModels.scname == null ||
+                  readDataONBillPDFModels.scname.toString() == '' ||
+                  readDataONBillPDFModels.scname == '')
               ? readDataONBillPDFModels.remark
               : readDataONBillPDFModels.scname;
           cname_ = readDataONBillPDFModels.cname;
@@ -158,6 +163,7 @@ class ManPay_Receipt_PDF {
           var sidamt = double.parse(finnancetransModel.amt!);
           var siddisper = double.parse(finnancetransModel.disper!);
           var pdatex = finnancetransModel.pdate;
+          com_ment = finnancetransModel.descr!;
           if (int.parse(finnancetransModel.receiptSer!) != 0) {
             finnancetransModels.add(finnancetransModel);
             pdate = pdatex;
@@ -170,6 +176,13 @@ class ManPay_Receipt_PDF {
           if (finnancetransModel.dtype! == 'MM') {
             dis_sum_Matjum =
                 dis_sum_Matjum + double.parse(finnancetransModel.amt!);
+          }
+          if (finnancetransModel.dtype! == 'KF') {
+            dis_sum_Pakan =
+                dis_sum_Pakan + double.parse(finnancetransModel.amt!);
+          }
+          if (finnancetransModel.dtype! == 'FTA') {
+            sum_fee = sum_fee + double.parse(finnancetransModel.amt!);
           }
           print(
               '>>>>> ${finnancetransModel.slip}>>>>>>dd>>> in $sidamt $siddisper  ');
@@ -207,6 +220,7 @@ class ManPay_Receipt_PDF {
               TransReBillHistoryModel.fromJson(map);
           var dtypeinvoiceent = _TransReBillHistoryModel.dtype;
           var numinvoiceent = _TransReBillHistoryModel.docno;
+          var expser_voiceent = _TransReBillHistoryModel.expser;
 
           var sum_pvatx = dtypeinvoiceent == 'KP' || dtypeinvoiceent == '!Z'
               ? double.parse(_TransReBillHistoryModel.pvat!)
@@ -255,7 +269,8 @@ class ManPay_Receipt_PDF {
 
     final tableData00 = [
       for (int index = 0; index < _TransReBillHistoryModels.length; index++)
-        if (_TransReBillHistoryModels[index].fine.toString() != '1.00')
+        if (_TransReBillHistoryModels[index].fine.toString() != '1.00' &&
+            _TransReBillHistoryModels[index].expser.toString().trim() != '0')
           [
             '${_TransReBillHistoryModels[index].unitser}',
 
@@ -266,13 +281,13 @@ class ManPay_Receipt_PDF {
             '${_TransReBillHistoryModels[index].expname.toString().trim()}',
 
             ///---2
-            '${nFormat.format((_TransReBillHistoryModels[index].nvat == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].nvat!))}',
+            '${nFormat.format((_TransReBillHistoryModels[index].vat == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].vat!))}',
 
             ///---3
             '${nFormat.format((_TransReBillHistoryModels[index].wht == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].wht!))}',
 
             ///---4
-            '${nFormat.format((_TransReBillHistoryModels[index].amt == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].amt!))}',
+            '${nFormat.format((_TransReBillHistoryModels[index].amt == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].pvat!))}',
 
             ///---5
             '${nFormat.format((_TransReBillHistoryModels[index].total == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].total!))}',
@@ -293,6 +308,15 @@ class ManPay_Receipt_PDF {
             '${_TransReBillHistoryModels[index].refno}',
 
             ///---11
+
+            '${nFormat.format((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!))}',
+
+            ///---12
+            (_TransReBillHistoryModels[index].total == null)
+                ? '${nFormat.format(0.00 - ((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!)))}'
+                : '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!) - ((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!)))}'
+
+            ///---13
           ],
     ];
     final tableData01 = [];
@@ -311,7 +335,7 @@ class ManPay_Receipt_PDF {
           'ค่าปรับ',
 
           ///---2
-          '${nFormat.format(_TransReBillHistoryModels.where((model) => model.fine == '1' || model.fine == '1.00').map((model) => double.parse(model.nvat ?? '0.00')).fold(0.0, (previousValue, element) => previousValue + element))}',
+          '${nFormat.format(_TransReBillHistoryModels.where((model) => model.fine == '1' || model.fine == '1.00').map((model) => double.parse(model.vat ?? '0.00')).fold(0.0, (previousValue, element) => previousValue + element))}',
 
           ///---3
           '${nFormat.format(_TransReBillHistoryModels.where((model) => model.fine == '1' || model.fine == '1.00').map((model) => double.parse(model.wht ?? '0.00')).fold(0.0, (previousValue, element) => previousValue + element))}',
@@ -350,77 +374,6 @@ class ManPay_Receipt_PDF {
 
     Future.delayed(Duration(milliseconds: 500), () async {
       if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
-        Pdfgen_his_statusbill.exportPDF_statusbill(
-            foder,
-            tableData00,
-            tableData01,
-            context,
-            _TransReBillHistoryModels,
-            'Num_cid',
-            'Namenew',
-            '${sum_pvat}',
-            sum_vat,
-            sum_wht,
-            sum_amt,
-            sum_disp,
-            sum_disamt,
-            '${(sum_amt - sum_disamt)}',
-            renTal_name,
-            scname_,
-            cname_,
-            addr_,
-            tax_,
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            numinvoice,
-            numdoctax,
-            finnancetransModels,
-            date_Transaction,
-            date_pay,
-            Howto_LockJonPay,
-            dis_sum_Matjum,
-            TitleType_Default_Receipt_Name);
-      } else if (tem_page_ser.toString() == '1') {
-        Pdfgen_his_statusbill_TP2.exportPDF_statusbill_TP2(
-            foder,
-            tableData00,
-            tableData01,
-            context,
-            _TransReBillHistoryModels,
-            'Num_cid',
-            'Namenew',
-            '${sum_pvat}',
-            sum_vat,
-            sum_wht,
-            sum_amt,
-            sum_disp,
-            sum_disamt,
-            '${(sum_amt - sum_disamt)}',
-            renTal_name,
-            scname_,
-            cname_,
-            addr_,
-            tax_,
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            // numdoctax == '' ? '$numinvoice' : '$numdoctax',
-            numinvoice,
-            numdoctax,
-            finnancetransModels,
-            date_Transaction,
-            date_pay,
-            Howto_LockJonPay,
-            dis_sum_Matjum,
-            TitleType_Default_Receipt_Name);
-      } else if (tem_page_ser.toString() == '2') {
         Pdfgen_his_statusbill_TP3.exportPDF_statusbill_TP3(
             foder,
             tableData00,
@@ -454,8 +407,11 @@ class ManPay_Receipt_PDF {
             date_pay,
             Howto_LockJonPay,
             dis_sum_Matjum,
-            TitleType_Default_Receipt_Name);
-      } else if (tem_page_ser.toString() == '3') {
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee,
+            com_ment);
+      } else if (tem_page_ser.toString() == '1') {
         Pdfgen_his_statusbill_TP4.exportPDF_statusbill_TP4(
             foder,
             tableData00,
@@ -489,78 +445,11 @@ class ManPay_Receipt_PDF {
             date_pay,
             Howto_LockJonPay,
             dis_sum_Matjum,
-            TitleType_Default_Receipt_Name);
-      } else if (tem_page_ser.toString() == '4') {
-        Pdfgen_his_statusbill_TP5.exportPDF_statusbill_TP5(
-            foder,
-            tableData00,
-            tableData01,
-            context,
-            _TransReBillHistoryModels,
-            'Num_cid',
-            'Namenew',
-            '${sum_pvat}',
-            sum_vat,
-            sum_wht,
-            sum_amt,
-            sum_disp,
-            sum_disamt,
-            '${(sum_amt - sum_disamt)}',
-            renTal_name,
-            scname_,
-            cname_,
-            addr_,
-            tax_,
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            numinvoice,
-            numdoctax,
-            finnancetransModels,
-            date_Transaction,
-            date_pay,
-            Howto_LockJonPay,
-            dis_sum_Matjum,
-            TitleType_Default_Receipt_Name);
-      } else if (tem_page_ser.toString() == '5') {
-        Pdfgen_his_statusbill_TP6.exportPDF_statusbill_TP6(
-            foder,
-            tableData00,
-            tableData01,
-            context,
-            _TransReBillHistoryModels,
-            'Num_cid',
-            'Namenew',
-            '${sum_pvat}',
-            sum_vat,
-            sum_wht,
-            sum_amt,
-            sum_disp,
-            sum_disamt,
-            '${(sum_amt - sum_disamt)}',
-            renTal_name,
-            scname_,
-            cname_,
-            addr_,
-            tax_,
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            numinvoice,
-            numdoctax,
-            finnancetransModels,
-            date_Transaction,
-            date_pay,
-            Howto_LockJonPay,
-            dis_sum_Matjum,
-            TitleType_Default_Receipt_Name);
-      } else if (tem_page_ser.toString() == '6') {
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee,
+            com_ment);
+      } else if (tem_page_ser.toString() == '2') {
         Pdfgen_his_statusbill_TP7.exportPDF_statusbill_TP7(
             foder,
             tableData00,
@@ -594,8 +483,11 @@ class ManPay_Receipt_PDF {
             date_pay,
             Howto_LockJonPay,
             dis_sum_Matjum,
-            TitleType_Default_Receipt_Name);
-      } else if (tem_page_ser.toString() == '7') {
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee,
+            com_ment);
+      } else if (tem_page_ser.toString() == '3') {
         if (rtser.toString() == '72' ||
             rtser.toString() == '92' ||
             rtser.toString() == '93' ||
@@ -638,7 +530,10 @@ class ManPay_Receipt_PDF {
               date_pay,
               Howto_LockJonPay,
               dis_sum_Matjum,
-              TitleType_Default_Receipt_Name);
+              TitleType_Default_Receipt_Name,
+              dis_sum_Pakan,
+              sum_fee,
+              com_ment);
         } else {
           Pdfgen_his_statusbill_TP8.exportPDF_statusbill_TP8(
               Cust_no,
@@ -678,9 +573,347 @@ class ManPay_Receipt_PDF {
               date_pay,
               Howto_LockJonPay,
               dis_sum_Matjum,
-              TitleType_Default_Receipt_Name);
+              TitleType_Default_Receipt_Name,
+              dis_sum_Pakan,
+              sum_fee,
+              com_ment);
         }
       }
     });
+
+    // Future.delayed(Duration(milliseconds: 500), () async {
+    //   if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
+    //     Pdfgen_his_statusbill.exportPDF_statusbill(
+    //         foder,
+    //         tableData00,
+    //         tableData01,
+    //         context,
+    //         _TransReBillHistoryModels,
+    //         'Num_cid',
+    //         'Namenew',
+    //         '${sum_pvat}',
+    //         sum_vat,
+    //         sum_wht,
+    //         sum_amt,
+    //         sum_disp,
+    //         sum_disamt,
+    //         '${(sum_amt - sum_disamt)}',
+    //         renTal_name,
+    //         scname_,
+    //         cname_,
+    //         addr_,
+    //         tax_,
+    //         bill_addr,
+    //         bill_email,
+    //         bill_tel,
+    //         bill_tax,
+    //         bill_name,
+    //         newValuePDFimg,
+    //         numinvoice,
+    //         numdoctax,
+    //         finnancetransModels,
+    //         date_Transaction,
+    //         date_pay,
+    //         Howto_LockJonPay,
+    //         dis_sum_Matjum,
+    //         TitleType_Default_Receipt_Name);
+    //   } else if (tem_page_ser.toString() == '1') {
+    //     Pdfgen_his_statusbill_TP2.exportPDF_statusbill_TP2(
+    //         foder,
+    //         tableData00,
+    //         tableData01,
+    //         context,
+    //         _TransReBillHistoryModels,
+    //         'Num_cid',
+    //         'Namenew',
+    //         '${sum_pvat}',
+    //         sum_vat,
+    //         sum_wht,
+    //         sum_amt,
+    //         sum_disp,
+    //         sum_disamt,
+    //         '${(sum_amt - sum_disamt)}',
+    //         renTal_name,
+    //         scname_,
+    //         cname_,
+    //         addr_,
+    //         tax_,
+    //         bill_addr,
+    //         bill_email,
+    //         bill_tel,
+    //         bill_tax,
+    //         bill_name,
+    //         newValuePDFimg,
+    //         // numdoctax == '' ? '$numinvoice' : '$numdoctax',
+    //         numinvoice,
+    //         numdoctax,
+    //         finnancetransModels,
+    //         date_Transaction,
+    //         date_pay,
+    //         Howto_LockJonPay,
+    //         dis_sum_Matjum,
+    //         TitleType_Default_Receipt_Name);
+    //   } else if (tem_page_ser.toString() == '2') {
+    //     Pdfgen_his_statusbill_TP3.exportPDF_statusbill_TP3(
+    //         foder,
+    //         tableData00,
+    //         tableData01,
+    //         context,
+    //         _TransReBillHistoryModels,
+    //         'Num_cid',
+    //         'Namenew',
+    //         '${sum_pvat}',
+    //         sum_vat,
+    //         sum_wht,
+    //         sum_amt,
+    //         sum_disp,
+    //         sum_disamt,
+    //         '${(sum_amt - sum_disamt)}',
+    //         renTal_name,
+    //         scname_,
+    //         cname_,
+    //         addr_,
+    //         tax_,
+    //         bill_addr,
+    //         bill_email,
+    //         bill_tel,
+    //         bill_tax,
+    //         bill_name,
+    //         newValuePDFimg,
+    //         numinvoice,
+    //         numdoctax,
+    //         finnancetransModels,
+    //         date_Transaction,
+    //         date_pay,
+    //         Howto_LockJonPay,
+    //         dis_sum_Matjum,
+    //         TitleType_Default_Receipt_Name);
+    //   } else if (tem_page_ser.toString() == '3') {
+    //     Pdfgen_his_statusbill_TP4.exportPDF_statusbill_TP4(
+    //         foder,
+    //         tableData00,
+    //         tableData01,
+    //         context,
+    //         _TransReBillHistoryModels,
+    //         'Num_cid',
+    //         'Namenew',
+    //         '${sum_pvat}',
+    //         sum_vat,
+    //         sum_wht,
+    //         sum_amt,
+    //         sum_disp,
+    //         sum_disamt,
+    //         '${(sum_amt - sum_disamt)}',
+    //         renTal_name,
+    //         scname_,
+    //         cname_,
+    //         addr_,
+    //         tax_,
+    //         bill_addr,
+    //         bill_email,
+    //         bill_tel,
+    //         bill_tax,
+    //         bill_name,
+    //         newValuePDFimg,
+    //         numinvoice,
+    //         numdoctax,
+    //         finnancetransModels,
+    //         date_Transaction,
+    //         date_pay,
+    //         Howto_LockJonPay,
+    //         dis_sum_Matjum,
+    //         TitleType_Default_Receipt_Name);
+    //   } else if (tem_page_ser.toString() == '4') {
+    //     Pdfgen_his_statusbill_TP5.exportPDF_statusbill_TP5(
+    //         foder,
+    //         tableData00,
+    //         tableData01,
+    //         context,
+    //         _TransReBillHistoryModels,
+    //         'Num_cid',
+    //         'Namenew',
+    //         '${sum_pvat}',
+    //         sum_vat,
+    //         sum_wht,
+    //         sum_amt,
+    //         sum_disp,
+    //         sum_disamt,
+    //         '${(sum_amt - sum_disamt)}',
+    //         renTal_name,
+    //         scname_,
+    //         cname_,
+    //         addr_,
+    //         tax_,
+    //         bill_addr,
+    //         bill_email,
+    //         bill_tel,
+    //         bill_tax,
+    //         bill_name,
+    //         newValuePDFimg,
+    //         numinvoice,
+    //         numdoctax,
+    //         finnancetransModels,
+    //         date_Transaction,
+    //         date_pay,
+    //         Howto_LockJonPay,
+    //         dis_sum_Matjum,
+    //         TitleType_Default_Receipt_Name);
+    //   } else if (tem_page_ser.toString() == '5') {
+    //     Pdfgen_his_statusbill_TP6.exportPDF_statusbill_TP6(
+    //         foder,
+    //         tableData00,
+    //         tableData01,
+    //         context,
+    //         _TransReBillHistoryModels,
+    //         'Num_cid',
+    //         'Namenew',
+    //         '${sum_pvat}',
+    //         sum_vat,
+    //         sum_wht,
+    //         sum_amt,
+    //         sum_disp,
+    //         sum_disamt,
+    //         '${(sum_amt - sum_disamt)}',
+    //         renTal_name,
+    //         scname_,
+    //         cname_,
+    //         addr_,
+    //         tax_,
+    //         bill_addr,
+    //         bill_email,
+    //         bill_tel,
+    //         bill_tax,
+    //         bill_name,
+    //         newValuePDFimg,
+    //         numinvoice,
+    //         numdoctax,
+    //         finnancetransModels,
+    //         date_Transaction,
+    //         date_pay,
+    //         Howto_LockJonPay,
+    //         dis_sum_Matjum,
+    //         TitleType_Default_Receipt_Name);
+    //   } else if (tem_page_ser.toString() == '6') {
+    //     Pdfgen_his_statusbill_TP7.exportPDF_statusbill_TP7(
+    //         foder,
+    //         tableData00,
+    //         tableData01,
+    //         context,
+    //         _TransReBillHistoryModels,
+    //         'Num_cid',
+    //         'Namenew',
+    //         '${sum_pvat}',
+    //         sum_vat,
+    //         sum_wht,
+    //         sum_amt,
+    //         sum_disp,
+    //         sum_disamt,
+    //         '${(sum_amt - sum_disamt)}',
+    //         renTal_name,
+    //         scname_,
+    //         cname_,
+    //         addr_,
+    //         tax_,
+    //         bill_addr,
+    //         bill_email,
+    //         bill_tel,
+    //         bill_tax,
+    //         bill_name,
+    //         newValuePDFimg,
+    //         numinvoice,
+    //         numdoctax,
+    //         finnancetransModels,
+    //         date_Transaction,
+    //         date_pay,
+    //         Howto_LockJonPay,
+    //         dis_sum_Matjum,
+    //         TitleType_Default_Receipt_Name);
+    //   } else if (tem_page_ser.toString() == '7') {
+    //     if (rtser.toString() == '72' ||
+    //         rtser.toString() == '92' ||
+    //         rtser.toString() == '93' ||
+    //         rtser.toString() == '94') {
+    //       Pdfgen_his_statusbill_TP8_Ortorkor.exportPDF_statusbill_TP8_Ortorkor(
+    //           Cust_no,
+    //           cid_,
+    //           Zone_s,
+    //           Ln_s,
+    //           fname,
+    //           foder,
+    //           tableData00,
+    //           tableData01,
+    //           context,
+    //           _TransReBillHistoryModels,
+    //           'Num_cid',
+    //           'Namenew',
+    //           '${sum_pvat}',
+    //           sum_vat,
+    //           sum_wht,
+    //           sum_amt,
+    //           sum_disp,
+    //           sum_disamt,
+    //           '${(sum_amt - sum_disamt)}',
+    //           renTal_name,
+    //           scname_,
+    //           cname_,
+    //           addr_,
+    //           tax_,
+    //           bill_addr,
+    //           bill_email,
+    //           bill_tel,
+    //           bill_tax,
+    //           bill_name,
+    //           newValuePDFimg,
+    //           numinvoice,
+    //           numdoctax,
+    //           finnancetransModels,
+    //           date_Transaction,
+    //           date_pay,
+    //           Howto_LockJonPay,
+    //           dis_sum_Matjum,
+    //           TitleType_Default_Receipt_Name);
+    //     } else {
+    //       Pdfgen_his_statusbill_TP8.exportPDF_statusbill_TP8(
+    //           Cust_no,
+    //           cid_,
+    //           Zone_s,
+    //           Ln_s,
+    //           fname,
+    //           foder,
+    //           tableData00,
+    //           tableData01,
+    //           context,
+    //           _TransReBillHistoryModels,
+    //           'Num_cid',
+    //           'Namenew',
+    //           '${sum_pvat}',
+    //           sum_vat,
+    //           sum_wht,
+    //           sum_amt,
+    //           sum_disp,
+    //           sum_disamt,
+    //           '${(sum_amt - sum_disamt)}',
+    //           renTal_name,
+    //           scname_,
+    //           cname_,
+    //           addr_,
+    //           tax_,
+    //           bill_addr,
+    //           bill_email,
+    //           bill_tel,
+    //           bill_tax,
+    //           bill_name,
+    //           newValuePDFimg,
+    //           numinvoice,
+    //           numdoctax,
+    //           finnancetransModels,
+    //           date_Transaction,
+    //           date_pay,
+    //           Howto_LockJonPay,
+    //           dis_sum_Matjum,
+    //           TitleType_Default_Receipt_Name);
+    //     }
+    //   }
+    // });
   }
 }

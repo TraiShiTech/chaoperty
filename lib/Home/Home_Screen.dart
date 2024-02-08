@@ -72,6 +72,21 @@ class _HomeScreenState extends State<HomeScreen> {
     red_Trans_bill();
     read_GC_tenantTwo();
     red_Trans_c_maintenance();
+    Viewpagenow();
+  }
+
+  Future<Null> Viewpagenow() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var seremail_login = preferences.getString('ser');
+    String url =
+        '${MyConstant().domain}/Up_Viewpagenow.php?isAdd=true&ren=$ren&page=0&seruser=$seremail_login';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      if (result.toString() == 'true') {}
+    } catch (e) {}
   }
 
   Future<Null> red_Trans_c_maintenance() async {
@@ -3831,7 +3846,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               .all(
                                                                           8.0),
                                                                   child:
-                                                                  
                                                                       InkWell(
                                                                     onTap: () {
                                                                       _scrollController3
@@ -4456,7 +4470,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               Tooltip(
                                                                             richMessage:
                                                                                 TextSpan(
-                                                                              text: '${teNantTwoModels[index].lncode}',
+                                                                              text: '${teNantTwoModels[index].ln_c}',
                                                                               style: const TextStyle(
                                                                                 color: HomeScreen_Color.Colors_Text1_,
                                                                                 fontWeight: FontWeight.bold,
@@ -4473,7 +4487,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 Padding(
                                                                               padding: const EdgeInsets.all(8.0),
                                                                               child: Text(
-                                                                                '${teNantTwoModels[index].lncode}',
+                                                                                '${teNantTwoModels[index].ln_c}',
                                                                                 maxLines: 1,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 textAlign: TextAlign.center,

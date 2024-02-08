@@ -50,7 +50,10 @@ class Pdfgen_his_statusbill_TP4 {
       dayfinpay,
       type_bills,
       dis_sum_Matjum,
-      TitleType_Default_Receipt_Name) async {
+      TitleType_Default_Receipt_Name,
+      dis_sum_Pakan,
+      sum_fee,
+      com_ment) async {
     ////
     //// ------------>(ใบเสร็จรับเงินชั่วคราว paySrsscreen_)
     ///////
@@ -79,7 +82,22 @@ class Pdfgen_his_statusbill_TP4 {
         (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
     List netImage = [];
     List netImage_QR = [];
-    String total_QR = '${nFormat.format(double.parse('${Total}'))}';
+
+    ///
+    ///
+////////////////------------------------------->
+    double Total_CASH = double.parse(
+      '${finnancetransModels.where((model) => model.ptser == '1' && model.dtype == 'KP').fold<double>(
+            0.0,
+            (double previousValue, element) =>
+                previousValue +
+                (element.total != null ? double.parse(element.total!) : 0),
+          )}',
+    );
+
+    // '${finnancetransModels.where((model) => model.ptser == '1' && model.dtype == 'KP').map((model) => model.total).join(', ')}';
+    String total_QR =
+        '${nFormat.format(double.parse('${Total}') - Total_CASH)}';
     String newTotal_QR = total_QR.replaceAll(RegExp(r'[^0-9]'), '');
     for (int i = 0; i < newValuePDFimg.length; i++) {
       netImage.add(await networkImage('${newValuePDFimg[i]}'));
@@ -93,39 +111,43 @@ class Pdfgen_his_statusbill_TP4 {
             '${MyConstant().domain}/files/$foder/payment/${finnancetransModels[i].img}'));
       }
     }
+
+//////////---------------------------->
     bool hasNonCashTransaction = finnancetransModels.any((transaction) {
-      return transaction.type.toString() != 'CASH';
-    });
+      return transaction.type.toString() != 'CASH' &&
+          transaction.type != null &&
+          transaction.dtype.toString() != 'FTA';
+    }); ///// เงินโอน , Online Standard QR , Online Payment
+////////////////------------------------------->
+    bool hasNonCashTransaction1 = finnancetransModels.any((transaction) {
+      return transaction.type.toString() == 'CASH' &&
+          transaction.dtype.toString() != 'FTA';
+    }); ///// เงินสด
+////////////////------------------------------->
     bool hasNonCashTransaction2 = finnancetransModels.any((transaction) {
-      return transaction.ptser.toString() == '6';
-    });
-    // final tableHeaders = [
-    //   'ลำดับ',
-    //   'กำหนดชำระ',
-    //   'รายการ',
-    //   'VAT%',
-    //   'หน่วย',
-    //   'VAT',
-    //   'ราคารวมก่อนVAT',
-    //   'ราคารวมvat',
-    // ];
-
-    // final tableData = [
-    //   for (int index = 0; index < _TransReBillHistoryModels.length; index++)
-    //     [
-    //       '${index + 1}',
-    //       '${_TransReBillHistoryModels[index].date}',
-    //       '${_TransReBillHistoryModels[index].expname}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].tqty!))}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].pvat!))}',
-    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
-    //     ],
-    // ];
-///////////////////////------------------------------------------------->
-
+      return transaction.ptser.toString() == '6' &&
+          transaction.dtype.toString() != 'FTA';
+    }); //Online Standard QR
+////////////////------------------------------->
+    bool hasNonCashTransaction3 = finnancetransModels.any((transaction) {
+      return transaction.ptser.toString() == '2' &&
+          transaction.dtype.toString() != 'FTA';
+    }); ///// เงินโอน
+////////////////------------------------------->
+    bool hasNonCashTransaction4 = finnancetransModels.any((transaction) {
+      return transaction.ptser.toString() == '5' &&
+          transaction.dtype.toString() != 'FTA';
+    }); ///// Online Payment
+////////////////------------------------------->
+    bool hasNonCashTransaction5 = finnancetransModels.any((transaction) {
+      return transaction.dtype.toString() == 'MM';
+    }); ///// Online Payment
 //////////---------------------------------->
+    bool hasNonCashTransaction6 = finnancetransModels.any((transaction) {
+      return transaction.dtype.toString() == 'FTA';
+    }); ///// Online Payment
+//////////---------------------------------->
+
     pdf.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4.copyWith(
@@ -142,7 +164,15 @@ class Pdfgen_his_statusbill_TP4 {
                     ? pw.Container(
                         height: 72,
                         width: 70,
-                        color: PdfColors.grey200,
+                        decoration: const pw.BoxDecoration(
+                          color: PdfColors.grey200,
+                          border: pw.Border(
+                            right: pw.BorderSide(color: PdfColors.grey300),
+                            left: pw.BorderSide(color: PdfColors.grey300),
+                            top: pw.BorderSide(color: PdfColors.grey300),
+                            bottom: pw.BorderSide(color: PdfColors.grey300),
+                          ),
+                        ),
                         child: pw.Center(
                           child: pw.Text(
                             '$bill_name ',
@@ -160,10 +190,23 @@ class Pdfgen_his_statusbill_TP4 {
                     //     height: 72,
                     //     width: 70,
                     //   )
-                    : pw.Image(
-                        (netImage[0]),
+                    : pw.Container(
                         height: 72,
                         width: 70,
+                        decoration: const pw.BoxDecoration(
+                          color: PdfColors.grey200,
+                          border: pw.Border(
+                            right: pw.BorderSide(color: PdfColors.grey300),
+                            left: pw.BorderSide(color: PdfColors.grey300),
+                            top: pw.BorderSide(color: PdfColors.grey300),
+                            bottom: pw.BorderSide(color: PdfColors.grey300),
+                          ),
+                        ),
+                        child: pw.Image(
+                          (netImage[0]),
+                          height: 72,
+                          width: 70,
+                        ),
                       ),
                 pw.SizedBox(width: 1 * PdfPageFormat.mm),
                 pw.Container(
@@ -354,6 +397,15 @@ class Pdfgen_his_statusbill_TP4 {
                           color: Colors_pd,
                         ),
                       ),
+                      pw.Text(
+                        'หมายเหตุ : $com_ment',
+                        textAlign: pw.TextAlign.justify,
+                        style: pw.TextStyle(
+                          fontSize: font_Size,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -467,58 +519,59 @@ class Pdfgen_his_statusbill_TP4 {
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       for (var i = 0; i < finnancetransModels.length; i++)
-                        pw.Row(
-                          children: [
-                            (finnancetransModels[i].dtype.toString() == 'KP')
-                                ? pw.Expanded(
-                                    flex: 1,
-                                    child: pw.Container(
-                                      // decoration: pw.BoxDecoration(
-                                      //   color: PdfColors.green100,
-                                      //   // border: pw.Border(
-                                      //   //   bottom: pw.BorderSide(
-                                      //   //       color: PdfColors.green900),
-                                      //   // ),
-                                      // ),
-                                      child: pw.Text(
-                                        (finnancetransModels[i]
-                                                    .type
-                                                    .toString() ==
-                                                'CASH')
-                                            ? '${i + 1}.เงินสด : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)'
-                                            : '${i + 1}.เงินโอน : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท  (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
-                                        textAlign: pw.TextAlign.justify,
-                                        style: pw.TextStyle(
-                                          fontSize: font_Size,
-                                          font: ttf,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: Colors_pd,
+                        if (finnancetransModels[i].dtype.toString() != 'FTA')
+                          pw.Row(
+                            children: [
+                              (finnancetransModels[i].dtype.toString() == 'KP')
+                                  ? pw.Expanded(
+                                      flex: 1,
+                                      child: pw.Container(
+                                        // decoration: pw.BoxDecoration(
+                                        //   color: PdfColors.green100,
+                                        //   // border: pw.Border(
+                                        //   //   bottom: pw.BorderSide(
+                                        //   //       color: PdfColors.green900),
+                                        //   // ),
+                                        // ),
+                                        child: pw.Text(
+                                          (finnancetransModels[i]
+                                                      .type
+                                                      .toString() ==
+                                                  'CASH')
+                                              ? '${i + 1}.เงินสด : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)'
+                                              : '${i + 1}.เงินโอน : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท  (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
+                                          textAlign: pw.TextAlign.justify,
+                                          style: pw.TextStyle(
+                                            fontSize: font_Size,
+                                            font: ttf,
+                                            fontWeight: pw.FontWeight.bold,
+                                            color: Colors_pd,
+                                          ),
                                         ),
-                                      ),
-                                    ))
-                                : pw.Expanded(
-                                    flex: 1,
-                                    child: pw.Container(
-                                      // decoration: pw.BoxDecoration(
-                                      //   color: PdfColors.green100,
-                                      //   // border: pw.Border(
-                                      //   //   bottom: pw.BorderSide(
-                                      //   //       color: PdfColors.green900),
-                                      //   // ),
-                                      // ),
-                                      child: pw.Text(
-                                        '${i + 1}.${finnancetransModels[i].remark} : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท  (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
-                                        textAlign: pw.TextAlign.justify,
-                                        style: pw.TextStyle(
-                                          fontSize: font_Size,
-                                          font: ttf,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: Colors_pd,
+                                      ))
+                                  : pw.Expanded(
+                                      flex: 1,
+                                      child: pw.Container(
+                                        // decoration: pw.BoxDecoration(
+                                        //   color: PdfColors.green100,
+                                        //   // border: pw.Border(
+                                        //   //   bottom: pw.BorderSide(
+                                        //   //       color: PdfColors.green900),
+                                        //   // ),
+                                        // ),
+                                        child: pw.Text(
+                                          '${i + 1}.${finnancetransModels[i].remark} : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท  (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
+                                          textAlign: pw.TextAlign.justify,
+                                          style: pw.TextStyle(
+                                            fontSize: font_Size,
+                                            font: ttf,
+                                            fontWeight: pw.FontWeight.bold,
+                                            color: Colors_pd,
+                                          ),
                                         ),
-                                      ),
-                                    )),
-                          ],
-                        )
+                                      )),
+                            ],
+                          )
                     ],
                   ),
                 ),
@@ -563,7 +616,7 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
                         // color: PdfColors.green100,
@@ -588,7 +641,6 @@ class Pdfgen_his_statusbill_TP4 {
                       ),
                     ),
                   ),
-
                   pw.Expanded(
                     flex: 4,
                     child: pw.Container(
@@ -615,44 +667,8 @@ class Pdfgen_his_statusbill_TP4 {
                       ),
                     ),
                   ),
-                  // pw.Expanded(
-                  //   flex: 1,
-                  //   child: pw.Container(
-                  //     height: 25,
-                  //     child: pw.Center(
-                  //       child: pw.Text(
-                  //         'จำนวน',
-                  //         textAlign: pw.TextAlign.center,
-                  //         maxLines: 1,
-                  //         style: pw.TextStyle(
-                  //             fontSize: 10.0,
-                  //             fontWeight: pw.FontWeight.bold,
-                  //             font: ttf,
-                  //             color: PdfColors.green900),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // pw.Expanded(
-                  //   flex: 1,
-                  //   child: pw.Container(
-                  //     height: 25,
-                  //     child: pw.Center(
-                  //       child: pw.Text(
-                  //         'หน่วย',
-                  //         textAlign: pw.TextAlign.center,
-                  //         maxLines: 1,
-                  //         style: pw.TextStyle(
-                  //             fontSize: 10.0,
-                  //             fontWeight: pw.FontWeight.bold,
-                  //             font: ttf,
-                  //             color: PdfColors.green900),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
                         // color: PdfColors.green100,
@@ -678,7 +694,7 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
                         // color: PdfColors.green100,
@@ -730,6 +746,33 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      decoration: const pw.BoxDecoration(
+                        // color: PdfColors.green100,
+                        border: pw.Border(
+                          left: pw.BorderSide(color: PdfColors.grey800),
+                          right: pw.BorderSide(color: PdfColors.grey800),
+                          top: pw.BorderSide(color: PdfColors.grey800),
+                          bottom: pw.BorderSide(color: PdfColors.grey800),
+                        ),
+                      ),
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'ส่วนลด',
+                          textAlign: pw.TextAlign.center,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
                     flex: 2,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
@@ -756,24 +799,6 @@ class Pdfgen_his_statusbill_TP4 {
                       ),
                     ),
                   ),
-                  // pw.Expanded(
-                  //   flex: 1,
-                  //   child: pw.Container(
-                  //     height: 25,
-                  //     child: pw.Center(
-                  //       child: pw.Text(
-                  //         'ราคารวมVAT',
-                  //         textAlign: pw.TextAlign.center,
-                  //         maxLines: 1,
-                  //         style: pw.TextStyle(
-                  //             fontSize: 10.0,
-                  //             fontWeight: pw.FontWeight.bold,
-                  //             font: ttf,
-                  //             color: PdfColors.green900),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -806,7 +831,7 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -820,7 +845,8 @@ class Pdfgen_his_statusbill_TP4 {
                       child: pw.Align(
                         alignment: pw.Alignment.center,
                         child: pw.Text(
-                          '${tableData00[index][1]}',
+                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${tableData00[index][1]}'))} ',
+                          // '${tableData00[index][1]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
@@ -858,7 +884,7 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -884,7 +910,7 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -936,6 +962,32 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        border: const pw.Border(
+                          left: pw.BorderSide(color: PdfColors.grey600),
+                          bottom: pw.BorderSide(color: PdfColors.grey600),
+                        ),
+                      ),
+                      padding: const pw.EdgeInsets.all(2.0),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData00[index][12]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
                     flex: 2,
                     child: pw.Container(
                       // height: 25,
@@ -951,7 +1003,7 @@ class Pdfgen_his_statusbill_TP4 {
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
-                          '${tableData00[index][6]}',
+                          '${tableData00[index][13]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
@@ -993,7 +1045,7 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -1007,7 +1059,8 @@ class Pdfgen_his_statusbill_TP4 {
                       child: pw.Align(
                         alignment: pw.Alignment.center,
                         child: pw.Text(
-                          '${tableData01[index][1]}',
+                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${tableData01[index][1]}'))} ',
+                          // '${tableData01[index][1]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
@@ -1045,7 +1098,7 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -1071,7 +1124,7 @@ class Pdfgen_his_statusbill_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -1112,6 +1165,33 @@ class Pdfgen_his_statusbill_TP4 {
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
                           '${tableData01[index][5]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        border: const pw.Border(
+                          left: pw.BorderSide(color: PdfColors.grey600),
+                          right: pw.BorderSide(color: PdfColors.grey600),
+                          bottom: pw.BorderSide(color: PdfColors.grey600),
+                        ),
+                      ),
+                      padding: const pw.EdgeInsets.all(2.0),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '0.00',
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
@@ -1240,6 +1320,29 @@ class Pdfgen_his_statusbill_TP4 {
                           children: [
                             pw.Expanded(
                               child: pw.Text(
+                                'ค่าธรรมเนียม',
+                                style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    fontWeight: pw.FontWeight.bold,
+                                    font: ttf,
+                                    color: PdfColors.grey800),
+                              ),
+                            ),
+                            pw.Text(
+                              '${nFormat.format(double.parse(sum_fee.toString()))}',
+                              // '$Sum_SubTotal',
+                              style: pw.TextStyle(
+                                  fontSize: font_Size,
+                                  fontWeight: pw.FontWeight.bold,
+                                  font: ttf,
+                                  color: PdfColors.grey800),
+                            ),
+                          ],
+                        ),
+                        pw.Row(
+                          children: [
+                            pw.Expanded(
+                              child: pw.Text(
                                 'ยอดรวม',
                                 style: pw.TextStyle(
                                     fontSize: font_Size,
@@ -1249,7 +1352,7 @@ class Pdfgen_his_statusbill_TP4 {
                               ),
                             ),
                             pw.Text(
-                              '${nFormat.format(double.parse(Sum_SubTotal.toString()))}',
+                              '${nFormat.format(double.parse(Sum_SubTotal.toString()) + double.parse(sum_fee.toString()))}',
                               // '$Sum_SubTotal',
                               style: pw.TextStyle(
                                   fontSize: font_Size,
@@ -1312,6 +1415,35 @@ class Pdfgen_his_statusbill_TP4 {
                               ),
                             ],
                           ),
+                        if (nFormat
+                                .format(double.parse(dis_sum_Pakan.toString()))
+                                .toString() !=
+                            '0.00')
+                          pw.Row(
+                            children: [
+                              pw.Expanded(
+                                child: pw.Text(
+                                  'เงินประกัน(ตัดเงินประกัน)',
+                                  //  'เงินมัดจำ(${nFormat.format(sum_matjum)})',
+                                  style: pw.TextStyle(
+                                      fontSize: font_Size,
+                                      fontWeight: pw.FontWeight.bold,
+                                      font: ttf,
+                                      color: PdfColors.grey800),
+                                ),
+                              ),
+                              pw.Text(
+                                dis_sum_Pakan == 0.00
+                                    ? '${nFormat.format(double.parse(dis_sum_Pakan.toString()))}'
+                                    : '${nFormat.format(double.parse(dis_sum_Pakan.toString()))}',
+                                style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    fontWeight: pw.FontWeight.bold,
+                                    font: ttf,
+                                    color: PdfColors.grey800),
+                              ),
+                            ],
+                          ),
                         pw.Divider(color: PdfColors.grey600),
                         pw.Row(
                           children: [
@@ -1326,7 +1458,7 @@ class Pdfgen_his_statusbill_TP4 {
                               ),
                             ),
                             pw.Text(
-                              '${nFormat.format(double.parse(Total.toString()) - double.parse(dis_sum_Matjum.toString()))}',
+                              '${nFormat.format((double.parse(Total.toString()) + double.parse(sum_fee.toString())) - (double.parse(dis_sum_Matjum.toString()) + double.parse(dis_sum_Pakan.toString())))}',
                               style: pw.TextStyle(
                                   fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
@@ -1369,7 +1501,7 @@ class Pdfgen_his_statusbill_TP4 {
                         flex: 4,
                         child: pw.Text(
                           //"${nFormat2.format(double.parse(Total.toString()))}";
-                          '(~${convertToThaiBaht(double.parse(Total.toString()))}~)',
+                          '(~${convertToThaiBaht(double.parse(Total.toString()) + double.parse(sum_fee.toString()))}~)',
                           style: pw.TextStyle(
                             fontSize: font_Size,
                             fontWeight: pw.FontWeight.bold,
@@ -1403,7 +1535,7 @@ class Pdfgen_his_statusbill_TP4 {
                                   ),
                                 ),
                                 pw.Text(
-                                  '${nFormat.format(double.parse(Total.toString()))}',
+                                  '${nFormat.format(double.parse(Total.toString()) + double.parse(sum_fee.toString()))}',
                                   // '${Total}',
                                   style: pw.TextStyle(
                                       fontWeight: pw.FontWeight.bold,
@@ -1422,375 +1554,651 @@ class Pdfgen_his_statusbill_TP4 {
             pw.SizedBox(height: 5 * PdfPageFormat.mm),
           ];
         },
+
         footer: (context) {
           return pw.Column(
             mainAxisSize: pw.MainAxisSize.min,
             children: [
-              (hasNonCashTransaction)
-                  ? pw.Container(
-                      decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.grey, width: 1),
-                      ),
-                      child: pw.Column(
-                        mainAxisAlignment: pw.MainAxisAlignment.center,
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          (hasNonCashTransaction2)
-                              ? pw.Row(
-                                  mainAxisAlignment:
-                                      pw.MainAxisAlignment.center,
-                                  children: [
-                                      pw.Expanded(
-                                        flex: 1,
-                                        child: pw.Container(
-                                          padding: const pw.EdgeInsets.all(4.0),
-                                          child: pw.Column(
-                                            children: [
-                                              // pw.Container(
-                                              //     // height: 60,
-                                              //     // width: 200,
-                                              //     child: pw.Image(
-                                              //   pw.MemoryImage(uint8Listthaiqr),
-                                              //   height: 72,
-                                              //   width: 65,
-                                              // )),
-                                              pw.Container(
-                                                child: pw.BarcodeWidget(
-                                                    data:
-                                                        '|${finnancetransModels.where((model) => model.ptser == '6').map((model) => model.bno).join(', ')}\r$numinvoice\r${DateFormat('dd-MM-yyyy').format(DateTime.parse('${dayfinpay}'))}\r${newTotal_QR}\r',
-                                                    barcode:
-                                                        pw.Barcode.qrCode(),
-                                                    width: 55,
-                                                    height: 55),
-
-                                                //  pw.PrettyQr(
-                                                //   // typeNumber: 3,
-                                                //   image: const AssetImage(
-                                                //     "images/Icon-chao.png",
-                                                //   ),
-                                                //   size: 110,
-                                                //   data: '${teNantModels[index].cid}',
-                                                //   errorCorrectLevel: QrErrorCorrectLevel.M,
-                                                //   roundEdges: true,
-                                                // ),
-                                              ),
-                                              pw.Text(
-                                                'บัญชี : ${finnancetransModels.where((model) => model.ptser == '6').map((model) => model.bno).join(', ')}',
-                                                style: pw.TextStyle(
-                                                  font: ttf,
-                                                  fontSize: font_Size,
-                                                  fontWeight:
-                                                      pw.FontWeight.bold,
-                                                ),
-                                              ),
-
-                                              pw.Text(
-                                                '(Ref1 : $numinvoice , Ref2 : ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${dayfinpay}'))})',
-                                                style: pw.TextStyle(
-                                                  font: ttf,
-                                                  fontSize: font_Size,
-                                                  fontWeight:
-                                                      pw.FontWeight.bold,
-                                                ),
-                                              ),
-                                              pw.Text(
-                                                'สำหรับชำระด้วย Mobile Banking',
-                                                style: pw.TextStyle(
-                                                  font: ttf,
-                                                  fontSize: font_Size,
-                                                  fontWeight:
-                                                      pw.FontWeight.bold,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      pw.Expanded(
-                                        flex: 1,
-                                        child: pw.Container(
-                                          padding: const pw.EdgeInsets.all(4.0),
-                                          child: pw.Column(
-                                            children: [
-                                              pw.Text(
-                                                'คำเตือน',
-                                                textAlign: pw.TextAlign.left,
-                                                style: pw.TextStyle(
-                                                    fontSize: font_Size,
-                                                    font: ttf,
-                                                    color: PdfColors.red,
-                                                    fontWeight:
-                                                        pw.FontWeight.bold),
-                                              ),
-                                              pw.SizedBox(
-                                                  height: 2 * PdfPageFormat.mm),
-                                              pw.Text(
-                                                'โปรดตรวจสอบความถูกต้องทุกครั้งก่อนทำการชำระเงิน',
-                                                textAlign: pw.TextAlign.left,
-                                                maxLines: 1,
-                                                style: pw.TextStyle(
-                                                  fontSize: font_Size,
-                                                  font: ttf,
-                                                  color: PdfColors.red,
-                                                ),
-                                              ),
-                                              pw.SizedBox(
-                                                  height: 2 * PdfPageFormat.mm),
-                                              pw.Text(
-                                                '( หากเกิดข้อผิดพลาดโปรดเก็บหลักฐานการชำระไว้ เพื่อติดต่อเจ้าหน้าที่ )',
-                                                textAlign: pw.TextAlign.center,
-                                                style: pw.TextStyle(
-                                                  fontSize: font_Size,
-                                                  font: ttf,
-                                                  color: PdfColors.red,
-                                                ),
-                                              ),
-                                              pw.SizedBox(
-                                                  height: 2 * PdfPageFormat.mm),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ])
-                              : pw.Row(
-                                  mainAxisAlignment:
-                                      pw.MainAxisAlignment.center,
-                                  children: [
-                                      for (var i = 0;
-                                          i < finnancetransModels.length;
-                                          i++)
-                                        if (finnancetransModels[i]
-                                                .ptser
-                                                .toString() !=
-                                            '1')
-                                          pw.Expanded(
-                                            flex: 1,
-                                            child: pw.Container(
-                                              padding:
-                                                  const pw.EdgeInsets.all(4.0),
-                                              child: pw.Column(
-                                                children: [
-                                                  // pw.Container(
-                                                  //     // height: 60,
-                                                  //     // width: 200,
-                                                  //     child: pw.Image(
-                                                  //   pw.MemoryImage(uint8Listthaiqr),
-                                                  //   height: 72,
-                                                  //   width: 65,
-                                                  // )),
-                                                  pw.Container(
-                                                    child: (finnancetransModels[i]
-                                                                    .ptser
-                                                                    .toString() ==
-                                                                '' ||
-                                                            finnancetransModels[i].ptser ==
-                                                                null ||
-                                                            finnancetransModels[i]
-                                                                    .img ==
-                                                                null ||
-                                                            finnancetransModels[i]
-                                                                    .img
-                                                                    .toString() ==
-                                                                '')
-                                                        ? pw.BarcodeWidget(
-                                                            data: generateQRCode(
-                                                                promptPayID:
-                                                                    "${finnancetransModels[i].bno}",
-                                                                amount: double.parse((Total ==
-                                                                            null ||
-                                                                        Total ==
-                                                                            '')
-                                                                    ? '0'
-                                                                    : '$Total')),
-                                                            barcode:
-                                                                pw.Barcode.qrCode(),
-                                                            width: 55,
-                                                            height: 55)
-                                                        : pw.Image(
-                                                            (netImage_QR[i]),
-                                                            height: 55,
-                                                            width: 55,
-                                                          ),
-                                                  ),
-                                                  pw.Text(
-                                                    'บัญชี : ${finnancetransModels[i].bno}',
-                                                    style: pw.TextStyle(
-                                                      font: ttf,
-                                                      fontSize: font_Size,
-                                                      fontWeight:
-                                                          pw.FontWeight.bold,
-                                                    ),
-                                                  ),
-
-                                                  pw.Text(
-                                                    'สำหรับชำระด้วย Mobile Banking',
-                                                    style: pw.TextStyle(
-                                                      font: ttf,
-                                                      fontSize: font_Size,
-                                                      fontWeight:
-                                                          pw.FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                      pw.Expanded(
-                                        flex: 1,
-                                        child: pw.Container(
-                                          padding: const pw.EdgeInsets.all(4.0),
-                                          child: pw.Column(
-                                            children: [
-                                              pw.Text(
-                                                'คำเตือน',
-                                                textAlign: pw.TextAlign.left,
-                                                style: pw.TextStyle(
-                                                    fontSize: font_Size,
-                                                    font: ttf,
-                                                    color: PdfColors.red,
-                                                    fontWeight:
-                                                        pw.FontWeight.bold),
-                                              ),
-                                              pw.SizedBox(
-                                                  height: 2 * PdfPageFormat.mm),
-                                              pw.Text(
-                                                'โปรดตรวจสอบความถูกต้องทุกครั้งก่อนทำการชำระเงิน',
-                                                textAlign: pw.TextAlign.left,
-                                                maxLines: 1,
-                                                style: pw.TextStyle(
-                                                  fontSize: font_Size,
-                                                  font: ttf,
-                                                  color: PdfColors.red,
-                                                ),
-                                              ),
-                                              pw.SizedBox(
-                                                  height: 2 * PdfPageFormat.mm),
-                                              pw.Text(
-                                                '( หากเกิดข้อผิดพลาดโปรดเก็บหลักฐานการชำระไว้ เพื่อติดต่อเจ้าหน้าที่ )',
-                                                textAlign: pw.TextAlign.center,
-                                                style: pw.TextStyle(
-                                                  fontSize: font_Size,
-                                                  font: ttf,
-                                                  color: PdfColors.red,
-                                                ),
-                                              ),
-                                              pw.SizedBox(
-                                                  height: 2 * PdfPageFormat.mm),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                        ],
-                      ))
-                  : pw.Container(
-                      decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.grey, width: 1),
-                      ),
-                      child: pw.Column(
-                        mainAxisAlignment: pw.MainAxisAlignment.center,
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.Row(
-                              mainAxisAlignment: pw.MainAxisAlignment.center,
-                              children: [
-                                pw.Expanded(
-                                  flex: 1,
-                                  child: pw.Container(
-                                    padding: const pw.EdgeInsets.all(4.0),
-                                    child: pw.Column(
-                                      children: [
-                                        pw.Text(
-                                          'หมายเหตุ ',
-                                          textAlign: pw.TextAlign.center,
-                                          style: pw.TextStyle(
-                                              fontSize: font_Size,
-                                              font: ttf,
-                                              color: Colors_pd,
-                                              fontWeight: pw.FontWeight.bold),
-                                        ),
-                                        pw.SizedBox(
-                                            height: 2 * PdfPageFormat.mm),
-                                        pw.Text(
-                                          '.....................................................................................................................................................................................................................................................................................................................',
-                                          textAlign: pw.TextAlign.center,
-                                          maxLines: 2,
-                                          style: pw.TextStyle(
-                                            fontSize: font_Size,
-                                            font: ttf,
-                                            color: Colors_pd,
-                                          ),
-                                        ),
-                                        pw.SizedBox(
-                                            height: 2 * PdfPageFormat.mm),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                pw.Expanded(
-                                  flex: 1,
-                                  child: pw.Container(
-                                    padding: const pw.EdgeInsets.all(4.0),
-                                    child: pw.Column(
-                                      children: [
-                                        pw.Text(
-                                          'ผู้รับเงิน',
-                                          textAlign: pw.TextAlign.left,
-                                          style: pw.TextStyle(
-                                              fontSize: font_Size,
-                                              font: ttf,
-                                              color: Colors_pd,
-                                              fontWeight: pw.FontWeight.bold),
-                                        ),
-                                        pw.SizedBox(
-                                            height: 2 * PdfPageFormat.mm),
-                                        pw.Text(
-                                          ' (..............................................)',
-                                          textAlign: pw.TextAlign.left,
-                                          maxLines: 1,
-                                          style: pw.TextStyle(
-                                            fontSize: font_Size,
-                                            font: ttf,
-                                            color: Colors_pd,
-                                          ),
-                                        ),
-                                        pw.SizedBox(
-                                            height: 2 * PdfPageFormat.mm),
-                                        pw.Text(
-                                          'วันที่........../........../..........',
-                                          textAlign: pw.TextAlign.center,
-                                          style: pw.TextStyle(
-                                            fontSize: font_Size,
-                                            font: ttf,
-                                            color: Colors_pd,
-                                          ),
-                                        ),
-                                        pw.SizedBox(
-                                            height: 2 * PdfPageFormat.mm),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                        ],
-                      )),
-              pw.SizedBox(height: 3 * PdfPageFormat.mm),
-              pw.Align(
-                alignment: pw.Alignment.bottomRight,
-                child: pw.Text(
-                  'หน้า ${context.pageNumber} / ${context.pagesCount} ',
-                  textAlign: pw.TextAlign.left,
-                  style: pw.TextStyle(
-                    fontSize: 10,
-                    font: ttf,
-                    color: Colors_pd,
-                    // fontWeight: pw.FontWeight.bold
+              pw.Container(
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(color: PdfColors.grey, width: 1),
                   ),
-                ),
+                  padding: pw.EdgeInsets.fromLTRB(2, 4, 2, 4),
+                  child: pw.Row(
+                    children: [
+                      pw.Expanded(
+                          flex: 2,
+                          child: pw.Column(
+                              mainAxisAlignment: pw.MainAxisAlignment.start,
+                              crossAxisAlignment: pw.CrossAxisAlignment.start,
+                              children: [
+                                pw.Text(
+                                  'หมายเหตุ : ',
+                                  textAlign: pw.TextAlign.left,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  (hasNonCashTransaction)
+                                      ? '( / ) 1. เงินโอน, QR Code, Mobile Banking '
+                                      : '(   ) 1. เงินโอน, QR Code, Mobile Banking ',
+                                  textAlign: pw.TextAlign.left,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  (hasNonCashTransaction)
+                                      ? '      บัญชี ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.bank).join(', ')} เลขที่ ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.bno).join(', ')} [ ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => (model.ptname.toString() == 'Online Payment' ? 'PromptPay QR' : model.ptname == 'เงินโอน' ? 'เลขบัญชี' : 'Online Standard QR')).join(', ')} ]'
+                                      : '      บัญชี...................................เลขที่...................................',
+                                  textAlign: pw.TextAlign.left,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Row(
+                                  // mainAxisAlignment:
+                                  //     pw.MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    pw.Expanded(
+                                      flex: 1,
+                                      child: pw.Text(
+                                        (hasNonCashTransaction1)
+                                            ? '( / ) 2. เงินสด'
+                                            : '(   ) 2. เงินสด',
+                                        textAlign: pw.TextAlign.left,
+                                        style: pw.TextStyle(
+                                          fontSize: font_Size,
+                                          font: ttf,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: Colors_pd,
+                                        ),
+                                      ),
+                                    ),
+                                    pw.Expanded(
+                                      flex: 3,
+                                      child: pw.Text(
+                                        (hasNonCashTransaction ||
+                                                hasNonCashTransaction1)
+                                            ? '(   ) 3. อื่นๆ.............................'
+                                            : '( / ) 3. อื่นๆ ${finnancetransModels.where((model) => model.ptser != '6' || model.ptser != '5' || model.ptser != '2' || model.ptser != '1' && model.dtype == 'KP').map((model) => model.bank).join(', ')}',
+                                        textAlign: pw.TextAlign.left,
+                                        style: pw.TextStyle(
+                                          fontSize: font_Size,
+                                          font: ttf,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: Colors_pd,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ])),
+                      pw.Expanded(
+                          flex: 1,
+                          child: pw.Column(
+                              mainAxisAlignment: pw.MainAxisAlignment.start,
+                              // crossAxisAlignment: pw.CrossAxisAlignment.center,
+                              children: [
+                                pw.Text(
+                                  'ลงชื่อ :',
+                                  textAlign: pw.TextAlign.left,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  '........................................................',
+                                  textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  '(......................................................)',
+                                  textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  'วันที่/Date...........................................',
+                                  textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                              ])),
+                      pw.Expanded(
+                          flex: 1,
+                          child: pw.Column(
+                              mainAxisAlignment: pw.MainAxisAlignment.start,
+                              // crossAxisAlignment: pw.CrossAxisAlignment.center,
+                              children: [
+                                pw.Text(
+                                  'ลงชื่อ :',
+                                  textAlign: pw.TextAlign.left,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  '........................................................',
+                                  textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  '(......................................................)',
+                                  textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  'วันที่/Date...........................................',
+                                  textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                              ])),
+                      pw.Expanded(
+                          flex: 1,
+                          child: pw.Column(
+                              mainAxisAlignment: pw.MainAxisAlignment.start,
+                              // crossAxisAlignment: pw.CrossAxisAlignment.center,
+                              children: [
+                                if (hasNonCashTransaction2)
+                                  pw.Container(
+                                    child: pw.BarcodeWidget(
+                                        data:
+                                            '|${finnancetransModels.where((model) => model.ptser == '6' && model.dtype == 'KP').map((model) => model.bno).join(',')}\r$numinvoice\r${DateFormat('ddMM').format(DateTime.parse(dayfinpay))}${DateTime.parse('${dayfinpay}').year + 543}\r${newTotal_QR}\r',
+                                        barcode: pw.Barcode.qrCode(),
+                                        width: 55,
+                                        height: 55),
+                                  ),
+                                if (hasNonCashTransaction4)
+                                  pw.BarcodeWidget(
+                                      data: generateQRCode(
+                                          promptPayID:
+                                              "${finnancetransModels.where((model) => model.ptser == '5' && model.dtype == 'KP').map((model) => model.bno).join(',')}",
+                                          amount: double.parse((Total == null ||
+                                                  Total == '')
+                                              ? '0'
+                                              : '${finnancetransModels.where((model) => model.ptser == '5' && model.dtype == 'KP').map((model) => model.total).join(',')}')),
+                                      barcode: pw.Barcode.qrCode(),
+                                      width: 55,
+                                      height: 55),
+                                if (hasNonCashTransaction3)
+                                  for (var i = 0;
+                                      i < finnancetransModels.length;
+                                      i++)
+                                    if (finnancetransModels[i]
+                                                .ptser
+                                                .toString() ==
+                                            '2' &&
+                                        finnancetransModels[i]
+                                                .dtype
+                                                .toString() ==
+                                            'KP')
+                                      pw.Image(
+                                        (netImage_QR[i]),
+                                        height: 55,
+                                        width: 55,
+                                      ),
+                              ])),
+                    ],
+                  )),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Padding(
+                    padding: const pw.EdgeInsets.fromLTRB(0, 2, 0, 0),
+                    child: pw.Align(
+                      alignment: pw.Alignment.bottomLeft,
+                      child: pw.Text(
+                        'พิมพ์เมื่อ : $date',
+                        // textAlign: pw.TextAlign.left,
+                        style: pw.TextStyle(
+                          fontSize: 7.00,
+                          font: ttf,
+                          color: Colors_pd,
+                          // fontWeight: pw.FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Padding(
+                    padding: const pw.EdgeInsets.fromLTRB(0, 2, 0, 0),
+                    child: pw.Align(
+                      alignment: pw.Alignment.bottomRight,
+                      child: pw.Text(
+                        'หน้าที่ ${context.pageNumber} / ${context.pagesCount} ',
+                        // textAlign: pw.TextAlign.left,
+                        style: pw.TextStyle(
+                          fontSize: 7.00,
+                          font: ttf,
+                          color: Colors_pd,
+                          // fontWeight: pw.FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               )
             ],
           );
         },
+        // footer: (context) {
+        //   return pw.Column(
+        //     mainAxisSize: pw.MainAxisSize.min,
+        //     children: [
+        //       (hasNonCashTransaction)
+        //           ? pw.Container(
+        //               decoration: pw.BoxDecoration(
+        //                 border: pw.Border.all(color: PdfColors.grey, width: 1),
+        //               ),
+        //               child: pw.Column(
+        //                 mainAxisAlignment: pw.MainAxisAlignment.center,
+        //                 crossAxisAlignment: pw.CrossAxisAlignment.start,
+        //                 children: [
+        //                   (hasNonCashTransaction2)
+        //                       ? pw.Row(
+        //                           mainAxisAlignment:
+        //                               pw.MainAxisAlignment.center,
+        //                           children: [
+        //                               pw.Expanded(
+        //                                 flex: 1,
+        //                                 child: pw.Container(
+        //                                   padding: const pw.EdgeInsets.all(4.0),
+        //                                   child: pw.Column(
+        //                                     children: [
+        //                                       // pw.Container(
+        //                                       //     // height: 60,
+        //                                       //     // width: 200,
+        //                                       //     child: pw.Image(
+        //                                       //   pw.MemoryImage(uint8Listthaiqr),
+        //                                       //   height: 72,
+        //                                       //   width: 65,
+        //                                       // )),
+        //                                       pw.Container(
+        //                                         child: pw.BarcodeWidget(
+        //                                             data:
+        //                                                 '|${finnancetransModels.where((model) => model.ptser == '6').map((model) => model.bno).join(', ')}\r$numinvoice\r${DateFormat('dd-MM-yyyy').format(DateTime.parse('${dayfinpay}'))}\r${newTotal_QR}\r',
+        //                                             barcode:
+        //                                                 pw.Barcode.qrCode(),
+        //                                             width: 55,
+        //                                             height: 55),
+
+        //                                         //  pw.PrettyQr(
+        //                                         //   // typeNumber: 3,
+        //                                         //   image: const AssetImage(
+        //                                         //     "images/Icon-chao.png",
+        //                                         //   ),
+        //                                         //   size: 110,
+        //                                         //   data: '${teNantModels[index].cid}',
+        //                                         //   errorCorrectLevel: QrErrorCorrectLevel.M,
+        //                                         //   roundEdges: true,
+        //                                         // ),
+        //                                       ),
+        //                                       pw.Text(
+        //                                         'บัญชี : ${finnancetransModels.where((model) => model.ptser == '6').map((model) => model.bno).join(', ')}',
+        //                                         style: pw.TextStyle(
+        //                                           font: ttf,
+        //                                           fontSize: font_Size,
+        //                                           fontWeight:
+        //                                               pw.FontWeight.bold,
+        //                                         ),
+        //                                       ),
+
+        //                                       pw.Text(
+        //                                         '(Ref1 : $numinvoice , Ref2 : ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${dayfinpay}'))})',
+        //                                         style: pw.TextStyle(
+        //                                           font: ttf,
+        //                                           fontSize: font_Size,
+        //                                           fontWeight:
+        //                                               pw.FontWeight.bold,
+        //                                         ),
+        //                                       ),
+        //                                       pw.Text(
+        //                                         'สำหรับชำระด้วย Mobile Banking',
+        //                                         style: pw.TextStyle(
+        //                                           font: ttf,
+        //                                           fontSize: font_Size,
+        //                                           fontWeight:
+        //                                               pw.FontWeight.bold,
+        //                                         ),
+        //                                       ),
+        //                                     ],
+        //                                   ),
+        //                                 ),
+        //                               ),
+        //                               pw.Expanded(
+        //                                 flex: 1,
+        //                                 child: pw.Container(
+        //                                   padding: const pw.EdgeInsets.all(4.0),
+        //                                   child: pw.Column(
+        //                                     children: [
+        //                                       pw.Text(
+        //                                         'คำเตือน',
+        //                                         textAlign: pw.TextAlign.left,
+        //                                         style: pw.TextStyle(
+        //                                             fontSize: font_Size,
+        //                                             font: ttf,
+        //                                             color: PdfColors.red,
+        //                                             fontWeight:
+        //                                                 pw.FontWeight.bold),
+        //                                       ),
+        //                                       pw.SizedBox(
+        //                                           height: 2 * PdfPageFormat.mm),
+        //                                       pw.Text(
+        //                                         'โปรดตรวจสอบความถูกต้องทุกครั้งก่อนทำการชำระเงิน',
+        //                                         textAlign: pw.TextAlign.left,
+        //                                         maxLines: 1,
+        //                                         style: pw.TextStyle(
+        //                                           fontSize: font_Size,
+        //                                           font: ttf,
+        //                                           color: PdfColors.red,
+        //                                         ),
+        //                                       ),
+        //                                       pw.SizedBox(
+        //                                           height: 2 * PdfPageFormat.mm),
+        //                                       pw.Text(
+        //                                         '( หากเกิดข้อผิดพลาดโปรดเก็บหลักฐานการชำระไว้ เพื่อติดต่อเจ้าหน้าที่ )',
+        //                                         textAlign: pw.TextAlign.center,
+        //                                         style: pw.TextStyle(
+        //                                           fontSize: font_Size,
+        //                                           font: ttf,
+        //                                           color: PdfColors.red,
+        //                                         ),
+        //                                       ),
+        //                                       pw.SizedBox(
+        //                                           height: 2 * PdfPageFormat.mm),
+        //                                     ],
+        //                                   ),
+        //                                 ),
+        //                               ),
+        //                             ])
+        //                       : pw.Row(
+        //                           mainAxisAlignment:
+        //                               pw.MainAxisAlignment.center,
+        //                           children: [
+        // for (var i = 0;
+        //     i < finnancetransModels.length;
+        //     i++)
+        //   if (finnancetransModels[i]
+        //               .ptser
+        //               .toString() !=
+        //           '1' &&
+        //       finnancetransModels[i]
+        //               .dtype
+        //               .toString() !=
+        //           'FTA')
+        //                                   pw.Expanded(
+        //                                     flex: 1,
+        //                                     child: pw.Container(
+        //                                       padding:
+        //                                           const pw.EdgeInsets.all(4.0),
+        //                                       child: pw.Column(
+        //                                         children: [
+        //                                           // pw.Container(
+        //                                           //     // height: 60,
+        //                                           //     // width: 200,
+        //                                           //     child: pw.Image(
+        //                                           //   pw.MemoryImage(uint8Listthaiqr),
+        //                                           //   height: 72,
+        //                                           //   width: 65,
+        //                                           // )),
+        //                                           pw.Container(
+        //                                             child: (finnancetransModels[i]
+        //                                                             .ptser
+        //                                                             .toString() ==
+        //                                                         '' ||
+        //                                                     finnancetransModels[i].ptser ==
+        //                                                         null ||
+        //                                                     finnancetransModels[i]
+        //                                                             .img ==
+        //                                                         null ||
+        //                                                     finnancetransModels[i]
+        //                                                             .img
+        //                                                             .toString() ==
+        //                                                         '')
+        //                                                 ?
+        // pw.BarcodeWidget(
+        //                                                     data: generateQRCode(
+        //                                                         promptPayID:
+        //                                                             "${finnancetransModels[i].bno}",
+        //                                                         amount: double.parse(
+        //                                                                 (Total == null || Total == '')
+        //                                                                     ? '0'
+        //                                                                     : '${Total}') +
+        //                                                             double.parse(
+        //                                                                 (sum_fee == null || sum_fee == '') ? '0' : sum_fee.toString())),
+        //                                                     barcode: pw.Barcode.qrCode(),
+        //                                                     width: 55,
+        //                                                     height: 55)
+        //                                                 :
+        // pw.Image(
+        //                                                     (netImage_QR[i]),
+        //                                                     height: 55,
+        //                                                     width: 55,
+        //                                                   ),
+        //                                           ),
+        //                                           pw.Text(
+        //                                             'บัญชี : ${finnancetransModels[i].bno}',
+        //                                             style: pw.TextStyle(
+        //                                               font: ttf,
+        //                                               fontSize: font_Size,
+        //                                               fontWeight:
+        //                                                   pw.FontWeight.bold,
+        //                                             ),
+        //                                           ),
+
+        //                                           pw.Text(
+        //                                             'สำหรับชำระด้วย Mobile Banking',
+        //                                             style: pw.TextStyle(
+        //                                               font: ttf,
+        //                                               fontSize: font_Size,
+        //                                               fontWeight:
+        //                                                   pw.FontWeight.bold,
+        //                                             ),
+        //                                           ),
+        //                                         ],
+        //                                       ),
+        //                                     ),
+        //                                   ),
+        //                               pw.Expanded(
+        //                                 flex: 1,
+        //                                 child: pw.Container(
+        //                                   padding: const pw.EdgeInsets.all(4.0),
+        //                                   child: pw.Column(
+        //                                     children: [
+        //                                       pw.Text(
+        //                                         'คำเตือน',
+        //                                         textAlign: pw.TextAlign.left,
+        //                                         style: pw.TextStyle(
+        //                                             fontSize: font_Size,
+        //                                             font: ttf,
+        //                                             color: PdfColors.red,
+        //                                             fontWeight:
+        //                                                 pw.FontWeight.bold),
+        //                                       ),
+        //                                       pw.SizedBox(
+        //                                           height: 2 * PdfPageFormat.mm),
+        //                                       pw.Text(
+        //                                         'โปรดตรวจสอบความถูกต้องทุกครั้งก่อนทำการชำระเงิน',
+        //                                         textAlign: pw.TextAlign.left,
+        //                                         maxLines: 1,
+        //                                         style: pw.TextStyle(
+        //                                           fontSize: font_Size,
+        //                                           font: ttf,
+        //                                           color: PdfColors.red,
+        //                                         ),
+        //                                       ),
+        //                                       pw.SizedBox(
+        //                                           height: 2 * PdfPageFormat.mm),
+        //                                       pw.Text(
+        //                                         '( หากเกิดข้อผิดพลาดโปรดเก็บหลักฐานการชำระไว้ เพื่อติดต่อเจ้าหน้าที่ )',
+        //                                         textAlign: pw.TextAlign.center,
+        //                                         style: pw.TextStyle(
+        //                                           fontSize: font_Size,
+        //                                           font: ttf,
+        //                                           color: PdfColors.red,
+        //                                         ),
+        //                                       ),
+        //                                       pw.SizedBox(
+        //                                           height: 2 * PdfPageFormat.mm),
+        //                                     ],
+        //                                   ),
+        //                                 ),
+        //                               ),
+        //                             ]),
+        //                 ],
+        //               ))
+        //           : pw.Container(
+        //               decoration: pw.BoxDecoration(
+        //                 border: pw.Border.all(color: PdfColors.grey, width: 1),
+        //               ),
+        //               child: pw.Column(
+        //                 mainAxisAlignment: pw.MainAxisAlignment.center,
+        //                 crossAxisAlignment: pw.CrossAxisAlignment.start,
+        //                 children: [
+        //                   pw.Row(
+        //                       mainAxisAlignment: pw.MainAxisAlignment.center,
+        //                       children: [
+        //                         pw.Expanded(
+        //                           flex: 1,
+        //                           child: pw.Container(
+        //                             padding: const pw.EdgeInsets.all(4.0),
+        //                             child: pw.Column(
+        //                               children: [
+        //                                 pw.Text(
+        //                                   'หมายเหตุ ',
+        //                                   textAlign: pw.TextAlign.center,
+        //                                   style: pw.TextStyle(
+        //                                       fontSize: font_Size,
+        //                                       font: ttf,
+        //                                       color: Colors_pd,
+        //                                       fontWeight: pw.FontWeight.bold),
+        //                                 ),
+        //                                 pw.SizedBox(
+        //                                     height: 2 * PdfPageFormat.mm),
+        //                                 pw.Text(
+        //                                   ' .' * 160,
+        //                                   textAlign: pw.TextAlign.center,
+        //                                   maxLines: 2,
+        //                                   style: pw.TextStyle(
+        //                                     fontSize: font_Size,
+        //                                     font: ttf,
+        //                                     color: Colors_pd,
+        //                                   ),
+        //                                 ),
+        //                                 pw.SizedBox(
+        //                                     height: 2 * PdfPageFormat.mm),
+        //                               ],
+        //                             ),
+        //                           ),
+        //                         ),
+        //                         pw.Expanded(
+        //                           flex: 1,
+        //                           child: pw.Container(
+        //                             padding: const pw.EdgeInsets.all(4.0),
+        //                             child: pw.Column(
+        //                               children: [
+        //                                 pw.Text(
+        //                                   'ผู้รับเงิน',
+        //                                   textAlign: pw.TextAlign.left,
+        //                                   style: pw.TextStyle(
+        //                                       fontSize: font_Size,
+        //                                       font: ttf,
+        //                                       color: Colors_pd,
+        //                                       fontWeight: pw.FontWeight.bold),
+        //                                 ),
+        //                                 pw.SizedBox(
+        //                                     height: 2 * PdfPageFormat.mm),
+        //                                 pw.Text(
+        //                                   ' (..............................................)',
+        //                                   textAlign: pw.TextAlign.left,
+        //                                   maxLines: 1,
+        //                                   style: pw.TextStyle(
+        //                                     fontSize: font_Size,
+        //                                     font: ttf,
+        //                                     color: Colors_pd,
+        //                                   ),
+        //                                 ),
+        //                                 pw.SizedBox(
+        //                                     height: 2 * PdfPageFormat.mm),
+        //                                 pw.Text(
+        //                                   'วันที่........../........../..........',
+        //                                   textAlign: pw.TextAlign.center,
+        //                                   style: pw.TextStyle(
+        //                                     fontSize: font_Size,
+        //                                     font: ttf,
+        //                                     color: Colors_pd,
+        //                                   ),
+        //                                 ),
+        //                                 pw.SizedBox(
+        //                                     height: 2 * PdfPageFormat.mm),
+        //                               ],
+        //                             ),
+        //                           ),
+        //                         ),
+        //                       ]),
+        //                 ],
+        //               )),
+        //       pw.SizedBox(height: 3 * PdfPageFormat.mm),
+        //       pw.Align(
+        //         alignment: pw.Alignment.bottomRight,
+        //         child: pw.Text(
+        //           'หน้า ${context.pageNumber} / ${context.pagesCount} ',
+        //           textAlign: pw.TextAlign.left,
+        //           style: pw.TextStyle(
+        //             fontSize: 10,
+        //             font: ttf,
+        //             color: Colors_pd,
+        //             // fontWeight: pw.FontWeight.bold
+        //           ),
+        //         ),
+        //       )
+        //     ],
+        //   );
+        // },
       ),
     );
     // pageCount++;
@@ -1842,6 +2250,7 @@ class Pdfgen_his_statusbill_TP4 {
     //     data,
     //     "pdf",
     //     mimeType: type);
+
     Navigator.push(
         context,
         MaterialPageRoute(

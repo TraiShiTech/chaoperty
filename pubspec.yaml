@@ -117,9 +117,18 @@ dependencies:
   get_ip_address: ^0.0.5
   usb_device: ^1.0.2
   percent_indicator: ^4.2.3
-  
-  
-  
+  upi_payment_qrcode_generator: ^1.4.0
+  qr_flutter: ^4.0.0
+  carousel_slider: ^4.2.1
+  scrollview_observer: ^1.19.0
+  connectivity_plus: ^5.0.2
+  appflowy_editor: ^0.1.12
+  month_year_picker: ^0.3.0+1
+  flutter_chat_bubble: ^2.0.2
+  chat_bubbles: ^1.5.0
+  cached_network_image: ^3.3.1
+  my_popup_menu: ^3.0.5
+
 
 dev_dependencies:
   flutter_test:
@@ -154,14 +163,10 @@ flutter:
     - images/TP2/
     - images/TP3/
     - images/TP4/
-    - images/TP5/
-    - images/TP6/
-    - images/TP7/
-    - images/TP8/
-    - images/TP8_1/
+    - images/TP4_1/
     - images/LogoBank/
     - images/card/
-    
+    - images/audio/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

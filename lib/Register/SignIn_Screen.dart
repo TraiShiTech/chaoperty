@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:js_interop';
-
+// import 'dart:js_interop_unsafe';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -553,7 +553,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                               MaterialPageRoute route =
                                                   MaterialPageRoute(
                                                 builder: (context) =>
-                                                    SignUnAdmin(),
+                                                    SignUnAdmin(vel_key: value),
                                               );
                                               Navigator.pushAndRemoveUntil(
                                                       context,
@@ -690,7 +690,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                                     MaterialPageRoute route =
                                                         MaterialPageRoute(
                                                       builder: (context) =>
-                                                          SignUnAdmin(),
+                                                          SignUnAdmin(
+                                                              vel_key: vel),
                                                     );
                                                     Navigator
                                                             .pushAndRemoveUntil(
@@ -1352,6 +1353,7 @@ class _SignInScreenState extends State<SignInScreen> {
     preferences.setString('verify', userModel.verify.toString());
     preferences.setString('permission', userModel.permission.toString());
     preferences.setString('rser', userModel.rser.toString());
+    preferences.setString('Muser', userModel.user.toString());
     preferences.setString('lavel', userModel.user_id.toString());
     preferences.setString('route', 'หน้าหลัก');
     preferences.setString('pakanPay', 0.toString());

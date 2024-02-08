@@ -49,7 +49,14 @@ class _AccessrightsState extends State<Accessrights> {
   List<RenTalModel> renTalModels = [];
   int? pkqty, pkuser, countarae;
   int renTal_lavel = 0;
-  String? rtname, type, typex, renname, pkname, ser_Zonex, laveluser;
+  String? rtname,
+      type,
+      typex,
+      renname,
+      pkname,
+      ser_Zonex,
+      laveluser,
+      renTal_utype;
 
   @override
   void initState() {
@@ -90,7 +97,9 @@ class _AccessrightsState extends State<Accessrights> {
 
   Future<Null> read_GC_rental() async {
     if (renTalModels.isNotEmpty) {
-      renTalModels.clear();
+      setState(() {
+        renTalModels.clear();
+      });
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
@@ -130,7 +139,9 @@ class _AccessrightsState extends State<Accessrights> {
 
   Future<Null> read_GC_permission() async {
     if (perMissionModels.length != 0) {
-      perMissionModels.clear();
+      setState(() {
+        perMissionModels.clear();
+      });
     }
 
     String url = '${MyConstant().domain}/GC_permissionAll.php?isAdd=true';
@@ -158,13 +169,17 @@ class _AccessrightsState extends State<Accessrights> {
     setState(() {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
+      renTal_utype = preferences.getString('utype');
       renTal_lavel = int.parse(preferences.getString('lavel').toString());
     });
   }
 
   Future<Null> read_GC_User() async {
-    if (userModels.length != 0) {
-      userModels.clear();
+    if (userModels.isNotEmpty) {
+      setState(() {
+        userModels.clear();
+        _userModels.clear();
+      });
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -1034,7 +1049,7 @@ class _AccessrightsState extends State<Accessrights> {
                                           FormEmail_text.clear();
                                           FormPassword_text.clear();
                                           FormRank_text.clear();
-                                          read_GC_User();
+                                          // read_GC_User();
                                         });
                                       } else {}
                                     } catch (e) {}
@@ -1117,6 +1132,7 @@ class _AccessrightsState extends State<Accessrights> {
     String? lname_ = userModels[index].lname;
     String? position_ = userModels[index].position;
     String? permission_ = userModels[index].permission;
+    String? utype_ = userModels[index].utype;
 
     // String value_thai_ = '${accessthai_}';
     // List<String> splitvalue_thai_ = value_thai_.split(',');
@@ -1463,112 +1479,249 @@ class _AccessrightsState extends State<Accessrights> {
                               ),
                             ],
                           )),
-                      Expanded(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              Row(
+                      renTal_lavel <= 1
+                          ? SizedBox()
+                          : Expanded(
+                              flex: 1,
+                              child: Column(
                                 children: [
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Level',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            color: SettingScreen_Color
+                                                .Colors_Text1_,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Level',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        color:
-                                            SettingScreen_Color.Colors_Text1_,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                        fontWeight: FontWeight.bold,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      // width: 200,
+                                      child: DropdownButtonFormField2(
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.zero,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Level $laveluid',
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                        icon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: TextHome_Color.TextHome_Colors,
+                                        ),
+                                        style: TextStyle(
+                                          color: Colors.green.shade900,
+                                        ),
+                                        iconSize: 20,
+                                        buttonHeight: 50,
+                                        // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                        dropdownDecoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        items: [
+                                          DropdownMenuItem<String>(
+                                            value: '1',
+                                            child: Text(
+                                              'Level 1',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: '2',
+                                            child: Text(
+                                              'Level 2',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: '3',
+                                            child: Text(
+                                              'Level 3',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          )
+                                        ],
+
+                                        onChanged: (value) async {
+                                          setState(() {
+                                            laveluid = value;
+                                          });
+                                        },
                                       ),
                                     ),
                                   ),
                                 ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  // width: 200,
-                                  child: DropdownButtonFormField2(
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.zero,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Level $laveluid',
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T),
-                                    ),
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: TextHome_Color.TextHome_Colors,
-                                    ),
-                                    style: TextStyle(
-                                      color: Colors.green.shade900,
-                                    ),
-                                    iconSize: 20,
-                                    buttonHeight: 50,
-                                    // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                    dropdownDecoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    items: [
-                                      DropdownMenuItem<String>(
-                                        value: '1',
+                              )),
+                      renTal_lavel <= 2
+                          ? SizedBox()
+                          : Expanded(
+                              flex: 1,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(8.0),
                                         child: Text(
-                                          'Level 1',
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              // fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
+                                          'All Maket',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            color: SettingScreen_Color
+                                                .Colors_Text1_,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                      DropdownMenuItem<String>(
-                                        value: '2',
-                                        child: Text(
-                                          'Level 2',
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              // fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                      DropdownMenuItem<String>(
-                                        value: '3',
-                                        child: Text(
-                                          'Level 3',
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              // fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      )
                                     ],
-
-                                    onChanged: (value) async {
-                                      setState(() {
-                                        laveluid = value;
-                                      });
-                                    },
                                   ),
-                                ),
-                              ),
-                            ],
-                          )),
+                                  renTal_utype != 'M'
+                                      ? Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              // color: Colors.lime[800],
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(10),
+                                                      topRight:
+                                                          Radius.circular(10),
+                                                      bottomLeft:
+                                                          Radius.circular(10),
+                                                      bottomRight:
+                                                          Radius.circular(10)),
+                                            ),
+                                            child: Text(
+                                              utype_ == 'S' ? 'ปิด' : 'เปิด',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            // width: 200,
+                                            child: DropdownButtonFormField2(
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding: EdgeInsets.zero,
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              ),
+                                              isExpanded: true,
+                                              hint: Text(
+                                                utype_ == 'S' ? 'ปิด' : 'เปิด',
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                              icon: const Icon(
+                                                Icons.arrow_drop_down,
+                                                color: TextHome_Color
+                                                    .TextHome_Colors,
+                                              ),
+                                              style: TextStyle(
+                                                color: Colors.green.shade900,
+                                              ),
+                                              iconSize: 20,
+                                              buttonHeight: 50,
+                                              // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                              dropdownDecoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              items: [
+                                                DropdownMenuItem<String>(
+                                                  value: 'S',
+                                                  child: Text(
+                                                    'ปิด',
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                                DropdownMenuItem<String>(
+                                                  value: 'MS',
+                                                  child: Text(
+                                                    'เปิด',
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ],
+
+                                              onChanged: (value) async {
+                                                setState(() {
+                                                  utype_ = value;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              )),
                       Expanded(
                           flex: 3,
                           child: Column(
@@ -1828,128 +1981,142 @@ class _AccessrightsState extends State<Accessrights> {
                       ],
                     ))
                   ]),
-                  Row(
-                    children: [
-                      Expanded(
-                          child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: StreamBuilder(
-                                      stream: Stream.periodic(
-                                          const Duration(seconds: 0)),
-                                      builder: (context, snapshot) {
-                                        return const Text(
-                                          'สิทธิการเข้าถึง( *กรุณากำหนดสิทธิ )',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text1_,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        );
-                                      }),
+                  renTal_lavel <= 1
+                      ? SizedBox()
+                      : Row(
+                          children: [
+                            Expanded(
+                                child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: StreamBuilder(
+                                            stream: Stream.periodic(
+                                                const Duration(seconds: 0)),
+                                            builder: (context, snapshot) {
+                                              return const Text(
+                                                'สิทธิการเข้าถึง( *กรุณากำหนดสิทธิ )',
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                  color: SettingScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              );
+                                            }),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                // color: Colors.grey[400],
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: StreamBuilder(
-                                  stream: Stream.periodic(
-                                      const Duration(seconds: 0)),
-                                  builder: (context, snapshot) {
-                                    return Column(
-                                      children: [
-                                        for (int index = 0;
-                                            index < perMissionModels.length;
-                                            index++)
-                                          if (perMissionModels[index]
-                                                  .perm
-                                                  .toString() !=
-                                              'จัดการข้อมูลส่วนตัว')
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Checkbox(
-                                                      activeColor: Colors
-                                                          .blue, // ​​color when activated
-                                                      value: _isChecks[index],
-                                                      onChanged: (bool? val) {
-                                                        setState(() {
-                                                          _isChecks[index] =
-                                                              val!;
-                                                        });
-                                                        // print(checked_Add);
-                                                        checked_value = '';
-                                                        for (var i = 0;
-                                                            i < list.length;
-                                                            i++) {
-                                                          String idmenu =
-                                                              list[i].title;
-                                                          String pnmenu =
-                                                              list[i].content;
-                                                          if (_isChecks[i] ==
-                                                              true) {
-                                                            setState(() {
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      // color: Colors.grey[400],
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15),
+                                          bottomLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: StreamBuilder(
+                                        stream: Stream.periodic(
+                                            const Duration(seconds: 0)),
+                                        builder: (context, snapshot) {
+                                          return Column(
+                                            children: [
+                                              for (int index = 0;
+                                                  index <
+                                                      perMissionModels.length;
+                                                  index++)
+                                                if (perMissionModels[index]
+                                                        .perm
+                                                        .toString() !=
+                                                    'จัดการข้อมูลส่วนตัว')
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Checkbox(
+                                                            activeColor: Colors
+                                                                .blue, // ​​color when activated
+                                                            value: _isChecks[
+                                                                index],
+                                                            onChanged:
+                                                                (bool? val) {
+                                                              setState(() {
+                                                                _isChecks[
+                                                                        index] =
+                                                                    val!;
+                                                              });
+                                                              // print(checked_Add);
                                                               checked_value =
-                                                                  '$checked_value' +
-                                                                      '$idmenu' +
-                                                                      ',';
-                                                            });
-                                                          }
-                                                        }
-                                                        print('$checked_value');
-                                                      }),
-                                                ),
-                                                Expanded(
-                                                  flex: 8,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    '${perMissionModels[index].perm}',
-                                                    textAlign: TextAlign.start,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: FontWeight_
-                                                            .Fonts_T),
+                                                                  '';
+                                                              for (var i = 0;
+                                                                  i < list.length;
+                                                                  i++) {
+                                                                String idmenu =
+                                                                    list[i]
+                                                                        .title;
+                                                                String pnmenu =
+                                                                    list[i]
+                                                                        .content;
+                                                                if (_isChecks[
+                                                                        i] ==
+                                                                    true) {
+                                                                  setState(() {
+                                                                    checked_value =
+                                                                        '$checked_value' +
+                                                                            '$idmenu' +
+                                                                            ',';
+                                                                  });
+                                                                }
+                                                              }
+                                                              print(
+                                                                  '$checked_value');
+                                                            }),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 8,
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 15,
+                                                          '${perMissionModels[index].perm}',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: const TextStyle(
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                      ],
-                                    );
-                                  }),
+                                            ],
+                                          );
+                                        }),
+                                  ),
+                                ),
+                              ],
+                            )),
+                            const Expanded(
+                              child: SizedBox(),
                             ),
-                          ),
-                        ],
-                      )),
-                      const Expanded(
-                        child: SizedBox(),
-                      ),
-                    ],
-                  ),
+                          ],
+                        ),
                 ],
               ),
             ),
@@ -2123,7 +2290,7 @@ class _AccessrightsState extends State<Accessrights> {
                                                     userModels[index].ser;
 
                                                 String url =
-                                                    '${MyConstant().domain}/UpC_Useradd.php?isAdd=true&ren=$ren&ser_id=$ser_id&ser_user=$ser_user&name=$name&lame=$lame&tel=$tel&email=$email&password=$password&renk=$renk&checked_value=$cle&laveluser=$laveluid';
+                                                    '${MyConstant().domain}/UpC_Useradd.php?isAdd=true&ren=$ren&ser_id=$ser_id&ser_user=$ser_user&name=$name&lame=$lame&tel=$tel&email=$email&password=$password&renk=$renk&checked_value=$cle&laveluser=$laveluid&utype=$utype_';
                                                 Insert_log.Insert_logs(
                                                     'ตั้งค่า',
                                                     'สิทธิการเข้าถึง>>แก้ไขผู้ใช้งาน(${FormEmail_text.text.toString()})');
@@ -2144,7 +2311,7 @@ class _AccessrightsState extends State<Accessrights> {
                                                       FormEmail_text.clear();
                                                       FormPassword_text.clear();
                                                       FormRank_text.clear();
-                                                      read_GC_User();
+                                                      // read_GC_User();
                                                     });
                                                   } else {}
                                                 } catch (e) {}
@@ -2381,7 +2548,7 @@ class _AccessrightsState extends State<Accessrights> {
                                   child: const Text(
                                     'ชื่อผู้ใช้',
                                     maxLines: 1,
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.start,
                                     style: TextStyle(
                                       color: SettingScreen_Color.Colors_Text1_,
                                       fontFamily: FontWeight_.Fonts_T,
@@ -2398,7 +2565,7 @@ class _AccessrightsState extends State<Accessrights> {
                                   child: const Text(
                                     'อีเมล',
                                     maxLines: 1,
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.start,
                                     style: TextStyle(
                                       color: SettingScreen_Color.Colors_Text1_,
                                       fontFamily: FontWeight_.Fonts_T,
@@ -2415,7 +2582,7 @@ class _AccessrightsState extends State<Accessrights> {
                                   child: const Text(
                                     'ตำแหน่ง',
                                     maxLines: 1,
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.start,
                                     style: TextStyle(
                                       color: SettingScreen_Color.Colors_Text1_,
                                       fontFamily: FontWeight_.Fonts_T,
@@ -2432,7 +2599,7 @@ class _AccessrightsState extends State<Accessrights> {
                                   child: const Text(
                                     'สิทธิ์การเข้าถึง',
                                     maxLines: 1,
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.start,
                                     style: TextStyle(
                                       color: SettingScreen_Color.Colors_Text1_,
                                       fontFamily: FontWeight_.Fonts_T,
@@ -2590,7 +2757,7 @@ class _AccessrightsState extends State<Accessrights> {
                                                   flex: 1,
                                                   child: Text(
                                                     '${userModels[index].fname} ${userModels[index].lname}',
-                                                    textAlign: TextAlign.center,
+                                                    textAlign: TextAlign.start,
                                                     maxLines: 2,
                                                     style: const TextStyle(
                                                         color:
@@ -2608,7 +2775,7 @@ class _AccessrightsState extends State<Accessrights> {
                                                   child: Text(
                                                     '${userModels[index].email} ',
                                                     maxLines: 2,
-                                                    textAlign: TextAlign.center,
+                                                    textAlign: TextAlign.start,
                                                     style: const TextStyle(
                                                         color:
                                                             SettingScreen_Color
@@ -2625,7 +2792,7 @@ class _AccessrightsState extends State<Accessrights> {
                                                   child: Text(
                                                     '${userModels[index].position} ',
                                                     maxLines: 2,
-                                                    textAlign: TextAlign.center,
+                                                    textAlign: TextAlign.start,
                                                     style: const TextStyle(
                                                         color:
                                                             SettingScreen_Color
@@ -2647,7 +2814,7 @@ class _AccessrightsState extends State<Accessrights> {
                                                     //     : '${newValue}',
                                                     //  'ผู้เช่า',
                                                     maxLines: 2,
-                                                    textAlign: TextAlign.center,
+                                                    textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                         color:
                                                             SettingScreen_Color
@@ -2708,7 +2875,25 @@ class _AccessrightsState extends State<Accessrights> {
                                                           ),
                                                         ),
                                                         onTap: () {
-                                                          Edit_userAcess(index);
+                                                          if (renTal_lavel >
+                                                              2) {
+                                                            Edit_userAcess(
+                                                                index);
+                                                          } else {
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                              const SnackBar(
+                                                                  content: Text(
+                                                                      'ระดับการใช้งานของคุณไม่สามารถแก้ไขได้ !!!',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T))),
+                                                            );
+                                                          }
+
                                                           // Edit_userAcess(index,
                                                           //     '${newValue.substring(0, newValue.length - 1)}');
                                                         },

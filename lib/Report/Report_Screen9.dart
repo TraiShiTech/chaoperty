@@ -254,7 +254,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
       builder: (BuildContext context) => AlertDialog(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        title: Text(
+        title: const Text(
           '📢ขออภัย !!!! ',
           textAlign: TextAlign.end,
           style: TextStyle(
@@ -264,17 +264,17 @@ class _ReportScreen9State extends State<ReportScreen9> {
           ),
         ),
         content: Container(
-          decoration: BoxDecoration(
-            image: const DecorationImage(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
               image: AssetImage("images/pngegg.png"),
               // fit: BoxFit.cover,
             ),
           ),
-          child: SingleChildScrollView(
+          child: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'ขออภัย ขณะนี้ฟังก์ชั่นก์ รายงานหน้า 9 อยู่ในช่วงทดสอบ... !!!!!! ',
                     textAlign: TextAlign.center,
@@ -469,7 +469,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
         }
       }
 
-      Future.delayed(Duration(milliseconds: 700), () async {
+      Future.delayed(const Duration(milliseconds: 700), () async {
         setState(() {
           _InvoiceModels = InvoiceModels;
           Await_Status_Report1 = null;
@@ -511,7 +511,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
         }
       }
 
-      Future.delayed(Duration(milliseconds: 700), () async {
+      Future.delayed(const Duration(milliseconds: 700), () async {
         setState(() {
           _InvoiceModels = InvoiceModels;
           Await_Status_Report2 = null;
@@ -725,7 +725,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
             TransReBillModels_.add(transReBillModel);
           });
         }
-        Future.delayed(Duration(milliseconds: 800), () async {
+        Future.delayed(const Duration(milliseconds: 800), () async {
           setState(() {
             Await_Status_Report3 = null;
           });
@@ -757,7 +757,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
             TransReBillModels_.add(transReBillModel);
           });
         }
-        Future.delayed(Duration(milliseconds: 800), () async {
+        Future.delayed(const Duration(milliseconds: 800), () async {
           setState(() {
             Await_Status_Report4 = null;
           });
@@ -767,6 +767,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
     } catch (e) {}
   }
 
+//
   ////////////-----------------------(วันที่รายงานประจำวัน)
   Future<Null> _select_Date_DailyBillAwatCheck(BuildContext context) async {
     setState(() {
@@ -853,38 +854,38 @@ class _ReportScreen9State extends State<ReportScreen9> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     '*** วิธีตรวจสอบ "สลิป" เบื้องต้น',
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.red,
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
                         fontFamily: Font_.Fonts_T),
                   ),
-                  Text(
+                  const Text(
                     '1. สังเกตความละเอียดของ ตัวเลข หรือ ตัวหนังสือ',
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.red,
                         fontSize: 12,
                         fontFamily: Font_.Fonts_T),
                   ),
-                  Text(
+                  const Text(
                     '2. เปิดแอปฯ ธนาคารขึ้นมา สแกน QR CODE บนสลิปโอนเงิน',
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.red,
                         fontSize: 12,
                         fontFamily: Font_.Fonts_T),
                   ),
-                  Text(
+                  const Text(
                     '3. ใช้  Mobile Banking เช็ก ยอดเงิน วัน-เวลาที่โอน ตรงกับในสลิปที่ได้มาหรือไม่',
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.red,
                         fontSize: 12,
                         fontFamily: Font_.Fonts_T),
                   ),
-                  Text(
+                  const Text(
                     '4. ควรตรวจสอบสลิปทันทีที่ได้รับมา เพราะ QR code บนสลิปของบางธนาคารจะมีอายุจำกัด ตั้งเเต่ 7 วัน ถึง 60 วัน ',
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.red,
                         fontSize: 12,
                         fontFamily: Font_.Fonts_T),
@@ -943,7 +944,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
         padding: const EdgeInsets.all(8.0),
         child: Container(
             height: MediaQuery.of(context).size.height * 0.6,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               // color: Colors.lime[200],
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -1352,7 +1353,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   'ค้นหา',
                                   style: TextStyle(
@@ -1421,7 +1422,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                               ),
                             )),
                         (Ser_BodySta1 != 1)
-                            ? Padding(
+                            ? const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   'รายงานข้อมูลใบแจ้งหนี้/วางบิล ',
@@ -1693,7 +1694,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   'ค้นหา',
                                   style: TextStyle(
@@ -1763,7 +1764,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                   }
                                 : null),
                         (Ser_BodySta2 != 1)
-                            ? Padding(
+                            ? const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน',
@@ -2822,7 +2823,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
         barrierDismissible: false,
         context: context,
         builder: (_) {
-          Timer(Duration(milliseconds: 3600), () {
+          Timer(const Duration(milliseconds: 3600), () {
             Navigator.of(context).pop();
           });
           return Dialog(
@@ -2937,7 +2938,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 // padding: EdgeInsets.all(10),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     // Expanded(child: _searchBar_ChoArea()),
@@ -3004,11 +3005,11 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                             bottomRight: Radius.circular(0)),
                                       ),
                                       padding: const EdgeInsets.all(4.0),
-                                      child: const Row(
+                                      child: Row(
                                         children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
+                                          Container(
+                                            width: 50,
+                                            child: const Text(
                                               'ลำดับ',
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
@@ -3019,7 +3020,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'เลขสัญญา',
@@ -3032,7 +3033,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 2,
                                             child: Text(
                                               'เลขที่ใบแจ้งหนี้',
@@ -3058,7 +3059,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                           //     ),
                                           //   ),
                                           // ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'วันที่ออกใบแจ้งหนี้',
@@ -3086,11 +3087,11 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                           //     ),
                                           //   ),
                                           // ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 2,
                                             child: Text(
                                               'ชื่อลูกค้า',
-                                              textAlign: TextAlign.start,
+                                              textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: ManageScreen_Color
                                                     .Colors_Text1_,
@@ -3112,10 +3113,23 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                           //     ),
                                           //   ),
                                           // ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 2,
                                             child: Text(
-                                              'ล็อค',
+                                              'โซน',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                color: ManageScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          const Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              'รหัสพื้นที่',
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                 color: ManageScreen_Color
@@ -3168,7 +3182,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                           //     ),
                                           //   ),
                                           // ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'ส่วนลด',
@@ -3181,7 +3195,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'ยอดรวม',
@@ -3194,7 +3208,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'ยอดเงินคงเหลือ',
@@ -3221,7 +3235,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                           //     ),
                                           //   ),
                                           // ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               '....',
@@ -3266,7 +3280,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                             index)
                                                         ? Colors.green[100]
                                                         : null,
-                                                    border: Border(
+                                                    border: const Border(
                                                       bottom: BorderSide(
                                                         color: Colors.black12,
                                                         width: 1,
@@ -3274,8 +3288,8 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                     ),
                                                   ),
                                                   child: Row(children: [
-                                                    Expanded(
-                                                      flex: 1,
+                                                    Container(
+                                                      width: 50,
                                                       child: Text(
                                                         '${index + 1}',
                                                         textAlign:
@@ -3358,7 +3372,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                         '${InvoiceModels[index].scname}',
                                                         // '${transMeterModels[index].ovalue}',
                                                         textAlign:
-                                                            TextAlign.start,
+                                                            TextAlign.center,
                                                         style: const TextStyle(
                                                           color:
                                                               ManageScreen_Color
@@ -3372,6 +3386,24 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                     ),
                                                     Expanded(
                                                       flex: 2,
+                                                      child: Text(
+                                                        '${InvoiceModels[index].zn}',
+                                                        //'${transMeterModels[index].qty}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: const TextStyle(
+                                                          color:
+                                                              ManageScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight:
+                                                          //     FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
                                                       child: Text(
                                                         '${InvoiceModels[index].ln}',
                                                         //'${transMeterModels[index].qty}',
@@ -3527,11 +3559,10 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                                 child:
                                                                     Container(
                                                                   decoration:
-                                                                      BoxDecoration(
+                                                                      const BoxDecoration(
                                                                     color: Colors
                                                                         .red,
-                                                                    borderRadius: const BorderRadius
-                                                                            .only(
+                                                                    borderRadius: BorderRadius.only(
                                                                         topLeft:
                                                                             Radius.circular(
                                                                                 10),
@@ -3548,7 +3579,8 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                                       const EdgeInsets
                                                                               .all(
                                                                           2.0),
-                                                                  child: Center(
+                                                                  child:
+                                                                      const Center(
                                                                     child:
                                                                         AutoSizeText(
                                                                       minFontSize:
@@ -3590,7 +3622,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                   decoration: BoxDecoration(
                                                     color: Colors.green[100],
                                                     borderRadius:
-                                                        BorderRadius.only(
+                                                        const BorderRadius.only(
                                                             topLeft:
                                                                 Radius.circular(
                                                                     8),
@@ -3806,7 +3838,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                         ),
                                                       ),
                                                     ),
-                                                    child: ListTile(
+                                                    child: const ListTile(
                                                         title: Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
@@ -3822,14 +3854,12 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                              style: TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
                                                             ),
                                                           ),
                                                         ]))),

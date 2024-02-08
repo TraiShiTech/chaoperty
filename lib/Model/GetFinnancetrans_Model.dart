@@ -43,6 +43,7 @@ class FinnancetransModel {
   String? ptser;
   String? ptname;
   String? img;
+  String? bname;
 
   FinnancetransModel(
       {this.ser,
@@ -88,7 +89,8 @@ class FinnancetransModel {
       this.dataUpdate,
       this.ptser,
       this.ptname,
-      this.img});
+      this.img,
+      this.bname});
 
   FinnancetransModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -135,6 +137,7 @@ class FinnancetransModel {
     ptser = json['ptser'];
     ptname = json['ptname'];
     img = json['img'];
+    bname = json['bname'];
   }
 
   Map<String, dynamic> toJson() {
@@ -183,6 +186,7 @@ class FinnancetransModel {
     data['ptser'] = this.ptser;
     data['ptname'] = this.ptname;
     data['img'] = this.img;
+    data['bname'] = this.bname;
     return data;
   }
 }

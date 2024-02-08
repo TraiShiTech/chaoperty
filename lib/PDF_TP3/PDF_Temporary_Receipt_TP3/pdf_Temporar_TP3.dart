@@ -50,7 +50,8 @@ class Pdfgen_Temporary_receipt_TP3 {
       dayfinpay,
       type_bills,
       dis_sum_Matjum,
-      TitleType_Default_Receipt_Name) async {
+      TitleType_Default_Receipt_Name,
+      dis_sum_Pakan) async {
     ////
     //// ------------>(ใบเสร็จรับเงินชั่วคราว paySrsscreen_)
     ///////
@@ -143,7 +144,15 @@ class Pdfgen_Temporary_receipt_TP3 {
                     ? pw.Container(
                         height: 72,
                         width: 70,
-                        color: PdfColors.grey200,
+                        decoration: const pw.BoxDecoration(
+                          color: PdfColors.grey200,
+                          border: pw.Border(
+                            right: pw.BorderSide(color: PdfColors.grey300),
+                            left: pw.BorderSide(color: PdfColors.grey300),
+                            top: pw.BorderSide(color: PdfColors.grey300),
+                            bottom: pw.BorderSide(color: PdfColors.grey300),
+                          ),
+                        ),
                         child: pw.Center(
                           child: pw.Text(
                             '$bill_name ',
@@ -161,10 +170,23 @@ class Pdfgen_Temporary_receipt_TP3 {
                     //     height: 72,
                     //     width: 70,
                     //   )
-                    : pw.Image(
-                        (netImage[0]),
+                    : pw.Container(
                         height: 72,
                         width: 70,
+                        decoration: const pw.BoxDecoration(
+                          color: PdfColors.grey200,
+                          border: pw.Border(
+                            right: pw.BorderSide(color: PdfColors.grey300),
+                            left: pw.BorderSide(color: PdfColors.grey300),
+                            top: pw.BorderSide(color: PdfColors.grey300),
+                            bottom: pw.BorderSide(color: PdfColors.grey300),
+                          ),
+                        ),
+                        child: pw.Image(
+                          (netImage[0]),
+                          height: 72,
+                          width: 70,
+                        ),
                       ),
                 pw.SizedBox(width: 1 * PdfPageFormat.mm),
                 pw.Container(
@@ -408,114 +430,6 @@ class Pdfgen_Temporary_receipt_TP3 {
                 ),
               ],
             ),
-            // pw.SizedBox(height: 3 * PdfPageFormat.mm),
-            // pw.Row(
-            //   children: [
-            //     pw.Expanded(
-            //       flex: 4,
-            //       child: pw.Text(
-            //         'รูปแบบชำระ',
-            //         textAlign: pw.TextAlign.justify,
-            //         style: pw.TextStyle(
-            //           fontSize: font_Size,
-            //           font: ttf,
-            //           fontWeight: pw.FontWeight.bold,
-            //           color: Colors_pd,
-            //         ),
-            //       ),
-            //     ),
-            //     pw.SizedBox(width: 10 * PdfPageFormat.mm),
-            //     pw.Expanded(
-            //       flex: 4,
-            //       child: pw.Column(
-            //         mainAxisSize: pw.MainAxisSize.min,
-            //         crossAxisAlignment: pw.CrossAxisAlignment.end,
-            //         children: [
-            //           pw.Text(
-            //             (dayfinpay.toString() == '' ||
-            //                     dayfinpay.toString() == 'null' ||
-            //                     dayfinpay == null)
-            //                 ? 'วันที่ชำระ : - '
-            //                 : 'วันที่ชำระ : ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${dayfinpay}'))} ',
-            //             style: pw.TextStyle(
-            //               fontSize: font_Size,
-            //               fontWeight: pw.FontWeight.bold,
-            //               font: ttf,
-            //               color: Colors_pd,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            // pw.Row(
-            //   children: [
-            //     pw.Expanded(
-            //       flex: 4,
-            //       child: pw.Column(
-            //         mainAxisSize: pw.MainAxisSize.min,
-            //         crossAxisAlignment: pw.CrossAxisAlignment.start,
-            //         children: [
-            //           for (var i = 0; i < finnancetransModels.length; i++)
-            //             pw.Row(
-            //               children: [
-            //                 (finnancetransModels[i].dtype.toString() == 'KP')
-            //                     ? pw.Expanded(
-            //                         flex: 1,
-            //                         child: pw.Container(
-            //                           // decoration: pw.BoxDecoration(
-            //                           //   color: PdfColors.green100,
-            //                           //   // border: pw.Border(
-            //                           //   //   bottom: pw.BorderSide(
-            //                           //   //       color: PdfColors.green900),
-            //                           //   // ),
-            //                           // ),
-            //                           child: pw.Text(
-            //                             (finnancetransModels[i]
-            //                                         .type
-            //                                         .toString() ==
-            //                                     'CASH')
-            //                                 ? '${i + 1}.เงินสด : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)'
-            //                                 : '${i + 1}.เงินโอน : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท  (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
-            //                             textAlign: pw.TextAlign.justify,
-            //                             style: pw.TextStyle(
-            //                               fontSize: font_Size,
-            //                               font: ttf,
-            //                               fontWeight: pw.FontWeight.bold,
-            //                               color: Colors_pd,
-            //                             ),
-            //                           ),
-            //                         ))
-            //                     : pw.Expanded(
-            //                         flex: 1,
-            //                         child: pw.Container(
-            //                           // decoration: pw.BoxDecoration(
-            //                           //   color: PdfColors.green100,
-            //                           //   // border: pw.Border(
-            //                           //   //   bottom: pw.BorderSide(
-            //                           //   //       color: PdfColors.green900),
-            //                           //   // ),
-            //                           // ),
-            //                           child: pw.Text(
-            //                             '${i + 1}.${finnancetransModels[i].remark} : ${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท  (~${convertToThaiBaht(double.parse(finnancetransModels[i].amt!.toString()))}~)',
-            //                             textAlign: pw.TextAlign.justify,
-            //                             style: pw.TextStyle(
-            //                               fontSize: font_Size,
-            //                               font: ttf,
-            //                               fontWeight: pw.FontWeight.bold,
-            //                               color: Colors_pd,
-            //                             ),
-            //                           ),
-            //                         )),
-            //               ],
-            //             )
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // ),
             pw.SizedBox(height: 3 * PdfPageFormat.mm),
             pw.Container(
               decoration: const pw.BoxDecoration(
@@ -526,32 +440,33 @@ class Pdfgen_Temporary_receipt_TP3 {
               ),
               child: pw.Row(
                 children: [
-                  pw.Expanded(
-                    flex: 1,
-                    child: pw.Container(
-                      height: 25,
-                      child: pw.Center(
-                        child: pw.Text(
-                          'ลำดับ',
-                          maxLines: 1,
-                          textAlign: pw.TextAlign.left,
-                          style: pw.TextStyle(
-                              fontSize: font_Size,
-                              fontWeight: pw.FontWeight.bold,
-                              font: ttf,
-                              color: PdfColors.green900),
-                        ),
+                  pw.Container(
+                    width: 25,
+                    height: 20,
+                    child: pw.Align(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Text(
+                        'ลำดับ',
+                        maxLines: 1,
+                        textAlign: pw.TextAlign.left,
+                        style: pw.TextStyle(
+                            fontSize: font_Size,
+                            fontWeight: pw.FontWeight.bold,
+                            font: ttf,
+                            color: PdfColors.green900),
                       ),
                     ),
                   ),
+
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
-                      child: pw.Center(
+                      height: 20,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
                         child: pw.Text(
                           'กำหนดชำระ',
-                          textAlign: pw.TextAlign.center,
+                          textAlign: pw.TextAlign.left,
                           maxLines: 1,
                           style: pw.TextStyle(
                               fontSize: font_Size,
@@ -564,13 +479,14 @@ class Pdfgen_Temporary_receipt_TP3 {
                   ),
 
                   pw.Expanded(
-                    flex: 4,
+                    flex: 3,
                     child: pw.Container(
-                      height: 25,
-                      child: pw.Center(
+                      height: 20,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
                         child: pw.Text(
                           'รายการ',
-                          textAlign: pw.TextAlign.center,
+                          textAlign: pw.TextAlign.left,
                           maxLines: 1,
                           style: pw.TextStyle(
                               fontSize: font_Size,
@@ -585,11 +501,12 @@ class Pdfgen_Temporary_receipt_TP3 {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
-                      child: pw.Center(
+                      height: 20,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
                         child: pw.Text(
                           'VAT',
-                          textAlign: pw.TextAlign.center,
+                          textAlign: pw.TextAlign.left,
                           maxLines: 1,
                           style: pw.TextStyle(
                               fontSize: font_Size,
@@ -603,11 +520,12 @@ class Pdfgen_Temporary_receipt_TP3 {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
-                      child: pw.Center(
+                      height: 20,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
                         child: pw.Text(
                           'WHT',
-                          textAlign: pw.TextAlign.center,
+                          textAlign: pw.TextAlign.left,
                           maxLines: 1,
                           style: pw.TextStyle(
                               fontSize: font_Size,
@@ -621,11 +539,12 @@ class Pdfgen_Temporary_receipt_TP3 {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
-                      child: pw.Center(
+                      height: 20,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
                         child: pw.Text(
                           'ราคารวมก่อนVAT',
-                          textAlign: pw.TextAlign.center,
+                          textAlign: pw.TextAlign.right,
                           maxLines: 1,
                           style: pw.TextStyle(
                               fontSize: font_Size,
@@ -639,11 +558,31 @@ class Pdfgen_Temporary_receipt_TP3 {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Container(
-                      height: 25,
-                      child: pw.Center(
+                      height: 20,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          'ส่วนลด',
+                          textAlign: pw.TextAlign.right,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      height: 20,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
                         child: pw.Text(
                           'ยอดสุทธิ',
-                          textAlign: pw.TextAlign.center,
+                          textAlign: pw.TextAlign.right,
                           maxLines: 1,
                           style: pw.TextStyle(
                               fontSize: font_Size,
@@ -678,20 +617,49 @@ class Pdfgen_Temporary_receipt_TP3 {
             for (int index = 0; index < tableData00.length; index++)
               pw.Row(
                 children: [
+                  pw.Container(
+                    width: 25,
+                    padding: const pw.EdgeInsets.all(2.0),
+                    child: pw.Align(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Text(
+                        '${index + 1}',
+                        maxLines: 2,
+                        textAlign: pw.TextAlign.left,
+                        style: pw.TextStyle(
+                            fontSize: font_Size,
+                            font: ttf,
+                            color: PdfColors.grey800),
+                      ),
+                    ),
+                  ),
                   pw.Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
-                      child: pw.Center(
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
                         child: pw.Text(
-                          '${index + 1}',
+                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${tableData00[index][1]}'))}',
+                          // '${tableData00[index][1]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.left,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 3,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          '${tableData00[index][2]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
@@ -706,63 +674,6 @@ class Pdfgen_Temporary_receipt_TP3 {
                     flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
-                      child: pw.Align(
-                        alignment: pw.Alignment.center,
-                        child: pw.Text(
-                          '${tableData00[index][1]}',
-                          maxLines: 2,
-                          textAlign: pw.TextAlign.center,
-                          style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: PdfColors.grey800),
-                        ),
-                      ),
-                    ),
-                  ),
-                  pw.Expanded(
-                    flex: 4,
-                    child: pw.Container(
-                      padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
-                      child: pw.Align(
-                        alignment: pw.Alignment.centerLeft,
-                        child: pw.Text(
-                          '${tableData00[index][2]}',
-                          maxLines: 2,
-                          textAlign: pw.TextAlign.right,
-                          style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: PdfColors.grey800),
-                        ),
-                      ),
-                    ),
-                  ),
-                  pw.Expanded(
-                    flex: 2,
-                    child: pw.Container(
-                      padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
@@ -781,13 +692,6 @@ class Pdfgen_Temporary_receipt_TP3 {
                     flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
@@ -806,13 +710,6 @@ class Pdfgen_Temporary_receipt_TP3 {
                     flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
@@ -831,17 +728,28 @@ class Pdfgen_Temporary_receipt_TP3 {
                     flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
-                          '${tableData00[index][6]}',
+                          '${tableData00[index][12]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData00[index][13]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
@@ -857,20 +765,49 @@ class Pdfgen_Temporary_receipt_TP3 {
             for (int index = 0; index < tableData01.length; index++)
               pw.Row(
                 children: [
+                  pw.Container(
+                    width: 25,
+                    padding: const pw.EdgeInsets.all(2.0),
+                    child: pw.Align(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Text(
+                        '${tableData00.length + 1}',
+                        maxLines: 2,
+                        textAlign: pw.TextAlign.left,
+                        style: pw.TextStyle(
+                            fontSize: font_Size,
+                            font: ttf,
+                            color: PdfColors.grey800),
+                      ),
+                    ),
+                  ),
                   pw.Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
-                      child: pw.Center(
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
                         child: pw.Text(
-                          '${tableData00.length + 1}',
+                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${tableData01[index][1]}'))}',
+                          // '${tableData01[index][1]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.center,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 3,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          '${tableData01[index][2]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
@@ -885,63 +822,6 @@ class Pdfgen_Temporary_receipt_TP3 {
                     flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
-                      child: pw.Align(
-                        alignment: pw.Alignment.center,
-                        child: pw.Text(
-                          '${tableData01[index][1]}',
-                          maxLines: 2,
-                          textAlign: pw.TextAlign.center,
-                          style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: PdfColors.grey800),
-                        ),
-                      ),
-                    ),
-                  ),
-                  pw.Expanded(
-                    flex: 4,
-                    child: pw.Container(
-                      padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
-                      child: pw.Align(
-                        alignment: pw.Alignment.centerLeft,
-                        child: pw.Text(
-                          '${tableData01[index][2]}',
-                          maxLines: 2,
-                          textAlign: pw.TextAlign.right,
-                          style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: PdfColors.grey800),
-                        ),
-                      ),
-                    ),
-                  ),
-                  pw.Expanded(
-                    flex: 2,
-                    child: pw.Container(
-                      padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
@@ -960,13 +840,6 @@ class Pdfgen_Temporary_receipt_TP3 {
                     flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
@@ -985,13 +858,6 @@ class Pdfgen_Temporary_receipt_TP3 {
                     flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
-                      ),
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
@@ -1010,13 +876,24 @@ class Pdfgen_Temporary_receipt_TP3 {
                     flex: 2,
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(2.0),
-                      // height: 25,
-                      decoration: const pw.BoxDecoration(
-                        color: PdfColors.white,
-                        // border: const pw.Border(
-                        //   bottom: pw.BorderSide(color: PdfColors.grey300),
-                        // ),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '0.00',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
                       ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(2.0),
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
@@ -1193,6 +1070,35 @@ class Pdfgen_Temporary_receipt_TP3 {
                               ),
                             ],
                           ),
+                        if (nFormat
+                                .format(double.parse(dis_sum_Pakan.toString()))
+                                .toString() !=
+                            '0.00')
+                          pw.Row(
+                            children: [
+                              pw.Expanded(
+                                child: pw.Text(
+                                  'เงินประกัน(ตัดเงินประกัน)',
+                                  //  'เงินมัดจำ(${nFormat.format(sum_matjum)})',
+                                  style: pw.TextStyle(
+                                      fontSize: font_Size,
+                                      fontWeight: pw.FontWeight.bold,
+                                      font: ttf,
+                                      color: PdfColors.green900),
+                                ),
+                              ),
+                              pw.Text(
+                                dis_sum_Pakan == 0.00
+                                    ? '${nFormat.format(double.parse(dis_sum_Pakan.toString()))}'
+                                    : '${nFormat.format(double.parse(dis_sum_Pakan.toString()))}',
+                                style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    fontWeight: pw.FontWeight.bold,
+                                    font: ttf,
+                                    color: PdfColors.green900),
+                              ),
+                            ],
+                          ),
                         pw.Divider(color: PdfColors.grey),
                         pw.Row(
                           children: [
@@ -1207,7 +1113,7 @@ class Pdfgen_Temporary_receipt_TP3 {
                               ),
                             ),
                             pw.Text(
-                              '${nFormat.format(double.parse(Total.toString()) - double.parse(dis_sum_Matjum.toString()))}',
+                              '${nFormat.format(double.parse(Total.toString()) - double.parse(dis_sum_Matjum.toString()) - double.parse(dis_sum_Pakan.toString()))}',
                               style: pw.TextStyle(
                                   fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
@@ -1331,7 +1237,7 @@ class Pdfgen_Temporary_receipt_TP3 {
                               ),
                               pw.SizedBox(height: 2 * PdfPageFormat.mm),
                               pw.Text(
-                                '.....................................................................................................................................................................................................................................................................................................................',
+                                ' .' * 150,
                                 textAlign: pw.TextAlign.center,
                                 maxLines: 2,
                                 style: pw.TextStyle(

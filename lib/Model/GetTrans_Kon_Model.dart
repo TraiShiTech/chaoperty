@@ -104,108 +104,126 @@ class TransKonModel {
   String? img;
   String? ucost;
 
-  TransKonModel(
-      {this.ser,
-      this.datex,
-      this.timex,
-      this.user,
-      this.rser,
-      this.daterec,
-      this.timerec,
-      this.date,
-      this.dateacc,
-      this.duedate,
-      this.dateCheckin,
-      this.dateCheckout,
-      this.shopno,
-      this.pos,
-      this.shifts,
-      this.st,
-      this.dochtax,
-      this.doctax,
-      this.cid,
-      this.meter,
-      this.docno,
-      this.custno,
-      this.supno,
-      this.supnox,
-      this.refno,
-      this.refnox,
-      this.po,
-      this.inv,
-      this.accode,
-      this.accodeAccrued,
-      this.service,
-      this.expense,
-      this.xxxno,
-      this.xxxdate,
-      this.barcode,
-      this.stcode,
-      this.name,
-      this.namex,
-      this.unit,
-      this.no,
-      this.tqty,
-      this.qty1,
-      this.qty2,
-      this.qty3,
-      this.qty4,
-      this.qty5,
-      this.agqty,
-      this.emp,
-      this.distype,
-      this.dis,
-      this.discount,
-      this.deposit,
-      this.other,
-      this.fine,
-      this.expser,
-      this.expname,
-      this.term,
-      this.sdate,
-      this.ldate,
-      this.amt,
-      this.amtx,
-      this.vtype,
-      this.nvat,
-      this.tax,
-      this.vat,
-      this.pvat,
-      this.xpvat,
-      this.xvat,
-      this.wtax,
-      this.wamt,
-      this.nwht,
-      this.wht,
-      this.total,
-      this.disendbill,
-      this.diffx,
-      this.dtypex,
-      this.dtype,
-      this.paid,
-      this.refund,
-      this.returnSt,
-      this.asset,
-      this.pass,
-      this.datepass,
-      this.remark,
-      this.ovalue,
-      this.nvalue,
-      this.qty,
-      this.pri,
-      this.c_pvat,
-      this.c_nvat,
-      this.c_vat,
-      this.c_amt,
-      this.c_refno,
-      this.c_note,
-      this.ser_in,
-      this.docno_in,
-      this.unit_con,
-      this.qty_con,
-      this.img,
-      this.amt_con,
-      this.ucost});
+  String? pdate;
+  String? type;
+  String? cname;
+  String? addr;
+  String? zn;
+  String? zser1;
+  String? znn;
+  String? zser;
+
+  TransKonModel({
+    this.ser,
+    this.datex,
+    this.timex,
+    this.user,
+    this.rser,
+    this.daterec,
+    this.timerec,
+    this.date,
+    this.dateacc,
+    this.duedate,
+    this.dateCheckin,
+    this.dateCheckout,
+    this.shopno,
+    this.pos,
+    this.shifts,
+    this.st,
+    this.dochtax,
+    this.doctax,
+    this.cid,
+    this.meter,
+    this.docno,
+    this.custno,
+    this.supno,
+    this.supnox,
+    this.refno,
+    this.refnox,
+    this.po,
+    this.inv,
+    this.accode,
+    this.accodeAccrued,
+    this.service,
+    this.expense,
+    this.xxxno,
+    this.xxxdate,
+    this.barcode,
+    this.stcode,
+    this.name,
+    this.namex,
+    this.unit,
+    this.no,
+    this.tqty,
+    this.qty1,
+    this.qty2,
+    this.qty3,
+    this.qty4,
+    this.qty5,
+    this.agqty,
+    this.emp,
+    this.distype,
+    this.dis,
+    this.discount,
+    this.deposit,
+    this.other,
+    this.fine,
+    this.expser,
+    this.expname,
+    this.term,
+    this.sdate,
+    this.ldate,
+    this.amt,
+    this.amtx,
+    this.vtype,
+    this.nvat,
+    this.tax,
+    this.vat,
+    this.pvat,
+    this.xpvat,
+    this.xvat,
+    this.wtax,
+    this.wamt,
+    this.nwht,
+    this.wht,
+    this.total,
+    this.disendbill,
+    this.diffx,
+    this.dtypex,
+    this.dtype,
+    this.paid,
+    this.refund,
+    this.returnSt,
+    this.asset,
+    this.pass,
+    this.datepass,
+    this.remark,
+    this.ovalue,
+    this.nvalue,
+    this.qty,
+    this.pri,
+    this.c_pvat,
+    this.c_nvat,
+    this.c_vat,
+    this.c_amt,
+    this.c_refno,
+    this.c_note,
+    this.ser_in,
+    this.docno_in,
+    this.unit_con,
+    this.qty_con,
+    this.img,
+    this.amt_con,
+    this.ucost,
+    this.pdate,
+    this.type,
+    this.cname,
+    this.addr,
+    this.zn,
+    this.zser1,
+    this.znn,
+    this.zser,
+  });
 
   TransKonModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -309,7 +327,16 @@ class TransKonModel {
     qty_con = json['qty_con'];
     amt_con = json['amt_con'];
     img = json['img'];
-    ucost= json['ucost'];
+    ucost = json['ucost'];
+
+    pdate = json['pdate'];
+    type = json['type'];
+    cname = json['cname'];
+    addr = json['addr'];
+    zn = json['zn'];
+    zser1 = json['zser1'];
+    znn = json['znn'];
+    zser = json['zser'];
   }
 
   Map<String, dynamic> toJson() {
@@ -415,7 +442,16 @@ class TransKonModel {
     data['qty_con'] = this.qty_con;
     data['amt_con'] = this.amt_con;
     data['img'] = this.img;
-       data['ucost'] = this.ucost;
+    data['ucost'] = this.ucost;
+
+    data['pdate'] = this.pdate;
+    data['type'] = this.type;
+    data['cname'] = this.cname;
+    data['addr'] = this.addr;
+    data['zn'] = this.zn;
+    data['zser1'] = this.zser1;
+    data['znn'] = this.znn;
+    data['zser'] = this.zser;
     return data;
   }
 }

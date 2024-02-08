@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:slide_switcher/slide_switcher.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../Constant/Myconstant.dart';
+import '../Man_PDF/Man_ChartReport_Generate.dart';
 import '../Model/GetArea_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Style/colors.dart';
@@ -532,9 +535,11 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                         format: 'point.y พื้นที่',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: const TrackballMarkerSettings(
-                                        markerVisibility:
-                                            TrackballVisibilityMode.visible),
+                                    markerSettings:
+                                        const TrackballMarkerSettings(
+                                            markerVisibility:
+                                                TrackballVisibilityMode
+                                                    .visible),
                                   ),
                                   zoomPanBehavior: ZoomPanBehavior(
                                       enableMouseWheelZooming: true,
@@ -554,14 +559,16 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
                                         text: 'โซน',
-                                        textStyle: const TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
                                         text: 'หน่วย (พื้นที่)',
-                                        textStyle: const TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -660,21 +667,25 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                         format: 'point.y  พื้นที่',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: const TrackballMarkerSettings(
-                                        markerVisibility:
-                                            TrackballVisibilityMode.visible),
+                                    markerSettings:
+                                        const TrackballMarkerSettings(
+                                            markerVisibility:
+                                                TrackballVisibilityMode
+                                                    .visible),
                                   ),
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
                                         text: 'โซน',
-                                        textStyle: const TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
                                         text: 'หน่วย (พื้นที่)',
-                                        textStyle: const TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -759,53 +770,110 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                     ),
                                   ]),
                             ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (Visit_1 == '1' || Visit_1 == null) {
-                                      captureAndConvertToBase64(chartKey1, '');
-                                    } else {
-                                      captureAndConvertToBase64(chartKey2, '');
-                                    }
-                                  },
-                                  child: Container(
-                                      width: 120,
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red[700],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8)),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'SAVE(.PNG)',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
-                                      )),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child: Align(
+                      //         alignment: Alignment.centerRight,
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: InkWell(
+                      //             onTap: () async {
+                      //               if (Visit_1 == '1' || Visit_1 == null) {
+                      //                 captureAndConvertToBase64(chartKey1, '');
+                      //               } else {
+                      //                 captureAndConvertToBase64(chartKey2, '');
+                      //               }
+                      //             },
+                      //             child: Container(
+                      //                 width: 120,
+                      //                 padding: const EdgeInsets.all(8.0),
+                      //                 decoration: BoxDecoration(
+                      //                   color: Colors.red[700],
+                      //                   borderRadius: const BorderRadius.only(
+                      //                       topLeft: Radius.circular(8),
+                      //                       topRight: Radius.circular(8),
+                      //                       bottomLeft: Radius.circular(8),
+                      //                       bottomRight: Radius.circular(8)),
+                      //                 ),
+                      //                 child: const Center(
+                      //                   child: Text(
+                      //                     'SAVE(.PNG)',
+                      //                     style: TextStyle(
+                      //                       color: Colors.white,
+                      //                       fontWeight: FontWeight.bold,
+                      //                       fontFamily: FontWeight_.Fonts_T,
+                      //                     ),
+                      //                   ),
+                      //                 )),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
               ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            if (Visit_1 == '1' || Visit_1 == null) {
+                              capture(chartKey1, chartKey3);
+                            } else {
+                              capture(chartKey2, chartKey4);
+                            }
+                          },
+                          child: Container(
+                              width: 120,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green[700],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'พิมพ์',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ]))));
+  }
+
+  dynamic capture(chartKey01, chartKey02) async {
+    final boundary01 =
+        chartKey01.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    final image01 = await boundary01.toImage(
+        pixelRatio: 3.0); // Adjust pixelRatio as needed
+
+    // Convert the captured image to bytes
+    final byteData01 = await image01.toByteData(format: ImageByteFormat.png);
+    final buffer01 = byteData01!.buffer.asUint8List();
+/////////------------------------------->
+
+    Man_ChartReport_GeneratePDF.man_chartReport_GeneratePDF(
+        context, buffer01, '', '6');
   }
 }
 

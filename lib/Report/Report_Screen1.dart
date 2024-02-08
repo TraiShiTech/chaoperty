@@ -410,11 +410,17 @@ class _ReportScreen1State extends State<ReportScreen1> {
       TranHisBillModels.clear();
       TransHisBillBank.clear();
     });
-
+    var serzone_s = (Type_search.toString() == 'Mon')
+        ? (zone_ser_Trans_Mon == null)
+            ? 0
+            : zone_ser_Trans_Mon
+        : (zone_ser_Trans_Daily == null)
+            ? 0
+            : zone_ser_Trans_Daily;
     String url = (Value_Report == 'รายงานการเคลื่อนไหวธนาคาร' ||
             Value_Report == 'รายงานการเคลื่อนไหวธนาคารประจำวัน')
-        ? '${MyConstant().domain}/GC_bill_pay_historyselectBankAllReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon&datex=$Value_TransDate_Daily&Typesearch=$Type_search'
-        : '${MyConstant().domain}/GC_bill_pay_historyselectAllReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon&datex=$Value_TransDate_Daily&Typesearch=$Type_search';
+        ? '${MyConstant().domain}/GC_bill_pay_historyselectBankAllReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$serzone_s&datex=$Value_TransDate_Daily&Typesearch=$Type_search'
+        : '${MyConstant().domain}/GC_bill_pay_historyselectAllReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$serzone_s&datex=$Value_TransDate_Daily&Typesearch=$Type_search';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -430,6 +436,10 @@ class _ReportScreen1State extends State<ReportScreen1> {
                 : TranHisBillModels.add(TranHisBillModels_Mons);
           });
         }
+        print(
+            'red_Trans_selectIncomeAll //TransHisBillBank/// ${TransHisBillBank.length}** $serzone_s  /// $Type_search');
+        print(
+            'red_Trans_selectIncomeAll//TranHisBillModels /// ${TranHisBillModels.length} ** $serzone_s /// $Type_search');
       }
     } catch (e) {}
   }
@@ -1630,7 +1640,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                         Container(
                           // color: Colors.grey[50],
                           width: (Responsive.isDesktop(context))
-                              ? MediaQuery.of(context).size.width * 0.9
+                              ? MediaQuery.of(context).size.width * 0.93
                               : (TransReBillModels.length == 0)
                                   ? MediaQuery.of(context).size.width
                                   : 800,
@@ -1676,8 +1686,11 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                               children: [
                                                 Container(
                                                   child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.start,
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
                                                       Container(
                                                         decoration:
@@ -1704,9 +1717,9 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                           //'${index1 + 1}. เลขที่: ${_TransReBillModels_Income[index1].docno}',
                                                           TransReBillModels[
                                                                           index1]
-                                                                      .docno ==
+                                                                      .doctax !=
                                                                   ''
-                                                              ? '${index1 + 1}. เลขที่: ${TransReBillModels[index1].refno}'
+                                                              ? '${index1 + 1}. เลขที่: ${TransReBillModels[index1].doctax}'
                                                               : '${index1 + 1}. เลขที่: ${TransReBillModels[index1].docno}',
                                                           style:
                                                               const TextStyle(
@@ -1720,6 +1733,58 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                           ),
                                                         ),
                                                       ),
+                                                      (TransReBillModels[index1]
+                                                                      .room_number
+                                                                      .toString() ==
+                                                                  '' ||
+                                                              TransReBillModels[
+                                                                          index1]
+                                                                      .room_number ==
+                                                                  null)
+                                                          ? SizedBox()
+                                                          : Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: AppbackgroundColor
+                                                                    .TiTile_Colors,
+                                                                borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            5),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            5),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            0),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            0)),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Text(
+                                                                (TransReBillModels[index1].room_number.toString() ==
+                                                                            '' ||
+                                                                        TransReBillModels[index1].room_number ==
+                                                                            null)
+                                                                    ? ''
+                                                                    : 'ล็อคเสียบ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 14,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
                                                     ],
                                                   ),
                                                 ),
@@ -1901,11 +1966,31 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                   ),
                                                                 ),
                                                               ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  'ค่าธรรมเนียม',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .right,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
 
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
-                                                                  'ส่วนลด',
+                                                                  'ราคารวม',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .right,
@@ -1925,7 +2010,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
-                                                                  'ราคารวม',
+                                                                  'ส่วนลด',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .right,
@@ -2170,11 +2255,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
-                                                                  (TransReBillModels[index1]
-                                                                              .total_dis ==
-                                                                          null)
-                                                                      ? '0.00'
-                                                                      : '${nFormat.format(double.parse(TransReBillModels[index1].total_bill!) - double.parse(TransReBillModels[index1].total_dis!))}',
+                                                                  '${TransReBillModels[index1].total_duesbill}',
                                                                   // '${_TransReBillModels[index1].total_bill}',
                                                                   textAlign:
                                                                       TextAlign
@@ -2216,11 +2297,26 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
-                                                                  (TransReBillModels[index1]
-                                                                              .total_dis ==
-                                                                          null)
-                                                                      ? '${nFormat.format(double.parse(TransReBillModels[index1].total_bill!))}'
-                                                                      : '${nFormat.format(double.parse(TransReBillModels[index1].total_dis!))}',
+                                                                  '${nFormat.format(double.parse(TransReBillModels[index1].total_dis!))}',
+                                                                  // '${_TransReBillModels[index1].total_bill}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .right,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  '${nFormat.format(double.parse(TransReBillModels[index1].total_bill!) - double.parse(TransReBillModels[index1].total_dis!))}',
                                                                   // '${_TransReBillModels[index1].total_bill}',
                                                                   textAlign:
                                                                       TextAlign
@@ -2323,6 +2419,8 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                               .refno!
                                                                           : TransReBillModels[index1]
                                                                               .docno!;
+                                                                      print(
+                                                                          '$ciddoc // $docnoin');
                                                                       red_Trans_selectIncome(
                                                                           ciddoc,
                                                                           docnoin,
@@ -2558,7 +2656,43 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                       'ราคารวม Vat',
                                                                       textAlign:
                                                                           TextAlign
-                                                                              .center,
+                                                                              .right,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: ReportScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: Text(
+                                                                      'ส่วนลด',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .right,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: ReportScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: Text(
+                                                                      'ยอดสุทธิ',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .right,
                                                                       style:
                                                                           TextStyle(
                                                                         color: ReportScreen_Color
@@ -2747,7 +2881,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                           Text(
                                                                         (TranHisBillModels[index2].vat ==
                                                                                 null)
-                                                                            ? '-'
+                                                                            ? '0.00'
                                                                             : '${nFormat.format(double.parse(TranHisBillModels[index2].vat!))}',
                                                                         textAlign:
                                                                             TextAlign.right,
@@ -2766,10 +2900,52 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                       flex: 1,
                                                                       child:
                                                                           Text(
-                                                                        (TranHisBillModels[index2].amt ==
+                                                                        (TranHisBillModels[index2].pvat ==
                                                                                 null)
-                                                                            ? '-'
+                                                                            ? '0.00'
+                                                                            : '${nFormat.format(double.parse(TranHisBillModels[index2].pvat!))}',
+                                                                        textAlign:
+                                                                            TextAlign.right,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              ReportScreen_Color.Colors_Text2_,
+                                                                          // fontWeight:
+                                                                          //     FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Text(
+                                                                        (TranHisBillModels[index2].dis ==
+                                                                                null)
+                                                                            ? '0.00'
                                                                             : '${nFormat.format(double.parse(TranHisBillModels[index2].amt!))}',
+                                                                        textAlign:
+                                                                            TextAlign.right,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              ReportScreen_Color.Colors_Text2_,
+                                                                          // fontWeight:
+                                                                          //     FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Text(
+                                                                        (TranHisBillModels[index2].dis ==
+                                                                                null)
+                                                                            ? '0.00'
+                                                                            : '${nFormat.format(double.parse(TranHisBillModels[index2].dis!))}',
                                                                         textAlign:
                                                                             TextAlign.right,
                                                                         style:
@@ -2789,8 +2965,12 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                           Text(
                                                                         (TranHisBillModels[index2].total ==
                                                                                 null)
-                                                                            ? '-'
-                                                                            : '${nFormat.format(double.parse(TranHisBillModels[index2].total!))}',
+                                                                            ? '${nFormat.format(0.00 - ((TranHisBillModels[index2].dis == null) ? 0.00 : double.parse(TranHisBillModels[index2].dis!)))}'
+                                                                            : '${nFormat.format(double.parse(TranHisBillModels[index2].total!) - ((TranHisBillModels[index2].dis == null) ? 0.00 : double.parse(TranHisBillModels[index2].dis!)))}',
+                                                                        // (TranHisBillModels[index2].total ==
+                                                                        //         null)
+                                                                        //     ? '-'
+                                                                        //     : '${nFormat.format(double.parse(TranHisBillModels[index2].total!))}',
                                                                         textAlign:
                                                                             TextAlign.right,
                                                                         style:
@@ -2898,7 +3078,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                           ),
                                           if (Responsive.isDesktop(context))
                                             const Expanded(
-                                              flex: 2,
+                                              flex: 3,
                                               child: Text(
                                                 '',
                                                 textAlign: TextAlign.center,
@@ -2914,9 +3094,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                           const Expanded(
                                             flex: 1,
                                             child: Text(
-                                              'รวมส่วนลด',
-                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
-                                              //  '${_TransReBillModels[index1].ramtd}',
+                                              'รวมค่าธรรมเนียม',
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                 color: ReportScreen_Color
@@ -2930,6 +3108,21 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                             flex: 1,
                                             child: Text(
                                               'รวมราคารวม',
+                                              textAlign: TextAlign.right,
+                                              style: TextStyle(
+                                                color: ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          const Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              'รวมส่วนลด',
+                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                              //  '${_TransReBillModels[index1].ramtd}',
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                 color: ReportScreen_Color
@@ -3014,7 +3207,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                           ),
                                           if (Responsive.isDesktop(context))
                                             const Expanded(
-                                              flex: 2,
+                                              flex: 3,
                                               child: Text(
                                                 '',
                                                 textAlign: TextAlign.center,
@@ -3032,31 +3225,74 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                             child: Text(
                                               (TransReBillModels.length == 0)
                                                   ? '0.00'
-                                                  : '${nFormat.format(double.parse((TransReBillModels.fold(
-                                                        0.0,
-                                                        (previousValue,
-                                                                element) =>
-                                                            previousValue +
-                                                            (element.total_bill !=
-                                                                    null
-                                                                ? double.parse(
-                                                                    element
-                                                                        .total_bill!)
-                                                                : 0),
-                                                      ) - TransReBillModels.fold(
-                                                        0.0,
-                                                        (previousValue,
-                                                                element) =>
-                                                            previousValue +
-                                                            (element.total_dis !=
-                                                                    null
-                                                                ? double.parse(
-                                                                    element
-                                                                        .total_dis!)
-                                                                : double.parse(
-                                                                    element
-                                                                        .total_bill!)),
-                                                      )).toString()))}',
+                                                  : nFormat.format(double.parse(
+                                                      TransReBillModels.fold(
+                                                      0.0,
+                                                      (previousValue,
+                                                              element) =>
+                                                          previousValue +
+                                                          (element.total_duesbill !=
+                                                                  null
+                                                              ? double.parse(element
+                                                                  .total_duesbill!)
+                                                              : 0),
+                                                    ).toString())),
+                                              // '$Sum_Total_',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                color: ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              (TransReBillModels.length == 0)
+                                                  ? '0.00'
+                                                  : nFormat.format(double.parse(
+                                                      TransReBillModels.fold(
+                                                      0.0,
+                                                      (previousValue,
+                                                              element) =>
+                                                          previousValue +
+                                                          (element.total_bill !=
+                                                                  null
+                                                              ? double.parse(
+                                                                  element
+                                                                      .total_bill!)
+                                                              : 0),
+                                                    ).toString())),
+                                              // '$Sum_Total_',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                color: ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              (TransReBillModels.length == 0)
+                                                  ? '0.00'
+                                                  : nFormat.format(double.parse(
+                                                      (TransReBillModels.fold(
+                                                      0.0,
+                                                      (previousValue,
+                                                              element) =>
+                                                          previousValue +
+                                                          (element.total_dis !=
+                                                                  null
+                                                              ? double.parse(
+                                                                  element
+                                                                      .total_dis!)
+                                                              : 0.00),
+                                                    )).toString())),
                                               // '${nFormat.format(double.parse('$Sum_dis_'))}',
 
                                               textAlign: TextAlign.right,
@@ -3073,46 +3309,34 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                             child: Text(
                                               (TransReBillModels.length == 0)
                                                   ? '0.00'
-                                                  : '${nFormat.format(double.parse(TransReBillModels.fold(
-                                                      0.0,
-                                                      (previousValue,
-                                                              element) =>
-                                                          previousValue +
-                                                          (element.total_bill !=
-                                                                  null
-                                                              ? double.parse(
-                                                                  element
-                                                                      .total_bill!)
-                                                              : 0),
-                                                    ).toString()))}',
-                                              // '$Sum_Total_',
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text1_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              (TransReBillModels.length == 0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse(TransReBillModels.fold(
-                                                      0.0,
-                                                      (previousValue,
-                                                              element) =>
-                                                          previousValue +
-                                                          (element.total_dis !=
-                                                                  null
-                                                              ? double.parse(
-                                                                  element
-                                                                      .total_dis!)
-                                                              : double.parse(element
-                                                                  .total_bill!)),
-                                                    ).toString()))}',
+                                                  : nFormat.format(double.parse(
+                                                          (TransReBillModels
+                                                              .fold(
+                                                        0.0,
+                                                        (previousValue,
+                                                                element) =>
+                                                            previousValue +
+                                                            (element.total_bill !=
+                                                                    null
+                                                                ? double.parse(
+                                                                    element
+                                                                        .total_bill!)
+                                                                : 0.00),
+                                                      )).toString()) -
+                                                      double.parse(
+                                                          (TransReBillModels
+                                                              .fold(
+                                                        0.0,
+                                                        (previousValue,
+                                                                element) =>
+                                                            previousValue +
+                                                            (element.total_dis !=
+                                                                    null
+                                                                ? double.parse(
+                                                                    element
+                                                                        .total_dis!)
+                                                                : 0.00),
+                                                      )).toString())),
                                               // '$Sum_Total_',
                                               textAlign: TextAlign.right,
                                               style: const TextStyle(
@@ -3357,7 +3581,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                         Container(
                           // color: Colors.grey[50],
                           width: (Responsive.isDesktop(context))
-                              ? MediaQuery.of(context).size.width * 0.9
+                              ? MediaQuery.of(context).size.width * 0.93
                               : (TransReBillBank.length == 0)
                                   ? MediaQuery.of(context).size.width
                                   : 800,
@@ -3403,8 +3627,11 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                               children: [
                                                 Container(
                                                   child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.start,
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
                                                       Container(
                                                         decoration:
@@ -3430,9 +3657,9 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                         child: Text(
                                                           //'${index1 + 1}. เลขที่: ${_TransReBillModels_Income[index1].docno}',
                                                           TransReBillBank[index1]
-                                                                      .docno ==
+                                                                      .doctax !=
                                                                   ''
-                                                              ? '${index1 + 1}. เลขที่: ${TransReBillBank[index1].refno}'
+                                                              ? '${index1 + 1}. เลขที่: ${TransReBillBank[index1].doctax}'
                                                               : '${index1 + 1}. เลขที่: ${TransReBillBank[index1].docno}',
                                                           style:
                                                               const TextStyle(
@@ -3446,6 +3673,58 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                           ),
                                                         ),
                                                       ),
+                                                      (TransReBillBank[index1]
+                                                                      .room_number
+                                                                      .toString() ==
+                                                                  '' ||
+                                                              TransReBillBank[
+                                                                          index1]
+                                                                      .room_number ==
+                                                                  null)
+                                                          ? SizedBox()
+                                                          : Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: AppbackgroundColor
+                                                                    .TiTile_Colors,
+                                                                borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            5),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            5),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            0),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            0)),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Text(
+                                                                (TransReBillBank[index1].room_number.toString() ==
+                                                                            '' ||
+                                                                        TransReBillBank[index1].room_number ==
+                                                                            null)
+                                                                    ? ''
+                                                                    : 'ล็อคเสียบ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 14,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
                                                     ],
                                                   ),
                                                 ),
@@ -3627,11 +3906,10 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                   ),
                                                                 ),
                                                               ),
-
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
-                                                                  'ส่วนลด',
+                                                                  'ค่าธรรมเนียม',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .right,
@@ -3668,6 +3946,27 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                   ),
                                                                 ),
                                                               ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  'ส่วนลด',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .right,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
@@ -3896,11 +4195,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
-                                                                  (TransReBillBank[index1]
-                                                                              .total_dis ==
-                                                                          null)
-                                                                      ? '0.00'
-                                                                      : '${nFormat.format(double.parse(TransReBillBank[index1].total_bill!) - double.parse(TransReBillBank[index1].total_dis!))}',
+                                                                  '${TransReBillBank[index1].total_duesbill}',
                                                                   // '${_TransReBillModels[index1].total_bill}',
                                                                   textAlign:
                                                                       TextAlign
@@ -3942,11 +4237,26 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
-                                                                  (TransReBillBank[index1]
-                                                                              .total_dis ==
-                                                                          null)
-                                                                      ? '${nFormat.format(double.parse(TransReBillBank[index1].total_bill!))}'
-                                                                      : '${nFormat.format(double.parse(TransReBillBank[index1].total_dis!))}',
+                                                                  '${nFormat.format(double.parse(TransReBillBank[index1].total_dis!))}',
+                                                                  // '${_TransReBillModels[index1].total_bill}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .right,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  '${nFormat.format(double.parse(TransReBillBank[index1].total_bill!) - double.parse(TransReBillBank[index1].total_dis!))}',
                                                                   // '${_TransReBillModels[index1].total_bill}',
                                                                   textAlign:
                                                                       TextAlign
@@ -4040,15 +4350,17 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                       });
 
                                                                       var ciddoc =
-                                                                          TransReBillModels[index1]
+                                                                          TransReBillBank[index1]
                                                                               .ser!;
 
-                                                                      var docnoin = (TransReBillModels[index1].docno ==
+                                                                      var docnoin = (TransReBillBank[index1].docno ==
                                                                               null)
-                                                                          ? TransReBillModels[index1]
+                                                                          ? TransReBillBank[index1]
                                                                               .refno!
-                                                                          : TransReBillModels[index1]
+                                                                          : TransReBillBank[index1]
                                                                               .docno!;
+                                                                      print(
+                                                                          '$ciddoc //// $docnoin');
                                                                       red_Trans_selectIncome(
                                                                           ciddoc,
                                                                           docnoin,
@@ -4284,7 +4596,43 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                       'ราคารวม Vat',
                                                                       textAlign:
                                                                           TextAlign
-                                                                              .center,
+                                                                              .right,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: ReportScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: Text(
+                                                                      'ส่วนลด',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .right,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: ReportScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: Text(
+                                                                      'ยอดสุทธิ',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .right,
                                                                       style:
                                                                           TextStyle(
                                                                         color: ReportScreen_Color
@@ -4473,7 +4821,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                           Text(
                                                                         (TranHisBillModels[index2].vat ==
                                                                                 null)
-                                                                            ? '-'
+                                                                            ? '0.00'
                                                                             : '${nFormat.format(double.parse(TranHisBillModels[index2].vat!))}',
                                                                         textAlign:
                                                                             TextAlign.right,
@@ -4492,10 +4840,10 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                       flex: 1,
                                                                       child:
                                                                           Text(
-                                                                        (TranHisBillModels[index2].amt ==
+                                                                        (TranHisBillModels[index2].pvat ==
                                                                                 null)
-                                                                            ? '-'
-                                                                            : '${nFormat.format(double.parse(TranHisBillModels[index2].amt!))}',
+                                                                            ? '0.00'
+                                                                            : '${nFormat.format(double.parse(TranHisBillModels[index2].pvat!))}',
                                                                         textAlign:
                                                                             TextAlign.right,
                                                                         style:
@@ -4515,8 +4863,50 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                           Text(
                                                                         (TranHisBillModels[index2].total ==
                                                                                 null)
-                                                                            ? '-'
+                                                                            ? '0.00'
                                                                             : '${nFormat.format(double.parse(TranHisBillModels[index2].total!))}',
+                                                                        textAlign:
+                                                                            TextAlign.right,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              ReportScreen_Color.Colors_Text2_,
+                                                                          // fontWeight:
+                                                                          //     FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Text(
+                                                                        (TranHisBillModels[index2].dis ==
+                                                                                null)
+                                                                            ? '0.00'
+                                                                            : '${nFormat.format(double.parse(TranHisBillModels[index2].dis!))}',
+                                                                        textAlign:
+                                                                            TextAlign.right,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              ReportScreen_Color.Colors_Text2_,
+                                                                          // fontWeight:
+                                                                          //     FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Text(
+                                                                        (TranHisBillModels[index2].total ==
+                                                                                null)
+                                                                            ? '${nFormat.format(0.00 - ((TranHisBillModels[index2].dis == null) ? 0.00 : double.parse(TranHisBillModels[index2].dis!)))}'
+                                                                            : '${nFormat.format(double.parse(TranHisBillModels[index2].total!) - ((TranHisBillModels[index2].dis == null) ? 0.00 : double.parse(TranHisBillModels[index2].dis!)))}',
                                                                         textAlign:
                                                                             TextAlign.right,
                                                                         style:
@@ -4624,7 +5014,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                           ),
                                           if (Responsive.isDesktop(context))
                                             const Expanded(
-                                              flex: 2,
+                                              flex: 3,
                                               child: Text(
                                                 '',
                                                 textAlign: TextAlign.center,
@@ -4640,7 +5030,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                           const Expanded(
                                             flex: 1,
                                             child: Text(
-                                              'รวมส่วนลด',
+                                              'รวมค่าธรรมเนียม',
                                               //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
                                               //  '${_TransReBillModels[index1].ramtd}',
                                               textAlign: TextAlign.right,
@@ -4656,6 +5046,21 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                             flex: 1,
                                             child: Text(
                                               'รวมราคารวม',
+                                              textAlign: TextAlign.right,
+                                              style: TextStyle(
+                                                color: ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          const Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              'รวมส่วนลด',
+                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                              //  '${_TransReBillModels[index1].ramtd}',
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                 color: ReportScreen_Color
@@ -4740,7 +5145,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                           ),
                                           if (Responsive.isDesktop(context))
                                             const Expanded(
-                                              flex: 2,
+                                              flex: 3,
                                               child: Text(
                                                 '',
                                                 textAlign: TextAlign.center,
@@ -4758,31 +5163,74 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                             child: Text(
                                               (TransReBillBank.length == 0)
                                                   ? '0.00'
-                                                  : '${nFormat.format(double.parse((TransReBillBank.fold(
-                                                        0.0,
-                                                        (previousValue,
-                                                                element) =>
-                                                            previousValue +
-                                                            (element.total_bill !=
-                                                                    null
-                                                                ? double.parse(
-                                                                    element
-                                                                        .total_bill!)
-                                                                : 0),
-                                                      ) - TransReBillBank.fold(
-                                                        0.0,
-                                                        (previousValue,
-                                                                element) =>
-                                                            previousValue +
-                                                            (element.total_dis !=
-                                                                    null
-                                                                ? double.parse(
-                                                                    element
-                                                                        .total_dis!)
-                                                                : double.parse(
-                                                                    element
-                                                                        .total_bill!)),
-                                                      )).toString()))}',
+                                                  : nFormat.format(double.parse(
+                                                      TransReBillBank.fold(
+                                                      0.0,
+                                                      (previousValue,
+                                                              element) =>
+                                                          previousValue +
+                                                          (element.total_duesbill !=
+                                                                  null
+                                                              ? double.parse(element
+                                                                  .total_duesbill!)
+                                                              : 0),
+                                                    ).toString())),
+                                              // '$Sum_Total_',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                color: ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              (TransReBillBank.length == 0)
+                                                  ? '0.00'
+                                                  : nFormat.format(double.parse(
+                                                      TransReBillBank.fold(
+                                                      0.0,
+                                                      (previousValue,
+                                                              element) =>
+                                                          previousValue +
+                                                          (element.total_bill !=
+                                                                  null
+                                                              ? double.parse(
+                                                                  element
+                                                                      .total_bill!)
+                                                              : 0),
+                                                    ).toString())),
+                                              // '$Sum_Total_',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                color: ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              (TransReBillBank.length == 0)
+                                                  ? '0.00'
+                                                  : nFormat.format(double.parse(
+                                                      (TransReBillBank.fold(
+                                                      0.0,
+                                                      (previousValue,
+                                                              element) =>
+                                                          previousValue +
+                                                          (element.total_dis !=
+                                                                  null
+                                                              ? double.parse(
+                                                                  element
+                                                                      .total_dis!)
+                                                              : 0.00),
+                                                    )).toString())),
                                               // '${nFormat.format(double.parse('$Sum_dis_'))}',
 
                                               textAlign: TextAlign.right,
@@ -4799,46 +5247,32 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                             child: Text(
                                               (TransReBillBank.length == 0)
                                                   ? '0.00'
-                                                  : '${nFormat.format(double.parse(TransReBillBank.fold(
-                                                      0.0,
-                                                      (previousValue,
-                                                              element) =>
-                                                          previousValue +
-                                                          (element.total_bill !=
-                                                                  null
-                                                              ? double.parse(
-                                                                  element
-                                                                      .total_bill!)
-                                                              : 0),
-                                                    ).toString()))}',
-                                              // '$Sum_Total_',
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text1_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              (TransReBillBank.length == 0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse(TransReBillBank.fold(
-                                                      0.0,
-                                                      (previousValue,
-                                                              element) =>
-                                                          previousValue +
-                                                          (element.total_dis !=
-                                                                  null
-                                                              ? double.parse(
-                                                                  element
-                                                                      .total_dis!)
-                                                              : double.parse(element
-                                                                  .total_bill!)),
-                                                    ).toString()))}',
+                                                  : nFormat.format(double.parse(
+                                                          (TransReBillBank.fold(
+                                                        0.0,
+                                                        (previousValue,
+                                                                element) =>
+                                                            previousValue +
+                                                            (element.total_bill !=
+                                                                    null
+                                                                ? double.parse(
+                                                                    element
+                                                                        .total_bill!)
+                                                                : 0.00),
+                                                      )).toString()) -
+                                                      double.parse(
+                                                          (TransReBillBank.fold(
+                                                        0.0,
+                                                        (previousValue,
+                                                                element) =>
+                                                            previousValue +
+                                                            (element.total_dis !=
+                                                                    null
+                                                                ? double.parse(
+                                                                    element
+                                                                        .total_dis!)
+                                                                : 0.00),
+                                                      )).toString())),
                                               // '$Sum_Total_',
                                               textAlign: TextAlign.right,
                                               style: const TextStyle(

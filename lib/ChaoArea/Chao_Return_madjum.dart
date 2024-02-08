@@ -2783,45 +2783,6 @@ class _ChaoReturnMadjumState extends State<ChaoReturnMadjum> {
         Insert_log.Insert_logs(
             'ผู้เช่า', 'ยกเลิกสัญญา:$ciddoc >> คืนเงินประกัน : cFinn');
 
-        PdfgenReceipt_PayPakan.exportPDF_Receipt_PayPakan(
-            '',
-            context,
-            '',
-            _TransModels,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            renTal_name,
-            Form_bussshop,
-            Form_address,
-            Form_tel,
-            Form_email,
-            Form_tax,
-            Form_nameshop,
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            '',
-            paymentName1,
-            '',
-            Form_payment1,
-            '',
-            cFinn,
-            Value_newDateD,
-            sum_matjum,
-            sum_ST,
-            sum_Matjum_KF,
-            transPakanKFModels,
-            transPakanModels);
         setState(() {
           red_Trans_select2();
           read_GC_matjum();
@@ -2885,45 +2846,7 @@ class _ChaoReturnMadjumState extends State<ChaoReturnMadjum> {
         Insert_log.Insert_logs(
             'ผู้เช่า', 'ยกเลิกสัญญา:$ciddoc >> คืนเงินประกัน : cFinn');
 
-        PdfgenReceipt_PayPakan.exportPDF_Receipt_PayPakan(
-            '',
-            context,
-            '',
-            _TransModels,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            renTal_name,
-            Form_bussshop,
-            Form_address,
-            Form_tel,
-            Form_email,
-            Form_tax,
-            Form_nameshop,
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            '',
-            paymentName1,
-            '',
-            Form_payment1,
-            '',
-            cFinn,
-            Value_newDateD,
-            sum_matjum,
-            sum_ST,
-            sum_Matjum_KF,
-            transPakanKFModels,
-            transPakanModels);
+ 
 
         setState(() {
           red_Trans_select2();

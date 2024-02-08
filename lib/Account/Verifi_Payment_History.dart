@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:html';
@@ -24,18 +25,23 @@ import 'package:simple_barcode_scanner/screens/io_device.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
+import '../Man_PDF/Man_Pay_Receipt_PDF.dart';
+import '../Man_PDF/Man_Receipt_Market_PDF.dart';
 import '../Model/GetFinnancetrans_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
+import '../Model/Get_easyslip_Model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
+import '../PDF_Market/pdf_hisbill_Market.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 
 class Verifi_Payment_History extends StatefulWidget {
-  const Verifi_Payment_History({super.key});
+  final Texts;
+  const Verifi_Payment_History({super.key, this.Texts});
 
   @override
   State<Verifi_Payment_History> createState() => _Verifi_Payment_HistoryState();
@@ -47,12 +53,14 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
   List<InvoiceHistoryModel> _InvoiceHistoryModels = [];
   List<TransReBillHistoryModel> _TransReBillHistoryModels = [];
   List<FinnancetransModel> finnancetransModels = [];
-  List<TransReBillModel> _TransReBillModels = [];
+
   List<TransReBillModel> limitedList_TransReBillModels_ = [];
   List<TeNantModel> teNantModels = [];
   List<TeNantModel> _teNantModels = <TeNantModel>[];
-  List<TransReBillModel> TransReBillModels_ = [];
-
+  List<TransReBillModel> _TransReBillModels = [];
+  List<TransReBillModel> TransReBillModels_ = <TransReBillModel>[];
+  List<TransReBillModel> _TransReBillModelsTest = [];
+  List<easyslipModel> easyslipModels_ = [];
   String tappedIndex_ = '';
   ScrollController _scrollController2 = ScrollController();
   List<TransModel> _TransModels = [];
@@ -60,6 +68,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
   int limit = 50; // The maximum number of items you want
   int offset = 0; // The starting index of items you want
   int endIndex = 0;
+  String? ser_payby;
   String? cid_Name, name_Name;
   String? base64_Slip, fileName_Slip, Slip_history;
   final Formbecause_ = TextEditingController();
@@ -110,18 +119,44 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
       bill_tser,
       foder,
       bills_name_;
+  List<String> monthsInThai = [
+    'มกราคม', // January
+    'กุมภาพันธ์', // February
+    'มีนาคม', // March
+    'เมษายน', // April
+    'พฤษภาคม', // May
+    'มิถุนายน', // June
+    'กรกฎาคม', // July
+    'สิงหาคม', // August
+    'กันยายน', // September
+    'ตุลาคม', // October
+    'พฤศจิกายน', // November
+    'ธันวาคม', // December
+  ];
+
+  ///------------------------>
+  List<String> YE_Th = [];
+  late Timer _timer;
+  String? MONTH_Now, YEAR_Now;
+  String? indexTest;
+  int? index_Test;
+
+  ///------------------------>
   @override
   void initState() {
     super.initState();
+    // _startTimer();
     checkPreferance();
     red_Trans_bill();
     read_GC_rental();
+    checkAutoSearch();
   }
 
   String? email_login;
   String? seremail_login;
 
   String randomString = '';
+
   generateRandomString() {
     setState(() {
       randomString = '';
@@ -139,8 +174,14 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
   }
 
   Future<Null> checkPreferance() async {
+    int currentYear = DateTime.now().year;
+    for (int i = currentYear; i >= currentYear - 10; i--) {
+      YE_Th.add(i.toString());
+    }
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
+      MONTH_Now = DateFormat('MM').format(DateTime.parse('${datex}'));
+      YEAR_Now = DateFormat('yyyy').format(DateTime.parse('${datex}'));
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
       fname_ = preferences.getString('fname');
@@ -221,13 +262,23 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
         limitedList_TransReBillModels_.clear();
       });
     }
+
+    var sertype = (ser_payby == '0' || ser_payby == null)
+        ? '0'
+        : (ser_payby == '1')
+            ? 'W'
+            : (ser_payby == '2')
+                ? 'U'
+                : (ser_payby == '3')
+                    ? 'LP'
+                    : (ser_payby == '4')
+                        ? 'H'
+                        : '0';
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
-    // var ciddoc = widget.Get_Value_cid;
-    // var qutser = widget.Get_Value_NameShop_index;
 
     String url =
-        '${MyConstant().domain}/GC_bill_pay_BC_Verifi.php?isAdd=true&ren=$ren';
+        '${MyConstant().domain}/GC_bill_pay_BC_Verifi.php?isAdd=true&ren=$ren&mont_h=$MONTH_Now&yea_r=$YEAR_Now&serpang=$sertype';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -238,8 +289,6 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
           TransReBillModel transReBillModel = TransReBillModel.fromJson(map);
           setState(() {
             limitedList_TransReBillModels_.add(transReBillModel);
-
-            // _TransBillModels.add(_TransBillModel);
           });
         }
         setState(() {
@@ -263,6 +312,72 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
     });
   }
 
+//////////////----------------------------->
+  void checkAutoSearch() {
+    if (widget.Texts != null && widget.Texts.isNotEmpty) {
+      checkAutoSearch_TransReBill();
+    }
+  }
+
+//////////////----------------------------->
+  String? _previousText;
+  void didUpdateWidget(covariant Verifi_Payment_History oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // print('didUpdate Widget');
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      if (_previousText != widget.Texts) {
+        _previousText = widget.Texts;
+        if (widget.Texts != null) {
+          checkAutoSearch_TransReBill();
+        }
+      }
+    });
+  }
+
+  // void didUpdateWidget(covariant Verifi_Payment_History oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   // print('didUpdateWidget');
+  //   if (_previousText != widget.Texts) {
+  //     _previousText = widget.Texts;
+  //     if (widget.Texts != null) {
+  //       checkAutoSearch_TransReBill();
+  //     }
+  //   }
+  // }
+
+//////////////----------------------------->
+  Future<Null> checkAutoSearch_TransReBill() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var Text = widget.Texts.toString();
+    var text = Text!.toLowerCase();
+
+    setState(() {
+      _TransReBillModels = TransReBillModels_.where((transReBill) {
+        var notTitle = transReBill.cid.toString().toLowerCase();
+        var notTitle2 = transReBill.docno.toString().toLowerCase();
+        var notTitle3 = transReBill.ln.toString().toLowerCase();
+        var notTitle4 = transReBill.room_number.toString().toLowerCase();
+        var notTitle5 = transReBill.sname.toString().toLowerCase();
+        var notTitle6 = transReBill.cname.toString().toLowerCase();
+        var notTitle7 = transReBill.expname.toString().toLowerCase();
+        var notTitle8 = transReBill.date.toString().toLowerCase();
+        var notTitle9 = transReBill.remark.toString().toLowerCase();
+        return notTitle.contains(text) ||
+            notTitle2.contains(text) ||
+            notTitle3.contains(text) ||
+            notTitle4.contains(text) ||
+            notTitle5.contains(text) ||
+            notTitle6.contains(text) ||
+            notTitle7.contains(text) ||
+            notTitle8.contains(text) ||
+            notTitle9.contains(text);
+      }).toList();
+    });
+    print(
+        'checkAutoSearch_TransReBill : $text // ${_TransReBillModels.length}');
+  }
+
+//////////////----------------------------->
   Future<Null> red_Trans_select(index) async {
     if (_TransReBillHistoryModels.length != 0) {
       setState(() {
@@ -463,7 +578,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
   Widget Next_page() {
     return Row(
       children: [
-        Expanded(child: Text('')),
+        const Expanded(child: Text('')),
         StreamBuilder(
             stream: Stream.periodic(const Duration(milliseconds: 300)),
             builder: (context, snapshot) {
@@ -479,10 +594,19 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                 padding: const EdgeInsets.all(4.0),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.menu_book,
-                      color: Colors.grey,
-                      size: 20,
+                    InkWell(
+                      onTap: (renTal_user.toString() != '50')
+                          ? null
+                          : () async {
+                              // red_easyslip_data();
+                              red_Trans_billTest();
+                              _easyslipDialog();
+                            },
+                      child: const Icon(
+                        Icons.menu_book,
+                        color: Colors.grey,
+                        size: 20,
+                      ),
                     ),
                     InkWell(
                         onTap: (offset == 0)
@@ -556,6 +680,1897 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
     );
   }
 
+////////--------------------------------------------->
+
+////////--------------------------------------------->
+  Future<Null> red_Trans_billTest() async {
+    if (_TransReBillModelsTest.length != 0) {
+      setState(() {
+        _TransReBillModelsTest.clear();
+      });
+    }
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+
+    String url =
+        '${MyConstant().domain}/GC_finance_testSlip.php?isAdd=true&ren=$ren';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('result $ciddoc');
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          TransReBillModel transReBillModel = TransReBillModel.fromJson(map);
+          setState(() {
+            _TransReBillModelsTest.add(transReBillModel);
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
+  Future<Null> Select_Trans_billTest(cid_doc) async {
+    if (easyslipModels_.length != 0) {
+      setState(() {
+        easyslipModels_.clear();
+      });
+    }
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+
+    String url =
+        '${MyConstant().domain}/GC_easyslip.php?isAdd=true&ren=$ren&ciddoc=$cid_doc';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('result $ciddoc');
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          easyslipModel easyslipModelss = easyslipModel.fromJson(map);
+          setState(() {
+            easyslipModels_.add(easyslipModelss);
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
+  Widget ResultChackSlip() {
+    // print('**************************');
+    // print('transRef: $transRef');
+    // print('วันที่สลิป: $date');
+    // print('จำนวนเงินในสลิป: $amountValue');
+    // print('**************************');
+    // print('ชื่อธนาคารผู้ส่ง: $sender_bank');
+    // print('ชื่อย่อธนาคารผู้ส่ง: $sender_banknameshort');
+    // print('เลขบช.ธนาคารผู้ส่ง: $sender_bankaccount');
+    // print('**************************');
+    // print('ชื่อธนาคารผู้รับ: $receiver_bank');
+    // print('ชื่อย่อธนาคารผู้รับ: $receiver_banknameshort');
+    // print('ชื่อผู้รับTH: $receiver_bankACNameTH');
+    // print('ชื่อผู้รับEN: $receiver_bankACNameEN');
+    // print('เลขบช.ธนาคารผู้รับ: $receiver_bankaccount');
+    // print('**************************');
+
+    return StreamBuilder(
+        stream: Stream.periodic(const Duration(seconds: 0)),
+        builder: (context, snapshot) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Container(
+              width: (Responsive.isDesktop(context))
+                  ? MediaQuery.of(context).size.width * 0.85
+                  : 1200,
+              color: Colors.green[50],
+              // padding: EdgeInsets.all(6.0),
+              child: Column(
+                children: [
+                  const Text(
+                    'ผลการตรวจสอบสลิป',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: AccountScreen_Color.Colors_Text1_,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: Font_.Fonts_T,
+                      //fontSize: 10.0
+                    ),
+                  ),
+                  Text(
+                    (easyslipModels_.length == 0)
+                        ? 'วันที่สลิป: ??  (จำนวนเงินในสลิป: ?? '
+                        : 'วันที่สลิป: ${easyslipModels_[0].slip_date}  (จำนวนเงินในสลิป: ${easyslipModels_[0].amount}) ',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: AccountScreen_Color.Colors_Text1_,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: Font_.Fonts_T,
+                      //fontSize: 10.0
+                    ),
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green[200],
+                          border: const Border(
+                            bottom: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            left: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            top: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(2.0),
+                        child: const Text(
+                          'ประเภทข้อมูลจากสลิป',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+
+                            fontWeight: FontWeight.w600,
+                            fontFamily: Font_.Fonts_T,
+                            //fontSize: 10.0
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green[200],
+                          border: const Border(
+                            bottom: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            left: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            top: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(2.0),
+                        child: const Text(
+                          'ชื่อธนาคาร',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+
+                            fontWeight: FontWeight.w600,
+                            fontFamily: Font_.Fonts_T,
+                            //fontSize: 10.0
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green[200],
+                          border: const Border(
+                            bottom: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            left: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            top: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(2.0),
+                        child: const Text(
+                          'เลขบช.ธนาคาร',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+
+                            fontWeight: FontWeight.w600,
+                            fontFamily: Font_.Fonts_T,
+                            //fontSize: 10.0
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green[200],
+                          border: const Border(
+                            bottom: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            left: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            top: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(2.0),
+                        child: const Text(
+                          'ชื่อ TH',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+
+                            fontWeight: FontWeight.w600,
+                            fontFamily: Font_.Fonts_T,
+                            //fontSize: 10.0
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green[200],
+                          border: const Border(
+                            bottom: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            left: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            top: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(2.0),
+                        child: const Text(
+                          'ชื่อ EN',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+
+                            fontWeight: FontWeight.w600,
+                            fontFamily: Font_.Fonts_T,
+                            //fontSize: 10.0
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green[200],
+                          border: const Border(
+                            bottom: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            left: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            top: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                            right: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(2.0),
+                        child: const Text(
+                          '...',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+
+                            fontWeight: FontWeight.w600,
+                            fontFamily: Font_.Fonts_T,
+                            //fontSize: 10.0
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+
+                  ///easyslipModels_
+                  for (int index = 0; index < easyslipModels_.length; index++)
+                    SizedBox(
+                      child: Column(
+                        children: [
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: const Text(
+                                      'ข้อมูลผู้ส่ง/ผู้โอน',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      (easyslipModels_[index].sen_bankname !=
+                                              null)
+                                          ? '${easyslipModels_[index].sen_bankname} (${easyslipModels_[index].sen_bankshort})'
+                                          : '',
+                                      textAlign: TextAlign.left,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      (easyslipModels_[index].sen_accnumber !=
+                                              null)
+                                          ? '${easyslipModels_[index].sen_accnumber}'
+                                          : '${easyslipModels_[index].sen_proxy_accnumber}',
+                                      textAlign: TextAlign.left,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      '${easyslipModels_[index].sen_accnameTh}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      '${easyslipModels_[index].sen_accnameEn}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        right: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      (easyslipModels_[index].sen_banktype !=
+                                              null)
+                                          ? '${easyslipModels_[index].sen_banktype}'
+                                          : '${easyslipModels_[index].sen_proxy_type}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: const Text(
+                                      'ข้อมูลผู้รับ',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      (easyslipModels_[index].recei_bankname ==
+                                                  null ||
+                                              easyslipModels_[index]
+                                                      .recei_bankname ==
+                                                  '')
+                                          ? ''
+                                          : '${easyslipModels_[index].recei_bankname} (${easyslipModels_[index].recei_bankshort})',
+                                      textAlign: TextAlign.left,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      (easyslipModels_[index].recei_accnumber ==
+                                                  null ||
+                                              easyslipModels_[index]
+                                                      .recei_accnumber ==
+                                                  '')
+                                          ? '${easyslipModels_[index].recei_proxy_accnumber}'
+                                          : '${easyslipModels_[index].recei_accnumber}',
+                                      textAlign: TextAlign.left,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      '${easyslipModels_[index].recei_accnameTh}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      '${easyslipModels_[index].recei_accnameEn}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                        right: BorderSide(
+                                          color: Colors.black12,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      (easyslipModels_[index].recei_banktype ==
+                                                  null ||
+                                              easyslipModels_[index]
+                                                      .recei_banktype ==
+                                                  '')
+                                          ? '${easyslipModels_[index].recei_proxy_type}'
+                                          : '${easyslipModels_[index].recei_banktype}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+
+                                        fontFamily: Font_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+////////-------------------------------------->
+  int ser_adddata = 0;
+
+  final _formKey = GlobalKey<FormState>();
+  final myController1 = TextEditingController();
+  final myController2 = TextEditingController();
+  final myController3 = TextEditingController();
+  final myController4 = TextEditingController();
+  final myController5 = TextEditingController();
+  final myController6 = TextEditingController();
+  /////////////------------------------------------>
+  Future<Null> _select_Date_Daily(BuildContext context, ser) async {
+    final Future<DateTime?> picked = showDatePicker(
+      // locale: const Locale('th', 'TH'),
+      helpText: 'เลือกวันที่', confirmText: 'ตกลง',
+      cancelText: 'ยกเลิก',
+      context: context,
+      initialDate: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
+      initialDatePickerMode: DatePickerMode.day,
+      firstDate: DateTime(2023, 1, 1),
+      lastDate: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
+      // selectableDayPredicate: _decideWhichDayToEnable,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppBarColors.ABar_Colors, // header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: Colors.black, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    picked.then((result) {
+      if (picked != null) {
+        // TransReBillModels = [];
+
+        var formatter = DateFormat('yyyy-MM-dd');
+        print("${formatter.format(result!)}");
+        setState(() {
+          if (ser == 2) {
+            myController2.text = "${formatter.format(result)}";
+          } else {
+            myController3.text = "${formatter.format(result)}";
+          }
+        });
+      }
+    });
+  }
+
+  //////////////////------------------------->
+  // String? base64_Slip, fileName_Slip; In_finance_testSlip
+  var extension_;
+  var file_;
+  Future<void> uploadFile_Slip() async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.getImage(
+        source: ImageSource.gallery, maxHeight: 100, maxWidth: 100);
+
+    if (pickedFile == null) {
+      print('User canceled image selection');
+      return;
+    } else {
+      // 2. Read the image as bytes
+      final imageBytes = await pickedFile.readAsBytes();
+
+      // 3. Encode the image as a base64 string
+      final base64Image = base64Encode(imageBytes);
+      setState(() {
+        base64_Slip = base64Image;
+      });
+      print(base64_Slip);
+      setState(() {
+        extension_ = 'png';
+        // file_ = file;
+      });
+      print(extension_);
+      print(extension_);
+    }
+    OKuploadFile_Slip();
+    // OKuploadFile_Slip();
+    // OKuploadFile_Slip(extension, file);
+  }
+
+  Future<void> OKuploadFile_Slip() async {
+    if (base64_Slip != null) {
+      String Path_foder = 'slip';
+      String dateTimeNow = DateTime.now().toString();
+      String date = DateFormat('ddMMyyyy')
+          .format(DateTime.parse('${dateTimeNow}'))
+          .toString();
+      final dateTimeNow2 = DateTime.now().toUtc().add(const Duration(hours: 7));
+      final formatter2 = DateFormat('HHmmss');
+      final formattedTime2 = formatter2.format(dateTimeNow2);
+      String Time_ = formattedTime2.toString();
+      var fileName_Slip_ = 'PaymentQR_${date.toString()}_$Time_';
+      setState(() {
+        fileName_Slip = 'Testeasyslip_${date.toString()}_$Time_.$extension_';
+      });
+      final url =
+          '${MyConstant().domain}/Test_Upeasyslip.php?name=$fileName_Slip&Foder=$foder&extension=$extension_';
+
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'image': base64_Slip,
+          'Foder': foder,
+          'name': fileName_Slip,
+          'ex': extension_.toString()
+        }, // Send the image as a form field named 'image'
+      );
+    }
+  }
+
+  Future<void> _easyslipDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible:
+          false, // user must tap button! **https://dzentric.com/chao_perty/chao_api/easyslip.php
+      builder: (BuildContext context) {
+        return StreamBuilder(
+            stream: Stream.periodic(const Duration(seconds: 0)),
+            builder: (context, snapshot) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                backgroundColor: AppbackgroundColor.Sub_Abg_Colors,
+                titlePadding: const EdgeInsets.all(0.0),
+                contentPadding: const EdgeInsets.all(10.0),
+                actionsPadding: const EdgeInsets.all(6.0),
+                title: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            setState(() {
+                              fileName_Slip = null;
+                              ser_adddata = 0;
+                              index_Test = null;
+                              myController1.clear();
+                              myController2.clear();
+                              myController3.clear();
+                              myController4.clear();
+                              myController5.clear();
+                              myController6.clear();
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Icon(Icons.highlight_off,
+                                size: 30, color: Colors.red[700]),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            onTap: () async {
+                              setState(() {
+                                fileName_Slip = null;
+
+                                myController1.clear();
+                                myController2.clear();
+                                myController3.clear();
+                                myController4.clear();
+                                myController5.clear();
+                                myController6.clear();
+                              });
+                              setState(() {
+                                if (ser_adddata == 1) {
+                                  ser_adddata = 0;
+                                } else {
+                                  ser_adddata = 1;
+                                }
+                              });
+                            },
+                            child: Container(
+                              color: (ser_adddata == 1)
+                                  ? Colors.red[100]
+                                  : Colors.green[100],
+                              width: 180,
+                              padding: EdgeInsets.all(2.0),
+                              child: Center(
+                                child: Text(
+                                  (ser_adddata == 1)
+                                      ? 'ยกเลิกทดสอบเพิ่ม X'
+                                      : 'ทดสอบเพิ่ม +',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                // title:
+                // Text(
+                //     'Easyslip Check Test ${_TransReBillModelsTest.length}'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      if (ser_adddata == 1)
+                        Form(
+                          key: _formKey,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.orange[100],
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                              border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            width: 500,
+                            padding: EdgeInsets.all(2.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: TextFormField(
+                                      controller: myController1,
+                                      decoration: const InputDecoration(
+                                        // icon: Icon(Icons.person),
+                                        labelText: 'เลขที่สัญญา',
+                                      ),
+                                      onSaved: (String? value) {
+                                        // This optional block of code can be used to run
+                                        // code when the user saves the form.
+                                      },
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please เลขที่สัญญา';
+                                        }
+                                        return null;
+                                      },
+                                    )),
+                                Expanded(
+                                    flex: 1,
+                                    child: TextFormField(
+                                      controller: myController2,
+                                      decoration: const InputDecoration(
+                                        // icon: Icon(Icons.person),
+                                        labelText: 'วันที่ทำรายการ',
+                                      ),
+                                      readOnly: true,
+                                      onSaved: (String? value) {
+                                        // This optional block of code can be used to run
+                                        // code when the user saves the form.
+                                      },
+                                      onTap: () {
+                                        _select_Date_Daily(context, 2);
+                                      },
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please วันที่ทำรายการ';
+                                        }
+                                        return null;
+                                      },
+                                    )),
+                                Expanded(
+                                    flex: 1,
+                                    child: TextFormField(
+                                      controller: myController3,
+                                      decoration: const InputDecoration(
+                                        // icon: Icon(Icons.person),
+                                        labelText: 'วันที่รับชำระ',
+                                      ),
+                                      readOnly: true,
+                                      onSaved: (String? value) {
+                                        // This optional block of code can be used to run
+                                        // code when the user saves the form.
+                                      },
+                                      onTap: () {
+                                        _select_Date_Daily(context, 3);
+                                      },
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please วันที่รับชำระ';
+                                        }
+                                        return null;
+                                      },
+                                    )),
+                                Expanded(
+                                    flex: 1,
+                                    child: TextFormField(
+                                      controller: myController4,
+                                      decoration: const InputDecoration(
+                                        // icon: Icon(Icons.person),
+                                        labelText: 'เลขที่ใบเสร็จ',
+                                      ),
+                                      onSaved: (String? value) {
+                                        // This optional block of code can be used to run
+                                        // code when the user saves the form.
+                                      },
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please เลขที่ใบเสร็จ';
+                                        }
+                                        return null;
+                                      },
+                                    )),
+                                Expanded(
+                                    flex: 1,
+                                    child: TextFormField(
+                                      controller: myController5,
+                                      decoration: const InputDecoration(
+                                        // icon: Icon(Icons.person),
+                                        labelText: 'ชื่อร้าน',
+                                      ),
+                                      onSaved: (String? value) {
+                                        // This optional block of code can be used to run
+                                        // code when the user saves the form.
+                                      },
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please ชื่อร้าน';
+                                        }
+                                        return null;
+                                      },
+                                    )),
+                                Expanded(
+                                    flex: 1,
+                                    child: TextFormField(
+                                      controller: myController6,
+                                      decoration: const InputDecoration(
+                                        // icon: Icon(Icons.person),
+                                        labelText: 'จำนวนเงิน',
+                                      ),
+                                      onSaved: (String? value) {
+                                        // This optional block of code can be used to run
+                                        // code when the user saves the form.
+                                      },
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please จำนวนเงิน';
+                                        }
+                                        return null;
+                                      },
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter(
+                                            RegExp("[0-9.]"),
+                                            allow: true),
+                                        // for below version 2 use this
+                                        // FilteringTextInputFormatter.allow(
+                                        //     RegExp(r'[0-9.]')),
+                                        // // for version 2 and greater youcan also use this
+                                        // FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                    )),
+                                Expanded(
+                                  flex: 1,
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        if (fileName_Slip != null) {
+                                          setState(() {
+                                            fileName_Slip = null;
+                                          });
+                                        } else {
+                                          uploadFile_Slip();
+                                        }
+                                      },
+                                      child: AutoSizeText(
+                                        minFontSize: 10,
+                                        maxFontSize: 25,
+                                        maxLines: 1,
+                                        (fileName_Slip != null)
+                                            ? 'ลบสลิป X'
+                                            : 'กรุณาอัพสลิป ',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: (fileName_Slip != null)
+                                                ? Colors.blue
+                                                : Colors.red,
+                                            fontFamily: Font_.Fonts_T),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: InkWell(
+                                      onTap: (fileName_Slip == null)
+                                          ? null
+                                          : () async {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                red_easyslip_data();
+                                              }
+                                            },
+                                      child: Container(
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          color: (fileName_Slip != null)
+                                              ? Colors.green
+                                              : Colors.green[50],
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                          border: Border.all(
+                                              color: Colors.white, width: 1),
+                                        ),
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 25,
+                                          maxLines: 1,
+                                          'ยืนยัน',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: AccountScreen_Color
+                                                  .Colors_Text2_,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            'Easyslip Check Test ${_TransReBillModelsTest.length}',
+                            style: const TextStyle(
+                              color: AccountScreen_Color.Colors_Text1_,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T,
+                              //fontSize: 10.0
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: (Responsive.isDesktop(context))
+                            ? MediaQuery.of(context).size.width * 0.85
+                            : 1200,
+                        decoration: const BoxDecoration(
+                          color: AppbackgroundColor.TiTile_Colors,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0)),
+                        ),
+                        // padding: const EdgeInsets.all(8.0),
+                        child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'เลขที่สัญญา',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: AccountScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'วันที่ทำรายการ',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: AccountScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'วันที่รับชำระ',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: AccountScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'เลขที่ใบเสร็จ',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: AccountScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'ชื่อร้าน',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: AccountScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'จำนวนเงิน',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      color: AccountScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Slip',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      color: AccountScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '....',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      color: AccountScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ),
+                      Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          width: Responsive.isDesktop(context)
+                              ? MediaQuery.of(context).size.width * 0.85
+                              : 1200,
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(0),
+                                topRight: Radius.circular(0),
+                                bottomLeft: Radius.circular(0),
+                                bottomRight: Radius.circular(0)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          child: _TransReBillModelsTest.isEmpty
+                              ? SizedBox(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const CircularProgressIndicator(),
+                                      StreamBuilder(
+                                        stream: Stream.periodic(
+                                            const Duration(milliseconds: 25),
+                                            (i) => i),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData)
+                                            return const Text('');
+                                          double elapsed = double.parse(
+                                                  snapshot.data.toString()) *
+                                              0.05;
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: (elapsed > 8.00)
+                                                ? const Text(
+                                                    'ไม่พบข้อมูล',
+                                                    style: TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  )
+                                                : Text(
+                                                    'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
+                                                    // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : ListView.builder(
+                                  // controller: _scrollController2,
+                                  // itemExtent: 50,
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: _TransReBillModelsTest.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Column(
+                                      children: [
+                                        Material(
+                                          color:
+                                              (indexTest == index.toString() ||
+                                                      index_Test == index)
+                                                  ? tappedIndex_Color
+                                                      .tappedIndex_Colors
+                                                  : AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                          child: Container(
+                                            color: (indexTest ==
+                                                        index.toString() ||
+                                                    index_Test == index)
+                                                ? tappedIndex_Color
+                                                    .tappedIndex_Colors
+                                                : null,
+                                            child: ListTile(
+                                                // onTap: () async {
+                                                //   // setState(() {
+                                                //   //   indexTest = '${index}';
+                                                //   // });
+                                                // },
+                                                title: Container(
+                                              decoration: const BoxDecoration(
+                                                // color: Colors.green[100]!
+                                                //     .withOpacity(0.5),
+                                                border: Border(
+                                                  bottom: BorderSide(
+                                                    color: Colors.black12,
+                                                    width: 1,
+                                                  ),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Tooltip(
+                                                      richMessage:
+                                                          const TextSpan(
+                                                        text: '',
+                                                        style: TextStyle(
+                                                          color: HomeScreen_Color
+                                                              .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          //fontSize: 10.0
+                                                        ),
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: Colors.grey[200],
+                                                      ),
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        '${_TransReBillModelsTest[index].refno}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Tooltip(
+                                                      richMessage:
+                                                          const TextSpan(
+                                                        text: '',
+                                                        style: TextStyle(
+                                                          color: HomeScreen_Color
+                                                              .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          //fontSize: 10.0
+                                                        ),
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: Colors.grey[200],
+                                                      ),
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        (_TransReBillModelsTest[
+                                                                        index]
+                                                                    .daterec ==
+                                                                null)
+                                                            ? '${_TransReBillModelsTest[index].daterec}'
+                                                            : '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModelsTest[index].daterec} 00:00:00'))}-${DateTime.parse('${_TransReBillModelsTest[index].daterec} 00:00:00').year + 543}',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Tooltip(
+                                                      richMessage:
+                                                          const TextSpan(
+                                                        text: '',
+                                                        style: TextStyle(
+                                                          color: HomeScreen_Color
+                                                              .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          //fontSize: 10.0
+                                                        ),
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: Colors.grey[200],
+                                                      ),
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        (_TransReBillModelsTest[
+                                                                        index]
+                                                                    .pdate ==
+                                                                null)
+                                                            ? '${_TransReBillModelsTest[index].pdate}'
+                                                            : '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModelsTest[index].pdate} 00:00:00'))}-${DateTime.parse('${_TransReBillModelsTest[index].pdate} 00:00:00').year + 543}',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Tooltip(
+                                                      richMessage:
+                                                          const TextSpan(
+                                                        text: '',
+                                                        style: TextStyle(
+                                                          color: HomeScreen_Color
+                                                              .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          //fontSize: 10.0
+                                                        ),
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: Colors.grey[200],
+                                                      ),
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        '${_TransReBillModelsTest[index].docno}',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Tooltip(
+                                                      richMessage:
+                                                          const TextSpan(
+                                                        text: '',
+                                                        style: TextStyle(
+                                                          color: HomeScreen_Color
+                                                              .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          //fontSize: 10.0
+                                                        ),
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: Colors.grey[200],
+                                                      ),
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        '${_TransReBillModelsTest[index].remark}',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Tooltip(
+                                                      richMessage:
+                                                          const TextSpan(
+                                                        text: '',
+                                                        style: TextStyle(
+                                                          color: HomeScreen_Color
+                                                              .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          //fontSize: 10.0
+                                                        ),
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: Colors.grey[200],
+                                                      ),
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        (_TransReBillModelsTest[
+                                                                        index]
+                                                                    .total ==
+                                                                null)
+                                                            ? '${_TransReBillModelsTest[index].total}'
+                                                            : '${nFormat.format(double.parse(_TransReBillModelsTest[index].total!))}',
+                                                        textAlign:
+                                                            TextAlign.right,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: InkWell(
+                                                        onTap: () async {
+                                                          String url =
+                                                              await '${MyConstant().domain}/Awaitdownload/payment/${_TransReBillModelsTest[index].slip}';
+                                                          await showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (_) => Dialog(
+                                                                        // backgroundColor: Colors.transparent,
+                                                                        // elevation: 0,
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              320,
+                                                                          // height:
+                                                                          //     400,
+                                                                          child:
+                                                                              Column(
+                                                                            // mainAxisAlignment:
+                                                                            //     MainAxisAlignment.spaceBetween,
+                                                                            // mainAxisSize:
+                                                                            //     MainAxisSize.s,
+                                                                            // crossAxisAlignment:
+                                                                            //     CrossAxisAlignment.stretch,
+                                                                            children: [
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(left: 0),
+                                                                                child: Container(
+                                                                                  color: Colors.grey[100],
+                                                                                  padding: const EdgeInsets.all(4),
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        '${_TransReBillModelsTest[index].docno}',
+                                                                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                                                                      ),
+                                                                                      IconButton(
+                                                                                        onPressed: () async {
+                                                                                          Navigator.of(context).pop();
+                                                                                        },
+                                                                                        icon: Icon(Icons.close_rounded),
+                                                                                        color: Colors.redAccent,
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Expanded(
+                                                                                child: Align(
+                                                                                  alignment: Alignment.center,
+                                                                                  child: Container(
+                                                                                    child: Image.network(
+                                                                                      '${url}',
+                                                                                      //  'https://dzentric.com/chao_perty/chao_api/Awaitdownload/payment/${_TransReBillModelsTest[index].slip}',
+                                                                                      fit: BoxFit.fill,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ));
+                                                        },
+                                                        child:
+                                                            const AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 25,
+                                                          maxLines: 1,
+                                                          'ดู',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.blue,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: InkWell(
+                                                        onTap: () async {
+                                                          //https://dzentric.com/chao_perty/chao_api/easyslip.php
+                                                          if (index_Test ==
+                                                              index) {
+                                                            setState(() {
+                                                              index_Test = null;
+                                                            });
+                                                          } else {
+                                                            setState(() {
+                                                              index_Test =
+                                                                  index;
+                                                            });
+                                                          }
+                                                          Select_Trans_billTest(
+                                                              '${_TransReBillModelsTest[index].docno}');
+                                                          // red_set_data(index);
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                (index_Test ==
+                                                                        index)
+                                                                    ? Colors.red
+                                                                    : Colors
+                                                                        .orange,
+                                                            borderRadius: const BorderRadius
+                                                                    .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .white,
+                                                                width: 1),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 25,
+                                                            maxLines: 1,
+                                                            (index_Test ==
+                                                                    index)
+                                                                ? 'X'
+                                                                : 'ตวจสอบ',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                color: AccountScreen_Color
+                                                                    .Colors_Text2_,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                          ),
+                                        ),
+                                        if (index_Test == index)
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 0, 8),
+                                            child: ResultChackSlip(),
+                                          ),
+                                        if (index_Test == index)
+                                          const SizedBox(
+                                            height: 5.0,
+                                          ),
+                                        if (index_Test == index)
+                                          const Divider(
+                                            color: Colors.grey,
+                                            height: 1.5,
+                                          ),
+                                        if (index_Test == index)
+                                          const SizedBox(
+                                            height: 5.0,
+                                          ),
+                                      ],
+                                    );
+                                  })),
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
+
   ///////////------------------------>
   @override
   Widget build(BuildContext context) {
@@ -617,8 +2632,711 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
                                           children: [
-                                            Next_page(),
-                                            const Row(
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                            .Sub_Abg_Colors
+                                                        .withOpacity(0.5),
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    // border: Border.all(color: Colors.white, width: 1),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(2.0),
+                                                        child: Text(
+                                                          'เดือน :',
+                                                          style: TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(2.0),
+                                                        child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: AppbackgroundColor
+                                                                .Sub_Abg_Colors,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            // border: Border.all(color: Colors.grey, width: 1),
+                                                          ),
+                                                          width: 120,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          child:
+                                                              DropdownButtonFormField2(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            focusColor:
+                                                                Colors.white,
+                                                            autofocus: false,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              floatingLabelAlignment:
+                                                                  FloatingLabelAlignment
+                                                                      .center,
+                                                              enabled: true,
+                                                              hoverColor:
+                                                                  Colors.brown,
+                                                              prefixIconColor:
+                                                                  Colors.blue,
+                                                              fillColor: Colors
+                                                                  .white
+                                                                  .withOpacity(
+                                                                      0.05),
+                                                              filled: false,
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderSide:
+                                                                    const BorderSide(
+                                                                        color: Colors
+                                                                            .red),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              focusedBorder:
+                                                                  const OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                ),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  width: 1,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          231,
+                                                                          227,
+                                                                          227),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            isExpanded: false,
+                                                            //value: MONTH_Now,
+                                                            hint: Text(
+                                                              MONTH_Now == null
+                                                                  ? 'เลือก'
+                                                                  : '${monthsInThai[int.parse('${MONTH_Now}') - 1]}',
+                                                              maxLines: 2,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                fontSize: 12,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .arrow_drop_down,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                            iconSize: 20,
+                                                            buttonHeight: 30,
+                                                            buttonWidth: 200,
+                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                            dropdownDecoration:
+                                                                BoxDecoration(
+                                                              // color: Colors
+                                                              //     .amber,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 1),
+                                                            ),
+                                                            items: [
+                                                              for (int item = 1;
+                                                                  item < 13;
+                                                                  item++)
+                                                                DropdownMenuItem<
+                                                                    String>(
+                                                                  value:
+                                                                      '${item}',
+                                                                  child: Text(
+                                                                    '${monthsInThai[item - 1]}',
+                                                                    // '${item}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                            ],
+
+                                                            onChanged:
+                                                                (value) async {
+                                                              MONTH_Now = value;
+                                                              red_Trans_bill();
+                                                              // if (Value_Chang_Zone_Income !=
+                                                              //     null) {
+                                                              //   red_Trans_billIncome();
+                                                              //   red_Trans_billMovemen();
+                                                              // }
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(2.0),
+                                                        child: Text(
+                                                          'ปี :',
+                                                          style: TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(2.0),
+                                                        child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: AppbackgroundColor
+                                                                .Sub_Abg_Colors,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            // border: Border.all(color: Colors.grey, width: 1),
+                                                          ),
+                                                          width: 120,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          child:
+                                                              DropdownButtonFormField2(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            focusColor:
+                                                                Colors.white,
+                                                            autofocus: false,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              floatingLabelAlignment:
+                                                                  FloatingLabelAlignment
+                                                                      .center,
+                                                              enabled: true,
+                                                              hoverColor:
+                                                                  Colors.brown,
+                                                              prefixIconColor:
+                                                                  Colors.blue,
+                                                              fillColor: Colors
+                                                                  .white
+                                                                  .withOpacity(
+                                                                      0.05),
+                                                              filled: false,
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderSide:
+                                                                    const BorderSide(
+                                                                        color: Colors
+                                                                            .red),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              focusedBorder:
+                                                                  const OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                ),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  width: 1,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          231,
+                                                                          227,
+                                                                          227),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            isExpanded: false,
+                                                            // value: YEAR_Now,
+                                                            hint: Text(
+                                                              YEAR_Now == null
+                                                                  ? 'เลือก'
+                                                                  : '$YEAR_Now',
+                                                              maxLines: 2,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                fontSize: 12,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .arrow_drop_down,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                            iconSize: 20,
+                                                            buttonHeight: 30,
+                                                            buttonWidth: 200,
+                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                            dropdownDecoration:
+                                                                BoxDecoration(
+                                                              // color: Colors
+                                                              //     .amber,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 1),
+                                                            ),
+                                                            items: YE_Th.map(
+                                                                (item) =>
+                                                                    DropdownMenuItem<
+                                                                        String>(
+                                                                      value:
+                                                                          '${item}',
+                                                                      child:
+                                                                          Text(
+                                                                        '${item}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          fontSize:
+                                                                              14,
+                                                                          color:
+                                                                              Colors.grey,
+                                                                        ),
+                                                                      ),
+                                                                    )).toList(),
+
+                                                            onChanged:
+                                                                (value) async {
+                                                              YEAR_Now = value;
+                                                              red_Trans_bill();
+                                                              // if (Value_Chang_Zone_Income !=
+                                                              //     null) {
+                                                              //   red_Trans_billIncome();
+                                                              //   red_Trans_billMovemen();
+                                                              // }
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(2.0),
+                                                        child: Text(
+                                                          'ระบบ :',
+                                                          style: TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(2.0),
+                                                        child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: AppbackgroundColor
+                                                                .Sub_Abg_Colors,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            // border: Border.all(color: Colors.grey, width: 1),
+                                                          ),
+                                                          width: 160,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          child:
+                                                              DropdownButtonFormField2(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            focusColor:
+                                                                Colors.white,
+                                                            autofocus: false,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              floatingLabelAlignment:
+                                                                  FloatingLabelAlignment
+                                                                      .center,
+                                                              enabled: true,
+                                                              hoverColor:
+                                                                  Colors.brown,
+                                                              prefixIconColor:
+                                                                  Colors.blue,
+                                                              fillColor: Colors
+                                                                  .white
+                                                                  .withOpacity(
+                                                                      0.05),
+                                                              filled: false,
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderSide:
+                                                                    const BorderSide(
+                                                                        color: Colors
+                                                                            .red),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              focusedBorder:
+                                                                  const OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                ),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  width: 1,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          231,
+                                                                          227,
+                                                                          227),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            isExpanded: false,
+                                                            // value: YEAR_Now,
+                                                            hint: Text(
+                                                              (ser_payby ==
+                                                                          null ||
+                                                                      ser_payby ==
+                                                                          '0')
+                                                                  ? 'ทั้งหมด'
+                                                                  : '$ser_payby',
+                                                              maxLines: 2,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                fontSize: 12,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .arrow_drop_down,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                            iconSize: 20,
+                                                            buttonHeight: 30,
+                                                            buttonWidth: 200,
+                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                            dropdownDecoration:
+                                                                BoxDecoration(
+                                                              // color: Colors
+                                                              //     .amber,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 1),
+                                                            ),
+                                                            items: const [
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '0',
+                                                                child: Text(
+                                                                  'ทั้งหมด',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '1',
+                                                                child: Text(
+                                                                  'เว็ป หลักแอดมิน(W)',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '2',
+                                                                child: Text(
+                                                                  'เว็ป User(U)',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '3',
+                                                                child: Text(
+                                                                  'เว็ป Market(LP)',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '4',
+                                                                child: Text(
+                                                                  'เครื่อง Handheld(H)',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+
+                                                            onChanged:
+                                                                (value) async {
+                                                              setState(() {
+                                                                ser_payby =
+                                                                    value;
+                                                              });
+
+                                                              // print(value);
+                                                              red_Trans_bill();
+                                                              // if (Value_Chang_Zone_Income !=
+                                                              //     null) {
+                                                              //   red_Trans_billIncome();
+                                                              //   red_Trans_billMovemen();
+                                                              // }
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Expanded(child: Next_page()),
+                                              ],
+                                            ),
+                                            const Divider(),
+                                            Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
@@ -626,12 +3344,12 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                   flex: 1,
                                                   child: Padding(
                                                     padding:
-                                                        EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Text(
-                                                      'เลขที่สัญญา',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
+                                                      'เลขที่สัญญา ${widget.Texts}',
+                                                      textAlign: TextAlign.left,
+                                                      style: const TextStyle(
                                                         color:
                                                             AccountScreen_Color
                                                                 .Colors_Text1_,
@@ -644,7 +3362,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     ),
                                                   ),
                                                 ),
-                                                Expanded(
+                                                const Expanded(
                                                   flex: 1,
                                                   child: Padding(
                                                     padding:
@@ -665,7 +3383,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     ),
                                                   ),
                                                 ),
-                                                Expanded(
+                                                const Expanded(
                                                   flex: 1,
                                                   child: Padding(
                                                     padding:
@@ -686,15 +3404,14 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     ),
                                                   ),
                                                 ),
-                                                Expanded(
+                                                const Expanded(
                                                   flex: 1,
                                                   child: Padding(
                                                     padding:
                                                         EdgeInsets.all(8.0),
                                                     child: Text(
                                                       'เลขที่ใบเสร็จ',
-                                                      textAlign:
-                                                          TextAlign.center,
+                                                      textAlign: TextAlign.left,
                                                       style: TextStyle(
                                                         color:
                                                             AccountScreen_Color
@@ -725,15 +3442,14 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                 //     ),
                                                 //   ),
                                                 // ),
-                                                Expanded(
+                                                const Expanded(
                                                   flex: 1,
                                                   child: Padding(
                                                     padding:
                                                         EdgeInsets.all(8.0),
                                                     child: Text(
                                                       'รหัสพื้นที่',
-                                                      textAlign:
-                                                          TextAlign.center,
+                                                      textAlign: TextAlign.left,
                                                       style: TextStyle(
                                                         color:
                                                             AccountScreen_Color
@@ -746,15 +3462,14 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     ),
                                                   ),
                                                 ),
-                                                Expanded(
+                                                const Expanded(
                                                   flex: 1,
                                                   child: Padding(
                                                     padding:
                                                         EdgeInsets.all(8.0),
                                                     child: Text(
                                                       'ชื่อร้านค้า',
-                                                      textAlign:
-                                                          TextAlign.center,
+                                                      textAlign: TextAlign.left,
                                                       style: TextStyle(
                                                         color:
                                                             AccountScreen_Color
@@ -767,7 +3482,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     ),
                                                   ),
                                                 ),
-                                                Expanded(
+                                                const Expanded(
                                                   flex: 1,
                                                   child: Padding(
                                                     padding:
@@ -775,7 +3490,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     child: Text(
                                                       'จำนวนเงิน',
                                                       textAlign:
-                                                          TextAlign.center,
+                                                          TextAlign.right,
                                                       style: TextStyle(
                                                         color:
                                                             AccountScreen_Color
@@ -788,7 +3503,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     ),
                                                   ),
                                                 ),
-                                                Expanded(
+                                                const Expanded(
                                                   flex: 1,
                                                   child: Padding(
                                                     padding:
@@ -809,7 +3524,70 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     ),
                                                   ),
                                                 ),
-                                                Expanded(
+                                                const Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Text(
+                                                      'ทำรายการ',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color:
+                                                            AccountScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Text(
+                                                      'ประเภท',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color:
+                                                            AccountScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                // Container(
+                                                //   width: 100,
+                                                //   child: Padding(
+                                                //     padding:
+                                                //         EdgeInsets.all(8.0),
+                                                //     child: Text(
+                                                //       'เอกสาร',
+                                                //       textAlign:
+                                                //           TextAlign.center,
+                                                //       style: TextStyle(
+                                                //         color:
+                                                //             AccountScreen_Color
+                                                //                 .Colors_Text1_,
+                                                //         fontWeight:
+                                                //             FontWeight.bold,
+                                                //         fontFamily:
+                                                //             FontWeight_.Fonts_T,
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                const Expanded(
                                                   flex: 1,
                                                   child: Padding(
                                                     padding:
@@ -974,7 +3752,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                 title:
                                                                     Container(
                                                                   decoration:
-                                                                      BoxDecoration(
+                                                                      const BoxDecoration(
                                                                     // color: Colors.green[100]!
                                                                     //     .withOpacity(0.5),
                                                                     border:
@@ -1026,7 +3804,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 1,
                                                                             '${_TransReBillModels[index].cid}',
                                                                             textAlign:
-                                                                                TextAlign.center,
+                                                                                TextAlign.start,
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             style:
@@ -1152,7 +3930,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 ? '${_TransReBillModels[index].docno}'
                                                                                 : '${_TransReBillModels[index].doctax}',
                                                                             textAlign:
-                                                                                TextAlign.center,
+                                                                                TextAlign.left,
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             style:
@@ -1248,7 +4026,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 ? '${_TransReBillModels[index].room_number}'
                                                                                 : '${_TransReBillModels[index].ln}',
                                                                             textAlign:
-                                                                                TextAlign.center,
+                                                                                TextAlign.left,
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             style:
@@ -1292,7 +4070,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 ? '${_TransReBillModels[index].remark}'
                                                                                 : '${_TransReBillModels[index].sname}',
                                                                             textAlign:
-                                                                                TextAlign.center,
+                                                                                TextAlign.left,
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             style:
@@ -1335,7 +4113,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 ? '${nFormat.format(double.parse(_TransReBillModels[index].total_bill!))}'
                                                                                 : '${nFormat.format(double.parse(_TransReBillModels[index].total_dis!))}',
                                                                             textAlign:
-                                                                                TextAlign.center,
+                                                                                TextAlign.right,
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             style:
@@ -1385,6 +4163,128 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                       Expanded(
                                                                         flex: 1,
                                                                         child:
+                                                                            Tooltip(
+                                                                          richMessage:
+                                                                              const TextSpan(
+                                                                            text:
+                                                                                '',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: HomeScreen_Color.Colors_Text1_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(5),
+                                                                            color:
+                                                                                Colors.grey[200],
+                                                                          ),
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                25,
+                                                                            maxLines:
+                                                                                1,
+                                                                            (_TransReBillModels[index].pay_by.toString() == 'W')
+                                                                                ? 'ผ่านเว็บ แอดมิน (${_TransReBillModels[index].pay_by})'
+                                                                                : (_TransReBillModels[index].pay_by.toString() == 'U')
+                                                                                    ? 'ผ่านเว็บ User (${_TransReBillModels[index].pay_by})'
+                                                                                    : (_TransReBillModels[index].pay_by.toString() == 'LP')
+                                                                                        ? 'ผ่านเว็บ Market (${_TransReBillModels[index].pay_by})'
+                                                                                        : (_TransReBillModels[index].pay_by.toString() == 'LP')
+                                                                                            ? 'ผ่านเครื่อง Handheld (${_TransReBillModels[index].pay_by})'
+                                                                                            : 'ไม่ทราบ ?? (${_TransReBillModels[index].pay_by})',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Tooltip(
+                                                                          richMessage:
+                                                                              const TextSpan(
+                                                                            text:
+                                                                                '',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: HomeScreen_Color.Colors_Text1_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(5),
+                                                                            color:
+                                                                                Colors.grey[200],
+                                                                          ),
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                25,
+                                                                            maxLines:
+                                                                                1,
+                                                                            (_TransReBillModels[index].pay_by.toString() == 'W')
+                                                                                ? 'ชำระค่าบริการ'
+                                                                                : (_TransReBillModels[index].pay_by.toString() == 'U')
+                                                                                    ? 'ชำระค่าบริการ'
+                                                                                    : (_TransReBillModels[index].pay_by.toString() == 'LP')
+                                                                                        ? 'จองล็อกเสียบ'
+                                                                                        : (_TransReBillModels[index].pay_by.toString() == 'LP')
+                                                                                            ? 'ชำระค่าบริการ'
+                                                                                            : 'ไม่ทราบ ??',
+                                                                            // 'จองพื้นที่รายวัน',
+                                                                            textAlign:
+                                                                                TextAlign.right,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            style:
+                                                                                const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      // Container(
+                                                                      //   width:
+                                                                      //       100,
+                                                                      //   // flex:
+                                                                      //   //     1,
+                                                                      //   child: Center(
+                                                                      //       child: InkWell(
+                                                                      //           onTap: () async {
+                                                                      //             SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                      //             var ren = preferences.getString('renTalSer');
+                                                                      //             var cFinn_now = _TransReBillModels[index].doctax == '' ? '${_TransReBillModels[index].docno}' : '${_TransReBillModels[index].doctax}';
+                                                                      //             print(cFinn_now);
+                                                                      //             ManPay_ReceiptMarket_PDF.ManPayReceiptMarket_PDF(
+                                                                      //               context,
+                                                                      //               ren,
+                                                                      //               cFinn_now,
+                                                                      //               bill_addr,
+                                                                      //               bill_email,
+                                                                      //               bill_tel,
+                                                                      //               bill_tax,
+                                                                      //               bill_name,
+                                                                      //             );
+                                                                      //           },
+                                                                      //           child: Icon(Icons.print))),
+                                                                      // ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
                                                                             Center(
                                                                           child:
                                                                               InkWell(
@@ -1410,7 +4310,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 border: Border.all(color: Colors.white, width: 1),
                                                                               ),
                                                                               padding: const EdgeInsets.all(4.0),
-                                                                              child: AutoSizeText(
+                                                                              child: const AutoSizeText(
                                                                                 minFontSize: 10,
                                                                                 maxFontSize: 25,
                                                                                 maxLines: 1,
@@ -1439,7 +4339,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                     .all(8.0),
                                                             child: Row(
                                                               children: [
-                                                                AutoSizeText(
+                                                                const AutoSizeText(
                                                                   minFontSize:
                                                                       10,
                                                                   maxFontSize:
@@ -1472,7 +4372,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                     height: 1,
                                                                   ),
                                                                 ),
-                                                                AutoSizeText(
+                                                                const AutoSizeText(
                                                                   minFontSize:
                                                                       10,
                                                                   maxFontSize:
@@ -1685,25 +4585,27 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
+                backgroundColor: AppbackgroundColor.Sub_Abg_Colors,
+                titlePadding: const EdgeInsets.all(0.0),
+                contentPadding: const EdgeInsets.all(10.0),
+                actionsPadding: const EdgeInsets.all(6.0),
                 title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: Text(
-                        'เลขที่บิล ${_TransReBillModels[index].docno}',
-                        style: const TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Icon(Icons.highlight_off,
+                            size: 30, color: Colors.red[700]),
                       ),
                     ),
                   ],
                 ),
                 content: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(0.0),
                   child: ScrollConfiguration(
                     behavior:
                         ScrollConfiguration.of(context).copyWith(dragDevices: {
@@ -1725,7 +4627,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                     Expanded(
                                       flex: 2,
                                       child: Container(
-                                        height: 50,
+                                        height: 30,
                                         decoration: BoxDecoration(
                                           color: Colors.orange[100],
                                           borderRadius: const BorderRadius.only(
@@ -1739,7 +4641,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                         ),
                                         // padding: const EdgeInsets.all(8.0),
                                         child: const Center(
-                                          child: Text(
+                                          child: AutoSizeText(
+                                            minFontSize: 8,
+                                            maxFontSize: 14,
                                             'รายละเอียดบิล', //numinvoice
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
@@ -1757,7 +4661,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                     Expanded(
                                       flex: 2,
                                       child: Container(
-                                        height: 50,
+                                        height: 30,
                                         decoration: BoxDecoration(
                                           color: Colors.orange[100],
                                           borderRadius: const BorderRadius.only(
@@ -1769,7 +4673,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                           // border: Border.all(
                                           //     color: Colors.grey, width: 1),
                                         ),
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(4.0),
                                         child: Container(
                                           decoration: const BoxDecoration(
                                             color: Colors.white,
@@ -1783,7 +4687,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                             //     color: Colors.grey, width: 1),
                                           ),
                                           child: Center(
-                                            child: Text(
+                                            child: AutoSizeText(
+                                              minFontSize: 8,
+                                              maxFontSize: 12,
                                               'บิลเลขที่ ${_TransReBillModels[index].docno}', //
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
@@ -1802,614 +4708,342 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.brown[200],
-                                        // padding: const EdgeInsets.all(8.0),
-                                        child: const Center(
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            'ลำดับ',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T
-                                                //fontSize: 10.0
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                Container(
+                                  color: Colors.brown[200],
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 80,
+                                        child: const AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          maxLines: 1,
+                                          'ลำดับ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.brown[200],
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: const Center(
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            'วันที่ชำระ',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T
-                                                //fontSize: 10.0
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                      const Expanded(
+                                        flex: 1,
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          maxLines: 1,
+                                          'วันที่ชำระ',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.brown[200],
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: const Center(
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            'กำหนดชำระ',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T
-                                                //fontSize: 10.0
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                      const Expanded(
+                                        flex: 1,
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          maxLines: 1,
+                                          'กำหนดชำระ',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.brown[200],
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: const Center(
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            'เลขตั้งหนี้',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T
-                                                //fontSize: 10.0
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                      const Expanded(
+                                        flex: 2,
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          maxLines: 1,
+                                          'เลขตั้งหนี้',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.brown[200],
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: const Center(
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            'รายการ',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T
-                                                //fontSize: 10.0
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                      const Expanded(
+                                        flex: 2,
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          maxLines: 1,
+                                          'รายการ',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.brown[200],
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: const Center(
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            'VAT(฿)',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T
-                                                //fontSize: 10.0
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                      const Expanded(
+                                        flex: 1,
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          maxLines: 1,
+                                          'VAT(฿)',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.brown[200],
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: const Center(
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            'WHT(฿)',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T
-                                                //fontSize: 10.0
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                      const Expanded(
+                                        flex: 1,
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          maxLines: 1,
+                                          'WHT(฿)',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                    // Expanded(
-                                    //   flex: 1,
-                                    //   child: Container(
-                                    //     height: 50,
-                                    //     color: Colors.brown[200],
-                                    //     padding: const EdgeInsets.all(8.0),
-                                    //     child: const Center(
-                                    //       child: AutoSizeText(
-                                    //         minFontSize: 10,
-                                    //         maxFontSize: 15,
-                                    //         maxLines: 1,
-                                    //         'VAT',
-                                    //         textAlign: TextAlign.center,
-                                    //         style: TextStyle(
-                                    //             color: PeopleChaoScreen_Color
-                                    //                 .Colors_Text1_,
-                                    //             fontWeight: FontWeight.bold,
-                                    //             fontFamily: FontWeight_.Fonts_T
-                                    //             //fontSize: 10.0
-                                    //             //fontSize: 10.0
-                                    //             ),
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    // if (renTal_user.toString() == '65' ||
-                                    //     renTal_user.toString() == '50')
-                                    //   Expanded(
-                                    //     flex: 1,
-                                    //     child: Container(
-                                    //       height: 50,
-                                    //       color: Colors.brown[200],
-                                    //       padding: const EdgeInsets.all(8.0),
-                                    //       child: const Center(
-                                    //         child: AutoSizeText(
-                                    //           minFontSize: 10,
-                                    //           maxFontSize: 15,
-                                    //           maxLines: 1,
-                                    //           '70',
-                                    //           textAlign: TextAlign.end,
-                                    //           style: TextStyle(
-                                    //               color: PeopleChaoScreen_Color
-                                    //                   .Colors_Text1_,
-                                    //               fontWeight: FontWeight.bold,
-                                    //               fontFamily:
-                                    //                   FontWeight_.Fonts_T
-                                    //               //fontSize: 10.0
-                                    //               //fontSize: 10.0
-                                    //               ),
-                                    //         ),
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // if (renTal_user.toString() == '65' ||
-                                    //     renTal_user.toString() == '50')
-                                    //   Expanded(
-                                    //     flex: 1,
-                                    //     child: Container(
-                                    //       height: 50,
-                                    //       color: Colors.brown[200],
-                                    //       padding: const EdgeInsets.all(8.0),
-                                    //       child: const Center(
-                                    //         child: AutoSizeText(
-                                    //           minFontSize: 10,
-                                    //           maxFontSize: 15,
-                                    //           maxLines: 1,
-                                    //           '30',
-                                    //           textAlign: TextAlign.end,
-                                    //           style: TextStyle(
-                                    //               color: PeopleChaoScreen_Color
-                                    //                   .Colors_Text1_,
-                                    //               fontWeight: FontWeight.bold,
-                                    //               fontFamily:
-                                    //                   FontWeight_.Fonts_T
-                                    //               //fontSize: 10.0
-                                    //               //fontSize: 10.0
-                                    //               ),
-                                    //         ),
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // Expanded(
-                                    //   flex: 1,
-                                    //   child: Container(
-                                    //     height: 50,
-                                    //     color: Colors.brown[200],
-                                    //     padding: const EdgeInsets.all(8.0),
-                                    //     child: const Center(
-                                    //       child: AutoSizeText(
-                                    //         minFontSize: 10,
-                                    //         maxFontSize: 15,
-                                    //         maxLines: 2,
-                                    //         'ราคารวมก่อน VAT',
-                                    //         textAlign: TextAlign.center,
-                                    //         style: TextStyle(
-                                    //             color: PeopleChaoScreen_Color
-                                    //                 .Colors_Text1_,
-                                    //             fontWeight: FontWeight.bold,
-                                    //             fontFamily: FontWeight_.Fonts_T
-                                    //             //fontSize: 10.0
-                                    //             //fontSize: 10.0
-                                    //             ),
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.brown[200],
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: const Center(
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            'ยอดสุทธิ',
-                                            textAlign: TextAlign.end,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T
-                                                //fontSize: 10.0
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                      const Expanded(
+                                        flex: 1,
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          maxLines: 1,
+                                          'ยอดสุทธิ',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                                 Expanded(
-                                  // height:
-                                  //     MediaQuery.of(context).size.height / 4.8,
-                                  // decoration: const BoxDecoration(
-                                  //   color: AppbackgroundColor.Sub_Abg_Colors,
-                                  //   borderRadius: BorderRadius.only(
-                                  //     topLeft: Radius.circular(0),
-                                  //     topRight: Radius.circular(0),
-                                  //     bottomLeft: Radius.circular(0),
-                                  //     bottomRight: Radius.circular(0),
-                                  //   ),
-                                  //   // border: Border.all(
-                                  //   //     color: Colors.grey, width: 1),
-                                  // ),
-                                  child: StreamBuilder(
-                                    stream: Stream.periodic(
-                                        const Duration(seconds: 0)),
-                                    builder: (context, snapshot) {
-                                      return ListView.builder(
-                                        controller: _scrollController2,
-                                        // itemExtent: 50,
-                                        physics:
-                                            const AlwaysScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount:
-                                            _TransReBillHistoryModels.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return ListTile(
-                                            title: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    maxLines: 1,
-                                                    '${index + 1}',
-                                                    textAlign: TextAlign.start,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
+                                  child: Container(
+                                    // height:
+                                    //     MediaQuery.of(context).size.height / 4.8,
+                                    decoration: const BoxDecoration(
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(0),
+                                        topRight: Radius.circular(0),
+                                        bottomLeft: Radius.circular(0),
+                                        bottomRight: Radius.circular(0),
+                                      ),
+                                      // border: Border.all(
+                                      //     color: Colors.grey, width: 1),
+                                    ),
+                                    child: StreamBuilder(
+                                      stream: Stream.periodic(
+                                          const Duration(seconds: 0)),
+                                      builder: (context, snapshot) {
+                                        return ListView.builder(
+                                          controller: _scrollController2,
+                                          // itemExtent: 50,
+                                          physics:
+                                              const AlwaysScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              _TransReBillHistoryModels.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
+                                              child: Container(
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: 80,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 14,
+                                                        maxLines: 1,
+                                                        '${index + 1}',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    maxLines: 1,
-                                                    '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransReBillHistoryModels[index].dateacc} 00:00:00'))}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 14,
+                                                        maxLines: 1,
+                                                        '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransReBillHistoryModels[index].dateacc} 00:00:00'))}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    maxLines: 1,
-                                                    // '${_TransReBillHistoryModels[index].duedate}',
-                                                    '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransReBillHistoryModels[index].date} 00:00:00'))}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 14,
+                                                        maxLines: 1,
+                                                        // '${_TransReBillHistoryModels[index].duedate}',
+                                                        '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransReBillHistoryModels[index].date} 00:00:00'))}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    maxLines: 1,
-                                                    '${_TransReBillHistoryModels[index].refno}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 14,
+                                                        maxLines: 1,
+                                                        '${_TransReBillHistoryModels[index].refno}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    maxLines: 1,
-                                                    '${_TransReBillHistoryModels[index].expname}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 14,
+                                                        maxLines: 1,
+                                                        '${_TransReBillHistoryModels[index].expname}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    maxLines: 1,
-                                                    '${_TransReBillHistoryModels[index].vat}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 14,
+                                                        maxLines: 1,
+                                                        '${_TransReBillHistoryModels[index].vat}',
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    maxLines: 1,
-                                                    '${_TransReBillHistoryModels[index].wht}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 14,
+                                                        maxLines: 1,
+                                                        '${_TransReBillHistoryModels[index].wht}',
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                                // Expanded(
-                                                //   flex: 1,
-                                                //   child: AutoSizeText(
-                                                //     minFontSize: 10,
-                                                //     maxFontSize: 15,
-                                                //     maxLines: 1,
-                                                //     '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
-                                                //     textAlign:
-                                                //         TextAlign.center,
-                                                //     style: const TextStyle(
-                                                //         color:
-                                                //             PeopleChaoScreen_Color
-                                                //                 .Colors_Text2_,
-                                                //         //fontWeight: FontWeight.bold,
-                                                //         fontFamily:
-                                                //             Font_.Fonts_T),
-                                                //   ),
-                                                // ),
-                                                // if (renTal_user.toString() ==
-                                                //         '65' ||
-                                                //     renTal_user.toString() ==
-                                                //         '50')
-                                                //   Expanded(
-                                                //     flex: 1,
-                                                //     child: Container(
-                                                //       height: 50,
-                                                //       // color: Colors.brown[200],
-                                                //       // padding:
-                                                //       //     const EdgeInsets.all(
-                                                //       //         8.0),
-                                                //       child: Center(
-                                                //         child: AutoSizeText(
-                                                //           minFontSize: 10,
-                                                //           maxFontSize: 15,
-                                                //           maxLines: 1,
-                                                //           (_TransReBillHistoryModels[
-                                                //                           index]
-                                                //                       .ramt
-                                                //                       .toString() ==
-                                                //                   'null')
-                                                //               ? '-'
-                                                //               : '${_TransReBillHistoryModels[index].ramt}',
-                                                //           textAlign:
-                                                //               TextAlign.end,
-                                                //           style: const TextStyle(
-                                                //               color: PeopleChaoScreen_Color
-                                                //                   .Colors_Text1_,
-                                                //               fontWeight:
-                                                //                   FontWeight
-                                                //                       .bold,
-                                                //               fontFamily:
-                                                //                   FontWeight_
-                                                //                       .Fonts_T
-                                                //               //fontSize: 10.0
-                                                //               //fontSize: 10.0
-                                                //               ),
-                                                //         ),
-                                                //       ),
-                                                //     ),
-                                                //   ),
-                                                // if (renTal_user.toString() ==
-                                                //         '65' ||
-                                                //     renTal_user.toString() ==
-                                                //         '50')
-                                                //   Expanded(
-                                                //     flex: 1,
-                                                //     child: Container(
-                                                //       height: 50,
-                                                //       // color: Colors.brown[200],
-                                                //       // padding:
-                                                //       //     const EdgeInsets.all(
-                                                //       //         8.0),
-                                                //       child: Center(
-                                                //         child: AutoSizeText(
-                                                //           minFontSize: 10,
-                                                //           maxFontSize: 15,
-                                                //           maxLines: 1,
-                                                //           (_TransReBillHistoryModels[
-                                                //                           index]
-                                                //                       .ramtd
-                                                //                       .toString() ==
-                                                //                   'null')
-                                                //               ? '-'
-                                                //               : '${_TransReBillHistoryModels[index].ramtd}',
-                                                //           textAlign:
-                                                //               TextAlign.end,
-                                                //           style: const TextStyle(
-                                                //               color: PeopleChaoScreen_Color
-                                                //                   .Colors_Text1_,
-                                                //               fontWeight:
-                                                //                   FontWeight
-                                                //                       .bold,
-                                                //               fontFamily:
-                                                //                   FontWeight_
-                                                //                       .Fonts_T
-                                                //               //fontSize: 10.0
-                                                //               //fontSize: 10.0
-                                                //               ),
-                                                //         ),
-                                                //       ),
-                                                //     ),
-                                                //   ),
-                                                // Expanded(
-                                                //   flex: 1,
-                                                //   child: AutoSizeText(
-                                                //     minFontSize: 10,
-                                                //     maxFontSize: 15,
-                                                //     maxLines: 1,
-                                                //     '${nFormat.format(double.parse(_TransReBillHistoryModels[index].amt!))}',
-                                                //     textAlign:
-                                                //         TextAlign.center,
-                                                //     style: const TextStyle(
-                                                //         color:
-                                                //             PeopleChaoScreen_Color
-                                                //                 .Colors_Text2_,
-                                                //         //fontWeight: FontWeight.bold,
-                                                //         fontFamily:
-                                                //             Font_.Fonts_T),
-                                                //   ),
-                                                // ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    maxLines: 1,
-                                                    '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
-                                                    textAlign: TextAlign.end,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 14,
+                                                        maxLines: 1,
+                                                        '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(2.0),
                                   child: Container(
                                     width: (Responsive.isDesktop(context))
                                         ? MediaQuery.of(context).size.width *
@@ -2418,11 +5052,25 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
                                         Container(
-                                          width: 250,
-                                          // height: 50,
-                                          // color: Colors.red,
+                                          width: 300,
+                                          decoration: BoxDecoration(
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            borderRadius: const BorderRadius
+                                                    .only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                          ),
+                                          padding: const EdgeInsets.all(4.0),
                                           child: StreamBuilder(
                                               stream: Stream.periodic(
                                                   const Duration(seconds: 0)),
@@ -2432,7 +5080,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     Align(
                                                       alignment:
                                                           Alignment.topLeft,
-                                                      child: Text(
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 13,
                                                         'วันที่ชำระ : ${DateFormat('dd-MM').format(DateTime.parse('$pdate 00:00:00'))}-${DateTime.parse('$pdate 00:00:00').year + 543}',
                                                         textAlign:
                                                             TextAlign.end,
@@ -2451,18 +5101,27 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     const Align(
                                                       alignment:
                                                           Alignment.topLeft,
-                                                      child: Text(
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 13,
                                                         'รูปแบบการชำระ',
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: TextStyle(
                                                             color: PeopleChaoScreen_Color
                                                                 .Colors_Text1_,
+                                                            // decoration:
+                                                            //     TextDecoration
+                                                            //         .underline,
+                                                            // decorationStyle:
+                                                            //     TextDecorationStyle
+                                                            //         .dashed,
                                                             // fontWeight:
                                                             //     FontWeight
                                                             //         .bold,
                                                             fontFamily:
-                                                                Font_.Fonts_T
+                                                                FontWeight_
+                                                                    .Fonts_T
                                                             //fontSize: 10.0
                                                             ),
                                                       ),
@@ -2475,17 +5134,42 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                       Align(
                                                         alignment:
                                                             Alignment.topLeft,
-                                                        child: Text(
-                                                          // minFontSize: 10,
-                                                          // maxFontSize: 15,
-                                                          '${i + 1}.(${finnancetransModels[i].type}) จำนวน ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท',
-                                                          style:
-                                                              const TextStyle(
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 13,
+                                                              '${i + 1}. จำนวน ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท (${finnancetransModels[i].ptname})',
+                                                              style: const TextStyle(
                                                                   color: PeopleChaoScreen_Color
                                                                       .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
                                                                   fontFamily: Font_
                                                                       .Fonts_T),
+                                                            ),
+                                                            if (finnancetransModels[
+                                                                        i]
+                                                                    .type
+                                                                    .toString() !=
+                                                                'CASH')
+                                                              AutoSizeText(
+                                                                minFontSize: 8,
+                                                                maxFontSize: 11,
+                                                                '  ** ${i + 1}.1. ธนาคาร : ${finnancetransModels[i].bank} , เลขบช. : ${finnancetransModels[i].bno}',
+                                                                style: TextStyle(
+                                                                    color: Colors.grey[800],
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                          ],
                                                         ),
                                                       ),
                                                   ],
@@ -2493,247 +5177,285 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                               }),
                                         ),
                                         Container(
-                                          width: 350,
-                                          // height: 50,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade300,
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                                    topLeft: Radius.circular(0),
-                                                    topRight:
-                                                        Radius.circular(0),
-                                                    bottomLeft:
-                                                        Radius.circular(0),
-                                                    bottomRight:
-                                                        Radius.circular(0)),
-                                          ),
-                                          child: StreamBuilder(
-                                            stream: Stream.periodic(
-                                                const Duration(seconds: 0)),
-                                            builder: (context, snapshot) {
-                                              return Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        width: 120,
-                                                        child:
-                                                            const AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          'รวม(บาท)',
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        // flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          '${nFormat.format(sum_pvat)}',
-                                                          style:
-                                                              const TextStyle(
+                                            width: 350,
+                                            decoration: const BoxDecoration(
+                                              color: AppbackgroundColor
+                                                  .Sub_Abg_Colors,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(0),
+                                                  topRight: Radius.circular(0),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: Container(
+                                                    color: Colors.grey.shade300,
+                                                    // height: 100,
+                                                    width: 300,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Column(children: [
+                                                      Row(
+                                                        children: [
+                                                          const Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              'รวม(บาท)',
+                                                              style: TextStyle(
                                                                   color: PeopleChaoScreen_Color
                                                                       .Colors_Text2_,
                                                                   //fontWeight: FontWeight.bold,
                                                                   fontFamily: Font_
                                                                       .Fonts_T),
-                                                        ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              '${nFormat.format(sum_pvat)}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
+                                                      Row(
+                                                        children: [
+                                                          const Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              'ภาษีมูลค่าเพิ่ม(vat)',
+                                                              style: TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              '${nFormat.format(sum_vat)}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              'หัก ณ ที่จ่าย',
+                                                              style: TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              '${nFormat.format(sum_wht)}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              'ยอดรวม',
+                                                              style: TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              '${nFormat.format(sum_amt)}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 2,
+                                                            child: Row(
+                                                              children: [
+                                                                const AutoSizeText(
+                                                                  minFontSize:
+                                                                      8,
+                                                                  maxFontSize:
+                                                                      11,
+                                                                  'ส่วนลด',
+                                                                  style: TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 60,
+                                                                  height: 20,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    minFontSize:
+                                                                        8,
+                                                                    maxFontSize:
+                                                                        11,
+                                                                    '$sum_disp  %',
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              '${nFormat.format(sum_disamt)}',
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                            // AutoSizeText(
+                                                            //   minFontSize: 10,
+                                                            //   maxFontSize: 15,
+                                                            //   textAlign: TextAlign.end,
+                                                            //   '${nFormat.format(0.00)}',
+                                                            //   style: TextStyle(
+                                                            //       color: PeopleChaoScreen_Color
+                                                            //           .Colors_Text2_,
+                                                            //       //fontWeight: FontWeight.bold,
+                                                            //       fontFamily: Font_.Fonts_T),
+                                                            // ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              'ยอดชำระ',
+                                                              style: TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 8,
+                                                              maxFontSize: 11,
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              '${nFormat.format(sum_amt - sum_disamt)}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ]),
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        width: 120,
-                                                        child:
-                                                            const AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          'ภาษีมูลค่าเพิ่ม(vat)',
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        // flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          '${nFormat.format(sum_vat)}',
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        width: 120,
-                                                        child:
-                                                            const AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          'หัก ณ ที่จ่าย',
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        // flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          '${nFormat.format(sum_wht)}',
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        width: 120,
-                                                        child:
-                                                            const AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          'ยอดรวม',
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          '${nFormat.format(sum_amt)}',
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        width: 120,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          'ส่วนลด $sum_disp  %',
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        // flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          '${nFormat.format(sum_disamt)}',
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        width: 120,
-                                                        child:
-                                                            const AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          'ยอดชำระ',
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        // flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          '${nFormat.format(sum_amt - sum_disamt)}',
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          ),
-                                        ),
+                                                ),
+                                              ],
+                                            ))
                                       ],
                                     ),
                                   ),
@@ -2749,14 +5471,14 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       const SizedBox(
-                        height: 5.0,
+                        height: 2.0,
                       ),
                       const Divider(
                         color: Colors.grey,
-                        height: 1.0,
+                        height: 2.0,
                       ),
                       const SizedBox(
-                        height: 5.0,
+                        height: 2.0,
                       ),
                       StreamBuilder(
                           stream: Stream.periodic(const Duration(seconds: 0)),
@@ -2766,7 +5488,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                               child: Row(
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(4.0),
                                     width: 180,
                                     child: InkWell(
                                       onTap: () {
@@ -2842,9 +5564,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                         crossAxisAlignment:
                                                                             CrossAxisAlignment.start,
                                                                         children: [
-                                                                          Text(
+                                                                          const Text(
                                                                             'ยอดชำระ ',
-                                                                            style: const TextStyle(
+                                                                            style: TextStyle(
                                                                                 color: AccountScreen_Color.Colors_Text2_,
                                                                                 fontWeight: FontWeight.bold,
                                                                                 fontFamily: Font_.Fonts_T),
@@ -2858,8 +5580,8 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 //     FontWeight.bold,
                                                                                 fontFamily: Font_.Fonts_T),
                                                                           ),
-                                                                          Padding(
-                                                                            padding: const EdgeInsets.fromLTRB(
+                                                                          const Padding(
+                                                                            padding: EdgeInsets.fromLTRB(
                                                                                 0,
                                                                                 4,
                                                                                 0,
@@ -2867,14 +5589,14 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                             child:
                                                                                 Text(
                                                                               'หลักฐานการชำระ ',
-                                                                              style: const TextStyle(color: AccountScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                              style: TextStyle(color: AccountScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
                                                                             ),
                                                                           ),
                                                                           Text(
                                                                             (Slip_history.toString() == null || Slip_history == null || Slip_history.toString() == 'null')
                                                                                 ? '- ไม่พบหลักฐาน ✖️'
                                                                                 : '- พบหลักฐาน ✔️',
-                                                                            style: TextStyle(
+                                                                            style: const TextStyle(
                                                                                 fontSize: 14,
                                                                                 color: AccountScreen_Color.Colors_Text2_,
                                                                                 //(Slip_history.toString() == null || Slip_history == null || Slip_history.toString() == 'null') ? Colors.red : Colors.green,
@@ -2886,7 +5608,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                             (Slip_history.toString() == null || Slip_history == null || Slip_history.toString() == 'null')
                                                                                 ? ''
                                                                                 : '($Slip_history)',
-                                                                            style: TextStyle(
+                                                                            style: const TextStyle(
                                                                                 fontSize: 10,
                                                                                 color: Colors.grey,
                                                                                 fontFamily: Font_.Fonts_T),
@@ -2920,14 +5642,14 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                               child: Row(
                                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                                 children: [
-                                                                                  Text(
+                                                                                  const Text(
                                                                                     'CODE : ',
                                                                                     style: TextStyle(fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
                                                                                   ),
                                                                                   Padding(
                                                                                     padding: const EdgeInsets.all(2),
                                                                                     child: Container(
-                                                                                      decoration: BoxDecoration(
+                                                                                      decoration: const BoxDecoration(
                                                                                         borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                                         color: Color.fromARGB(255, 179, 177, 170),
                                                                                         // image:
@@ -2965,7 +5687,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                   keyboardType: TextInputType.number,
                                                                                   numberOfFields: 2,
                                                                                   fieldWidth: 40.0,
-                                                                                  style: TextStyle(
+                                                                                  style: const TextStyle(
                                                                                     fontFamily: Font_.Fonts_T,
                                                                                     color: Colors.black,
                                                                                   ),
@@ -3038,10 +5760,14 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                     SharedPreferences preferences = await SharedPreferences.getInstance();
 
                                                                                     var ren = preferences.getString('renTalSer');
-                                                                                    var Remark = '${email_login}($seremail_login)';
-                                                                                    var docno = '${_TransReBillModels[index].docno}';
+                                                                                    var Remark = _TransReBillModels[index].sname == null ? '${_TransReBillModels[index].remark}' : '${_TransReBillModels[index].sname}';
+                                                                                    var ser_userVerifi = '$seremail_login';
+                                                                                    // '${email_login}($seremail_login)';
+                                                                                    var docno = _TransReBillModels[index].doctax == '' ? '${_TransReBillModels[index].docno}' : '${_TransReBillModels[index].doctax}';
 
-                                                                                    String url = '${MyConstant().domain}/OK_Verifi_Payment.php?isAdd=true&ren=$ren&ciddoc=$docno&Re_mark=$Remark';
+                                                                                    // '${_TransReBillModels[index].docno}';
+
+                                                                                    String url = '${MyConstant().domain}/OK_Verifi_Payment.php?isAdd=true&ren=$ren&ciddoc=$docno&Re_mark=$Remark&ser_user=$ser_userVerifi';
 
                                                                                     try {
                                                                                       var response = await http.get(Uri.parse(url));
@@ -3050,7 +5776,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                       if (result.toString() == 'true') {
                                                                                         Insert_log.Insert_logs('บัญชี', 'ประวัติบิลรอตรวจสอบ>>อนุมัติ($docno,ผู้อนุมัตื:${Remark})');
                                                                                         ScaffoldMessenger.of(context).showSnackBar(
-                                                                                          SnackBar(backgroundColor: Colors.green, content: Text('$docno อนุมัติเสร็จสิ้น!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                          SnackBar(backgroundColor: Colors.green, content: Text('$docno อนุมัติเสร็จสิ้น!', style: const TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
                                                                                         );
                                                                                         Navigator.pop(context, 'OK');
                                                                                         Navigator.pop(context, 'OK');
@@ -3124,7 +5850,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                       },
                                       child: Container(
                                           decoration: BoxDecoration(
-                                            color: Colors.black,
+                                            color: Colors.green[400],
                                             borderRadius:
                                                 const BorderRadius.only(
                                                     topLeft: Radius.circular(6),
@@ -3142,16 +5868,16 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Padding(
-                                                padding: EdgeInsets.all(8.0),
+                                                padding: EdgeInsets.all(4.0),
                                                 child: Icon(Icons.check,
-                                                    color: Colors.white),
+                                                    color: Colors.black),
                                               ),
                                               Padding(
-                                                padding: EdgeInsets.all(8.0),
+                                                padding: EdgeInsets.all(4.0),
                                                 child: Text(
                                                   'ถูกต้อง/อนุมัติ',
                                                   style: TextStyle(
-                                                    color: Colors.white,
+                                                    color: Colors.black,
                                                     // fontWeight:
                                                     //     FontWeight.bold,
                                                     fontFamily: Font_.Fonts_T,
@@ -3163,7 +5889,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                     ),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(4.0),
                                     // width: MediaQuery.of(context).size.width,
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -3241,9 +5967,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
-                                                                  Text(
+                                                                  const Text(
                                                                     '*** วิธีตรวจสอบ "สลิป" เบื้องต้น',
-                                                                    style: const TextStyle(
+                                                                    style: TextStyle(
                                                                         color: Colors
                                                                             .red,
                                                                         fontSize:
@@ -3254,9 +5980,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                         fontFamily:
                                                                             Font_.Fonts_T),
                                                                   ),
-                                                                  Text(
+                                                                  const Text(
                                                                     '1. สังเกตความละเอียดของ ตัวเลข หรือ ตัวหนังสือ',
-                                                                    style: const TextStyle(
+                                                                    style: TextStyle(
                                                                         color: Colors
                                                                             .red,
                                                                         fontSize:
@@ -3264,9 +5990,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                         fontFamily:
                                                                             Font_.Fonts_T),
                                                                   ),
-                                                                  Text(
+                                                                  const Text(
                                                                     '2. เปิดแอปฯ ธนาคารขึ้นมา สแกน QR CODE บนสลิปโอนเงิน',
-                                                                    style: const TextStyle(
+                                                                    style: TextStyle(
                                                                         color: Colors
                                                                             .red,
                                                                         fontSize:
@@ -3274,9 +6000,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                         fontFamily:
                                                                             Font_.Fonts_T),
                                                                   ),
-                                                                  Text(
+                                                                  const Text(
                                                                     '3. ใช้  Mobile Banking เช็ก ยอดเงิน วัน-เวลาที่โอน ตรงกับในสลิปที่ได้มาหรือไม่',
-                                                                    style: const TextStyle(
+                                                                    style: TextStyle(
                                                                         color: Colors
                                                                             .red,
                                                                         fontSize:
@@ -3284,9 +6010,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                         fontFamily:
                                                                             Font_.Fonts_T),
                                                                   ),
-                                                                  Text(
+                                                                  const Text(
                                                                     '4. ควรตรวจสอบสลิปทันทีที่ได้รับมา เพราะ QR code บนสลิปของบางธนาคารจะมีอายุจำกัด ตั้งเเต่ 7 วัน ถึง 60 วัน ',
-                                                                    style: const TextStyle(
+                                                                    style: TextStyle(
                                                                         color: Colors
                                                                             .red,
                                                                         fontSize:
@@ -3377,7 +6103,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                           Padding(
                                                             padding:
                                                                 EdgeInsets.all(
-                                                                    8.0),
+                                                                    4.0),
                                                             child: Icon(
                                                                 Icons.image,
                                                                 color: Colors
@@ -3386,7 +6112,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                           Padding(
                                                             padding:
                                                                 EdgeInsets.all(
-                                                                    8.0),
+                                                                    4.0),
                                                             child: Text(
                                                               'หลักฐานการโอน',
                                                               style: TextStyle(
@@ -3404,7 +6130,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                 ),
                                               ),
                                         Container(
-                                          padding: const EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(4.0),
                                           width: 180,
                                           child: InkWell(
                                             onTap: () {
@@ -3702,7 +6428,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                             },
                                             child: Container(
                                                 decoration: BoxDecoration(
-                                                  color: Colors.orange[200],
+                                                  color: Colors.red[200],
                                                   borderRadius:
                                                       const BorderRadius.only(
                                                           topLeft:
@@ -3727,7 +6453,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                   children: [
                                                     Padding(
                                                       padding:
-                                                          EdgeInsets.all(8.0),
+                                                          EdgeInsets.all(4.0),
                                                       child: Icon(
                                                           Icons
                                                               .cancel_presentation,
@@ -3735,7 +6461,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     ),
                                                     Padding(
                                                       padding:
-                                                          EdgeInsets.all(8.0),
+                                                          EdgeInsets.all(4.0),
                                                       child: Text(
                                                         'ยกเลิกการรับชำระ',
                                                         style: TextStyle(
@@ -3753,63 +6479,91 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                 )),
                                           ),
                                         ),
-                                        Container(
-                                          padding: const EdgeInsets.all(8.0),
-                                          width: 180,
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.black,
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  6),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  6),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  6),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  6)),
-                                                  border: Border.all(
-                                                      color: Colors.grey,
-                                                      width: 1),
-                                                ),
-                                                child: const Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
-                                                      child: Icon(
-                                                          Icons.highlight_off,
-                                                          color: Colors.white),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
-                                                      child: Text(
-                                                        'ปิด',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          // fontWeight:
-                                                          //     FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                        if (_TransReBillModels[index]
+                                                .pay_by
+                                                .toString() ==
+                                            'LP')
+                                          Container(
+                                            padding: const EdgeInsets.all(4.0),
+                                            width: 180,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                SharedPreferences preferences =
+                                                    await SharedPreferences
+                                                        .getInstance();
+                                                var ren = preferences
+                                                    .getString('renTalSer');
+                                                var cFinn_now = _TransReBillModels[
+                                                                index]
+                                                            .doctax ==
+                                                        ''
+                                                    ? '${_TransReBillModels[index].docno}'
+                                                    : '${_TransReBillModels[index].doctax}';
+                                                print(cFinn_now);
+                                                ManPay_ReceiptMarket_PDF
+                                                    .ManPayReceiptMarket_PDF(
+                                                  context,
+                                                  ren,
+                                                  cFinn_now,
+                                                  bill_addr,
+                                                  bill_email,
+                                                  bill_tel,
+                                                  bill_tax,
+                                                  bill_name,
+                                                );
+                                              },
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.green[200],
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    6),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    6),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    6),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    6)),
+                                                    border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 1),
+                                                  ),
+                                                  child: const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(4.0),
+                                                        child: Icon(Icons.print,
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(4.0),
+                                                        child: Text(
+                                                          'พิมพ์',
+                                                          style: TextStyle(
+                                                            color: AccountScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight:
+                                                            //     FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )),
+                                                    ],
+                                                  )),
+                                            ),
                                           ),
-                                        ),
                                       ],
                                     ),
                                   ),
@@ -3822,5 +6576,390 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                 ],
               ),
             ));
+  }
+
+///////////////////--------------------------------------------------->
+  // var daterec;
+  // var date;
+  // var dateacc;
+  // var dtype;
+  // var shopno;
+  // var pos;
+  // var docno;
+  // var custno;
+  // var supno;
+  // var refno;
+  // var status;
+  // var payload;
+  // var trans_ref;
+  // var slip_date;
+  // var country_code;
+  // var amount;
+  // var currency;
+  // var fee;
+  // var ref1;
+  // var ref2;
+  // var ref3;
+  // var sen_bankid;
+  // var sen_bankname;
+  // var sen_bankshort;
+  // var sen_accnameTh;
+  // var sen_accnameEn;
+  // var sen_banktype;
+  // var sen_accnumber;
+  // var sen_proxy_type;
+  // var sen_proxy_accnumber;
+  // var recei_bankid;
+  // var recei_bankname;
+  // var recei_bankshort;
+  // var recei_accnameTh;
+  // var recei_accnameEn;
+  // var recei_banktype;
+  // var recei_accnumber;
+  // var recei_proxy_type;
+  // var recei_proxy_accnumber;
+  // var merchant_Id;
+  // var slip_img;
+  var datadata = '''
+{
+  "status": 200,
+  "data": {
+    "payload": "004600060000010103002022520240116080807230055057085102TH91044463",
+    "transRef": "2024011608080723005505708",
+    "date": "2024-01-16T08:08:06+07:00",
+    "countryCode": "",
+    "amount": {
+      "amount": 50,
+      "local": {
+        "amount": 0,
+        "currency": ""
+      }
+    },
+    "fee": 0,
+    "ref1": "",
+    "ref2": "",
+    "ref3": "",
+    "sender": {
+      "bank": {
+        "id": "2",
+        "name": "ธนาคารกรุงเทพ",
+        "short": "BBL"
+      },
+      "account": {
+        "name": [],
+        "bank": {
+          "type": "BANKAC",
+          "account": "399-0-xxx171"
+        }
+      }
+    },
+    "receiver": {
+      "bank": {
+        "id": ""
+      },
+      "account": {
+        "name": {
+          "th": "นาง ธนษา ป",
+          "en": "THANASA P"
+        },
+        "proxy": {
+          "type": "MSISDN",
+          "account": "093-xxx-2295"
+        }
+      }
+    }
+  }
+}
+  ''';
+
+  red_easyslip_data() async {
+    //var result = json.decode(datadata);
+    var fileName = 'Awaitdownload/payment/$fileName_Slip';
+    String url = '${MyConstant().domain}/easyslip.php?file=$fileName';
+    var response = await http.get(Uri.parse(url));
+    var result = json.decode(response.body);
+    print(result);
+    print('fileName_Slip');
+    print(fileName_Slip);
+    var daterec = '';
+    var date = '';
+    var dateacc = '';
+    var dtype = '';
+    var shopno = '';
+    var pos = '';
+    var docno = '';
+    var custno = '';
+    var supno = '';
+    var refno = '';
+    ///////------------------------------------------->
+    var status = result?['status'];
+    var payload = result?['data']?['payload'];
+    var trans_ref = result?['data']?['transRef'];
+    var slip_date = result?['data']?['date'];
+    var country_code = result?['data']?['countryCode'];
+    var amount = result?['data']?['amount']?['amount'];
+    var currency = result?['data']?['amount']?['local']?['currency'];
+    var fee = result?['data']?['fee'];
+    var ref1 = result?['data']?['ref1'];
+    var ref2 = result?['data']?['ref2'];
+    var ref3 = result?['data']?['ref3'];
+    print('**** 1');
+    ///////------------------------------------------->
+    var sender = result['data']['sender'];
+    var sendername = result['data']['sender']['account']['name'];
+    ///////-----------**************----------->
+    var sen_bankid = sender?['bank']?['id'];
+
+    var sen_bankname = sender?['bank']?['name'];
+    var sen_bankshort = sender?['bank']?['short'];
+
+    var sen_accnameTh = (sendername is List) ? '' : sendername?['th'] ?? '';
+    var sen_accnameEn = (sendername is List) ? '' : sendername?['en'] ?? '';
+
+    var sen_banktype = sender?['account']?['bank']?['type'];
+    var sen_accnumber = sender?['account']?['bank']?['account'];
+    var sen_proxy_type = sender?['account']?['proxy']?['type'];
+    var sen_proxy_accnumber = sender?['account']?['proxy']?['account'];
+
+    print('**** 2');
+    ///////------------------------------------------->
+    var recei_bankid = result?['data']?['receiver']?['bank']?['id'];
+    var recei_bankname = result?['data']?['receiver']?['bank']?['name'];
+    var recei_bankshort = result?['data']?['receiver']?['bank']?['short'];
+    var recei_accnameTh =
+        result?['data']?['receiver']?['account']?['name']?['th'];
+    var recei_accnameEn =
+        result?['data']?['receiver']?['account']?['name']?['en'];
+    var recei_banktype =
+        result?['data']?['receiver']?['account']?['bank']?['type'];
+    var recei_accnumber =
+        result?['data']?['receiver']?['account']?['bank']?['account'];
+    var recei_proxy_type =
+        result?['data']?['receiver']?['account']?['proxy']?['type'];
+    var recei_proxy_accnumber =
+        result?['data']?['receiver']?['account']?['proxy']?['account'];
+    print('**** 3');
+    ///////------------------------------------------->
+    var merchant_Id = result?['data']?['receiver']?['merchantId'];
+    var slip_img = '';
+    print('**** ');
+    print('**** $recei_accnameTh');
+    await InC_easyslip(
+        daterec,
+        date,
+        dateacc,
+        dtype,
+        shopno,
+        pos,
+        docno,
+        custno,
+        supno,
+        refno,
+        status,
+        payload,
+        trans_ref,
+        slip_date,
+        country_code,
+        amount,
+        currency,
+        fee,
+        ref1,
+        ref2,
+        ref3,
+        sen_bankid,
+        sen_bankname,
+        sen_bankshort,
+        sen_accnameTh,
+        sen_accnameEn,
+        sen_banktype,
+        sen_accnumber,
+        sen_proxy_type,
+        sen_proxy_accnumber,
+        recei_bankid,
+        recei_bankname,
+        recei_bankshort,
+        recei_accnameTh,
+        recei_accnameEn,
+        recei_banktype,
+        recei_accnumber,
+        recei_proxy_type,
+        recei_proxy_accnumber,
+        merchant_Id,
+        slip_img);
+  }
+
+///////////////////--------------------------------------------------->
+
+  Future<void> InC_easyslip(
+      daterec,
+      date,
+      dateacc,
+      dtype,
+      shopno,
+      pos,
+      docno,
+      custno,
+      supno,
+      refno,
+      status,
+      payload,
+      trans_ref,
+      slip_date,
+      country_code,
+      amount,
+      currency,
+      fee,
+      ref1,
+      ref2,
+      ref3,
+      sen_bankid,
+      sen_bankname,
+      sen_bankshort,
+      sen_accnameTh,
+      sen_accnameEn,
+      sen_banktype,
+      sen_accnumber,
+      sen_proxy_type,
+      sen_proxy_accnumber,
+      recei_bankid,
+      recei_bankname,
+      recei_bankshort,
+      recei_accnameTh,
+      recei_accnameEn,
+      recei_banktype,
+      recei_accnumber,
+      recei_proxy_type,
+      recei_proxy_accnumber,
+      merchant_Id,
+      slip_img) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    String url = '${MyConstant().domain}/In_c_easyslip.php?isAdd=true&ren=$ren';
+    String Date_now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    String Time_now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    var response = await http.post(Uri.parse(url), body: {
+      'isAdd': 'true',
+      'ren': '$ren',
+      'user': '$user',
+      'daterec': Date_now,
+      'date': Date_now,
+      'dateacc': Date_now,
+      'dtype': 'KP',
+      'shopno': '1',
+      'pos': '1',
+      'docno': '',
+      'custno': '',
+      'supno': '',
+      'refno': '',
+      'status': (status == null) ? '' : status.toString(),
+      'payload': (payload == null) ? '' : payload.toString(),
+      'trans_ref': (trans_ref == null) ? '' : trans_ref.toString(),
+      'slip_date': (slip_date == null) ? '' : slip_date.toString(),
+      'country_code': (country_code == null) ? '' : country_code.toString(),
+      'amount': (amount == null) ? '' : amount.toString(),
+      'currency': (currency == null) ? '' : currency.toString(),
+      'fee': (fee == null) ? '' : fee.toString(),
+      'ref1': (ref1 == null) ? '' : ref1.toString(),
+      'ref2': (ref2 == null) ? '' : ref2.toString(),
+      'ref3': (ref3 == null) ? '' : ref3.toString(),
+      'sen_bankname': (sen_bankname == null) ? '' : sen_bankname.toString(),
+      'sen_bankshort': (sen_bankshort == null) ? '' : sen_bankshort.toString(),
+      'sen_accnameTh': (sen_accnameTh == null) ? '' : sen_accnameTh.toString(),
+      'sen_accnameEn': (sen_accnameEn == null) ? '' : sen_accnameEn.toString(),
+      'sen_banktype': (sen_banktype == null) ? '' : sen_banktype.toString(),
+      'sen_accnumber': (sen_accnumber == null) ? '' : sen_accnumber.toString(),
+      'sen_proxy_type':
+          (sen_proxy_type == null) ? '' : sen_proxy_type.toString(),
+      'sen_proxy_accnumber':
+          (sen_proxy_accnumber == null) ? '' : sen_proxy_accnumber.toString(),
+      'recei_bankid': (recei_bankid == null) ? '' : recei_bankid.toString(),
+      'recei_bankname':
+          (recei_bankname == null) ? '' : recei_bankname.toString(),
+      'recei_bankshort':
+          (recei_bankshort == null) ? '' : recei_bankshort.toString(),
+      'recei_accnameTh':
+          (recei_accnameTh == null) ? '' : recei_accnameTh.toString(),
+      'recei_accnameEn':
+          (recei_accnameEn == null) ? '' : recei_accnameEn.toString(),
+      'recei_banktype':
+          (recei_banktype == null) ? '' : recei_banktype.toString(),
+      'recei_accnumber':
+          (recei_accnumber == null) ? '' : recei_accnumber.toString(),
+      'recei_proxy_type':
+          (recei_proxy_type == null) ? '' : recei_proxy_type.toString(),
+      'recei_proxy_accnumber': (recei_proxy_accnumber == null)
+          ? ''
+          : recei_proxy_accnumber.toString(),
+      'merchant_Id': (merchant_Id == null) ? '' : merchant_Id.toString(),
+      'slip_img': '$fileName_Slip',
+      'directions': '1',
+    }).then((value) async {
+      if (value.toString() != 'No') {
+        var result = json.decode(value.body);
+        var payload, Sernow;
+        for (var map in result) {
+          easyslipModel easyslipModelss = easyslipModel.fromJson(map);
+          print(easyslipModelss.payload);
+          setState(() {
+            payload = easyslipModelss.payload!;
+            Sernow = easyslipModelss.ser!;
+          });
+        }
+        await InC_financetestSlip(
+          payload,
+          Sernow,
+        );
+      }
+    });
+  }
+
+  Future<void> InC_financetestSlip(
+    payload,
+    Sernow,
+  ) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+
+    String url =
+        '${MyConstant().domain}/In_finance_testSlip.php?isAdd=true&ren=$ren';
+    String Date_now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    String Time_now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    // daterec,pdate
+    var response = await http.post(Uri.parse(url), body: {
+      'isAdd': 'true',
+      'ren': '$ren',
+      'user': '$user',
+      'daterec': '${myController2.text}',
+      'pdate': '${myController3.text}',
+      'docno': '${myController4.text}',
+      'remark': '${myController5.text}',
+      'refno': '${myController1.text}',
+      'payload': payload.toString(),
+      'slip_img': '$fileName_Slip',
+      'amount': '${myController6.text}',
+      'sernow': '$Sernow',
+    }).then((value) async {
+      var result = json.decode(value.body);
+      print(result);
+      setState(() {
+        ser_adddata = 0;
+        index_Test = null;
+        myController1.clear();
+        myController2.clear();
+        myController3.clear();
+        myController4.clear();
+        myController5.clear();
+        myController6.clear();
+        fileName_Slip = null;
+      });
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.green[50],
+            content: Text('ทำรายการเสร็จสิ้น !!!!')),
+      );
+    });
   }
 }

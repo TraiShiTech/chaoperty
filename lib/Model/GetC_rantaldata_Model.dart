@@ -36,46 +36,70 @@ class RenTaldataModel {
   String? r_tel;
   String? par_king;
   String? a_aboutAll;
-
-  RenTaldataModel({
-    this.ser,
-    this.datex,
-    this.timex,
-    this.user,
-    this.rser,
-    this.tser,
-    this.rtser,
-    this.pn,
-    this.dbn,
-    this.dataUpdate,
-    this.province,
-    this.lat,
-    this.longi,
-    this.customerID,
-    this.purchaseDate,
-    this.url_You,
-    this.url_Map,
-    this.r_Line,
-    this.r_Facebook,
-    this.stime,
-    this.ltime,
-    this.n_Places,
-    this.f_Lities,
-    this.a_About,
-    this.man_Image,
-    this.qr_Image,
-    this.status_Web,
-    this.title_web,
-    this.pn_TH,
-    this.range_lowpri,
-    this.range_heipri,
-    this.dialog,
-    this.dialog_tex,
-    this.rt_view,
-    this.r_tel,
-    this.par_king,
-    this.a_aboutAll,
-  });
+  String? d1;
+  String? d2;
+  String? d3;
+  String? d4;
+  String? d5;
+  String? d6;
+  String? d7;
+  String? ds1;
+  String? ds2;
+  String? ds3;
+  String? ds4;
+  String? ds5;
+  String? open_book;
+  RenTaldataModel(
+      {this.ser,
+      this.datex,
+      this.timex,
+      this.user,
+      this.rser,
+      this.tser,
+      this.rtser,
+      this.pn,
+      this.dbn,
+      this.dataUpdate,
+      this.province,
+      this.lat,
+      this.longi,
+      this.customerID,
+      this.purchaseDate,
+      this.url_You,
+      this.url_Map,
+      this.r_Line,
+      this.r_Facebook,
+      this.stime,
+      this.ltime,
+      this.n_Places,
+      this.f_Lities,
+      this.a_About,
+      this.man_Image,
+      this.qr_Image,
+      this.status_Web,
+      this.title_web,
+      this.pn_TH,
+      this.range_lowpri,
+      this.range_heipri,
+      this.dialog,
+      this.dialog_tex,
+      this.rt_view,
+      this.r_tel,
+      this.par_king,
+      this.a_aboutAll,
+      this.d1,
+      this.d2,
+      this.d3,
+      this.d4,
+      this.d5,
+      this.d6,
+      this.d7,
+      this.ds1,
+      this.ds2,
+      this.ds3,
+      this.ds4,
+      this.ds5,
+      this.open_book});
 
   RenTaldataModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -115,6 +139,19 @@ class RenTaldataModel {
     r_tel = json['r_tel'];
     par_king = json['par_king'];
     a_aboutAll = json['a_aboutAll'];
+    d1 = json['d1'];
+    d2 = json['d2'];
+    d3 = json['d3'];
+    d4 = json['d4'];
+    d5 = json['d5'];
+    d6 = json['d6'];
+    d7 = json['d7'];
+    ds1 = json['ds1'];
+    ds2 = json['ds2'];
+    ds3 = json['ds3'];
+    ds4 = json['ds4'];
+    ds5 = json['ds5'];
+    open_book = json['open_book'];
   }
 
   Map<String, dynamic> toJson() {
@@ -156,6 +193,20 @@ class RenTaldataModel {
     data['r_tel'] = this.r_tel;
     data['par_king'] = this.par_king;
     data['a_aboutAll'] = this.a_aboutAll;
+    data['d1'] = this.d1;
+    data['d2'] = this.d2;
+    data['d3'] = this.d3;
+    data['d4'] = this.d4;
+    data['d5'] = this.d5;
+    data['d6'] = this.d6;
+    data['d7'] = this.d7;
+
+    data['ds1'] = this.ds1;
+    data['ds2'] = this.ds2;
+    data['ds3'] = this.ds3;
+    data['ds4'] = this.ds4;
+    data['ds5'] = this.ds5;
+    data['open_book'] = this.open_book;
     return data;
   }
 }

@@ -646,7 +646,8 @@ class _Rental_customersState extends State<Rental_customers> {
                                                                       )),
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.fromLTRB(
+                                                                        const EdgeInsets
+                                                                            .fromLTRB(
                                                                             4,
                                                                             0,
                                                                             4,
@@ -717,7 +718,7 @@ class _Rental_customersState extends State<Rental_customers> {
                                                               EdgeInsets.all(
                                                                   8.0),
                                                           child: Text(
-                                                            'รหัสลูกค้า ${widget.updatesearch.toString()}',
+                                                            'รหัสลูกค้า',
                                                             textAlign:
                                                                 TextAlign.start,
                                                             style: TextStyle(
@@ -781,52 +782,52 @@ class _Rental_customersState extends State<Rental_customers> {
                                                           ),
                                                         ),
                                                       ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(
-                                                            'User name',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style: TextStyle(
-                                                              color: AccountScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(
-                                                            'passw',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style: TextStyle(
-                                                              color: AccountScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
+                                                      // Expanded(
+                                                      //   flex: 1,
+                                                      //   child: Padding(
+                                                      //     padding:
+                                                      //         EdgeInsets.all(
+                                                      //             8.0),
+                                                      //     child: Text(
+                                                      //       'User name',
+                                                      //       textAlign:
+                                                      //           TextAlign.start,
+                                                      //       style: TextStyle(
+                                                      //         color: AccountScreen_Color
+                                                      //             .Colors_Text1_,
+                                                      //         fontWeight:
+                                                      //             FontWeight
+                                                      //                 .bold,
+                                                      //         fontFamily:
+                                                      //             FontWeight_
+                                                      //                 .Fonts_T,
+                                                      //       ),
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      // Expanded(
+                                                      //   flex: 1,
+                                                      //   child: Padding(
+                                                      //     padding:
+                                                      //         EdgeInsets.all(
+                                                      //             8.0),
+                                                      //     child: Text(
+                                                      //       'passw',
+                                                      //       textAlign:
+                                                      //           TextAlign.start,
+                                                      //       style: TextStyle(
+                                                      //         color: AccountScreen_Color
+                                                      //             .Colors_Text1_,
+                                                      //         fontWeight:
+                                                      //             FontWeight
+                                                      //                 .bold,
+                                                      //         fontFamily:
+                                                      //             FontWeight_
+                                                      //                 .Fonts_T,
+                                                      //       ),
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
                                                       Expanded(
                                                         flex: 1,
                                                         child: Padding(
@@ -959,7 +960,7 @@ class _Rental_customersState extends State<Rental_customers> {
                                                                 return Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: (elapsed >
                                                                           8.00)
@@ -1037,27 +1038,16 @@ class _Rental_customersState extends State<Rental_customers> {
                                                                         // });
                                                                       },
                                                                       title:
-                                                                          Container(
-                                                                        decoration:
-                                                                            const BoxDecoration(
-                                                                          // color: Colors.green[100]!
-                                                                          //     .withOpacity(0.5),
-                                                                          border:
-                                                                              Border(
-                                                                            bottom:
-                                                                                BorderSide(
-                                                                              color: Colors.black12,
-                                                                              width: 1,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        child:
-                                                                            Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.center,
-                                                                          children: [
-                                                                            Expanded(
-                                                                              flex: 1,
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
                                                                               child: AutoSizeText(
                                                                                 minFontSize: 10,
                                                                                 maxFontSize: 25,
@@ -1068,8 +1058,13 @@ class _Rental_customersState extends State<Rental_customers> {
                                                                                 style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
                                                                               ),
                                                                             ),
-                                                                            Expanded(
-                                                                              flex: 1,
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
                                                                               child: Tooltip(
                                                                                 richMessage: TextSpan(
                                                                                   text: '${teNantModels[index].cname}',
@@ -1095,465 +1090,464 @@ class _Rental_customersState extends State<Rental_customers> {
                                                                                 ),
                                                                               ),
                                                                             ),
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Tooltip(
-                                                                                richMessage: TextSpan(
-                                                                                  text: '${teNantModels[index].sname}',
-                                                                                  style: const TextStyle(
-                                                                                    color: HomeScreen_Color.Colors_Text1_,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                    fontFamily: FontWeight_.Fonts_T,
-                                                                                    //fontSize: 10.0
-                                                                                  ),
-                                                                                ),
-                                                                                decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.circular(5),
-                                                                                  color: Colors.grey[200],
-                                                                                ),
-                                                                                child: AutoSizeText(
-                                                                                  minFontSize: 10,
-                                                                                  maxFontSize: 25,
-                                                                                  maxLines: 1,
-                                                                                  '${teNantModels[index].sname}',
-                                                                                  textAlign: TextAlign.start,
-                                                                                  overflow: TextOverflow.ellipsis,
-                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Tooltip(
+                                                                              richMessage: TextSpan(
+                                                                                text: '${teNantModels[index].sname}',
+                                                                                style: const TextStyle(
+                                                                                  color: HomeScreen_Color.Colors_Text1_,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                  //fontSize: 10.0
                                                                                 ),
                                                                               ),
+                                                                              decoration: BoxDecoration(
+                                                                                borderRadius: BorderRadius.circular(5),
+                                                                                color: Colors.grey[200],
+                                                                              ),
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                '${teNantModels[index].sname}',
+                                                                                textAlign: TextAlign.start,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                              ),
                                                                             ),
-                                                                            Expanded(
+                                                                          ),
+                                                                          // Expanded(
+                                                                          //   flex:
+                                                                          //       1,
+                                                                          //   child:
+                                                                          //       Align(
+                                                                          //     alignment: Alignment.centerLeft,
+                                                                          //     child: Padding(
+                                                                          //       padding: const EdgeInsets.all(4.0),
+                                                                          //       child: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString() != '')
+                                                                          //           ? TextFormField(
+                                                                          //               readOnly: true,
+                                                                          //               style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
+                                                                          //               textAlign: TextAlign.start,
+                                                                          //               // controller:
+                                                                          //               //     Add_Number_area_,
+                                                                          //               validator: (value) {
+                                                                          //                 if (value == null || value.isEmpty) {
+                                                                          //                   return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                          //                 }
+                                                                          //                 // if (int.parse(value.toString()) < 13) {
+                                                                          //                 //   return '< 13';
+                                                                          //                 // }
+                                                                          //                 return null;
+                                                                          //               },
+                                                                          //               initialValue: regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString(),
+                                                                          //               cursorColor: Colors.green,
+                                                                          //               decoration: InputDecoration(
+                                                                          //                   fillColor: Colors.grey[300]!.withOpacity(0.4),
+                                                                          //                   filled: true,
+                                                                          //                   // prefixIcon:
+                                                                          //                   //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                          //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                          //                   focusedBorder: const OutlineInputBorder(
+                                                                          //                     borderRadius: BorderRadius.only(
+                                                                          //                       topRight: Radius.circular(15),
+                                                                          //                       topLeft: Radius.circular(15),
+                                                                          //                       bottomRight: Radius.circular(15),
+                                                                          //                       bottomLeft: Radius.circular(15),
+                                                                          //                     ),
+                                                                          //                     borderSide: BorderSide(
+                                                                          //                       width: 1,
+                                                                          //                       color: Colors.black,
+                                                                          //                     ),
+                                                                          //                   ),
+                                                                          //                   enabledBorder: const OutlineInputBorder(
+                                                                          //                     borderRadius: BorderRadius.only(
+                                                                          //                       topRight: Radius.circular(15),
+                                                                          //                       topLeft: Radius.circular(15),
+                                                                          //                       bottomRight: Radius.circular(15),
+                                                                          //                       bottomLeft: Radius.circular(15),
+                                                                          //                     ),
+                                                                          //                     borderSide: BorderSide(
+                                                                          //                       width: 1,
+                                                                          //                       color: Colors.grey,
+                                                                          //                     ),
+                                                                          //                   ),
+                                                                          //                   // labelText:
+                                                                          //                   //     'เลขเรื่มต้น 1-xxx',
+                                                                          //                   labelStyle: const TextStyle(
+                                                                          //                     fontSize: 12,
+                                                                          //                     color: Colors.black54,
+                                                                          //                     fontFamily: FontWeight_.Fonts_T,
+                                                                          //                   )),
+                                                                          //             )
+                                                                          //           : TextFormField(
+                                                                          //               style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
+                                                                          //               textAlign: TextAlign.start,
+                                                                          //               // controller:
+                                                                          //               //     Add_Number_area_,
+                                                                          //               validator: (value) {
+                                                                          //                 if (value == null || value.isEmpty) {
+                                                                          //                   return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                          //                 }
+                                                                          //                 // if (int.parse(value.toString()) < 13) {
+                                                                          //                 //   return '< 13';
+                                                                          //                 // }
+                                                                          //                 return null;
+                                                                          //               },
+                                                                          //               // initialValue: teNantModels[index].user_name,
+                                                                          //               onFieldSubmitted: (value) async {
+                                                                          //                 SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                          //                 String? ren = preferences.getString('renTalSer');
+                                                                          //                 String? renTalname_s = preferences.getString('renTalName');
+
+                                                                          //                 var Cust_n = '${teNantModels[index].custno}';
+                                                                          //                 var Cid = '';
+                                                                          //                 var User_U = '$value';
+                                                                          //                 var Pass_U = '';
+                                                                          //                 var Accesstoken = '';
+                                                                          //                 var Idtoken = '';
+                                                                          //                 var Userid = '';
+                                                                          //                 var Displayname = '';
+                                                                          //                 var C_name = '${teNantModels[index].cname}';
+                                                                          //                 var Type = '${teNantModels[index].stype}';
+
+                                                                          //                 String url = '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&ren=$ren&Pn=$renTalname_s&cust_no=$Cust_n&Cid=$Cid&user_U=$User_U&pass_U=$Pass_U&Accesstoken=$Accesstoken&Idtoken=$Idtoken&Userid=$Userid&Displayname=$Displayname&c_name=$C_name';
+
+                                                                          //                 try {
+                                                                          //                   var response = await http.get(Uri.parse(url));
+
+                                                                          //                   var result = json.decode(response.body);
+                                                                          //                   print('result');
+                                                                          //                   print(result);
+                                                                          //                   print(result);
+                                                                          //                   if (result.toString() == 'true' && regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username.toString()).first.toString() != '$value') {
+                                                                          //                     Insert_log.Insert_logs('บัญชี', 'บัญชี>>บัญชีผู้เช่า>>User>>$value(${teNantModels[index].custno})');
+
+                                                                          //                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('แก้ไขข้อมูลเสร็จสิ้น !!', style: TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))));
+                                                                          //                   } else {
+                                                                          //                     ScaffoldMessenger.of(context).showSnackBar(
+                                                                          //                       const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
+                                                                          //                     );
+                                                                          //                   }
+                                                                          //                 } catch (e) {
+                                                                          //                   ScaffoldMessenger.of(context).showSnackBar(
+                                                                          //                     const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
+                                                                          //                   );
+                                                                          //                 }
+                                                                          //                 setState(() {
+                                                                          //                   checkPreferance();
+                                                                          //                   read_GC_rental();
+
+                                                                          //                   read_GC_tenant();
+                                                                          //                   read_GC_Regis();
+                                                                          //                 });
+                                                                          //               },
+
+                                                                          //               // maxLength: 4,
+                                                                          //               cursorColor: Colors.green,
+                                                                          //               decoration: InputDecoration(
+                                                                          //                   hintStyle: TextStyle(
+                                                                          //                     fontSize: 10.5,
+                                                                          //                     fontFamily: Font_.Fonts_T,
+                                                                          //                   ),
+                                                                          //                   labelText: 'กำหนด Username',
+                                                                          //                   hintText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
+                                                                          //                   fillColor: Colors.white.withOpacity(0.3),
+                                                                          //                   filled: true,
+                                                                          //                   // prefixIcon:
+                                                                          //                   //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                          //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                          //                   focusedBorder: const OutlineInputBorder(
+                                                                          //                     borderRadius: BorderRadius.only(
+                                                                          //                       topRight: Radius.circular(15),
+                                                                          //                       topLeft: Radius.circular(15),
+                                                                          //                       bottomRight: Radius.circular(15),
+                                                                          //                       bottomLeft: Radius.circular(15),
+                                                                          //                     ),
+                                                                          //                     borderSide: BorderSide(
+                                                                          //                       width: 1,
+                                                                          //                       color: Colors.black,
+                                                                          //                     ),
+                                                                          //                   ),
+                                                                          //                   enabledBorder: const OutlineInputBorder(
+                                                                          //                     borderRadius: BorderRadius.only(
+                                                                          //                       topRight: Radius.circular(15),
+                                                                          //                       topLeft: Radius.circular(15),
+                                                                          //                       bottomRight: Radius.circular(15),
+                                                                          //                       bottomLeft: Radius.circular(15),
+                                                                          //                     ),
+                                                                          //                     borderSide: BorderSide(
+                                                                          //                       width: 1,
+                                                                          //                       color: Colors.grey,
+                                                                          //                     ),
+                                                                          //                   ),
+                                                                          //                   // labelText:
+                                                                          //                   //     'เลขเรื่มต้น 1-xxx',
+                                                                          //                   labelStyle: TextStyle(
+                                                                          //                     fontSize: 11,
+                                                                          //                     color: Colors.red[700],
+                                                                          //                     fontFamily: Font_.Fonts_T,
+                                                                          //                   )),
+                                                                          //               inputFormatters: <TextInputFormatter>[
+                                                                          //                 FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9_.@]')),
+                                                                          //               ],
+                                                                          //             ),
+                                                                          //     ),
+                                                                          //   ),
+                                                                          // ),
+                                                                          // Expanded(
+                                                                          //   flex:
+                                                                          //       1,
+                                                                          //   child:
+                                                                          //       Align(
+                                                                          //     alignment: Alignment.centerLeft,
+                                                                          //     child: Padding(
+                                                                          //       padding: const EdgeInsets.all(4.0),
+                                                                          //       child: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString() == '')
+                                                                          //           ? Text('')
+                                                                          //           : TextFormField(  readOnly: true,
+                                                                          //               style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
+                                                                          //               textAlign: TextAlign.start,
+                                                                          //               // controller:
+                                                                          //               //     Add_Number_area_,
+                                                                          //               validator: (value) {
+                                                                          //                 if (value == null || value.isEmpty) {
+                                                                          //                   return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                          //                 }
+                                                                          //                 // if (int.parse(value.toString()) < 13) {
+                                                                          //                 //   return '< 13';
+                                                                          //                 // }
+                                                                          //                 return null;
+                                                                          //               },
+
+                                                                          //               initialValue: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.passwd).join(', ').toString() != '') ? 'XXXXXX' : '',
+                                                                          //               onFieldSubmitted: (value) async {
+                                                                          //                 String password = md5.convert(utf8.encode(value)).toString();
+
+                                                                          //                 SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                          //                 String? ren = preferences.getString('renTalSer');
+                                                                          //                 String? renTalname_s = preferences.getString('renTalName');
+
+                                                                          //                 var Cust_n = '${teNantModels[index].custno}';
+                                                                          //                 var Cid = '';
+                                                                          //                 var User_U = '${regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username.toString()).first}';
+
+                                                                          //                 var Pass_U = '$password';
+                                                                          //                 var Accesstoken = '';
+                                                                          //                 var Idtoken = '';
+                                                                          //                 var Userid = '';
+                                                                          //                 var Displayname = '';
+                                                                          //                 var C_name = '${teNantModels[index].cname}';
+
+                                                                          //                 String url = '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&ren=$ren&Pn=$renTalname_s&cust_no=$Cust_n&Cid=$Cid&user_U=$User_U&pass_U=$Pass_U&Accesstoken=$Accesstoken&Idtoken=$Idtoken&Userid=$Userid&Displayname=$Displayname&c_name=$C_name';
+
+                                                                          //                 try {
+                                                                          //                   var response = await http.get(Uri.parse(url));
+
+                                                                          //                   var result = json.decode(response.body);
+                                                                          //                   print(result);
+                                                                          //                   print(result);
+                                                                          //                   if (result.toString() == 'true') {
+                                                                          //                     Insert_log.Insert_logs('บัญชี', 'บัญชี>>บัญชีผู้เช่า>>Passwd>>$value(${teNantModels[index].custno})');
+
+                                                                          //                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('แก้ไขข้อมูลเสร็จสิ้น !!', style: TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))));
+                                                                          //                   } else {
+                                                                          //                     ScaffoldMessenger.of(context).showSnackBar(
+                                                                          //                       const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
+                                                                          //                     );
+                                                                          //                   }
+                                                                          //                 } catch (e) {
+                                                                          //                   ScaffoldMessenger.of(context).showSnackBar(
+                                                                          //                     const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
+                                                                          //                   );
+                                                                          //                 }
+                                                                          //                 setState(() {
+                                                                          //                   checkPreferance();
+                                                                          //                   read_GC_rental();
+
+                                                                          //                   read_GC_tenant();
+                                                                          //                   read_GC_Regis();
+                                                                          //                 });
+                                                                          //               },
+                                                                          //               // maxLength: 4,
+                                                                          //               cursorColor: Colors.green,
+                                                                          //               decoration: InputDecoration(
+                                                                          //                   labelText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
+                                                                          //                   // hintText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
+                                                                          //                   fillColor: Colors.white.withOpacity(0.3),
+                                                                          //                   filled: true,
+                                                                          //                   // prefixIcon:
+                                                                          //                   //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                          //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                          //                   focusedBorder: const OutlineInputBorder(
+                                                                          //                     borderRadius: BorderRadius.only(
+                                                                          //                       topRight: Radius.circular(15),
+                                                                          //                       topLeft: Radius.circular(15),
+                                                                          //                       bottomRight: Radius.circular(15),
+                                                                          //                       bottomLeft: Radius.circular(15),
+                                                                          //                     ),
+                                                                          //                     borderSide: BorderSide(
+                                                                          //                       width: 1,
+                                                                          //                       color: Colors.black,
+                                                                          //                     ),
+                                                                          //                   ),
+                                                                          //                   enabledBorder: const OutlineInputBorder(
+                                                                          //                     borderRadius: BorderRadius.only(
+                                                                          //                       topRight: Radius.circular(15),
+                                                                          //                       topLeft: Radius.circular(15),
+                                                                          //                       bottomRight: Radius.circular(15),
+                                                                          //                       bottomLeft: Radius.circular(15),
+                                                                          //                     ),
+                                                                          //                     borderSide: BorderSide(
+                                                                          //                       width: 1,
+                                                                          //                       color: Colors.grey,
+                                                                          //                     ),
+                                                                          //                   ),
+                                                                          //                   // labelText:
+                                                                          //                   //     'เลขเรื่มต้น 1-xxx',
+                                                                          //                   labelStyle: TextStyle(
+                                                                          //                     fontSize: 11,
+                                                                          //                     color: Colors.red[700],
+                                                                          //                     fontFamily: Font_.Fonts_T,
+                                                                          //                   )),
+                                                                          //               inputFormatters: <TextInputFormatter>[
+                                                                          //                 FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9_.@]')),
+                                                                          //               ],
+                                                                          //             ),
+                                                                          //     ),
+                                                                          //   ),
+                                                                          //   //     AutoSizeText(
+                                                                          //   //   minFontSize:
+                                                                          //   //       10,
+                                                                          //   //   maxFontSize:
+                                                                          //   //       25,
+                                                                          //   //   maxLines:
+                                                                          //   //       1,
+                                                                          //   //   (teNantModels[index].passw == null)
+                                                                          //   //       ? ''
+                                                                          //   //       : '******',
+                                                                          //   //   textAlign:
+                                                                          //   //       TextAlign.start,
+                                                                          //   //   style: const TextStyle(
+                                                                          //   //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          //   //       fontFamily: Font_.Fonts_T),
+                                                                          //   // ),
+                                                                          // ),
+                                                                          Expanded(
                                                                               flex: 1,
-                                                                              child: Align(
-                                                                                alignment: Alignment.centerLeft,
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.all(2.0),
-                                                                                  child: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString() != '')
-                                                                                      ? Container(
-                                                                                          height: 40,
-                                                                                          child: TextFormField(
-                                                                                            readOnly: true,
-                                                                                            style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
-                                                                                            textAlign: TextAlign.start,
-                                                                                            // controller:
-                                                                                            //     Add_Number_area_,
-                                                                                            validator: (value) {
-                                                                                              if (value == null || value.isEmpty) {
-                                                                                                return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                                              }
-                                                                                              // if (int.parse(value.toString()) < 13) {
-                                                                                              //   return '< 13';
-                                                                                              // }
-                                                                                              return null;
-                                                                                            },
-                                                                                            initialValue: regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString(),
-                                                                                            cursorColor: Colors.green,
-                                                                                            decoration: InputDecoration(
-                                                                                                fillColor: Colors.grey[300]!.withOpacity(0.4),
-                                                                                                filled: true,
-                                                                                                // prefixIcon:
-                                                                                                //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                                focusedBorder: const OutlineInputBorder(
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topRight: Radius.circular(15),
-                                                                                                    topLeft: Radius.circular(15),
-                                                                                                    bottomRight: Radius.circular(15),
-                                                                                                    bottomLeft: Radius.circular(15),
-                                                                                                  ),
-                                                                                                  borderSide: BorderSide(
-                                                                                                    width: 1,
-                                                                                                    color: Colors.black,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                enabledBorder: const OutlineInputBorder(
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topRight: Radius.circular(15),
-                                                                                                    topLeft: Radius.circular(15),
-                                                                                                    bottomRight: Radius.circular(15),
-                                                                                                    bottomLeft: Radius.circular(15),
-                                                                                                  ),
-                                                                                                  borderSide: BorderSide(
-                                                                                                    width: 1,
-                                                                                                    color: Colors.grey,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                // labelText:
-                                                                                                //     'เลขเรื่มต้น 1-xxx',
-                                                                                                labelStyle: const TextStyle(
-                                                                                                  fontSize: 12,
-                                                                                                  color: Colors.black54,
-                                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                                )),
-                                                                                          ),
-                                                                                        )
-                                                                                      : Container(
-                                                                                          height: 40,
-                                                                                          child: TextFormField(
-                                                                                            style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
-                                                                                            textAlign: TextAlign.start,
-                                                                                            // controller:
-                                                                                            //     Add_Number_area_,
-                                                                                            validator: (value) {
-                                                                                              if (value == null || value.isEmpty) {
-                                                                                                return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                                              }
-                                                                                              // if (int.parse(value.toString()) < 13) {
-                                                                                              //   return '< 13';
-                                                                                              // }
-                                                                                              return null;
-                                                                                            },
-                                                                                            // initialValue: teNantModels[index].user_name,
-                                                                                            onFieldSubmitted: (value) async {
-                                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                              String? ren = preferences.getString('renTalSer');
-                                                                                              String? renTalname_s = preferences.getString('renTalName');
-
-                                                                                              var Cust_n = '${teNantModels[index].custno}';
-                                                                                              var Cid = '';
-                                                                                              var User_U = '$value';
-                                                                                              var Pass_U = '';
-                                                                                              var Accesstoken = '';
-                                                                                              var Idtoken = '';
-                                                                                              var Userid = '';
-                                                                                              var Displayname = '';
-                                                                                              var C_name = '${teNantModels[index].cname}';
-                                                                                              var Type = '${teNantModels[index].stype}';
-
-                                                                                              String url = '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&ren=$ren&Pn=$renTalname_s&cust_no=$Cust_n&Cid=$Cid&user_U=$User_U&pass_U=$Pass_U&Accesstoken=$Accesstoken&Idtoken=$Idtoken&Userid=$Userid&Displayname=$Displayname&c_name=$C_name';
-
-                                                                                              try {
-                                                                                                var response = await http.get(Uri.parse(url));
-
-                                                                                                var result = json.decode(response.body);
-                                                                                                print('result');
-                                                                                                print(result);
-                                                                                                print(result);
-                                                                                                if (result.toString() == 'true' && regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username.toString()).first.toString() != '$value') {
-                                                                                                  Insert_log.Insert_logs('บัญชี', 'บัญชี>>บัญชีผู้เช่า>>User>>$value(${teNantModels[index].custno})');
-
-                                                                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('แก้ไขข้อมูลเสร็จสิ้น !!', style: TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))));
-                                                                                                } else {
-                                                                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                                                                    const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
-                                                                                                  );
-                                                                                                }
-                                                                                              } catch (e) {
-                                                                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                                                                  const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
-                                                                                                );
-                                                                                              }
-                                                                                              setState(() {
-                                                                                                checkPreferance();
-                                                                                                read_GC_rental();
-
-                                                                                                read_GC_tenant();
-                                                                                                read_GC_Regis();
-                                                                                              });
-                                                                                            },
-
-                                                                                            // maxLength: 4,
-                                                                                            cursorColor: Colors.green,
-                                                                                            decoration: InputDecoration(
-                                                                                                hintStyle: TextStyle(
-                                                                                                  fontSize: 10.5,
-                                                                                                  fontFamily: Font_.Fonts_T,
-                                                                                                ),
-                                                                                                labelText: 'กำหนด Username',
-                                                                                                hintText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
-                                                                                                fillColor: Colors.white.withOpacity(0.3),
-                                                                                                filled: true,
-                                                                                                // prefixIcon:
-                                                                                                //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                                focusedBorder: const OutlineInputBorder(
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topRight: Radius.circular(15),
-                                                                                                    topLeft: Radius.circular(15),
-                                                                                                    bottomRight: Radius.circular(15),
-                                                                                                    bottomLeft: Radius.circular(15),
-                                                                                                  ),
-                                                                                                  borderSide: BorderSide(
-                                                                                                    width: 1,
-                                                                                                    color: Colors.black,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                enabledBorder: const OutlineInputBorder(
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topRight: Radius.circular(15),
-                                                                                                    topLeft: Radius.circular(15),
-                                                                                                    bottomRight: Radius.circular(15),
-                                                                                                    bottomLeft: Radius.circular(15),
-                                                                                                  ),
-                                                                                                  borderSide: BorderSide(
-                                                                                                    width: 1,
-                                                                                                    color: Colors.grey,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                // labelText:
-                                                                                                //     'เลขเรื่มต้น 1-xxx',
-                                                                                                labelStyle: TextStyle(
-                                                                                                  fontSize: 11,
-                                                                                                  color: Colors.red[700],
-                                                                                                  fontFamily: Font_.Fonts_T,
-                                                                                                )),
-                                                                                            inputFormatters: <TextInputFormatter>[
-                                                                                              FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9_.@]')),
+                                                                              child: StreamBuilder(
+                                                                                  stream: Stream<void>.periodic(const Duration(seconds: 1), (i) => i).take(1),
+                                                                                  // stream: Stream<void>.periodic(const Duration(seconds: 0)).take(1),
+                                                                                  builder: (context, snapshot) {
+                                                                                    return FutureBuilder<int>(
+                                                                                      future: read_GC_tenant_where(index),
+                                                                                      initialData: 0, // Set an initial value
+                                                                                      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                                                                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                                                                          return Row(
+                                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                                            children: [
+                                                                                              SizedBox(height: 50, child: CircularProgressIndicator()),
                                                                                             ],
-                                                                                          ),
-                                                                                        ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Align(
-                                                                                alignment: Alignment.centerLeft,
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.all(2.0),
-                                                                                  child: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString() == '')
-                                                                                      ? Text('')
-                                                                                      : Container(
-                                                                                          height: 40,
-                                                                                          child: TextFormField(
-                                                                                            style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
-                                                                                            textAlign: TextAlign.start,
-                                                                                            // controller:
-                                                                                            //     Add_Number_area_,
-                                                                                            validator: (value) {
-                                                                                              if (value == null || value.isEmpty) {
-                                                                                                return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                                              }
-                                                                                              // if (int.parse(value.toString()) < 13) {
-                                                                                              //   return '< 13';
-                                                                                              // }
-                                                                                              return null;
-                                                                                            },
-
-                                                                                            initialValue: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.passwd).join(', ').toString() != '') ? 'XXXXXX' : '',
-                                                                                            onFieldSubmitted: (value) async {
-                                                                                              String password = md5.convert(utf8.encode(value)).toString();
-
-                                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                              String? ren = preferences.getString('renTalSer');
-                                                                                              String? renTalname_s = preferences.getString('renTalName');
-
-                                                                                              var Cust_n = '${teNantModels[index].custno}';
-                                                                                              var Cid = '';
-                                                                                              var User_U = '${regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username.toString()).first}';
-
-                                                                                              var Pass_U = '$password';
-                                                                                              var Accesstoken = '';
-                                                                                              var Idtoken = '';
-                                                                                              var Userid = '';
-                                                                                              var Displayname = '';
-                                                                                              var C_name = '${teNantModels[index].cname}';
-
-                                                                                              String url = '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&ren=$ren&Pn=$renTalname_s&cust_no=$Cust_n&Cid=$Cid&user_U=$User_U&pass_U=$Pass_U&Accesstoken=$Accesstoken&Idtoken=$Idtoken&Userid=$Userid&Displayname=$Displayname&c_name=$C_name';
-
-                                                                                              try {
-                                                                                                var response = await http.get(Uri.parse(url));
-
-                                                                                                var result = json.decode(response.body);
-                                                                                                print(result);
-                                                                                                print(result);
-                                                                                                if (result.toString() == 'true') {
-                                                                                                  Insert_log.Insert_logs('บัญชี', 'บัญชี>>บัญชีผู้เช่า>>Passwd>>$value(${teNantModels[index].custno})');
-
-                                                                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('แก้ไขข้อมูลเสร็จสิ้น !!', style: TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))));
-                                                                                                } else {
-                                                                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                                                                    const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
-                                                                                                  );
-                                                                                                }
-                                                                                              } catch (e) {
-                                                                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                                                                  const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
-                                                                                                );
-                                                                                              }
-                                                                                              setState(() {
-                                                                                                checkPreferance();
-                                                                                                read_GC_rental();
-
-                                                                                                read_GC_tenant();
-                                                                                                read_GC_Regis();
-                                                                                              });
-                                                                                            },
-                                                                                            // maxLength: 4,
-                                                                                            cursorColor: Colors.green,
-                                                                                            decoration: InputDecoration(
-                                                                                                labelText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
-                                                                                                // hintText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
-                                                                                                fillColor: Colors.white.withOpacity(0.3),
-                                                                                                filled: true,
-                                                                                                // prefixIcon:
-                                                                                                //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                                focusedBorder: const OutlineInputBorder(
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topRight: Radius.circular(15),
-                                                                                                    topLeft: Radius.circular(15),
-                                                                                                    bottomRight: Radius.circular(15),
-                                                                                                    bottomLeft: Radius.circular(15),
-                                                                                                  ),
-                                                                                                  borderSide: BorderSide(
-                                                                                                    width: 1,
-                                                                                                    color: Colors.black,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                enabledBorder: const OutlineInputBorder(
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topRight: Radius.circular(15),
-                                                                                                    topLeft: Radius.circular(15),
-                                                                                                    bottomRight: Radius.circular(15),
-                                                                                                    bottomLeft: Radius.circular(15),
-                                                                                                  ),
-                                                                                                  borderSide: BorderSide(
-                                                                                                    width: 1,
-                                                                                                    color: Colors.grey,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                // labelText:
-                                                                                                //     'เลขเรื่มต้น 1-xxx',
-                                                                                                labelStyle: TextStyle(
-                                                                                                  fontSize: 11,
-                                                                                                  color: Colors.red[700],
-                                                                                                  fontFamily: Font_.Fonts_T,
-                                                                                                )),
-                                                                                            inputFormatters: <TextInputFormatter>[
-                                                                                              FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9_.@]')),
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                ),
-                                                                              ),
-                                                                              //     AutoSizeText(
-                                                                              //   minFontSize:
-                                                                              //       10,
-                                                                              //   maxFontSize:
-                                                                              //       25,
-                                                                              //   maxLines:
-                                                                              //       1,
-                                                                              //   (teNantModels[index].passw == null)
-                                                                              //       ? ''
-                                                                              //       : '******',
-                                                                              //   textAlign:
-                                                                              //       TextAlign.start,
-                                                                              //   style: const TextStyle(
-                                                                              //       color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //       fontFamily: Font_.Fonts_T),
-                                                                              // ),
-                                                                            ),
-                                                                            Expanded(
-                                                                                flex: 1,
-                                                                                child: StreamBuilder(
-                                                                                    stream: Stream<void>.periodic(const Duration(seconds: 1), (i) => i).take(1),
-                                                                                    // stream: Stream<void>.periodic(const Duration(seconds: 0)).take(1),
-                                                                                    builder: (context, snapshot) {
-                                                                                      return FutureBuilder<int>(
-                                                                                        future: read_GC_tenant_where(index),
-                                                                                        initialData: 0, // Set an initial value
-                                                                                        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                                                                                          if (snapshot.connectionState == ConnectionState.waiting) {
-                                                                                            return Row(
-                                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                                              children: [
-                                                                                                SizedBox(height: 50, child: CircularProgressIndicator()),
-                                                                                              ],
-                                                                                            );
-                                                                                          } else if (snapshot.hasError) {
-                                                                                            return Text('Error: ${snapshot.error}');
-                                                                                          } else {
-                                                                                            return Text(
-                                                                                              snapshot.data.toString(),
-                                                                                              maxLines: 1,
-                                                                                              textAlign: TextAlign.end,
-                                                                                              style: const TextStyle(
-                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                fontFamily: Font_.Fonts_T,
-                                                                                              ),
-                                                                                            );
-                                                                                          }
-                                                                                        },
-                                                                                      );
-                                                                                    })),
-                                                                            Expanded(
-                                                                                flex: 1,
-                                                                                child: StreamBuilder(
-                                                                                    stream: Stream<void>.periodic(const Duration(seconds: 1), (i) => i).take(1),
-                                                                                    builder: (context, snapshot) {
-                                                                                      return FutureBuilder<String>(
-                                                                                        future: read_GC_tenant_wherecids(index),
-                                                                                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                                                                          if (snapshot.connectionState == ConnectionState.waiting) {
-                                                                                            return Row(
-                                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                                              children: [
-                                                                                                SizedBox(height: 50, child: CircularProgressIndicator()),
-                                                                                              ],
-                                                                                            );
-                                                                                          } else if (snapshot.hasError) {
-                                                                                            return Text('Error: ${snapshot.error}');
-                                                                                          } else {
-                                                                                            return Text(
-                                                                                              snapshot.data.toString(),
-                                                                                              maxLines: 1,
-                                                                                              textAlign: TextAlign.end,
-                                                                                              style: const TextStyle(
-                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                fontFamily: Font_.Fonts_T,
-                                                                                              ),
-                                                                                            );
-                                                                                          }
-                                                                                        },
-                                                                                      );
-                                                                                    })),
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                                                children: [
-                                                                                  Padding(
-                                                                                    padding: const EdgeInsets.all(0.0),
-                                                                                    child: InkWell(
-                                                                                      onTap: () {
-                                                                                        print(teNantModels[index].custno);
-                                                                                        setState(() {
-                                                                                          // widget.updateMessage('0');
-                                                                                          Status_cuspang = 1;
-
-                                                                                          cust_no = teNantModels[index].custno!;
-                                                                                        });
-                                                                                        // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                                                                                        //   return Details_Rental_customer(
-                                                                                        //     name_custno: cust_no,
-                                                                                        //   );
-                                                                                        // }));
+                                                                                          );
+                                                                                        } else if (snapshot.hasError) {
+                                                                                          return Text('Error: ${snapshot.error}');
+                                                                                        } else {
+                                                                                          return Text(
+                                                                                            snapshot.data.toString(),
+                                                                                            maxLines: 1,
+                                                                                            textAlign: TextAlign.end,
+                                                                                            style: const TextStyle(
+                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          );
+                                                                                        }
                                                                                       },
-                                                                                      child: Container(
-                                                                                        width: 130,
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: Colors.deepPurple.shade100,
-                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                          border: Border.all(color: Colors.white, width: 1),
-                                                                                        ),
-                                                                                        padding: const EdgeInsets.all(2.0),
-                                                                                        child: const AutoSizeText(
-                                                                                          minFontSize: 10,
-                                                                                          maxFontSize: 25,
-                                                                                          maxLines: 1,
-                                                                                          'เรียกดู',
-                                                                                          textAlign: TextAlign.center,
-                                                                                          style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                        ),
+                                                                                    );
+                                                                                  })),
+                                                                          Expanded(
+                                                                              flex: 1,
+                                                                              child: StreamBuilder(
+                                                                                  stream: Stream<void>.periodic(const Duration(seconds: 1), (i) => i).take(1),
+                                                                                  builder: (context, snapshot) {
+                                                                                    return FutureBuilder<String>(
+                                                                                      future: read_GC_tenant_wherecids(index),
+                                                                                      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                                                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                                                                          return Row(
+                                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                                            children: [
+                                                                                              SizedBox(height: 50, child: CircularProgressIndicator()),
+                                                                                            ],
+                                                                                          );
+                                                                                        } else if (snapshot.hasError) {
+                                                                                          return Text('Error: ${snapshot.error}');
+                                                                                        } else {
+                                                                                          return Text(
+                                                                                            snapshot.data.toString(),
+                                                                                            maxLines: 1,
+                                                                                            textAlign: TextAlign.end,
+                                                                                            style: const TextStyle(
+                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          );
+                                                                                        }
+                                                                                      },
+                                                                                    );
+                                                                                  })),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                                              children: [
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: InkWell(
+                                                                                    onTap: () {
+                                                                                      print(teNantModels[index].custno);
+                                                                                      setState(() {
+                                                                                        // widget.updateMessage('0');
+                                                                                        Status_cuspang = 1;
+
+                                                                                        cust_no = teNantModels[index].custno!;
+                                                                                      });
+                                                                                      // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                                                                                      //   return Details_Rental_customer(
+                                                                                      //     name_custno: cust_no,
+                                                                                      //   );
+                                                                                      // }));
+                                                                                    },
+                                                                                    child: Container(
+                                                                                      width: 130,
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.deepPurple.shade100,
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        border: Border.all(color: Colors.white, width: 1),
+                                                                                      ),
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: const AutoSizeText(
+                                                                                        minFontSize: 10,
+                                                                                        maxFontSize: 25,
+                                                                                        maxLines: 1,
+                                                                                        'เรียกดู',
+                                                                                        textAlign: TextAlign.center,
+                                                                                        style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
                                                                                       ),
                                                                                     ),
                                                                                   ),
-                                                                                ],
-                                                                              ),
+                                                                                ),
+                                                                              ],
                                                                             ),
-                                                                          ],
-                                                                        ),
+                                                                          ),
+                                                                        ],
                                                                       )),
                                                                   // if (index +
                                                                   //         1 ==
@@ -1637,7 +1631,7 @@ class _Rental_customersState extends State<Rental_customers> {
                                                       //     .TiTile_Colors,
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius

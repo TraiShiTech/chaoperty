@@ -21,6 +21,7 @@ import '../Constant/Myconstant.dart';
 import '../Home/Home_Screen.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Manage/Manage_Screen.dart';
+import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Report/Report_Screen.dart';
 import '../Setting/SettingScreen.dart';
@@ -36,6 +37,7 @@ import 'Rental_Information.dart';
 import 'package:http/http.dart' as http;
 
 import 'Seteing_listmenu.dart';
+import 'discount_bill.dart';
 
 class PeopleChaoScreen2 extends StatefulWidget {
   final Get_Value_NameShop_index;
@@ -60,6 +62,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
   /////------------------------------------------------>()
   int ser_tabbarview_1 = 0, _Pakan = 0, renTal_lavel = 0, _Madjum = 0;
   List<TeNantModel> teNantModels = [];
+  List<RenTalModel> renTalModels = [];
   String? areanew, namenew, Sercid;
   final Formbecause_ = TextEditingController();
   List tabbarview_1 = [
@@ -79,6 +82,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
     'ข้อมูลการเช่า',
     'มิเตอร์น้ำไฟฟ้า',
     'วางบิล',
+    'ลดหนี้',
     'รับชำระ',
     'ประวัติบิล',
   ];
@@ -86,9 +90,29 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
     Colors.green,
     Colors.blue,
     Colors.brown,
+    Colors.pink,
     Colors.deepPurple,
     Colors.orange,
   ];
+
+  String? rtname,
+      type,
+      typex,
+      renname,
+      bill_name,
+      bill_addr,
+      bill_tax,
+      bill_tel,
+      bill_email,
+      expbill,
+      expbill_name,
+      bill_default,
+      bill_tser,
+      foder,
+      tem_page_ser,
+      newValuePDFimg_QR,
+      renTal_name,
+      open_disinv;
 
   @override
   void initState() {
@@ -96,8 +120,65 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
     read_GC_teNant();
     read_GC_pkan();
     read_GC_Madjum();
+    read_GC_rental();
     // print(tabbarview_2.length);
     ser_tabbarview_2 = int.parse(widget.Get_Value_indexpage);
+  }
+
+  Future<Null> read_GC_rental() async {
+    if (renTalModels.isNotEmpty) {
+      setState(() {
+        renTalModels.clear();
+      });
+    }
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
+    renTal_name = preferences.getString('renTalName');
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          RenTalModel renTalModel = RenTalModel.fromJson(map);
+          var rtnamex = renTalModel.rtname!.trim();
+          var typexs = renTalModel.type!.trim();
+          var typexx = renTalModel.typex!.trim();
+          var bill_namex = renTalModel.bill_name!.trim();
+          var bill_addrx = renTalModel.bill_addr!.trim();
+          var bill_taxx = renTalModel.bill_tax!.trim();
+          var bill_telx = renTalModel.bill_tel!.trim();
+          var bill_emailx = renTalModel.bill_email!.trim();
+          var bill_defaultx = renTalModel.bill_default;
+          var bill_tserx = renTalModel.tser;
+          var name = renTalModel.pn!.trim();
+          var foderx = renTalModel.dbn;
+          var open_disinvx = renTalModel.open_disinv;
+          setState(() {
+            foder = foderx;
+            rtname = rtnamex;
+            type = typexs;
+            typex = typexx;
+            renname = name;
+            bill_name = bill_namex;
+            bill_addr = bill_addrx;
+            bill_tax = bill_taxx;
+            bill_tel = bill_telx;
+            bill_email = bill_emailx;
+            bill_default = bill_defaultx;
+            bill_tser = bill_tserx;
+            tem_page_ser = renTalModel.tem_page!.trim();
+            open_disinv = open_disinvx;
+
+            renTalModels.add(renTalModel);
+          });
+        }
+      } else {}
+    } catch (e) {}
   }
 
   Future<Null> read_GC_pkan() async {
@@ -216,12 +297,12 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
-              color: AppbackgroundColor.TiTile_Colors,
+              color: AppbackgroundColor.TiTile_Box,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(0),
-                  bottomRight: Radius.circular(0)),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
               // border: Border.all(color: Colors.white, width: 1),
             ),
             child: Align(
@@ -440,6 +521,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
               )
             : contact_new == 2
                 ? ChaoReturn(
+                    Get_Value_NameShop_index: widget.Get_Value_NameShop_index,
                     Value_cid: widget.Get_Value_cid,
                   )
                 : contact_new == 3
@@ -453,13 +535,13 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                         : Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                                 child: Container(
                                   decoration: const BoxDecoration(
-                                    color: Colors.white30,
+                                    color: Colors.white60,
                                     borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(0),
-                                        topRight: Radius.circular(0),
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
                                         bottomLeft: Radius.circular(10),
                                         bottomRight: Radius.circular(10)),
                                     // border: Border.all(color: Colors.grey, width: 1),
@@ -474,6 +556,8 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                             padding: const EdgeInsets.all(4.0),
                                             child: Container(
                                               decoration: BoxDecoration(
+                                                color: AppbackgroundColor
+                                                    .Sub_Abg_Colors,
                                                 borderRadius:
                                                     const BorderRadius.only(
                                                         topLeft:
@@ -514,7 +598,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                                       decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -554,6 +638,8 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                             padding: const EdgeInsets.all(4.0),
                                             child: Container(
                                               decoration: BoxDecoration(
+                                                color: AppbackgroundColor
+                                                    .Sub_Abg_Colors,
                                                 borderRadius:
                                                     const BorderRadius.only(
                                                         topLeft:
@@ -601,7 +687,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                                               color:
                                                                   Colors.white,
                                                               borderRadius: const BorderRadius
-                                                                  .only(
+                                                                      .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -677,7 +763,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                                                 color: Colors
                                                                     .white,
                                                                 borderRadius: const BorderRadius
-                                                                    .only(
+                                                                        .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             10),
@@ -782,12 +868,12 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                                                       index)
                                                                   ? tabbarview_color_2[
                                                                           index]
-                                                                      [600]
+                                                                      [700]
                                                                   : tabbarview_color_2[
                                                                           index]
                                                                       [200],
                                                               borderRadius: const BorderRadius
-                                                                  .only(
+                                                                      .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -928,36 +1014,42 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                               Get_Value_NameShop_index: widget
                                                   .Get_Value_NameShop_index,
                                               namenew: namenew)
-                                          // : (ser_tabbarview_2 == 3)
-                                          //     ? BillsHistory(
-                                          //         Get_Value_cid: widget.Get_Value_cid,
-                                          //         Get_Value_NameShop_index:
-                                          //             widget.Get_Value_NameShop_index)
                                           : (ser_tabbarview_2 == 3)
-                                              ? Pays(
-                                                  Get_Value_cid:
-                                                      widget.Get_Value_cid,
-                                                  Get_Value_NameShop_index: widget
-                                                      .Get_Value_NameShop_index,
-                                                  namenew: namenew)
-                                              // : (ser_tabbarview_2 == 5)
-                                              //     ? PaysHistory(
-                                              //         Get_Value_cid: widget.Get_Value_cid,
-                                              //         Get_Value_NameShop_index:
-                                              //             widget.Get_Value_NameShop_index)
+                                              ? open_disinv == '0'
+                                                  ? Center(
+                                                      child: Text(
+                                                          'Coming soon...'),
+                                                    )
+                                                  : DiscountBill(
+                                                      Get_Value_cid:
+                                                          widget.Get_Value_cid,
+                                                    )
                                               : (ser_tabbarview_2 == 4)
-                                                  ? HistoryBills(
+                                                  ? Pays(
                                                       Get_Value_cid:
                                                           widget.Get_Value_cid,
                                                       Get_Value_NameShop_index:
                                                           widget
-                                                              .Get_Value_NameShop_index)
-                                                  : SettringListMenu(
-                                                      Get_Value_cid:
-                                                          widget.Get_Value_cid,
-                                                      Get_Value_NameShop_index:
-                                                          widget
-                                                              .Get_Value_NameShop_index),
+                                                              .Get_Value_NameShop_index,
+                                                      namenew: namenew)
+                                                  // : (ser_tabbarview_2 == 5)
+                                                  //     ? PaysHistory(
+                                                  //         Get_Value_cid: widget.Get_Value_cid,
+                                                  //         Get_Value_NameShop_index:
+                                                  //             widget.Get_Value_NameShop_index)
+                                                  : (ser_tabbarview_2 == 5)
+                                                      ? HistoryBills(
+                                                          Get_Value_cid: widget
+                                                              .Get_Value_cid,
+                                                          Get_Value_NameShop_index:
+                                                              widget
+                                                                  .Get_Value_NameShop_index)
+                                                      : SettringListMenu(
+                                                          Get_Value_cid: widget
+                                                              .Get_Value_cid,
+                                                          Get_Value_NameShop_index:
+                                                              widget
+                                                                  .Get_Value_NameShop_index),
                             ],
                           ),
       ],

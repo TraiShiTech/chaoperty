@@ -22,6 +22,10 @@ class ExpModel {
   String? cal_auto;
   String? pri_auto;
   String? data_update;
+  String? pri_han;
+  String? show_han;
+  String? show_book;
+  String? pri_book;
 
   ExpModel(
       {this.ser,
@@ -46,7 +50,11 @@ class ExpModel {
       this.auto,
       this.cal_auto,
       this.pri_auto,
-      this.data_update});
+      this.data_update,
+      this.pri_han,
+      this.show_han,
+      this.show_book,
+      this.pri_book});
 
   ExpModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -72,6 +80,10 @@ class ExpModel {
     cal_auto = json['cal_auto'];
     pri_auto = json['pri_auto'];
     data_update = json['data_update'];
+    pri_han = json['pri_han'];
+    show_han = json['show_han'];
+      show_book = json['show_book'];
+    pri_book = json['pri_book'];
   }
 
   Map<String, dynamic> toJson() {
@@ -99,6 +111,10 @@ class ExpModel {
     data['cal_auto'] = this.cal_auto;
     data['pri_auto'] = this.pri_auto;
     data['data_update'] = this.data_update;
+    data['pri_han'] = this.pri_han;
+    data['show_han'] = this.show_han;
+     data['show_book'] = this.show_book;
+    data['pri_book'] = this.pri_book;
     return data;
   }
 }

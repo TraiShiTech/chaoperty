@@ -543,6 +543,10 @@ class _PlayColumnState extends State<PlayColumn> {
           TransPlayModel transPlayModel = TransPlayModel.fromJson(map);
           var vv = transPlayModel.cid;
           List<dynamic> successList = transPlayModel.play_amt;
+
+          print('>length>transPlayModel>>>>>>>${transPlayModel}');
+          print('>>>>>>successList>>>>>>>$successList');
+          print('>length>successList>>>>>>>${successList.length}');
           var ara = double.parse(transPlayModel.area.toString());
           // List<dynamic> successList = result[][transPlayModel.play_amt];
           print('>>>>>>araara>>>>>>>$ara');
@@ -1338,102 +1342,99 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                         .refno_trans)
                                                                   Row(
                                                                     children: [
-                                                                      for (int i =
-                                                                              0;
-                                                                          i < expModels.length;
-                                                                          i++)
-                                                                        (transPlayxModels[v].expx_row == expModels[i].ser)
-                                                                            ? transPlayxModels[v].pvat_trans == null
-                                                                                ? Expanded(
-                                                                                    child: Text(
-                                                                                    '0',
-                                                                                    textAlign: TextAlign.center,
-                                                                                  ))
-                                                                                : Expanded(
-                                                                                    child: transPlayxModels[v].invoice_row != null
-                                                                                        ? Text(
-                                                                                            '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
-                                                                                            textAlign: TextAlign.center,
-                                                                                            style: TextStyle(color: Colors.orange.shade900),
-                                                                                          )
-                                                                                        : Card(
-                                                                                            color: listcolor[i] == transPlayxModels[v].docno_trans ? Colors.green.shade700 : Colors.white,
-                                                                                            child: SizedBox(
-                                                                                              child: InkWell(
-                                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                  onDoubleTap: () {
-                                                                                                    print('onDoubleTap');
-                                                                                                    in_Trans_select(v, i);
-                                                                                                    var ciddoc = transPlayModels[index].cid;
+                                                                      (transPlayxModels[v].expx_row ==
+                                                                              expModels[i].ser)
+                                                                          ? transPlayxModels[v].pvat_trans == null
+                                                                              ? Expanded(
+                                                                                  child: Text(
+                                                                                  '0',
+                                                                                  textAlign: TextAlign.center,
+                                                                                ))
+                                                                              : Expanded(
+                                                                                  child: transPlayxModels[v].invoice_row != null
+                                                                                      ? Text(
+                                                                                          '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: TextStyle(color: Colors.orange.shade900),
+                                                                                        )
+                                                                                      : Card(
+                                                                                          color: listcolor[i] == transPlayxModels[v].docno_trans ? Colors.green.shade700 : Colors.white,
+                                                                                          child: SizedBox(
+                                                                                            child: InkWell(
+                                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                onDoubleTap: () {
+                                                                                                  print('onDoubleTap');
+                                                                                                  in_Trans_select(v, i);
+                                                                                                  var ciddoc = transPlayModels[index].cid;
 
-                                                                                                    setState(() {
-                                                                                                      if (his == 1) {
-                                                                                                        red_listdate(ciddoc);
-                                                                                                      }
-                                                                                                      if (transPlayModels[index].yon_amt == '0') {
-                                                                                                        _customTileExpanded = false;
-                                                                                                      }
-                                                                                                    });
-                                                                                                    setState(() {
-                                                                                                      insexselect = v;
-                                                                                                      areaselect = transPlayModels[index].ln;
-                                                                                                      nameselect = transPlayModels[index].sname;
-                                                                                                    });
-                                                                                                    de_item(v);
-                                                                                                  },
-                                                                                                  onLongPress: () {
-                                                                                                    print('onLongPress');
-                                                                                                    in_Trans_select(v, i);
-                                                                                                    var ciddoc = transPlayModels[index].cid;
+                                                                                                  setState(() {
+                                                                                                    if (his == 1) {
+                                                                                                      red_listdate(ciddoc);
+                                                                                                    }
+                                                                                                    if (transPlayModels[index].yon_amt == '0') {
+                                                                                                      _customTileExpanded = false;
+                                                                                                    }
+                                                                                                  });
+                                                                                                  setState(() {
+                                                                                                    insexselect = v;
+                                                                                                    areaselect = transPlayModels[index].ln;
+                                                                                                    nameselect = transPlayModels[index].sname;
+                                                                                                  });
+                                                                                                  de_item(v);
+                                                                                                },
+                                                                                                onLongPress: () {
+                                                                                                  print('onLongPress');
+                                                                                                  in_Trans_select(v, i);
+                                                                                                  var ciddoc = transPlayModels[index].cid;
 
-                                                                                                    setState(() {
-                                                                                                      if (his == 1) {
-                                                                                                        red_listdate(ciddoc);
-                                                                                                      }
-                                                                                                      if (transPlayModels[index].yon_amt == '0') {
-                                                                                                        _customTileExpanded = false;
-                                                                                                      }
-                                                                                                    });
-                                                                                                    setState(() {
-                                                                                                      insexselect = v;
-                                                                                                      areaselect = transPlayModels[index].ln;
-                                                                                                      nameselect = transPlayModels[index].sname;
-                                                                                                    });
-                                                                                                    de_item(v);
-                                                                                                  },
-                                                                                                  onTap: () async {
-                                                                                                    in_Trans_select(v, i);
-                                                                                                    var ciddoc = transPlayModels[index].cid;
+                                                                                                  setState(() {
+                                                                                                    if (his == 1) {
+                                                                                                      red_listdate(ciddoc);
+                                                                                                    }
+                                                                                                    if (transPlayModels[index].yon_amt == '0') {
+                                                                                                      _customTileExpanded = false;
+                                                                                                    }
+                                                                                                  });
+                                                                                                  setState(() {
+                                                                                                    insexselect = v;
+                                                                                                    areaselect = transPlayModels[index].ln;
+                                                                                                    nameselect = transPlayModels[index].sname;
+                                                                                                  });
+                                                                                                  de_item(v);
+                                                                                                },
+                                                                                                onTap: () async {
+                                                                                                  in_Trans_select(v, i);
+                                                                                                  var ciddoc = transPlayModels[index].cid;
 
-                                                                                                    setState(() {
-                                                                                                      if (his == 1) {
-                                                                                                        red_listdate(ciddoc);
-                                                                                                      }
-                                                                                                      if (transPlayModels[index].yon_amt == '0') {
-                                                                                                        _customTileExpanded = false;
-                                                                                                      }
-                                                                                                    });
-                                                                                                    setState(() {
-                                                                                                      insexselect = v;
-                                                                                                      areaselect = transPlayModels[index].ln;
-                                                                                                      nameselect = transPlayModels[index].sname;
-                                                                                                    });
-                                                                                                  },
-                                                                                                  child: Padding(
-                                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                                    child: Center(
-                                                                                                      child: Text(
-                                                                                                        '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
-                                                                                                        style: TextStyle(
-                                                                                                          color: listcolor[i] == transPlayxModels[v].docno_trans ? Colors.white : Colors.black,
-                                                                                                        ),
+                                                                                                  setState(() {
+                                                                                                    if (his == 1) {
+                                                                                                      red_listdate(ciddoc);
+                                                                                                    }
+                                                                                                    if (transPlayModels[index].yon_amt == '0') {
+                                                                                                      _customTileExpanded = false;
+                                                                                                    }
+                                                                                                  });
+                                                                                                  setState(() {
+                                                                                                    insexselect = v;
+                                                                                                    areaselect = transPlayModels[index].ln;
+                                                                                                    nameselect = transPlayModels[index].sname;
+                                                                                                  });
+                                                                                                },
+                                                                                                child: Padding(
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: Center(
+                                                                                                    child: Text(
+                                                                                                      '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
+                                                                                                      style: TextStyle(
+                                                                                                        color: listcolor[i] == transPlayxModels[v].docno_trans ? Colors.white : Colors.black,
                                                                                                       ),
                                                                                                     ),
-                                                                                                  )),
-                                                                                            ),
+                                                                                                  ),
+                                                                                                )),
                                                                                           ),
-                                                                                  )
-                                                                            : SizedBox(),
+                                                                                        ),
+                                                                                )
+                                                                          : SizedBox(),
                                                                     ],
                                                                   ),
                                                             ],
@@ -1638,31 +1639,28 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                         .refno_trans)
                                                                   Row(
                                                                     children: [
-                                                                      for (int i =
-                                                                              0;
-                                                                          i < expModels.length;
-                                                                          i++)
-                                                                        (transPlayxModels[v].expx_row == expModels[i].ser)
-                                                                            ? transPlayxModels[v].pvat_trans == null
-                                                                                ? Expanded(
-                                                                                    child: Text(
-                                                                                    '0',
-                                                                                    textAlign: TextAlign.center,
-                                                                                  ))
-                                                                                : Expanded(
-                                                                                    child: transPlayxModels[v].invoice_row != null
-                                                                                        ? Text(
-                                                                                            '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
-                                                                                            textAlign: TextAlign.center,
-                                                                                            style: TextStyle(color: Colors.orange.shade900),
-                                                                                          )
-                                                                                        : Text(
-                                                                                            '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
-                                                                                            textAlign: TextAlign.center,
-                                                                                            style: TextStyle(color: Colors.black),
-                                                                                          ),
-                                                                                  )
-                                                                            : SizedBox(),
+                                                                      (transPlayxModels[v].expx_row ==
+                                                                              expModels[i].ser)
+                                                                          ? transPlayxModels[v].pvat_trans == null
+                                                                              ? Expanded(
+                                                                                  child: Text(
+                                                                                  '0',
+                                                                                  textAlign: TextAlign.center,
+                                                                                ))
+                                                                              : Expanded(
+                                                                                  child: transPlayxModels[v].invoice_row != null
+                                                                                      ? Text(
+                                                                                          '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: TextStyle(color: Colors.orange.shade900),
+                                                                                        )
+                                                                                      : Text(
+                                                                                          '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: TextStyle(color: Colors.black),
+                                                                                        ),
+                                                                                )
+                                                                          : SizedBox(),
                                                                     ],
                                                                   ),
                                                             ],
@@ -2793,7 +2791,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                             .red[
                                                                         600],
                                                                     borderRadius: const BorderRadius
-                                                                            .only(
+                                                                        .only(
                                                                         topLeft:
                                                                             Radius.circular(
                                                                                 10),
@@ -2809,7 +2807,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -2863,7 +2861,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -3287,7 +3285,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                         color: Colors.white,
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 4, 8, 4, 2),
                                                         child: Column(
                                                           crossAxisAlignment:
@@ -3318,7 +3316,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                 ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child: Center(
                                                                   child: Text(
@@ -6596,7 +6594,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child: InkWell(
                                                                   child: Container(
@@ -6604,7 +6602,8 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                       decoration: BoxDecoration(
                                                                         color: Colors
                                                                             .red[600],
-                                                                        borderRadius: const BorderRadius.only(
+                                                                        borderRadius: const BorderRadius
+                                                                            .only(
                                                                             topLeft:
                                                                                 Radius.circular(10),
                                                                             topRight: Radius.circular(10),
@@ -6638,7 +6637,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child: InkWell(
                                                                   child: Container(
@@ -7093,7 +7092,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                     .white,
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .fromLTRB(
+                                                                        .fromLTRB(
                                                                         4,
                                                                         8,
                                                                         4,
@@ -7118,8 +7117,9 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                               bottomLeft: Radius.circular(0),
                                                                               bottomRight: Radius.circular(0)),
                                                                         ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             Center(
                                                                           child:
@@ -7376,7 +7376,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       TextButton(
@@ -7835,115 +7835,231 @@ class _PlayColumnState extends State<PlayColumn> {
                     ),
                   ),
                 ),
-                for (int v = 0; v < transPlayListxModels.length; v++)
-                  if (transPlayListModels[index].datex ==
-                      transPlayListxModels[v].date_trans)
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          for (int i = 0; i < expModels.length; i++)
-                            (transPlayListxModels[v].expx_row ==
-                                    expModels[i].ser)
-                                ? transPlayListxModels[v].pvat_trans == null
-                                    ? Expanded(
-                                        child: Text(
-                                          '0',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      )
-                                    : Expanded(
-                                        child: transPlayListxModels[v]
-                                                    .invoice_row !=
-                                                null
-                                            ? Text(
-                                                '${nFormat.format(double.parse(transPlayListxModels[v].pvat_trans!))}',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color:
-                                                        Colors.orange.shade900),
-                                              )
-                                            : Card(
-                                                color: listcolorplay[v] ==
-                                                        transPlayListxModels[v]
-                                                            .docno_trans
-                                                    ? Colors.green.shade700
-                                                    : Colors.white,
-                                                child: SizedBox(
-                                                  child: InkWell(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                      onDoubleTap: () {
-                                                        print('onDoubleTap');
-                                                        if (listcolorplay[v] ==
-                                                            transPlayListxModels[
-                                                                    v]
-                                                                .docno_trans) {
-                                                          in_TransList_select(
-                                                              v, i);
-                                                        }
+                for (int i = 0; i < expModels.length; i++)
+                  Expanded(
+                      child: Column(
+                    children: [
+                      for (int v = 0; v < transPlayListxModels.length; v++)
+                        if (transPlayListModels[index].datex ==
+                            transPlayListxModels[v].date_trans)
+                          Row(
+                            children: [
+                              (transPlayListxModels[v].expx_row ==
+                                      expModels[i].ser)
+                                  ? transPlayListxModels[v].pvat_trans == null
+                                      ? Expanded(
+                                          child: Text(
+                                            '0',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        )
+                                      : Expanded(
+                                          child: transPlayListxModels[v]
+                                                      .invoice_row !=
+                                                  null
+                                              ? Text(
+                                                  '${nFormat.format(double.parse(transPlayListxModels[v].pvat_trans!))}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .orange.shade900),
+                                                )
+                                              : Card(
+                                                  color: listcolorplay[v] ==
+                                                          transPlayListxModels[
+                                                                  v]
+                                                              .docno_trans
+                                                      ? Colors.green.shade700
+                                                      : Colors.white,
+                                                  child: SizedBox(
+                                                    child: InkWell(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                        onDoubleTap: () {
+                                                          print('onDoubleTap');
+                                                          if (listcolorplay[
+                                                                  v] ==
+                                                              transPlayListxModels[
+                                                                      v]
+                                                                  .docno_trans) {
+                                                            in_TransList_select(
+                                                                v, i);
+                                                          }
 
-                                                        de_item_his(v);
-                                                      },
-                                                      onLongPress: () {
-                                                        print('onLongPress');
-                                                        if (listcolorplay[v] ==
-                                                            transPlayListxModels[
-                                                                    v]
-                                                                .docno_trans) {
+                                                          de_item_his(v);
+                                                        },
+                                                        onLongPress: () {
+                                                          print('onLongPress');
+                                                          if (listcolorplay[
+                                                                  v] ==
+                                                              transPlayListxModels[
+                                                                      v]
+                                                                  .docno_trans) {
+                                                            in_TransList_select(
+                                                                v, i);
+                                                          }
+                                                          de_item_his(v);
+                                                        },
+                                                        onTap: () async {
                                                           in_TransList_select(
                                                               v, i);
-                                                        }
-                                                        de_item_his(v);
-                                                      },
-                                                      onTap: () async {
-                                                        in_TransList_select(
-                                                            v, i);
-                                                        // var ciddoc =
-                                                        //     transPlayModels[
-                                                        //             index]
-                                                        //         .cid;
-                                                        // setState(() {
-                                                        //   red_listdate(ciddoc);
-                                                        // });
-                                                      },
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Center(
-                                                          child: Text(
-                                                            '${nFormat.format(double.parse(transPlayListxModels[v].pvat_trans!))}',
-                                                            style: TextStyle(
-                                                              color: listcolorplay[
-                                                                          v] ==
-                                                                      transPlayListxModels[
-                                                                              v]
-                                                                          .docno_trans
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                      .black,
+                                                          // var ciddoc =
+                                                          //     transPlayModels[
+                                                          //             index]
+                                                          //         .cid;
+                                                          // setState(() {
+                                                          //   red_listdate(ciddoc);
+                                                          // });
+                                                        },
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Center(
+                                                            child: Text(
+                                                              '${nFormat.format(double.parse(transPlayListxModels[v].pvat_trans!))}',
+                                                              style: TextStyle(
+                                                                color: listcolorplay[
+                                                                            v] ==
+                                                                        transPlayListxModels[v]
+                                                                            .docno_trans
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black,
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      )),
+                                                        )),
+                                                  ),
                                                 ),
-                                              ),
-                                      )
-                                : SizedBox(),
-                        ],
-                      ),
-                    ),
+                                        )
+                                  : SizedBox(),
+                            ],
+                          ),
+                    ],
+                  )),
+                // for (int v = 0; v < transPlayListxModels.length; v++)
+                //   if (transPlayListModels[index].datex ==
+                //       transPlayListxModels[v].date_trans)
+                //     Expanded(
+                //       flex: 1,
+                //       child: Row(
+                //         children: [
+                //           for (int i = 0; i < expModels.length; i++)
+                //             (transPlayListxModels[v].expx_row ==
+                //                     expModels[i].ser)
+                //                 ? transPlayListxModels[v].pvat_trans == null
+                //                     ? Expanded(
+                //                         child: Text(
+                //                           '0',
+                //                           textAlign: TextAlign.center,
+                //                         ),
+                //                       )
+                //                     : Expanded(
+                //                         child: transPlayListxModels[v]
+                //                                     .invoice_row !=
+                //                                 null
+                //                             ? Text(
+                //                                 '${nFormat.format(double.parse(transPlayListxModels[v].pvat_trans!))}',
+                //                                 textAlign: TextAlign.center,
+                //                                 style: TextStyle(
+                //                                     color:
+                //                                         Colors.orange.shade900),
+                //                               )
+                //                             : Card(
+                //                                 color: listcolorplay[v] ==
+                //                                         transPlayListxModels[v]
+                //                                             .docno_trans
+                //                                     ? Colors.green.shade700
+                //                                     : Colors.white,
+                //                                 child: SizedBox(
+                //                                   child: InkWell(
+                //                                       borderRadius:
+                //                                           BorderRadius.only(
+                //                                               topLeft: Radius
+                //                                                   .circular(10),
+                //                                               topRight: Radius
+                //                                                   .circular(10),
+                //                                               bottomLeft: Radius
+                //                                                   .circular(10),
+                //                                               bottomRight:
+                //                                                   Radius
+                //                                                       .circular(
+                //                                                           10)),
+                //                                       onDoubleTap: () {
+                //                                         print('onDoubleTap');
+                //                                         if (listcolorplay[v] ==
+                //                                             transPlayListxModels[
+                //                                                     v]
+                //                                                 .docno_trans) {
+                //                                           in_TransList_select(
+                //                                               v, i);
+                //                                         }
+
+                //                                         de_item_his(v);
+                //                                       },
+                //                                       onLongPress: () {
+                //                                         print('onLongPress');
+                //                                         if (listcolorplay[v] ==
+                //                                             transPlayListxModels[
+                //                                                     v]
+                //                                                 .docno_trans) {
+                //                                           in_TransList_select(
+                //                                               v, i);
+                //                                         }
+                //                                         de_item_his(v);
+                //                                       },
+                //                                       onTap: () async {
+                //                                         in_TransList_select(
+                //                                             v, i);
+                //                                         // var ciddoc =
+                //                                         //     transPlayModels[
+                //                                         //             index]
+                //                                         //         .cid;
+                //                                         // setState(() {
+                //                                         //   red_listdate(ciddoc);
+                //                                         // });
+                //                                       },
+                //                                       child: Padding(
+                //                                         padding:
+                //                                             const EdgeInsets
+                //                                                 .all(8.0),
+                //                                         child: Center(
+                //                                           child: Text(
+                //                                             '${nFormat.format(double.parse(transPlayListxModels[v].pvat_trans!))}',
+                //                                             style: TextStyle(
+                //                                               color: listcolorplay[
+                //                                                           v] ==
+                //                                                       transPlayListxModels[
+                //                                                               v]
+                //                                                           .docno_trans
+                //                                                   ? Colors.white
+                //                                                   : Colors
+                //                                                       .black,
+                //                                             ),
+                //                                           ),
+                //                                         ),
+                //                                       )),
+                //                                 ),
+                //                               ),
+                //                       )
+                //                 : SizedBox(),
+                //         ],
+                //       ),
+                //     ),
                 Expanded(
                   child: Text(
                     '',

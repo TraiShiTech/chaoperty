@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
+import '../Man_PDF/Man_Pay_Receipt_PDF.dart';
 import '../Model/GetFinnancetrans_Model.dart';
 import '../Model/GetInvoice_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
@@ -2360,8 +2361,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         Container(
@@ -2378,9 +2378,9 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed: () => Navigator.pop(
@@ -3341,7 +3341,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                             padding: EdgeInsets.all(8.0),
                                             child: Center(
                                                 child: Text(
-                                              '$sum_amt พิมพ์',
+                                              'พิมพ์',
                                               style: TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text1_,
@@ -3404,8 +3404,306 @@ class _HistoryBillsState extends State<HistoryBills> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: InkWell(
-                                        onTap: () {
-                                          pPC_finantIbill();
+                                        onTap: () async {
+                                          final Formbecause_ =
+                                              TextEditingController();
+                                          // pPC_finantIbill();
+
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20.0))),
+                                              title: const Center(
+                                                  child: Text(
+                                                'ยกเลิกการรับชำระ',
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T),
+                                              )),
+                                              content: Container(
+                                                height: 120,
+                                                child: Column(
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 2.0,
+                                                    ),
+                                                    Text(
+                                                      'บิลเลขที่ ${numinvoice}',
+                                                      style: const TextStyle(
+                                                          color:
+                                                              AccountScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight:
+                                                          //     FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: TextFormField(
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        controller:
+                                                            Formbecause_,
+                                                        validator: (value) {
+                                                          if (value == null ||
+                                                              value.isEmpty) {
+                                                            return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                          }
+                                                          // if (int.parse(value.toString()) < 13) {
+                                                          //   return '< 13';
+                                                          // }
+                                                          return null;
+                                                        },
+                                                        // maxLength: 13,
+                                                        cursorColor:
+                                                            Colors.green,
+                                                        decoration:
+                                                            InputDecoration(
+                                                                fillColor: Colors
+                                                                    .white
+                                                                    .withOpacity(
+                                                                        0.3),
+                                                                filled: true,
+                                                                // prefixIcon: const Icon(Icons.water,
+                                                                //     color: Colors.blue),
+                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                focusedBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            15),
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            15),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            15),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            15),
+                                                                  ),
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    width: 1,
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                                enabledBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            15),
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            15),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            15),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            15),
+                                                                  ),
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    width: 1,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                                labelText:
+                                                                    'หมายเหตุ',
+                                                                labelStyle:
+                                                                    const TextStyle(
+                                                                  color: AccountScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight:
+                                                                  //     FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                )),
+                                                        // inputFormatters: <TextInputFormatter>[
+                                                        //   // for below version 2 use this
+                                                        //   FilteringTextInputFormatter.allow(
+                                                        //       RegExp(r'[0-9]')),
+                                                        //   // for version 2 and greater youcan also use this
+                                                        //   FilteringTextInputFormatter.digitsOnly
+                                                        // ],
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5.0,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Container(
+                                                    width: 150,
+                                                    height: 40,
+                                                    // ignore: deprecated_member_use
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                      ),
+                                                      onPressed: () {
+                                                        String Formbecause =
+                                                            Formbecause_.text
+                                                                .toString();
+                                                        if (Formbecause == '') {
+                                                          showDialog<String>(
+                                                            context: context,
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                AlertDialog(
+                                                              shape: const RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              20.0))),
+                                                              title:
+                                                                  const Center(
+                                                                      child:
+                                                                          Text(
+                                                                'กรุณากรอกเหตุผล !!',
+                                                                style: TextStyle(
+                                                                    color: AdminScafScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T),
+                                                              )),
+                                                              actions: <Widget>[
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Container(
+                                                                        width:
+                                                                            100,
+                                                                        decoration:
+                                                                            const BoxDecoration(
+                                                                          color:
+                                                                              Colors.redAccent,
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                        ),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            TextButton(
+                                                                          onPressed: () => Navigator.pop(
+                                                                              context,
+                                                                              'OK'),
+                                                                          child:
+                                                                              const Text(
+                                                                            'ปิด',
+                                                                            style: TextStyle(
+                                                                                color: Colors.white,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          pPC_finantIbill(
+                                                              Formbecause);
+                                                          setState(() {
+                                                            Formbecause_
+                                                                .clear();
+                                                          });
+                                                          Navigator.pop(
+                                                              context, 'OK');
+                                                        }
+                                                      },
+                                                      child: const Text(
+                                                        'ยืนยัน',
+                                                        style: TextStyle(
+                                                          // fontSize: 20.0,
+                                                          // fontWeight: FontWeight.bold,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      // color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Container(
+                                                    width: 150,
+                                                    height: 40,
+                                                    // ignore: deprecated_member_use
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor:
+                                                            Colors.black,
+                                                      ),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          Formbecause_.clear();
+                                                        });
+                                                        Navigator.pop(
+                                                            context, 'OK');
+                                                      },
+                                                      child: const Text(
+                                                        'ปิด',
+                                                        style: TextStyle(
+                                                          // fontSize: 20.0,
+                                                          // fontWeight: FontWeight.bold,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      // color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                         },
                                         child: Container(
                                             height: 50,
@@ -3423,7 +3721,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: const Center(
                                                 child: Text(
-                                              'ยกเลิกรับชำระ',
+                                              'ยกเลิกการรับชำระ',
                                               style: TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text1_,
@@ -3622,26 +3920,25 @@ class _HistoryBillsState extends State<HistoryBills> {
   //             ),
   //           ));
   // }
-
-  Future<Null> pPC_finantIbill() async {
+  Future<Null> pPC_finantIbill(Formbecause) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var user = preferences.getString('ser');
-    var ciddoc = widget.Get_Value_cid;
-    var qutser = widget.Get_Value_NameShop_index;
+    // var ciddoc = widget.Get_Value_cid;
+    // var qutser = widget.Get_Value_NameShop_index;
 
     var numin = numinvoice;
 
     String url =
-        '${MyConstant().domain}/UPC_finant_bill.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&numin=$numin';
+        '${MyConstant().domain}/UPC_finant_bill.php?isAdd=true&ren=$ren&user=$user&numin=$numin&because=$Formbecause';
     try {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() == 'true') {
-        Insert_log.Insert_logs(
-            'ผู้เช่า', 'ประวัติบิล>>ยกเลิกรับชำระ(${numin.toString()})');
+        Insert_log.Insert_logs('บัญชี',
+            'ประวัติบิล>>ยกเลิกการรับชำระ($numin,เหตุผล:${Formbecause})');
         setState(() {
           _InvoiceModels.clear();
           _InvoiceHistoryModels.clear();
@@ -3662,10 +3959,53 @@ class _HistoryBillsState extends State<HistoryBills> {
           red_Trans_bill();
           finnancetransModels.clear();
         });
-        print('rrrrrrrrrrrrrr');
+        // print('rrrrrrrrrrrrrr');
       }
     } catch (e) {}
   }
+  // Future<Null> pPC_finantIbill() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var ren = preferences.getString('renTalSer');
+  //   var user = preferences.getString('ser');
+  //   var ciddoc = widget.Get_Value_cid;
+  //   var qutser = widget.Get_Value_NameShop_index;
+
+  //   var numin = numinvoice;
+
+  //   String url =
+  //       '${MyConstant().domain}/UPC_finant_bill.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&numin=$numin';
+  //   try {
+  //     var response = await http.get(Uri.parse(url));
+
+  //     var result = json.decode(response.body);
+  //     print(result);
+  //     if (result.toString() == 'true') {
+  //       Insert_log.Insert_logs(
+  //           'ผู้เช่า', 'ประวัติบิล>>ยกเลิกรับชำระ(${numin.toString()})');
+  //       setState(() {
+  //         _InvoiceModels.clear();
+  //         _InvoiceHistoryModels.clear();
+  //         _TransReBillHistoryModels.clear();
+  //         numinvoice = null;
+  //         numdoctax = null;
+  //         // sum_disamtx.text = '0.00';
+  //         // sum_dispx.text = '0.00';
+  //         sum_pvat = 0.00;
+  //         sum_vat = 0.00;
+  //         sum_wht = 0.00;
+  //         sum_amt = 0.00;
+  //         sum_dis = 0.00;
+  //         sum_disamt = 0.00;
+  //         total_amt = 0.00;
+  //         sum_disp = 0;
+  //         select_page = 0;
+  //         red_Trans_bill();
+  //         finnancetransModels.clear();
+  //       });
+  //       print('rrrrrrrrrrrrrr');
+  //     }
+  //   } catch (e) {}
+  // }
 
   ////////////------------------------------------------------------>(Export file)
   Future<void> showMyDialog_SAVE(
@@ -3844,218 +4184,253 @@ class _HistoryBillsState extends State<HistoryBills> {
     var date_pay = (finnancetransModels.length == 0)
         ? ''
         : '${finnancetransModels[0].dateacc}';
+    var cFinn_S = (numinvoice != '') ? numinvoice : numdoctax;
     Navigator.pop(context, 'OK');
-    if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
-      Pdfgen_his_statusbill.exportPDF_statusbill(
-          foder,
-          tableData00,
-          tableData00,
+    Future.delayed(Duration(milliseconds: 500), () async {
+      // print('cFinn_S  ${cFinn_S}');
+      // print('foder  ${foder}');
+      // print('renTal_name   ${renTal_name}');
+      // print('bill_addr  ${bill_addr}');
+      // print('bill_email  ${bill_email}');
+      // print('bill_tel   ${bill_tel}');
+      // print('bill_tax  ${bill_tax}');
+      // print('bill_name  ${bill_name}');
+      // print('newValuePDFimg   ${newValuePDFimg}');
+      // print(
+      //     'TitleType_Default_Receipt_Name  ${TitleType_Default_Receipt_Name}');
+      // print('tem_page_ser  ${tem_page_ser}');
+      // print('bills_name_  ${bills_name_}');
+      // print('numdoctax  ${numdoctax} /// numinvoice ${numinvoice}  ');
+      ManPay_Receipt_PDF.ManPayReceipt_PDF(
+          '${cFinn_S}',
           context,
-          _TransReBillHistoryModels,
-          'Num_cid',
-          'Namenew',
-          sum_pvat,
-          sum_vat,
-          sum_wht,
-          sum_amt,
-          sum_disp,
-          sum_disamt,
-          '${sum_amt - sum_disamt}',
+          foder,
           renTal_name,
-          Form_bussscontact,
-          Form_bussscontact,
-          Form_address,
-          Form_tax,
+          // Form_nameshop,
+          // Form_bussshop,
+          // Form_address,
+          // Form_tax,
           bill_addr,
           bill_email,
           bill_tel,
           bill_tax,
           bill_name,
           newValuePDFimg,
-          numinvoice,
-          numdoctax,
-          finnancetransModels,
-          date_Transaction,
-          date_pay,
-          room_number_BillHistory,
-          dis_sum_Matjum,
-          TitleType_Default_Receipt_Name);
-    } else if (tem_page_ser.toString() == '1') {
-      Pdfgen_his_statusbill_TP2.exportPDF_statusbill_TP2(
-          foder,
-          tableData00,
-          tableData00,
-          context,
-          _TransReBillHistoryModels,
-          'Num_cid',
-          'Namenew',
-          sum_pvat,
-          sum_vat,
-          sum_wht,
-          sum_amt,
-          sum_disp,
-          sum_disamt,
-          '${sum_amt - sum_disamt}',
-          renTal_name,
-          Form_bussscontact,
-          Form_bussscontact,
-          Form_address,
-          Form_tax,
-          bill_addr,
-          bill_email,
-          bill_tel,
-          bill_tax,
-          bill_name,
-          newValuePDFimg,
-          // numdoctax == '' ? '$numinvoice' : '$numdoctax',
-          numinvoice,
-          numdoctax,
-          finnancetransModels,
-          date_Transaction,
-          date_pay,
-          room_number_BillHistory,
-          dis_sum_Matjum,
-          TitleType_Default_Receipt_Name);
-    } else if (tem_page_ser.toString() == '2') {
-      Pdfgen_his_statusbill_TP3.exportPDF_statusbill_TP3(
-          foder,
-          tableData00,
-          tableData00,
-          context,
-          _TransReBillHistoryModels,
-          'Num_cid',
-          'Namenew',
-          sum_pvat,
-          sum_vat,
-          sum_wht,
-          sum_amt,
-          sum_disp,
-          sum_disamt,
-          '${sum_amt - sum_disamt}',
-          renTal_name,
-          Form_bussscontact,
-          Form_bussscontact,
-          Form_address,
-          Form_tax,
-          bill_addr,
-          bill_email,
-          bill_tel,
-          bill_tax,
-          bill_name,
-          newValuePDFimg,
-          numinvoice,
-          numdoctax,
-          finnancetransModels,
-          date_Transaction,
-          date_pay,
-          room_number_BillHistory,
-          dis_sum_Matjum,
-          TitleType_Default_Receipt_Name);
-    } else if (tem_page_ser.toString() == '3') {
-      Pdfgen_his_statusbill_TP4.exportPDF_statusbill_TP4(
-          foder,
-          tableData00,
-          tableData00,
-          context,
-          _TransReBillHistoryModels,
-          'Num_cid',
-          'Namenew',
-          sum_pvat,
-          sum_vat,
-          sum_wht,
-          sum_amt,
-          sum_disp,
-          sum_disamt,
-          '${sum_amt - sum_disamt}',
-          renTal_name,
-          Form_bussscontact,
-          Form_bussscontact,
-          Form_address,
-          Form_tax,
-          bill_addr,
-          bill_email,
-          bill_tel,
-          bill_tax,
-          bill_name,
-          newValuePDFimg,
-          numinvoice,
-          numdoctax,
-          finnancetransModels,
-          date_Transaction,
-          date_pay,
-          room_number_BillHistory,
-          dis_sum_Matjum,
-          TitleType_Default_Receipt_Name);
-    } else if (tem_page_ser.toString() == '4') {
-      Pdfgen_his_statusbill_TP5.exportPDF_statusbill_TP5(
-          foder,
-          tableData00,
-          tableData00,
-          context,
-          _TransReBillHistoryModels,
-          'Num_cid',
-          'Namenew',
-          sum_pvat,
-          sum_vat,
-          sum_wht,
-          sum_amt,
-          sum_disp,
-          sum_disamt,
-          '${sum_amt - sum_disamt}',
-          renTal_name,
-          Form_bussscontact,
-          Form_bussscontact,
-          Form_address,
-          Form_tax,
-          bill_addr,
-          bill_email,
-          bill_tel,
-          bill_tax,
-          bill_name,
-          newValuePDFimg,
-          numinvoice,
-          numdoctax,
-          finnancetransModels,
-          date_Transaction,
-          date_pay,
-          room_number_BillHistory,
-          dis_sum_Matjum,
-          TitleType_Default_Receipt_Name);
-    } else if (tem_page_ser.toString() == '5') {
-      Pdfgen_his_statusbill_TP6.exportPDF_statusbill_TP6(
-          foder,
-          tableData00,
-          tableData00,
-          context,
-          _TransReBillHistoryModels,
-          'Num_cid',
-          'Namenew',
-          sum_pvat,
-          sum_vat,
-          sum_wht,
-          sum_amt,
-          sum_disp,
-          sum_disamt,
-          '${sum_amt - sum_disamt}',
-          renTal_name,
-          Form_bussscontact,
-          Form_bussscontact,
-          Form_address,
-          Form_tax,
-          bill_addr,
-          bill_email,
-          bill_tel,
-          bill_tax,
-          bill_name,
-          newValuePDFimg,
-          numinvoice,
-          numdoctax,
-          finnancetransModels,
-          date_Transaction,
-          date_pay,
-          room_number_BillHistory,
-          dis_sum_Matjum,
-          TitleType_Default_Receipt_Name);
-    }
+          TitleType_Default_Receipt_Name,
+          tem_page_ser,
+          bills_name_);
+    });
+    // if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
+    //   Pdfgen_his_statusbill.exportPDF_statusbill(
+    //       foder,
+    //       tableData00,
+    //       tableData00,
+    //       context,
+    //       _TransReBillHistoryModels,
+    //       'Num_cid',
+    //       'Namenew',
+    //       sum_pvat,
+    //       sum_vat,
+    //       sum_wht,
+    //       sum_amt,
+    //       sum_disp,
+    //       sum_disamt,
+    //       '${sum_amt - sum_disamt}',
+    //       renTal_name,
+    //       Form_bussscontact,
+    //       Form_bussscontact,
+    //       Form_address,
+    //       Form_tax,
+    //       bill_addr,
+    //       bill_email,
+    //       bill_tel,
+    //       bill_tax,
+    //       bill_name,
+    //       newValuePDFimg,
+    //       numinvoice,
+    //       numdoctax,
+    //       finnancetransModels,
+    //       date_Transaction,
+    //       date_pay,
+    //       room_number_BillHistory,
+    //       dis_sum_Matjum,
+    //       TitleType_Default_Receipt_Name);
+    // } else if (tem_page_ser.toString() == '1') {
+    //   Pdfgen_his_statusbill_TP2.exportPDF_statusbill_TP2(
+    //       foder,
+    //       tableData00,
+    //       tableData00,
+    //       context,
+    //       _TransReBillHistoryModels,
+    //       'Num_cid',
+    //       'Namenew',
+    //       sum_pvat,
+    //       sum_vat,
+    //       sum_wht,
+    //       sum_amt,
+    //       sum_disp,
+    //       sum_disamt,
+    //       '${sum_amt - sum_disamt}',
+    //       renTal_name,
+    //       Form_bussscontact,
+    //       Form_bussscontact,
+    //       Form_address,
+    //       Form_tax,
+    //       bill_addr,
+    //       bill_email,
+    //       bill_tel,
+    //       bill_tax,
+    //       bill_name,
+    //       newValuePDFimg,
+    //       // numdoctax == '' ? '$numinvoice' : '$numdoctax',
+    //       numinvoice,
+    //       numdoctax,
+    //       finnancetransModels,
+    //       date_Transaction,
+    //       date_pay,
+    //       room_number_BillHistory,
+    //       dis_sum_Matjum,
+    //       TitleType_Default_Receipt_Name);
+    // } else if (tem_page_ser.toString() == '2') {
+    //   Pdfgen_his_statusbill_TP3.exportPDF_statusbill_TP3(
+    //       foder,
+    //       tableData00,
+    //       tableData00,
+    //       context,
+    //       _TransReBillHistoryModels,
+    //       'Num_cid',
+    //       'Namenew',
+    //       sum_pvat,
+    //       sum_vat,
+    //       sum_wht,
+    //       sum_amt,
+    //       sum_disp,
+    //       sum_disamt,
+    //       '${sum_amt - sum_disamt}',
+    //       renTal_name,
+    //       Form_bussscontact,
+    //       Form_bussscontact,
+    //       Form_address,
+    //       Form_tax,
+    //       bill_addr,
+    //       bill_email,
+    //       bill_tel,
+    //       bill_tax,
+    //       bill_name,
+    //       newValuePDFimg,
+    //       numinvoice,
+    //       numdoctax,
+    //       finnancetransModels,
+    //       date_Transaction,
+    //       date_pay,
+    //       room_number_BillHistory,
+    //       dis_sum_Matjum,
+    //       TitleType_Default_Receipt_Name);
+    // } else if (tem_page_ser.toString() == '3') {
+    //   Pdfgen_his_statusbill_TP4.exportPDF_statusbill_TP4(
+    //       foder,
+    //       tableData00,
+    //       tableData00,
+    //       context,
+    //       _TransReBillHistoryModels,
+    //       'Num_cid',
+    //       'Namenew',
+    //       sum_pvat,
+    //       sum_vat,
+    //       sum_wht,
+    //       sum_amt,
+    //       sum_disp,
+    //       sum_disamt,
+    //       '${sum_amt - sum_disamt}',
+    //       renTal_name,
+    //       Form_bussscontact,
+    //       Form_bussscontact,
+    //       Form_address,
+    //       Form_tax,
+    //       bill_addr,
+    //       bill_email,
+    //       bill_tel,
+    //       bill_tax,
+    //       bill_name,
+    //       newValuePDFimg,
+    //       numinvoice,
+    //       numdoctax,
+    //       finnancetransModels,
+    //       date_Transaction,
+    //       date_pay,
+    //       room_number_BillHistory,
+    //       dis_sum_Matjum,
+    //       TitleType_Default_Receipt_Name);
+    // } else if (tem_page_ser.toString() == '4') {
+    //   Pdfgen_his_statusbill_TP5.exportPDF_statusbill_TP5(
+    //       foder,
+    //       tableData00,
+    //       tableData00,
+    //       context,
+    //       _TransReBillHistoryModels,
+    //       'Num_cid',
+    //       'Namenew',
+    //       sum_pvat,
+    //       sum_vat,
+    //       sum_wht,
+    //       sum_amt,
+    //       sum_disp,
+    //       sum_disamt,
+    //       '${sum_amt - sum_disamt}',
+    //       renTal_name,
+    //       Form_bussscontact,
+    //       Form_bussscontact,
+    //       Form_address,
+    //       Form_tax,
+    //       bill_addr,
+    //       bill_email,
+    //       bill_tel,
+    //       bill_tax,
+    //       bill_name,
+    //       newValuePDFimg,
+    //       numinvoice,
+    //       numdoctax,
+    //       finnancetransModels,
+    //       date_Transaction,
+    //       date_pay,
+    //       room_number_BillHistory,
+    //       dis_sum_Matjum,
+    //       TitleType_Default_Receipt_Name);
+    // } else if (tem_page_ser.toString() == '5') {
+    //   Pdfgen_his_statusbill_TP6.exportPDF_statusbill_TP6(
+    //       foder,
+    //       tableData00,
+    //       tableData00,
+    //       context,
+    //       _TransReBillHistoryModels,
+    //       'Num_cid',
+    //       'Namenew',
+    //       sum_pvat,
+    //       sum_vat,
+    //       sum_wht,
+    //       sum_amt,
+    //       sum_disp,
+    //       sum_disamt,
+    //       '${sum_amt - sum_disamt}',
+    //       renTal_name,
+    //       Form_bussscontact,
+    //       Form_bussscontact,
+    //       Form_address,
+    //       Form_tax,
+    //       bill_addr,
+    //       bill_email,
+    //       bill_tel,
+    //       bill_tax,
+    //       bill_name,
+    //       newValuePDFimg,
+    //       numinvoice,
+    //       numdoctax,
+    //       finnancetransModels,
+    //       date_Transaction,
+    //       date_pay,
+    //       room_number_BillHistory,
+    //       dis_sum_Matjum,
+    //       TitleType_Default_Receipt_Name);
+    // }
   }
 }

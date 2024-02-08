@@ -18,6 +18,7 @@ import '../../Style/ThaiBaht.dart';
 class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
   //////////---------------------------------------------------->(ใบวางบิล แจ้งหนี้)  ใช้  ++
   static void exportPDF_BillingNoteInvlice_TP8_Ortorkor(
+      foder,
       Cust_no,
       cid_,
       Zone_s,
@@ -54,7 +55,13 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
       paymentName1,
       paymentName2,
       selectedValue_bank_bno,
-      TitleType_Default_Receipt_Name) async {
+      TitleType_Default_Receipt_Name,
+      payment_Ptser1,
+      bank1,
+      ptser1,
+      ptname1,
+      img1,
+      Preview_ser) async {
     final pdf = pw.Document();
     // final fontData = await rootBundle.load("ThaiFonts/Sarabun-Medium.ttf");
     // var dataint = fontData.buffer
@@ -88,9 +95,17 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
     String total_QR = '${nFormat.format(double.parse('${Total}'))}';
     String newTotal_QR = total_QR.replaceAll(RegExp(r'[^0-9]'), '');
     List netImage = [];
-
+    List netImage_QR = [];
     for (int i = 0; i < newValuePDFimg.length; i++) {
       netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    }
+    if (img1 == null || img1.toString() == '') {
+      netImage_QR.add(await networkImage(
+          '${MyConstant().domain}/Awaitdownload/imagenot.png'));
+      // netImage_QR.add(iconImage);
+    } else {
+      netImage_QR.add(await networkImage(
+          '${MyConstant().domain}/files/$foder/payment/${img1}'));
     }
     final tableHeaders = [
       'ลำดับ',
@@ -130,7 +145,15 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                 ? pw.Container(
                     height: 60,
                     width: 60,
-                    color: PdfColors.grey200,
+                    decoration: const pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      border: pw.Border(
+                        right: pw.BorderSide(color: PdfColors.grey300),
+                        left: pw.BorderSide(color: PdfColors.grey300),
+                        top: pw.BorderSide(color: PdfColors.grey300),
+                        bottom: pw.BorderSide(color: PdfColors.grey300),
+                      ),
+                    ),
                     child: pw.Center(
                       child: pw.Text(
                         '$bill_name ',
@@ -148,12 +171,24 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                 //     height: 72,
                 //     width: 70,
                 //   )
-                : pw.Image(
-                    (netImage[0]),
-                    // fit: pw.BoxFit.fill,
+                : pw.Container(
                     height: 60,
                     width: 60,
-                  ),
+                    decoration: const pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      border: pw.Border(
+                        right: pw.BorderSide(color: PdfColors.grey300),
+                        left: pw.BorderSide(color: PdfColors.grey300),
+                        top: pw.BorderSide(color: PdfColors.grey300),
+                        bottom: pw.BorderSide(color: PdfColors.grey300),
+                      ),
+                    ),
+                    child: pw.Image(
+                      (netImage[0]),
+                      // fit: pw.BoxFit.fill,
+                      height: 60,
+                      width: 60,
+                    )),
             pw.SizedBox(width: 1 * PdfPageFormat.mm),
             pw.Container(
               // color: PdfColors.grey200,
@@ -286,7 +321,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
             // ),
           ],
         ),
-        pw.SizedBox(height: 1 * PdfPageFormat.mm),
+        pw.SizedBox(height: 1 * PdfPageFormat.mm + 3),
         // pw.SizedBox(height: 1 * PdfPageFormat.mm),
         // pw.Divider(),
         // pw.SizedBox(height: 1 * PdfPageFormat.mm),
@@ -858,7 +893,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
               child: pw.Row(
                 children: [
                   pw.Container(
-                    width: 57,
+                    width: 45,
                     decoration: const pw.BoxDecoration(
                       // color: PdfColors.green100,
                       border: pw.Border(
@@ -1046,6 +1081,44 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                     ),
                   ),
                   pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      decoration: const pw.BoxDecoration(
+                        // color: PdfColors.green100,
+                        border: pw.Border(
+                          right: pw.BorderSide(color: PdfColors.grey600),
+                          top: pw.BorderSide(color: PdfColors.grey600),
+                          bottom: pw.BorderSide(color: PdfColors.grey600),
+                        ),
+                      ),
+                      height: 30,
+                      child: pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                            'ส่วนลด',
+                            maxLines: 1,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                                fontSize: font_Size,
+                                font: ttf,
+                                color: PdfColors.black),
+                          ),
+                          pw.Text(
+                            'Dis',
+                            maxLines: 1,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                                fontSize: font_Size,
+                                font: ttf,
+                                color: PdfColors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
                     flex: 2,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
@@ -1104,7 +1177,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                   for (int index = 0; index < tableData003.length; index++)
                     pw.TableRow(children: [
                       pw.Container(
-                        width: 57,
+                        width: 45,
                         padding: const pw.EdgeInsets.all(2.0),
                         child: pw.Align(
                           alignment: pw.Alignment.topCenter,
@@ -1188,6 +1261,23 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                 (tableData003[index][7].toString() == '0.00')
                                     ? '${tableData003[index][5]}'
                                     : '${tableData003[index][7]}',
+                                maxLines: 2,
+                                textAlign: pw.TextAlign.right,
+                                style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    color: PdfColors.grey800),
+                              ),
+                            ),
+                          )),
+                      pw.Expanded(
+                          flex: 1,
+                          child: pw.Container(
+                            padding: const pw.EdgeInsets.all(2.0),
+                            child: pw.Align(
+                              alignment: pw.Alignment.topRight,
+                              child: pw.Text(
+                                '0.00',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.right,
                                 style: pw.TextStyle(
@@ -1748,65 +1838,104 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                   ),
                                 ),
                               ])),
-                      if (paymentName1.toString().trim() != 'เงินสด')
-                        pw.Expanded(
-                            flex: 2,
-                            child:
-                                (paymentName1.toString().trim() == 'เงินโอน' ||
-                                        paymentName1.toString().trim() ==
-                                            'เงินโอน' ||
-                                        paymentName1.toString().trim() ==
-                                            'Online Payment' ||
-                                        paymentName1.toString().trim() ==
-                                            'Online Payment' ||
-                                        paymentName1.toString().trim() ==
-                                            'Online Standard QR' ||
-                                        paymentName2.toString().trim() ==
-                                            'เงินโอน' ||
-                                        paymentName2.toString().trim() ==
-                                            'เงินโอน' ||
-                                        paymentName2.toString().trim() ==
-                                            'Online Payment' ||
-                                        paymentName2.toString().trim() ==
-                                            'Online Payment' ||
-                                        paymentName2.toString().trim() ==
-                                            'Online Standard QR')
-                                    ? pw.Container(
-                                        padding: const pw.EdgeInsets.all(4.0),
-                                        child: pw.Column(
-                                          mainAxisAlignment:
-                                              pw.MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              pw.CrossAxisAlignment.end,
-                                          children: [
-                                            pw.Container(
-                                              child: pw.BarcodeWidget(
-                                                  data: (paymentName1
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'Online Standard QR' ||
-                                                          paymentName2
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'Online Standard QR')
-                                                      ? '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('dd-MM-yyyy').format(DateTime.parse(date_Transaction))}\r${newTotal_QR}\r'
-                                                      : generateQRCode(
-                                                          promptPayID:
-                                                              "$selectedValue_bank_bno",
-                                                          amount: double.parse(
-                                                              (Total == null ||
-                                                                      Total ==
-                                                                          '')
-                                                                  ? '0'
-                                                                  : '$Total')),
-                                                  barcode: pw.Barcode.qrCode(),
-                                                  width: 60,
-                                                  height: 60),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : pw.Text('')),
+
+                      pw.Expanded(
+                          flex: 2,
+                          child: pw.Container(
+                            padding: const pw.EdgeInsets.all(4.0),
+                            child: pw.Column(
+                                mainAxisAlignment: pw.MainAxisAlignment.end,
+                                crossAxisAlignment: pw.CrossAxisAlignment.end,
+                                children: [
+                                  if (ptser1.toString() == '6')
+                                    pw.Container(
+                                      child: pw.BarcodeWidget(
+                                          data:
+                                              '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('ddMM').format(DateTime.parse(date_Transaction))}${DateTime.parse('${date_Transaction}').year + 543}\r${newTotal_QR}\r',
+                                          barcode: pw.Barcode.qrCode(),
+                                          width: 60,
+                                          height: 60),
+                                    ),
+                                  if (ptser1.toString() == '5')
+                                    pw.BarcodeWidget(
+                                        data: generateQRCode(
+                                            promptPayID:
+                                                "$selectedValue_bank_bno",
+                                            amount: double.parse(
+                                                (Total == null || Total == '')
+                                                    ? '0'
+                                                    : '$Total')),
+                                        barcode: pw.Barcode.qrCode(),
+                                        width: 60,
+                                        height: 60),
+                                  if (img1.toString() != '')
+                                    if (ptser1.toString() == '2')
+                                      pw.Image(
+                                        (netImage_QR[0]),
+                                        height: 60,
+                                        width: 60,
+                                      ),
+                                ]),
+                          )),
+                      // if (paymentName1.toString().trim() != 'เงินสด')
+                      //   pw.Expanded(
+                      //       flex: 2,
+                      //       child:
+                      //           (paymentName1.toString().trim() == 'เงินโอน' ||
+                      //                   paymentName1.toString().trim() ==
+                      //                       'เงินโอน' ||
+                      //                   paymentName1.toString().trim() ==
+                      //                       'Online Payment' ||
+                      //                   paymentName1.toString().trim() ==
+                      //                       'Online Payment' ||
+                      //                   paymentName1.toString().trim() ==
+                      //                       'Online Standard QR' ||
+                      //                   paymentName2.toString().trim() ==
+                      //                       'เงินโอน' ||
+                      //                   paymentName2.toString().trim() ==
+                      //                       'เงินโอน' ||
+                      //                   paymentName2.toString().trim() ==
+                      //                       'Online Payment' ||
+                      //                   paymentName2.toString().trim() ==
+                      //                       'Online Payment' ||
+                      //                   paymentName2.toString().trim() ==
+                      //                       'Online Standard QR')
+                      //               ? pw.Container(
+                      //                   padding: const pw.EdgeInsets.all(4.0),
+                      //                   child: pw.Column(
+                      //                     mainAxisAlignment:
+                      //                         pw.MainAxisAlignment.end,
+                      //                     crossAxisAlignment:
+                      //                         pw.CrossAxisAlignment.end,
+                      //                     children: [
+                      //                       pw.Container(
+                      //                         child: pw.BarcodeWidget(
+                      //                             data: (paymentName1
+                      //                                             .toString()
+                      //                                             .trim() ==
+                      //                                         'Online Standard QR' ||
+                      //                                     paymentName2
+                      //                                             .toString()
+                      //                                             .trim() ==
+                      //                                         'Online Standard QR')
+                      //                                 ? '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('dd-MM-yyyy').format(DateTime.parse(date_Transaction))}\r${newTotal_QR}\r'
+                      //                                 : generateQRCode(
+                      //                                     promptPayID:
+                      //                                         "$selectedValue_bank_bno",
+                      //                                     amount: double.parse(
+                      //                                         (Total == null ||
+                      //                                                 Total ==
+                      //                                                     '')
+                      //                                             ? '0'
+                      //                                             : '$Total')),
+                      //                             barcode: pw.Barcode.qrCode(),
+                      //                             width: 60,
+                      //                             height: 60),
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                 )
+                      //               : pw.Text('')),
                     ],
                   )),
               pw.Padding(
@@ -1845,11 +1974,19 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
     //     data,
     //     "pdf",
     //     mimeType: type);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PreviewPdfgen_Bills(
-              doc: pdf, nameBills: 'ใบวางบิล/ใบแจ้งหนี้${cFinn}'),
-        ));
+    if (Preview_ser.toString() == '1') {
+      final List<int> bytes = await pdf.save();
+      final Uint8List data = Uint8List.fromList(bytes);
+      MimeType type = MimeType.PDF;
+      final dir = await FileSaver.instance
+          .saveFile('ใบวางบิล/ใบแจ้งหนี้${cFinn}', data, "pdf", mimeType: type);
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PreviewPdfgen_Bills(
+                doc: pdf, nameBills: 'ใบวางบิล/ใบแจ้งหนี้${cFinn}'),
+          ));
+    }
   }
 }

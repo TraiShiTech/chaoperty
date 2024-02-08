@@ -39,6 +39,9 @@ class RenTalModel {
   String? printbill_default;
   String? receipt_title;
   String? pn_TH;
+  String? open_set;
+  String? open_disinv;
+  String? open_set_date;
 
   RenTalModel(
       {this.ser,
@@ -80,7 +83,10 @@ class RenTalModel {
       this.Floor_plans,
       this.printbill_default,
       this.receipt_title,
-      this.pn_TH});
+      this.pn_TH,
+      this.open_set,
+      this.open_disinv,
+      this.open_set_date});
 
   RenTalModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -123,6 +129,9 @@ class RenTalModel {
     printbill_default = json['printbill_default'];
     receipt_title = json['receipt_title'];
     pn_TH = json['pn_TH'];
+    open_set = json['open_set'];
+    open_disinv = json['open_disinv'];
+    open_set_date = json['open_set_date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -166,7 +175,11 @@ class RenTalModel {
     data['Floor_plans'] = this.Floor_plans;
     data['printbill_default'] = this.printbill_default;
     data['receipt_title'] = this.receipt_title;
-     data['pn_TH'] = this.pn_TH;
+    data['pn_TH'] = this.pn_TH;
+    data['open_set'] = this.open_set;
+    data['open_disinv'] = this.open_disinv;
+    data['open_set_date'] = this.open_set_date;
+
     return data;
   }
 }

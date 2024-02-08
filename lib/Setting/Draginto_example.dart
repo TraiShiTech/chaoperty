@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, prefer_const_constructors, unnecessary_import, implementation_imports, prefer_const_constructors_in_immutables, non_constant_identifier_names, avoid_init_to_null, prefer_void_to_null, unnecessary_brace_in_string_interps, avoid_print, empty_catches, sized_box_for_whitespace, use_build_context_synchronously, file_names, prefer_const_literals_to_create_immutables, prefer_const_declarations, unnecessary_string_interpolations, prefer_collection_literals, sort_child_properties_last, avoid_unnecessary_containers, prefer_is_empty, prefer_final_fields, camel_case_types, avoid_web_libraries_in_flutter, prefer_typing_uninitialized_variables, no_leading_underscores_for_local_identifiers, deprecated_member_use
 import 'dart:convert';
 import 'dart:ui';
 
@@ -29,7 +30,7 @@ class _DragIntoListExample extends State<DragIntoListExample> {
   List<SubZoneModel> subzoneModels = [];
   final _formKey = GlobalKey<FormState>();
   final zone_text = TextEditingController();
-
+  List<String> reverseOrdersub = [];
   @override
   void initState() {
     super.initState();
@@ -74,194 +75,186 @@ class _DragIntoListExample extends State<DragIntoListExample> {
       }
     } catch (e) {}
     setState(() {
-      read_GC_zone().then((value) =>
-          _contents = List.generate(subzoneModels.length, (index) {
-            return DragAndDropList(
-              contentsWhenEmpty: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  subzoneModels[index].zn.toString(),
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              lastTarget: Text(
-                "${subzoneModels[index].ser}",
-                style: TextStyle(color: Colors.transparent),
-              ),
-              header: Column(
-                children: <Widget>[
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8, bottom: 4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${subzoneModels[index].zn}',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                            subzoneModels[index].ser == '0'
-                                ? IconButton(
-                                    onPressed: () {
-                                      addZone();
-                                    },
-                                    icon: Icon(
-                                        Icons.add_circle_outline_outlined,
-                                        color: Colors.green),
-                                  )
-                                : IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => StatefulBuilder(
-                                          builder: (context, setState) =>
-                                              AlertDialog(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            title: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.2,
-                                                        child: Text(
-                                                          'ลบโซนพื้นที่ ${subzoneModels[index].zn}',
-                                                          style: TextStyle(
-                                                            fontSize: 20.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.red,
-                                                          ),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ), //AppBarColors2.Colors(),
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    Container(
-                                                      width: 130,
-                                                      height: 40,
-                                                      // ignore: deprecated_member_use
-                                                      child: ElevatedButton(
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          backgroundColor:
-                                                              Colors.green,
-                                                        ),
-                                                        onPressed: () async {
-                                                          deleteZone(index);
+      read_GC_zone().then((value) => sub_con());
+    });
+  }
 
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: const Text(
-                                                          'ยันยัน',
-                                                          style: TextStyle(
-                                                            // fontSize: 20.0,
-                                                            // fontWeight: FontWeight.bold,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                        // color: Colors.orange[900],
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      width: 150,
-                                                      height: 40,
-                                                      // ignore: deprecated_member_use
-                                                      child: ElevatedButton(
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          backgroundColor:
-                                                              Colors.black,
-                                                        ),
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context),
-                                                        child: const Text(
-                                                          'ยกเลิก',
-                                                          style: TextStyle(
-                                                            // fontSize: 20.0,
-                                                            // fontWeight: FontWeight.bold,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                        // color: Colors.black,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    icon: Icon(
-                                        Icons.remove_circle_outline_outlined,
-                                        color: Colors.red),
-                                  ),
-                          ],
-                        ),
+  List<DragAndDropList> sub_con() {
+    return _contents = List.generate(subzoneModels.length, (index) {
+      return DragAndDropList(
+        contentsWhenEmpty: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Text(
+            subzoneModels[index].zn.toString(),
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+        lastTarget: Text(
+          "${subzoneModels[index].ser}",
+          style: TextStyle(color: Colors.transparent),
+        ),
+        header: Column(
+          children: <Widget>[
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, bottom: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${subzoneModels[index].zn}',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
+                      subzoneModels[index].ser == '0'
+                          ? IconButton(
+                              onPressed: () {
+                                addZone();
+                              },
+                              icon: Icon(Icons.add_circle_outline_outlined,
+                                  color: Colors.green),
+                            )
+                          : IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => StatefulBuilder(
+                                    builder: (context, setState) => AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      title: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                  alignment: Alignment.center,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.2,
+                                                  child: Text(
+                                                    'ลบโซนพื้นที่ ${subzoneModels[index].zn}',
+                                                    style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.red,
+                                                    ),
+                                                  )),
+                                            ],
+                                          ),
+                                        ],
+                                      ), //AppBarColors2.Colors(),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Container(
+                                                width: 130,
+                                                height: 40,
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                  ),
+                                                  onPressed: () async {
+                                                    deleteZone(index);
+
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text(
+                                                    'ยันยัน',
+                                                    style: TextStyle(
+                                                      // fontSize: 20.0,
+                                                      // fontWeight: FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  // color: Colors.orange[900],
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 150,
+                                                height: 40,
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.black,
+                                                  ),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                  child: const Text(
+                                                    'ยกเลิก',
+                                                    style: TextStyle(
+                                                      // fontSize: 20.0,
+                                                      // fontWeight: FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  // color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: Icon(Icons.remove_circle_outline_outlined,
+                                  color: Colors.red),
+                            ),
                     ],
                   ),
-                ],
-              ),
-              children: <DragAndDropItem>[
-                for (int indexz = 0; indexz < zoneModels.length; indexz++)
-                  if (subzoneModels[index].ser == zoneModels[indexz].sub_zone)
-                    DragAndDropItem(
-                      feedbackWidget: Text(zoneModels[indexz].ser.toString()),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 12),
-                            child: Text(
-                              '${zoneModels[indexz].zn}',
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  else if (index == 0 && zoneModels[indexz].sub_zone == '0')
-                    DragAndDropItem(
-                      feedbackWidget: Text(zoneModels[indexz].ser.toString()),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 12),
-                            child: Text(
-                              '${zoneModels[indexz].zn}',
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                ),
               ],
-            );
-          }));
+            ),
+          ],
+        ),
+        children: <DragAndDropItem>[
+          for (int indexz = 0; indexz < zoneModels.length; indexz++)
+            if (subzoneModels[index].ser == zoneModels[indexz].sub_zone)
+              DragAndDropItem(
+                feedbackWidget: Text(zoneModels[indexz].ser.toString()),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 12),
+                      child: Text(
+                        '${zoneModels[indexz].zn}',
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else if (index == 0 && zoneModels[indexz].sub_zone == '0')
+              DragAndDropItem(
+                feedbackWidget: Text(zoneModels[indexz].ser.toString()),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 12),
+                      child: Text(
+                        '${zoneModels[indexz].zn}',
+                      ),
+                    ),
+                  ],
+                ),
+              )
+        ],
+      );
     });
   }
 
@@ -561,37 +554,7 @@ class _DragIntoListExample extends State<DragIntoListExample> {
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                 onTap: () {
-                  for (int index = 0; index < _contents.length; index++) {
-                    var Order =
-                        _contents[index].lastTarget.toString().indexOf('"');
-                    var Order2 = _contents[index]
-                        .lastTarget
-                        .toString()
-                        .substring(Order + 1);
-                    var Order22 = Order2.toString().indexOf('"');
-                    var sub_zone = Order2.toString().substring(0, Order22);
-                    print('sub_zone $sub_zone');
-                    var reverseOrder = _contents[index].children;
-
-                    for (int i = 0; i < reverseOrder.length; i++) {
-                      var reverse = reverseOrder[i]
-                          .feedbackWidget
-                          .toString()
-                          .indexOf('"');
-                      var reverse2 = reverseOrder[i]
-                          .feedbackWidget
-                          .toString()
-                          .substring(reverse + 1);
-                      var zone =
-                          reverse2.toString().substring(0, reverse2.length - 2);
-                      print('zone $zone');
-                      edit_Sub_zone(sub_zone, zone, index);
-                    }
-                  }
-                  setState(() {
-                    subzoneModels.clear;
-                    read_GC_Sub_zone();
-                  });
+                  saveZone();
                 },
                 child: Container(
                     height: 50,
@@ -685,6 +648,161 @@ class _DragIntoListExample extends State<DragIntoListExample> {
     );
   }
 
+  Future<String?> saveZone() {
+    return showDialog<String>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => Form(
+        key: _formKey,
+        child: AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: Center(
+              child: Text(
+            'บันทึก',
+            style: TextStyle(
+              color: SettingScreen_Color.Colors_Text1_,
+              fontFamily: FontWeight_.Fonts_T,
+              fontWeight: FontWeight.bold,
+            ),
+          )),
+          actions: <Widget>[
+            Column(
+              children: [
+                const SizedBox(
+                  height: 5.0,
+                ),
+                const Divider(
+                  color: Colors.grey,
+                  height: 4.0,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton(
+                            onPressed: () async {
+                              print(
+                                  ' ${_contents.length} ${_contents[1].children.length} ${_contents[1].children[0].feedbackWidget.toString()}');
+                              print((_contents[1].children[0].feedbackWidget
+                                      as Text)
+                                  .data);
+                              for (int index = 0;
+                                  index < _contents.length;
+                                  index++) {
+                                // var Order = _contents[index]
+                                //     .lastTarget
+                                //     .toString()
+                                //     .indexOf('"');
+                                // var Order2 = _contents[index]
+                                //     .lastTarget
+                                //     .toString()
+                                //     .substring(Order + 1);
+                                // var Order22 = Order2.toString().indexOf('"');
+                                // var sub_zone =
+                                //     Order2.toString().substring(0, Order22);
+                                var sub_zone =
+                                    (_contents[index].lastTarget as Text).data;
+                                print('sub_zone $sub_zone');
+                                List<DragAndDropItem> reverseOrder =
+                                    _contents[index].children;
+
+                                // setState(() {
+                                //   reverseOrdersub.add(
+                                //       _contents[index].children.toString());
+                                // });
+
+                                for (int i = 0; i < reverseOrder.length; i++) {
+                                  // var reverse = reverseOrder[i]
+                                  //     .feedbackWidget
+                                  //     .toString()
+                                  //     .indexOf('"');
+                                  // var reverse2 = reverseOrder[i]
+                                  //     .feedbackWidget
+                                  //     .toString()
+                                  //     .substring(reverse + 1);
+                                  // var zone = reverse2
+                                  //     .toString()
+                                  //     .substring(0, reverse2.length - 2);
+                                  var zone =
+                                      (reverseOrder[i].feedbackWidget as Text)
+                                          .data;
+                                  print('zone $zone');
+                                  edit_Sub_zone(sub_zone!, zone!, index);
+                                }
+                              }
+
+                              setState(() {
+                                subzoneModels.clear;
+                                read_GC_Sub_zone();
+                              });
+                              Navigator.pop(context, 'OK');
+                            },
+                            child: const Text(
+                              'บันทึก',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: FontWeight_.Fonts_T,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const Text(
+                              'ยกเลิก',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: FontWeight_.Fonts_T,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<Null> edit_Sub_zone(String sub_zone, String zone, int index) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? ren = preferences.getString('renTalSer');
@@ -702,8 +820,10 @@ class _DragIntoListExample extends State<DragIntoListExample> {
 
       var result = json.decode(response.body);
 
-      // Insert_log.Insert_logs('ตั้งค่า', 'จัดโซนพื้นที่');
+      Insert_log.Insert_logs('ตั้งค่า', 'จัดโซนพื้นที่');
       if (result.toString() == 'true') {
+        print(
+            'true zone_sub $zone_sub >>zone_name>> $zone_name >>index>> $index');
         // setState(() {
         //   subzoneModels.clear;
         //   read_GC_Sub_zone();

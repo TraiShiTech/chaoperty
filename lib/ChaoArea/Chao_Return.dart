@@ -17,6 +17,7 @@ import '../AdminScaffold/AdminScaffold.dart';
 import '../CRC_16_Prompay/generate_qrcode.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
+import '../Man_PDF/Man_Pay_Pakan.dart';
 import '../Model/GetCFinnancetrans_Model.dart';
 import '../Model/GetFinnancetrans_Pay_Model.dart';
 import '../Model/GetInvoice_Model.dart';
@@ -35,7 +36,8 @@ import '../PDF/pdf_Receipt_PayPakan.dart';
 import '../PeopleChao/Pays_.dart';
 import '../Style/colors.dart';
 import 'dart:ui' as ui;
-
+import '../PDF/pdf_Receipt_PayPakan.dart';
+import '../Man_PDF/Man_Cancel_Rental.dart';
 class ChaoReturn extends StatefulWidget {
   final Value_cid;
   final Get_Value_NameShop_index;
@@ -126,7 +128,7 @@ class _ChaoReturnState extends State<ChaoReturn> {
       Form_zn,
       Form_aser,
       Form_qty,
-      discount_;
+      discount_ ,  tem_page_ser;
   @override
   void initState() {
     super.initState();
@@ -191,6 +193,7 @@ class _ChaoReturnState extends State<ChaoReturn> {
             bill_email = bill_emailx;
             bill_default = bill_defaultx;
             bill_tser = bill_tserx;
+                tem_page_ser = renTalModel.tem_page!.trim();
             renTalModels.add(renTalModel);
             if (bill_defaultx == 'P') {
               bills_name_ = 'บิลธรรมดา';
@@ -1543,7 +1546,37 @@ class _ChaoReturnState extends State<ChaoReturn> {
                                                                   materialPageRoute,
                                                                   (route) =>
                                                                       false);
-
+     List newValuePDFimg = [];
+                                                for (int index = 0;
+                                                    index < 1;
+                                                    index++) {
+                                                  if (renTalModels[0]
+                                                          .imglogo!
+                                                          .trim() ==
+                                                      '') {
+                                                    // newValuePDFimg.add(
+                                                    //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                  } else {
+                                                    newValuePDFimg.add(
+                                                        '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                  }
+                                                }
+                                                Man_CancelRental_PDF
+                                                    .ManCancelRental_PDF(
+                                                      '',
+                                                  '1',
+                                                  '${widget.Value_cid}',
+                                                  context,
+                                                  foder,
+                                                  renTal_name,
+                                                  bill_addr,
+                                                  bill_email,
+                                                  bill_tel,
+                                                  bill_tax,
+                                                  bill_name,
+                                                  newValuePDFimg,
+                                                  'tem_page_ser',
+                                                );
                                                               setState(() {
                                                                 Formbecause_
                                                                     .clear();
@@ -3412,6 +3445,18 @@ class _ChaoReturnState extends State<ChaoReturn> {
                       fontWeight: FontWeight.bold,
                       fontFamily: Font_.Fonts_T),
                 ),
+              ), Expanded(
+                child: AutoSizeText(
+                  minFontSize: 10,
+                  maxFontSize: 25,
+                  maxLines: 1,
+                  '....',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: Font_.Fonts_T),
+                ),
               ),
             ],
           ),
@@ -3421,7 +3466,7 @@ class _ChaoReturnState extends State<ChaoReturn> {
               for (int i = 0; i < transKonModels.length; i++)
                 Row(
                   children: [
-                    Expanded(
+                       Expanded(
                       child: AutoSizeText(
                         minFontSize: 10,
                         maxFontSize: 25,
@@ -3447,6 +3492,52 @@ class _ChaoReturnState extends State<ChaoReturn> {
                             fontFamily: Font_.Fonts_T),
                       ),
                     ),
+                    Expanded(
+                        child: InkWell(
+                      onTap: () async {
+                        String docno_s = '${transKonModels[i].docno}';
+                        List newValuePDFimg = [];
+                        for (int index = 0; index < 1; index++) {
+                          if (renTalModels[0].imglogo!.trim() == '') {
+                            // newValuePDFimg.add(
+                            //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                          } else {
+                            newValuePDFimg.add(
+                                '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                          }
+                        }
+                        print(docno_s);
+                      ManPay_Receipt_PakanPDF.ManPayReceipt_PakanPDF(
+                            docno_s,
+                            context,
+                            foder,
+                            renTal_name,
+                            bill_addr,
+                            bill_email,
+                            bill_tel,
+                            bill_tax,
+                            bill_name,
+                            newValuePDFimg,
+                            '1',
+                            tem_page_ser,
+                            bills_name_);
+                      },
+                      child: Container(
+                        width: 100,
+                        color: Colors.blue,
+                        child: AutoSizeText(
+                          minFontSize: 10,
+                          maxFontSize: 25,
+                          maxLines: 1,
+                          'พิมพ์',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: Font_.Fonts_T),
+                        ),
+                      ),
+                    )),
                   ],
                 ),
             ],
@@ -3546,45 +3637,7 @@ class _ChaoReturnState extends State<ChaoReturn> {
         Insert_log.Insert_logs(
             'ผู้เช่า', 'ยกเลิกสัญญา:$ciddoc >> คืนเงินประกัน : cFinn');
 
-        PdfgenReceipt_PayPakan.exportPDF_Receipt_PayPakan(
-            '',
-            context,
-            '',
-            _TransModels,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            renTal_name,
-            Form_bussshop,
-            Form_address,
-            Form_tel,
-            Form_email,
-            Form_tax,
-            Form_nameshop,
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            '',
-            paymentName1,
-            '',
-            Form_payment1,
-            '',
-            cFinn,
-            Value_newDateD,
-            sum_Pakan,
-            sum_ST,
-            sum_Pakan_KF,
-            transPakanKFModels,
-            transPakanModels);
+    
         setState(() {
           red_Trans_select2();
           read_GC_pkan_total();
@@ -3649,45 +3702,6 @@ class _ChaoReturnState extends State<ChaoReturn> {
         Insert_log.Insert_logs(
             'ผู้เช่า', 'ยกเลิกสัญญา:$ciddoc >> คืนเงินประกัน : cFinn');
 
-        PdfgenReceipt_PayPakan.exportPDF_Receipt_PayPakan(
-            '',
-            context,
-            '',
-            _TransModels,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            renTal_name,
-            Form_bussshop,
-            Form_address,
-            Form_tel,
-            Form_email,
-            Form_tax,
-            Form_nameshop,
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            '',
-            paymentName1,
-            '',
-            Form_payment1,
-            '',
-            cFinn,
-            Value_newDateD,
-            sum_Pakan,
-            sum_ST,
-            sum_Pakan_KF,
-            transPakanKFModels,
-            transPakanModels);
 
         setState(() {
           red_Trans_select2();

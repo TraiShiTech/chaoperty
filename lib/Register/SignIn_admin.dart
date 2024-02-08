@@ -5,15 +5,21 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:crypto/crypto.dart';
+import 'package:flutter/gestures.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../AdminScaffold/AdminScaffold.dart';
+import '../AdminScaffold/Chat_Screen.dart';
+import '../AdminScaffold/Chat_ScreenAdmin.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
+import '../Model/GC_keyuser.dart';
 import '../Model/GC_package_model.dart';
 import '../Model/GetC_Otp.dart';
 import '../Model/GetLicensekey_Modely.dart';
@@ -22,9 +28,12 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
+import '../Model/GetUser_Model.dart';
+import 'dart:html' as html;
 
 class SignUnAdmin extends StatefulWidget {
-  const SignUnAdmin({super.key});
+  final vel_key;
+  const SignUnAdmin({super.key, this.vel_key});
 
   @override
   State<SignUnAdmin> createState() => _SignUnAdminState();
@@ -36,7 +45,11 @@ class _SignUnAdminState extends State<SignUnAdmin> {
   List<LicensekeyModel> licensekeyModels = [];
   List<LicensekeyUPModel> licensekeyUPModels = [];
   List<OtpModel> otpModels = [];
+  List<UserModel> userModels = [];
+  List<KeyuserModel> keyuserModel = [];
+  List<UserModel> userModels_chat = [];
   DateTime datenow = DateTime.now();
+  var Value_randomNumber;
   String? packSelext,
       day_date = 'D',
       _Licens,
@@ -57,6 +70,59 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     read_GC_package();
     read_GC_packageGen();
     read_GC_otp();
+    Keyuseremail();
+  }
+
+  Future<Null> Keyuseremail() async {
+    if (keyuserModel.isNotEmpty) {
+      keyuserModel.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url = '${MyConstant().domain}/Gc_Keyuseremail.php?isAdd=true';
+    int indexfor = 0;
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          KeyuserModel keyuserModels = KeyuserModel.fromJson(map);
+          if (keyuserModels.use.toString() == '1') {
+            setState(() {
+              keyuserModel.add(keyuserModels);
+            });
+          }
+        }
+      } else {}
+    } catch (e) {}
+    // print('name>>>>>  $renname');
+  }
+
+  Future<Null> userModelsAddmin() async {
+    if (userModels.isNotEmpty) {
+      userModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url = '${MyConstant().domain}/Connected_UserAll.php?isAdd=true';
+    int indexfor = 0;
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          UserModel userModel = UserModel.fromJson(map);
+          setState(() {
+            userModels.add(userModel);
+          });
+        }
+      } else {}
+    } catch (e) {}
+    // print('name>>>>>  $renname');
   }
 
   Future<Null> read_GC_otp() async {
@@ -167,9 +233,23 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     } catch (e) {}
   }
 
+  Future<void> createFolderAndFile() async {
+    // Get the application documents directory
+    final directory = await getApplicationDocumentsDirectory();
+
+    // Create a new folder named 'new_folder'
+    final newFolder = Directory('${directory.path}/new_folder');
+    newFolder.createSync();
+
+    // Create a sample file inside the folder
+    final sampleFile = File('${newFolder.path}/sample.txt');
+    sampleFile.writeAsStringSync('Hello, this is a sample file content.');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightGreen[600],
@@ -181,12 +261,98 @@ class _SignUnAdminState extends State<SignUnAdmin> {
             ),
           ),
           centerTitle: true,
-          title: Text(
-            "Admin Program",
-            style: const TextStyle(
-              color: Colors.white,
-              fontFamily: Font_.Fonts_T,
-            ),
+          title: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "Admin Program ${keyuserModel.length}",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: Font_.Fonts_T,
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.lightGreen[200],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(0),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(0)),
+                  // border: Border.all(color: Colors.grey, width: 0.5),
+                ),
+                padding: const EdgeInsets.all(0.5),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+                  child: StreamBuilder(
+                      stream: Stream.periodic(const Duration(seconds: 0)),
+                      builder: (context, snapshot) {
+                        return Text(
+                          keyuserModel
+                                  .where((model) =>
+                                      model.key == '${widget.vel_key}')
+                                  .map((userModel) => userModel.email)
+                                  .isEmpty
+                              ? 'Hi คุณ ??'
+                              : 'Hi คุณ' +
+                                  keyuserModel
+                                      .firstWhere((model) =>
+                                          model.key == '${widget.vel_key}')
+                                      .email
+                                      .toString(),
+                          // 'Hi คุณ ${widget.vel_key} ...',
+                          style: TextStyle(
+                              color: AdminScafScreen_Color.Colors_Text1_,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: FontWeight_.Fonts_T),
+                        );
+                      }),
+                ),
+              ),
+              PopupMenuButton<int>(
+                color: Colors.green[50],
+                tooltip: '',
+                child: Icon(
+                  Icons.menu,
+                  color: Colors.black,
+                  size: 20,
+                ),
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem<int>(
+                        value: 1,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              // color: Colors.green[100]!
+                              //     .withOpacity(0.5),
+                              border: const Border(
+                                bottom: BorderSide(
+                                  color: Colors.black12,
+                                  width: 1,
+                                ),
+                              ),
+                            ),
+                            width: 220,
+                            child: Text("EmailAdmin",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: AdminScafScreen_Color.Colors_Text1_,
+                                    fontFamily: Font_.Fonts_T)))),
+                  ];
+                },
+                onOpened: () {},
+                onCanceled: () {},
+                onSelected: (value) async {
+                  if (value == 1) {
+                    userModelsAddmin();
+                    DialogEmailAdmin();
+                  } else {}
+                },
+              ),
+            ],
           ),
         ),
         body: Column(
@@ -226,116 +392,205 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                             for (int i = 0; i < renTalModels.length; i++)
                               Card(
                                 color: Colors.white,
-                                child: InkWell(
-                                  onTap: () async {
-                                    setState(() {
-                                      _Licens = null;
-                                    });
-                                    genORsign(i);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${renTalModels[i].pn}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topRight,
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  1, 1, 0, 1),
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  if (widget.vel_key
+                                                          .toString()
+                                                          .trim() ==
+                                                      'DzenCha0') {
+                                                    // var serren =
+                                                    //     renTalModels[i].ser;
+                                                    // signInThread(serren);
+                                                  } else {
+                                                    Admin_select(i);
+                                                  }
+                                                },
+                                                child: Icon(
+                                                  Icons.login,
+                                                  color: Colors.green,
+                                                ),
                                               ),
-                                              AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 2,
-                                                '${renTalModels[i].bill_name}',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
-                                              AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                renTalModels[i].pkldate ==
-                                                        '0000-00-00'
-                                                    ? '( Free )'
-                                                    : '( ${renTalModels[i].pkldate} )',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: renTalModels[i]
-                                                                .pkldate ==
-                                                            '0000-00-00'
-                                                        ? Colors.blue.shade900
-                                                        : Colors.black,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
-                                              datenow.isAfter(DateTime.parse(renTalModels[i]
-                                                                      .pkldate ==
-                                                                  '0000-00-00'
-                                                              ? '${renTalModels[i].data_update}'
-                                                              : '${renTalModels[i].pkldate} 00:00:00.000')
-                                                          .subtract(const Duration(
-                                                              days: 7))) ==
-                                                      true
-                                                  ? AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
-                                                      maxLines: 1,
-                                                      '- ใกล้หมดอายุ -',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.red,
-                                                          //fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    )
-                                                  : datenow.isAfter(DateTime.parse(renTalModels[i]
-                                                                          .pkldate ==
-                                                                      '0000-00-00'
-                                                                  ? '${renTalModels[i].data_update}'
-                                                                  : '${renTalModels[i].pkldate} 00:00:00.000')
-                                                              .subtract(const Duration(days: 0))) ==
-                                                          true
-                                                      ? AutoSizeText(
+                                            ),
+                                          ),
+
+                                          // Align(
+                                          //   alignment: Alignment.topRight,
+                                          //   child: Padding(
+                                          //     padding: EdgeInsets.fromLTRB(
+                                          //         4, 1, 0, 1),
+                                          //     child: ChatAdminScreen(
+                                          //       ser_user:
+                                          //           '${keyuserModel.firstWhere((model) => model.key == '${widget.vel_key}').seruser.toString()}',
+                                          //       ser_ren:
+                                          //           '${renTalModels[i].ser}',
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                      child: const Divider(
+                                        color:
+                                            Color.fromARGB(255, 211, 209, 209),
+                                        height: 0.5,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          preferences.setString('renTalSer',
+                                              renTalModels[i].ser.toString());
+                                          setState(() {
+                                            _Licens = null;
+                                          });
+                                          genORsign(i);
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        AutoSizeText(
                                                           minFontSize: 10,
-                                                          maxFontSize: 15,
+                                                          maxFontSize: 14,
                                                           maxLines: 1,
-                                                          '- หมดอายุ -',
+                                                          '${renTalModels[i].pn}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: const TextStyle(
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        ),
+                                                        AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 12,
+                                                          maxLines: 2,
+                                                          '${renTalModels[i].bill_name}',
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
-                                                              color: Colors.red,
+                                                              color:
+                                                                  Colors.grey,
                                                               //fontWeight: FontWeight.bold,
                                                               fontFamily: Font_
                                                                   .Fonts_T),
-                                                        )
-                                                      : SizedBox(),
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                                        ),
+                                                        AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 12,
+                                                          maxLines: 1,
+                                                          renTalModels[i]
+                                                                      .pkldate ==
+                                                                  '0000-00-00'
+                                                              ? '( Free )'
+                                                              : '( ${renTalModels[i].pkldate} )',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: renTalModels[
+                                                                              i]
+                                                                          .pkldate ==
+                                                                      '0000-00-00'
+                                                                  ? Colors.blue
+                                                                      .shade900
+                                                                  : Colors
+                                                                      .black,
+                                                              //fontWeight: FontWeight.bold,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        ),
+                                                        datenow.isAfter(DateTime.parse(renTalModels[i].pkldate ==
+                                                                            '0000-00-00'
+                                                                        ? '${renTalModels[i].data_update}'
+                                                                        : '${renTalModels[i].pkldate} 00:00:00.000')
+                                                                    .subtract(
+                                                                        const Duration(
+                                                                            days:
+                                                                                7))) ==
+                                                                true
+                                                            ? AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 12,
+                                                                maxLines: 1,
+                                                                '- ใกล้หมดอายุ -',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: Colors.red,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              )
+                                                            : datenow.isAfter(DateTime.parse(renTalModels[i].pkldate ==
+                                                                                '0000-00-00'
+                                                                            ? '${renTalModels[i].data_update}'
+                                                                            : '${renTalModels[i].pkldate} 00:00:00.000')
+                                                                        .subtract(
+                                                                            const Duration(days: 0))) ==
+                                                                    true
+                                                                ? AutoSizeText(
+                                                                    minFontSize:
+                                                                        10,
+                                                                    maxFontSize:
+                                                                        12,
+                                                                    maxLines: 1,
+                                                                    '- หมดอายุ -',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        color: Colors.red,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  )
+                                                                : SizedBox(),
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               )
                           ],
@@ -1993,6 +2248,550 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     );
   }
 
+  DialogEmailAdmin() async {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        title: Center(
+            child: Text(
+          'Email Admin Chao ',
+          style: TextStyle(
+              color: AdminScafScreen_Color.Colors_Text1_,
+              fontWeight: FontWeight.bold,
+              fontFamily: FontWeight_.Fonts_T),
+        )),
+        content: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+          }),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            dragStartBehavior: DragStartBehavior.start,
+            child: Row(
+              children: [
+                Container(
+                  width: (Responsive.isDesktop(context))
+                      ? MediaQuery.of(context).size.width * 0.7
+                      : 800,
+                  child: StreamBuilder(
+                      stream: Stream.periodic(const Duration(seconds: 0)),
+                      builder: (context, snapshot) {
+                        return Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'ทั้งหมด : ${userModels.length} คน',
+                                  style: TextStyle(
+                                      color:
+                                          AdminScafScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              decoration: const BoxDecoration(
+                                color: AppbackgroundColor.TiTile_Colors,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0),
+                                ),
+                                // border: Border.all(
+                                //     color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 50,
+                                    child: Text(
+                                      '...',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: AdminScafScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      'Email',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: AdminScafScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
+                                  ),
+                                  // Expanded(
+                                  //   flex: 1,
+                                  //   child: Text(
+                                  //     'Passw',
+                                  //     textAlign: TextAlign.start,
+                                  //     style: TextStyle(
+                                  //         color: AdminScafScreen_Color
+                                  //             .Colors_Text1_,
+                                  //         fontWeight: FontWeight.bold,
+                                  //         fontFamily: FontWeight_.Fonts_T),
+                                  //   ),
+                                  // ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      'ชื่อ',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: AdminScafScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      'ตำแหน่ง',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: AdminScafScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      'ขณะนี้อยู่ตลาด',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: AdminScafScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 50,
+                                    child: Text(
+                                      '...',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: AdminScafScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.6,
+                                width: (Responsive.isDesktop(context))
+                                    ? MediaQuery.of(context).size.width * 0.7
+                                    : 800,
+                                child: ListView.builder(
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: userModels.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          // color: Colors.green[100]!
+                                          //     .withOpacity(0.5),
+                                          border: const Border(
+                                            bottom: BorderSide(
+                                              color: Colors.black12,
+                                              width: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.all(4),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 50,
+                                              child: Text(
+                                                '${index + 1}',
+                                                textAlign: TextAlign.start,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    color: AdminScafScreen_Color
+                                                        .Colors_Text1_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                textAlign: TextAlign.start,
+                                                maxLines: 2,
+                                                '${userModels[index].email}',
+                                                style: TextStyle(
+                                                    color: AdminScafScreen_Color
+                                                        .Colors_Text1_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                            // Expanded(
+                                            //   //ResetPass(context, ser_user, password_U)
+                                            //   flex: 1,
+                                            //   child: SizedBox(
+                                            //     height: 40,
+                                            //     child: Padding(
+                                            //       padding:
+                                            //           const EdgeInsets.all(4.0),
+                                            //       child: TextFormField(
+                                            //         keyboardType:
+                                            //             TextInputType.text,
+                                            //         // controller: Pasw1_text,
+                                            //         validator: (value) {
+                                            //           if (value == null ||
+                                            //               value.isEmpty) {
+                                            //             return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                            //           }
+                                            //           // if (int.parse(value.toString()) < 13) {
+                                            //           //   return '< 13';
+                                            //           // }
+                                            //           return null;
+                                            //         },
+                                            //         // maxLength: 13,
+                                            //         cursorColor: Colors.green,
+                                            //         decoration: InputDecoration(
+                                            //             fillColor: Colors.white
+                                            //                 .withOpacity(0.3),
+                                            //             filled: true,
+                                            //             // prefixIcon:
+                                            //             //     const Icon(Icons.person_pin, color: Colors.black),
+                                            //             // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                            //             focusedBorder:
+                                            //                 const OutlineInputBorder(
+                                            //               borderRadius:
+                                            //                   BorderRadius.only(
+                                            //                 topRight:
+                                            //                     Radius.circular(
+                                            //                         10),
+                                            //                 topLeft:
+                                            //                     Radius.circular(
+                                            //                         10),
+                                            //                 bottomRight:
+                                            //                     Radius.circular(
+                                            //                         10),
+                                            //                 bottomLeft:
+                                            //                     Radius.circular(
+                                            //                         10),
+                                            //               ),
+                                            //               borderSide:
+                                            //                   BorderSide(
+                                            //                 width: 1,
+                                            //                 color: Colors.black,
+                                            //               ),
+                                            //             ),
+                                            //             enabledBorder:
+                                            //                 const OutlineInputBorder(
+                                            //               borderRadius:
+                                            //                   BorderRadius.only(
+                                            //                 topRight:
+                                            //                     Radius.circular(
+                                            //                         10),
+                                            //                 topLeft:
+                                            //                     Radius.circular(
+                                            //                         10),
+                                            //                 bottomRight:
+                                            //                     Radius.circular(
+                                            //                         10),
+                                            //                 bottomLeft:
+                                            //                     Radius.circular(
+                                            //                         10),
+                                            //               ),
+                                            //               borderSide:
+                                            //                   BorderSide(
+                                            //                 width: 1,
+                                            //                 color: Colors.grey,
+                                            //               ),
+                                            //             ),
+                                            //             labelText:
+                                            //                 'รหัสผ่านใหม่',
+                                            //             labelStyle:
+                                            //                 const TextStyle(
+                                            //               color: Colors.black54,
+                                            //               fontFamily:
+                                            //                   FontWeight_
+                                            //                       .Fonts_T,
+                                            //             )),
+                                            //         onFieldSubmitted:
+                                            //             (value) async {
+                                            //           var password_U = md5
+                                            //               .convert(utf8.encode(
+                                            //                   value.toString()))
+                                            //               .toString();
+                                            //           print(userModels[index]
+                                            //               .ser);
+                                            //           print(password_U);
+                                            //           String url =
+                                            //               '${MyConstant().domain}/ResetPasswd.php?isAdd=true&ser_U=${userModels[index].ser}&pass_U=$password_U&type=0';
+                                            //           try {
+                                            //             var response =
+                                            //                 await http.get(
+                                            //                     Uri.parse(url));
+
+                                            //             var result =
+                                            //                 json.decode(
+                                            //                     response.body);
+
+                                            //             print(
+                                            //                 result.toString());
+                                            //           } catch (e) {
+                                            //             ScaffoldMessenger.of(
+                                            //                     context)
+                                            //                 .showSnackBar(
+                                            //               const SnackBar(
+                                            //                   content: Text(
+                                            //                       'การเชื่อมต่อผิดพลาด',
+                                            //                       style: TextStyle(
+                                            //                           color: Colors
+                                            //                               .black,
+                                            //                           fontFamily:
+                                            //                               Font_
+                                            //                                   .Fonts_T))),
+                                            //             );
+                                            //           }
+                                            //           Navigator.pop(
+                                            //               context, 'OK');
+                                            //         },
+                                            //         inputFormatters: <TextInputFormatter>[
+                                            //           FilteringTextInputFormatter
+                                            //               .deny(RegExp(r'\s')),
+                                            //         ],
+                                            //       ),
+                                            //     ),
+                                            //   ),
+
+                                            //   // Text(
+                                            //   //   textAlign: TextAlign.start,
+                                            //   //   maxLines: 2,
+                                            //   //   '${userModels[index].passwd}',
+                                            //   //   style: TextStyle(
+                                            //   //       color: AdminScafScreen_Color
+                                            //   //           .Colors_Text1_,
+                                            //   //       // fontWeight: FontWeight.bold,
+                                            //   //       fontFamily: Font_.Fonts_T),
+                                            //   // ),
+                                            // ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                textAlign: TextAlign.start,
+                                                maxLines: 2,
+                                                '${userModels[index].fname} ${userModels[index].lname}',
+                                                style: TextStyle(
+                                                    color: AdminScafScreen_Color
+                                                        .Colors_Text1_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                '${userModels[index].position}',
+                                                textAlign: TextAlign.start,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    color: AdminScafScreen_Color
+                                                        .Colors_Text1_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                renTalModels
+                                                        .where((model) =>
+                                                            model.ser
+                                                                .toString() ==
+                                                            '${userModels[index].rser}')
+                                                        .map((renTalModels) =>
+                                                            renTalModels.rtname)
+                                                        .isEmpty
+                                                    ? '??'
+                                                    : renTalModels
+                                                        .firstWhere((model) =>
+                                                            model.ser
+                                                                .toString() ==
+                                                            '${userModels[index].rser}')
+                                                        .pn
+                                                        .toString(),
+                                                // '${userModels[index].rser}',
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 50,
+                                              child: PopupMenuButton<int>(
+                                                color: Colors.green[50],
+                                                tooltip: '',
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  color: Colors.orange[900],
+                                                  size: 20,
+                                                ),
+                                                itemBuilder: (context) {
+                                                  return [
+                                                    for (int index = 0;
+                                                        index <
+                                                            renTalModels.length;
+                                                        index++)
+                                                      PopupMenuItem<int>(
+                                                          value: int.parse(
+                                                              '${renTalModels[index].ser}'),
+                                                          child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                // color: Colors.green[100]!
+                                                                //     .withOpacity(0.5),
+                                                                border:
+                                                                    const Border(
+                                                                  bottom:
+                                                                      BorderSide(
+                                                                    color: Colors
+                                                                        .black12,
+                                                                    width: 1,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              width: 220,
+                                                              child: Text(
+                                                                  "${index + 1}. ${renTalModels[index].pn}",
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: AdminScafScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T)))),
+                                                  ];
+                                                },
+                                                onOpened: () {},
+                                                onCanceled: () {},
+                                                onSelected: (value) async {
+                                                  ///UP_emailAdminSer
+                                                  print(value);
+                                                  try {
+                                                    final url =
+                                                        '${MyConstant().domain}/UP_emailAdminSer.php';
+
+                                                    final response = await http
+                                                        .post(Uri.parse(url),
+                                                            body: {
+                                                          'isAdd': 'true',
+                                                          'seruser':
+                                                              '${userModels[index].ser}',
+                                                          'serrenTal': '$value',
+                                                        });
+                                                    setState(() {
+                                                      userModelsAddmin();
+                                                    });
+                                                  } catch (e) {
+                                                    setState(() {
+                                                      userModelsAddmin();
+                                                    });
+                                                  }
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    })),
+                          ],
+                        );
+                      }),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          Column(
+            children: [
+              const SizedBox(
+                height: 5.0,
+              ),
+              const Divider(
+                color: Colors.grey,
+                height: 4.0,
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text(
+                                'ปิด',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Future SendEmail(String name, String email, String message) async {
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
     final response = await http.post(url,
@@ -2014,7 +2813,7 @@ class _SignUnAdminState extends State<SignUnAdmin> {
 
   Future<Null> signInThread(serren) async {
     String url =
-        '${MyConstant().domain}/GC_user.php?isAdd=true&email=dzentric.com@gmail.com';
+        '${MyConstant().domain}/GC_user.php?isAdd=true&email=T_T@gmail.com';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -2077,6 +2876,128 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     preferences.setString('lavel', userModel.user_id.toString());
     preferences.setString('route', 'หน้าหลัก');
     preferences.setString('pakanPay', 0.toString());
+    Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
+    MaterialPageRoute route = MaterialPageRoute(
+      builder: (context) => myWidget,
+    );
+    Navigator.pushAndRemoveUntil(context, route, (route) => false);
+  }
+
+////////////----------------------------------------------->
+  // Future<Null> ResetPass(context, ser_user, password) async {
+  //   var password_U = md5.convert(utf8.encode(password.toString())).toString();
+  //   String url =
+  //       '${MyConstant().domain}/ResetPasswd.php?isAdd=true&ser_U=$ser_user&pass_U=$password_U&type=0';
+  //   try {
+  //     var response = await http.get(Uri.parse(url));
+
+  //     var result = json.decode(response.body);
+
+  //     print(result.toString());
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(
+  //           content: Text('การเชื่อมต่อผิดพลาด',
+  //               style:
+  //                   TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))),
+  //     );
+  //   }
+  //   Navigator.pop(context, 'OK');
+  //   // Future.delayed(const Duration(milliseconds: 500), () {
+  //   //   ScaffoldMessenger.of(context).showSnackBar(
+  //   //     const SnackBar(
+  //   //         content: Text('การเชื่อมต่อผิดพลาด',
+  //   //             style:
+  //   //                 TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))),
+  //   //   );
+  //   // });
+  // }
+
+  Future<Null> Admin_select(index) async {
+    var ser_user_ = keyuserModel
+        .firstWhere((model) => model.key == '${widget.vel_key}')
+        .seruser
+        .toString();
+
+    try {
+      final url = '${MyConstant().domain}/UP_emailAdminSer.php';
+
+      final response = await http.post(Uri.parse(url), body: {
+        'isAdd': 'true',
+        'seruser': '${ser_user_}',
+        'serrenTal': '${renTalModels[index].ser}',
+      });
+      Future.delayed(const Duration(milliseconds: 500), () {
+        Admin_select2(index);
+      });
+    } catch (e) {}
+    //////------------------>
+  }
+
+  Future<Null> Admin_select2(index) async {
+    var ser_user_ = keyuserModel
+        .firstWhere((model) => model.key == '${widget.vel_key}')
+        .seruser
+        .toString();
+    var email_user_ = keyuserModel
+        .firstWhere((model) => model.key == '${widget.vel_key}')
+        .email
+        .toString();
+    Random random = Random();
+    int c = random.nextInt(9000) + 1000;
+    setState(() {
+      Value_randomNumber = c.toString();
+    });
+
+    print(ser_user_);
+
+    String url =
+        '${MyConstant().domain}/GC_user.php?isAdd=true&email=$email_user_';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      for (var map in result) {
+        UserModel userModel = UserModel.fromJson(map);
+        var onoff = int.parse(userModel.onoff!);
+        var ser = userModel.ser;
+        if (onoff == 0) {
+          if (ser_user_.toString().trim() == userModel.ser!.toString().trim()) {
+            String verify = userModel.verify!;
+            if (verify == "1") {
+              // Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
+              routeToService2(AdminScafScreen(route: 'หน้าหลัก'), userModel);
+              var on = '1';
+              var randomNumber = Value_randomNumber;
+              String url =
+                  '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on&randomNumber=$randomNumber';
+            } else {}
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  Future<Null> routeToService2(
+    Widget myWidget,
+    UserModel userModel,
+  ) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('ser', userModel.ser.toString());
+    preferences.setString('position', userModel.position.toString());
+    preferences.setString('fname', userModel.fname.toString());
+    preferences.setString('lname', userModel.lname.toString());
+    preferences.setString('email', userModel.email.toString());
+    preferences.setString('utype', userModel.utype.toString());
+    preferences.setString('verify', userModel.verify.toString());
+    preferences.setString('permission', userModel.permission.toString());
+    preferences.setString('rser', userModel.rser.toString());
+    preferences.setString('Muser', userModel.user.toString());
+    preferences.setString('lavel', userModel.user_id.toString());
+    preferences.setString('route', 'หน้าหลัก');
+    preferences.setString('pakanPay', 0.toString());
+    preferences.setString('login', Value_randomNumber.toString());
     Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => myWidget,

@@ -26,6 +26,7 @@ import '../Model/trans_re_bill_model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
+import '../Style/view_pagenow.dart';
 import 'Dashboard_Screen1.dart';
 import 'Dashboard_Screen2.dart';
 import 'Dashboard_Screen3.dart';
@@ -442,56 +443,66 @@ class _DashboardScreenState extends State<DashboardScreen> {
       height: MediaQuery.of(context).size.height,
       child: SingleChildScrollView(
         child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: AppbackgroundColor.TiTile_Colors,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
+                      child: Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: AppbackgroundColor.TiTile_Box,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        padding: const EdgeInsets.all(5.0),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AutoSizeText(
+                              'รายงาน ',
+                              overflow: TextOverflow.ellipsis,
+                              minFontSize: 8,
+                              maxFontSize: 20,
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: ReportScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            ),
+                            AutoSizeText(
+                              ' > > ',
+                              overflow: TextOverflow.ellipsis,
+                              minFontSize: 8,
+                              maxFontSize: 20,
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                  padding: const EdgeInsets.all(5.0),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AutoSizeText(
-                        'รายงาน ',
-                        overflow: TextOverflow.ellipsis,
-                        minFontSize: 8,
-                        maxFontSize: 20,
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: ReportScreen_Color.Colors_Text1_,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontWeight_.Fonts_T,
-                        ),
-                      ),
-                      AutoSizeText(
-                        ' > > ',
-                        overflow: TextOverflow.ellipsis,
-                        minFontSize: 8,
-                        maxFontSize: 20,
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontWeight_.Fonts_T,
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ),
-            ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: viewpage(context, '5'),
+              ),
+            ],
           ),
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.end,
@@ -536,12 +547,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Container(
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
-                color: AppbackgroundColor.TiTile_Colors,
+                color: AppbackgroundColor.TiTile_Box,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0)),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)),
                 // border: Border.all(color: Colors.grey, width: 1),
               ),
               padding: const EdgeInsets.all(5.0),
@@ -646,13 +657,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               )),
+              ////
           Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 // height: 270,
                 decoration: const BoxDecoration(
-                  color: AppbackgroundColor.TiTile_Colors,
+                  color: AppbackgroundColor.TiTile_Box,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),
@@ -667,7 +679,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            if ((MediaQuery.of(context).size.width) > 650)
+                            if ((MediaQuery.of(context).size.width) > 1200)
                               Expanded(flex: 1, child: SizedBox()),
                             Expanded(
                               flex: 1,
@@ -678,7 +690,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.white.withOpacity(0.5),
-                                          borderRadius: BorderRadius.only(
+                                          borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(10),
                                               topRight: Radius.circular(10),
                                               bottomLeft: Radius.circular(10),
@@ -980,8 +992,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     ),
                                                   ),
                                                   const Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(8, 0, 8, 0),
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            8, 0, 8, 0),
                                                     child: Text(
                                                       'ถึง',
                                                       style: TextStyle(
@@ -1064,7 +1077,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.white.withOpacity(0.5),
-                                          borderRadius: BorderRadius.only(
+                                          borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(10),
                                               topRight: Radius.circular(10),
                                               bottomLeft: Radius.circular(10),
@@ -1366,8 +1379,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     ),
                                                   ),
                                                   const Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(8, 0, 8, 0),
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            8, 0, 8, 0),
                                                     child: Text(
                                                       'ถึง',
                                                       style: TextStyle(
@@ -1451,34 +1465,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             stream: Stream.periodic(const Duration(seconds: 0)),
                             builder: (context, snapshot) {
                               return GridView.count(
-                                  padding: ((MediaQuery.of(context).size.width) <
-                                          650)
-                                      ? const EdgeInsets.all(2)
-                                      : const EdgeInsets.all(5),
+                                  padding:
+                                      ((MediaQuery.of(context).size.width) < 650)
+                                          ? const EdgeInsets.all(2)
+                                          : const EdgeInsets.all(5),
                                   crossAxisSpacing:
                                       ((MediaQuery.of(context).size.width) < 650)
                                           ? 10.00
                                           : 16.0,
                                   mainAxisSpacing:
-                                      ((MediaQuery.of(context).size.width) <
-                                              650)
+                                      ((MediaQuery.of(context).size.width) < 650)
                                           ? 10.00
                                           : 16.0,
                                   crossAxisCount:
                                       (MediaQuery.of(context).size.width) < 650
                                           ? 2
                                           : 4,
-                                  childAspectRatio: ((MediaQuery.of(context)
-                                                  .size
-                                                  .width) <
-                                              650 &&
-                                          (MediaQuery.of(context).size.width) >
-                                              500)
-                                      ? 1.2
-                                      : ((MediaQuery.of(context).size.width) <
-                                              500)
-                                          ? 0.8
-                                          : 2,
+                                  childAspectRatio: (Responsive.isDesktop(
+                                          context))
+                                      ? ((MediaQuery.of(context).size.width) >=
+                                              1200)
+                                          ? 2
+                                          : 0.8
+                                      : ((MediaQuery.of(context).size.width) < 650 &&
+                                              (MediaQuery.of(context).size.width) >
+                                                  500)
+                                          ? 1.2
+                                          : ((MediaQuery.of(context).size.width) <
+                                                      780 &&
+                                                  (MediaQuery.of(context)
+                                                          .size
+                                                          .width) >
+                                                      650)
+                                              ? 0.8
+                                              : ((MediaQuery.of(context).size.width) < 500)
+                                                  ? 0.8
+                                                  : 0.8,
+                                  // childAspectRatio: ((MediaQuery.of(context)
+                                  //                 .size
+                                  //                 .width) <
+                                  //             650 &&
+                                  //         (MediaQuery.of(context).size.width) >
+                                  //             500)
+                                  //     ? 1.2
+                                  //     : ((MediaQuery.of(context).size.width) <
+                                  //             500)
+                                  //         ? 0.8
+                                  //         : 2,
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   children: <Widget>[
@@ -1774,7 +1807,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               fontFamily: FontWeight_.Fonts_T,
                                             ),
                                           ),
-                                          Row(
+                                          const Row(
                                             children: [
                                               Expanded(
                                                 // width: ((MediaQuery.of(
@@ -1784,7 +1817,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 //         650)
                                                 //     ? 40
                                                 //     : 100,
-                                                child: const Text(
+                                                child: Text(
                                                   '',
                                                   maxLines: 2,
                                                   overflow:
@@ -2216,7 +2249,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               fontFamily: FontWeight_.Fonts_T,
                                             ),
                                           ),
-                                          Row(
+                                          const Row(
                                             children: [
                                               Expanded(
                                                 // width: ((MediaQuery.of(
@@ -2226,7 +2259,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 //         650)
                                                 //     ? 40
                                                 //     : 100,
-                                                child: const Text(
+                                                child: Text(
                                                   '',
                                                   maxLines: 2,
                                                   overflow:
@@ -2382,9 +2415,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ]),
                 ),
               )),
+          const SizedBox(
+            height: 20,
+          ),
           Row(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Dashboard : ',

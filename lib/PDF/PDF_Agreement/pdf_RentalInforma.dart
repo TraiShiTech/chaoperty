@@ -109,6 +109,12 @@ class Pdfgen_RentalInforma {
     // ];
     pdf.addPage(
       pw.MultiPage(
+        pageFormat: PdfPageFormat.a4.copyWith(
+          marginBottom: 8.00,
+          marginLeft: 8.00,
+          marginRight: 8.00,
+          marginTop: 8.00,
+        ),
         header: (context) {
           return pw.Column(children: [
             pw.Row(
@@ -1296,6 +1302,12 @@ class Pdfgen_RentalInforma {
 
     pageCount++;
     pdf.addPage(pw.MultiPage(
+      pageFormat: PdfPageFormat.a4.copyWith(
+        marginBottom: 8.00,
+        marginLeft: 8.00,
+        marginRight: 8.00,
+        marginTop: 8.00,
+      ),
       header: (context) {
         return pw.Column(children: [
           pw.Row(
@@ -1718,131 +1730,7 @@ class Pdfgen_RentalInforma {
                       ),
                     ],
                   ),
-                // pw.Row(
-                //   children: [
-                //     pw.Expanded(
-                //       flex: 2,
-                //       child: pw.Container(
-                //         height: 25,
-                //         // decoration: const pw.BoxDecoration(
-                //         //   color: PdfColors.grey100,
-                //         //   border: pw.Border(
-                //         //     bottom: pw.BorderSide(color: PdfColors.grey300),
-                //         //   ),
-                //         // ),
-                //         child: pw.Center(
-                //           child: pw.Text(
-                //             '',
-                //             textAlign: pw.TextAlign.left,
-                //             maxLines: 2,
-                //             style: pw.TextStyle(
-                //               fontSize: 8.0,
-                //               font: ttf,
-                //               // fontWeight: pw.FontWeight.bold,
-                //               color: Colors_pd,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     pw.Expanded(
-                //       flex: 2,
-                //       child: pw.Container(
-                //         height: 25,
-                //         // decoration: const pw.BoxDecoration(
-                //         //   color: PdfColors.white,
-                //         //   border: const pw.Border(
-                //         //     bottom: pw.BorderSide(color: PdfColors.grey300),
-                //         //   ),
-                //         // ),
-                //         child: pw.Center(
-                //           child: pw.Text(
-                //             '',
-                //             textAlign: pw.TextAlign.left,
-                //             style: pw.TextStyle(
-                //               fontSize: 8.0,
-                //               font: ttf,
-                //               // fontWeight: pw.FontWeight.bold,
-                //               color: Colors_pd,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     pw.Expanded(
-                //       flex: 2,
-                //       child: pw.Container(
-                //         height: 25,
-                //         // decoration: const pw.BoxDecoration(
-                //         //   color: PdfColors.grey100,
-                //         //   border: const pw.Border(
-                //         //     bottom: pw.BorderSide(color: PdfColors.grey300),
-                //         //   ),
-                //         // ),
-                //         child: pw.Center(
-                //           child: pw.Text(
-                //             '',
-                //             textAlign: pw.TextAlign.left,
-                //             style: pw.TextStyle(
-                //               fontSize: 8.0,
-                //               font: ttf,
-                //               // fontWeight: pw.FontWeight.bold,
-                //               color: Colors_pd,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     pw.Expanded(
-                //       flex: 1,
-                //       child: pw.Container(
-                //         height: 25,
-                //         decoration: const pw.BoxDecoration(
-                //           color: PdfColors.grey100,
-                //           border: const pw.Border(
-                //             bottom: pw.BorderSide(color: PdfColors.grey300),
-                //           ),
-                //         ),
-                //         child: pw.Center(
-                //           child: pw.Text(
-                //             'ยอดรวมสุทธิ',
-                //             textAlign: pw.TextAlign.left,
-                //             style: pw.TextStyle(
-                //               fontSize: 8.0,
-                //               font: ttf,
-                //               fontWeight: pw.FontWeight.bold,
-                //               color: Colors_pd,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     pw.Expanded(
-                //       flex: 1,
-                //       child: pw.Container(
-                //         height: 25,
-                //         decoration: const pw.BoxDecoration(
-                //           color: PdfColors.grey100,
-                //           border: const pw.Border(
-                //             bottom: pw.BorderSide(color: PdfColors.grey300),
-                //           ),
-                //         ),
-                //         child: pw.Center(
-                //           child: pw.Text(
-                //             '${nFormat.format(total_)}',
-                //             textAlign: pw.TextAlign.right,
-                //             style: pw.TextStyle(
-                //               fontSize: 8.0,
-                //               font: ttf,
-                //               fontWeight: pw.FontWeight.bold,
-                //               color: Colors_pd,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
+
                 pw.Container(
                     height: 25,
                     decoration: const pw.BoxDecoration(

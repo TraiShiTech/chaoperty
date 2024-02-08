@@ -169,6 +169,10 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('L1').cellStyle = globalStyle22;
     sheet.getRangeByName('M1').cellStyle = globalStyle22;
     sheet.getRangeByName('N1').cellStyle = globalStyle22;
+    sheet.getRangeByName('O1').cellStyle = globalStyle22;
+    sheet.getRangeByName('P1').cellStyle = globalStyle22;
+    sheet.getRangeByName('Q1').cellStyle = globalStyle22;
+    sheet.getRangeByName('R1').cellStyle = globalStyle22;
     // sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
     range.setText((ser_type_repro == '1')
@@ -198,6 +202,11 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('L2').cellStyle = globalStyle22;
     sheet.getRangeByName('M2').cellStyle = globalStyle22;
     sheet.getRangeByName('N2').cellStyle = globalStyle22;
+    sheet.getRangeByName('O2').cellStyle = globalStyle22;
+    sheet.getRangeByName('P2').cellStyle = globalStyle22;
+    sheet.getRangeByName('Q2').cellStyle = globalStyle22;
+    sheet.getRangeByName('R2').cellStyle = globalStyle22;
+
     // sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
     sheet
@@ -221,6 +230,10 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('L3').cellStyle = globalStyle22;
     sheet.getRangeByName('M3').cellStyle = globalStyle22;
     sheet.getRangeByName('N3').cellStyle = globalStyle22;
+    sheet.getRangeByName('O3').cellStyle = globalStyle22;
+    sheet.getRangeByName('P3').cellStyle = globalStyle22;
+    sheet.getRangeByName('Q3').cellStyle = globalStyle22;
+    sheet.getRangeByName('R3').cellStyle = globalStyle22;
     // sheet.getRangeByName('O3').cellStyle = globalStyle22;
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillModels.length}');
     sheet.getRangeByName('B3').setText('รายการ : ${TranHisBillModels.length}');
@@ -238,7 +251,10 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('L3').columnWidth = 18;
     sheet.getRangeByName('M3').columnWidth = 18;
     sheet.getRangeByName('N3').columnWidth = 18;
-    // sheet.getRangeByName('O3').columnWidth = 18;
+    sheet.getRangeByName('O3').columnWidth = 18;
+    sheet.getRangeByName('P3').columnWidth = 18;
+    sheet.getRangeByName('Q3').columnWidth = 18;
+    sheet.getRangeByName('R3').columnWidth = 18;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
@@ -254,7 +270,10 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('L4').cellStyle = globalStyle1;
     sheet.getRangeByName('M4').cellStyle = globalStyle1;
     sheet.getRangeByName('N4').cellStyle = globalStyle1;
-    // sheet.getRangeByName('O4').cellStyle = globalStyle1;
+    sheet.getRangeByName('O4').cellStyle = globalStyle1;
+    sheet.getRangeByName('P4').cellStyle = globalStyle1;
+    sheet.getRangeByName('Q4').cellStyle = globalStyle1;
+    sheet.getRangeByName('R4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('A4').columnWidth = 18;
     sheet.getRangeByName('B4').columnWidth = 18;
@@ -295,10 +314,12 @@ class Excgen_IncomeReport {
     // sheet.getRangeByName('I4').setText('70%');
     // sheet.getRangeByName('J4').setText('30%');
     sheet.getRangeByName('L4').setText('ราคาก่อน Vat');
-    sheet.getRangeByName('M4').setText('ราคารวม');
-    sheet.getRangeByName('N4').setText('ส่วนลด');
-    // sheet.getRangeByName('O4').setText('ราคารามส่วนลด');
-
+    sheet.getRangeByName('M4').setText('ค่าธรรมเนียม');
+    sheet.getRangeByName('N4').setText('ราคารวม');
+    sheet.getRangeByName('O4').setText('ส่วนลด');
+    sheet.getRangeByName('P4').setText('ยอดสุทธิ');
+    sheet.getRangeByName('Q4').setText('ประเภท');
+    sheet.getRangeByName('R4').setText('สถานะ');
     int indextotol = 0;
     int indextotol_ = 0;
     int ser_dis = 0;
@@ -347,6 +368,15 @@ class Excgen_IncomeReport {
               globalStyle2220;
           sheet.getRangeByName('N${indextotol + 5 - 1}').cellStyle =
               globalStyle2220;
+          sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+          sheet.getRangeByName('P${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+          sheet.getRangeByName('Q${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+          sheet.getRangeByName('R${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+
           sheet
               .getRangeByName('A${indextotol + 5 - 1}')
               .setText('${TranHisBillModels[index2].docno}');
@@ -357,9 +387,9 @@ class Excgen_IncomeReport {
                   : '${DateFormat('dd-MM').format(DateTime.parse('${TranHisBillModels[index2].daterec}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TranHisBillModels[index2].daterec}'))}') + 543}');
 
           sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
-              (TranHisBillModels[index2].zser == null)
-                  ? '${TranHisBillModels[index2].zser1}'
-                  : '${TranHisBillModels[index2].zser}');
+              (TranHisBillModels[index2].zser1 == null)
+                  ? '${TranHisBillModels[index2].zser}'
+                  : '${TranHisBillModels[index2].zser1}');
           sheet.getRangeByName('E${indextotol + 5 - 1}').setText(
               (TranHisBillModels[index2].zn == null)
                   ? '${TranHisBillModels[index2].znn}'
@@ -373,7 +403,7 @@ class Excgen_IncomeReport {
               .setText('${TranHisBillModels[index2].type}');
           sheet
               .getRangeByName('H${indextotol + 5 - 1}')
-              .setText('ส่วนลดทั้งบิล');
+              .setText('ยอดรวมทั้งบิล');
 
           sheet.getRangeByName('I${indextotol + 5 - 1}').setText(
               (TranHisBillModels[index2].sname == null)
@@ -382,17 +412,35 @@ class Excgen_IncomeReport {
           sheet.getRangeByName('J${indextotol + 5 - 1}').setNumber(0.00);
           sheet.getRangeByName('K${indextotol + 5 - 1}').setNumber(0.00);
           sheet.getRangeByName('L${indextotol + 5 - 1}').setNumber(0.00);
-          sheet.getRangeByName('M${indextotol + 5 - 1}').setNumber(0.00);
-          sheet.getRangeByName('N${indextotol + 5 - 1}').setNumber(
-              (item.total_dis == null)
-                  ? 0.00
-                  : double.parse(
-                          (item.total_bill == null) ? '0' : item.total_bill!) -
-                      double.parse(item.total_dis!));
+          sheet
+              .getRangeByName('M${indextotol + 5 - 1}')
+              .setNumber(double.parse(item.total_duesbill!));
+          sheet
+              .getRangeByName('N${indextotol + 5 - 1}')
+              .setNumber(double.parse(item.total_bill!));
+
+          sheet.getRangeByName('O${indextotol + 5 - 1}').setNumber(
+              (item.total_dis == null) ? 0.00 : double.parse(item.total_dis!));
+
+          sheet.getRangeByName('P${indextotol + 5 - 1}').setNumber(
+                (item.total_dis == null)
+                    ? double.parse(item.total_bill!)
+                    : double.parse(item.total_bill!) -
+                        double.parse(item.total_dis!),
+              );
+
+          sheet.getRangeByName('Q${indextotol + 5 - 1}').setText(
+                (item.room_number.toString() == '' || item.room_number == null)
+                    ? ''
+                    : 'ล็อคเสียบ',
+              );
+          sheet.getRangeByName('R${indextotol + 5 - 1}').setText(
+                (item.doctax == '' || item.doctax == null) ? '' : 'ใบกำกับภาษี',
+              );
         });
       }
 
-///////------------------------->
+      ///////------------------------->
 
       // dynamic numberColor_s = i1 % 2 == 0 ? globalStyle220 : globalStyle2220;
 
@@ -411,6 +459,10 @@ class Excgen_IncomeReport {
       sheet.getRangeByName('L${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('M${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('N${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('P${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('Q${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('R${indextotol + 5 - 1}').cellStyle = globalStyle22;
 
       sheet
           .getRangeByName('A${indextotol + 5 - 1}')
@@ -424,13 +476,15 @@ class Excgen_IncomeReport {
           : '${DateFormat('dd-MM').format(DateTime.parse('${TranHisBillModels[index2].daterec}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TranHisBillModels[index2].daterec}'))}') + 543}');
 
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
-          (TranHisBillModels[index2].zser == null)
-              ? '${TranHisBillModels[index2].zser1}'
-              : '${TranHisBillModels[index2].zser}');
+          (TranHisBillModels[index2].zser1 == null)
+              ? '${TranHisBillModels[index2].zser}'
+              : '${TranHisBillModels[index2].zser1}');
+
       sheet.getRangeByName('E${indextotol + 5 - 1}').setText(
           (TranHisBillModels[index2].zn == null)
               ? '${TranHisBillModels[index2].znn}'
               : '${TranHisBillModels[index2].zn}');
+
       sheet.getRangeByName('F${indextotol + 5 - 1}').setText(
           (TranHisBillModels[index2].ln == null)
               ? '${TranHisBillModels[index2].room_number}'
@@ -451,91 +505,97 @@ class Excgen_IncomeReport {
           (TranHisBillModels[index2].nvat == null)
               ? 0.00
               : double.parse('${TranHisBillModels[index2].nvat}'));
+
       sheet.getRangeByName('K${indextotol + 5 - 1}').setNumber(
           (TranHisBillModels[index2].vat == null)
               ? 0.00
               : double.parse('${TranHisBillModels[index2].vat}'));
+
       sheet.getRangeByName('L${indextotol + 5 - 1}').setNumber(
-          (TranHisBillModels[index2].amt == null)
+          (TranHisBillModels[index2].pvat == null)
               ? 0.00
-              : double.parse('${TranHisBillModels[index2].amt}'));
-      sheet.getRangeByName('M${indextotol + 5 - 1}').setNumber(
-          (TranHisBillModels[index2].total == null)
-              ? 0.00
-              : double.parse('${TranHisBillModels[index2].total}'));
-      sheet.getRangeByName('N${indextotol + 5 - 1}').setNumber(0.00);
+              : double.parse('${TranHisBillModels[index2].pvat}'));
+
+      sheet.getRangeByName('M${indextotol + 5 - 1}').setNumber(0.00);
+
+      sheet.getRangeByName('N${indextotol + 5 - 1}').setNumber(
+            (TranHisBillModels[index2].amt == null)
+                ? 0.00
+                : double.parse(TranHisBillModels[index2].amt!),
+          );
+
+      sheet.getRangeByName('O${indextotol + 5 - 1}').setNumber(
+            (TranHisBillModels[index2].dis == null)
+                ? 0.00
+                : double.parse(TranHisBillModels[index2].dis!),
+          );
+
+      sheet.getRangeByName('P${indextotol + 5 - 1}').setNumber(
+            (TranHisBillModels[index2].total == null)
+                ? 0.00 -
+                    ((TranHisBillModels[index2].dis == null)
+                        ? 0.00
+                        : double.parse(TranHisBillModels[index2].dis!))
+                : double.parse(TranHisBillModels[index2].total!) -
+                    ((TranHisBillModels[index2].dis == null)
+                        ? 0.00
+                        : double.parse(TranHisBillModels[index2].dis!)),
+          );
+      sheet.getRangeByName('Q${indextotol + 5 - 1}').setText('');
+      sheet.getRangeByName('R${indextotol + 5 - 1}').setText('');
     }
-    //   print('-------------------------');
-    // }
 
-    ///////////////////////////////------------------------------------------------>
-    sheet.getRangeByName('I${indextotol + 5 + 0}').setText('เฉพาะล็อคเสียบ: ');
-    sheet.getRangeByName('I${indextotol + 5 + 1}').setText('เฉพาะล็อคธรรมดา: ');
-    sheet.getRangeByName('I${indextotol + 5 + 2}').setText('รวมทั้งหมด: ');
+    /////////////////////////////////------------------------------------------------>
 
-    sheet.getRangeByName('J${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",J5:J${indextotol + 5 - 1})');
-    sheet.getRangeByName('J${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ",J5:J${indextotol + 5 - 1})');
-    sheet
-        .getRangeByName('J${indextotol + 5 + 2}')
-        .setFormula('=SUM(J5:J${indextotol + 5 - 1})');
+    sheet.getRangeByName('L${indextotol + 5 + 0}').setText('เฉพาะล็อคเสียบ: ');
+    sheet.getRangeByName('L${indextotol + 5 + 1}').setText('เฉพาะล็อคธรรมดา: ');
+    sheet.getRangeByName('L${indextotol + 5 + 2}').setText('รวมทั้งหมด: ');
 
-    ///---------->
-    sheet.getRangeByName('K${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",K5:K${indextotol + 5 - 1})');
-    sheet.getRangeByName('K${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ",K5:K${indextotol + 5 - 1})');
-    sheet
-        .getRangeByName('K${indextotol + 5 + 2}')
-        .setFormula('=SUM(K5:K${indextotol + 5 - 1})');
-
-    ///---------->
-    sheet.getRangeByName('L${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",L5:L${indextotol + 5 - 1})');
-    sheet.getRangeByName('L${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ",L5:L${indextotol + 5 - 1})');
-    sheet
-        .getRangeByName('L${indextotol + 5 + 2}')
-        .setFormula('=SUM(L5:L${indextotol + 5 - 1})');
-
-    ///---------->
     sheet.getRangeByName('M${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ",M5:M${indextotol + 5 - 1})');
+        '=SUMIFS(M5:M${indextotol + 5 - 1}, Q5:Q${indextotol + 5 - 1}, "ล็อคเสียบ", H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล")');
     sheet.getRangeByName('M${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ", M5:M${indextotol + 5 - 1})');
-
-    sheet
-        .getRangeByName('M${indextotol + 5 + 2}')
-        .setFormula('=SUM(M5:M${indextotol + 5 - 1})');
+        '=SUMIFS(M5:M${indextotol + 5 - 1}, Q5:Q${indextotol + 5 - 1}, "<>ล็อคเสียบ", H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล")');
+    sheet.getRangeByName('M${indextotol + 5 + 2}').setFormula(
+        '=SUMIF(H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล",M5:M${indextotol + 5 - 1})');
 
     ///---------->
     sheet.getRangeByName('N${indextotol + 5 + 0}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "ล็อคเสียบ", N5:N${indextotol + 5 - 1})');
+        '=SUMIFS(N5:N${indextotol + 5 - 1}, Q5:Q${indextotol + 5 - 1}, "ล็อคเสียบ", H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล")');
     sheet.getRangeByName('N${indextotol + 5 + 1}').setFormula(
-        '=SUMIF(F5:F${indextotol + 5 - 1}, "<>ล็อคเสียบ", N5:N${indextotol + 5 - 1})');
-    sheet
-        .getRangeByName('N${indextotol + 5 + 2}')
-        .setFormula('=SUM(N5:N${indextotol + 5 - 1})');
+        '=SUMIFS(N5:N${indextotol + 5 - 1}, Q5:Q${indextotol + 5 - 1}, "<>ล็อคเสียบ", H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล")');
+    sheet.getRangeByName('N${indextotol + 5 + 2}').setFormula(
+        '=SUMIF(H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล",N5:N${indextotol + 5 - 1})');
 
-///////-------------------------------------------------------------------->
+    ///---------->
+    sheet.getRangeByName('O${indextotol + 5 + 0}').setFormula(
+        '=SUMIFS(O5:O${indextotol + 5 - 1}, Q5:Q${indextotol + 5 - 1}, "ล็อคเสียบ", H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล")');
+    sheet.getRangeByName('O${indextotol + 5 + 1}').setFormula(
+        '=SUMIFS(O5:O${indextotol + 5 - 1}, Q5:Q${indextotol + 5 - 1}, "<>ล็อคเสียบ", H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล")');
+    sheet.getRangeByName('O${indextotol + 5 + 2}').setFormula(
+        '=SUMIF(H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล",O5:O${indextotol + 5 - 1})');
+
+    ///---------->
+    sheet.getRangeByName('P${indextotol + 5 + 0}').setFormula(
+        '=SUMIFS(P5:P${indextotol + 5 - 1}, Q5:Q${indextotol + 5 - 1}, "ล็อคเสียบ", H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล")');
+    sheet.getRangeByName('P${indextotol + 5 + 1}').setFormula(
+        '=SUMIFS(P5:P${indextotol + 5 - 1}, Q5:Q${indextotol + 5 - 1}, "<>ล็อคเสียบ", H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล")');
+    sheet.getRangeByName('P${indextotol + 5 + 2}').setFormula(
+        '=SUMIF(H5:H${indextotol + 5 - 1}, "ยอดรวมทั้งบิล",P5:P${indextotol + 5 - 1})');
+
+    ///---------->
 
     for (var index = 0; index < 3; index++) {
-      sheet.getRangeByName('I${indextotol + 5 + index}').cellStyle =
-          globalStyle7;
-      sheet.getRangeByName('J${indextotol + 5 + index}').cellStyle =
-          globalStyle7;
-      sheet.getRangeByName('K${indextotol + 5 + index}').cellStyle =
-          globalStyle7;
       sheet.getRangeByName('L${indextotol + 5 + index}').cellStyle =
           globalStyle7;
       sheet.getRangeByName('M${indextotol + 5 + index}').cellStyle =
           globalStyle7;
       sheet.getRangeByName('N${indextotol + 5 + index}').cellStyle =
           globalStyle7;
+      sheet.getRangeByName('O${indextotol + 5 + index}').cellStyle =
+          globalStyle7;
+      sheet.getRangeByName('P${indextotol + 5 + index}').cellStyle =
+          globalStyle7;
     }
-
-/////////////////////////////////------------------------------------------------>
 
 /////////////////////////////////------------------------------------------------>
 

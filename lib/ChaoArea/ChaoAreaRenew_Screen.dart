@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
@@ -29,6 +30,7 @@ import '../Model/GetC_Quot_Select_2Model.dart';
 import '../Model/GetC_Quot_Select_Model.dart';
 import '../Model/GetContractf_Model.dart';
 import '../Model/GetCustomer_Model.dart';
+import '../Model/GetCustomer_tex_Model.dart';
 import '../Model/GetExpType_Model.dart';
 import '../Model/GetExp_Model.dart';
 import '../Model/GetExp_type_auto.dart';
@@ -40,6 +42,8 @@ import '../Model/GetUnit_Model.dart';
 import '../Model/GetUnitx_Model.dart';
 import '../Model/GetVat_Model.dart';
 import '../Model/GetWht_Model.dart';
+import '../Model/card_model.dart';
+import '../Model/electricity_model.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement.dart';
 import '../PeopleChao/Pays_.dart';
 import '../PeopleChao/Rental_Information.dart';
@@ -114,10 +118,11 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
   List<WhtModel> whtModels = [];
   List<RentalTypeModel> rental_type_ = [];
   List<CustomerModel> customerModels = [];
+  List<ElectricityModel> electricityModels = [];
   List<CustomerModel> _customerModels = <CustomerModel>[];
   double _area_sum = 0;
   double _area_rent_sum = 0;
-  int select_coutumerindex = 0;
+  int select_coutumerindex = 0, select_count = 0;
   List<String> dates =
       ('01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,18,17,19,20,21,22,23,24,25,26,27,28,29,30,31'
           .split(','));
@@ -125,6 +130,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
   List<ContractfModel> contractfModels = [];
   List<RenTalModel> renTalModels = [];
   List<ExpAutoModel> expAutoModels = [];
+  List<String> amtlist = [];
   @override
   void initState() {
     super.initState();
@@ -140,6 +146,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     GC_contractf();
     read_GC_rental();
     read_GC_ExpAuto();
+    read_Electricity();
     Value_D_read = DateFormat('yyyy-MM-dd').format(_dateTime);
     _areaModels = areaModels;
     _customerModels = customerModels;
@@ -156,6 +163,64 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     print('ssss>>>> $_area_sum    $_area_rent_sum');
     print(
         'aaaa>>>> ${_selecteSerbool.map((e) => e)}    ${_selecteSer.map((e) => e)} ');
+  }
+
+  Future<Null> read_Electricity() async {
+    if (electricityModels.isNotEmpty) {
+      electricityModels.clear();
+    }
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_electricity.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        Map<String, dynamic> data = Map();
+        data['ser'] = '0';
+        data['name_ele'] = 'เลือกอัตราคำนวณ';
+        data['ele_one'] = '0';
+        data['ele_mit_one'] = '0';
+        data['ele_two'] = '0';
+        data['ele_mit_two'] = '0';
+        data['ele_three'] = '0';
+        data['ele_mit_three'] = '0';
+        data['ele_tour'] = '0';
+        data['ele_mit_tour'] = '0';
+        data['ele_five'] = '0';
+        data['ele_mit_five'] = '0';
+        data['ele_six'] = '0';
+        data['ele_mit_six'] = '0';
+        data['ele_tf'] = '0';
+        data['vat'] = '0';
+        data['wht'] = '0';
+        data['other'] = '0';
+        data['st'] = '0';
+        data['ele_gob_one'] = '0';
+        data['ele_gob_two'] = '0';
+        data['ele_gob_three'] = '0';
+        data['ele_gob_tour'] = '0';
+        data['ele_gob_five'] = '0';
+        data['ele_gob_six'] = '0';
+
+        ElectricityModel electricityModel = ElectricityModel.fromJson(data);
+
+        setState(() {
+          electricityModels.add(electricityModel);
+        });
+        for (var map in result) {
+          ElectricityModel electricityModel = ElectricityModel.fromJson(map);
+          setState(() {
+            electricityModels.add(electricityModel);
+          });
+        }
+      } else {}
+    } catch (e) {}
   }
 
   Future<Null> read_GC_ExpAuto() async {
@@ -181,6 +246,228 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
 
           setState(() {
             expAutoModels.add(expAutoModel);
+          });
+        }
+      } else {}
+    } catch (e) {}
+  }
+
+  String? read_card =
+          'คุณอาจยังไม่ติดตั้ง หรือ เปิดโปรแกรม Smartdcard Reader หรือ ยังไม่เปิดใช้งาน Cors Unblock',
+      id_card;
+  List<CerdModel> cerdModels = [];
+  List<CustomerTexModel> customerTexModels = [];
+
+  Future<Null> red_card() async {
+    Map<String, String> requestHeaders = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Methods': 'PUT,GET,POST,DELETE,OPTIONS',
+      'Access-Control-Allow-Headers':
+          'Origin,Content-Type,Authorization,Accept,X-Requested-With,x-xsrf-token"',
+      'Content-Type': 'application/javascript; charset=utf-8',
+    };
+
+    var response = await Dio()
+        .request(
+      'https://localhost:8182/thaiid/read.jsonp?&section1=true&section2a=true&section2b=true',
+      options: Options(
+        method: 'GET',
+        headers: requestHeaders,
+      ),
+    )
+        .catchError((errr) {
+      setState(() {
+        id_card = null;
+        read_card =
+            'คุณอาจยังไม่ติดตั้ง หรือ เปิดโปรแกรม Smartdcard Reader หรือ ยังไม่เปิดใช้งาน Cors Unblock';
+
+        Form_nameshop.clear();
+        Form_typeshop.clear();
+        Form_bussshop.clear();
+        Form_bussscontact.clear();
+        Form_address.clear();
+        Form_tel.clear();
+        Form_email.clear();
+        Form_tax.clear();
+
+        Value_AreaSer_ = 0; // ser ประเภท
+        _verticalGroupValue = 'ส่วนตัว/บุคคลธรรมดา'; // ประเภท
+
+        _Form_nameshop = null;
+        _Form_typeshop = null;
+        _Form_bussshop = null;
+        _Form_bussscontact = null;
+        _Form_address = null;
+        _Form_tel = null;
+        _Form_email = null;
+        _Form_tax = null;
+
+        number_custno = null;
+      });
+    });
+
+    try {
+      if (response.statusCode == 200) {
+        cerdModels.clear();
+        var result = json.decode('[' +
+            response.data
+                .toString()
+                .substring(13, response.data.toString().length - 1) +
+            ']');
+
+        if (result.toString().substring(1, result.toString().length - 1) !=
+            'null') {
+          for (var map in result) {
+            CerdModel cerdModel = CerdModel.fromJson(map);
+            var id_cardx = cerdModel.citizenNo;
+
+            setState(() {
+              id_card = id_cardx;
+              read_card = null;
+              Form_nameshop.clear();
+              Form_typeshop.clear();
+              Form_bussshop.text =
+                  '${cerdModel.titleNameTh} ${cerdModel.firstNameTh} ${cerdModel.lastNameTh}';
+              if (Value_AreaSer_ + 1 == 1) {
+                Form_bussscontact.text =
+                    '${cerdModel.titleNameTh} ${cerdModel.firstNameTh} ${cerdModel.lastNameTh}';
+              } else {
+                Form_bussscontact.clear();
+              }
+              Form_address.text =
+                  '${cerdModel.homeNo} ${cerdModel.moo} ต.${cerdModel.tumbol} อ.${cerdModel.amphur} จ.${cerdModel.province}';
+              Form_tel.clear();
+              Form_email.clear();
+              Form_tax.text = '${cerdModel.citizenNo}';
+
+              _Form_nameshop = '';
+              _Form_typeshop = '';
+              _Form_bussshop =
+                  '${cerdModel.titleNameTh} ${cerdModel.firstNameTh} ${cerdModel.lastNameTh}';
+              if (Value_AreaSer_ + 1 == 1) {
+                _Form_bussscontact =
+                    '${cerdModel.titleNameTh} ${cerdModel.firstNameTh} ${cerdModel.lastNameTh}';
+              } else {
+                _Form_bussscontact = '';
+              }
+              _Form_address =
+                  '${cerdModel.homeNo} ${cerdModel.moo} ต.${cerdModel.tumbol} อ.${cerdModel.amphur} จ.${cerdModel.province}';
+              _Form_tel = '';
+              _Form_email = '';
+              _Form_tax = '${cerdModel.citizenNo}';
+
+              number_custno = '';
+
+              cerdModels.add(cerdModel);
+            });
+          }
+        } else {
+          setState(() {
+            id_card = null;
+            read_card = 'ตรวจสอบ บัตรประชาชนเสียบแล้ว หรือไม่??';
+
+            Form_nameshop.clear();
+            Form_typeshop.clear();
+            Form_bussshop.clear();
+            Form_bussscontact.clear();
+            Form_address.clear();
+            Form_tel.clear();
+            Form_email.clear();
+            Form_tax.clear();
+
+            Value_AreaSer_ = 0; // ser ประเภท
+            _verticalGroupValue = 'ส่วนตัว/บุคคลธรรมดา'; // ประเภท
+
+            _Form_nameshop = null;
+            _Form_typeshop = null;
+            _Form_bussshop = null;
+            _Form_bussscontact = null;
+            _Form_address = null;
+            _Form_tel = null;
+            _Form_email = null;
+            _Form_tax = null;
+
+            number_custno = null;
+          });
+        }
+      }
+    } catch (e) {
+      setState(() {
+        id_card = null;
+        read_card =
+            'คุณอาจยังไม่ติดตั้ง หรือ ลงโปรแกรม Smartdcard Reader หรือ ยังไม่เปิดใช้งาน Cors Unblock';
+
+        Form_nameshop.clear();
+        Form_typeshop.clear();
+        Form_bussshop.clear();
+        Form_bussscontact.clear();
+        Form_address.clear();
+        Form_tel.clear();
+        Form_email.clear();
+        Form_tax.clear();
+
+        Value_AreaSer_ = 0; // ser ประเภท
+        _verticalGroupValue = 'ส่วนตัว/บุคคลธรรมดา'; // ประเภท
+
+        _Form_nameshop = null;
+        _Form_typeshop = null;
+        _Form_bussshop = null;
+        _Form_bussscontact = null;
+        _Form_address = null;
+        _Form_tel = null;
+        _Form_email = null;
+        _Form_tax = null;
+
+        number_custno = null;
+      });
+    }
+    if (id_card != null) {
+      red_card_tex();
+    }
+  }
+
+  Future<Null> red_card_tex() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/Gc_customer_tex.php?isAdd=true&ren=$ren&idcard=$id_card';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print('object>>>>>>>>>>>123>>>>>$result');
+      if (result != null) {
+        customerTexModels.clear();
+        for (var map in result) {
+          CustomerTexModel customerTexModel = CustomerTexModel.fromJson(map);
+          setState(() {
+            customerTexModels.add(customerTexModel);
+
+            Form_nameshop.text = '${customerTexModel.scname}';
+            Form_typeshop.text = '${customerTexModel.stype}';
+            Form_bussshop.text = '${customerTexModel.cname}';
+            Form_bussscontact.text = '${customerTexModel.attn}';
+            Form_address.text = '${customerTexModel.addr1}';
+            Form_tel.text = '${customerTexModel.tel}';
+            Form_email.text = '${customerTexModel.email}';
+            Form_tax.text = '${customerTexModel.tax}';
+
+            Value_AreaSer_ =
+                int.parse(customerTexModel.typeser!) - 1; // ser ประเภท
+            _verticalGroupValue = '${customerTexModel.type}'; // ประเภท
+
+            _Form_nameshop = '${customerTexModel.scname}';
+            _Form_typeshop = '${customerTexModel.stype}';
+            _Form_bussshop = '${customerTexModel.cname}';
+            _Form_bussscontact = '${customerTexModel.attn}';
+            _Form_address = '${customerTexModel.addr1}';
+            _Form_tel = '${customerTexModel.tel}';
+            _Form_email = '${customerTexModel.email}';
+            _Form_tax = '$customerTexModel.tax}';
+
+            number_custno = customerTexModel.custno.toString();
           });
         }
       } else {}
@@ -2471,14 +2758,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                       })),
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child:
-                                  InkWell(onTap: () {}, child: const Text('')),
-                            ),
-                          ),
+
                           Expanded(
                             flex: 1,
                             child: Column(
@@ -2561,6 +2841,60 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                     ),
                                   ),
                               ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: () {
+                                  // setState(() {
+                                  //   select_coutumerindex = 1;
+                                  // });
+                                  // select_coutumer();
+                                  red_card().then((value) {
+                                    if (read_card != null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text('$read_card',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily:
+                                                        Font_.Fonts_T))),
+                                      );
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
+                                    ),
+                                    border: Border.all(
+                                        color: Colors.black, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: const Text(
+                                    'ค้นจากบัตรประชาชน',
+                                    maxLines: 5,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text1_,
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      fontWeight: FontWeight.bold,
+                                      //fontSize: 10.0
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           // if (!Responsive.isDesktop(context))
@@ -5574,6 +5908,18 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                               firstDate: DateTime(1000, 1, 01),
                                               lastDate: DateTime.now().add(
                                                   const Duration(days: 50)),
+                                              // selectableDayPredicate:
+                                              //     (DateTime val) {
+                                              //   if (Value_rental_type_2 ==
+                                              //       'สัปดาห์') {
+                                              //     return val.weekday ==
+                                              //             DateTime.monday
+                                              //         ? false
+                                              //         : true;
+                                              //   } else {
+                                              //     return true;
+                                              //   }
+                                              // },
                                               builder: (context, child) {
                                                 return Theme(
                                                   data: Theme.of(context)
@@ -5652,8 +5998,10 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                         ? DateTime(
                                                             newDate.year,
                                                             newDate.month,
+                                                            // newDate.weekday *
+                                                            //     countday
                                                             newDate.day +
-                                                                (countday * 6))
+                                                                (countday * 7))
                                                         : Value_rental_type_2 ==
                                                                 'เดือน'
                                                             ? DateTime(
@@ -8672,6 +9020,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                           }).toList(),
 
                                                                                           onChanged: (value) async {
+                                                                                            // setState(() {
+                                                                                            //   amtlist.clear();
+                                                                                            // });
                                                                                             var zones = value!.indexOf(':');
                                                                                             var unitSer = value.substring(0, zones);
                                                                                             var unitName = value.substring(zones + 1);
@@ -8767,6 +9118,10 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                           }).toList(),
 
                                                                                           onChanged: (value) async {
+                                                                                            // setState(() {
+                                                                                            //   amtlist.clear();
+                                                                                            // });
+
                                                                                             var zones = value!.indexOf(':');
                                                                                             var unitSer = value.substring(0, zones);
                                                                                             var unitName = value.substring(zones + 1);
@@ -9388,199 +9743,40 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                       flex: 1,
                                                                                       child: InkWell(
                                                                                         onTap: () {
-                                                                                          showDialog<void>(
-                                                                                              context: context,
-                                                                                              barrierDismissible: false, // user must tap button!
-                                                                                              builder: (BuildContext context) {
-                                                                                                return AlertDialog(
-                                                                                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                                                                                                  // title: const Text('AlertDialog Title'),
-                                                                                                  content: SingleChildScrollView(
-                                                                                                    child: ListBody(
-                                                                                                      children: <Widget>[
-                                                                                                        Container(
-                                                                                                          width: MediaQuery.of(context).size.width * 0.3,
-                                                                                                          height: MediaQuery.of(context).size.width * 0.08,
-                                                                                                          child: Center(
-                                                                                                            child: Padding(
-                                                                                                              padding: const EdgeInsets.all(8.0),
-                                                                                                              child: Column(
-                                                                                                                children: [
-                                                                                                                  Container(
-                                                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                                                    child: AutoSizeText(
-                                                                                                                      maxLines: 2,
-                                                                                                                      minFontSize: 8,
-                                                                                                                      // maxFontSize: 15,
-                                                                                                                      '${quotxSelectModels[index].expname}',
-                                                                                                                      textAlign: TextAlign.start,
-                                                                                                                      style: const TextStyle(
-                                                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                                          // fontWeight: FontWeight.bold,
-                                                                                                                          fontFamily: Font_.Fonts_T
+                                                                                          setState(() {
+                                                                                            amtlist.clear();
+                                                                                          });
+                                                                                          // if (quotxSelectModels[index].exptser == '1') {
+                                                                                          if (Value_rental_type_ == 'รายวัน' || Value_rental_type_ == 'ครั้งเดียว' || Value_rental_type_ == 'รายสัปดาห์') {
+                                                                                            setOne(context, index);
+                                                                                          } else {
+                                                                                            print(quotxSelectModels[index].amt_ty);
+                                                                                            if (quotxSelectModels[index].amt_ty == '') {
+                                                                                              if (amtlist.length == 0) {
+                                                                                                for (int trem = 0; trem < int.parse(Value_rental_count_); trem++) {
+                                                                                                  var amlis = quotxSelectModels[index].amt;
+                                                                                                  setState(() {
+                                                                                                    amtlist.add(amlis!);
+                                                                                                  });
+                                                                                                }
+                                                                                              }
+                                                                                            } else {
+                                                                                              var listB = quotxSelectModels[index].amt_ty;
+                                                                                              var b = (listB!.split(','));
+                                                                                              for (int spin = 0; spin < b.length; spin++) {
+                                                                                                var amlis = b[spin].trim();
+                                                                                                print(b[spin].trim());
+                                                                                                setState(() {
+                                                                                                  amtlist.add(amlis);
+                                                                                                });
+                                                                                              }
+                                                                                            }
 
-                                                                                                                          //fontSize: 10.0
-                                                                                                                          ),
-                                                                                                                    ),
-                                                                                                                  ),
-                                                                                                                  TextFormField(
-                                                                                                                    textAlign: TextAlign.right,
-                                                                                                                    initialValue: quotxSelectModels[index].amt, // nFormat.format(double.parse(quotxSelectModels[index].amt!)),
-                                                                                                                    // onChanged: (value) async {
-                                                                                                                    //   SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                                                    //   String? ren = preferences.getString('renTalSer');
-                                                                                                                    //   String? ser_user = preferences.getString('ser');
-                                                                                                                    //   var qser = quotxSelectModels[index].ser;
-                                                                                                                    //   String url = '${MyConstant().domain}/UDBquotx_select.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user';
-
-                                                                                                                    //   try {
-                                                                                                                    //     var response = await http.get(Uri.parse(url));
-
-                                                                                                                    //     var result = json.decode(response.body);
-                                                                                                                    //     print(result);
-                                                                                                                    //     if (result.toString() != 'null') {
-                                                                                                                    //       if (quotxSelectModels.isNotEmpty) {
-                                                                                                                    //         setState(() {
-                                                                                                                    //           quotxSelectModels.clear();
-                                                                                                                    //         });
-                                                                                                                    //       }
-                                                                                                                    //       for (var map in result) {
-                                                                                                                    //         QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
-                                                                                                                    //         setState(() {
-                                                                                                                    //           quotxSelectModels.add(quotxSelectModel);
-                                                                                                                    //         });
-                                                                                                                    //       }
-                                                                                                                    //     } else {
-                                                                                                                    //       setState(() {
-                                                                                                                    //         quotxSelectModels.clear();
-                                                                                                                    //       });
-                                                                                                                    //     }
-                                                                                                                    //   } catch (e) {}
-                                                                                                                    // },
-                                                                                                                    onFieldSubmitted: (value) async {
-                                                                                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                                                      String? ren = preferences.getString('renTalSer');
-                                                                                                                      String? ser_user = preferences.getString('ser');
-                                                                                                                      var qser = quotxSelectModels[index].ser;
-                                                                                                                      String url = '${MyConstant().domain}/UDBquotx_select.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user';
-
-                                                                                                                      try {
-                                                                                                                        var response = await http.get(Uri.parse(url));
-
-                                                                                                                        var result = json.decode(response.body);
-                                                                                                                        print(result);
-                                                                                                                        if (result.toString() != 'null') {
-                                                                                                                          if (quotxSelectModels.isNotEmpty) {
-                                                                                                                            setState(() {
-                                                                                                                              quotxSelectModels.clear();
-                                                                                                                            });
-                                                                                                                          }
-                                                                                                                          for (var map in result) {
-                                                                                                                            QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
-                                                                                                                            setState(() {
-                                                                                                                              quotxSelectModels.add(quotxSelectModel);
-                                                                                                                            });
-                                                                                                                          }
-                                                                                                                          Navigator.of(context).pop();
-                                                                                                                        } else {
-                                                                                                                          setState(() {
-                                                                                                                            quotxSelectModels.clear();
-                                                                                                                          });
-                                                                                                                        }
-                                                                                                                      } catch (e) {}
-                                                                                                                    },
-
-                                                                                                                    // maxLength: 13,
-                                                                                                                    cursorColor: Colors.green,
-                                                                                                                    decoration: InputDecoration(
-                                                                                                                        fillColor: Colors.white.withOpacity(0.05),
-                                                                                                                        filled: true,
-                                                                                                                        // prefixIcon:
-                                                                                                                        //     const Icon(Icons.key, color: Colors.black),
-                                                                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                                                        focusedBorder: const OutlineInputBorder(
-                                                                                                                          borderRadius: BorderRadius.only(
-                                                                                                                            topRight: Radius.circular(15),
-                                                                                                                            topLeft: Radius.circular(15),
-                                                                                                                            bottomRight: Radius.circular(15),
-                                                                                                                            bottomLeft: Radius.circular(15),
-                                                                                                                          ),
-                                                                                                                          borderSide: BorderSide(
-                                                                                                                            width: 1,
-                                                                                                                            color: Colors.grey,
-                                                                                                                          ),
-                                                                                                                        ),
-                                                                                                                        enabledBorder: const OutlineInputBorder(
-                                                                                                                          borderRadius: BorderRadius.only(
-                                                                                                                            topRight: Radius.circular(15),
-                                                                                                                            topLeft: Radius.circular(15),
-                                                                                                                            bottomRight: Radius.circular(15),
-                                                                                                                            bottomLeft: Radius.circular(15),
-                                                                                                                          ),
-                                                                                                                          borderSide: BorderSide(
-                                                                                                                            width: 1,
-                                                                                                                            color: Colors.grey,
-                                                                                                                          ),
-                                                                                                                        ),
-                                                                                                                        // labelText: 'PASSWOED',
-                                                                                                                        labelStyle: const TextStyle(
-                                                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                                            fontFamily: Font_.Fonts_T)),
-                                                                                                                    // inputFormatters: <
-                                                                                                                    //     TextInputFormatter>[
-                                                                                                                    //   // for below version 2 use this
-                                                                                                                    //   FilteringTextInputFormatter
-                                                                                                                    //       .allow(RegExp(
-                                                                                                                    //           r'[0-9]')),
-                                                                                                                    //   // for version 2 and greater youcan also use this
-                                                                                                                    //   FilteringTextInputFormatter
-                                                                                                                    //       .digitsOnly
-                                                                                                                    // ],
-                                                                                                                  ),
-                                                                                                                ],
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ],
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  actions: <Widget>[
-                                                                                                    Row(
-                                                                                                      mainAxisAlignment: MainAxisAlignment.end,
-                                                                                                      children: [
-                                                                                                        Container(
-                                                                                                          child: Padding(
-                                                                                                            padding: const EdgeInsets.all(8.0),
-                                                                                                            child: InkWell(
-                                                                                                              child: Container(
-                                                                                                                  width: 100,
-                                                                                                                  decoration: const BoxDecoration(
-                                                                                                                    color: Colors.black,
-                                                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                                    // border: Border.all(color: Colors.white, width: 1),
-                                                                                                                  ),
-                                                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                                                  child: const Center(
-                                                                                                                      child: Text(
-                                                                                                                    'ปิด',
-                                                                                                                    textAlign: TextAlign.center,
-                                                                                                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                                                        //fontSize: 10.0
-                                                                                                                        ),
-                                                                                                                  ))),
-                                                                                                              onTap: () {
-                                                                                                                Navigator.of(context).pop();
-                                                                                                              },
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ],
-                                                                                                    ),
-                                                                                                  ],
-                                                                                                );
-                                                                                              });
+                                                                                            setTwo(context, index);
+                                                                                          }
+                                                                                          // } else {
+                                                                                          //   setOne(context, index);
+                                                                                          // }
                                                                                         },
                                                                                         child: Container(
                                                                                             height: 45,
@@ -9596,9 +9792,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                                 color: Colors.grey,
                                                                                               ),
                                                                                             ),
-                                                                                            padding: const EdgeInsets.all(3.0),
+                                                                                            padding: EdgeInsets.all(3.0),
                                                                                             child: Text(
-                                                                                              '${quotxSelectModels[index].amt}',
+                                                                                              quotxSelectModels[index].amt_ty != '' ? 'อัตราก้าวหน้า' : '${quotxSelectModels[index].amt}',
                                                                                               textAlign: TextAlign.end,
                                                                                               style: TextStyle(
                                                                                                 color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -9714,7 +9910,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                       // ),
                                                                                     ),
                                                                               Expanded(
-                                                                                flex: 1,
+                                                                                flex: quotxSelectModels[index].amt_ty != '' ? 2 : 1,
                                                                                 child: Padding(
                                                                                   padding: EdgeInsets.all(8),
                                                                                   child: DropdownButtonFormField2(
@@ -9803,25 +9999,27 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                              Expanded(
-                                                                                flex: 1,
-                                                                                child: AutoSizeText(
-                                                                                  maxLines: 2,
-                                                                                  minFontSize: 8,
-                                                                                  // maxFontSize: 15,
-                                                                                  '${quotxSelectModels[index].vat}',
-                                                                                  textAlign: TextAlign.right,
-                                                                                  style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T),
-                                                                                ),
-                                                                              ),
+                                                                              quotxSelectModels[index].amt_ty != ''
+                                                                                  ? SizedBox()
+                                                                                  : Expanded(
+                                                                                      flex: 1,
+                                                                                      child: AutoSizeText(
+                                                                                        maxLines: 2,
+                                                                                        minFontSize: 8,
+                                                                                        // maxFontSize: 15,
+                                                                                        '${quotxSelectModels[index].vat}',
+                                                                                        textAlign: TextAlign.right,
+                                                                                        style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                    ),
                                                                               // if ((Value_AreaSer_ + 1) == 1)
                                                                               //   SizedBox()
                                                                               // else
                                                                               Expanded(
-                                                                                flex: 1,
+                                                                                flex: quotxSelectModels[index].amt_ty != '' ? 2 : 1,
                                                                                 child: Padding(
                                                                                   padding: EdgeInsets.all(8),
                                                                                   child: DropdownButtonFormField2(
@@ -9913,26 +10111,28 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                               // if ((Value_AreaSer_ + 1) == 1)
                                                                               //   SizedBox()
                                                                               // else
-                                                                              Expanded(
-                                                                                flex: 1,
-                                                                                child: Padding(
-                                                                                  padding: EdgeInsets.all(8.0),
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 2,
-                                                                                    minFontSize: 8,
-                                                                                    // maxFontSize: 15,
-                                                                                    '${quotxSelectModels[index].wht}',
-                                                                                    textAlign: TextAlign.right,
-                                                                                    style: const TextStyle(
-                                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                        // fontWeight: FontWeight.bold,
-                                                                                        fontFamily: Font_.Fonts_T
+                                                                              quotxSelectModels[index].amt_ty != ''
+                                                                                  ? SizedBox()
+                                                                                  : Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Padding(
+                                                                                        padding: EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${quotxSelectModels[index].wht}',
+                                                                                          textAlign: TextAlign.right,
+                                                                                          style: const TextStyle(
+                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                              fontFamily: Font_.Fonts_T
 
-                                                                                        //fontSize: 10.0
+                                                                                              //fontSize: 10.0
+                                                                                              ),
                                                                                         ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
+                                                                                      ),
+                                                                                    ),
                                                                               Expanded(
                                                                                 flex: 1,
                                                                                 child: Padding(
@@ -9941,7 +10141,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                     maxLines: 2,
                                                                                     minFontSize: 8,
                                                                                     // maxFontSize: 15,
-                                                                                    '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                                    quotxSelectModels[index].amt_ty != '' ? '...' : '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
                                                                                     textAlign: TextAlign.right,
                                                                                     style: const TextStyle(
                                                                                         color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -10377,9 +10577,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                                                             fontFamily: Font_.Fonts_T)),
                                                                                                                     inputFormatters: <TextInputFormatter>[
                                                                                                                       // for below version 2 use this
-                                                                                                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
                                                                                                                       // for version 2 and greater youcan also use this
-                                                                                                                      FilteringTextInputFormatter.digitsOnly
+                                                                                                                      // FilteringTextInputFormatter.digitsOnly
                                                                                                                     ],
                                                                                                                   ),
                                                                                                                 ],
@@ -10587,9 +10787,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                                                             fontFamily: Font_.Fonts_T)),
                                                                                                                     inputFormatters: <TextInputFormatter>[
                                                                                                                       // for below version 2 use this
-                                                                                                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
                                                                                                                       // for version 2 and greater youcan also use this
-                                                                                                                      FilteringTextInputFormatter.digitsOnly
+                                                                                                                      // FilteringTextInputFormatter.digitsOnly
                                                                                                                     ],
                                                                                                                   ),
                                                                                                                 ],
@@ -10683,17 +10883,90 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                     ),
                                                                                   ),
                                                                                   Expanded(
-                                                                                    flex: 1,
-                                                                                    child: AutoSizeText(
-                                                                                      maxLines: 2,
-                                                                                      minFontSize: 8,
-                                                                                      // maxFontSize: 15,
-                                                                                      '',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: const TextStyle(
-                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                          // fontWeight: FontWeight.bold,
-                                                                                          fontFamily: Font_.Fonts_T),
+                                                                                    flex: 3,
+                                                                                    child: Padding(
+                                                                                      padding: const EdgeInsets.all(8),
+                                                                                      child: Column(
+                                                                                        children: [
+                                                                                          Row(
+                                                                                            children: [
+                                                                                              Text(
+                                                                                                'อัตราก้าวหน้า',
+                                                                                                textAlign: TextAlign.start,
+                                                                                                style: TextStyle(
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                  fontSize: 15,
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                          DropdownButtonFormField2(
+                                                                                            decoration: InputDecoration(
+                                                                                              isDense: true,
+                                                                                              contentPadding: EdgeInsets.zero,
+                                                                                              border: OutlineInputBorder(
+                                                                                                borderRadius: BorderRadius.circular(10),
+                                                                                              ),
+                                                                                            ),
+                                                                                            isExpanded: true,
+                                                                                            hint: Text(
+                                                                                              quotxSelectModels[index].ele_ty == '0' || quotxSelectModels[index].ele_ty == 0 ? 'เลือก' : '${electricityModels.where((element) => element.ser == quotxSelectModels[index].ele_ty).map((element) => element.nameEle)} ',
+                                                                                              maxLines: 1,
+                                                                                              style: const TextStyle(
+                                                                                                  fontSize: 14,
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ),
+                                                                                            icon: const Icon(
+                                                                                              Icons.arrow_drop_down,
+                                                                                              color: Colors.black,
+                                                                                            ),
+                                                                                            style: TextStyle(color: Colors.green.shade900, fontFamily: Font_.Fonts_T),
+                                                                                            iconSize: 20,
+                                                                                            buttonHeight: 50,
+                                                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                                                            dropdownDecoration: BoxDecoration(
+                                                                                              borderRadius: BorderRadius.circular(10),
+                                                                                            ),
+                                                                                            items: electricityModels
+                                                                                                .map((item) => DropdownMenuItem<String>(
+                                                                                                      value: '${item.ser}:${item.nameEle}',
+                                                                                                      child: Text(
+                                                                                                        item.nameEle!,
+                                                                                                        style: const TextStyle(
+                                                                                                            fontSize: 14,
+                                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                            // fontWeight: FontWeight.bold,
+                                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                                      ),
+                                                                                                    ))
+                                                                                                .toList(),
+
+                                                                                            onChanged: (value) async {
+                                                                                              var zones = value!.indexOf(':');
+                                                                                              var whtSer = value.substring(0, zones);
+                                                                                              var whtName = value.substring(zones + 1);
+                                                                                              print('mmmmm ${whtSer.toString()} $whtName');
+
+                                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                              String? ren = preferences.getString('renTalSer');
+                                                                                              String? ser_user = preferences.getString('ser');
+                                                                                              var qser = quotxSelectModels[index].ser;
+                                                                                              String url = '${MyConstant().domain}/UELEquotx_select.php?isAdd=true&ren=$ren&qser=$qser&whtSer=$whtSer&ser_user=$ser_user';
+                                                                                              try {
+                                                                                                var response = await http.get(Uri.parse(url));
+                                                                                                var result = json.decode(response.body);
+                                                                                                print(result);
+                                                                                                if (result.toString() == 'Yes') {
+                                                                                                  print(result.toString());
+                                                                                                }
+                                                                                              } catch (e) {}
+                                                                                            },
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
                                                                                     ),
                                                                                   ),
                                                                                 ],
@@ -11042,283 +11315,518 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: IconButton(
                                       onPressed: () {
-                                        // read_GC_Exp(expTypeModels[Ser_Sub].ser);
-                                        // showDialog<String>(
-                                        //     barrierDismissible: false,
-                                        //     context: context,
-                                        //     builder: (BuildContext context) {
-                                        //       return StreamBuilder(
-                                        //           stream: Stream.periodic(
-                                        //               const Duration(seconds: 0)),
-                                        //           builder: (context, snapshot) {
-                                        //             return AlertDialog(
-                                        //                 shape:
-                                        //                     const RoundedRectangleBorder(
-                                        //                         borderRadius:
-                                        //                             BorderRadius.all(
-                                        //                                 Radius.circular(
-                                        //                                     20.0))),
-                                        //                 title: Row(
-                                        //                   mainAxisAlignment:
-                                        //                       MainAxisAlignment
-                                        //                           .spaceAround,
-                                        //                   children: [
-                                        //                     Expanded(
-                                        //                       flex: 6,
-                                        //                       child: Text(
-                                        //                         '${expTypeModels[Ser_Sub].bills}',
-                                        //                         style: TextStyle(
-                                        //                           color: Colors.black,
-                                        //                           fontWeight:
-                                        //                               FontWeight.bold,
-                                        //                         ),
-                                        //                       ),
-                                        //                     ),
-                                        //                     Expanded(
-                                        //                         flex: 6,
-                                        //                         child: Row(
-                                        //                           mainAxisAlignment:
-                                        //                               MainAxisAlignment
-                                        //                                   .end,
-                                        //                           children: [
-                                        //                             IconButton(
-                                        //                                 onPressed:
-                                        //                                     () {
-                                        //                                   Navigator
-                                        //                                       .pop(
-                                        //                                     context,
-                                        //                                   );
-                                        //                                 },
-                                        //                                 icon: Icon(
-                                        //                                     Icons
-                                        //                                         .close,
-                                        //                                     color: Colors
-                                        //                                         .black)),
-                                        //                           ],
-                                        //                         )),
-                                        //                   ],
-                                        //                 ),
-                                        //                 content: Container(
-                                        //                   height:
-                                        //                       MediaQuery.of(context)
-                                        //                               .size
-                                        //                               .height /
-                                        //                           1.5,
-                                        //                   width:
-                                        //                       MediaQuery.of(context)
-                                        //                               .size
-                                        //                               .width /
-                                        //                           1.2,
-                                        //                   child: Column(
-                                        //                     children: [
-                                        //                       Container(
-                                        //                         color: Colors
-                                        //                             .grey.shade300,
-                                        //                         child: Row(
-                                        //                           mainAxisAlignment:
-                                        //                               MainAxisAlignment
-                                        //                                   .spaceBetween,
-                                        //                           children: [
-                                        //                             Expanded(
-                                        //                               flex: 6,
-                                        //                               child:
-                                        //                                   Container(
-                                        //                                 padding:
-                                        //                                     const EdgeInsets
-                                        //                                             .all(
-                                        //                                         8.0),
-                                        //                                 child:
-                                        //                                     AutoSizeText(
-                                        //                                   maxLines: 2,
-                                        //                                   minFontSize:
-                                        //                                       8,
-                                        //                                   // maxFontSize: 15,
-                                        //                                   'รายการ',
-                                        //                                   textAlign:
-                                        //                                       TextAlign
-                                        //                                           .start,
-                                        //                                   style:
-                                        //                                       const TextStyle(
-                                        //                                     color: TextHome_Color
-                                        //                                         .TextHome_Colors,
+                                        read_GC_Exp(expTypeModels[Ser_Sub].ser);
+                                        showDialog<String>(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return StreamBuilder(
+                                                  stream: Stream.periodic(
+                                                      const Duration(
+                                                          seconds: 0)),
+                                                  builder: (context, snapshot) {
+                                                    return AlertDialog(
+                                                        shape: const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        20.0))),
+                                                        title: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceAround,
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 6,
+                                                              child: Text(
+                                                                '${expTypeModels[Ser_Sub].bills}',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                                flex: 6,
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    IconButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator
+                                                                              .pop(
+                                                                            context,
+                                                                          );
+                                                                        },
+                                                                        icon: Icon(
+                                                                            Icons
+                                                                                .close,
+                                                                            color:
+                                                                                Colors.black)),
+                                                                  ],
+                                                                )),
+                                                          ],
+                                                        ),
+                                                        content: Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              1.5,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              1.2,
+                                                          child: Column(
+                                                            children: [
+                                                              Container(
+                                                                color: Colors
+                                                                    .grey
+                                                                    .shade300,
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      flex: 2,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: AppbackgroundColor
+                                                                            .TiTile_Colors,
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'ค่าใช้จ่ายที่ต้องการปรับ',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: AppbackgroundColor
+                                                                            .TiTile_Colors,
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'เกินกำหนด/วัน',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: AppbackgroundColor
+                                                                            .TiTile_Colors,
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'วิธีการคำนวน %',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: AppbackgroundColor
+                                                                            .TiTile_Colors,
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'วิธีการคำนวน บาท',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: Colors
+                                                                            .red
+                                                                            .shade200,
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'เกินวันกำหนด',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: Colors
+                                                                            .red
+                                                                            .shade200,
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'วิธีการคำนวน %',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: Colors
+                                                                            .red
+                                                                            .shade200,
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'วิธีการคำนวน บาท',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .fromLTRB(
+                                                                        8,
+                                                                        0,
+                                                                        8,
+                                                                        8),
+                                                                child: Column(
+                                                                  children: [
+                                                                    Container(
+                                                                      height: MediaQuery.of(context)
+                                                                              .size
+                                                                              .height /
+                                                                          1.8,
+                                                                      width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width,
+                                                                      // height: 250,
 
-                                        //                                     //fontSize: 10.0
-                                        //                                   ),
-                                        //                                 ),
-                                        //                               ),
-                                        //                             ),
-                                        //                             Expanded(
-                                        //                               flex: 1,
-                                        //                               child:
-                                        //                                   Container(
-                                        //                                 padding:
-                                        //                                     EdgeInsets
-                                        //                                         .all(
-                                        //                                             8.0),
-                                        //                                 child:
-                                        //                                     AutoSizeText(
-                                        //                                   maxLines: 2,
-                                        //                                   minFontSize:
-                                        //                                       8,
-                                        //                                   // maxFontSize: 15,
-                                        //                                   'หน่วย',
-                                        //                                   textAlign:
-                                        //                                       TextAlign
-                                        //                                           .center,
-                                        //                                   style:
-                                        //                                       const TextStyle(
-                                        //                                     color: TextHome_Color
-                                        //                                         .TextHome_Colors,
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                        color: AppbackgroundColor
+                                                                            .Sub_Abg_Colors,
+                                                                        borderRadius: BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(0),
+                                                                            topRight: Radius.circular(0),
+                                                                            bottomLeft: Radius.circular(0),
+                                                                            bottomRight: Radius.circular(0)),
+                                                                        // border: Border.all(color: Colors.grey, width: 1),
+                                                                      ),
+                                                                      child: ListView
+                                                                          .builder(
+                                                                        // controller: expModels.length,
+                                                                        // itemExtent: 50,
+                                                                        physics:
+                                                                            const NeverScrollableScrollPhysics(),
+                                                                        shrinkWrap:
+                                                                            true,
+                                                                        itemCount:
+                                                                            expModels.length,
+                                                                        itemBuilder:
+                                                                            (BuildContext context,
+                                                                                int index) {
+                                                                          return Container(
+                                                                            child: ListTile(
+                                                                                onTap: () {
+                                                                                  var serex = expModels[index].ser;
+                                                                                  var sdate = expModels[index].sday;
+                                                                                  // String
+                                                                                  //     _Date =
+                                                                                  //     DateFormat('dd').format(DateTime.parse('${expModels[index].sdate!} 00:00:00'));
+                                                                                  // Value_AreaSer_ +
+                                                                                  //     1; // ser ประเภท
+                                                                                  // _verticalGroupValue; // ประเภท
+                                                                                  // _Form_nameshop; //ชื่อร้าน
+                                                                                  // _Form_typeshop; //ประเภทร้าน
+                                                                                  // _Form_bussshop; //ชื่อผู้เช่า
+                                                                                  // _Form_bussscontact; //ชื่อผู้ติดต่อ
+                                                                                  // _Form_address; //ที่อยู่
+                                                                                  // _Form_tel; //เบอร์โทร
+                                                                                  // _Form_email; //email
+                                                                                  // _Form_tax; //เลข tax
+                                                                                  // Value_DateTime_Step2; //เลือก ว-ด-ป
+                                                                                  // Value_rental_type_; //รายวัน เดือน ปี
+                                                                                  // Value_rental_type_2; //วัน เดือน ปี
+                                                                                  // Value_DateTime_end; //หมดสัญญา ว-ด-ป
+                                                                                  // Value_D_start; //เริ่มสัญญา ป/ด/ว
+                                                                                  // Value_D_end; //หมดสัญญา ป/ด/ว
+                                                                                  // Value_rental_count_; //จำนวน วัน เดือน ปี
+                                                                                  // _selecteSer.map((e) => e).toString().substring(1,
+                                                                                  //     _selecteSer.map((e) => e).toString().length - 1); // serพื้นที่
+                                                                                  // _selecteSerbool.map((e) => e).toString().substring(1,
+                                                                                  //     _selecteSerbool.map((e) => e).toString().length - 1); //พื้นที่
 
-                                        //                                     //fontSize: 10.0
-                                        //                                   ),
-                                        //                                 ),
-                                        //                               ),
-                                        //                             ),
-                                        //                           ],
-                                        //                         ),
-                                        //                       ),
-                                        //                       Padding(
-                                        //                         padding:
-                                        //                             const EdgeInsets
-                                        //                                     .fromLTRB(
-                                        //                                 8, 0, 8, 8),
-                                        //                         child: Column(
-                                        //                           children: [
-                                        //                             Container(
-                                        //                               height: MediaQuery.of(
-                                        //                                           context)
-                                        //                                       .size
-                                        //                                       .height /
-                                        //                                   1.8,
-                                        //                               width: MediaQuery.of(
-                                        //                                       context)
-                                        //                                   .size
-                                        //                                   .width,
-                                        //                               // height: 250,
+                                                                                  add_quot(serex, sdate, index);
+                                                                                },
+                                                                                title: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                  children: [
+                                                                                    Expanded(
+                                                                                      flex: 2,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].expname}',
+                                                                                          textAlign: TextAlign.start,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
 
-                                        //                               decoration:
-                                        //                                   const BoxDecoration(
-                                        //                                 color: AppbackgroundColor
-                                        //                                     .Sub_Abg_Colors,
-                                        //                                 borderRadius: BorderRadius.only(
-                                        //                                     topLeft: Radius
-                                        //                                         .circular(
-                                        //                                             0),
-                                        //                                     topRight:
-                                        //                                         Radius.circular(
-                                        //                                             0),
-                                        //                                     bottomLeft:
-                                        //                                         Radius.circular(
-                                        //                                             0),
-                                        //                                     bottomRight:
-                                        //                                         Radius.circular(
-                                        //                                             0)),
-                                        //                                 // border: Border.all(color: Colors.grey, width: 1),
-                                        //                               ),
-                                        //                               child: ListView
-                                        //                                   .builder(
-                                        //                                 // controller: expModels.length,
-                                        //                                 // itemExtent: 50,
-                                        //                                 physics:
-                                        //                                     const NeverScrollableScrollPhysics(),
-                                        //                                 shrinkWrap:
-                                        //                                     true,
-                                        //                                 itemCount:
-                                        //                                     expModels
-                                        //                                         .length,
-                                        //                                 itemBuilder:
-                                        //                                     (BuildContext
-                                        //                                             context,
-                                        //                                         int index) {
-                                        //                                   return Container(
-                                        //                                     child: ListTile(
-                                        //                                         onTap: () {
-                                        //                                           var serex =
-                                        //                                               expModels[index].ser;
-                                        //                                           String
-                                        //                                               _Date =
-                                        //                                               DateFormat('dd').format(DateTime.parse('${expModels[index].sdate!} 00:00:00'));
-                                        //                                           // Value_AreaSer_ +
-                                        //                                           //     1; // ser ประเภท
-                                        //                                           // _verticalGroupValue; // ประเภท
-                                        //                                           // _Form_nameshop; //ชื่อร้าน
-                                        //                                           // _Form_typeshop; //ประเภทร้าน
-                                        //                                           // _Form_bussshop; //ชื่อผู้เช่า
-                                        //                                           // _Form_bussscontact; //ชื่อผู้ติดต่อ
-                                        //                                           // _Form_address; //ที่อยู่
-                                        //                                           // _Form_tel; //เบอร์โทร
-                                        //                                           // _Form_email; //email
-                                        //                                           // _Form_tax; //เลข tax
-                                        //                                           // Value_DateTime_Step2; //เลือก ว-ด-ป
-                                        //                                           // Value_rental_type_; //รายวัน เดือน ปี
-                                        //                                           // Value_rental_type_2; //วัน เดือน ปี
-                                        //                                           // Value_DateTime_end; //หมดสัญญา ว-ด-ป
-                                        //                                           // Value_D_start; //เริ่มสัญญา ป/ด/ว
-                                        //                                           // Value_D_end; //หมดสัญญา ป/ด/ว
-                                        //                                           // Value_rental_count_; //จำนวน วัน เดือน ปี
-                                        //                                           // _selecteSer.map((e) => e).toString().substring(1,
-                                        //                                           //     _selecteSer.map((e) => e).toString().length - 1); // serพื้นที่
-                                        //                                           // _selecteSerbool.map((e) => e).toString().substring(1,
-                                        //                                           //     _selecteSerbool.map((e) => e).toString().length - 1); //พื้นที่
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].sday}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
 
-                                        //                                           add_quot(serex,
-                                        //                                               _Date);
-                                        //                                         },
-                                        //                                         title: Row(
-                                        //                                           mainAxisAlignment:
-                                        //                                               MainAxisAlignment.spaceBetween,
-                                        //                                           children: [
-                                        //                                             Expanded(
-                                        //                                               flex: 6,
-                                        //                                               child: Container(
-                                        //                                                 padding: const EdgeInsets.all(8.0),
-                                        //                                                 child: AutoSizeText(
-                                        //                                                   maxLines: 2,
-                                        //                                                   minFontSize: 8,
-                                        //                                                   // maxFontSize: 15,
-                                        //                                                   '${expModels[index].expname}',
-                                        //                                                   textAlign: TextAlign.start,
-                                        //                                                   style: const TextStyle(
-                                        //                                                     color:  Colors.black,
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine_cal}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
 
-                                        //                                                     //fontSize: 10.0
-                                        //                                                   ),
-                                        //                                                 ),
-                                        //                                               ),
-                                        //                                             ),
-                                        //                                             Expanded(
-                                        //                                               flex: 1,
-                                        //                                               child: Padding(
-                                        //                                                 padding: EdgeInsets.all(8.0),
-                                        //                                                 child: AutoSizeText(
-                                        //                                                   maxLines: 2,
-                                        //                                                   minFontSize: 8,
-                                        //                                                   // maxFontSize: 15,
-                                        //                                                   '${expModels[index].unit}',
-                                        //                                                   textAlign: TextAlign.center,
-                                        //                                                   style: const TextStyle(
-                                        //                                                     color:  Colors.black,
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine_pri}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
 
-                                        //                                                     //fontSize: 10.0
-                                        //                                                   ),
-                                        //                                                 ),
-                                        //                                               ),
-                                        //                                             ),
-                                        //                                           ],
-                                        //                                         )),
-                                        //                                   );
-                                        //                                 },
-                                        //                               ),
-                                        //                             ),
-                                        //                           ],
-                                        //                         ),
-                                        //                       ),
-                                        //                     ],
-                                        //                   ),
-                                        //                 ));
-                                        //           });
-                                        //     });
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
+
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine_unit}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
+
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine_late}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
+
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                )),
+                                                                          );
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ));
+                                                  });
+                                            });
                                         // print('555');
                                       },
                                       icon: const Icon(Icons.add,
@@ -11407,7 +11915,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   EdgeInsets
                                                                       .all(8.0),
                                                               child: Text(
-                                                                'ค่าบริการที่ต้องการปรับ',
+                                                                'ค่าปรับ',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -11433,7 +11941,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   EdgeInsets
                                                                       .all(8.0),
                                                               child: Text(
-                                                                'ความถี่',
+                                                                'เกินกำหนดชำระ/วัน',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -11459,7 +11967,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   EdgeInsets
                                                                       .all(8.0),
                                                               child: Text(
-                                                                'จำนวนวันช้ากว่ากำหนด',
+                                                                'วิธีคำนวน เปอร์เซนต์/บาท',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -11485,7 +11993,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   EdgeInsets
                                                                       .all(8.0),
                                                               child: Text(
-                                                                'วิธีคิดค่าปรับ',
+                                                                'เกินวันที่กำหมด',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -11511,7 +12019,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   EdgeInsets
                                                                       .all(8.0),
                                                               child: Text(
-                                                                'ยอดปรับ',
+                                                                'วิธีคำนวน เปอร์เซนต์/บาท',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -11648,11 +12156,11 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                               MainAxisAlignment.center,
                                                                           children: [
                                                                             Container(
-                                                                              decoration: BoxDecoration(
-                                                                                color: Colors.grey.shade300,
-                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                                              ),
+                                                                              // decoration: BoxDecoration(
+                                                                              //   color: Colors.grey.shade300,
+                                                                              //   borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                              //   // border: Border.all(color: Colors.grey, width: 1),
+                                                                              // ),
                                                                               padding: const EdgeInsets.all(8.0),
                                                                               child: AutoSizeText(
                                                                                 maxLines: 2,
@@ -11675,10 +12183,740 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       Expanded(
                                                                         flex: 1,
                                                                         child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                            GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            showDialog<void>(
+                                                                                context: context,
+                                                                                barrierDismissible: false, // user must tap button!
+                                                                                builder: (BuildContext context) {
+                                                                                  return AlertDialog(
+                                                                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                    // title: const Text('AlertDialog Title'),
+                                                                                    content: SingleChildScrollView(
+                                                                                      child: ListBody(
+                                                                                        children: <Widget>[
+                                                                                          Container(
+                                                                                            width: MediaQuery.of(context).size.width * 0.3,
+                                                                                            height: MediaQuery.of(context).size.width * 0.08,
+                                                                                            child: Center(
+                                                                                              child: Padding(
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: Column(
+                                                                                                  children: [
+                                                                                                    Container(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: AutoSizeText(
+                                                                                                        maxLines: 2,
+                                                                                                        minFontSize: 8,
+                                                                                                        // maxFontSize: 15,
+                                                                                                        'เกินกำหนดชำระ/วัน',
+                                                                                                        textAlign: TextAlign.start,
+                                                                                                        style: const TextStyle(
+                                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                            // fontWeight: FontWeight.bold,
+                                                                                                            fontFamily: Font_.Fonts_T
+
+                                                                                                            //fontSize: 10.0
+                                                                                                            ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    TextFormField(
+                                                                                                      textAlign: TextAlign.right,
+                                                                                                      initialValue: double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0),
+                                                                                                      onFieldSubmitted: (value) async {
+                                                                                                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                        String? ren = preferences.getString('renTalSer');
+                                                                                                        String? ser_user = preferences.getString('ser');
+                                                                                                        var qser = quotxSelectModels[index].ser;
+                                                                                                        var qqtty = value == '0' ? '1' : value;
+                                                                                                        String url = '${MyConstant().domain}/U_quotx_fine_qty.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&ser_user=$ser_user';
+
+                                                                                                        try {
+                                                                                                          var response = await http.get(Uri.parse(url));
+
+                                                                                                          var result = json.decode(response.body);
+                                                                                                          print(result);
+                                                                                                          if (result.toString() != 'null') {
+                                                                                                            if (quotxSelectModels.isNotEmpty) {
+                                                                                                              setState(() {
+                                                                                                                quotxSelectModels.clear();
+                                                                                                              });
+                                                                                                            }
+                                                                                                            for (var map in result) {
+                                                                                                              QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                              setState(() {
+                                                                                                                quotxSelectModels.add(quotxSelectModel);
+                                                                                                              });
+                                                                                                            }
+                                                                                                          } else {
+                                                                                                            setState(() {
+                                                                                                              quotxSelectModels.clear();
+                                                                                                            });
+                                                                                                          }
+                                                                                                        } catch (e) {}
+                                                                                                        Navigator.of(context).pop();
+                                                                                                      },
+                                                                                                      // maxLength: 13,
+                                                                                                      cursorColor: Colors.green,
+                                                                                                      decoration: InputDecoration(
+                                                                                                          fillColor: Colors.white.withOpacity(0.05),
+                                                                                                          filled: true,
+                                                                                                          // prefixIcon:
+                                                                                                          //     const Icon(Icons.key, color: Colors.black),
+                                                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                          focusedBorder: const OutlineInputBorder(
+                                                                                                            borderRadius: BorderRadius.only(
+                                                                                                              topRight: Radius.circular(15),
+                                                                                                              topLeft: Radius.circular(15),
+                                                                                                              bottomRight: Radius.circular(15),
+                                                                                                              bottomLeft: Radius.circular(15),
+                                                                                                            ),
+                                                                                                            borderSide: BorderSide(
+                                                                                                              width: 1,
+                                                                                                              color: Colors.grey,
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          enabledBorder: const OutlineInputBorder(
+                                                                                                            borderRadius: BorderRadius.only(
+                                                                                                              topRight: Radius.circular(15),
+                                                                                                              topLeft: Radius.circular(15),
+                                                                                                              bottomRight: Radius.circular(15),
+                                                                                                              bottomLeft: Radius.circular(15),
+                                                                                                            ),
+                                                                                                            borderSide: BorderSide(
+                                                                                                              width: 1,
+                                                                                                              color: Colors.grey,
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          // labelText: 'เกินกำหนดชำระ',
+                                                                                                          labelStyle: const TextStyle(
+                                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                              // fontWeight: FontWeight.bold,
+                                                                                                              fontFamily: Font_.Fonts_T)),
+                                                                                                      inputFormatters: <TextInputFormatter>[
+                                                                                                        // for below version 2 use this
+                                                                                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                                        // for version 2 and greater youcan also use this
+                                                                                                        FilteringTextInputFormatter.digitsOnly
+                                                                                                      ],
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                    actions: <Widget>[
+                                                                                      Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            child: Padding(
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: InkWell(
+                                                                                                child: Container(
+                                                                                                    width: 100,
+                                                                                                    decoration: const BoxDecoration(
+                                                                                                      color: Colors.black,
+                                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                                                    ),
+                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                    child: const Center(
+                                                                                                        child: Text(
+                                                                                                      'ปิด',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                          //fontSize: 10.0
+                                                                                                          ),
+                                                                                                    ))),
+                                                                                                onTap: () {
+                                                                                                  Navigator.of(context).pop();
+                                                                                                },
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  );
+                                                                                });
+                                                                          },
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              maxLines: 2,
+                                                                              minFontSize: 8,
+                                                                              // maxFontSize: 15,
+                                                                              '${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T,
+
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            PopupMenuButton(
+                                                                          itemBuilder:
+                                                                              (BuildContext context) => [
+                                                                            PopupMenuItem(
+                                                                              child: InkWell(
+                                                                                  onTap: () async {
+                                                                                    showDialog<void>(
+                                                                                        context: context,
+                                                                                        barrierDismissible: false, // user must tap button!
+                                                                                        builder: (BuildContext context) {
+                                                                                          return AlertDialog(
+                                                                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                            // title: const Text('AlertDialog Title'),
+                                                                                            content: SingleChildScrollView(
+                                                                                              child: ListBody(
+                                                                                                children: <Widget>[
+                                                                                                  Container(
+                                                                                                    width: MediaQuery.of(context).size.width * 0.3,
+                                                                                                    height: MediaQuery.of(context).size.width * 0.08,
+                                                                                                    child: Center(
+                                                                                                      child: Padding(
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: Column(
+                                                                                                          children: [
+                                                                                                            Container(
+                                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                                              child: AutoSizeText(
+                                                                                                                maxLines: 2,
+                                                                                                                minFontSize: 8,
+                                                                                                                // maxFontSize: 15,
+                                                                                                                'วิธีคิด/เปอร์เซนต์',
+                                                                                                                textAlign: TextAlign.start,
+                                                                                                                style: const TextStyle(
+                                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: Font_.Fonts_T
+
+                                                                                                                    //fontSize: 10.0
+                                                                                                                    ),
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            TextFormField(
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              initialValue: quotxSelectModels[index].fineCal,
+                                                                                                              onFieldSubmitted: (value) async {
+                                                                                                                SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                                String? ren = preferences.getString('renTalSer');
+                                                                                                                String? ser_user = preferences.getString('ser');
+                                                                                                                var qser = quotxSelectModels[index].ser;
+                                                                                                                var qqtty = '0';
+                                                                                                                var qqttper = value;
+                                                                                                                String url = '${MyConstant().domain}/U_quotx_fine_perbath.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&qqttper=$qqttper&ser_user=$ser_user';
+
+                                                                                                                try {
+                                                                                                                  var response = await http.get(Uri.parse(url));
+
+                                                                                                                  var result = json.decode(response.body);
+                                                                                                                  print(result);
+                                                                                                                  if (result.toString() != 'null') {
+                                                                                                                    if (quotxSelectModels.isNotEmpty) {
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.clear();
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                    for (var map in result) {
+                                                                                                                      QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.add(quotxSelectModel);
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                  } else {
+                                                                                                                    setState(() {
+                                                                                                                      quotxSelectModels.clear();
+                                                                                                                    });
+                                                                                                                  }
+                                                                                                                } catch (e) {}
+                                                                                                                Navigator.of(context).pop();
+                                                                                                                Navigator.of(context).pop();
+                                                                                                              },
+                                                                                                              // maxLength: 13,
+                                                                                                              cursorColor: Colors.green,
+                                                                                                              decoration: InputDecoration(
+                                                                                                                  fillColor: Colors.white.withOpacity(0.05),
+                                                                                                                  filled: true,
+                                                                                                                  // prefixIcon:
+                                                                                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                                  focusedBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  enabledBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  // labelText: 'เกินกำหนดชำระ',
+                                                                                                                  labelStyle: const TextStyle(
+                                                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight: FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T)),
+                                                                                                              inputFormatters: <TextInputFormatter>[
+                                                                                                                // for below version 2 use this
+                                                                                                                FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                                                // for version 2 and greater youcan also use this
+                                                                                                                // FilteringTextInputFormatter.digitsOnly
+                                                                                                              ],
+                                                                                                            ),
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                            actions: <Widget>[
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    child: Padding(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: InkWell(
+                                                                                                        child: Container(
+                                                                                                            width: 100,
+                                                                                                            decoration: const BoxDecoration(
+                                                                                                              color: Colors.black,
+                                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                                                                            ),
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: const Center(
+                                                                                                                child: Text(
+                                                                                                              'ปิด',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                                  //fontSize: 10.0
+                                                                                                                  ),
+                                                                                                            ))),
+                                                                                                        onTap: () {
+                                                                                                          Navigator.of(context).pop();
+                                                                                                        },
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ],
+                                                                                          );
+                                                                                        });
+                                                                                  },
+                                                                                  child: Container(
+                                                                                      padding: const EdgeInsets.all(10),
+                                                                                      width: MediaQuery.of(context).size.width,
+                                                                                      child: const Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              'วิธีคิด/เปอร์เซนต์',
+                                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ))),
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                              child: InkWell(
+                                                                                  onTap: () async {
+                                                                                    showDialog<void>(
+                                                                                        context: context,
+                                                                                        barrierDismissible: false, // user must tap button!
+                                                                                        builder: (BuildContext context) {
+                                                                                          return AlertDialog(
+                                                                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                            // title: const Text('AlertDialog Title'),
+                                                                                            content: SingleChildScrollView(
+                                                                                              child: ListBody(
+                                                                                                children: <Widget>[
+                                                                                                  Container(
+                                                                                                    width: MediaQuery.of(context).size.width * 0.3,
+                                                                                                    height: MediaQuery.of(context).size.width * 0.08,
+                                                                                                    child: Center(
+                                                                                                      child: Padding(
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: Column(
+                                                                                                          children: [
+                                                                                                            Container(
+                                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                                              child: AutoSizeText(
+                                                                                                                maxLines: 2,
+                                                                                                                minFontSize: 8,
+                                                                                                                // maxFontSize: 15,
+                                                                                                                'วิธีคิด/บาท',
+                                                                                                                textAlign: TextAlign.start,
+                                                                                                                style: const TextStyle(
+                                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: Font_.Fonts_T
+
+                                                                                                                    //fontSize: 10.0
+                                                                                                                    ),
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            TextFormField(
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              initialValue: quotxSelectModels[index].finePri,
+                                                                                                              onFieldSubmitted: (value) async {
+                                                                                                                SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                                String? ren = preferences.getString('renTalSer');
+                                                                                                                String? ser_user = preferences.getString('ser');
+                                                                                                                var qser = quotxSelectModels[index].ser;
+                                                                                                                var qqtty = value;
+                                                                                                                var qqttper = '0';
+                                                                                                                String url = '${MyConstant().domain}/U_quotx_fine_perbath.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&qqttper=$qqttper&ser_user=$ser_user';
+
+                                                                                                                try {
+                                                                                                                  var response = await http.get(Uri.parse(url));
+
+                                                                                                                  var result = json.decode(response.body);
+                                                                                                                  print(result);
+                                                                                                                  if (result.toString() != 'null') {
+                                                                                                                    if (quotxSelectModels.isNotEmpty) {
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.clear();
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                    for (var map in result) {
+                                                                                                                      QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.add(quotxSelectModel);
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                  } else {
+                                                                                                                    setState(() {
+                                                                                                                      quotxSelectModels.clear();
+                                                                                                                    });
+                                                                                                                  }
+                                                                                                                } catch (e) {}
+                                                                                                                Navigator.of(context).pop();
+                                                                                                                Navigator.of(context).pop();
+                                                                                                              },
+                                                                                                              // maxLength: 13,
+                                                                                                              cursorColor: Colors.green,
+                                                                                                              decoration: InputDecoration(
+                                                                                                                  fillColor: Colors.white.withOpacity(0.05),
+                                                                                                                  filled: true,
+                                                                                                                  // prefixIcon:
+                                                                                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                                  focusedBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  enabledBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  // labelText: 'เกินกำหนดชำระ',
+                                                                                                                  labelStyle: const TextStyle(
+                                                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight: FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T)),
+                                                                                                              inputFormatters: <TextInputFormatter>[
+                                                                                                                // for below version 2 use this
+                                                                                                                FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                                                // for version 2 and greater youcan also use this
+                                                                                                                // FilteringTextInputFormatter.digitsOnly
+                                                                                                              ],
+                                                                                                            ),
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                            actions: <Widget>[
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    child: Padding(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: InkWell(
+                                                                                                        child: Container(
+                                                                                                            width: 100,
+                                                                                                            decoration: const BoxDecoration(
+                                                                                                              color: Colors.black,
+                                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                                                                            ),
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: const Center(
+                                                                                                                child: Text(
+                                                                                                              'ปิด',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                                  //fontSize: 10.0
+                                                                                                                  ),
+                                                                                                            ))),
+                                                                                                        onTap: () {
+                                                                                                          Navigator.of(context).pop();
+                                                                                                        },
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ],
+                                                                                          );
+                                                                                        });
+                                                                                  },
+                                                                                  child: Container(
+                                                                                      padding: const EdgeInsets.all(10),
+                                                                                      width: MediaQuery.of(context).size.width,
+                                                                                      child: const Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              'วิธีคิด/บาท',
+                                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ))),
+                                                                            ),
+                                                                          ],
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              maxLines: 2,
+                                                                              minFontSize: 8,
+                                                                              // maxFontSize: 15,
+                                                                              double.parse(quotxSelectModels[index].fineCal!).toStringAsFixed(2) == '0.00' ? '${quotxSelectModels[index].finePri} บาท' : '${quotxSelectModels[index].fineCal} %',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T,
+
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            showDialog<void>(
+                                                                                context: context,
+                                                                                barrierDismissible: false, // user must tap button!
+                                                                                builder: (BuildContext context) {
+                                                                                  return AlertDialog(
+                                                                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                    // title: const Text('AlertDialog Title'),
+                                                                                    content: SingleChildScrollView(
+                                                                                      child: ListBody(
+                                                                                        children: <Widget>[
+                                                                                          Container(
+                                                                                            width: MediaQuery.of(context).size.width * 0.3,
+                                                                                            height: MediaQuery.of(context).size.width * 0.08,
+                                                                                            child: Center(
+                                                                                              child: Padding(
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: Column(
+                                                                                                  children: [
+                                                                                                    Container(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: AutoSizeText(
+                                                                                                        maxLines: 2,
+                                                                                                        minFontSize: 8,
+                                                                                                        // maxFontSize: 15,
+                                                                                                        'เกินวันที่กำหนด',
+                                                                                                        textAlign: TextAlign.start,
+                                                                                                        style: const TextStyle(
+                                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                            // fontWeight: FontWeight.bold,
+                                                                                                            fontFamily: Font_.Fonts_T
+
+                                                                                                            //fontSize: 10.0
+                                                                                                            ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    TextFormField(
+                                                                                                      textAlign: TextAlign.right,
+                                                                                                      initialValue: double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0),
+                                                                                                      onFieldSubmitted: (value) async {
+                                                                                                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                        String? ren = preferences.getString('renTalSer');
+                                                                                                        String? ser_user = preferences.getString('ser');
+                                                                                                        var qser = quotxSelectModels[index].ser;
+                                                                                                        var qqtty = value;
+                                                                                                        String url = '${MyConstant().domain}/U_quotx_fine_fine.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&ser_user=$ser_user';
+
+                                                                                                        try {
+                                                                                                          var response = await http.get(Uri.parse(url));
+
+                                                                                                          var result = json.decode(response.body);
+                                                                                                          print(result);
+                                                                                                          if (result.toString() != 'null') {
+                                                                                                            if (quotxSelectModels.isNotEmpty) {
+                                                                                                              setState(() {
+                                                                                                                quotxSelectModels.clear();
+                                                                                                              });
+                                                                                                            }
+                                                                                                            for (var map in result) {
+                                                                                                              QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                              setState(() {
+                                                                                                                quotxSelectModels.add(quotxSelectModel);
+                                                                                                              });
+                                                                                                            }
+                                                                                                          } else {
+                                                                                                            setState(() {
+                                                                                                              quotxSelectModels.clear();
+                                                                                                            });
+                                                                                                          }
+                                                                                                        } catch (e) {}
+                                                                                                        Navigator.of(context).pop();
+                                                                                                      },
+                                                                                                      // maxLength: 13,
+                                                                                                      cursorColor: Colors.green,
+                                                                                                      decoration: InputDecoration(
+                                                                                                          fillColor: Colors.white.withOpacity(0.05),
+                                                                                                          filled: true,
+                                                                                                          // prefixIcon:
+                                                                                                          //     const Icon(Icons.key, color: Colors.black),
+                                                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                          focusedBorder: const OutlineInputBorder(
+                                                                                                            borderRadius: BorderRadius.only(
+                                                                                                              topRight: Radius.circular(15),
+                                                                                                              topLeft: Radius.circular(15),
+                                                                                                              bottomRight: Radius.circular(15),
+                                                                                                              bottomLeft: Radius.circular(15),
+                                                                                                            ),
+                                                                                                            borderSide: BorderSide(
+                                                                                                              width: 1,
+                                                                                                              color: Colors.grey,
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          enabledBorder: const OutlineInputBorder(
+                                                                                                            borderRadius: BorderRadius.only(
+                                                                                                              topRight: Radius.circular(15),
+                                                                                                              topLeft: Radius.circular(15),
+                                                                                                              bottomRight: Radius.circular(15),
+                                                                                                              bottomLeft: Radius.circular(15),
+                                                                                                            ),
+                                                                                                            borderSide: BorderSide(
+                                                                                                              width: 1,
+                                                                                                              color: Colors.grey,
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          // labelText: 'เกินกำหนดชำระ',
+                                                                                                          labelStyle: const TextStyle(
+                                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                              // fontWeight: FontWeight.bold,
+                                                                                                              fontFamily: Font_.Fonts_T)),
+                                                                                                      inputFormatters: <TextInputFormatter>[
+                                                                                                        // for below version 2 use this
+                                                                                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                                        // for version 2 and greater youcan also use this
+                                                                                                        FilteringTextInputFormatter.digitsOnly
+                                                                                                      ],
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                    actions: <Widget>[
+                                                                                      Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            child: Padding(
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: InkWell(
+                                                                                                child: Container(
+                                                                                                    width: 100,
+                                                                                                    decoration: const BoxDecoration(
+                                                                                                      color: Colors.black,
+                                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                                                    ),
+                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                    child: const Center(
+                                                                                                        child: Text(
+                                                                                                      'ปิด',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                          //fontSize: 10.0
+                                                                                                          ),
+                                                                                                    ))),
+                                                                                                onTap: () {
+                                                                                                  Navigator.of(context).pop();
+                                                                                                },
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  );
+                                                                                });
+                                                                          },
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -11686,7 +12924,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                             minFontSize:
                                                                                 8,
                                                                             // maxFontSize: 15,
-                                                                            '${quotxSelectModels[index].unit}',
+                                                                            quotxSelectModels[index].fine == '0'
+                                                                                ? ''
+                                                                                : '${quotxSelectModels[index].fine} วัน',
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             style:
@@ -11703,10 +12943,366 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       Expanded(
                                                                         flex: 1,
                                                                         child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                            PopupMenuButton(
+                                                                          itemBuilder:
+                                                                              (BuildContext context) => [
+                                                                            PopupMenuItem(
+                                                                              child: InkWell(
+                                                                                  onTap: () async {
+                                                                                    showDialog<void>(
+                                                                                        context: context,
+                                                                                        barrierDismissible: false, // user must tap button!
+                                                                                        builder: (BuildContext context) {
+                                                                                          return AlertDialog(
+                                                                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                            // title: const Text('AlertDialog Title'),
+                                                                                            content: SingleChildScrollView(
+                                                                                              child: ListBody(
+                                                                                                children: <Widget>[
+                                                                                                  Container(
+                                                                                                    width: MediaQuery.of(context).size.width * 0.3,
+                                                                                                    height: MediaQuery.of(context).size.width * 0.08,
+                                                                                                    child: Center(
+                                                                                                      child: Padding(
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: Column(
+                                                                                                          children: [
+                                                                                                            Container(
+                                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                                              child: AutoSizeText(
+                                                                                                                maxLines: 2,
+                                                                                                                minFontSize: 8,
+                                                                                                                // maxFontSize: 15,
+                                                                                                                'วิธีคิด/เปอร์เซนต์',
+                                                                                                                textAlign: TextAlign.start,
+                                                                                                                style: const TextStyle(
+                                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: Font_.Fonts_T
+
+                                                                                                                    //fontSize: 10.0
+                                                                                                                    ),
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            TextFormField(
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              initialValue: quotxSelectModels[index].fineUnit,
+                                                                                                              onFieldSubmitted: (value) async {
+                                                                                                                SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                                String? ren = preferences.getString('renTalSer');
+                                                                                                                String? ser_user = preferences.getString('ser');
+                                                                                                                var qser = quotxSelectModels[index].ser;
+                                                                                                                var qqtty = '0';
+                                                                                                                var qqttper = value;
+                                                                                                                String url = '${MyConstant().domain}/U_quotx_fine_per_red.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&qqttper=$qqttper&ser_user=$ser_user';
+
+                                                                                                                try {
+                                                                                                                  var response = await http.get(Uri.parse(url));
+
+                                                                                                                  var result = json.decode(response.body);
+                                                                                                                  print(result);
+                                                                                                                  if (result.toString() != 'null') {
+                                                                                                                    if (quotxSelectModels.isNotEmpty) {
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.clear();
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                    for (var map in result) {
+                                                                                                                      QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.add(quotxSelectModel);
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                  } else {
+                                                                                                                    setState(() {
+                                                                                                                      quotxSelectModels.clear();
+                                                                                                                    });
+                                                                                                                  }
+                                                                                                                } catch (e) {}
+                                                                                                                Navigator.of(context).pop();
+                                                                                                                Navigator.of(context).pop();
+                                                                                                              },
+                                                                                                              // maxLength: 13,
+                                                                                                              cursorColor: Colors.green,
+                                                                                                              decoration: InputDecoration(
+                                                                                                                  fillColor: Colors.white.withOpacity(0.05),
+                                                                                                                  filled: true,
+                                                                                                                  // prefixIcon:
+                                                                                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                                  focusedBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  enabledBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  // labelText: 'เกินกำหนดชำระ',
+                                                                                                                  labelStyle: const TextStyle(
+                                                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight: FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T)),
+                                                                                                              inputFormatters: <TextInputFormatter>[
+                                                                                                                // for below version 2 use this
+                                                                                                                FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                                                // for version 2 and greater youcan also use this
+                                                                                                                // FilteringTextInputFormatter.digitsOnly
+                                                                                                              ],
+                                                                                                            ),
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                            actions: <Widget>[
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    child: Padding(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: InkWell(
+                                                                                                        child: Container(
+                                                                                                            width: 100,
+                                                                                                            decoration: const BoxDecoration(
+                                                                                                              color: Colors.black,
+                                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                                                                            ),
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: const Center(
+                                                                                                                child: Text(
+                                                                                                              'ปิด',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                                  //fontSize: 10.0
+                                                                                                                  ),
+                                                                                                            ))),
+                                                                                                        onTap: () {
+                                                                                                          Navigator.of(context).pop();
+                                                                                                        },
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ],
+                                                                                          );
+                                                                                        });
+                                                                                  },
+                                                                                  child: Container(
+                                                                                      padding: const EdgeInsets.all(10),
+                                                                                      width: MediaQuery.of(context).size.width,
+                                                                                      child: const Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              'วิธีคิด/เปอร์เซนต์',
+                                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ))),
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                              child: InkWell(
+                                                                                  onTap: () async {
+                                                                                    showDialog<void>(
+                                                                                        context: context,
+                                                                                        barrierDismissible: false, // user must tap button!
+                                                                                        builder: (BuildContext context) {
+                                                                                          return AlertDialog(
+                                                                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                            // title: const Text('AlertDialog Title'),
+                                                                                            content: SingleChildScrollView(
+                                                                                              child: ListBody(
+                                                                                                children: <Widget>[
+                                                                                                  Container(
+                                                                                                    width: MediaQuery.of(context).size.width * 0.3,
+                                                                                                    height: MediaQuery.of(context).size.width * 0.08,
+                                                                                                    child: Center(
+                                                                                                      child: Padding(
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: Column(
+                                                                                                          children: [
+                                                                                                            Container(
+                                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                                              child: AutoSizeText(
+                                                                                                                maxLines: 2,
+                                                                                                                minFontSize: 8,
+                                                                                                                // maxFontSize: 15,
+                                                                                                                'วิธีคิด/บาท',
+                                                                                                                textAlign: TextAlign.start,
+                                                                                                                style: const TextStyle(
+                                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: Font_.Fonts_T
+
+                                                                                                                    //fontSize: 10.0
+                                                                                                                    ),
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            TextFormField(
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              initialValue: quotxSelectModels[index].fineLate,
+                                                                                                              onFieldSubmitted: (value) async {
+                                                                                                                SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                                String? ren = preferences.getString('renTalSer');
+                                                                                                                String? ser_user = preferences.getString('ser');
+                                                                                                                var qser = quotxSelectModels[index].ser;
+                                                                                                                var qqtty = value;
+                                                                                                                var qqttper = '0';
+                                                                                                                String url = '${MyConstant().domain}/U_quotx_fine_per_red.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&qqttper=$qqttper&ser_user=$ser_user';
+
+                                                                                                                try {
+                                                                                                                  var response = await http.get(Uri.parse(url));
+
+                                                                                                                  var result = json.decode(response.body);
+                                                                                                                  print(result);
+                                                                                                                  if (result.toString() != 'null') {
+                                                                                                                    if (quotxSelectModels.isNotEmpty) {
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.clear();
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                    for (var map in result) {
+                                                                                                                      QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.add(quotxSelectModel);
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                  } else {
+                                                                                                                    setState(() {
+                                                                                                                      quotxSelectModels.clear();
+                                                                                                                    });
+                                                                                                                  }
+                                                                                                                } catch (e) {}
+                                                                                                                Navigator.of(context).pop();
+                                                                                                                Navigator.of(context).pop();
+                                                                                                              },
+                                                                                                              // maxLength: 13,
+                                                                                                              cursorColor: Colors.green,
+                                                                                                              decoration: InputDecoration(
+                                                                                                                  fillColor: Colors.white.withOpacity(0.05),
+                                                                                                                  filled: true,
+                                                                                                                  // prefixIcon:
+                                                                                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                                  focusedBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  enabledBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  // labelText: 'เกินกำหนดชำระ',
+                                                                                                                  labelStyle: const TextStyle(
+                                                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight: FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T)),
+                                                                                                              inputFormatters: <TextInputFormatter>[
+                                                                                                                // for below version 2 use this
+                                                                                                                FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                                                // for version 2 and greater youcan also use this
+                                                                                                                // FilteringTextInputFormatter.digitsOnly
+                                                                                                              ],
+                                                                                                            ),
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                            actions: <Widget>[
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    child: Padding(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: InkWell(
+                                                                                                        child: Container(
+                                                                                                            width: 100,
+                                                                                                            decoration: const BoxDecoration(
+                                                                                                              color: Colors.black,
+                                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                                                                            ),
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: const Center(
+                                                                                                                child: Text(
+                                                                                                              'ปิด',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                                  //fontSize: 10.0
+                                                                                                                  ),
+                                                                                                            ))),
+                                                                                                        onTap: () {
+                                                                                                          Navigator.of(context).pop();
+                                                                                                        },
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ],
+                                                                                          );
+                                                                                        });
+                                                                                  },
+                                                                                  child: Container(
+                                                                                      padding: const EdgeInsets.all(10),
+                                                                                      width: MediaQuery.of(context).size.width,
+                                                                                      child: const Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              'วิธีคิด/บาท',
+                                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ))),
+                                                                            ),
+                                                                          ],
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -11714,9 +13310,13 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                             minFontSize:
                                                                                 8,
                                                                             // maxFontSize: 15,
-                                                                            '${quotxSelectModels[index].day}',
+                                                                            quotxSelectModels[index].fine == '0'
+                                                                                ? ''
+                                                                                : double.parse(quotxSelectModels[index].fineUnit!).toStringAsFixed(2) != '0.00'
+                                                                                    ? '${quotxSelectModels[index].fineUnit} %'
+                                                                                    : '${quotxSelectModels[index].fineLate} บาท',
                                                                             textAlign:
-                                                                                TextAlign.center,
+                                                                                TextAlign.right,
                                                                             style:
                                                                                 const TextStyle(
                                                                               color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -11725,54 +13325,6 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
 
                                                                               //fontSize: 10.0
                                                                             ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      const Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              2,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          // maxFontSize: 15,
-                                                                          'บาท',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            //fontWeight: FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
-
-                                                                            //fontSize: 10.0
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              2,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          // maxFontSize: 15,
-                                                                          '${quotxSelectModels[index].amt}',
-                                                                          textAlign:
-                                                                              TextAlign.right,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            //fontWeight: FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
-
-                                                                            //fontSize: 10.0
                                                                           ),
                                                                         ),
                                                                       ),
@@ -11786,39 +13338,46 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                               child: Padding(
                                                                                 padding: const EdgeInsets.all(8.0),
                                                                                 child: InkWell(
-                                                                                  onTap: () {
-                                                                                    _scrollControllers[Ser_Sub].animateTo(_scrollControllers[Ser_Sub].offset - 220, curve: Curves.linear, duration: const Duration(milliseconds: 500));
+                                                                                  onTap: () async {
+                                                                                    var qser = quotxSelectModels[index].ser;
+                                                                                    SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                    String? ren = preferences.getString('renTalSer');
+                                                                                    String? ser_user = preferences.getString('ser');
+                                                                                    String url = '${MyConstant().domain}/Dquotx_select.php?isAdd=true&ren=$ren&qser=$qser&ser_user=$ser_user';
+
+                                                                                    try {
+                                                                                      var response = await http.get(Uri.parse(url));
+
+                                                                                      var result = json.decode(response.body);
+                                                                                      print(result);
+                                                                                      if (result.toString() != 'null') {
+                                                                                        if (quotxSelectModels.isNotEmpty) {
+                                                                                          setState(() {
+                                                                                            quotxSelectModels.clear();
+                                                                                          });
+                                                                                        }
+                                                                                        for (var map in result) {
+                                                                                          QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                          setState(() {
+                                                                                            quotxSelectModels.add(quotxSelectModel);
+                                                                                          });
+                                                                                        }
+                                                                                      } else {
+                                                                                        setState(() {
+                                                                                          quotxSelectModels.clear();
+                                                                                        });
+                                                                                      }
+                                                                                    } catch (e) {}
                                                                                   },
                                                                                   child: Container(
-                                                                                      decoration: const BoxDecoration(
-                                                                                        color: Colors.green,
-                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                      ),
+                                                                                      // decoration: const BoxDecoration(
+                                                                                      //   color: Colors.red,
+                                                                                      //   borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                      // ),
                                                                                       padding: const EdgeInsets.all(8.0),
-                                                                                      child: const Icon(
-                                                                                        Icons.edit,
-                                                                                        color: Colors.white,
-                                                                                      )),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: InkWell(
-                                                                                  onTap: () {
-                                                                                    _scrollControllers[Ser_Sub].animateTo(_scrollControllers[Ser_Sub].offset - 220, curve: Curves.linear, duration: const Duration(milliseconds: 500));
-                                                                                  },
-                                                                                  child: Container(
-                                                                                      decoration: const BoxDecoration(
-                                                                                        color: Colors.red,
-                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                      ),
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: const Icon(
+                                                                                      child: Icon(
                                                                                         Icons.delete,
-                                                                                        color: Colors.white,
+                                                                                        color: Colors.red,
                                                                                       )),
                                                                                 ),
                                                                               ),
@@ -12628,178 +14187,178 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   (BuildContext
                                                                           context,
                                                                       int index) {
-                                                                return Container(
-                                                                  child: ListTile(
-                                                                      onTap: () {
-                                                                        setState(
-                                                                            () {
-                                                                          Strp3_tappedIndex6 =
-                                                                              index.toString();
-                                                                        });
-                                                                      },
-                                                                      title: Column(
-                                                                        children: [
-                                                                          for (var i = 0;
-                                                                              i < int.parse(quotxSelectModels[index].term!);
-                                                                              i++)
-                                                                            Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                return quotxSelectModels[index]
+                                                                            .etype ==
+                                                                        'F'
+                                                                    ? SizedBox()
+                                                                    : Container(
+                                                                        child: ListTile(
+                                                                            onTap: () {
+                                                                              setState(() {
+                                                                                Strp3_tappedIndex6 = index.toString();
+                                                                              });
+                                                                            },
+                                                                            title: Column(
                                                                               children: [
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${(i + 1)}',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
+                                                                                for (var i = 0; i < int.parse(quotxSelectModels[index].term!); i++)
+                                                                                  Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                    children: [
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${(i + 1)}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00').add(Duration(days: (int.parse(quotxSelectModels[index].day!) * i))))}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${quotxSelectModels[index].expname!}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${quotxSelectModels[index].vtype!}',
+                                                                                          textAlign: TextAlign.right,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${quotxSelectModels[index].nvat!} %',
+                                                                                          textAlign: TextAlign.right,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${quotxSelectModels[index].vat!}',
+                                                                                          textAlign: TextAlign.right,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${quotxSelectModels[index].pvat!}',
+                                                                                          textAlign: TextAlign.right,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${quotxSelectModels[index].nwht!}',
+                                                                                          textAlign: TextAlign.right,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${quotxSelectModels[index].wht!}',
+                                                                                          textAlign: TextAlign.right,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 1,
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 1,
+                                                                                          minFontSize: 8,
+                                                                                          maxFontSize: 20,
+                                                                                          '${nFormat.format(double.parse(quotxSelectModels[index].total!))}', //${quotxSelectModels[index].amt_ty!.split(',').toList().elementAt(i)} //ก้าวหน้า
+                                                                                          textAlign: TextAlign.right,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
                                                                                   ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00').add(Duration(days: (int.parse(quotxSelectModels[index].day!) * i))))}',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${quotxSelectModels[index].expname!}',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${quotxSelectModels[index].vtype!}',
-                                                                                    textAlign: TextAlign.right,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${quotxSelectModels[index].nvat!} %',
-                                                                                    textAlign: TextAlign.right,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${quotxSelectModels[index].vat!}',
-                                                                                    textAlign: TextAlign.right,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${quotxSelectModels[index].pvat!}',
-                                                                                    textAlign: TextAlign.right,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${quotxSelectModels[index].nwht!}',
-                                                                                    textAlign: TextAlign.right,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${quotxSelectModels[index].wht!}',
-                                                                                    textAlign: TextAlign.right,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: AutoSizeText(
-                                                                                    maxLines: 1,
-                                                                                    minFontSize: 8,
-                                                                                    maxFontSize: 20,
-                                                                                    '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                                                    textAlign: TextAlign.right,
-                                                                                    style: const TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
                                                                               ],
-                                                                            ),
-                                                                        ],
-                                                                      )),
-                                                                );
+                                                                            )),
+                                                                      );
                                                               },
                                                             ),
                                                           ),
@@ -13077,179 +14636,407 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                   //         .tappedIndex_Colors
                                                   //         .withOpacity(0.5)
                                                   //     : null,
-                                                  child: ListTile(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          Strp3_tappedIndex6 =
-                                                              index.toString();
-                                                        });
-                                                      },
-                                                      title: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Container(
-                                                                  // decoration: BoxDecoration(
-                                                                  //   color: Colors.grey.shade300,
-                                                                  //   borderRadius:
-                                                                  //       const BorderRadius.only(
-                                                                  //           topLeft:
-                                                                  //               Radius.circular(10),
-                                                                  //           topRight:
-                                                                  //               Radius.circular(10),
-                                                                  //           bottomLeft:
-                                                                  //               Radius.circular(10),
-                                                                  //           bottomRight:
-                                                                  //               Radius.circular(10)),
-                                                                  //   // border: Border.all(color: Colors.grey, width: 1),
-                                                                  // ),
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    maxLines: 2,
-                                                                    minFontSize:
-                                                                        8,
-                                                                    // maxFontSize: 15,
-                                                                    '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      // fontWeight:
-                                                                      //     FontWeight
-                                                                      //         .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
+                                                  child:
+                                                      quotxSelectModels[index]
+                                                                  .etype !=
+                                                              'F'
+                                                          ? ListTile(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  Strp3_tappedIndex6 =
+                                                                      index
+                                                                          .toString();
+                                                                });
+                                                              },
+                                                              title: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Container(
+                                                                          // decoration: BoxDecoration(
+                                                                          //   color: Colors.grey.shade300,
+                                                                          //   borderRadius:
+                                                                          //       const BorderRadius.only(
+                                                                          //           topLeft:
+                                                                          //               Radius.circular(10),
+                                                                          //           topRight:
+                                                                          //               Radius.circular(10),
+                                                                          //           bottomLeft:
+                                                                          //               Radius.circular(10),
+                                                                          //           bottomRight:
+                                                                          //               Radius.circular(10)),
+                                                                          //   // border: Border.all(color: Colors.grey, width: 1),
+                                                                          // ),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight
+                                                                              //         .bold,
+                                                                              fontFamily: Font_.Fonts_T,
 
-                                                                      //fontSize: 10.0
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                maxLines: 2,
-                                                                minFontSize: 8,
-                                                                // maxFontSize: 15,
-                                                                '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
-                                                                textAlign:
-                                                                    TextAlign
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            2,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        // maxFontSize: 15,
+                                                                        '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            2,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        // maxFontSize: 15,
+                                                                        '${quotxSelectModels[index].expname} ${quotxSelectModels[index].meter}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: quotxSelectModels[index].amt_ty !=
+                                                                            ''
+                                                                        ? AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            '${quotxSelectModels[index].amt_ty} / งวด',
+                                                                            textAlign:
+                                                                                TextAlign.right,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          )
+                                                                        : AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            quotxSelectModels[index].qty == '0.00'
+                                                                                ? '${nFormat.format(double.parse(quotxSelectModels[index].total!))} / งวด'
+                                                                                : '${nFormat.format(double.parse(quotxSelectModels[index].qty!))} / หน่วย',
+                                                                            textAlign:
+                                                                                TextAlign.right,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: quotxSelectModels[index].amt_ty !=
+                                                                            ''
+                                                                        ? AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+
+                                                                            '${nFormat.format(double.parse(quotxSelectModels[index].amt_ty!.split(',').reduce((sum, element) => ((double.parse(sum) + double.parse(element))).toString())) * (Value_rental_type_ == 'รายเดือน' ? 30 : (int.parse(Value_rental_count_) * 12)))}',
+                                                                            textAlign:
+                                                                                TextAlign.right,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          )
+                                                                        : AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+
+                                                                            '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
+                                                                            textAlign:
+                                                                                TextAlign.right,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                  ),
+                                                                ],
+                                                              ))
+                                                          : ListTile(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  Strp3_tappedIndex6 =
+                                                                      index
+                                                                          .toString();
+                                                                });
+                                                              },
+                                                              title: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
                                                                         .center,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T,
+                                                                children: [
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Container(
+                                                                          // decoration: BoxDecoration(
+                                                                          //   color: Colors.grey.shade300,
+                                                                          //   borderRadius:
+                                                                          //       const BorderRadius.only(
+                                                                          //           topLeft:
+                                                                          //               Radius.circular(10),
+                                                                          //           topRight:
+                                                                          //               Radius.circular(10),
+                                                                          //           bottomLeft:
+                                                                          //               Radius.circular(10),
+                                                                          //           bottomRight:
+                                                                          //               Radius.circular(10)),
+                                                                          //   // border: Border.all(color: Colors.grey, width: 1),
+                                                                          // ),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            '${quotxSelectModels[index].expname}',
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight
+                                                                              //         .bold,
+                                                                              fontFamily: Font_.Fonts_T,
 
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                maxLines: 2,
-                                                                minFontSize: 8,
-                                                                // maxFontSize: 15,
-                                                                '${quotxSelectModels[index].expname} ${quotxSelectModels[index].meter}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            2,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        // maxFontSize: 15,
+                                                                        '${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
 
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 2,
-                                                              minFontSize: 8,
-                                                              // maxFontSize: 15,
-                                                              quotxSelectModels[
-                                                                              index]
-                                                                          .qty ==
-                                                                      '0.00'
-                                                                  ? '${nFormat.format(double.parse(quotxSelectModels[index].total!))} / งวด'
-                                                                  : '${nFormat.format(double.parse(quotxSelectModels[index].qty!))} / หน่วย',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .right,
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            2,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        // maxFontSize: 15,
+                                                                        quotxSelectModels[index].fineCal ==
+                                                                                '0.00'
+                                                                            ? '${nFormat.format(double.parse(quotxSelectModels[index].finePri!))} บาท'
+                                                                            : '${nFormat.format(double.parse(quotxSelectModels[index].fineCal!))} %',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
 
-                                                                //fontSize: 10.0
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 2,
-                                                              minFontSize: 8,
-                                                              // maxFontSize: 15,
-                                                              '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .right,
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      maxLines:
+                                                                          2,
+                                                                      minFontSize:
+                                                                          8,
+                                                                      // maxFontSize: 15,
+                                                                      double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0) ==
+                                                                              '0'
+                                                                          ? ''
+                                                                          : 'เกิน ${double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0)} วัน',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .right,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: PeopleChaoScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
 
-                                                                //fontSize: 10.0
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )),
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      maxLines:
+                                                                          2,
+                                                                      minFontSize:
+                                                                          8,
+                                                                      // maxFontSize: 15,
+                                                                      double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0) ==
+                                                                              '0'
+                                                                          ? ''
+                                                                          : double.parse(quotxSelectModels[index].fineUnit!).toStringAsFixed(0) == '0'
+                                                                              ? '${nFormat.format(double.parse(quotxSelectModels[index].fineLate!))} บาท'
+                                                                              : '${nFormat.format(double.parse(quotxSelectModels[index].fineUnit!))} %',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .right,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: PeopleChaoScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )),
                                                 ),
                                               );
                                             },
@@ -13430,7 +15217,788 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
         });
   }
 
+  Future<void> setOne(BuildContext context, int index) {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    height: MediaQuery.of(context).size.width * 0.08,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: AutoSizeText(
+                                maxLines: 2,
+                                minFontSize: 8,
+                                // maxFontSize: 15,
+                                '${quotxSelectModels[index].expname}',
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T
+
+                                    //fontSize: 10.0
+                                    ),
+                              ),
+                            ),
+                            TextFormField(
+                              textAlign: TextAlign.right,
+                              initialValue: quotxSelectModels[index]
+                                  .amt, // nFormat.format(double.parse(quotxSelectModels[index].amt!)),
+                              // onChanged: (value) async {
+                              //   SharedPreferences preferences = await SharedPreferences.getInstance();
+                              //   String? ren = preferences.getString('renTalSer');
+                              //   String? ser_user = preferences.getString('ser');
+                              //   var qser = quotxSelectModels[index].ser;
+                              //   String url = '${MyConstant().domain}/UDBquotx_select.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user';
+
+                              //   try {
+                              //     var response = await http.get(Uri.parse(url));
+
+                              //     var result = json.decode(response.body);
+                              //     print(result);
+                              //     if (result.toString() != 'null') {
+                              //       if (quotxSelectModels.isNotEmpty) {
+                              //         setState(() {
+                              //           quotxSelectModels.clear();
+                              //         });
+                              //       }
+                              //       for (var map in result) {
+                              //         QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                              //         setState(() {
+                              //           quotxSelectModels.add(quotxSelectModel);
+                              //         });
+                              //       }
+                              //     } else {
+                              //       setState(() {
+                              //         quotxSelectModels.clear();
+                              //       });
+                              //     }
+                              //   } catch (e) {}
+                              // },
+                              onFieldSubmitted: (value) async {
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                String? ren =
+                                    preferences.getString('renTalSer');
+                                String? ser_user = preferences.getString('ser');
+                                var qser = quotxSelectModels[index].ser;
+                                String url =
+                                    '${MyConstant().domain}/UDBquotx_select.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user';
+
+                                try {
+                                  var response = await http.get(Uri.parse(url));
+
+                                  var result = json.decode(response.body);
+                                  print(result);
+                                  if (result.toString() != 'null') {
+                                    if (quotxSelectModels.isNotEmpty) {
+                                      setState(() {
+                                        quotxSelectModels.clear();
+                                      });
+                                    }
+                                    for (var map in result) {
+                                      QuotxSelectModel quotxSelectModel =
+                                          QuotxSelectModel.fromJson(map);
+                                      setState(() {
+                                        quotxSelectModels.add(quotxSelectModel);
+                                      });
+                                    }
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    setState(() {
+                                      quotxSelectModels.clear();
+                                    });
+                                  }
+                                } catch (e) {}
+                              },
+
+                              // maxLength: 13,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.05),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.key, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  // labelText: 'PASSWOED',
+                                  labelStyle: const TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text2_,
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T)),
+                              // inputFormatters: <
+                              //     TextInputFormatter>[
+                              //   // for below version 2 use this
+                              //   FilteringTextInputFormatter
+                              //       .allow(RegExp(
+                              //           r'[0-9]')),
+                              //   // for version 2 and greater youcan also use this
+                              //   FilteringTextInputFormatter
+                              //       .digitsOnly
+                              // ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ปิด',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          setState(() {
+                            select_count = 0;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> setTwo(BuildContext context, int index) {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 0)),
+              builder: (context, snapshot) {
+                return AlertDialog(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                  // title: const Text('AlertDialog Title'),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          // height: MediaQuery.of(context).size.width * 0.08,
+                          child: Center(
+                              child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: AutoSizeText(
+                                    maxLines: 2,
+                                    minFontSize: 8,
+                                    // maxFontSize: 15,
+                                    '${quotxSelectModels[index].expname}',
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: select_count == 0
+                                                ? Colors.blue.shade900
+                                                : Colors.white,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                            // border: Border.all(color: Colors.white, width: 1),
+                                          ),
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              maxLines: 2,
+                                              minFontSize: 8,
+                                              // maxFontSize: 15,
+                                              'อัตราปกติ',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: select_count == 0
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T
+
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          setState(() {
+                                            select_count = 0;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: select_count == 1
+                                                ? Colors.blue.shade900
+                                                : Colors.white,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                            // border: Border.all(color: Colors.white, width: 1),
+                                          ),
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              maxLines: 2,
+                                              minFontSize: 8,
+                                              // maxFontSize: 15,
+                                              'อัตราก้าวหน้า',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: select_count == 1
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T
+
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          setState(() {
+                                            select_count = 1;
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                select_count == 1
+                                    ? SingleChildScrollView(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            for (int trem = 0;
+                                                trem < amtlist.length;
+                                                trem++)
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: AutoSizeText(
+                                                      maxLines: 2,
+                                                      minFontSize: 8,
+                                                      // maxFontSize: 15,
+                                                      '${Value_rental_type_.substring(3)}ที่ ${trem + 1}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: TextFormField(
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      initialValue: amtlist[
+                                                          trem], // nFormat.format(double.parse(quotxSelectModels[index].amt!)),
+                                                      onChanged: (value) async {
+                                                        var amt = value;
+                                                        amtlist.removeAt(trem);
+                                                        amtlist.insert(
+                                                            trem, amt);
+                                                      },
+
+                                                      // maxLength: 13,
+                                                      cursorColor: Colors.green,
+                                                      decoration:
+                                                          InputDecoration(
+                                                              fillColor: Colors
+                                                                  .white
+                                                                  .withOpacity(
+                                                                      0.05),
+                                                              filled: true,
+                                                              // prefixIcon:
+                                                              //     const Icon(Icons.key, color: Colors.black),
+                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                              focusedBorder:
+                                                                  const OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                ),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  width: 1,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                              enabledBorder:
+                                                                  const OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          15),
+                                                                ),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  width: 1,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                              // labelText: 'PASSWOED',
+                                                              labelStyle:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T)),
+                                                      // inputFormatters: <
+                                                      //     TextInputFormatter>[
+                                                      //   // for below version 2 use this
+                                                      //   FilteringTextInputFormatter
+                                                      //       .allow(RegExp(
+                                                      //           r'[0-9]')),
+                                                      //   // for version 2 and greater youcan also use this
+                                                      //   FilteringTextInputFormatter
+                                                      //       .digitsOnly
+                                                      // ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                          ],
+                                        ),
+                                      )
+                                    : Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFormField(
+                                              textAlign: TextAlign.right,
+                                              initialValue: quotxSelectModels[
+                                                      index]
+                                                  .amt, // nFormat.format(double.parse(quotxSelectModels[index].amt!)),
+                                              // onChanged: (value) async {
+                                              //   SharedPreferences preferences = await SharedPreferences.getInstance();
+                                              //   String? ren = preferences.getString('renTalSer');
+                                              //   String? ser_user = preferences.getString('ser');
+                                              //   var qser = quotxSelectModels[index].ser;
+                                              //   String url = '${MyConstant().domain}/UDBquotx_select.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user';
+
+                                              //   try {
+                                              //     var response = await http.get(Uri.parse(url));
+
+                                              //     var result = json.decode(response.body);
+                                              //     print(result);
+                                              //     if (result.toString() != 'null') {
+                                              //       if (quotxSelectModels.isNotEmpty) {
+                                              //         setState(() {
+                                              //           quotxSelectModels.clear();
+                                              //         });
+                                              //       }
+                                              //       for (var map in result) {
+                                              //         QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                              //         setState(() {
+                                              //           quotxSelectModels.add(quotxSelectModel);
+                                              //         });
+                                              //       }
+                                              //     } else {
+                                              //       setState(() {
+                                              //         quotxSelectModels.clear();
+                                              //       });
+                                              //     }
+                                              //   } catch (e) {}
+                                              // },
+                                              onFieldSubmitted: (value) async {
+                                                SharedPreferences preferences =
+                                                    await SharedPreferences
+                                                        .getInstance();
+                                                String? ren = preferences
+                                                    .getString('renTalSer');
+                                                String? ser_user = preferences
+                                                    .getString('ser');
+                                                var qser =
+                                                    quotxSelectModels[index]
+                                                        .ser;
+                                                String url =
+                                                    '${MyConstant().domain}/UDBquotx_select.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user';
+
+                                                try {
+                                                  var response = await http
+                                                      .get(Uri.parse(url));
+
+                                                  var result = json
+                                                      .decode(response.body);
+                                                  print(result);
+                                                  if (result.toString() !=
+                                                      'null') {
+                                                    if (quotxSelectModels
+                                                        .isNotEmpty) {
+                                                      setState(() {
+                                                        quotxSelectModels
+                                                            .clear();
+                                                      });
+                                                    }
+                                                    for (var map in result) {
+                                                      QuotxSelectModel
+                                                          quotxSelectModel =
+                                                          QuotxSelectModel
+                                                              .fromJson(map);
+                                                      setState(() {
+                                                        quotxSelectModels.add(
+                                                            quotxSelectModel);
+                                                      });
+                                                    }
+                                                    Navigator.of(context).pop();
+                                                  } else {
+                                                    setState(() {
+                                                      quotxSelectModels.clear();
+                                                    });
+                                                  }
+                                                } catch (e) {}
+                                              },
+
+                                              // maxLength: 13,
+                                              cursorColor: Colors.green,
+                                              decoration: InputDecoration(
+                                                  fillColor: Colors.white
+                                                      .withOpacity(0.05),
+                                                  filled: true,
+                                                  // prefixIcon:
+                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                  focusedBorder:
+                                                      const OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      bottomRight:
+                                                          Radius.circular(15),
+                                                      bottomLeft:
+                                                          Radius.circular(15),
+                                                    ),
+                                                    borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  enabledBorder:
+                                                      const OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      bottomRight:
+                                                          Radius.circular(15),
+                                                      bottomLeft:
+                                                          Radius.circular(15),
+                                                    ),
+                                                    borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  // labelText: 'PASSWOED',
+                                                  labelStyle: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      // fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T)),
+                                              // inputFormatters: <
+                                              //     TextInputFormatter>[
+                                              //   // for below version 2 use this
+                                              //   FilteringTextInputFormatter
+                                              //       .allow(RegExp(
+                                              //           r'[0-9]')),
+                                              //   // for version 2 and greater youcan also use this
+                                              //   FilteringTextInputFormatter
+                                              //       .digitsOnly
+                                              // ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                              ],
+                            ),
+                          )),
+                        )
+                      ],
+                    ),
+                  ),
+
+                  actions: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        select_count == 1
+                            ? Container(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: InkWell(
+                                    child: Container(
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          color: Colors.orange.shade900,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                          // border: Border.all(color: Colors.white, width: 1),
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: const Center(
+                                            child: Text(
+                                          'Save',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ))),
+                                    onTap: () async {
+                                      var mlist = amtlist
+                                          .map((e) => e)
+                                          .toString()
+                                          .substring(
+                                              1,
+                                              amtlist
+                                                      .map((e) => e)
+                                                      .toString()
+                                                      .length -
+                                                  1);
+
+                                      var sumlist = amtlist.reduce(
+                                          (sum, element) => (double.parse(sum) +
+                                                  double.parse(element))
+                                              .toString());
+
+                                      print(mlist);
+                                      print(sumlist);
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                      String? ren =
+                                          preferences.getString('renTalSer');
+                                      String? ser_user =
+                                          preferences.getString('ser');
+                                      var qser = quotxSelectModels[index].ser;
+                                      String url =
+                                          '${MyConstant().domain}/UDBquotx_select_amt.php?isAdd=true&ren=$ren&qser=$qser&qty=$mlist&ser_user=$ser_user';
+
+                                      try {
+                                        var response =
+                                            await http.get(Uri.parse(url));
+
+                                        var result = json.decode(response.body);
+                                        print(result);
+                                        if (result.toString() != 'null') {
+                                          if (quotxSelectModels.isNotEmpty) {
+                                            setState(() {
+                                              quotxSelectModels.clear();
+                                            });
+                                          }
+                                          for (var map in result) {
+                                            QuotxSelectModel quotxSelectModel =
+                                                QuotxSelectModel.fromJson(map);
+                                            setState(() {
+                                              quotxSelectModels
+                                                  .add(quotxSelectModel);
+                                            });
+                                          }
+                                          Navigator.of(context).pop();
+                                        } else {
+                                          setState(() {
+                                            quotxSelectModels.clear();
+                                          });
+                                        }
+                                      } catch (e) {}
+                                      // Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    // border: Border.all(color: Colors.white, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: const Center(
+                                      child: Text(
+                                    'ปิด',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ))),
+                              onTap: () {
+                                setState(() {
+                                  select_count = 0;
+                                });
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              });
+        });
+  }
+
 //////////////------------------------------------------------->(Stepper 4)
+
+  int bug = 0;
+
   Widget Body4() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -13438,7 +16006,105 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
           // color: Colors.red,
           width: MediaQuery.of(context).size.width,
           // height: 450,
-          child: Column(children: [
+          child:
+              //  bug == 0
+              //     ? Column(children: [
+              //         Row(
+              //           mainAxisAlignment: MainAxisAlignment.end,
+              //           children: [
+              //             InkWell(
+              //               onTap: () async {
+              //                 setState(() {
+              //                   bug = 1;
+              //                 });
+              //               },
+              //               child: Container(
+              //                 width: 200,
+              //                 height: 50,
+              //                 decoration: const BoxDecoration(
+              //                   color: Colors.green,
+              //                   borderRadius: BorderRadius.only(
+              //                       topLeft: Radius.circular(20),
+              //                       topRight: Radius.circular(20),
+              //                       bottomLeft: Radius.circular(20),
+              //                       bottomRight: Radius.circular(20)),
+              //                 ),
+              //                 child: const Center(
+              //                   child: Text('ชำระมัดจำหรือค่าบริการ',
+              //                       maxLines: 3,
+              //                       overflow: TextOverflow.ellipsis,
+              //                       softWrap: false,
+              //                       style: TextStyle(
+              //                         fontSize: 20,
+              //                         color: Colors.white,
+              //                         // fontWeight: FontWeight.bold,
+              //                         fontFamily: Font_.Fonts_T,
+              //                       )),
+              //                 ),
+              //               ),
+              //             ),
+              //             SizedBox(
+              //               width: 10,
+              //             ),
+              //             InkWell(
+              //               onTap: () async {
+              //                 Insert_log.Insert_logs('พื้นที่เช่า',
+              //                     'ทำ/ต่อสัญญา>>ทำ/ต่อสัญญา($Get_Value_cid ,พื้นที่:${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)})');
+              //                 // setState(() {
+              //                 //   activeStep = activeStep + 1;
+              //                 // });
+              //                 SharedPreferences preferences =
+              //                     await SharedPreferences.getInstance();
+              //                 String? _route = preferences.getString('route');
+              //                 MaterialPageRoute materialPageRoute =
+              //                     MaterialPageRoute(
+              //                         builder: (BuildContext context) =>
+              //                             AdminScafScreen(route: _route));
+              //                 Navigator.pushAndRemoveUntil(
+              //                     context, materialPageRoute, (route) => false);
+              //               },
+              //               child: Container(
+              //                 width: 150,
+              //                 height: 50,
+              //                 decoration: const BoxDecoration(
+              //                   color: Colors.green,
+              //                   borderRadius: BorderRadius.only(
+              //                       topLeft: Radius.circular(20),
+              //                       topRight: Radius.circular(20),
+              //                       bottomLeft: Radius.circular(20),
+              //                       bottomRight: Radius.circular(20)),
+              //                 ),
+              //                 child: const Center(
+              //                   child: Text('กลับหน้าหลัก',
+              //                       maxLines: 3,
+              //                       overflow: TextOverflow.ellipsis,
+              //                       softWrap: false,
+              //                       style: TextStyle(
+              //                         fontSize: 20,
+              //                         color: Colors.white,
+              //                         // fontWeight: FontWeight.bold,
+              //                         fontFamily: Font_.Fonts_T,
+              //                       )),
+              //                 ),
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //         Row(children: [
+              //           Text('3.1.ปรับอัตตราค่าเช่า/บริการหลัก',
+              //               maxLines: 3,
+              //               overflow: TextOverflow.ellipsis,
+              //               softWrap: false,
+              //               style: TextStyle(
+              //                 fontSize: 20,
+              //                 color: Colors.white,
+              //                 // fontWeight: FontWeight.bold,
+              //                 fontFamily: Font_.Fonts_T,
+              //               )),
+              //         ]),
+              //       ])
+              //     :
+              Column(children: [
             Sub_Body4_Web(),
             const SizedBox(
               height: 20,
@@ -13452,42 +16118,6 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // InkWell(
-                //   onTap: () async {
-                //     SharedPreferences preferences =
-                //         await SharedPreferences.getInstance();
-                //     String? _route = preferences.getString('route');
-                //     MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                //         builder: (BuildContext context) =>
-                //             AdminScafScreen(route: _route));
-                //     Navigator.pushAndRemoveUntil(
-                //         context, materialPageRoute, (route) => false);
-                //   },
-                //   child: Container(
-                //     width: 130,
-                //     height: 50,
-                //     decoration: const BoxDecoration(
-                //       color: Colors.black,
-                //       borderRadius: BorderRadius.only(
-                //           topLeft: Radius.circular(20),
-                //           topRight: Radius.circular(20),
-                //           bottomLeft: Radius.circular(20),
-                //           bottomRight: Radius.circular(20)),
-                //     ),
-                //     child: const Center(
-                //       child: Text('Back',
-                //           maxLines: 3,
-                //           overflow: TextOverflow.ellipsis,
-                //           softWrap: false,
-                //           style: TextStyle(
-                //             fontSize: 20,
-                //             color: Colors.white,
-                //             fontWeight: FontWeight.bold,
-                //             fontFamily: FontWeight_.Fonts_T,
-                //           )),
-                //     ),
-                //   ),
-                // ),
                 InkWell(
                   onTap: () async {
                     Insert_log.Insert_logs('พื้นที่เช่า',
@@ -16109,6 +18739,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
 
       case 2:
         return 'ค่าบริการ';
+
       case 3:
         return 'สัญญาเช่า';
 

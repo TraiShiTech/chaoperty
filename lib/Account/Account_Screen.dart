@@ -75,8 +75,12 @@ import 'package:pdf/widgets.dart' as pw;
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 import 'AcFloorplans_Screen.dart';
+import 'Account_Invoce.dart';
+import 'Account_Invoce_pay.dart';
 import 'Play_column.dart';
 import 'lockpay.dart';
+import 'Billing_Screen.dart';
+import '../Style/view_pagenow.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -87,9 +91,13 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
+  TextEditingController Text_searchBar1 = TextEditingController();
+  TextEditingController Text_searchBar2 = TextEditingController();
   DateTime datex = DateTime.now();
   int Status_ = 1;
+  int Date_ser = 0;
   String tappedIndex_ = '';
+  String Ser_nowpage = '3';
   List<ZoneModel> zoneModels = [];
 
   List<TeNantModel> teNantModels = [];
@@ -100,7 +108,7 @@ class _AccountScreenState extends State<AccountScreen> {
   int limit = 50; // The maximum number of items you want
   int offset = 0; // The starting index of items you want
   int endIndex = 0;
-
+  final FormSearchFile_text = TextEditingController();
 //Create a sublist with the specified range
 
   List<TransReBillModel> TransReBillModels_ = [];
@@ -137,18 +145,36 @@ class _AccountScreenState extends State<AccountScreen> {
     'ลดหนี้',
     'ประวัติบิล',
   ];
+
+  // List Status = [
+  //   // 'ภาพรวม(ตาราง)',
+  //   'ภาพรวม',//1
+  //   'ค้างชำระ',//2
+  //   'ประวัติบิล',//3
+  //   'ประวัติใบวางบิล',//4
+  //   'ประวัติชำระรอตรวจสอบ',//5
+  //   'ล็อกเสียบ',//6
+  //   'Invoice',//7
+  //   'Pay Invoice',//8
+  //   // 'บัญชีผู้เช่า',
+  // ];
+
   List Status = [
     // 'ภาพรวม(ตาราง)',
-    'ภาพรวม',
-    'ค้างชำระ',
-    'ประวัติบิล',
-
-    'ล็อกเสียบ ',
-    'ประวัติชำระรอตรวจสอบ',
+    'ภาพรวม', //1
+    'ค้างชำระ', //2
+    'วางบิล', //7
+    'ประวัติวางบิล', //4
+    'รายการชำระ(รอตรวจสอบ)', //5
+    'ชำระบิล', //8
+    'ประวัติชำระ', //3
+    'ใบเสร็จอื่นๆ', //6
     // 'บัญชีผู้เช่า',
   ];
+
   String? base64_Slip, fileName_Slip, Slip_history;
   String? teNantcid, teNantsname, teNantnamenew;
+  String? ser_payby;
   String? numinvoice,
       paymentSer1,
       paymentName1,
@@ -591,12 +617,24 @@ class _AccountScreenState extends State<AccountScreen> {
         limitedList_TransReBillModels_.clear();
       });
     }
+
+    var sertype = (ser_payby == '0' || ser_payby == null)
+        ? '0'
+        : (ser_payby == '1')
+            ? 'W'
+            : (ser_payby == '2')
+                ? 'U'
+                : (ser_payby == '3')
+                    ? 'LP'
+                    : (ser_payby == '4')
+                        ? 'H'
+                        : '0';
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     // var ciddoc = widget.Get_Value_cid;
     // var qutser = widget.Get_Value_NameShop_index;
     String url =
-        '${MyConstant().domain}/GC_bill_pay_BC.php?isAdd=true&ren=$ren&mont_h=$MONTH_Now&yea_r=$YEAR_Now';
+        '${MyConstant().domain}/GC_bill_pay_BC.php?isAdd=true&ren=$ren&mont_h=$MONTH_Now&yea_r=$YEAR_Now&serpang=$sertype';
     // String url =
     //     '${MyConstant().domain}/GC_bill_pay_BC.php?isAdd=true&ren=$ren';
     try {
@@ -638,14 +676,19 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Future<Null> checkPreferance() async {
     int currentYear = DateTime.now().year;
+    setState(() {
+      YE_Th.clear();
+    });
     for (int i = currentYear; i >= currentYear - 10; i--) {
       YE_Th.add(i.toString());
     }
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      MONTH_Now = DateFormat('MM').format(DateTime.parse('${datex}'))!;
-      YEAR_Now = DateFormat('yyyy').format(DateTime.parse('${datex}'))!;
+      MONTH_Now = DateFormat('MM').format(DateTime.parse('${datex}'));
+      YEAR_Now = DateFormat('yyyy').format(DateTime.parse('${datex}'));
+      Value_selectDate =
+          DateFormat('yyyy-MM-dd').format(DateTime.parse('${datex}'));
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
       fname_ = preferences.getString('fname');
@@ -1005,6 +1048,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   _searchBar() {
     return TextField(
+      controller: Text_searchBar1,
       autofocus: false,
       keyboardType: TextInputType.text,
       style: const TextStyle(
@@ -1085,10 +1129,15 @@ class _AccountScreenState extends State<AccountScreen> {
         } else if (Status_ == 3) {
           setState(() {
             _TransReBillModels = TransReBillModels_.where((TransReBillModels) {
+              var daterec_ =
+                  '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.daterec} 00:00:00'))}-${DateTime.parse('${TransReBillModels.daterec} 00:00:00').year + 543}';
+              var pdate_ =
+                  '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.pdate} 00:00:00'))}-${DateTime.parse('${TransReBillModels.pdate} 00:00:00').year + 543}';
+
               var notTitle = TransReBillModels.cid.toString().toLowerCase();
               var notTitle2 =
                   TransReBillModels.daterec.toString().toLowerCase();
-              var notTitle3 = TransReBillModels.pdate.toString().toLowerCase();
+              var notTitle3 = pdate_.toString().toLowerCase();
               var notTitle4 = TransReBillModels.docno.toString().toLowerCase();
               var notTitle5 = TransReBillModels.doctax.toString().toLowerCase();
               var notTitle6 = TransReBillModels.inv.toString().toLowerCase();
@@ -1101,7 +1150,11 @@ class _AccountScreenState extends State<AccountScreen> {
                   TransReBillModels.total_bill.toString().toLowerCase();
               var notTitle12 =
                   TransReBillModels.doctax.toString().toLowerCase();
+              var notTitle13 = TransReBillModels.type.toString().toLowerCase();
 
+              var notTitle14 = TransReBillModels.date.toString().toLowerCase();
+
+              var notTitle15 = daterec_.toString().toLowerCase();
               return notTitle.contains(text) ||
                   notTitle2.contains(text) ||
                   notTitle3.contains(text) ||
@@ -1113,10 +1166,112 @@ class _AccountScreenState extends State<AccountScreen> {
                   notTitle9.contains(text) ||
                   notTitle10.contains(text) ||
                   notTitle11.contains(text) ||
-                  notTitle12.contains(text);
+                  notTitle12.contains(text) ||
+                  notTitle13.contains(text) ||
+                  notTitle14.contains(text) ||
+                  notTitle15.contains(text);
             }).toList();
           });
         } else {}
+      },
+    );
+  }
+
+  _searchBar2() {
+    return TextField(
+      textAlign: TextAlign.center,
+      controller: Text_searchBar2,
+      autofocus: false,
+      cursorHeight: 14,
+      keyboardType: TextInputType.text,
+      style: const TextStyle(
+          color: PeopleChaoScreen_Color.Colors_Text2_,
+          fontFamily: Font_.Fonts_T),
+      decoration: InputDecoration(
+        filled: true,
+        // fillColor: Colors.white,
+        hintText: ' Search...',
+        hintStyle: const TextStyle(
+            // fontSize: 12,
+            color: PeopleChaoScreen_Color.Colors_Text2_,
+            fontFamily: Font_.Fonts_T),
+        contentPadding:
+            const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+        // focusedBorder: OutlineInputBorder(
+        //   borderSide: const BorderSide(color: Colors.white),
+        //   borderRadius: BorderRadius.circular(10),
+        // ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      onChanged: (text) {
+        var Text_searchBar2_ = Text_searchBar2.text.toLowerCase();
+        //         Widget BodyHome_Web() {
+        //   return (Status_ == 1)
+        //       ? viewTab == 0
+        //           ? PlayColumn()
+        //           : BodyStatus2_Web()
+        //       : (Status_ == 2)
+        //           ? BodyStatus1_Web()
+        //           : (Status_ == 3)
+        //               ? BodyStatus3_Web()
+        //               : BodyStatus4_Web();
+        // }
+
+        if (Date_ser == 0) {
+          setState(() {
+            _TransReBillModels = TransReBillModels_.where((TransReBillModels) {
+              var daterec_ =
+                  '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.daterec} 00:00:00'))}-${DateTime.parse('${TransReBillModels.daterec} 00:00:00').year + 543}';
+              var pdate_ =
+                  '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.pdate} 00:00:00'))}-${DateTime.parse('${TransReBillModels.pdate} 00:00:00').year + 543}';
+              var date_ =
+                  '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.date} 00:00:00'))}-${DateTime.parse('${TransReBillModels.date} 00:00:00').year + 543}';
+              var notTitle1 = daterec_.toString().toLowerCase();
+              var notTitle2 = pdate_.toString().toLowerCase();
+              var notTitle3 = date_.toString().toLowerCase();
+
+              return notTitle1.contains(Text_searchBar2_) ||
+                  notTitle2.contains(Text_searchBar2_) ||
+                  notTitle3.contains(Text_searchBar2_);
+            }).toList();
+          });
+        } else if (Date_ser == 1) {
+          setState(() {
+            _TransReBillModels = TransReBillModels_.where((TransReBillModels) {
+              var daterec_ =
+                  '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.daterec} 00:00:00'))}-${DateTime.parse('${TransReBillModels.daterec} 00:00:00').year + 543}';
+
+              var notTitle1 = daterec_.toString().toLowerCase();
+
+              return notTitle1.contains(text);
+            }).toList();
+          });
+        } else if (Date_ser == 2) {
+          setState(() {
+            _TransReBillModels = TransReBillModels_.where((TransReBillModels) {
+              var pdate_ =
+                  '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.pdate} 00:00:00'))}-${DateTime.parse('${TransReBillModels.pdate} 00:00:00').year + 543}';
+
+              var notTitle1 = pdate_.toString().toLowerCase();
+
+              return notTitle1.contains(text);
+            }).toList();
+          });
+        } else if (Date_ser == 3) {
+          setState(() {
+            _TransReBillModels = TransReBillModels_.where((TransReBillModels) {
+              var date_ =
+                  '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.date} 00:00:00'))}-${DateTime.parse('${TransReBillModels.date} 00:00:00').year + 543}';
+
+              var notTitle1 = date_.toString().toLowerCase();
+
+              return notTitle1.contains(text);
+            }).toList();
+          });
+        }
       },
     );
   }
@@ -1159,15 +1314,16 @@ class _AccountScreenState extends State<AccountScreen> {
   Future<Null> _select_Date(BuildContext context) async {
     final Future<DateTime?> picked = showDatePicker(
       // locale: const Locale('th', 'TH'),
-      helpText: 'เลือกวันที่เริ่มต้น', confirmText: 'ตกลง',
+      helpText: 'เลือกวันที่', confirmText: 'ตกลง',
       cancelText: 'ยกเลิก',
       context: context,
       initialDate: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
       initialDatePickerMode: DatePickerMode.day,
-      firstDate: DateTime(2023, 1, 1),
+      firstDate: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
       lastDate: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
       // selectableDayPredicate: _decideWhichDayToEnable,
       builder: (context, child) {
         return Theme(
@@ -1189,9 +1345,10 @@ class _AccountScreenState extends State<AccountScreen> {
     );
     picked.then((result) {
       if (picked != null) {
-        // print("${result!.year}/${result.month}/${result.day}");
+        var formatter = DateFormat('yyyy-MM-dd');
+        print("${formatter.format(result!)}");
         setState(() {
-          Value_selectDate = "${result!.day}-${result!.month}-${result!.year}";
+          Value_selectDate = "${formatter.format(result)}";
         });
       }
     });
@@ -1321,79 +1478,102 @@ class _AccountScreenState extends State<AccountScreen> {
                         Get_Value_cid: resultqr,
                         Get_Value_NameShop_index: '1',
                         Get_Value_status: '1',
-                        Get_Value_indexpage: '3',
+                        Get_Value_indexpage: '4',
                         updateMessage: updateMessage,
                       ),
                     ],
                   )
                 : Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
-                            child: Container(
-                              width: 100,
-                              decoration: BoxDecoration(
-                                color: AppbackgroundColor.TiTile_Colors,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 8, 2, 0),
+                                  child: Container(
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                          color: AppbackgroundColor.TiTile_Box,
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                      ),
+                                      border: Border.all(
+                                          color: Colors.white, width: 2),
+                                    ),
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        AutoSizeText(
+                                          'บัญชี ',
+                                          overflow: TextOverflow.ellipsis,
+                                          minFontSize: 8,
+                                          maxFontSize: 20,
+                                          style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: ReportScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                          ),
+                                        ),
+                                        AutoSizeText(
+                                          ' > >',
+                                          overflow: TextOverflow.ellipsis,
+                                          minFontSize: 8,
+                                          maxFontSize: 20,
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                border:
-                                    Border.all(color: Colors.white, width: 2),
-                              ),
-                              padding: const EdgeInsets.all(5.0),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  AutoSizeText(
-                                    'บัญชี ',
-                                    overflow: TextOverflow.ellipsis,
-                                    minFontSize: 8,
-                                    maxFontSize: 20,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: ReportScreen_Color.Colors_Text1_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
-                                  ),
-                                  AutoSizeText(
-                                    ' > >',
-                                    overflow: TextOverflow.ellipsis,
-                                    minFontSize: 8,
-                                    maxFontSize: 20,
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
                           ),
-                        ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: viewpage(context, '$Ser_nowpage'),
+                          ),
+                        ],
                       ),
+                      //              Row(
+                      //   mainAxisAlignment: MainAxisAlignment.end,
+                      //   children: [
+                      //     Align(
+                      //       alignment: Alignment.topLeft,
+                      //       child: viewpage(context, '$Ser_nowpage'),
+                      //     ),
+                      //   ],
+                      // ),
                       if (Status_ != 0)
                         Padding(
                           padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                           child: Container(
-                            decoration: const BoxDecoration(
-                              color: AppbackgroundColor.TiTile_Colors,
+                             decoration: const BoxDecoration(
+                              color: AppbackgroundColor.TiTile_Box,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(0)),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
                               // border: Border.all(color: Colors.white, width: 1),
                             ),
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(4.0),
                             child: Row(
                               children: [
                                 subzoneModels.length == 1
@@ -1685,7 +1865,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ),
                                   ),
                                 ),
-                                if (Status_ != 4)
+                                if (Status_ != 6)
                                   const Expanded(
                                     flex: 1,
                                     child: Padding(
@@ -1701,7 +1881,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                       ),
                                     ),
                                   ),
-                                (Status_ == 4)
+                                (Status_ == 6)
                                     ? Expanded(
                                         flex: MediaQuery.of(context)
                                                     .size
@@ -1742,8 +1922,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                               border: Border.all(
                                                   color: Colors.grey, width: 1),
                                             ),
-                                            // width: 120,
-                                            // height: 35,
+                                             // width: 120,
+                                            height: 40,
                                             child: _searchBar(),
                                           ),
                                         ),
@@ -1754,15 +1934,15 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       Padding(
                         padding: (Status_ != 0)
-                            ? EdgeInsets.fromLTRB(8, 0, 8, 8)
+                            ? EdgeInsets.fromLTRB(8, 8, 8, 8)
                             : EdgeInsets.fromLTRB(8, 8, 8, 8),
                         child: Container(
                           decoration: (Status_ != 0)
                               ? const BoxDecoration(
-                                  color: Colors.white30,
+                                  color: Colors.white60,
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(0),
-                                      topRight: Radius.circular(0),
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
                                       bottomLeft: Radius.circular(10),
                                       bottomRight: Radius.circular(10)),
                                   // border: Border.all(color: Colors.grey, width: 1),
@@ -1805,8 +1985,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                               i < Status.length;
                                               i++)
                                             Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
+                                                 padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 4, 8, 4),
                                                 child: InkWell(
                                                   onTap: () async {
                                                     setState(() {
@@ -1832,24 +2013,55 @@ class _AccountScreenState extends State<AccountScreen> {
                                                   child: Container(
                                                     decoration: BoxDecoration(
                                                       color: (i + 1 == 1)
-                                                          ? Colors.green[400]
+                                                          ? (Status_ == i + 1)
+                                                              ? Colors.grey[700]
+                                                              : Colors
+                                                                  .grey[300] //1
                                                           : (i + 1 == 2)
-                                                              ? Colors.red[400]
+                                                              ? (Status_ ==
+                                                                      i + 1)
+                                                                  ? Colors
+                                                                      .red[700]
+                                                                  : Colors.red[
+                                                                      200] //2
                                                               : (i + 1 == 3)
-                                                                  ? Colors.purple[
-                                                                      400]
+                                                                  ? (Status_ ==
+                                                                          i + 1)
+                                                                      ? Colors.purple[
+                                                                          700]
+                                                                      : Colors.purple[
+                                                                          200] //7
+
                                                                   : (i + 1 == 4)
-                                                                      ? Colors.brown[
-                                                                          400]
+                                                                      ? (Status_ ==
+                                                                              i +
+                                                                                  1)
+                                                                          ? Colors.blue[
+                                                                              700]
+                                                                          : Colors.blue[
+                                                                              200] //4
+
                                                                       : (i + 1 ==
                                                                               5)
-                                                                          ? Colors.orange[
-                                                                              400]
-                                                                          : Colors
-                                                                              .pink[400],
+                                                                          ? (Status_ == i + 1)
+                                                                              ? Colors.orange[700]
+                                                                              : Colors.orange[200] //5
+
+                                                                          : (i + 1 == 6)
+                                                                              ? (Status_ == i + 1)
+                                                                                  ? Colors.purple[700]
+                                                                                  : Colors.purple[200] //8
+
+                                                                              : (i + 1 == 7)
+                                                                                  ? (Status_ == i + 1)
+                                                                                      ? Colors.green[700]
+                                                                                      : Colors.green[200] //3
+                                                                                  : (Status_ == i + 1)
+                                                                                      ? Colors.brown
+                                                                                      : Colors.brown[200], //6
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -1860,12 +2072,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                   Radius
                                                                       .circular(
                                                                           10)),
-                                                      border: (Status_ == i + 1)
-                                                          ? Border.all(
-                                                              color:
-                                                                  Colors.white,
-                                                              width: 1)
-                                                          : null,
+                                                      border: Border.all(
+                                                          color: Colors.white,
+                                                          width: 1),
                                                     ),
                                                     padding:
                                                         const EdgeInsets.all(
@@ -2147,6 +2356,60 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                     ),
                                                                                   )),
                                                                           ])),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(2.0),
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                _select_Date(
+                                                                    context);
+                                                              },
+                                                              child: Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: AppbackgroundColor
+                                                                        .Sub_Abg_Colors,
+                                                                    borderRadius: const BorderRadius
+                                                                        .only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomRight:
+                                                                            Radius.circular(10)),
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            1),
+                                                                  ),
+                                                                  width: 120,
+                                                                  height: 35,
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          4.0),
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      (Value_selectDate ==
+                                                                              null)
+                                                                          ? 'เลือกวันที่'
+                                                                          : '$Value_selectDate',
+                                                                      style: const TextStyle(
+                                                                          color: ReportScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T,
+                                                                          fontSize: 14),
+                                                                    ),
+                                                                  )),
                                                             ),
                                                           ),
                                                         ],
@@ -2486,12 +2749,18 @@ class _AccountScreenState extends State<AccountScreen> {
                 ? BodyStatus2_Web()
                 : AcFloorplans_Screen()
         : (Status_ == 2)
-            ? BodyStatus1_Web()
+            ? BodyStatus1_Web() //2
             : (Status_ == 3)
-                ? BodyStatus3_Web()
+                ? AccountInvoice() //7
                 : (Status_ == 4)
-                    ? BodyStatus4_Web()
-                    : Verifi_Payment_History();
+                    ? BodyBillingScreen_Web() //4
+                    : (Status_ == 5)
+                        ? BodyVerifi_Payment_Web() //5
+                        : (Status_ == 6)
+                            ? AccountInvoicePay() //8
+                            : (Status_ == 7)
+                                ? BodyStatus3_Web() //3
+                                : BodyStatus4_Web(); //6
 //  (Status_ == 5)
 //         ? Verifi_Payment_History()
 //         : Rental_customers(updateMessage: updateMessage);
@@ -2501,17 +2770,26 @@ class _AccountScreenState extends State<AccountScreen> {
   //   return PlayColumn();
   // }
 
-  // Widget BodyStatusPlay_Web() {
-  //   return StreamBuilder(
-  //       stream: Stream.periodic(const Duration(seconds: 0)),
-  //       builder: (context, snapshot) {
-  //         return PlayColumn(
+  //////---------------------------------------------->
+  Widget BodyVerifi_Payment_Web() {
+    return StreamBuilder(
+        stream: Stream.periodic(const Duration(seconds: 0)),
+        builder: (context, snapshot) {
+          return Verifi_Payment_History(
+              Texts: FormSearchFile_text.text.toString());
+        });
+  }
 
-  //         );
-  //       });
-  // }
+  //////---------------------------------------------->
+  Widget BodyBillingScreen_Web() {
+    return StreamBuilder(
+        stream: Stream.periodic(const Duration(seconds: 0)),
+        builder: (context, snapshot) {
+          return BillingScreen(Texts: FormSearchFile_text.text.toString());
+        });
+  }
 
-  ///----------------------->
+  //////---------------------------------------------->
   Widget Next_page_BodyStatus1_Web() {
     return Row(
       children: [
@@ -3486,7 +3764,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             BoxDecoration(
                                                                           color:
                                                                               Colors.red[400],
-                                                                          borderRadius: const BorderRadius.only(
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
                                                                               topLeft: Radius.circular(10),
                                                                               topRight: Radius.circular(10),
                                                                               bottomLeft: Radius.circular(10),
@@ -3495,8 +3774,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                               color: Colors.white,
                                                                               width: 1),
                                                                         ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(4.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            4.0),
                                                                         child:
                                                                             AutoSizeText(
                                                                           minFontSize:
@@ -4399,24 +4679,56 @@ class _AccountScreenState extends State<AccountScreen> {
                                                           (BuildContext context,
                                                               int index) {
                                                         return ListTile(
-                                                          title: Container(
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              // color: Colors.green[100]!
-                                                              //     .withOpacity(0.5),
-                                                              border: Border(
-                                                                bottom:
-                                                                    BorderSide(
-                                                                  color: Colors
-                                                                      .black12,
-                                                                  width: 1,
+                                                          title: Row(
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  minFontSize:
+                                                                      10,
+                                                                  maxFontSize:
+                                                                      15,
+                                                                  maxLines: 1,
+                                                                  '${index + 1}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
                                                                 ),
                                                               ),
-                                                            ),
-                                                            child: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  flex: 1,
+                                                              Expanded(
+                                                                flex: 2,
+                                                                child: Tooltip(
+                                                                  richMessage:
+                                                                      TextSpan(
+                                                                    text:
+                                                                        '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceHistoryModels[index].dateacc} 00:00:00'))}', //${_TransModels[index].date}
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: HomeScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                      //fontSize: 10.0
+                                                                    ),
+                                                                  ),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        200],
+                                                                  ),
                                                                   child:
                                                                       AutoSizeText(
                                                                     minFontSize:
@@ -4424,325 +4736,278 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                     maxFontSize:
                                                                         15,
                                                                     maxLines: 1,
-                                                                    '${index + 1}',
+                                                                    '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceHistoryModels[index].date} 00:00:00'))}', //${_TransModels[index].date}
                                                                     textAlign:
                                                                         TextAlign
-                                                                            .center,
+                                                                            .start,
                                                                     style: const TextStyle(
                                                                         color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                         //fontWeight: FontWeight.bold,
                                                                         fontFamily: Font_.Fonts_T),
                                                                   ),
                                                                 ),
-                                                                Expanded(
-                                                                  flex: 2,
-                                                                  child:
-                                                                      Tooltip(
-                                                                    richMessage:
-                                                                        TextSpan(
-                                                                      text:
-                                                                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceHistoryModels[index].dateacc} 00:00:00'))}', //${_TransModels[index].date}
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: HomeScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          200],
-                                                                    ),
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          15,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceHistoryModels[index].date} 00:00:00'))}', //${_TransModels[index].date}
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 2,
+                                                                child: Tooltip(
+                                                                  richMessage:
+                                                                      TextSpan(
+                                                                    text:
+                                                                        '${_InvoiceHistoryModels[index].descr}',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: HomeScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                      //fontSize: 10.0
                                                                     ),
                                                                   ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 2,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        200],
+                                                                  ),
                                                                   child:
-                                                                      Tooltip(
-                                                                    richMessage:
-                                                                        TextSpan(
-                                                                      text:
-                                                                          '${_InvoiceHistoryModels[index].descr}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: HomeScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          200],
-                                                                    ),
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          15,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${_InvoiceHistoryModels[index].descr}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
+                                                                      AutoSizeText(
+                                                                    minFontSize:
+                                                                        10,
+                                                                    maxFontSize:
+                                                                        15,
+                                                                    maxLines: 1,
+                                                                    '${_InvoiceHistoryModels[index].descr}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
                                                                   ),
                                                                 ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child:
-                                                                      Tooltip(
-                                                                    richMessage:
-                                                                        TextSpan(
-                                                                      text:
-                                                                          '${_InvoiceHistoryModels[index].qty}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: HomeScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          200],
-                                                                    ),
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          15,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${_InvoiceHistoryModels[index].qty}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Tooltip(
+                                                                  richMessage:
+                                                                      TextSpan(
+                                                                    text:
+                                                                        '${_InvoiceHistoryModels[index].qty}',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: HomeScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                      //fontSize: 10.0
                                                                     ),
                                                                   ),
-                                                                ),
-                                                                // Expanded(
-                                                                //   flex: 1,
-                                                                //   child: AutoSizeText(
-                                                                //     minFontSize: 10,
-                                                                //     maxFontSize: 15,
-                                                                //     maxLines: 1,
-                                                                //     '${_InvoiceHistoryModels[index].unit_con}',
-                                                                //     textAlign: TextAlign.end,
-                                                                //     style: const TextStyle(
-                                                                //         color:
-                                                                //             PeopleChaoScreen_Color
-                                                                //                 .Colors_Text2_,
-                                                                //         //fontWeight: FontWeight.bold,
-                                                                //         fontFamily:
-                                                                //             Font_.Fonts_T),
-                                                                //   ),
-                                                                // ),
-                                                                Expanded(
-                                                                  flex: 1,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        200],
+                                                                  ),
                                                                   child:
-                                                                      Tooltip(
-                                                                    richMessage:
-                                                                        TextSpan(
-                                                                      text:
-                                                                          '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: HomeScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          200],
-                                                                    ),
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          15,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
+                                                                      AutoSizeText(
+                                                                    minFontSize:
+                                                                        10,
+                                                                    maxFontSize:
+                                                                        15,
+                                                                    maxLines: 1,
+                                                                    '${_InvoiceHistoryModels[index].qty}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
                                                                   ),
                                                                 ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child:
-                                                                      Tooltip(
-                                                                    richMessage:
-                                                                        TextSpan(
-                                                                      text:
-                                                                          '${nFormat.format(double.parse(_InvoiceHistoryModels[index].wht!))}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: HomeScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          200],
-                                                                    ),
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          15,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].wht!))}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                              // Expanded(
+                                                              //   flex: 1,
+                                                              //   child: AutoSizeText(
+                                                              //     minFontSize: 10,
+                                                              //     maxFontSize: 15,
+                                                              //     maxLines: 1,
+                                                              //     '${_InvoiceHistoryModels[index].unit_con}',
+                                                              //     textAlign: TextAlign.end,
+                                                              //     style: const TextStyle(
+                                                              //         color:
+                                                              //             PeopleChaoScreen_Color
+                                                              //                 .Colors_Text2_,
+                                                              //         //fontWeight: FontWeight.bold,
+                                                              //         fontFamily:
+                                                              //             Font_.Fonts_T),
+                                                              //   ),
+                                                              // ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Tooltip(
+                                                                  richMessage:
+                                                                      TextSpan(
+                                                                    text:
+                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: HomeScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                      //fontSize: 10.0
                                                                     ),
                                                                   ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        200],
+                                                                  ),
                                                                   child:
-                                                                      Tooltip(
-                                                                    richMessage:
-                                                                        TextSpan(
-                                                                      text:
-                                                                          '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: HomeScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          200],
-                                                                    ),
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          15,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
+                                                                      AutoSizeText(
+                                                                    minFontSize:
+                                                                        10,
+                                                                    maxFontSize:
+                                                                        15,
+                                                                    maxLines: 1,
+                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
                                                                   ),
                                                                 ),
-                                                                // Expanded(
-                                                                //     flex: 1,
-                                                                //     child: IconButton(
-                                                                //         onPressed: () {
-                                                                //           de_Trans_select(index);
-                                                                //         },
-                                                                //         icon: const Icon(
-                                                                //             Icons.remove_circle))),
-                                                              ],
-                                                            ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Tooltip(
+                                                                  richMessage:
+                                                                      TextSpan(
+                                                                    text:
+                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].wht!))}',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: HomeScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                      //fontSize: 10.0
+                                                                    ),
+                                                                  ),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        200],
+                                                                  ),
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    minFontSize:
+                                                                        10,
+                                                                    maxFontSize:
+                                                                        15,
+                                                                    maxLines: 1,
+                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].wht!))}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Tooltip(
+                                                                  richMessage:
+                                                                      TextSpan(
+                                                                    text:
+                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: HomeScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                      //fontSize: 10.0
+                                                                    ),
+                                                                  ),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        200],
+                                                                  ),
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    minFontSize:
+                                                                        10,
+                                                                    maxFontSize:
+                                                                        15,
+                                                                    maxLines: 1,
+                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              // Expanded(
+                                                              //     flex: 1,
+                                                              //     child: IconButton(
+                                                              //         onPressed: () {
+                                                              //           de_Trans_select(index);
+                                                              //         },
+                                                              //         icon: const Icon(
+                                                              //             Icons.remove_circle))),
+                                                            ],
                                                           ),
                                                         );
                                                       },
@@ -6200,8 +6465,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           ),
                                                                           // border: Border.all(color: Colors.grey, width: 1),
                                                                         ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             Row(
                                                                           children: [
@@ -6753,9 +7019,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       color: Colors
                                                                               .green[
                                                                           200],
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           const Center(
                                                                         child:
@@ -6781,9 +7047,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: Colors
                                                                           .green[50],
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Center(
                                                                         child:
@@ -6814,9 +7080,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: AppbackgroundColor
                                                                           .Sub_Abg_Colors,
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Center(
                                                                         child:
@@ -7114,9 +7380,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: AppbackgroundColor
                                                                           .Sub_Abg_Colors,
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           const Center(
                                                                         child:
@@ -7602,8 +7868,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .Sub_Abg_Colors,
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
@@ -7631,8 +7898,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .Sub_Abg_Colors,
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             Center(
                                                                           child:
@@ -7861,7 +8129,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: [
@@ -8049,9 +8317,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       //         .size
                                                                       //         .width *
                                                                       //     0.33,
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Column(
                                                                         mainAxisAlignment:
@@ -8136,9 +8404,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                     flex: 4,
                                                                     child:
                                                                         Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           InkWell(
                                                                         onTap:
@@ -9190,7 +9458,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9230,7 +9498,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9270,7 +9538,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9310,7 +9578,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9350,7 +9618,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9390,7 +9658,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9430,7 +9698,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9505,240 +9773,248 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             context,
                                                                         int index) {
                                                                   return ListTile(
-                                                                    title:
-                                                                        Container(
-                                                                      decoration:
-                                                                          const BoxDecoration(
-                                                                        // color: Colors.green[100]!
-                                                                        //     .withOpacity(0.5),
-                                                                        border:
-                                                                            Border(
-                                                                          bottom:
-                                                                              BorderSide(
-                                                                            color:
-                                                                                Colors.black12,
-                                                                            width:
+                                                                    title: Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                15,
+                                                                            maxLines:
                                                                                 1,
+                                                                            '${index + 1}',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      child:
-                                                                          Row(
-                                                                        children: [
-                                                                          Expanded(
-                                                                            flex:
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                15,
+                                                                            maxLines:
                                                                                 1,
+                                                                            // '${_TransModels[index].duedate}',
+                                                                            '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}', //${_TransModels[index].date}
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                15,
+                                                                            maxLines:
+                                                                                1,
+                                                                            '${_TransModels[index].name}',
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${_TransModels[index].tqty}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[200],
+                                                                            ),
                                                                             child:
                                                                                 AutoSizeText(
                                                                               minFontSize: 10,
                                                                               maxFontSize: 15,
                                                                               maxLines: 1,
-                                                                              '${index + 1}',
-                                                                              textAlign: TextAlign.center,
+                                                                              '${_TransModels[index].tqty}',
+                                                                              textAlign: TextAlign.end,
                                                                               style: const TextStyle(
                                                                                   color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                                   //fontWeight: FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T),
                                                                             ),
                                                                           ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                2,
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${_TransModels[index].unit_con}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[200],
+                                                                            ),
                                                                             child:
                                                                                 AutoSizeText(
                                                                               minFontSize: 10,
                                                                               maxFontSize: 15,
                                                                               maxLines: 1,
-                                                                              // '${_TransModels[index].duedate}',
-                                                                              '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}', //${_TransModels[index].date}
-                                                                              textAlign: TextAlign.start,
+                                                                              '${_TransModels[index].unit_con}',
+                                                                              textAlign: TextAlign.end,
                                                                               style: const TextStyle(
                                                                                   color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                                   //fontWeight: FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T),
                                                                             ),
                                                                           ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                2,
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${_TransModels[index].vat}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[200],
+                                                                            ),
                                                                             child:
                                                                                 AutoSizeText(
                                                                               minFontSize: 10,
                                                                               maxFontSize: 15,
                                                                               maxLines: 1,
-                                                                              '${_TransModels[index].name}',
-                                                                              textAlign: TextAlign.start,
+                                                                              '${_TransModels[index].vat}',
+                                                                              textAlign: TextAlign.end,
                                                                               style: const TextStyle(
                                                                                   color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                                   //fontWeight: FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T),
                                                                             ),
                                                                           ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                Tooltip(
-                                                                              richMessage: TextSpan(
-                                                                                text: '${_TransModels[index].tqty}',
-                                                                                style: const TextStyle(
-                                                                                  color: HomeScreen_Color.Colors_Text1_,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                  //fontSize: 10.0
-                                                                                ),
-                                                                              ),
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(5),
-                                                                                color: Colors.grey[200],
-                                                                              ),
-                                                                              child: AutoSizeText(
-                                                                                minFontSize: 10,
-                                                                                maxFontSize: 15,
-                                                                                maxLines: 1,
-                                                                                '${_TransModels[index].tqty}',
-                                                                                textAlign: TextAlign.end,
-                                                                                style: const TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    //fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${nFormat.format(double.parse(_TransModels[index].wht!))}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
                                                                               ),
                                                                             ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[200],
+                                                                            ),
                                                                             child:
-                                                                                Tooltip(
-                                                                              richMessage: TextSpan(
-                                                                                text: '${_TransModels[index].unit_con}',
-                                                                                style: const TextStyle(
-                                                                                  color: HomeScreen_Color.Colors_Text1_,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                  //fontSize: 10.0
-                                                                                ),
-                                                                              ),
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(5),
-                                                                                color: Colors.grey[200],
-                                                                              ),
-                                                                              child: AutoSizeText(
-                                                                                minFontSize: 10,
-                                                                                maxFontSize: 15,
-                                                                                maxLines: 1,
-                                                                                '${_TransModels[index].unit_con}',
-                                                                                textAlign: TextAlign.end,
-                                                                                style: const TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    //fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
-                                                                              ),
+                                                                                AutoSizeText(
+                                                                              minFontSize: 10,
+                                                                              maxFontSize: 15,
+                                                                              maxLines: 1,
+                                                                              '${nFormat.format(double.parse(_TransModels[index].wht!))}',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: const TextStyle(
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  //fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
                                                                             ),
                                                                           ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                Tooltip(
-                                                                              richMessage: TextSpan(
-                                                                                text: '${_TransModels[index].vat}',
-                                                                                style: const TextStyle(
-                                                                                  color: HomeScreen_Color.Colors_Text1_,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                  //fontSize: 10.0
-                                                                                ),
-                                                                              ),
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(5),
-                                                                                color: Colors.grey[200],
-                                                                              ),
-                                                                              child: AutoSizeText(
-                                                                                minFontSize: 10,
-                                                                                maxFontSize: 15,
-                                                                                maxLines: 1,
-                                                                                '${_TransModels[index].vat}',
-                                                                                textAlign: TextAlign.end,
-                                                                                style: const TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    //fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+                                                                              style: const TextStyle(
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
                                                                               ),
                                                                             ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[200],
+                                                                            ),
                                                                             child:
-                                                                                Tooltip(
-                                                                              richMessage: TextSpan(
-                                                                                text: '${nFormat.format(double.parse(_TransModels[index].wht!))}',
-                                                                                style: const TextStyle(
-                                                                                  color: HomeScreen_Color.Colors_Text1_,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                  //fontSize: 10.0
-                                                                                ),
-                                                                              ),
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(5),
-                                                                                color: Colors.grey[200],
-                                                                              ),
-                                                                              child: AutoSizeText(
-                                                                                minFontSize: 10,
-                                                                                maxFontSize: 15,
-                                                                                maxLines: 1,
-                                                                                '${nFormat.format(double.parse(_TransModels[index].wht!))}',
-                                                                                textAlign: TextAlign.end,
-                                                                                style: const TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    //fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
-                                                                              ),
+                                                                                AutoSizeText(
+                                                                              minFontSize: 10,
+                                                                              maxFontSize: 15,
+                                                                              maxLines: 1,
+                                                                              '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: const TextStyle(
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  //fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
                                                                             ),
                                                                           ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                Tooltip(
-                                                                              richMessage: TextSpan(
-                                                                                text: '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
-                                                                                style: const TextStyle(
-                                                                                  color: HomeScreen_Color.Colors_Text1_,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                  //fontSize: 10.0
-                                                                                ),
-                                                                              ),
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(5),
-                                                                                color: Colors.grey[200],
-                                                                              ),
-                                                                              child: AutoSizeText(
-                                                                                minFontSize: 10,
-                                                                                maxFontSize: 15,
-                                                                                maxLines: 1,
-                                                                                '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
-                                                                                textAlign: TextAlign.end,
-                                                                                style: const TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    //fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          // Expanded(
-                                                                          //     flex: 1,
-                                                                          //     child: IconButton(
-                                                                          //         onPressed: () {
-                                                                          //           de_Trans_select(index);
-                                                                          //         },
-                                                                          //         icon: const Icon(
-                                                                          //             Icons.remove_circle))),
-                                                                        ],
-                                                                      ),
+                                                                        ),
+                                                                        // Expanded(
+                                                                        //     flex: 1,
+                                                                        //     child: IconButton(
+                                                                        //         onPressed: () {
+                                                                        //           de_Trans_select(index);
+                                                                        //         },
+                                                                        //         icon: const Icon(
+                                                                        //             Icons.remove_circle))),
+                                                                      ],
                                                                     ),
                                                                   );
                                                                 },
@@ -10258,9 +10534,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       color: Colors
                                                                               .green[
                                                                           200],
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           const Center(
                                                                         child:
@@ -10286,9 +10562,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: Colors
                                                                           .green[50],
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Center(
                                                                         child:
@@ -10319,9 +10595,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: AppbackgroundColor
                                                                           .Sub_Abg_Colors,
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Center(
                                                                         child:
@@ -10634,9 +10910,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: AppbackgroundColor
                                                                           .Sub_Abg_Colors,
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           const Center(
                                                                         child:
@@ -11115,8 +11391,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .Sub_Abg_Colors,
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
@@ -11144,8 +11421,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .Sub_Abg_Colors,
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             Center(
                                                                           child:
@@ -11379,7 +11657,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: [
@@ -11564,9 +11842,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       //         .size
                                                                       //         .width *
                                                                       //     0.33,
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Column(
                                                                         mainAxisAlignment:
@@ -11994,9 +12272,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                     flex: 4,
                                                                     child:
                                                                         Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           InkWell(
                                                                         onTap:
@@ -13087,7 +13365,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: [
@@ -14304,6 +14582,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 (value) async {
                                                               YEAR_Now = value;
                                                               red_Trans_bill();
+                                                              // red_Trans_bill();
                                                               // if (Value_Chang_Zone_Income !=
                                                               //     null) {
                                                               //   red_Trans_billIncome();
@@ -14313,6 +14592,620 @@ class _AccountScreenState extends State<AccountScreen> {
                                                           ),
                                                         ),
                                                       ),
+                                                      const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(2.0),
+                                                        child: Text(
+                                                          'ระบบ :',
+                                                          style: TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(2.0),
+                                                        child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: AppbackgroundColor
+                                                                .Sub_Abg_Colors,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            // border: Border.all(color: Colors.grey, width: 1),
+                                                          ),
+                                                          width: 160,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          child:
+                                                              DropdownButtonFormField2(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            focusColor:
+                                                                Colors.white,
+                                                            autofocus: false,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              floatingLabelAlignment:
+                                                                  FloatingLabelAlignment
+                                                                      .center,
+                                                              enabled: true,
+                                                              hoverColor:
+                                                                  Colors.brown,
+                                                              prefixIconColor:
+                                                                  Colors.blue,
+                                                              fillColor: Colors
+                                                                  .white
+                                                                  .withOpacity(
+                                                                      0.05),
+                                                              filled: false,
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderSide:
+                                                                    const BorderSide(
+                                                                        color: Colors
+                                                                            .red),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              focusedBorder:
+                                                                  const OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                ),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  width: 1,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          231,
+                                                                          227,
+                                                                          227),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            isExpanded: false,
+                                                            // value: YEAR_Now,
+                                                            hint: Text(
+                                                              (ser_payby ==
+                                                                          null ||
+                                                                      ser_payby ==
+                                                                          '0')
+                                                                  ? 'ทั้งหมด'
+                                                                  : '$ser_payby',
+                                                              maxLines: 2,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                fontSize: 12,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .arrow_drop_down,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                            iconSize: 20,
+                                                            buttonHeight: 30,
+                                                            buttonWidth: 200,
+                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                            dropdownDecoration:
+                                                                BoxDecoration(
+                                                              // color: Colors
+                                                              //     .amber,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 1),
+                                                            ),
+                                                            items: const [
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '0',
+                                                                child: Text(
+                                                                  'ทั้งหมด',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '1',
+                                                                child: Text(
+                                                                  'เว็ป หลักแอดมิน(W)',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '2',
+                                                                child: Text(
+                                                                  'เว็ป User(U)',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '3',
+                                                                child: Text(
+                                                                  'เว็ป Market(LP)',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '4',
+                                                                child: Text(
+                                                                  'เครื่อง Handheld(H)',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+
+                                                            onChanged:
+                                                                (value) async {
+                                                              setState(() {
+                                                                ser_payby =
+                                                                    value;
+                                                              });
+
+                                                              // print(value);
+                                                              red_Trans_bill();
+                                                              // if (Value_Chang_Zone_Income !=
+                                                              //     null) {
+                                                              //   red_Trans_billIncome();
+                                                              //   red_Trans_billMovemen();
+                                                              // }
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Container(
+                                                      height: 20,
+                                                      width: 3,
+                                                      color: Colors.grey),
+                                                ),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                            .Sub_Abg_Colors
+                                                        .withOpacity(0.5),
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    // border: Border.all(color: Colors.white, width: 1),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(2.0),
+                                                        child: Text(
+                                                          'ประเภทวันที่ :',
+                                                          style: TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(2.0),
+                                                        child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: AppbackgroundColor
+                                                                .Sub_Abg_Colors,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            // border: Border.all(color: Colors.grey, width: 1),
+                                                          ),
+                                                          width: 125,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          child:
+                                                              DropdownButtonFormField2(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            focusColor:
+                                                                Colors.white,
+                                                            autofocus: false,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              floatingLabelAlignment:
+                                                                  FloatingLabelAlignment
+                                                                      .center,
+                                                              enabled: true,
+                                                              hoverColor:
+                                                                  Colors.brown,
+                                                              prefixIconColor:
+                                                                  Colors.blue,
+                                                              fillColor: Colors
+                                                                  .white
+                                                                  .withOpacity(
+                                                                      0.05),
+                                                              filled: false,
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderSide:
+                                                                    const BorderSide(
+                                                                        color: Colors
+                                                                            .red),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              focusedBorder:
+                                                                  const OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                ),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  width: 1,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          231,
+                                                                          227,
+                                                                          227),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            isExpanded: false,
+                                                            // value: YEAR_Now,
+                                                            hint: Text(
+                                                              'ทั้งหมด',
+                                                              maxLines: 2,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                fontSize: 12,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .arrow_drop_down,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                            iconSize: 20,
+                                                            buttonHeight: 30,
+                                                            buttonWidth: 120,
+                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                            dropdownDecoration:
+                                                                BoxDecoration(
+                                                              // color: Colors
+                                                              //     .amber,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 1),
+                                                            ),
+                                                            items: const [
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '0',
+                                                                child: Text(
+                                                                  'ทั้งหมด',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '1',
+                                                                child: Text(
+                                                                  'วันที่ทำรายการ',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '2',
+                                                                child: Text(
+                                                                  'วันที่รับชำระ',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DropdownMenuItem<
+                                                                  String>(
+                                                                value: '3',
+                                                                child: Text(
+                                                                  'กำหนดชำระ',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+
+                                                            onChanged:
+                                                                (value) async {
+                                                              setState(() {
+                                                                Text_searchBar2
+                                                                    .clear();
+                                                                _TransReBillModels =
+                                                                    TransReBillModels_;
+                                                                Date_ser =
+                                                                    int.parse(
+                                                                        value!);
+                                                              });
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(2.0),
+                                                        child: Text(
+                                                          'ค้นหา :',
+                                                          style: TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      // SizedBox(
+                                                      //   height: 30, //Date_ser
+                                                      //   width: 120,
+                                                      //   child: _searchBar2(),
+                                                      // )
+                                                      Container(
+                                                        height: 25, //Date_ser
+                                                        width: 120,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                          borderRadius: const BorderRadius
+                                                              .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey,
+                                                              width: 1),
+                                                        ),
+                                                        child: _searchBar2(),
+                                                      )
                                                     ],
                                                   ),
                                                 ),
@@ -14743,8 +15636,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Tooltip(
                                                                             richMessage:
@@ -14779,8 +15673,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Tooltip(
                                                                             richMessage:
@@ -14904,8 +15799,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Tooltip(
                                                                             richMessage:
@@ -15180,9 +16076,18 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                 25,
                                                                             maxLines:
                                                                                 1,
-                                                                            _TransReBillModels[index].shopno == '1'
-                                                                                ? 'ผ่านระบบผู้เช่า'
-                                                                                : 'ผ่านระบบแอดมิน',
+                                                                            (_TransReBillModels[index].pay_by.toString() == 'W')
+                                                                                ? 'ผ่านเว็บ แอดมิน (${_TransReBillModels[index].pay_by})'
+                                                                                : (_TransReBillModels[index].pay_by.toString() == 'U')
+                                                                                    ? 'ผ่านเว็บ User (${_TransReBillModels[index].pay_by})'
+                                                                                    : (_TransReBillModels[index].pay_by.toString() == 'LP')
+                                                                                        ? 'ผ่านเว็บ Market (${_TransReBillModels[index].pay_by})'
+                                                                                        : (_TransReBillModels[index].pay_by.toString() == 'H')
+                                                                                            ? 'ผ่านเครื่อง Handheld (${_TransReBillModels[index].pay_by})'
+                                                                                            : 'ไม่ทราบ ?? (${_TransReBillModels[index].pay_by})',
+                                                                            // _TransReBillModels[index].shopno == '1'
+                                                                            //     ? 'ผ่านระบบผู้เช่า'
+                                                                            //     : 'ผ่านระบบแอดมิน',
                                                                             textAlign:
                                                                                 TextAlign.end,
                                                                             style:
@@ -15738,6 +16643,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 backgroundColor: AppbackgroundColor.Sub_Abg_Colors,
+                titlePadding: const EdgeInsets.all(0.0),
+                contentPadding: const EdgeInsets.all(10.0),
+                actionsPadding: const EdgeInsets.all(6.0),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -15746,29 +16654,15 @@ class _AccountScreenState extends State<AccountScreen> {
                         Navigator.pop(context);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(4.0),
                         child: Icon(Icons.highlight_off,
                             size: 30, color: Colors.red[700]),
                       ),
                     ),
-                    // Container(
-                    //   alignment: Alignment.center,
-                    //   width: MediaQuery.of(context).size.width * 0.6,
-                    //   child: Text(
-                    //     _TransReBillModels[index].doctax == ''
-                    //         ? 'เลขที่บิล ${_TransReBillModels[index].docno}'
-                    //         : 'เลขที่บิล ${_TransReBillModels[index].doctax}',
-                    //     style: const TextStyle(
-                    //       fontSize: 20.0,
-                    //       fontWeight: FontWeight.bold,
-                    //       color: Colors.black,
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
                 content: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(0.0),
                   child: ScrollConfiguration(
                     behavior:
                         ScrollConfiguration.of(context).copyWith(dragDevices: {
@@ -16060,16 +16954,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                               padding:
                                                   const EdgeInsets.all(2.0),
                                               child: Container(
-                                                decoration: const BoxDecoration(
-                                                  // color: Colors.green[100]!
-                                                  //     .withOpacity(0.5),
-                                                  border: Border(
-                                                    bottom: BorderSide(
-                                                      color: Colors.black12,
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                ),
                                                 child: Row(
                                                   children: [
                                                     Expanded(
@@ -16231,9 +17115,21 @@ class _AccountScreenState extends State<AccountScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          width: 250,
-                                          // height: 50,
-                                          // color: Colors.red,
+                                          width: 300,
+                                          decoration: BoxDecoration(
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                          ),
+                                          padding: const EdgeInsets.all(4.0),
                                           child: StreamBuilder(
                                               stream: Stream.periodic(
                                                   const Duration(seconds: 0)),
@@ -16245,8 +17141,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                           Alignment.topLeft,
                                                       child: AutoSizeText(
                                                         minFontSize: 8,
-                                                        'วันที่ชำระ : $pdate',
-                                                        //  'วันที่ชำระ : ${DateFormat('dd-MM').format(DateTime.parse('$pdate 00:00:00'))}-${DateTime.parse('$pdate 00:00:00').year + 543}',
+                                                        (pdate == null)
+                                                            ? 'วันที่ชำระ : $pdate'
+                                                            : 'วันที่ชำระ : ${DateFormat('dd-MM').format(DateTime.parse('$pdate 00:00:00'))}-${DateTime.parse('$pdate 00:00:00').year + 543}',
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
@@ -16291,49 +17188,93 @@ class _AccountScreenState extends State<AccountScreen> {
                                                               .dtype
                                                               .toString() !=
                                                           'FTA')
-                                                        (finnancetransModels[i]
-                                                                    .dtype
-                                                                    .toString() ==
-                                                                'KP')
-                                                            ? Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topLeft,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      8,
-                                                                  maxFontSize:
-                                                                      13,
-                                                                  (finnancetransModels[i]
-                                                                              .type
-                                                                              .toString() ==
-                                                                          'CASH')
-                                                                      ? '${i + 1}.เงินสด : ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท'
-                                                                      : '${i + 1}.เงินโอน : ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท',
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T),
-                                                                ),
-                                                              )
-                                                            : Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topLeft,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      8,
-                                                                  maxFontSize:
-                                                                      13,
-                                                                  '${i + 1}.${finnancetransModels[i].remark} : ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท',
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T),
-                                                                ),
+                                                        Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              AutoSizeText(
+                                                                minFontSize: 8,
+                                                                maxFontSize: 13,
+                                                                '${i + 1}. จำนวน ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท (${finnancetransModels[i].ptname})',
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
                                                               ),
+                                                              if (finnancetransModels[
+                                                                          i]
+                                                                      .type
+                                                                      .toString() !=
+                                                                  'CASH')
+                                                                AutoSizeText(
+                                                                  minFontSize:
+                                                                      8,
+                                                                  maxFontSize:
+                                                                      11,
+                                                                  '  ** ${i + 1}.1. ธนาคาร : ${finnancetransModels[i].bank} , เลขบช. : ${finnancetransModels[i].bno}',
+                                                                  style: TextStyle(
+                                                                      color: Colors.grey[800],
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                    // (finnancetransModels[i]
+                                                    //             .dtype
+                                                    //             .toString() ==
+                                                    //         'KP')
+                                                    //     ? Align(
+                                                    //         alignment:
+                                                    //             Alignment
+                                                    //                 .topLeft,
+                                                    //         child:
+                                                    //             AutoSizeText(
+                                                    //           minFontSize:
+                                                    //               8,
+                                                    //           maxFontSize:
+                                                    //               13,
+                                                    //           (finnancetransModels[i]
+                                                    //                       .type
+                                                    //                       .toString() ==
+                                                    //                   'CASH')
+                                                    //               ? '${i + 1}.เงินสด : ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท'
+                                                    //               : '${i + 1}.เงินโอน : ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท',
+                                                    //           style: const TextStyle(
+                                                    //               color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //               //fontWeight: FontWeight.bold,
+                                                    //               fontFamily: Font_.Fonts_T),
+                                                    //         ),
+                                                    //       )
+                                                    //     : Align(
+                                                    //         alignment:
+                                                    //             Alignment
+                                                    //                 .topLeft,
+                                                    //         child:
+                                                    //             AutoSizeText(
+                                                    //           minFontSize:
+                                                    //               8,
+                                                    //           maxFontSize:
+                                                    //               13,
+                                                    //           '${i + 1}.${finnancetransModels[i].remark} : ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท',
+                                                    //           style: const TextStyle(
+                                                    //               color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //               //fontWeight: FontWeight.bold,
+                                                    //               fontFamily: Font_.Fonts_T),
+                                                    //         ),
+                                                    //       ),
                                                   ],
                                                 );
                                               }),
@@ -16832,7 +17773,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         Container(
@@ -16849,9 +17791,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed: () => Navigator.pop(
@@ -16880,7 +17822,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                       color: Colors.blue[200],
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius
@@ -17129,7 +18071,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 actions: <Widget>[
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child: Row(
                                                                       mainAxisAlignment:
@@ -17149,8 +18092,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                 bottomLeft: Radius.circular(10),
                                                                                 bottomRight: Radius.circular(10)),
                                                                           ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               TextButton(
                                                                             onPressed: () =>
@@ -17466,7 +18410,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                       color: Colors.green[200],
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius

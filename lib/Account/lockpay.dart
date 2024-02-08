@@ -40,6 +40,7 @@ import '../PDF_TP3/PDF_Receipt_TP3/pdf_LockReceipt_TP3.dart';
 import '../PDF_TP4/PDF_Receipt_TP4/pdf_LockReceipt_TP4.dart';
 import '../PDF_TP5/PDF_Receipt_TP5/pdf_LockReceipt_TP5.dart';
 import '../PDF_TP6/PDF_Receipt_TP6/pdf_LockReceipt_TP6.dart';
+import '../PeopleChao/webviewPay.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'dart:html' as html;
@@ -79,7 +80,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
   List<AreaModel> areaModels = [];
   List<AreakModel> areakModels = [];
   List<PayMentModel> _PayMentModels = [];
-  String? selectedValue;
+
+  String? selectedValue, selectedValue2;
+  String? bname1, bname2;
   List Area_ = [
     'คอมมูนิตี้มอลล์',
     'ออฟฟิศให้เช่า',
@@ -136,7 +139,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
       bill_tser,
       foder,
       bills_name_,
-      numinvoice;
+      numinvoice,
+      newValuePDFimg_QR;
   String? Form_nameshop,
       Form_typeshop,
       Form_bussshop,
@@ -434,7 +438,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
             if (autox == '1') {
               paymentSer1 = serx.toString();
               paymentName1 = ptnamex.toString();
-
+              selectedValue = _PayMentModel.bno.toString();
+              bname1 = _PayMentModel.bname.toString();
               Form_payment1.text =
                   (sum_amt - sum_disamt).toStringAsFixed(2).toString();
             }
@@ -918,10 +923,10 @@ class _LockpayScreenState extends State<LockpayScreen> {
     var area_rent_sum = expModels[index].cal_auto == '1'
         ? expModels[index].pri_auto
         : _area_rent_sum; //ราคาพื้นที่
-
+    var custno_s = (number_custno == null) ? '' : number_custno;
     // print('object $tdocno');
     String url =
-        '${MyConstant().domain}/In_c_paynew.php?isAdd=true&ren=$ren&tser=$tser&selecte=$selecte&selecte_ln=$selecte_ln&_area_rent_sum=$area_rent_sum&user=$user&ciddoc=$ciddoc&zone=$zone';
+        '${MyConstant().domain}/In_c_paynew.php?isAdd=true&ren=$ren&tser=$tser&selecte=$selecte&selecte_ln=$selecte_ln&_area_rent_sum=$area_rent_sum&user=$user&ciddoc=$ciddoc&zone=$zone&cust_no=$custno_s';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -1104,8 +1109,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
         return AlertDialog(
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          title: Column(
-            children: const [
+          title: const Column(
+            children: [
               Center(
                 child: Text(
                   'เลือกรายชื่อจากทะเบียน',
@@ -1181,8 +1186,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                             bottomLeft: Radius.circular(0),
                                             bottomRight: Radius.circular(0)),
                                       ),
-                                      child: Row(
-                                        children: const [
+                                      child: const Row(
+                                        children: [
                                           Expanded(
                                             flex: 2,
                                             child: AutoSizeText(
@@ -1525,7 +1530,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                       child: Text(
                         '$text',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: PeopleChaoScreen_Color.Colors_Text1_,
                             fontWeight: FontWeight.bold,
                             fontFamily: FontWeight_.Fonts_T
@@ -1608,9 +1613,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                     // height: 450,
                     child: Column(
                       children: [
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: AutoSizeText(
@@ -1711,7 +1716,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                             child: const Text('')),
                                       ),
                                     )
-                                  : SizedBox(),
+                                  : const SizedBox(),
                               (Responsive.isDesktop(context))
                                   ? Expanded(
                                       flex: 1,
@@ -1833,8 +1838,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                         child: Container(
                                                                             padding: const EdgeInsets.all(10),
                                                                             width: MediaQuery.of(context).size.width,
-                                                                            child: Row(
-                                                                              children: const [
+                                                                            child: const Row(
+                                                                              children: [
                                                                                 Expanded(
                                                                                   child: Text(
                                                                                     'ไม่ระบุพื้นที่',
@@ -2003,8 +2008,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                         child: Container(
                                                                             padding: const EdgeInsets.all(10),
                                                                             width: MediaQuery.of(context).size.width,
-                                                                            child: Row(
-                                                                              children: const [
+                                                                            child: const Row(
+                                                                              children: [
                                                                                 Expanded(
                                                                                   child: Text(
                                                                                     'ระบุพื้นที่',
@@ -2255,7 +2260,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                             }),
                                       ),
                                     )
-                                  : SizedBox(),
+                                  : const SizedBox(),
                               Expanded(
                                 flex: (Responsive.isDesktop(context)) ? 1 : 2,
                                 child: Padding(
@@ -3971,7 +3976,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   }
                                                   // }
                                                 },
-                                                icon: Icon(Icons.east))),
+                                                icon: const Icon(Icons.east))),
                                       ],
                                     ),
                                   ),
@@ -3982,7 +3987,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                         ),
                         Container(
                           color: Colors.white,
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -4236,7 +4241,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           maxLines: 1,
                                           '${_TransModels[index].name}',
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: PeopleChaoScreen_Color
                                                   .Colors_Text2_,
                                               //fontWeight: FontWeight.bold,
@@ -4251,7 +4256,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           maxLines: 1,
                                           '${_TransModels[index].tqty}',
                                           textAlign: TextAlign.end,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: PeopleChaoScreen_Color
                                                   .Colors_Text2_,
                                               //fontWeight: FontWeight.bold,
@@ -4883,7 +4888,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       height: 50,
                                       color: AppbackgroundColor.Sub_Abg_Colors,
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
+                                      child: const Text(
                                         'ยอดชำระรวม',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
@@ -4942,7 +4947,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       height: 40,
                                       color: AppbackgroundColor.Sub_Abg_Colors,
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
+                                      child: const Text(
                                         'ใบเสร็จ',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
@@ -5073,7 +5078,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                         color:
                                             AppbackgroundColor.Sub_Abg_Colors,
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(
+                                        child: const Text(
                                           'หัวบิล',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
@@ -5251,7 +5256,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                 } else {}
                                               },
                                               icon: pamentpage == 0
-                                                  ? Icon(
+                                                  ? const Icon(
                                                       Icons.add_circle_outline,
                                                       color: Colors.green,
                                                     )
@@ -5303,7 +5308,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                 children: [
                                                   Text(
                                                     '$paymentName1',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 14,
                                                         color:
                                                             PeopleChaoScreen_Color
@@ -5334,9 +5339,14 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                           setState(() {
                                                             selectedValue =
                                                                 item.bno!;
+                                                            newValuePDFimg_QR = (item
+                                                                            .img ==
+                                                                        null ||
+                                                                    item.img.toString() ==
+                                                                        '')
+                                                                ? '${MyConstant().domain}/Awaitdownload/imagenot.png'
+                                                                : '${MyConstant().domain}/files/$foder/payment/${item.img}';
                                                           });
-                                                          print(
-                                                              '**/*/*   --- ${selectedValue}');
                                                         },
                                                         value:
                                                             '${item.ser}:${item.ptname}',
@@ -5383,10 +5393,12 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                 // print(
                                                 //     'mmmmm ${rtnameSer.toString()} $rtnameName');
                                                 setState(() {
+                                                  pamentpage = 0;
+                                                  paymentName2 = null;
+
                                                   paymentSer1 =
                                                       rtnameSer.toString();
-                                                  // paymentName1 =
-                                                  //     rtnameName.toString();
+                                                  Form_payment2.clear();
 
                                                   if (rtnameSer.toString() ==
                                                       '0') {
@@ -5422,7 +5434,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           ),
                                         ),
                                         pamentpage == 0
-                                            ? SizedBox()
+                                            ? const SizedBox()
                                             : Expanded(
                                                 child: Container(
                                                   decoration:
@@ -5463,8 +5475,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                     ),
                                                     isExpanded: true,
                                                     // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                    hint: Row(
-                                                      children: const [
+                                                    hint: const Row(
+                                                      children: [
                                                         Text(
                                                           'เลือก',
                                                           style: TextStyle(
@@ -5493,43 +5505,113 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                           BorderRadius.circular(
                                                               15),
                                                     ),
-                                                    items: _PayMentModels.map(
-                                                        (item) =>
-                                                            DropdownMenuItem<
-                                                                String>(
-                                                              value:
-                                                                  '${item.ser}:${item.ptname}',
-                                                              child: Row(
-                                                                children: [
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      '${item.ptname!}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      style: const TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
+                                                    items: (paymentName1
+                                                                    .toString()
+                                                                    .trim() ==
+                                                                'เงินโอน' ||
+                                                            paymentName1
+                                                                    .toString()
+                                                                    .trim() ==
+                                                                'Online Payment')
+                                                        ? _PayMentModels.where((item) =>
+                                                                item.ptser.toString() !=
+                                                                    '5' &&
+                                                                item.ptser.toString() !=
+                                                                    '2')
+                                                            .map((item) =>
+                                                                DropdownMenuItem<
+                                                                    String>(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      newValuePDFimg_QR = (item.img == null ||
+                                                                              item.img.toString() == '')
+                                                                          ? '${MyConstant().domain}/Awaitdownload/imagenot.png'
+                                                                          : '${MyConstant().domain}/files/$foder/payment/${item.img}';
+                                                                      selectedValue2 =
+                                                                          item.bno!;
+                                                                    });
+                                                                  },
+                                                                  value:
+                                                                      '${item.ser}:${item.ptname}',
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child:
+                                                                            Text(
+                                                                          '${item.ptname!}',
+                                                                          textAlign:
+                                                                              TextAlign.start,
+                                                                          style: const TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        child:
+                                                                            Text(
+                                                                          '${item.bno!}',
+                                                                          textAlign:
+                                                                              TextAlign.end,
+                                                                          style: const TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      '${item.bno!}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      style: const TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
+                                                                ))
+                                                            .toList()
+                                                        : _PayMentModels.map(
+                                                            (item) => DropdownMenuItem<String>(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      newValuePDFimg_QR = (item.img == null ||
+                                                                              item.img.toString() == '')
+                                                                          ? '${MyConstant().domain}/Awaitdownload/imagenot.png'
+                                                                          : '${MyConstant().domain}/files/$foder/payment/${item.img}';
+                                                                      selectedValue2 =
+                                                                          item.bno!;
+                                                                    });
+                                                                  },
+                                                                  value:
+                                                                      '${item.ser}:${item.ptname}',
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child:
+                                                                            Text(
+                                                                          '${item.ptname!}',
+                                                                          textAlign:
+                                                                              TextAlign.start,
+                                                                          style: const TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        child:
+                                                                            Text(
+                                                                          '${item.bno!}',
+                                                                          textAlign:
+                                                                              TextAlign.end,
+                                                                          style: const TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
-                                                                ],
-                                                              ),
-                                                            )).toList(),
+                                                                )).toList(),
                                                     onChanged: (value) async {
                                                       // Do something when changing the item if you want.
 
@@ -5749,7 +5831,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           ),
                                         ),
                                         pamentpage == 0
-                                            ? SizedBox()
+                                            ? const SizedBox()
                                             : Expanded(
                                                 child: Container(
                                                   height: 50,
@@ -6395,10 +6477,10 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                               .Fonts_T),
                                                                 )),
                                                                 content:
-                                                                    SingleChildScrollView(
+                                                                    const SingleChildScrollView(
                                                                   child:
                                                                       ListBody(
-                                                                    children: const <Widget>[
+                                                                    children: <Widget>[
                                                                       Text(
                                                                         'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
                                                                         style: TextStyle(
@@ -6753,7 +6835,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 20,
                                       ),
                                     ],
@@ -6761,9 +6843,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                 ),
                               Container(
                                 height: 10,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: AppbackgroundColor.Sub_Abg_Colors,
-                                  borderRadius: const BorderRadius.only(
+                                  borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(0),
                                     topRight: Radius.circular(0),
                                     bottomLeft: Radius.circular(10),
@@ -6924,7 +7006,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         children: [
-                                          Row(
+                                          const Row(
                                             children: [
                                               Text(
                                                 'หมายเหตุ',
@@ -6996,7 +7078,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               (paymentName1.toString().trim() ==
@@ -7011,16 +7093,17 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                               height: 50,
                                               decoration: BoxDecoration(
                                                 color: Colors.blue[900],
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        const Radius.circular(
-                                                            10),
-                                                    topRight:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(10),
-                                                    bottomRight:
-                                                        Radius.circular(10)),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10)),
                                                 // border: Border.all(color: Colors.white, width: 1),
                                               ),
                                               padding:
@@ -7050,368 +7133,454 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   )),
                                                 ],
                                               )),
-                                          onTap:
-                                              (paymentName1.toString().trim() !=
+                                          onTap: (paymentName1
+                                                          .toString()
+                                                          .trim() !=
+                                                      'Online Payment' &&
+                                                  paymentName2
+                                                          .toString()
+                                                          .trim() !=
+                                                      'Online Payment')
+                                              ? null
+                                              : () {
+                                                  double totalQr_ = 0.00;
+                                                  if (paymentName1
+                                                              .toString()
+                                                              .trim() ==
                                                           'Online Payment' &&
                                                       paymentName2
                                                               .toString()
-                                                              .trim() !=
-                                                          'Online Payment')
-                                                  ? null
-                                                  : () {
-                                                      double totalQr_ = 0.00;
-                                                      if (paymentName1
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'Online Payment' &&
-                                                          paymentName2
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'Online Payment') {
-                                                        setState(() {
-                                                          totalQr_ = 0.00;
-                                                        });
-                                                        setState(() {
-                                                          totalQr_ = double.parse(
-                                                                  '${Form_payment1.text}') +
-                                                              double.parse(
-                                                                  '${Form_payment2.text}');
-                                                        });
-                                                      } else if (paymentName1
-                                                              .toString()
                                                               .trim() ==
                                                           'Online Payment') {
-                                                        setState(() {
-                                                          totalQr_ = 0.00;
-                                                        });
-                                                        setState(() {
-                                                          totalQr_ = double.parse(
-                                                              '${Form_payment1.text}');
-                                                        });
-                                                      } else if (paymentName2
-                                                              .toString()
-                                                              .trim() ==
-                                                          'Online Payment') {
-                                                        setState(() {
-                                                          totalQr_ = 0.00;
-                                                        });
-                                                        setState(() {
-                                                          totalQr_ = double.parse(
+                                                    setState(() {
+                                                      totalQr_ = 0.00;
+                                                    });
+                                                    setState(() {
+                                                      totalQr_ = double.parse(
+                                                              '${Form_payment1.text}') +
+                                                          double.parse(
                                                               '${Form_payment2.text}');
-                                                        });
-                                                      }
+                                                    });
+                                                  } else if (paymentName1
+                                                          .toString()
+                                                          .trim() ==
+                                                      'Online Payment') {
+                                                    setState(() {
+                                                      totalQr_ = 0.00;
+                                                    });
+                                                    setState(() {
+                                                      totalQr_ = double.parse(
+                                                          '${Form_payment1.text}');
+                                                    });
+                                                  } else if (paymentName2
+                                                          .toString()
+                                                          .trim() ==
+                                                      'Online Payment') {
+                                                    setState(() {
+                                                      totalQr_ = 0.00;
+                                                    });
+                                                    setState(() {
+                                                      totalQr_ = double.parse(
+                                                          '${Form_payment2.text}');
+                                                    });
+                                                  }
+                                                  String text1 =
+                                                      Form_payment1.text ?? '0';
+                                                  String text2 =
+                                                      Form_payment2.text ?? '0';
 
-                                                      showDialog<void>(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            false, // user must tap button!
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            shape: const RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20.0))),
-                                                            // title: Center(
-                                                            //     child: Container(
-                                                            //         decoration: BoxDecoration(
-                                                            //           color: Colors.blue[300],
-                                                            //           borderRadius:
-                                                            //               const BorderRadius
-                                                            //                       .only(
-                                                            //                   topLeft: Radius
-                                                            //                       .circular(10),
-                                                            //                   topRight: Radius
-                                                            //                       .circular(10),
-                                                            //                   bottomLeft: Radius
-                                                            //                       .circular(10),
-                                                            //                   bottomRight:
-                                                            //                       Radius
-                                                            //                           .circular(
-                                                            //                               10)),
-                                                            //         ),
-                                                            //         padding:
-                                                            //             const EdgeInsets.all(
-                                                            //                 4.0),
-                                                            //         child: const Text(
-                                                            //           ' QR PromtPay',
-                                                            //           style: TextStyle(
-                                                            //             color: Colors.white,
-                                                            //             fontWeight:
-                                                            //                 FontWeight.bold,
-                                                            //           ),
-                                                            //         ))),
-                                                            content:
-                                                                SingleChildScrollView(
-                                                              child: ListBody(
-                                                                children: <Widget>[
-                                                                  //  '${Form_bussshop}',
-                                                                  //   '${Form_address}',
-                                                                  //   '${Form_tel}',
-                                                                  //   '${Form_email}',
-                                                                  //   '${Form_tax}',
-                                                                  //   '${Form_nameshop}',
-                                                                  Center(
-                                                                    child:
-                                                                        RepaintBoundary(
-                                                                      key:
-                                                                          qrImageKey,
+                                                  double value1 =
+                                                      double.tryParse(
+                                                              text1.replaceAll(
+                                                                  ',', '')) ??
+                                                          0;
+                                                  double value2 =
+                                                      double.tryParse(
+                                                              text2.replaceAll(
+                                                                  ',', '')) ??
+                                                          0;
+                                                  double sum = value1 + value2;
+                                                  showDialog<void>(
+                                                    context: context,
+                                                    barrierDismissible:
+                                                        false, // user must tap button!
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        shape: const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        20.0))),
+
+                                                        content:
+                                                            SingleChildScrollView(
+                                                          child: ListBody(
+                                                            children: <Widget>[
+                                                              SizedBox(
+                                                                height: 20,
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context,
+                                                                            'OK');
+                                                                      },
+                                                                      child:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .cancel,
+                                                                        color: Colors
+                                                                            .red,
+                                                                        size:
+                                                                            22,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              (paymentName1.toString().trim() ==
+                                                                          'เงินโอน' ||
+                                                                      paymentName2
+                                                                              .toString()
+                                                                              .trim() ==
+                                                                          'เงินโอน')
+                                                                  ? Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Container(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        padding: const EdgeInsets.fromLTRB(
-                                                                            4,
-                                                                            8,
-                                                                            4,
-                                                                            2),
                                                                         child:
                                                                             Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
                                                                           children: [
-                                                                            // Text(
-                                                                            //   '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
-                                                                            //   style: TextStyle(
-                                                                            //     color:
-                                                                            //         Colors.red,
-                                                                            //     fontWeight:
-                                                                            //         FontWeight
-                                                                            //             .bold,
-                                                                            //   ),
-                                                                            // ),
-                                                                            Center(
+                                                                            const Text(
+                                                                              'รูปแบบ : โอนตามเลขบัญชี หรือรูปที่แนบไว้',
+                                                                              style: TextStyle(
+                                                                                fontSize: 16,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
                                                                               child: Container(
-                                                                                width: 220,
-                                                                                decoration: BoxDecoration(
-                                                                                  color: Colors.green[300],
-                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                ),
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Center(
-                                                                                  child: Text(
-                                                                                    '$renTal_name',
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.white,
-                                                                                      fontSize: 13,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            // Align(
-                                                                            //   alignment: Alignment
-                                                                            //       .centerLeft,
-                                                                            //   child: Text(
-                                                                            //     'คุณ : $Form_bussshop',
-                                                                            //     style:
-                                                                            //         TextStyle(
-                                                                            //       fontSize: 13,
-                                                                            //       fontWeight:
-                                                                            //           FontWeight
-                                                                            //               .bold,
-                                                                            //     ),
-                                                                            //   ),
-                                                                            // ),
-                                                                            Container(
-                                                                              height: 60,
-                                                                              width: 220,
-                                                                              child: Image.asset(
-                                                                                "images/thai_qr_payment.png",
-                                                                                height: 60,
-                                                                                width: 220,
-                                                                                fit: BoxFit.cover,
-                                                                              ),
-                                                                            ),
-                                                                            Container(
-                                                                              width: 200,
-                                                                              height: 200,
-                                                                              child: Center(
-                                                                                child: PrettyQr(
-                                                                                  // typeNumber: 3,
-                                                                                  image: AssetImage(
-                                                                                    "images/Icon-chao.png",
-                                                                                  ),
-                                                                                  size: 200,
-                                                                                  data: generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
-                                                                                  errorCorrectLevel: QrErrorCorrectLevel.M,
-                                                                                  roundEdges: true,
-                                                                                ),
-                                                                              ),
+                                                                                  color: Colors.grey,
+                                                                                  width: 200,
+                                                                                  height: 200,
+                                                                                  child: (newValuePDFimg_QR == null || newValuePDFimg_QR.toString() == '')
+                                                                                      ? const Icon(
+                                                                                          Icons.image_not_supported,
+                                                                                          color: Colors.white,
+                                                                                          // size: 22,
+                                                                                        )
+                                                                                      : Image.network('$newValuePDFimg_QR')),
                                                                             ),
                                                                             Text(
-                                                                              'พร้อมเพย์ : $selectedValue',
-                                                                              style: TextStyle(
+                                                                              'บัญชี : $selectedValue',
+                                                                              style: const TextStyle(
                                                                                 fontSize: 13,
                                                                                 fontWeight: FontWeight.bold,
                                                                               ),
                                                                             ),
                                                                             Text(
-                                                                              'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
-                                                                              style: TextStyle(
+                                                                              'จำนวนเงิน : ${nFormat.format(sum)} บาท',
+                                                                              style: const TextStyle(
                                                                                 fontSize: 13,
                                                                                 fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
-                                                                            Text(
-                                                                              '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
-                                                                              style: TextStyle(
-                                                                                fontSize: 10,
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
-                                                                            Container(
-                                                                              color: Color(0xFFD9D9B7),
-                                                                              height: 60,
-                                                                              width: 220,
-                                                                              child: Image.asset(
-                                                                                "images/LOGOchao.png",
-                                                                                height: 70,
-                                                                                width: 220,
                                                                               ),
                                                                             ),
                                                                           ],
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ),
-                                                                  Center(
-                                                                    child:
-                                                                        Container(
+                                                                    )
+                                                                  : Container(
+                                                                      // height: 600,
                                                                       width:
-                                                                          220,
-                                                                      decoration:
-                                                                          const BoxDecoration(
-                                                                        color: Colors
-                                                                            .green,
-                                                                        borderRadius: BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(0),
-                                                                            topRight: Radius.circular(0),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                      ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          TextButton(
-                                                                        onPressed:
-                                                                            () async {
-                                                                          // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
-
-                                                                          RenderRepaintBoundary
-                                                                              boundary =
-                                                                              qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-                                                                          ui.Image
-                                                                              image =
-                                                                              await boundary.toImage();
-                                                                          ByteData?
-                                                                              byteData =
-                                                                              await image.toByteData(format: ui.ImageByteFormat.png);
-                                                                          Uint8List
-                                                                              bytes =
-                                                                              byteData!.buffer.asUint8List();
-                                                                          html.Blob
-                                                                              blob =
-                                                                              html.Blob([
-                                                                            bytes
-                                                                          ]);
-                                                                          String
-                                                                              url =
-                                                                              html.Url.createObjectUrlFromBlob(blob);
-
-                                                                          html.AnchorElement
-                                                                              anchor =
-                                                                              html.AnchorElement()
-                                                                                ..href = url
-                                                                                ..setAttribute('download', 'qrcode.png')
-                                                                                ..click();
-
-                                                                          html.Url.revokeObjectUrl(
-                                                                              url);
-                                                                        },
-                                                                        child:
-                                                                            const Text(
-                                                                          'Download QR Code',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
+                                                                          320,
+                                                                      child: WebViewX2Page(
+                                                                          id_ser: (paymentName1.toString().trim() == 'Online Payment')
+                                                                              ? '$selectedValue'
+                                                                              : (paymentName2.toString().trim() == 'Online Payment')
+                                                                                  ? '$selectedValue2'
+                                                                                  : 'ไม่พบเลขบัญชี',
+                                                                          amt_ser: (paymentName1.toString().trim() == 'Online Payment' && paymentName2.toString().trim() == 'Online Payment')
+                                                                              ? '${value1 + value2}'
+                                                                              : (paymentName1.toString().trim() == 'Online Payment')
+                                                                                  ? '${value1}'
+                                                                                  : (paymentName2.toString().trim() == 'Online Payment')
+                                                                                      ? '${value2}'
+                                                                                      : '0.00',
+                                                                          name_ser: (paymentName1.toString().trim() == 'Online Payment')
+                                                                              ? '$bname1'
+                                                                              : (paymentName2.toString().trim() == 'Online Payment')
+                                                                                  ? '$bname2'
+                                                                                  : 'ไม่พบชื่อบัญชี'),
                                                                     ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            actions: <Widget>[
-                                                              Column(
-                                                                children: [
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  const Divider(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    height: 4.0,
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .end,
-                                                                      children: [
-                                                                        Container(
-                                                                          width:
-                                                                              100,
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
-                                                                          ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              TextButton(
-                                                                            onPressed: () =>
-                                                                                Navigator.pop(context, 'OK'),
-                                                                            child:
-                                                                                const Text(
-                                                                              'ปิด',
-                                                                              style: TextStyle(
-                                                                                color: Colors.white,
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
+                                                              // Center(
+                                                              //   child:
+                                                              //       RepaintBoundary(
+                                                              //     key:
+                                                              //         qrImageKey,
+                                                              //     child:
+                                                              //         Container(
+                                                              //       color: Colors
+                                                              //           .white,
+                                                              //       padding: const EdgeInsets.fromLTRB(
+                                                              //           4,
+                                                              //           8,
+                                                              //           4,
+                                                              //           2),
+                                                              //       child:
+                                                              //           Column(
+                                                              //         crossAxisAlignment:
+                                                              //             CrossAxisAlignment.center,
+                                                              //         children: [
+                                                              //           // Text(
+                                                              //           //   '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
+                                                              //           //   style: TextStyle(
+                                                              //           //     color:
+                                                              //           //         Colors.red,
+                                                              //           //     fontWeight:
+                                                              //           //         FontWeight
+                                                              //           //             .bold,
+                                                              //           //   ),
+                                                              //           // ),
+                                                              //           Center(
+                                                              //             child: Container(
+                                                              //               width: 220,
+                                                              //               decoration: BoxDecoration(
+                                                              //                 color: Colors.green[300],
+                                                              //                 borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                              //               ),
+                                                              //               padding: const EdgeInsets.all(8.0),
+                                                              //               child: Center(
+                                                              //                 child: Text(
+                                                              //                   '$renTal_name',
+                                                              //                   style: TextStyle(
+                                                              //                     color: Colors.white,
+                                                              //                     fontSize: 13,
+                                                              //                     fontWeight: FontWeight.bold,
+                                                              //                   ),
+                                                              //                 ),
+                                                              //               ),
+                                                              //             ),
+                                                              //           ),
+                                                              //           // Align(
+                                                              //           //   alignment: Alignment
+                                                              //           //       .centerLeft,
+                                                              //           //   child: Text(
+                                                              //           //     'คุณ : $Form_bussshop',
+                                                              //           //     style:
+                                                              //           //         TextStyle(
+                                                              //           //       fontSize: 13,
+                                                              //           //       fontWeight:
+                                                              //           //           FontWeight
+                                                              //           //               .bold,
+                                                              //           //     ),
+                                                              //           //   ),
+                                                              //           // ),
+                                                              //           Container(
+                                                              //             height: 60,
+                                                              //             width: 220,
+                                                              //             child: Image.asset(
+                                                              //               "images/thai_qr_payment.png",
+                                                              //               height: 60,
+                                                              //               width: 220,
+                                                              //               fit: BoxFit.cover,
+                                                              //             ),
+                                                              //           ),
+                                                              //           Container(
+                                                              //             width: 200,
+                                                              //             height: 200,
+                                                              //             child: Center(
+                                                              //               child: PrettyQr(
+                                                              //                 // typeNumber: 3,
+                                                              //                 image: AssetImage(
+                                                              //                   "images/Icon-chao.png",
+                                                              //                 ),
+                                                              //                 size: 200,
+                                                              //                 data: generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
+                                                              //                 errorCorrectLevel: QrErrorCorrectLevel.M,
+                                                              //                 roundEdges: true,
+                                                              //               ),
+                                                              //             ),
+                                                              //           ),
+                                                              //           Text(
+                                                              //             'พร้อมเพย์ : $selectedValue',
+                                                              //             style: TextStyle(
+                                                              //               fontSize: 13,
+                                                              //               fontWeight: FontWeight.bold,
+                                                              //             ),
+                                                              //           ),
+                                                              //           Text(
+                                                              //             'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
+                                                              //             style: TextStyle(
+                                                              //               fontSize: 13,
+                                                              //               fontWeight: FontWeight.bold,
+                                                              //             ),
+                                                              //           ),
+                                                              //           Text(
+                                                              //             '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
+                                                              //             style: TextStyle(
+                                                              //               fontSize: 10,
+                                                              //               fontWeight: FontWeight.bold,
+                                                              //             ),
+                                                              //           ),
+                                                              //           Container(
+                                                              //             color: Color(0xFFD9D9B7),
+                                                              //             height: 60,
+                                                              //             width: 220,
+                                                              //             child: Image.asset(
+                                                              //               "images/LOGOchao.png",
+                                                              //               height: 70,
+                                                              //               width: 220,
+                                                              //             ),
+                                                              //           ),
+                                                              //         ],
+                                                              //       ),
+                                                              //     ),
+                                                              //   ),
+                                                              // ),
+                                                              // Center(
+                                                              //   child:
+                                                              //       Container(
+                                                              //     width:
+                                                              //         220,
+                                                              //     decoration:
+                                                              //         const BoxDecoration(
+                                                              //       color: Colors
+                                                              //           .green,
+                                                              //       borderRadius: BorderRadius.only(
+                                                              //           topLeft:
+                                                              //               Radius.circular(0),
+                                                              //           topRight: Radius.circular(0),
+                                                              //           bottomLeft: Radius.circular(10),
+                                                              //           bottomRight: Radius.circular(10)),
+                                                              //     ),
+                                                              //     padding:
+                                                              //         const EdgeInsets.all(
+                                                              //             8.0),
+                                                              //     child:
+                                                              //         TextButton(
+                                                              //       onPressed:
+                                                              //           () async {
+                                                              //         // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
+
+                                                              //         RenderRepaintBoundary
+                                                              //             boundary =
+                                                              //             qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+                                                              //         ui.Image
+                                                              //             image =
+                                                              //             await boundary.toImage();
+                                                              //         ByteData?
+                                                              //             byteData =
+                                                              //             await image.toByteData(format: ui.ImageByteFormat.png);
+                                                              //         Uint8List
+                                                              //             bytes =
+                                                              //             byteData!.buffer.asUint8List();
+                                                              //         html.Blob
+                                                              //             blob =
+                                                              //             html.Blob([
+                                                              //           bytes
+                                                              //         ]);
+                                                              //         String
+                                                              //             url =
+                                                              //             html.Url.createObjectUrlFromBlob(blob);
+
+                                                              //         html.AnchorElement
+                                                              //             anchor =
+                                                              //             html.AnchorElement()
+                                                              //               ..href = url
+                                                              //               ..setAttribute('download', 'qrcode.png')
+                                                              //               ..click();
+
+                                                              //         html.Url.revokeObjectUrl(
+                                                              //             url);
+                                                              //       },
+                                                              //       child:
+                                                              //           const Text(
+                                                              //         'Download QR Code',
+                                                              //         style:
+                                                              //             TextStyle(
+                                                              //           color:
+                                                              //               Colors.white,
+                                                              //           fontWeight:
+                                                              //               FontWeight.bold,
+                                                              //         ),
+                                                              //       ),
+                                                              //     ),
+                                                              //   ),
+                                                              // ),
                                                             ],
-                                                          );
-                                                        },
+                                                          ),
+                                                        ),
+                                                        // actions: <Widget>[
+                                                        //   Column(
+                                                        //     children: [
+                                                        //       const SizedBox(
+                                                        //         height: 5.0,
+                                                        //       ),
+                                                        //       const Divider(
+                                                        //         color: Colors
+                                                        //             .grey,
+                                                        //         height: 4.0,
+                                                        //       ),
+                                                        //       const SizedBox(
+                                                        //         height: 5.0,
+                                                        //       ),
+                                                        //       Padding(
+                                                        //         padding:
+                                                        //             const EdgeInsets.all(
+                                                        //                 8.0),
+                                                        //         child: Row(
+                                                        //           mainAxisAlignment:
+                                                        //               MainAxisAlignment
+                                                        //                   .end,
+                                                        //           children: [
+                                                        //             Container(
+                                                        //               width:
+                                                        //                   100,
+                                                        //               decoration:
+                                                        //                   const BoxDecoration(
+                                                        //                 color:
+                                                        //                     Colors.black,
+                                                        //                 borderRadius: BorderRadius.only(
+                                                        //                     topLeft: Radius.circular(10),
+                                                        //                     topRight: Radius.circular(10),
+                                                        //                     bottomLeft: Radius.circular(10),
+                                                        //                     bottomRight: Radius.circular(10)),
+                                                        //               ),
+                                                        //               padding:
+                                                        //                   const EdgeInsets.all(8.0),
+                                                        //               child:
+                                                        //                   TextButton(
+                                                        //                 onPressed: () =>
+                                                        //                     Navigator.pop(context, 'OK'),
+                                                        //                 child:
+                                                        //                     const Text(
+                                                        //                   'ปิด',
+                                                        //                   style: TextStyle(
+                                                        //                     color: Colors.white,
+                                                        //                     fontWeight: FontWeight.bold,
+                                                        //                   ),
+                                                        //                 ),
+                                                        //               ),
+                                                        //             ),
+                                                        //           ],
+                                                        //         ),
+                                                        //       ),
+                                                        //     ],
+                                                        //   ),
+                                                        // ],
                                                       );
                                                     },
+                                                  );
+                                                },
                                         ),
                                         if (paymentName1.toString().trim() !=
                                                 'Online Payment' &&
@@ -7427,9 +7596,10 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   color: Colors.grey
                                                       .withOpacity(0.5),
                                                   borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(10),
+                                                      const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  10),
                                                           topRight:
                                                               Radius.circular(
                                                                   10),
@@ -7444,7 +7614,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                               )),
                                       ],
                                     )
-                                  : SizedBox(),
+                                  : const SizedBox(),
                               Row(
                                 children: [
                                   const Expanded(
@@ -7857,11 +8027,11 @@ class _LockpayScreenState extends State<LockpayScreen> {
                         ),
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
             ],
           ),
           (Responsive.isDesktop(context))
-              ? SizedBox()
+              ? const SizedBox()
               : Row(
                   children: [
                     Expanded(
@@ -7917,7 +8087,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                         color:
                                             AppbackgroundColor.Sub_Abg_Colors,
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(
+                                        child: const Text(
                                           'หัวบิล',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
@@ -8056,7 +8226,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       height: 50,
                                       color: AppbackgroundColor.Sub_Abg_Colors,
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
+                                      child: const Text(
                                         'ยอดชำระรวม',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
@@ -8115,7 +8285,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       height: 40,
                                       color: AppbackgroundColor.Sub_Abg_Colors,
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
+                                      child: const Text(
                                         'ใบเสร็จ',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
@@ -8285,7 +8455,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                 } else {}
                                               },
                                               icon: pamentpage == 0
-                                                  ? Icon(
+                                                  ? const Icon(
                                                       Icons.add_circle_outline,
                                                       color: Colors.green,
                                                     )
@@ -8337,7 +8507,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                 children: [
                                                   Text(
                                                     '$paymentName1',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 14,
                                                         color:
                                                             PeopleChaoScreen_Color
@@ -8456,7 +8626,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           ),
                                         ),
                                         pamentpage == 0
-                                            ? SizedBox()
+                                            ? const SizedBox()
                                             : Expanded(
                                                 child: Container(
                                                   decoration:
@@ -8497,8 +8667,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                     ),
                                                     isExpanded: true,
                                                     // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                    hint: Row(
-                                                      children: const [
+                                                    hint: const Row(
+                                                      children: [
                                                         Text(
                                                           'เลือก',
                                                           style: TextStyle(
@@ -8783,7 +8953,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           ),
                                         ),
                                         pamentpage == 0
-                                            ? SizedBox()
+                                            ? const SizedBox()
                                             : Expanded(
                                                 child: Container(
                                                   height: 50,
@@ -9429,10 +9599,10 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                               .Fonts_T),
                                                                 )),
                                                                 content:
-                                                                    SingleChildScrollView(
+                                                                    const SingleChildScrollView(
                                                                   child:
                                                                       ListBody(
-                                                                    children: const <Widget>[
+                                                                    children: <Widget>[
                                                                       Text(
                                                                         'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
                                                                         style: TextStyle(
@@ -9787,7 +9957,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 20,
                                       ),
                                     ],
@@ -9795,9 +9965,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                 ),
                               Container(
                                 height: 10,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: AppbackgroundColor.Sub_Abg_Colors,
-                                  borderRadius: const BorderRadius.only(
+                                  borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(0),
                                     topRight: Radius.circular(0),
                                     bottomLeft: Radius.circular(10),
@@ -9958,7 +10128,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         children: [
-                                          Row(
+                                          const Row(
                                             children: [
                                               Text(
                                                 'หมายเหตุ',
@@ -10030,7 +10200,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               (paymentName1.toString().trim() ==
@@ -10045,16 +10215,17 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                               height: 50,
                                               decoration: BoxDecoration(
                                                 color: Colors.blue[900],
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        const Radius.circular(
-                                                            10),
-                                                    topRight:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(10),
-                                                    bottomRight:
-                                                        Radius.circular(10)),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10)),
                                                 // border: Border.all(color: Colors.white, width: 1),
                                               ),
                                               padding:
@@ -10084,368 +10255,454 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   )),
                                                 ],
                                               )),
-                                          onTap:
-                                              (paymentName1.toString().trim() !=
+                                          onTap: (paymentName1
+                                                          .toString()
+                                                          .trim() !=
+                                                      'Online Payment' &&
+                                                  paymentName2
+                                                          .toString()
+                                                          .trim() !=
+                                                      'Online Payment')
+                                              ? null
+                                              : () {
+                                                  double totalQr_ = 0.00;
+                                                  if (paymentName1
+                                                              .toString()
+                                                              .trim() ==
                                                           'Online Payment' &&
                                                       paymentName2
                                                               .toString()
-                                                              .trim() !=
-                                                          'Online Payment')
-                                                  ? null
-                                                  : () {
-                                                      double totalQr_ = 0.00;
-                                                      if (paymentName1
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'Online Payment' &&
-                                                          paymentName2
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'Online Payment') {
-                                                        setState(() {
-                                                          totalQr_ = 0.00;
-                                                        });
-                                                        setState(() {
-                                                          totalQr_ = double.parse(
-                                                                  '${Form_payment1.text}') +
-                                                              double.parse(
-                                                                  '${Form_payment2.text}');
-                                                        });
-                                                      } else if (paymentName1
-                                                              .toString()
                                                               .trim() ==
                                                           'Online Payment') {
-                                                        setState(() {
-                                                          totalQr_ = 0.00;
-                                                        });
-                                                        setState(() {
-                                                          totalQr_ = double.parse(
-                                                              '${Form_payment1.text}');
-                                                        });
-                                                      } else if (paymentName2
-                                                              .toString()
-                                                              .trim() ==
-                                                          'Online Payment') {
-                                                        setState(() {
-                                                          totalQr_ = 0.00;
-                                                        });
-                                                        setState(() {
-                                                          totalQr_ = double.parse(
+                                                    setState(() {
+                                                      totalQr_ = 0.00;
+                                                    });
+                                                    setState(() {
+                                                      totalQr_ = double.parse(
+                                                              '${Form_payment1.text}') +
+                                                          double.parse(
                                                               '${Form_payment2.text}');
-                                                        });
-                                                      }
+                                                    });
+                                                  } else if (paymentName1
+                                                          .toString()
+                                                          .trim() ==
+                                                      'Online Payment') {
+                                                    setState(() {
+                                                      totalQr_ = 0.00;
+                                                    });
+                                                    setState(() {
+                                                      totalQr_ = double.parse(
+                                                          '${Form_payment1.text}');
+                                                    });
+                                                  } else if (paymentName2
+                                                          .toString()
+                                                          .trim() ==
+                                                      'Online Payment') {
+                                                    setState(() {
+                                                      totalQr_ = 0.00;
+                                                    });
+                                                    setState(() {
+                                                      totalQr_ = double.parse(
+                                                          '${Form_payment2.text}');
+                                                    });
+                                                  }
+                                                  String text1 =
+                                                      Form_payment1.text ?? '0';
+                                                  String text2 =
+                                                      Form_payment2.text ?? '0';
 
-                                                      showDialog<void>(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            false, // user must tap button!
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            shape: const RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20.0))),
-                                                            // title: Center(
-                                                            //     child: Container(
-                                                            //         decoration: BoxDecoration(
-                                                            //           color: Colors.blue[300],
-                                                            //           borderRadius:
-                                                            //               const BorderRadius
-                                                            //                       .only(
-                                                            //                   topLeft: Radius
-                                                            //                       .circular(10),
-                                                            //                   topRight: Radius
-                                                            //                       .circular(10),
-                                                            //                   bottomLeft: Radius
-                                                            //                       .circular(10),
-                                                            //                   bottomRight:
-                                                            //                       Radius
-                                                            //                           .circular(
-                                                            //                               10)),
-                                                            //         ),
-                                                            //         padding:
-                                                            //             const EdgeInsets.all(
-                                                            //                 4.0),
-                                                            //         child: const Text(
-                                                            //           ' QR PromtPay',
-                                                            //           style: TextStyle(
-                                                            //             color: Colors.white,
-                                                            //             fontWeight:
-                                                            //                 FontWeight.bold,
-                                                            //           ),
-                                                            //         ))),
-                                                            content:
-                                                                SingleChildScrollView(
-                                                              child: ListBody(
-                                                                children: <Widget>[
-                                                                  //  '${Form_bussshop}',
-                                                                  //   '${Form_address}',
-                                                                  //   '${Form_tel}',
-                                                                  //   '${Form_email}',
-                                                                  //   '${Form_tax}',
-                                                                  //   '${Form_nameshop}',
-                                                                  Center(
-                                                                    child:
-                                                                        RepaintBoundary(
-                                                                      key:
-                                                                          qrImageKey,
+                                                  double value1 =
+                                                      double.tryParse(
+                                                              text1.replaceAll(
+                                                                  ',', '')) ??
+                                                          0;
+                                                  double value2 =
+                                                      double.tryParse(
+                                                              text2.replaceAll(
+                                                                  ',', '')) ??
+                                                          0;
+                                                  double sum = value1 + value2;
+                                                  showDialog<void>(
+                                                    context: context,
+                                                    barrierDismissible:
+                                                        false, // user must tap button!
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        shape: const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        20.0))),
+
+                                                        content:
+                                                            SingleChildScrollView(
+                                                          child: ListBody(
+                                                            children: <Widget>[
+                                                              SizedBox(
+                                                                height: 20,
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context,
+                                                                            'OK');
+                                                                      },
+                                                                      child:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .cancel,
+                                                                        color: Colors
+                                                                            .red,
+                                                                        size:
+                                                                            22,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              (paymentName1.toString().trim() ==
+                                                                          'เงินโอน' ||
+                                                                      paymentName2
+                                                                              .toString()
+                                                                              .trim() ==
+                                                                          'เงินโอน')
+                                                                  ? Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Container(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        padding: const EdgeInsets.fromLTRB(
-                                                                            4,
-                                                                            8,
-                                                                            4,
-                                                                            2),
                                                                         child:
                                                                             Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
                                                                           children: [
-                                                                            // Text(
-                                                                            //   '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
-                                                                            //   style: TextStyle(
-                                                                            //     color:
-                                                                            //         Colors.red,
-                                                                            //     fontWeight:
-                                                                            //         FontWeight
-                                                                            //             .bold,
-                                                                            //   ),
-                                                                            // ),
-                                                                            Center(
+                                                                            const Text(
+                                                                              'รูปแบบ : โอนตามเลขบัญชี หรือรูปที่แนบไว้',
+                                                                              style: TextStyle(
+                                                                                fontSize: 16,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
                                                                               child: Container(
-                                                                                width: 220,
-                                                                                decoration: BoxDecoration(
-                                                                                  color: Colors.green[300],
-                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                ),
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Center(
-                                                                                  child: Text(
-                                                                                    '$renTal_name',
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.white,
-                                                                                      fontSize: 13,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            // Align(
-                                                                            //   alignment: Alignment
-                                                                            //       .centerLeft,
-                                                                            //   child: Text(
-                                                                            //     'คุณ : $Form_bussshop',
-                                                                            //     style:
-                                                                            //         TextStyle(
-                                                                            //       fontSize: 13,
-                                                                            //       fontWeight:
-                                                                            //           FontWeight
-                                                                            //               .bold,
-                                                                            //     ),
-                                                                            //   ),
-                                                                            // ),
-                                                                            Container(
-                                                                              height: 60,
-                                                                              width: 220,
-                                                                              child: Image.asset(
-                                                                                "images/thai_qr_payment.png",
-                                                                                height: 60,
-                                                                                width: 220,
-                                                                                fit: BoxFit.cover,
-                                                                              ),
-                                                                            ),
-                                                                            Container(
-                                                                              width: 200,
-                                                                              height: 200,
-                                                                              child: Center(
-                                                                                child: PrettyQr(
-                                                                                  // typeNumber: 3,
-                                                                                  image: AssetImage(
-                                                                                    "images/Icon-chao.png",
-                                                                                  ),
-                                                                                  size: 200,
-                                                                                  data: generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
-                                                                                  errorCorrectLevel: QrErrorCorrectLevel.M,
-                                                                                  roundEdges: true,
-                                                                                ),
-                                                                              ),
+                                                                                  color: Colors.grey,
+                                                                                  width: 200,
+                                                                                  height: 200,
+                                                                                  child: (newValuePDFimg_QR == null || newValuePDFimg_QR.toString() == '')
+                                                                                      ? const Icon(
+                                                                                          Icons.image_not_supported,
+                                                                                          color: Colors.white,
+                                                                                          // size: 22,
+                                                                                        )
+                                                                                      : Image.network('$newValuePDFimg_QR')),
                                                                             ),
                                                                             Text(
-                                                                              'พร้อมเพย์ : $selectedValue',
-                                                                              style: TextStyle(
+                                                                              'บัญชี : $selectedValue',
+                                                                              style: const TextStyle(
                                                                                 fontSize: 13,
                                                                                 fontWeight: FontWeight.bold,
                                                                               ),
                                                                             ),
                                                                             Text(
-                                                                              'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
-                                                                              style: TextStyle(
+                                                                              'จำนวนเงิน : ${nFormat.format(sum)} บาท',
+                                                                              style: const TextStyle(
                                                                                 fontSize: 13,
                                                                                 fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
-                                                                            Text(
-                                                                              '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
-                                                                              style: TextStyle(
-                                                                                fontSize: 10,
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
-                                                                            Container(
-                                                                              color: Color(0xFFD9D9B7),
-                                                                              height: 60,
-                                                                              width: 220,
-                                                                              child: Image.asset(
-                                                                                "images/LOGOchao.png",
-                                                                                height: 70,
-                                                                                width: 220,
                                                                               ),
                                                                             ),
                                                                           ],
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ),
-                                                                  Center(
-                                                                    child:
-                                                                        Container(
+                                                                    )
+                                                                  : Container(
+                                                                      // height: 600,
                                                                       width:
-                                                                          220,
-                                                                      decoration:
-                                                                          const BoxDecoration(
-                                                                        color: Colors
-                                                                            .green,
-                                                                        borderRadius: BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(0),
-                                                                            topRight: Radius.circular(0),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                      ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          TextButton(
-                                                                        onPressed:
-                                                                            () async {
-                                                                          // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
-
-                                                                          RenderRepaintBoundary
-                                                                              boundary =
-                                                                              qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-                                                                          ui.Image
-                                                                              image =
-                                                                              await boundary.toImage();
-                                                                          ByteData?
-                                                                              byteData =
-                                                                              await image.toByteData(format: ui.ImageByteFormat.png);
-                                                                          Uint8List
-                                                                              bytes =
-                                                                              byteData!.buffer.asUint8List();
-                                                                          html.Blob
-                                                                              blob =
-                                                                              html.Blob([
-                                                                            bytes
-                                                                          ]);
-                                                                          String
-                                                                              url =
-                                                                              html.Url.createObjectUrlFromBlob(blob);
-
-                                                                          html.AnchorElement
-                                                                              anchor =
-                                                                              html.AnchorElement()
-                                                                                ..href = url
-                                                                                ..setAttribute('download', 'qrcode.png')
-                                                                                ..click();
-
-                                                                          html.Url.revokeObjectUrl(
-                                                                              url);
-                                                                        },
-                                                                        child:
-                                                                            const Text(
-                                                                          'Download QR Code',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
+                                                                          320,
+                                                                      child: WebViewX2Page(
+                                                                          id_ser: (paymentName1.toString().trim() == 'Online Payment')
+                                                                              ? '$selectedValue'
+                                                                              : (paymentName2.toString().trim() == 'Online Payment')
+                                                                                  ? '$selectedValue2'
+                                                                                  : 'ไม่พบเลขบัญชี',
+                                                                          amt_ser: (paymentName1.toString().trim() == 'Online Payment' && paymentName2.toString().trim() == 'Online Payment')
+                                                                              ? '${value1 + value2}'
+                                                                              : (paymentName1.toString().trim() == 'Online Payment')
+                                                                                  ? '${value1}'
+                                                                                  : (paymentName2.toString().trim() == 'Online Payment')
+                                                                                      ? '${value2}'
+                                                                                      : '0.00',
+                                                                          name_ser: (paymentName1.toString().trim() == 'Online Payment')
+                                                                              ? '$bname1'
+                                                                              : (paymentName2.toString().trim() == 'Online Payment')
+                                                                                  ? '$bname2'
+                                                                                  : 'ไม่พบชื่อบัญชี'),
                                                                     ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            actions: <Widget>[
-                                                              Column(
-                                                                children: [
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  const Divider(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    height: 4.0,
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .end,
-                                                                      children: [
-                                                                        Container(
-                                                                          width:
-                                                                              100,
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
-                                                                          ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              TextButton(
-                                                                            onPressed: () =>
-                                                                                Navigator.pop(context, 'OK'),
-                                                                            child:
-                                                                                const Text(
-                                                                              'ปิด',
-                                                                              style: TextStyle(
-                                                                                color: Colors.white,
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
+                                                              // Center(
+                                                              //   child:
+                                                              //       RepaintBoundary(
+                                                              //     key:
+                                                              //         qrImageKey,
+                                                              //     child:
+                                                              //         Container(
+                                                              //       color: Colors
+                                                              //           .white,
+                                                              //       padding: const EdgeInsets.fromLTRB(
+                                                              //           4,
+                                                              //           8,
+                                                              //           4,
+                                                              //           2),
+                                                              //       child:
+                                                              //           Column(
+                                                              //         crossAxisAlignment:
+                                                              //             CrossAxisAlignment.center,
+                                                              //         children: [
+                                                              //           // Text(
+                                                              //           //   '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
+                                                              //           //   style: TextStyle(
+                                                              //           //     color:
+                                                              //           //         Colors.red,
+                                                              //           //     fontWeight:
+                                                              //           //         FontWeight
+                                                              //           //             .bold,
+                                                              //           //   ),
+                                                              //           // ),
+                                                              //           Center(
+                                                              //             child: Container(
+                                                              //               width: 220,
+                                                              //               decoration: BoxDecoration(
+                                                              //                 color: Colors.green[300],
+                                                              //                 borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                              //               ),
+                                                              //               padding: const EdgeInsets.all(8.0),
+                                                              //               child: Center(
+                                                              //                 child: Text(
+                                                              //                   '$renTal_name',
+                                                              //                   style: TextStyle(
+                                                              //                     color: Colors.white,
+                                                              //                     fontSize: 13,
+                                                              //                     fontWeight: FontWeight.bold,
+                                                              //                   ),
+                                                              //                 ),
+                                                              //               ),
+                                                              //             ),
+                                                              //           ),
+                                                              //           // Align(
+                                                              //           //   alignment: Alignment
+                                                              //           //       .centerLeft,
+                                                              //           //   child: Text(
+                                                              //           //     'คุณ : $Form_bussshop',
+                                                              //           //     style:
+                                                              //           //         TextStyle(
+                                                              //           //       fontSize: 13,
+                                                              //           //       fontWeight:
+                                                              //           //           FontWeight
+                                                              //           //               .bold,
+                                                              //           //     ),
+                                                              //           //   ),
+                                                              //           // ),
+                                                              //           Container(
+                                                              //             height: 60,
+                                                              //             width: 220,
+                                                              //             child: Image.asset(
+                                                              //               "images/thai_qr_payment.png",
+                                                              //               height: 60,
+                                                              //               width: 220,
+                                                              //               fit: BoxFit.cover,
+                                                              //             ),
+                                                              //           ),
+                                                              //           Container(
+                                                              //             width: 200,
+                                                              //             height: 200,
+                                                              //             child: Center(
+                                                              //               child: PrettyQr(
+                                                              //                 // typeNumber: 3,
+                                                              //                 image: AssetImage(
+                                                              //                   "images/Icon-chao.png",
+                                                              //                 ),
+                                                              //                 size: 200,
+                                                              //                 data: generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
+                                                              //                 errorCorrectLevel: QrErrorCorrectLevel.M,
+                                                              //                 roundEdges: true,
+                                                              //               ),
+                                                              //             ),
+                                                              //           ),
+                                                              //           Text(
+                                                              //             'พร้อมเพย์ : $selectedValue',
+                                                              //             style: TextStyle(
+                                                              //               fontSize: 13,
+                                                              //               fontWeight: FontWeight.bold,
+                                                              //             ),
+                                                              //           ),
+                                                              //           Text(
+                                                              //             'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
+                                                              //             style: TextStyle(
+                                                              //               fontSize: 13,
+                                                              //               fontWeight: FontWeight.bold,
+                                                              //             ),
+                                                              //           ),
+                                                              //           Text(
+                                                              //             '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
+                                                              //             style: TextStyle(
+                                                              //               fontSize: 10,
+                                                              //               fontWeight: FontWeight.bold,
+                                                              //             ),
+                                                              //           ),
+                                                              //           Container(
+                                                              //             color: Color(0xFFD9D9B7),
+                                                              //             height: 60,
+                                                              //             width: 220,
+                                                              //             child: Image.asset(
+                                                              //               "images/LOGOchao.png",
+                                                              //               height: 70,
+                                                              //               width: 220,
+                                                              //             ),
+                                                              //           ),
+                                                              //         ],
+                                                              //       ),
+                                                              //     ),
+                                                              //   ),
+                                                              // ),
+                                                              // Center(
+                                                              //   child:
+                                                              //       Container(
+                                                              //     width:
+                                                              //         220,
+                                                              //     decoration:
+                                                              //         const BoxDecoration(
+                                                              //       color: Colors
+                                                              //           .green,
+                                                              //       borderRadius: BorderRadius.only(
+                                                              //           topLeft:
+                                                              //               Radius.circular(0),
+                                                              //           topRight: Radius.circular(0),
+                                                              //           bottomLeft: Radius.circular(10),
+                                                              //           bottomRight: Radius.circular(10)),
+                                                              //     ),
+                                                              //     padding:
+                                                              //         const EdgeInsets.all(
+                                                              //             8.0),
+                                                              //     child:
+                                                              //         TextButton(
+                                                              //       onPressed:
+                                                              //           () async {
+                                                              //         // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
+
+                                                              //         RenderRepaintBoundary
+                                                              //             boundary =
+                                                              //             qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+                                                              //         ui.Image
+                                                              //             image =
+                                                              //             await boundary.toImage();
+                                                              //         ByteData?
+                                                              //             byteData =
+                                                              //             await image.toByteData(format: ui.ImageByteFormat.png);
+                                                              //         Uint8List
+                                                              //             bytes =
+                                                              //             byteData!.buffer.asUint8List();
+                                                              //         html.Blob
+                                                              //             blob =
+                                                              //             html.Blob([
+                                                              //           bytes
+                                                              //         ]);
+                                                              //         String
+                                                              //             url =
+                                                              //             html.Url.createObjectUrlFromBlob(blob);
+
+                                                              //         html.AnchorElement
+                                                              //             anchor =
+                                                              //             html.AnchorElement()
+                                                              //               ..href = url
+                                                              //               ..setAttribute('download', 'qrcode.png')
+                                                              //               ..click();
+
+                                                              //         html.Url.revokeObjectUrl(
+                                                              //             url);
+                                                              //       },
+                                                              //       child:
+                                                              //           const Text(
+                                                              //         'Download QR Code',
+                                                              //         style:
+                                                              //             TextStyle(
+                                                              //           color:
+                                                              //               Colors.white,
+                                                              //           fontWeight:
+                                                              //               FontWeight.bold,
+                                                              //         ),
+                                                              //       ),
+                                                              //     ),
+                                                              //   ),
+                                                              // ),
                                                             ],
-                                                          );
-                                                        },
+                                                          ),
+                                                        ),
+                                                        // actions: <Widget>[
+                                                        //   Column(
+                                                        //     children: [
+                                                        //       const SizedBox(
+                                                        //         height: 5.0,
+                                                        //       ),
+                                                        //       const Divider(
+                                                        //         color: Colors
+                                                        //             .grey,
+                                                        //         height: 4.0,
+                                                        //       ),
+                                                        //       const SizedBox(
+                                                        //         height: 5.0,
+                                                        //       ),
+                                                        //       Padding(
+                                                        //         padding:
+                                                        //             const EdgeInsets.all(
+                                                        //                 8.0),
+                                                        //         child: Row(
+                                                        //           mainAxisAlignment:
+                                                        //               MainAxisAlignment
+                                                        //                   .end,
+                                                        //           children: [
+                                                        //             Container(
+                                                        //               width:
+                                                        //                   100,
+                                                        //               decoration:
+                                                        //                   const BoxDecoration(
+                                                        //                 color:
+                                                        //                     Colors.black,
+                                                        //                 borderRadius: BorderRadius.only(
+                                                        //                     topLeft: Radius.circular(10),
+                                                        //                     topRight: Radius.circular(10),
+                                                        //                     bottomLeft: Radius.circular(10),
+                                                        //                     bottomRight: Radius.circular(10)),
+                                                        //               ),
+                                                        //               padding:
+                                                        //                   const EdgeInsets.all(8.0),
+                                                        //               child:
+                                                        //                   TextButton(
+                                                        //                 onPressed: () =>
+                                                        //                     Navigator.pop(context, 'OK'),
+                                                        //                 child:
+                                                        //                     const Text(
+                                                        //                   'ปิด',
+                                                        //                   style: TextStyle(
+                                                        //                     color: Colors.white,
+                                                        //                     fontWeight: FontWeight.bold,
+                                                        //                   ),
+                                                        //                 ),
+                                                        //               ),
+                                                        //             ),
+                                                        //           ],
+                                                        //         ),
+                                                        //       ),
+                                                        //     ],
+                                                        //   ),
+                                                        // ],
                                                       );
                                                     },
+                                                  );
+                                                },
                                         ),
                                         if (paymentName1.toString().trim() !=
                                                 'Online Payment' &&
@@ -10461,9 +10718,10 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   color: Colors.grey
                                                       .withOpacity(0.5),
                                                   borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(10),
+                                                      const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  10),
                                                           topRight:
                                                               Radius.circular(
                                                                   10),
@@ -10478,7 +10736,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                               )),
                                       ],
                                     )
-                                  : SizedBox(),
+                                  : const SizedBox(),
                               Row(
                                 children: [
                                   const Expanded(
@@ -10908,11 +11166,11 @@ class _LockpayScreenState extends State<LockpayScreen> {
             content: SingleChildScrollView(
               child: Column(
                 children: [
-                  ListBody(
+                  const ListBody(
                     children: <Widget>[
                       Center(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0),
                           child: Text(
                             'เพิ่มรายการชำระ',
                             textAlign: TextAlign.center,
@@ -11020,7 +11278,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                 }),
                           ],
                         )),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Expanded(
@@ -11171,7 +11429,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                             width: 150,
                             decoration: BoxDecoration(
                               color: Colors.green.shade900,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10),
                                   bottomLeft: Radius.circular(10),
@@ -11672,7 +11930,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
 
   Dialog_Update() async {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
           backgroundColor: Colors.green,
           content: Text('ทำรายการเสร็จสิ้น ...!!',
               style: TextStyle(

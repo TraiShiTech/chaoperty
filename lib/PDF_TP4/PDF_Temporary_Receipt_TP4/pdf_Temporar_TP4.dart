@@ -50,7 +50,8 @@ class Pdfgen_Temporary_receipt_TP4 {
       dayfinpay,
       type_bills,
       dis_sum_Matjum,
-      TitleType_Default_Receipt_Name) async {
+      TitleType_Default_Receipt_Name,
+      dis_sum_Pakan) async {
     ////
     //// ------------>(ใบเสร็จรับเงินชั่วคราว paySrsscreen_)
     ///////
@@ -557,7 +558,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
                         // color: PdfColors.green100,
@@ -582,7 +583,6 @@ class Pdfgen_Temporary_receipt_TP4 {
                       ),
                     ),
                   ),
-
                   pw.Expanded(
                     flex: 4,
                     child: pw.Container(
@@ -609,44 +609,8 @@ class Pdfgen_Temporary_receipt_TP4 {
                       ),
                     ),
                   ),
-                  // pw.Expanded(
-                  //   flex: 1,
-                  //   child: pw.Container(
-                  //     height: 25,
-                  //     child: pw.Center(
-                  //       child: pw.Text(
-                  //         'จำนวน',
-                  //         textAlign: pw.TextAlign.center,
-                  //         maxLines: 1,
-                  //         style: pw.TextStyle(
-                  //             fontSize: 10.0,
-                  //             fontWeight: pw.FontWeight.bold,
-                  //             font: ttf,
-                  //             color: PdfColors.green900),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // pw.Expanded(
-                  //   flex: 1,
-                  //   child: pw.Container(
-                  //     height: 25,
-                  //     child: pw.Center(
-                  //       child: pw.Text(
-                  //         'หน่วย',
-                  //         textAlign: pw.TextAlign.center,
-                  //         maxLines: 1,
-                  //         style: pw.TextStyle(
-                  //             fontSize: 10.0,
-                  //             fontWeight: pw.FontWeight.bold,
-                  //             font: ttf,
-                  //             color: PdfColors.green900),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
                         // color: PdfColors.green100,
@@ -672,7 +636,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
                         // color: PdfColors.green100,
@@ -724,6 +688,33 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      decoration: const pw.BoxDecoration(
+                        // color: PdfColors.green100,
+                        border: pw.Border(
+                          left: pw.BorderSide(color: PdfColors.grey800),
+                          right: pw.BorderSide(color: PdfColors.grey800),
+                          top: pw.BorderSide(color: PdfColors.grey800),
+                          bottom: pw.BorderSide(color: PdfColors.grey800),
+                        ),
+                      ),
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'ส่วนลด',
+                          textAlign: pw.TextAlign.center,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
                     flex: 2,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
@@ -750,24 +741,6 @@ class Pdfgen_Temporary_receipt_TP4 {
                       ),
                     ),
                   ),
-                  // pw.Expanded(
-                  //   flex: 1,
-                  //   child: pw.Container(
-                  //     height: 25,
-                  //     child: pw.Center(
-                  //       child: pw.Text(
-                  //         'ราคารวมVAT',
-                  //         textAlign: pw.TextAlign.center,
-                  //         maxLines: 1,
-                  //         style: pw.TextStyle(
-                  //             fontSize: 10.0,
-                  //             fontWeight: pw.FontWeight.bold,
-                  //             font: ttf,
-                  //             color: PdfColors.green900),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -800,7 +773,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -814,7 +787,8 @@ class Pdfgen_Temporary_receipt_TP4 {
                       child: pw.Align(
                         alignment: pw.Alignment.center,
                         child: pw.Text(
-                          '${tableData00[index][1]}',
+                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${tableData00[index][1]}'))} ',
+                          // '${tableData00[index][1]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
@@ -852,7 +826,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -878,7 +852,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -930,6 +904,32 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        border: const pw.Border(
+                          left: pw.BorderSide(color: PdfColors.grey600),
+                          bottom: pw.BorderSide(color: PdfColors.grey600),
+                        ),
+                      ),
+                      padding: const pw.EdgeInsets.all(2.0),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData00[index][12]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
                     flex: 2,
                     child: pw.Container(
                       // height: 25,
@@ -945,7 +945,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                       child: pw.Align(
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
-                          '${tableData00[index][6]}',
+                          '${tableData00[index][13]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
@@ -987,7 +987,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -1001,7 +1001,8 @@ class Pdfgen_Temporary_receipt_TP4 {
                       child: pw.Align(
                         alignment: pw.Alignment.center,
                         child: pw.Text(
-                          '${tableData01[index][1]}',
+                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${tableData01[index][1]}'))} ',
+                          // '${tableData01[index][1]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
@@ -1039,7 +1040,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -1065,7 +1066,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       // height: 25,
                       decoration: const pw.BoxDecoration(
@@ -1106,6 +1107,33 @@ class Pdfgen_Temporary_receipt_TP4 {
                         alignment: pw.Alignment.centerRight,
                         child: pw.Text(
                           '${tableData01[index][5]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      // height: 25,
+                      decoration: const pw.BoxDecoration(
+                        color: PdfColors.white,
+                        border: const pw.Border(
+                          left: pw.BorderSide(color: PdfColors.grey600),
+                          right: pw.BorderSide(color: PdfColors.grey600),
+                          bottom: pw.BorderSide(color: PdfColors.grey600),
+                        ),
+                      ),
+                      padding: const pw.EdgeInsets.all(2.0),
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '0.00',
                           maxLines: 2,
                           textAlign: pw.TextAlign.right,
                           style: pw.TextStyle(
@@ -1306,6 +1334,35 @@ class Pdfgen_Temporary_receipt_TP4 {
                               ),
                             ],
                           ),
+                        if (nFormat
+                                .format(double.parse(dis_sum_Pakan.toString()))
+                                .toString() !=
+                            '0.00')
+                          pw.Row(
+                            children: [
+                              pw.Expanded(
+                                child: pw.Text(
+                                  'เงินประกัน(ตัดเงินประกัน)',
+                                  //  'เงินมัดจำ(${nFormat.format(sum_matjum)})',
+                                  style: pw.TextStyle(
+                                      fontSize: font_Size,
+                                      fontWeight: pw.FontWeight.bold,
+                                      font: ttf,
+                                      color: PdfColors.grey800),
+                                ),
+                              ),
+                              pw.Text(
+                                dis_sum_Pakan == 0.00
+                                    ? '${nFormat.format(double.parse(dis_sum_Pakan.toString()))}'
+                                    : '${nFormat.format(double.parse(dis_sum_Pakan.toString()))}',
+                                style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    fontWeight: pw.FontWeight.bold,
+                                    font: ttf,
+                                    color: PdfColors.grey800),
+                              ),
+                            ],
+                          ),
                         pw.Divider(color: PdfColors.grey600),
                         pw.Row(
                           children: [
@@ -1320,7 +1377,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                               ),
                             ),
                             pw.Text(
-                              '${nFormat.format(double.parse(Total.toString()) - double.parse(dis_sum_Matjum.toString()))}',
+                              '${nFormat.format(double.parse(Total.toString()) - double.parse(dis_sum_Matjum.toString()) - double.parse(dis_sum_Pakan.toString()))}',
                               style: pw.TextStyle(
                                   fontSize: font_Size,
                                   fontWeight: pw.FontWeight.bold,
@@ -1445,7 +1502,7 @@ class Pdfgen_Temporary_receipt_TP4 {
                               ),
                               pw.SizedBox(height: 2 * PdfPageFormat.mm),
                               pw.Text(
-                                '.....................................................................................................................................................................................................................................................................................................................',
+                                ' .' * 150,
                                 textAlign: pw.TextAlign.center,
                                 maxLines: 2,
                                 style: pw.TextStyle(

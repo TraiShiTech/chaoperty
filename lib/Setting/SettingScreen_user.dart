@@ -39,7 +39,7 @@ import 'Rental.dart';
 import 'User_Information.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
-
+import '../Style/view_pagenow.dart';
 import 'Webview.dart';
 
 class SettingUserScreen extends StatefulWidget {
@@ -56,7 +56,8 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
   //------------------------------------------------------>
   int Status_MenuZone = 1;
   String name_Zone = 'ทั้งหมด';
-  int Ser_Zone = 0;
+  int Ser_Zone = 0, renTal_lavel = 1;
+  String Ser_nowpage = '8';
   ///////---------------------------------------------------->
   String tappedIndex_ = '';
   final _formKey = GlobalKey<FormState>();
@@ -218,6 +219,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
     setState(() {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
+      renTal_lavel = int.parse(preferences.getString('lavel').toString());
     });
   }
 
@@ -726,7 +728,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                       child: Container(
                         width: 220,
                         decoration: BoxDecoration(
-                          color: AppbackgroundColor.TiTile_Colors,
+                          color: AppbackgroundColor.TiTile_Box,
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10),
@@ -736,9 +738,9 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                         padding: const EdgeInsets.all(5.0),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             AutoSizeText(
                               'ตั้งค่า/จัดการข้อมูลส่วนตัว',
                               overflow: TextOverflow.ellipsis,
@@ -769,51 +771,10 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: InkWell(
-              //     onTap: () {
-              //       setState(() {
-              //         Status_ = 8;
-              //       });
-              //     },
-              //     child: Container(
-              //       decoration: BoxDecoration(
-              //         color: Colors.tealAccent[700],
-              //         borderRadius: const BorderRadius.only(
-              //           topLeft: Radius.circular(10),
-              //           topRight: Radius.circular(10),
-              //           bottomLeft: Radius.circular(10),
-              //           bottomRight: Radius.circular(10),
-              //         ),
-              //         border: Border.all(color: Colors.white, width: 2),
-              //       ),
-              //       padding: const EdgeInsets.all(8.0),
-              //       width: 120,
-              //       // height: 30,
-              //       child: Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           Text(
-              //             '🔰 ',
-              //             style: TextStyle(
-              //                 // color:
-              //                 //     (Status_ == 7) ? Colors.black : Colors.black,
-              //                 fontFamily: FontWeight_.Fonts_T),
-              //           ),
-              //           Text(
-              //             'ติดต่อผู้ดูแล',
-              //             style: TextStyle(
-              //                 // decoration: TextDecoration.underline,
-              //                 color:
-              //                     (Status_ == 8) ? Colors.black : Colors.black,
-              //                 fontFamily: FontWeight_.Fonts_T),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // )
+              Align(
+                alignment: Alignment.centerRight,
+                child: viewpage(context, '$Ser_nowpage'),
+              ),
             ],
           ),
           Padding(
@@ -821,12 +782,12 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
             child: Container(
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
-                color: AppbackgroundColor.TiTile_Colors,
+                color: AppbackgroundColor.TiTile_Box,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0)),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)),
                 // border: Border.all(color: Colors.grey, width: 1),
               ),
               child: Row(
@@ -4596,8 +4557,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                                                         fontFamily:
                                                                             FontWeight_.Fonts_T,
                                                                       )),
-                                                                  inputFormatters: <
-                                                                      TextInputFormatter>[
+                                                                  inputFormatters: <TextInputFormatter>[
                                                                     FilteringTextInputFormatter
                                                                         .deny(RegExp(
                                                                             "[' ']")),
@@ -4724,8 +4684,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                                                         fontFamily:
                                                                             FontWeight_.Fonts_T,
                                                                       )),
-                                                                  inputFormatters: <
-                                                                      TextInputFormatter>[
+                                                                  inputFormatters: <TextInputFormatter>[
                                                                     FilteringTextInputFormatter
                                                                         .deny(RegExp(
                                                                             "[' ']")),
@@ -5509,8 +5468,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                                                             // fontWeight: FontWeight.bold,
                                                                             fontFamily: Font_.Fonts_T),
                                                                       ),
-                                                                      inputFormatters: <
-                                                                          TextInputFormatter>[
+                                                                      inputFormatters: <TextInputFormatter>[
                                                                         // for below version 2 use this
                                                                         FilteringTextInputFormatter.allow(
                                                                             RegExp(r'[0-9 .]')),
@@ -5634,8 +5592,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                                                             // fontWeight: FontWeight.bold,
                                                                             fontFamily: Font_.Fonts_T),
                                                                       ),
-                                                                      inputFormatters: <
-                                                                          TextInputFormatter>[
+                                                                      inputFormatters: <TextInputFormatter>[
                                                                         // for below version 2 use this
                                                                         FilteringTextInputFormatter.allow(
                                                                             RegExp(r'[0-9 .]')),

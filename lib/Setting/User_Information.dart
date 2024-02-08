@@ -152,7 +152,7 @@ class _USerInformationState extends State<USerInformation> {
             child: Container(
               height: 20,
               decoration: const BoxDecoration(
-                color: Colors.white30,
+                color: Colors.white60,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(0),
                     topRight: Radius.circular(0),
@@ -348,8 +348,7 @@ class _USerInformationState extends State<USerInformation> {
                                                   fontFamily:
                                                       FontWeight_.Fonts_T,
                                                 )),
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.deny(
                                                   RegExp(r'\s')),
                                             ],
@@ -434,8 +433,7 @@ class _USerInformationState extends State<USerInformation> {
                                                   fontFamily:
                                                       FontWeight_.Fonts_T,
                                                 )),
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.deny(
                                                   RegExp(r'\s')),
                                             ],
@@ -645,8 +643,7 @@ class _USerInformationState extends State<USerInformation> {
                                                   fontFamily:
                                                       FontWeight_.Fonts_T,
                                                 )),
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               // for below version 2 use this
                                               FilteringTextInputFormatter.allow(
                                                   RegExp(r'[0-9]')),
@@ -727,8 +724,7 @@ class _USerInformationState extends State<USerInformation> {
                                                   fontFamily:
                                                       FontWeight_.Fonts_T,
                                                 )),
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.deny(
                                                   RegExp(r'\s')),
                                             ],

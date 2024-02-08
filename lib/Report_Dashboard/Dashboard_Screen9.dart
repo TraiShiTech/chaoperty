@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:universal_html/html.dart' as html;
 import '../Constant/Myconstant.dart';
+import '../Man_PDF/Man_ChartReport_Generate.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/Get_tran_meter_model.dart';
@@ -917,54 +918,95 @@ class _Dashboard_Screen9State extends State<Dashboard_Screen9> {
                                       ),
                                   ]),
                             ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (Visit_1 == '1' || Visit_1 == null) {
-                                      captureAndConvertToBase64(chartKey1, '');
-                                    } else {
-                                      captureAndConvertToBase64(chartKey2, '');
-                                    }
-                                  },
-                                  child: Container(
-                                      width: 120,
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red[700],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8)),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'SAVE(.PNG)',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
-                                      )),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child: Align(
+                      //         alignment: Alignment.centerRight,
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: InkWell(
+                      //             onTap: () async {
+                      //               if (Visit_1 == '1' || Visit_1 == null) {
+                      //                 captureAndConvertToBase64(chartKey1, '');
+                      //               } else {
+                      //                 captureAndConvertToBase64(chartKey2, '');
+                      //               }
+                      //             },
+                      //             child: Container(
+                      //                 width: 120,
+                      //                 padding: const EdgeInsets.all(8.0),
+                      //                 decoration: BoxDecoration(
+                      //                   color: Colors.red[700],
+                      //                   borderRadius: const BorderRadius.only(
+                      //                       topLeft: Radius.circular(8),
+                      //                       topRight: Radius.circular(8),
+                      //                       bottomLeft: Radius.circular(8),
+                      //                       bottomRight: Radius.circular(8)),
+                      //                 ),
+                      //                 child: const Center(
+                      //                   child: Text(
+                      //                     'SAVE(.PNG)',
+                      //                     style: TextStyle(
+                      //                       color: Colors.white,
+                      //                       fontWeight: FontWeight.bold,
+                      //                       fontFamily: FontWeight_.Fonts_T,
+                      //                     ),
+                      //                   ),
+                      //                 )),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
               ),
 
-              ///
+              Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            if (Visit_1 == '1' || Visit_1 == null) {
+                              capture(chartKey1, chartKey3);
+                            } else {
+                              capture(chartKey2, chartKey4);
+                            }
+                          },
+                          child: Container(
+                              width: 120,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green[700],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'พิมพ์',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -975,6 +1017,20 @@ class _Dashboard_Screen9State extends State<Dashboard_Screen9> {
   late GlobalKey<SfCartesianChartState> _cartesianChartKey;
   late TooltipBehavior _tooltip;
 
+  dynamic capture(chartKey01, chartKey02) async {
+    final boundary01 =
+        chartKey01.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    final image01 = await boundary01.toImage(
+        pixelRatio: 3.0); // Adjust pixelRatio as needed
+
+    // Convert the captured image to bytes
+    final byteData01 = await image01.toByteData(format: ImageByteFormat.png);
+    final buffer01 = byteData01!.buffer.asUint8List();
+/////////------------------------------->
+
+    Man_ChartReport_GeneratePDF.man_chartReport_GeneratePDF(
+        context, buffer01, '', '9');
+  }
   // Future<void> _renderPDF() async {
   //   try {
   //     final boundary = _cartesianChartKey.currentContext!.findRenderObject()

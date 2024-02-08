@@ -33,10 +33,10 @@ class Insert_log {
     Map<String, dynamic> data = json.decode(response.body);
 
     // Print the user's IP address and location
-    print('IP address: ${data['ip']}');
-    print('City: ${data['city']}');
-    print('Region: ${data['region']}');
-    print('Country: ${data['country_name']}');
+    // print('IP address: ${data['ip']}');
+    // print('City: ${data['city']}');
+    // print('Region: ${data['region']}');
+    // print('Country: ${data['country_name']}');
     final ipv4 = await Ipify.ipv4();
     String singleDeviceName = "Unknown";
     String singleDeviceNameFromModel = "Unknown";
@@ -69,7 +69,7 @@ class Insert_log {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result.toString());
+      // print(result.toString());
     } catch (e) {}
   }
 }

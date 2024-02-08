@@ -14,10 +14,12 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:html' as html;
 import '../Constant/Myconstant.dart';
+import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetContractx_Model.dart';
 import '../Model/GetExp_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTrans_Model.dart';
+import '../Model/electricity_history_model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'dart:html' as html;
@@ -90,6 +92,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
   List<TransModel> _TransModels = [];
   List<ContractxModel> _ContractxModels = [];
+  List<ElectricityHistoryModel> electricityHistoryModels = [];
   List<RenTalModel> renTalModels = [];
   int Ser__TapContractx = 0, renTal_lavel = 0;
   String tappedIndex_1 = '';
@@ -107,6 +110,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
       bill_default,
       bill_tser,
       foder;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -1109,31 +1113,6 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
-                                                  children: [
-                                                    AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
-                                                      'ราคาต่อหน่วย $_cqty_vat',
-                                                      maxLines: 1,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T
-                                                          //fontSize: 10.0
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
                                                   children: const [
                                                     AutoSizeText(
                                                       minFontSize: 10,
@@ -1197,7 +1176,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                     AutoSizeText(
                                                       minFontSize: 10,
                                                       maxFontSize: 15,
-                                                      '(รวม vat $_celvat %)',
+                                                      '(รวม VAT)',
                                                       maxLines: 1,
                                                       textAlign:
                                                           TextAlign.center,
@@ -1356,37 +1335,197 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                   ? _TransModels[indextran]
                                                                               .ovalue !=
                                                                           null
-                                                                      ? Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                Colors.grey.shade300,
-                                                                            borderRadius:
-                                                                                const BorderRadius.only(
-                                                                              topLeft: Radius.circular(15),
-                                                                              topRight: Radius.circular(15),
-                                                                              bottomLeft: Radius.circular(15),
-                                                                              bottomRight: Radius.circular(15),
-                                                                            ),
-                                                                            border:
-                                                                                Border.all(color: Colors.grey, width: 1),
-                                                                          ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                      ? GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            if (_TransModels[indextran].docno_in ==
+                                                                                '') {
+                                                                              if (renTal_lavel > 1) {
+                                                                                print('123254 Edit');
+                                                                                showDialog<void>(
+                                                                                  context: context,
+                                                                                  barrierDismissible: false, // user must tap button!
+                                                                                  builder: (BuildContext context) {
+                                                                                    return AlertDialog(
+                                                                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                      // title: const Text('AlertDialog Title'),
+                                                                                      content: SingleChildScrollView(
+                                                                                        child: ListBody(
+                                                                                          children: <Widget>[
+                                                                                            Container(
+                                                                                              width: MediaQuery.of(context).size.width * 0.3,
+                                                                                              height: MediaQuery.of(context).size.width * 0.08,
+                                                                                              child: Center(
+                                                                                                child: Padding(
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: Column(
+                                                                                                    children: [
+                                                                                                      Container(
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: AutoSizeText(
+                                                                                                          maxLines: 2,
+                                                                                                          minFontSize: 8,
+                                                                                                          // maxFontSize: 15,
+                                                                                                          'แก้ไขเลขมิเตอร์เริ่มต้น',
+                                                                                                          textAlign: TextAlign.start,
+                                                                                                          style: const TextStyle(
+                                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                              // fontWeight: FontWeight.bold,
+                                                                                                              fontFamily: Font_.Fonts_T
+
+                                                                                                              //fontSize: 10.0
+                                                                                                              ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      TextFormField(
+                                                                                                        textAlign: TextAlign.center,
+                                                                                                        // initialValue:
+                                                                                                        //     _cmeter,
+                                                                                                        onFieldSubmitted: (value) async {
+                                                                                                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                          String? ren = preferences.getString('renTalSer');
+                                                                                                          String? ser_user = preferences.getString('ser');
+                                                                                                          var qser_in = _TransModels[indextran].ser_in;
+                                                                                                          var ovalue = _TransModels[indextran].ovalue;
+                                                                                                          var qser = _cser;
+                                                                                                          String url = '${MyConstant().domain}/UPC_Invoice_ovalue.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user';
+
+                                                                                                          try {
+                                                                                                            var response = await http.get(Uri.parse(url));
+
+                                                                                                            var result = json.decode(response.body);
+                                                                                                            print(result);
+                                                                                                            if (result.toString() == 'true') {
+                                                                                                              Insert_log.Insert_logs('แก้ไขเลขมิเตอร์เริ่มต้น', 'แก้ไข $ovalue >> $value');
+                                                                                                              setState(() {
+                                                                                                                red_Trans(_cser);
+                                                                                                              });
+                                                                                                            }
+                                                                                                          } catch (e) {}
+                                                                                                          Navigator.of(context).pop();
+                                                                                                        },
+                                                                                                        // maxLength: 13,
+                                                                                                        cursorColor: Colors.green,
+                                                                                                        decoration: InputDecoration(
+                                                                                                            fillColor: Colors.white.withOpacity(0.05),
+                                                                                                            filled: true,
+
+                                                                                                            // prefixIcon:
+                                                                                                            //     const Icon(Icons.key, color: Colors.black),
+                                                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                            focusedBorder: const OutlineInputBorder(
+                                                                                                              borderRadius: BorderRadius.only(
+                                                                                                                topRight: Radius.circular(15),
+                                                                                                                topLeft: Radius.circular(15),
+                                                                                                                bottomRight: Radius.circular(15),
+                                                                                                                bottomLeft: Radius.circular(15),
+                                                                                                              ),
+                                                                                                              borderSide: BorderSide(
+                                                                                                                width: 1,
+                                                                                                                color: Colors.grey,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            enabledBorder: const OutlineInputBorder(
+                                                                                                              borderRadius: BorderRadius.only(
+                                                                                                                topRight: Radius.circular(15),
+                                                                                                                topLeft: Radius.circular(15),
+                                                                                                                bottomRight: Radius.circular(15),
+                                                                                                                bottomLeft: Radius.circular(15),
+                                                                                                              ),
+                                                                                                              borderSide: BorderSide(
+                                                                                                                width: 1,
+                                                                                                                color: Colors.grey,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            labelText: 'แก้ไขเลขมิเตอร์เริ่มต้น',
+                                                                                                            labelStyle: const TextStyle(
+                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T)),
+                                                                                                        // inputFormatters: <TextInputFormatter>[
+                                                                                                        //   // for below version 2 use this
+                                                                                                        //   FilteringTextInputFormatter.allow(
+                                                                                                        //       RegExp(r'[0-9]')),
+                                                                                                        //   // for version 2 and greater youcan also use this
+                                                                                                        //   FilteringTextInputFormatter
+                                                                                                        //       .digitsOnly
+                                                                                                        // ],
+                                                                                                      ),
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                      actions: <Widget>[
+                                                                                        Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                                                          children: [
+                                                                                            Container(
+                                                                                              child: Padding(
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: InkWell(
+                                                                                                  child: Container(
+                                                                                                      width: 100,
+                                                                                                      decoration: const BoxDecoration(
+                                                                                                        color: Colors.black,
+                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                        // border: Border.all(color: Colors.white, width: 1),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: const Center(
+                                                                                                          child: Text(
+                                                                                                        'ปิด',
+                                                                                                        textAlign: TextAlign.center,
+                                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                            //fontSize: 10.0
+                                                                                                            ),
+                                                                                                      ))),
+                                                                                                  onTap: () {
+                                                                                                    Navigator.of(context).pop();
+                                                                                                  },
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    );
+                                                                                  },
+                                                                                );
+                                                                              }
+                                                                            }
+                                                                          },
                                                                           child:
-                                                                              Text(
-                                                                            indextran == 0
-                                                                                ? '${_TransModels[indextran].ovalue!.padLeft(4, '0')}' // '${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
-                                                                                //'${_TransModels[indextran].ovalue}'
-                                                                                : '${_TransModels[indextran - 1].nvalue!.padLeft(4, '0')}', //'${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
-                                                                            // '${_TransModels[indextran - 1].nvalue}',
-                                                                            textAlign:
-                                                                                TextAlign.right,
-                                                                            style: const TextStyle(
-                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                //fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
+                                                                              Container(
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Colors.grey.shade300,
+                                                                              borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(15),
+                                                                                topRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                              ),
+                                                                              border: Border.all(color: Colors.grey, width: 1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Text(
+                                                                              indextran == 0
+                                                                                  ? '${_TransModels[indextran].ovalue!.padLeft(4, '0')}' // '${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
+                                                                                  //'${_TransModels[indextran].ovalue}'
+                                                                                  : '${_TransModels[indextran - 1].nvalue!.padLeft(4, '0')}', //'${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
+                                                                              // '${_TransModels[indextran - 1].nvalue}',
+                                                                              textAlign: TextAlign.right,
+                                                                              style: const TextStyle(
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  //fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
                                                                           ),
                                                                         )
                                                                       : TextFormField(
@@ -1616,12 +1755,12 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                         var tran_expser =
                                                                             _TransModels[indextran].expser;
                                                                         var qser_inn =
-                                                                            _TransModels[indextran + 1].ser_in;
+                                                                            _TransModels[indextran].ser_in;
 
                                                                         var tran_ser =
                                                                             _TransModels[indextran].ser;
                                                                         var tran_sern =
-                                                                            _TransModels[indextran + 1].ser;
+                                                                            _TransModels[indextran].ser;
                                                                         var ovalue =
                                                                             _TransModels[indextran].ovalue; // ก่อน
                                                                         var nvalue =
@@ -1682,7 +1821,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                                 '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
                                                                             String
                                                                                 url =
-                                                                                '${MyConstant().domain}/InC_InvoiceNew.php?isAdd=true&ren=$ren&tran_ser=$tran_ser&qty=$value&ser_user=$ser_user&oval=$oval&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser';
+                                                                                '${MyConstant().domain}/InC_InvoiceNew.php?isAdd=true&ren=$ren&tran_ser=$tran_ser&qty=$value&ser_user=$ser_user&oval=$oval&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser';
 
                                                                             try {
                                                                               var response = await http.get(Uri.parse(url));
@@ -1710,11 +1849,11 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                           var qser_in =
                                                                               _TransModels[indextran].ser_in;
                                                                           var qser_inn =
-                                                                              _TransModels[indextran + 1].ser_in;
+                                                                              _TransModels[indextran].ser_in;
                                                                           var tran_expser =
                                                                               _TransModels[indextran].expser;
                                                                           var tran_sern =
-                                                                              _TransModels[indextran + 1].ser;
+                                                                              _TransModels[indextran].ser;
                                                                           var tran_ser =
                                                                               _TransModels[indextran].ser;
                                                                           var ovalue =
@@ -2021,19 +2160,74 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                     ),
                                                     Expanded(
                                                       flex: 1,
-                                                      child: Text(
-                                                        '${nFormat.format(double.parse(_TransModels[indextran].amt!))}',
-                                                        //  '${_TransModels[indextran].amt}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            electricityHistoryModels
+                                                                .clear();
+                                                            unit1 = 0;
+                                                            unit2 = 0;
+                                                            unit3 = 0;
+                                                            unit4 = 0;
+                                                            unit5 = 0;
+                                                            unit6 = 0;
+                                                            sum1 = 0;
+                                                            sum2 = 0;
+                                                            sum3 = 0;
+                                                            sum4 = 0;
+                                                            sum5 = 0;
+                                                            sum6 = 0;
+                                                            unit = 0;
+                                                            unit1c = 0;
+                                                            unit2c = 0;
+                                                            unit3c = 0;
+                                                            unit4c = 0;
+                                                            unit5c = 0;
+                                                            unit6c = 0;
+                                                            ele_tf = 0.0000;
+                                                            ele_other = 0;
+                                                            ele_vat = 0;
+                                                            ele_one = 0;
+                                                            ele_mit_one = 0;
+                                                            ele_gob_one = 0;
+                                                            ele_two = 0;
+                                                            ele_mit_two = 0;
+                                                            ele_gob_two = 0;
+                                                            ele_three = 0;
+                                                            ele_mit_three = 0;
+                                                            ele_gob_three = 0;
+                                                            ele_tour = 0;
+                                                            ele_mit_tour = 0;
+                                                            ele_gob_tour = 0;
+                                                            ele_five = 0;
+                                                            ele_mit_five = 0;
+                                                            ele_gob_five = 0;
+                                                            ele_six = 0;
+                                                            ele_mit_six = 0;
+                                                            ele_gob_six = 0;
+                                                            sum = 0;
+                                                            sum_n = 0;
+                                                            sum_f = 0;
+                                                            sum_per = 0;
+                                                            sum_all = 0;
+                                                          });
+                                                          showmiter(indextran);
+                                                        },
+                                                        child: Text(
+                                                          '${nFormat.format(double.parse(_TransModels[indextran].amt!))}',
+                                                          //  '${_TransModels[indextran].amt}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
                                                       ),
                                                     ),
                                                     Expanded(
@@ -3211,5 +3405,1176 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
         ),
       ),
     );
+  }
+
+  double unit1 = 0,
+      unit2 = 0,
+      unit3 = 0,
+      unit4 = 0,
+      unit5 = 0,
+      unit6 = 0,
+      sum1 = 0,
+      sum2 = 0,
+      sum3 = 0,
+      sum4 = 0,
+      sum5 = 0,
+      sum6 = 0,
+      unit = 0,
+      unit1c = 0,
+      unit2c = 0,
+      unit3c = 0,
+      unit4c = 0,
+      unit5c = 0,
+      unit6c = 0,
+      ele_tf = 0.0000,
+      ele_other = 0,
+      ele_vat = 0,
+      ele_one = 0,
+      ele_mit_one = 0,
+      ele_gob_one = 0,
+      ele_two = 0,
+      ele_mit_two = 0,
+      ele_gob_two = 0,
+      ele_three = 0,
+      ele_mit_three = 0,
+      ele_gob_three = 0,
+      ele_tour = 0,
+      ele_mit_tour = 0,
+      ele_gob_tour = 0,
+      ele_five = 0,
+      ele_mit_five = 0,
+      ele_gob_five = 0,
+      ele_six = 0,
+      ele_mit_six = 0,
+      ele_gob_six = 0,
+      sum = 0,
+      sum_n = 0,
+      sum_f = 0,
+      sum_per = 0,
+      sum_all = 0;
+
+  Future<dynamic> showmiter(int indextran) async {
+    var qser_in = _TransModels[indextran].ser_in;
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_electricity_history.php?isAdd=true&ren=$ren&qser_in=$qser_in';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        for (var map in result) {
+          ElectricityHistoryModel electricityHistoryModel =
+              ElectricityHistoryModel.fromJson(map);
+          setState(() {
+            electricityHistoryModels.add(electricityHistoryModel);
+          });
+        }
+      } else {}
+    } catch (e) {}
+
+    if (electricityHistoryModels.isEmpty) {
+      return null;
+    } else {
+      setState(() {
+        unit = double.parse(electricityHistoryModels[0].edit_new!);
+
+        unit1c = double.parse(electricityHistoryModels[0].eleOne!) - 0;
+        unit2c = double.parse(electricityHistoryModels[0].eleTwo!) -
+            double.parse(electricityHistoryModels[0].eleOne!);
+        unit3c = double.parse(electricityHistoryModels[0].eleThree!) -
+            double.parse(electricityHistoryModels[0].eleTwo!);
+        unit4c = double.parse(electricityHistoryModels[0].eleTour!) -
+            double.parse(electricityHistoryModels[0].eleThree!);
+        unit5c = double.parse(electricityHistoryModels[0].eleFive!) -
+            double.parse(electricityHistoryModels[0].eleTour!);
+        unit6c = unit - double.parse(electricityHistoryModels[0].eleSix!);
+
+        ele_tf = double.parse(electricityHistoryModels[0].eleTf!);
+        ele_other = double.parse(electricityHistoryModels[0].other!);
+        ele_vat = double.parse(electricityHistoryModels[0].vat!);
+
+        ele_one = double.parse(electricityHistoryModels[0].eleOne!);
+        ele_mit_one = double.parse(electricityHistoryModels[0].eleMitOne!);
+        ele_gob_one = double.parse(electricityHistoryModels[0].eleGobOne!);
+
+        ele_two = double.parse(electricityHistoryModels[0].eleTwo!);
+        ele_mit_two = double.parse(electricityHistoryModels[0].eleMitTwo!);
+        ele_gob_two = double.parse(electricityHistoryModels[0].eleGobTwo!);
+
+        ele_three = double.parse(electricityHistoryModels[0].eleThree!);
+        ele_mit_three = double.parse(electricityHistoryModels[0].eleMitThree!);
+        ele_gob_three = double.parse(electricityHistoryModels[0].eleGobThree!);
+
+        ele_tour = double.parse(electricityHistoryModels[0].eleTour!);
+        ele_mit_tour = double.parse(electricityHistoryModels[0].eleMitTour!);
+        ele_gob_tour = double.parse(electricityHistoryModels[0].eleGobTour!);
+
+        ele_five = double.parse(electricityHistoryModels[0].eleFive!);
+        ele_mit_five = double.parse(electricityHistoryModels[0].eleMitFive!);
+        ele_gob_five = double.parse(electricityHistoryModels[0].eleGobFive!);
+
+        ele_six = double.parse(electricityHistoryModels[0].eleSix!);
+        ele_mit_six = double.parse(electricityHistoryModels[0].eleMitSix!);
+        ele_gob_six = double.parse(electricityHistoryModels[0].eleGobSix!);
+      });
+
+      if (unit > unit1c) {
+        setState(() {
+          unit1 = unit - unit1c;
+        });
+
+        if (ele_gob_one != 0.00) {
+          setState(() {
+            sum1 = ele_gob_one;
+          });
+        } else {
+          setState(() {
+            sum1 = unit1c * ele_mit_one;
+          });
+        }
+      } else {
+        if (ele_gob_one != 0.00) {
+          setState(() {
+            sum1 = ele_gob_one;
+          });
+        } else {
+          setState(() {
+            sum1 = unit * ele_mit_one;
+          });
+        }
+      }
+
+      if (unit1 >= unit2c) {
+        setState(() {
+          unit2 = unit1 - unit2c;
+        });
+
+        if (ele_gob_two != 0.00) {
+          setState(() {
+            sum2 = ele_gob_two;
+          });
+        } else {
+          setState(() {
+            sum2 = unit2c * ele_mit_two;
+          });
+        }
+      } else {
+        if (ele_gob_two != 0.00) {
+          setState(() {
+            sum2 = ele_gob_two;
+          });
+        } else {
+          setState(() {
+            sum2 = unit1 * ele_mit_two;
+          });
+        }
+      }
+
+      if (unit2 >= unit3c) {
+        setState(() {
+          unit3 = unit2 - unit3c;
+        });
+        if (ele_gob_three != 0.00) {
+          setState(() {
+            sum3 = ele_gob_three;
+          });
+        } else {
+          setState(() {
+            sum3 = unit3c * ele_mit_three;
+          });
+        }
+      } else {
+        if (ele_gob_three != 0.00) {
+          setState(() {
+            sum3 = ele_gob_three;
+          });
+        } else {
+          setState(() {
+            sum3 = unit2 * ele_mit_three;
+          });
+        }
+      }
+
+      if (unit3 >= unit4c) {
+        setState(() {
+          unit4 = unit3 - unit4c;
+        });
+
+        if (ele_gob_tour != 0.00) {
+          setState(() {
+            sum4 = ele_gob_tour;
+          });
+        } else {
+          setState(() {
+            sum4 = unit4c * ele_mit_tour;
+          });
+        }
+      } else {
+        if (ele_gob_tour != 0.00) {
+          setState(() {
+            sum4 = ele_gob_tour;
+          });
+        } else {
+          setState(() {
+            sum4 = unit3 * ele_mit_tour;
+          });
+        }
+      }
+
+      if (unit4 >= unit5c) {
+        setState(() {
+          unit5 = unit4 - unit5c;
+        });
+
+        if (ele_gob_five != 0.00) {
+          setState(() {
+            sum5 = ele_gob_five;
+          });
+        } else {
+          setState(() {
+            sum5 = unit5c * ele_mit_five;
+          });
+        }
+      } else {
+        if (ele_gob_five != 0.00) {
+          setState(() {
+            sum5 = ele_gob_five;
+          });
+        } else {
+          setState(() {
+            sum5 = unit4 * ele_mit_five;
+          });
+        }
+      }
+
+      if (unit5 >= unit6c) {
+        setState(() {
+          unit6 = unit5 - unit6c;
+        });
+
+        if (ele_gob_six != 0.00) {
+          setState(() {
+            sum6 = ele_gob_six;
+          });
+        } else {
+          setState(() {
+            sum6 = unit6c * ele_mit_six;
+          });
+        }
+      } else {
+        if (ele_gob_six != 0.00) {
+          setState(() {
+            sum6 = ele_gob_six;
+          });
+        } else {
+          setState(() {
+            sum6 = unit5 * ele_mit_six;
+          });
+        }
+      }
+
+      // if (unit5 >= unit6c) {
+      //   if (ele_gob_six != 0.00) {
+      //     setState(() {
+      //       sum6 = ele_gob_six;
+      //     });
+      //   } else {
+      //     setState(() {
+      //       sum6 = unit6c * ele_mit_six;
+      //     });
+      //   }
+      // }
+      setState(() {
+        if (sum6 < 0) {
+          sum = sum1 + sum2 + sum3 + sum4 + sum5;
+        } else {
+          sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6;
+        }
+      });
+      setState(() {
+        sum_n = sum + ele_other;
+      });
+      setState(() {
+        sum_f = unit * ele_tf;
+      });
+      setState(() {
+        sum_per = (sum_n + sum_f) * ele_vat / 100;
+      });
+      setState(() {
+        sum_all = sum_n + sum_f + sum_per;
+      });
+
+      return showDialog(
+          context: context,
+          builder: (_) {
+            return Dialog(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.width * 0.4,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                // ignore: unnecessary_string_interpolations
+                                '${DateFormat.MMMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                '',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                'หน่วยที่ใช้ไป : ',
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                '$unit',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                'หน่วย',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                      (unit - unit1) == 0 || sum1 <= 0
+                          ? SizedBox()
+                          : Row(
+                              children: [
+                                Expanded(flex: 1, child: Text('')),
+                                Expanded(
+                                  flex: 4,
+                                  child: RichText(
+                                    textAlign: TextAlign.start,
+                                    text: TextSpan(
+                                      text: 'หน่วยที่ 0-$ele_one',
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          fontFamily: Font_.Fonts_T),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: ele_mit_one == 0
+                                              ? ' (เหมาจ่าย $ele_gob_one บาท)'
+                                              : ' (หน่วยละ $ele_mit_one บาท)',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${unit - unit1} หน่วย',
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${nFormat.format(sum1)}',
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      (unit1 - unit2) == 0 || sum2 <= 0
+                          ? SizedBox()
+                          : Row(
+                              children: [
+                                Expanded(flex: 1, child: Text('')),
+                                Expanded(
+                                  flex: 4,
+                                  child: RichText(
+                                    textAlign: TextAlign.start,
+                                    text: TextSpan(
+                                      text:
+                                          'หน่วยที่ ${(ele_one + 1)} - $ele_two',
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          fontFamily: Font_.Fonts_T),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: ele_mit_two == 0
+                                              ? ' (เหมาจ่าย $ele_gob_two บาท)'
+                                              : ' (หน่วยละ $ele_mit_two บาท)',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${unit1 - unit2} หน่วย',
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${nFormat.format(sum2)}',
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      (unit2 - unit3) == 0 || sum3 <= 0
+                          ? SizedBox()
+                          : Row(
+                              children: [
+                                Expanded(flex: 1, child: Text('')),
+                                Expanded(
+                                  flex: 4,
+                                  child: RichText(
+                                    textAlign: TextAlign.start,
+                                    text: TextSpan(
+                                      text:
+                                          'หน่วยที่ ${(ele_two + 1)} - $ele_three',
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          fontFamily: Font_.Fonts_T),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: ele_mit_three == 0
+                                              ? ' (เหมาจ่าย $ele_gob_three บาท)'
+                                              : ' (หน่วยละ $ele_mit_three บาท)',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${unit2 - unit3} หน่วย',
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${nFormat.format(sum3)}',
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      (unit3 - unit4) == 0 || sum4 <= 0
+                          ? SizedBox()
+                          : Row(
+                              children: [
+                                Expanded(flex: 1, child: Text('')),
+                                Expanded(
+                                  flex: 4,
+                                  child: RichText(
+                                    textAlign: TextAlign.start,
+                                    text: TextSpan(
+                                      text:
+                                          'หน่วยที่ ${(ele_three + 1)} - $ele_tour',
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          fontFamily: Font_.Fonts_T),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: ele_mit_tour == 0
+                                              ? ' (เหมาจ่าย $ele_gob_tour บาท)'
+                                              : ' (หน่วยละ $ele_mit_tour บาท)',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${unit3 - unit4} หน่วย',
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${nFormat.format(sum4)}',
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      (unit4 - unit5) == 0 || sum5 <= 0
+                          ? SizedBox()
+                          : Row(
+                              children: [
+                                Expanded(flex: 1, child: Text('')),
+                                Expanded(
+                                  flex: 4,
+                                  child: RichText(
+                                    textAlign: TextAlign.start,
+                                    text: TextSpan(
+                                      text:
+                                          'หน่วยที่ ${(ele_tour + 1)} - $ele_five',
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          fontFamily: Font_.Fonts_T),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: ele_mit_five == 0
+                                              ? ' (เหมาจ่าย $ele_gob_five บาท)'
+                                              : ' (หน่วยละ $ele_mit_five บาท)',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${unit4 - unit5} หน่วย',
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${nFormat.format(sum5)}',
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      (unit5 - unit6) == 0 || sum6 <= 0
+                          ? SizedBox()
+                          : sum6 < 0
+                              ? SizedBox()
+                              : Row(
+                                  children: [
+                                    Expanded(flex: 1, child: Text('')),
+                                    Expanded(
+                                      flex: 4,
+                                      child: RichText(
+                                        textAlign: TextAlign.start,
+                                        text: TextSpan(
+                                          text: 'หน่วยที่ $ele_six ขึ้นไป',
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              fontFamily: Font_.Fonts_T),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: ele_mit_six == 0
+                                                  ? ' (เหมาจ่าย $ele_gob_six บาท)'
+                                                  : ' (หน่วยละ $ele_mit_six บาท)',
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        '${unit5 - unit6} หน่วย',
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            fontFamily: Font_.Fonts_T),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        '${nFormat.format(sum6)}',
+                                        textAlign: TextAlign.end,
+                                        style: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            fontFamily: Font_.Fonts_T),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'บาท',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            fontFamily: Font_.Fonts_T),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                      Divider(),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              ' ',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              'เงิน$_cnamexฐาน',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${nFormat.format(sum)}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'บาท',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              '',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: RichText(
+                              textAlign: TextAlign.end,
+                              text: TextSpan(
+                                text: 'ค่า Ft',
+                                style: TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    fontFamily: Font_.Fonts_T),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: ' ( $ele_tf ) บาท/หน่วย',
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${nFormat.format(sum_f)}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'บาท',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              ' ',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              'ค่าบริการรายเดือน',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${nFormat.format(ele_other)}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'บาท',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              ' ',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Divider(),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              '',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: RichText(
+                              textAlign: TextAlign.end,
+                              text: TextSpan(
+                                text: 'ภาษีมูลค่าเพิ่ม',
+                                style: TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    fontFamily: Font_.Fonts_T),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: ' ${nFormat.format(ele_vat)} % (VAT)',
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${nFormat.format(sum_per)}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'บาท',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              ' ',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Divider(),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              '',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              'รวมเงิน$_cnamexเดือนปัจจุบัน',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${nFormat.format(sum_all)}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'บาท',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              'รวมเงินทั้งสิ้น',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                fontFamily: FontWeight_.Fonts_T,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              ' ',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                fontFamily: FontWeight_.Fonts_T,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '${nFormat.format(sum_all)}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                fontFamily: FontWeight_.Fonts_T,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              'บาท',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                fontFamily: FontWeight_.Fonts_T,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 50,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+    }
   }
 }

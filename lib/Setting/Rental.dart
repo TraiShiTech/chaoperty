@@ -20,11 +20,13 @@ import '../Model/GetUnit_Model.dart';
 import '../Model/GetUnitx_Model.dart';
 import '../Model/GetVat_Model.dart';
 import '../Model/GetWht_Model.dart';
+import '../Model/electricity_model.dart';
 import '../Model/vat_SC_model.dart';
 import '../Model/vat_s_model.dart';
 import '../Model/wht_SC_model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
+import 'Set_ele.dart';
 
 class Rental extends StatefulWidget {
   const Rental({super.key});
@@ -47,9 +49,10 @@ class _RentalState extends State<Rental> {
   List<VatSModel> selectVat = [];
   List<UnitModel> unitModels = [];
   List<UnitxModel> unitxModels = [];
+  List<ElectricityModel> electricityModels = [];
   String tappedIndex_VAT = '';
   String tappedIndex_WHT = '';
-  int Show_VAT_WHT = 0;
+  int Show_VAT_WHT = 0, Show_ELE = 0;
   //////////////-------------------------------->
   List<String> dates =
       ('01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,18,17,19,20,21,22,23,24,25,26,27,28,29,30,31'
@@ -64,6 +67,7 @@ class _RentalState extends State<Rental> {
     read_GC_wht();
     read_selectVat_map();
     read_GC_unit();
+    read_Electricity();
     _scrollControllers = List.generate(5, (_) => ScrollController());
 
     for (int i = 0; i < dates.length; i++) {
@@ -118,6 +122,32 @@ class _RentalState extends State<Rental> {
                 unitxModel.ser == '7') {
               unitxModels.add(unitxModel);
             }
+          });
+        }
+      } else {}
+    } catch (e) {}
+  }
+
+  Future<Null> read_Electricity() async {
+    if (electricityModels.isNotEmpty) {
+      electricityModels.clear();
+    }
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_electricity.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        for (var map in result) {
+          ElectricityModel electricityModel = ElectricityModel.fromJson(map);
+          setState(() {
+            electricityModels.add(electricityModel);
           });
         }
       } else {}
@@ -321,6 +351,39 @@ class _RentalState extends State<Rental> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (Show_ELE == 0) {
+                                Show_ELE = 1;
+                              } else {
+                                Show_ELE = 0;
+                              }
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.purple.shade900,
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: EdgeInsets.all(4.0),
+                            width: 170,
+                            // height: 30,
+                            child: Center(
+                              child: Text(
+                                Show_ELE == 0 ? 'ปรับอัตตราค่าไฟ' : 'ปิด',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                        ),
                         if (Show_VAT_WHT == 1)
                           Padding(
                             padding: const EdgeInsets.all(4.0),
@@ -412,6 +475,14 @@ class _RentalState extends State<Rental> {
                   ],
                 )),
           ),
+          Show_ELE == 0
+              ? SizedBox()
+              : Container(
+                  height: MediaQuery.of(context).size.width * 0.3,
+                  child: SingleChildScrollView(
+                    child: SetEle(),
+                  ),
+                ), //ele_set(),
           if (Show_VAT_WHT != 0)
             SizedBox(
               child: Column(
@@ -846,7 +917,8 @@ class _RentalState extends State<Rental> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         TextFormField(
@@ -937,7 +1009,8 @@ class _RentalState extends State<Rental> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         TextFormField(
@@ -1075,7 +1148,7 @@ class _RentalState extends State<Rental> {
                                                                     buttonHeight:
                                                                         60,
                                                                     buttonPadding: const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         left:
                                                                             10,
                                                                         right:
@@ -1320,8 +1393,9 @@ class _RentalState extends State<Rental> {
                                                                               .center,
                                                                       children: [
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Container(
                                                                             width:
@@ -1401,7 +1475,8 @@ class _RentalState extends State<Rental> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -1459,7 +1534,8 @@ class _RentalState extends State<Rental> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius.only(
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -1506,7 +1582,8 @@ class _RentalState extends State<Rental> {
                                                                           BoxDecoration(
                                                                         // color: AppbackgroundColor
                                                                         //     .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius.only(
+                                                                        borderRadius: const BorderRadius
+                                                                            .only(
                                                                             topLeft:
                                                                                 Radius.circular(6),
                                                                             topRight: Radius.circular(6),
@@ -1517,9 +1594,9 @@ class _RentalState extends State<Rental> {
                                                                                 Colors.grey,
                                                                             width: 1),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              3.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          3.0),
                                                                       child:
                                                                           const Text(
                                                                         'Scroll',
@@ -2075,7 +2152,8 @@ class _RentalState extends State<Rental> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         TextFormField(
@@ -2327,8 +2405,9 @@ class _RentalState extends State<Rental> {
                                                                               .center,
                                                                       children: [
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Container(
                                                                             width:
@@ -2408,7 +2487,8 @@ class _RentalState extends State<Rental> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -2466,7 +2546,8 @@ class _RentalState extends State<Rental> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius.only(
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -2513,7 +2594,8 @@ class _RentalState extends State<Rental> {
                                                                           BoxDecoration(
                                                                         // color: AppbackgroundColor
                                                                         //     .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius.only(
+                                                                        borderRadius: const BorderRadius
+                                                                            .only(
                                                                             topLeft:
                                                                                 Radius.circular(6),
                                                                             topRight: Radius.circular(6),
@@ -2524,9 +2606,9 @@ class _RentalState extends State<Rental> {
                                                                                 Colors.grey,
                                                                             width: 1),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              3.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          3.0),
                                                                       child:
                                                                           const Text(
                                                                         'Scroll',
@@ -3210,7 +3292,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -3585,9 +3667,9 @@ class _RentalState extends State<Rental> {
                                                                           .exptser !=
                                                                       '3'
                                                                   ? Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Container(
                                                                         width:
@@ -3610,8 +3692,9 @@ class _RentalState extends State<Rental> {
                                                                           // border: Border.all(
                                                                           //     color: Colors.grey, width: 1),
                                                                         ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             Row(
                                                                           children: [
@@ -3727,9 +3810,9 @@ class _RentalState extends State<Rental> {
                                                                       ),
                                                                     )
                                                                   : Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Row(
                                                                         children: [
@@ -3965,7 +4048,7 @@ class _RentalState extends State<Rental> {
                                                                     60,
                                                                 buttonPadding:
                                                                     const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         left:
                                                                             10,
                                                                         right:
@@ -4078,7 +4161,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     DropdownButtonFormField2(
@@ -4135,7 +4218,7 @@ class _RentalState extends State<Rental> {
                                                                       60,
                                                                   buttonPadding:
                                                                       const EdgeInsets
-                                                                              .only(
+                                                                          .only(
                                                                           left:
                                                                               10,
                                                                           right:
@@ -4232,7 +4315,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     DropdownButtonFormField2(
@@ -4289,7 +4372,7 @@ class _RentalState extends State<Rental> {
                                                                       60,
                                                                   buttonPadding:
                                                                       const EdgeInsets
-                                                                              .only(
+                                                                          .only(
                                                                           left:
                                                                               10,
                                                                           right:
@@ -4386,7 +4469,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     Container(
@@ -4416,7 +4499,7 @@ class _RentalState extends State<Rental> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: GestureDetector(
                                                                       onTap: () async {
@@ -4488,7 +4571,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     Container(
@@ -4518,7 +4601,7 @@ class _RentalState extends State<Rental> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       GestureDetector(
@@ -4663,7 +4746,7 @@ class _RentalState extends State<Rental> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -4725,7 +4808,7 @@ class _RentalState extends State<Rental> {
                                                           // color: AppbackgroundColor
                                                           //     .TiTile_Colors,
                                                           borderRadius: const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius
@@ -4794,7 +4877,7 @@ class _RentalState extends State<Rental> {
                                                         // color: AppbackgroundColor
                                                         //     .TiTile_Colors,
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(6),
                                                             topRight:
@@ -5074,7 +5157,7 @@ class _RentalState extends State<Rental> {
                                       Row(
                                         children: [
                                           Expanded(
-                                            flex: 4,
+                                            flex: 2,
                                             child: Container(
                                               height: 50,
                                               color: AppbackgroundColor
@@ -5107,7 +5190,7 @@ class _RentalState extends State<Rental> {
                                                   const EdgeInsets.all(8.0),
                                               child: const Center(
                                                 child: Text(
-                                                  'จำนวนวันช้ากว่ากำหนด',
+                                                  'เกินกำหนด/วัน',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     color: SettingScreen_Color
@@ -5151,6 +5234,75 @@ class _RentalState extends State<Rental> {
                                               height: 50,
                                               color: AppbackgroundColor
                                                   .TiTile_Colors,
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: const Center(
+                                                child: Text(
+                                                  'วิธีการคำนวน บาท',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    fontWeight: FontWeight.bold,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              height: 50,
+                                              color: Colors.red.shade200,
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: const Center(
+                                                child: Text(
+                                                  'เกินวันกำหนด',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    fontWeight: FontWeight.bold,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              height: 50,
+                                              color: Colors.red.shade200,
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: const Center(
+                                                child: Text(
+                                                  'วิธีการคำนวน %',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    fontWeight: FontWeight.bold,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              height: 50,
+                                              color: Colors.red.shade200,
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: const Center(
@@ -5250,11 +5402,11 @@ class _RentalState extends State<Rental> {
                                                         title: Row(
                                                           children: [
                                                             Expanded(
-                                                              flex: 4,
+                                                              flex: 2,
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -5375,7 +5527,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -5488,8 +5640,7 @@ class _RentalState extends State<Rental> {
                                                                         // fontWeight: FontWeight.bold,
                                                                         fontFamily: Font_.Fonts_T),
                                                                   ),
-                                                                  inputFormatters: <
-                                                                      TextInputFormatter>[
+                                                                  inputFormatters: <TextInputFormatter>[
                                                                     FilteringTextInputFormatter
                                                                         .allow(RegExp(
                                                                             r'[0-9]')),
@@ -5503,7 +5654,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -5616,8 +5767,7 @@ class _RentalState extends State<Rental> {
                                                                         // fontWeight: FontWeight.bold,
                                                                         fontFamily: Font_.Fonts_T),
                                                                   ),
-                                                                  inputFormatters: <
-                                                                      TextInputFormatter>[
+                                                                  inputFormatters: <TextInputFormatter>[
                                                                     FilteringTextInputFormatter
                                                                         .allow(RegExp(
                                                                             r'[0-9 .]')),
@@ -5631,7 +5781,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -5744,8 +5894,7 @@ class _RentalState extends State<Rental> {
                                                                         // fontWeight: FontWeight.bold,
                                                                         fontFamily: Font_.Fonts_T),
                                                                   ),
-                                                                  inputFormatters: <
-                                                                      TextInputFormatter>[
+                                                                  inputFormatters: <TextInputFormatter>[
                                                                     FilteringTextInputFormatter
                                                                         .allow(RegExp(
                                                                             r'[0-9 .]')),
@@ -5774,7 +5923,403 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
+                                                                        8.0),
+                                                                child:
+                                                                    TextFormField(
+                                                                  initialValue:
+                                                                      expModels[
+                                                                              index]
+                                                                          .fine,
+                                                                  onFieldSubmitted:
+                                                                      (value) async {
+                                                                    SharedPreferences
+                                                                        preferences =
+                                                                        await SharedPreferences
+                                                                            .getInstance();
+                                                                    String?
+                                                                        ren =
+                                                                        preferences
+                                                                            .getString('renTalSer');
+                                                                    String?
+                                                                        ser_user =
+                                                                        preferences
+                                                                            .getString('ser');
+                                                                    var vser =
+                                                                        expModels[index]
+                                                                            .ser;
+                                                                    String url =
+                                                                        '${MyConstant().domain}/UpC_exp_date_fine.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                    try {
+                                                                      var response =
+                                                                          await http
+                                                                              .get(Uri.parse(url));
+
+                                                                      var result =
+                                                                          json.decode(
+                                                                              response.body);
+                                                                      print(
+                                                                          result);
+                                                                      if (result
+                                                                              .toString() ==
+                                                                          'true') {
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_Exp();
+                                                                        });
+                                                                      } else {}
+                                                                    } catch (e) {}
+                                                                  },
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    fillColor: Colors
+                                                                        .white
+                                                                        .withOpacity(
+                                                                            0.05),
+                                                                    filled:
+                                                                        true,
+                                                                    // prefixIcon:
+                                                                    //     const Icon(Icons.key, color: Colors.black),
+                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                    focusedBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    enabledBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    // labelText: 'PASSWOED',
+                                                                    labelStyle: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                  inputFormatters: <TextInputFormatter>[
+                                                                    FilteringTextInputFormatter
+                                                                        .allow(RegExp(
+                                                                            r'[0-9]')),
+                                                                    // FilteringTextInputFormatter.digitsOnly
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child:
+                                                                    TextFormField(
+                                                                  initialValue:
+                                                                      expModels[
+                                                                              index]
+                                                                          .fine_unit,
+                                                                  onFieldSubmitted:
+                                                                      (value) async {
+                                                                    SharedPreferences
+                                                                        preferences =
+                                                                        await SharedPreferences
+                                                                            .getInstance();
+                                                                    String?
+                                                                        ren =
+                                                                        preferences
+                                                                            .getString('renTalSer');
+                                                                    String?
+                                                                        ser_user =
+                                                                        preferences
+                                                                            .getString('ser');
+                                                                    var vser =
+                                                                        expModels[index]
+                                                                            .ser;
+                                                                    String url =
+                                                                        '${MyConstant().domain}/UpC_exp_fine_unit.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                    try {
+                                                                      var response =
+                                                                          await http
+                                                                              .get(Uri.parse(url));
+
+                                                                      var result =
+                                                                          json.decode(
+                                                                              response.body);
+                                                                      print(
+                                                                          result);
+                                                                      if (result
+                                                                              .toString() ==
+                                                                          'true') {
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_Exp();
+                                                                        });
+                                                                      } else {}
+                                                                    } catch (e) {}
+                                                                  },
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    fillColor: Colors
+                                                                        .white
+                                                                        .withOpacity(
+                                                                            0.05),
+                                                                    filled:
+                                                                        true,
+                                                                    // prefixIcon:
+                                                                    //     const Icon(Icons.key, color: Colors.black),
+                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                    focusedBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    enabledBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    // labelText: 'PASSWOED',
+                                                                    labelStyle: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                  inputFormatters: <TextInputFormatter>[
+                                                                    FilteringTextInputFormatter
+                                                                        .allow(RegExp(
+                                                                            r'[0-9 .]')),
+                                                                    // FilteringTextInputFormatter.digitsOnly
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child:
+                                                                    TextFormField(
+                                                                  initialValue:
+                                                                      expModels[
+                                                                              index]
+                                                                          .fine_late,
+                                                                  onFieldSubmitted:
+                                                                      (value) async {
+                                                                    SharedPreferences
+                                                                        preferences =
+                                                                        await SharedPreferences
+                                                                            .getInstance();
+                                                                    String?
+                                                                        ren =
+                                                                        preferences
+                                                                            .getString('renTalSer');
+                                                                    String?
+                                                                        ser_user =
+                                                                        preferences
+                                                                            .getString('ser');
+                                                                    var vser =
+                                                                        expModels[index]
+                                                                            .ser;
+                                                                    String url =
+                                                                        '${MyConstant().domain}/UpC_exp_fine_late_p.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                    try {
+                                                                      var response =
+                                                                          await http
+                                                                              .get(Uri.parse(url));
+
+                                                                      var result =
+                                                                          json.decode(
+                                                                              response.body);
+                                                                      print(
+                                                                          result);
+                                                                      if (result
+                                                                              .toString() ==
+                                                                          'true') {
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_Exp();
+                                                                        });
+                                                                      } else {}
+                                                                    } catch (e) {}
+                                                                  },
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    fillColor: Colors
+                                                                        .white
+                                                                        .withOpacity(
+                                                                            0.05),
+                                                                    filled:
+                                                                        true,
+                                                                    // prefixIcon:
+                                                                    //     const Icon(Icons.key, color: Colors.black),
+                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                    focusedBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    enabledBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    // labelText: 'PASSWOED',
+                                                                    labelStyle: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                  inputFormatters: <TextInputFormatter>[
+                                                                    FilteringTextInputFormatter
+                                                                        .allow(RegExp(
+                                                                            r'[0-9 .]')),
+                                                                    // FilteringTextInputFormatter.digitsOnly
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              //  Text(
+                                                              //   '5%',
+                                                              //   maxLines: 2,
+                                                              //   textAlign:
+                                                              //       TextAlign
+                                                              //           .center,
+                                                              //   style: TextStyle(
+                                                              //     color: SettingScreen_Color
+                                                              //         .Colors_Text2_,
+                                                              //     fontFamily: Font_
+                                                              //         .Fonts_T,
+                                                              //     //fontWeight: FontWeight.bold,
+                                                              //     //fontSize: 10.0
+                                                              //   ),
+                                                              // ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     Container(
@@ -5803,7 +6348,7 @@ class _RentalState extends State<Rental> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       GestureDetector(
@@ -6150,4 +6695,5 @@ class _RentalState extends State<Rental> {
           ),
         ]));
   }
+
 }

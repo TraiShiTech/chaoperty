@@ -380,14 +380,14 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
             child: Container(
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
-                color: Colors.white30,
+                color: Colors.white60,
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(0),
-                    topRight: Radius.circular(0),
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10)),
                 // border: Border.all(color: Colors.white, width: 1),
@@ -504,25 +504,49 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                     color: (i + 1 == 1)
-                                                        ? Colors.blue[300]
+                                                        ? (Status_3_ == i)
+                                                            ? Colors.blue[700]
+                                                            : Colors.blue[200]
                                                         : (i + 1 == 2)
-                                                            ? Colors.grey[300]
+                                                            ? (Status_3_ == i)
+                                                                ? Colors.grey[
+                                                                    700]
+                                                                : Colors
+                                                                    .grey[300]
                                                             : (i + 1 == 3)
-                                                                ? Colors
-                                                                    .purple[300]
+                                                                ? (Status_3_ ==
+                                                                        i)
+                                                                    ? Colors.purple[
+                                                                        700]
+                                                                    : Colors.purple[
+                                                                        200]
                                                                 : (i + 1 == 4)
-                                                                    ? Colors.amber[
-                                                                        300]
+                                                                    ? (Status_3_ ==
+                                                                            i)
+                                                                        ? Colors.amber[
+                                                                            700]
+                                                                        : Colors.amber[
+                                                                            200]
                                                                     : (i + 1 ==
                                                                             5)
-                                                                        ? Colors.lime[
-                                                                            300]
+                                                                        ? (Status_3_ ==
+                                                                                i)
+                                                                            ? Colors.lime[
+                                                                                700]
+                                                                            : Colors.lime[
+                                                                                200]
                                                                         : (i + 1 ==
                                                                                 6)
-                                                                            ? Colors.blueGrey[300]
+                                                                            ? (Status_3_ == i)
+                                                                                ? Colors.blueGrey[700]
+                                                                                : Colors.blueGrey[200]
                                                                             : (i + 1 == 7)
-                                                                                ? Colors.brown[300]
-                                                                                : Colors.red[300],
+                                                                                ? (Status_3_ == i)
+                                                                                    ? Colors.brown[700]
+                                                                                    : Colors.brown[200]
+                                                                                : (Status_3_ == i)
+                                                                                    ? Colors.red[700]
+                                                                                    : Colors.red[200],
                                                     borderRadius:
                                                         const BorderRadius.only(
                                                             topLeft:
@@ -1397,154 +1421,156 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                           //     tappedIndex_ == index.toString()
                                           //         ? Colors.grey.shade300
                                           //         : null,
-                                          padding: const EdgeInsets.all(5),
+                                          padding: const EdgeInsets.all(0),
                                           child: ListTile(
                                             onTap: () {
                                               setState(() {
                                                 tappedIndex_ = index.toString();
                                               });
                                             },
-                                            title: Row(
-                                              children: [
-                                                // Expanded(
-                                                //   flex: 1,
-                                                //   child: Container(
-                                                //     child: Center(
-                                                //       child: Text(
-                                                //         '${syslogModel[index].atype}',
-                                                //         style: const TextStyle(
-                                                //             color:
-                                                //                 CustomerScreen_Color
-                                                //                     .Colors_Text2_,
-                                                //             // fontWeight: FontWeight.bold,
-                                                //             fontFamily:
-                                                //                 Font_.Fonts_T),
-                                                //       ),
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Container(
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${syslogModel[index].datex}',
-                                                        maxLines: 2,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
-                                                    ),
+                                            title: Container(
+                                              decoration: BoxDecoration(
+                                                // color: Colors.green[100]!
+                                                //     .withOpacity(0.5),
+                                                border: Border(
+                                                  bottom: BorderSide(
+                                                    color: Colors.black12,
+                                                    width: 1,
                                                   ),
                                                 ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Container(
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${syslogModel[index].timex}',
-                                                        maxLines: 2,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  // Expanded(
+                                                  //   flex: 1,
+                                                  //   child: Container(
+                                                  //     child: Center(
+                                                  //       child: Text(
+                                                  //         '${syslogModel[index].atype}',
+                                                  //         style: const TextStyle(
+                                                  //             color:
+                                                  //                 CustomerScreen_Color
+                                                  //                     .Colors_Text2_,
+                                                  //             // fontWeight: FontWeight.bold,
+                                                  //             fontFamily:
+                                                  //                 Font_.Fonts_T),
+                                                  //       ),
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '${syslogModel[index].datex}',
+                                                      maxLines: 2,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              CustomerScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Container(
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${syslogModel[index].ip}',
-                                                        maxLines: 2,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '${syslogModel[index].timex}',
+                                                      maxLines: 2,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              CustomerScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
                                                     ),
                                                   ),
-                                                ),
-                                                // Expanded(
-                                                //   flex: 1,
-                                                //   child: Container(
-                                                //     child: Center(
-                                                //       child: Text(
-                                                //         '${syslogModel[index].uid}',
-                                                //         style: const TextStyle(
-                                                //             color:
-                                                //                 CustomerScreen_Color
-                                                //                     .Colors_Text2_,
-                                                //             // fontWeight: FontWeight.bold,
-                                                //             fontFamily:
-                                                //                 Font_.Fonts_T),
-                                                //       ),
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Container(
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${syslogModel[index].username}',
-                                                        maxLines: 2,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Text(
+                                                      '${syslogModel[index].ip}',
+                                                      maxLines: 2,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              CustomerScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Container(
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${syslogModel[index].frm}',
-                                                        maxLines: 2,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
+                                                  // Expanded(
+                                                  //   flex: 1,
+                                                  //   child: Container(
+                                                  //     child: Center(
+                                                  //       child: Text(
+                                                  //         '${syslogModel[index].uid}',
+                                                  //         style: const TextStyle(
+                                                  //             color:
+                                                  //                 CustomerScreen_Color
+                                                  //                     .Colors_Text2_,
+                                                  //             // fontWeight: FontWeight.bold,
+                                                  //             fontFamily:
+                                                  //                 Font_.Fonts_T),
+                                                  //       ),
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Text(
+                                                      '${syslogModel[index].username}',
+                                                      maxLines: 2,
+                                                      textAlign: TextAlign.left,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              CustomerScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 3,
-                                                  child: Container(
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${syslogModel[index].fdo}',
-                                                        maxLines: 2,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '${syslogModel[index].frm}',
+                                                      maxLines: 2,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              CustomerScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                  Expanded(
+                                                    flex: 3,
+                                                    child: Text(
+                                                      '${syslogModel[index].fdo}',
+                                                      maxLines: 2,
+                                                      textAlign: TextAlign.left,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              CustomerScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),

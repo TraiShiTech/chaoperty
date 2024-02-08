@@ -103,6 +103,9 @@ class TransModel {
   String? amt_con;
   String? img;
   String? ucost;
+  String? cname;
+  String? sname;
+  String? ln;
 
   TransModel(
       {this.ser,
@@ -205,7 +208,10 @@ class TransModel {
       this.qty_con,
       this.img,
       this.amt_con,
-      this.ucost});
+      this.ucost,
+      this.cname,
+      this.sname,
+      this.ln});
 
   TransModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -309,7 +315,10 @@ class TransModel {
     qty_con = json['qty_con'];
     amt_con = json['amt_con'];
     img = json['img'];
-    ucost= json['ucost'];
+    ucost = json['ucost'];
+    cname = json['cname'];
+    sname = json['sname'];
+    ln = json['ln'];
   }
 
   Map<String, dynamic> toJson() {
@@ -398,7 +407,6 @@ class TransModel {
     data['pass'] = this.pass;
     data['datepass'] = this.datepass;
     data['remark'] = this.remark;
-
     data['ovalue'] = this.ovalue;
     data['nvalue'] = this.nvalue;
     data['qty'] = this.qty;
@@ -415,7 +423,10 @@ class TransModel {
     data['qty_con'] = this.qty_con;
     data['amt_con'] = this.amt_con;
     data['img'] = this.img;
-       data['ucost'] = this.ucost;
+    data['ucost'] = this.ucost;
+    data['cname'] = this.cname;
+    data['sname'] = this.sname;
+    data['ln'] = this.ln;
     return data;
   }
 }

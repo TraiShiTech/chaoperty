@@ -3,12 +3,14 @@ import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:slide_switcher/slide_switcher.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../Constant/Myconstant.dart';
+import '../Man_PDF/Man_ChartReport_Generate.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Style/colors.dart';
@@ -424,7 +426,6 @@ class _Dashboard_Screen5State extends State<Dashboard_Screen5> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-         
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -565,9 +566,11 @@ class _Dashboard_Screen5State extends State<Dashboard_Screen5> {
                                         format: 'point.y สัญญา',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: const TrackballMarkerSettings(
-                                        markerVisibility:
-                                            TrackballVisibilityMode.visible),
+                                    markerSettings:
+                                        const TrackballMarkerSettings(
+                                            markerVisibility:
+                                                TrackballVisibilityMode
+                                                    .visible),
                                   ),
                                   zoomPanBehavior: ZoomPanBehavior(
                                       enableMouseWheelZooming: true,
@@ -587,14 +590,16 @@ class _Dashboard_Screen5State extends State<Dashboard_Screen5> {
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
                                         text: 'โซน',
-                                        textStyle: const TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
                                         text: 'หน่วย (สัญญา)',
-                                        textStyle: const TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -693,21 +698,25 @@ class _Dashboard_Screen5State extends State<Dashboard_Screen5> {
                                         format: 'point.y  สัญญา',
                                         enable: true,
                                         color: Colors.black54),
-                                    markerSettings: const TrackballMarkerSettings(
-                                        markerVisibility:
-                                            TrackballVisibilityMode.visible),
+                                    markerSettings:
+                                        const TrackballMarkerSettings(
+                                            markerVisibility:
+                                                TrackballVisibilityMode
+                                                    .visible),
                                   ),
                                   primaryXAxis: CategoryAxis(
                                     title: AxisTitle(
                                         text: 'โซน',
-                                        textStyle: const TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     labelStyle: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                   primaryYAxis: NumericAxis(
                                     title: AxisTitle(
                                         text: 'หน่วย (สัญญา)',
-                                        textStyle: const TextStyle(fontSize: 16)),
+                                        textStyle:
+                                            const TextStyle(fontSize: 16)),
                                     numberFormat: NumberFormat.compact(),
                                     isInversed: false,
                                     //  interval: 1000,
@@ -792,409 +801,114 @@ class _Dashboard_Screen5State extends State<Dashboard_Screen5> {
                                     ),
                                   ]),
                             ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (Visit_1 == '1' || Visit_1 == null) {
-                                      captureAndConvertToBase64(chartKey1, '');
-                                    } else {
-                                      captureAndConvertToBase64(chartKey2, '');
-                                    }
-                                  },
-                                  child: Container(
-                                      width: 120,
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red[700],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8)),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'SAVE(.PNG)',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
-                                      )),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child: Align(
+                      //         alignment: Alignment.centerRight,
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: InkWell(
+                      //             onTap: () async {
+                      //               if (Visit_1 == '1' || Visit_1 == null) {
+                      //                 captureAndConvertToBase64(chartKey1, '');
+                      //               } else {
+                      //                 captureAndConvertToBase64(chartKey2, '');
+                      //               }
+                      //             },
+                      //             child: Container(
+                      //                 width: 120,
+                      //                 padding: const EdgeInsets.all(8.0),
+                      //                 decoration: BoxDecoration(
+                      //                   color: Colors.red[700],
+                      //                   borderRadius: const BorderRadius.only(
+                      //                       topLeft: Radius.circular(8),
+                      //                       topRight: Radius.circular(8),
+                      //                       bottomLeft: Radius.circular(8),
+                      //                       bottomRight: Radius.circular(8)),
+                      //                 ),
+                      //                 child: const Center(
+                      //                   child: Text(
+                      //                     'SAVE(.PNG)',
+                      //                     style: TextStyle(
+                      //                       color: Colors.white,
+                      //                       fontWeight: FontWeight.bold,
+                      //                       fontFamily: FontWeight_.Fonts_T,
+                      //                     ),
+                      //                   ),
+                      //                 )),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
               ),
-              // const SizedBox(
-              //   height: 5.0,
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Container(
-              //         width: MediaQuery.of(context).size.width / 1.25,
-              //         height: 4.0,
-              //         child: Divider(
-              //           color: Colors.grey[300],
-              //           height: 4.0,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 5.0,
-              // ),
-              // SizedBox(
-              //   height: 50,
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Column(
-              //     children: [
-              //       Container(
-              //         decoration: const BoxDecoration(
-              //           color: AppbackgroundColor.TiTile_Colors,
-              //           borderRadius: BorderRadius.only(
-              //               topLeft: Radius.circular(10),
-              //               topRight: Radius.circular(10),
-              //               bottomLeft: Radius.circular(0),
-              //               bottomRight: Radius.circular(0)),
-              //           // border: Border.all(color: Colors.grey, width: 1),
-              //         ),
-              //         child: Row(
-              //           children: [
-              //             const Padding(
-              //               padding: EdgeInsets.all(8.0),
-              //               child: Text(
-              //                 'ผู้เช่า : รายงานข้อมูลผู้เช่า(ยกเลิกสัญญา)',
-              //                 style: TextStyle(
-              //                   color: ReportScreen_Color.Colors_Text2_,
-              //                   fontWeight: FontWeight.bold,
-              //                   fontFamily: FontWeight_.Fonts_T,
-              //                 ),
-              //               ),
-              //             ),
-              //             Padding(
-              //               padding: const EdgeInsets.all(8.0),
-              //               child: InkWell(
-              //                 onTap: () async {
-              //                   // read_GC_tenant_Cancel();
-              //                 },
-              //                 child: Container(
-              //                     width: 100,
-              //                     padding: const EdgeInsets.all(8.0),
-              //                     decoration: BoxDecoration(
-              //                       color: Colors.green[700],
-              //                       borderRadius: const BorderRadius.only(
-              //                           topLeft: Radius.circular(10),
-              //                           topRight: Radius.circular(10),
-              //                           bottomLeft: Radius.circular(10),
-              //                           bottomRight: Radius.circular(10)),
-              //                     ),
-              //                     child: Center(
-              //                       child: Text(
-              //                         'ค้นหา',
-              //                         style: TextStyle(
-              //                           color: Colors.white,
-              //                           fontWeight: FontWeight.bold,
-              //                           fontFamily: FontWeight_.Fonts_T,
-              //                         ),
-              //                       ),
-              //                     )),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //       Container(
-              //         decoration: BoxDecoration(
-              //           color:
-              //               AppbackgroundColor.TiTile_Colors.withOpacity(0.4),
-              //           borderRadius: BorderRadius.only(
-              //               topLeft: Radius.circular(0),
-              //               topRight: Radius.circular(0),
-              //               bottomLeft: Radius.circular(10),
-              //               bottomRight: Radius.circular(10)),
-              //           // border: Border.all(color: Colors.grey, width: 1),
-              //         ),
-              //         child: Row(
-              //           children: [
-              //             Expanded(
-              //               child: Align(
-              //                 alignment: Alignment.centerRight,
-              //                 child: Padding(
-              //                   padding: const EdgeInsets.all(8.0),
-              //                   child: InkWell(
-              //                     onTap: () {},
-              //                     child: SlideSwitcher(
-              //                       containerBorder: Border.all(
-              //                           color: Colors.grey, width: 1),
-              //                       slidersColors: [Colors.white],
-              //                       containerBorderRadius: 10,
-              //                       onSelect: (index) async {
-              //                         setState(() {
-              //                           // switcherIndex1 = index;
-              //                           setState(() {
-              //                             Visit_2 = '${index + 1}';
-              //                           });
-              //                         });
-              //                       },
-              //                       containerHeight: 35,
-              //                       containerWight: 100,
-              //                       containerColor: Colors.grey,
-              //                       children: [
-              //                         Icon(
-              //                           Icons.line_axis,
-              //                           color: (Visit_2 == '1')
-              //                               ? Colors.blue[900]
-              //                               : Colors.black,
-              //                         ),
-              //                         Icon(
-              //                           Icons.view_column,
-              //                           color: (Visit_2 == '2')
-              //                               ? Colors.blue[900]
-              //                               : Colors.black,
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Container(
-              //     color: Colors.green[50]!.withOpacity(0.5),
-              //     padding: const EdgeInsets.all(8.0),
-              //     child: Column(
-              //       children: [
-              //         (Visit_2 == '1' || Visit_2 == null)
-              //             ? RepaintBoundary(
-              //                 key: chartKey3,
-              //                 child: SfCartesianChart(
-              //                     trackballBehavior: TrackballBehavior(
-              //                       activationMode: ActivationMode.singleTap,
-              //                       enable: true,
-              //                       tooltipDisplayMode:
-              //                           TrackballDisplayMode.groupAllPoints,
-              //                       tooltipSettings: InteractiveTooltip(
-              //                           format: 'point.y สัญญา',
-              //                           enable: true,
-              //                           color: Colors.black54),
-              //                       markerSettings: TrackballMarkerSettings(
-              //                           markerVisibility:
-              //                               TrackballVisibilityMode.visible),
-              //                     ),
-              //                     zoomPanBehavior: ZoomPanBehavior(
-              //                         enableMouseWheelZooming: true,
-              //                         maximumZoomLevel: 0.5,
-              //                         enablePinching: true,
-              //                         zoomMode: ZoomMode.x,
-              //                         enablePanning: true,
-              //                         enableSelectionZooming: true,
-              //                         enableDoubleTapZooming: true),
-              //                     // trackballBehavior: TrackballBehavior(),
-              //                     title: ChartTitle(text: 'รายงานผู้เช่า '),
-              //                     legend: Legend(
-              //                         isVisible: true,
-              //                         textStyle:
-              //                             TextStyle(color: Colors.black)),
-              //                     // primaryYAxis: NumericAxis(isInversed: false),
-              //                     primaryXAxis: CategoryAxis(
-              //                       title: AxisTitle(
-              //                           text: 'โซน',
-              //                           textStyle: TextStyle(fontSize: 16)),
-              //                       labelStyle: TextStyle(
-              //                           fontSize: 12, color: Colors.blue),
-              //                     ),
-              //                     primaryYAxis: NumericAxis(
-              //                       title: AxisTitle(
-              //                           text: 'หน่วย (สัญญา)',
-              //                           textStyle: TextStyle(fontSize: 16)),
-              //                       numberFormat: NumberFormat.compact(),
-              //                       isInversed: false,
-              //                       //  interval: 1000,
-              //                       minimum: 0,
-              //                       isVisible:
-              //                           true, // Set isVisible to false to hide the left y-axis   116
-              //                     ),
-              //                     // axes: <ChartAxis>[
-              //                     //   NumericAxis(
-              //                     //       numberFormat: NumberFormat.compact(),
-              //                     //       majorGridLines: const MajorGridLines(width: 0),
-              //                     //       opposedPosition: true,
-              //                     //       name: 'yAxis1',
-              //                     //       interval: 1000,
-              //                     //       minimum: 0,
-              //                     //       labelAlignment: LabelAlignment.start
-              //                     //       // maximum: 1000000
-              //                     //       ),
-              //                     // ],
-              //                     series: <ChartSeries<_SalesData, String>>[
-              //                       LineSeries<_SalesData, String>(
-              //                         color: Colors.red,
-              //                         animationDuration: 100,
-              //                         onRendererCreated:
-              //                             (ChartSeriesController controller) {
-              //                           _chartSeriesController1 = controller;
-              //                         },
-              //                         dataSource: data_tatol_income,
-              //                         xValueMapper: (_SalesData data, _) =>
-              //                             data.zone,
-              //                         yValueMapper: (_SalesData data, _) =>
-              //                             data.status4,
-              //                         name: '${Status[3]} ',
-              //                       ),
-              //                     ]))
-              //             : RepaintBoundary(
-              //                 key: chartKey4,
-              //                 child: SfCartesianChart(
-              //                     title: ChartTitle(text: 'รายงานผู้เช่า'),
-              //                     zoomPanBehavior: ZoomPanBehavior(
-              //                         enableMouseWheelZooming: true,
-              //                         maximumZoomLevel: 0.05,
-              //                         enablePinching: true,
-              //                         zoomMode: ZoomMode.x,
-              //                         enablePanning: true,
-              //                         enableSelectionZooming: true,
-              //                         enableDoubleTapZooming: true),
-              //                     trackballBehavior: TrackballBehavior(
-              //                       activationMode: ActivationMode.singleTap,
-              //                       enable: true,
-              //                       tooltipDisplayMode:
-              //                           TrackballDisplayMode.groupAllPoints,
-              //                       tooltipSettings: InteractiveTooltip(
-              //                           format: 'point.y  สัญญา',
-              //                           enable: true,
-              //                           color: Colors.black54),
-              //                       markerSettings: TrackballMarkerSettings(
-              //                           markerVisibility:
-              //                               TrackballVisibilityMode.visible),
-              //                     ),
-              //                     primaryXAxis: CategoryAxis(
-              //                       title: AxisTitle(
-              //                           text: 'โซน',
-              //                           textStyle: TextStyle(fontSize: 16)),
-              //                       labelStyle: TextStyle(
-              //                           fontSize: 12, color: Colors.blue),
-              //                     ),
-              //                     primaryYAxis: NumericAxis(
-              //                       title: AxisTitle(
-              //                           text: 'หน่วย (สัญญา)',
-              //                           textStyle: TextStyle(fontSize: 16)),
-              //                       numberFormat: NumberFormat.compact(),
-              //                       isInversed: false,
-              //                       //  interval: 1000,
-              //                       minimum: 0,
-              //                       isVisible:
-              //                           true, // Set isVisible to false to hide the left y-axis   116
-              //                     ),
-              //                     // axes: <ChartAxis>[
-              //                     //   NumericAxis(
-              //                     //     numberFormat: NumberFormat.compact(),
-              //                     //     majorGridLines: const MajorGridLines(width: 0),
-              //                     //     opposedPosition: true,
-              //                     //     name: 'yAxis1',
-              //                     //     interval: 10,
-              //                     //     minimum: 0,
-              //                     //   )
-              //                     // ],
-              //                     legend: Legend(
-              //                         isVisible: true,
-              //                         textStyle:
-              //                             TextStyle(color: Colors.black)),
-              //                     series: <ChartSeries<_SalesData, String>>[
-              //                       ColumnSeries<_SalesData, String>(
-              //                         color: Colors.red,
-              //                         trackColor: Colors.red,
-              //                         animationDuration: 100,
-              //                         onRendererCreated:
-              //                             (ChartSeriesController controller) {
-              //                           _chartSeriesController1 = controller;
-              //                         },
-              //                         dataSource: data_tatol_income,
-              //                         xValueMapper: (_SalesData data, _) =>
-              //                             data.zone,
-              //                         yValueMapper: (_SalesData data, _) =>
-              //                             data.status4,
-              //                         name: '${Status[3]} ',
-              //                       ),
-              //                     ]),
-              //               ),
-              //         Row(
-              //           children: [
-              //             Expanded(
-              //               child: Align(
-              //                 alignment: Alignment.centerRight,
-              //                 child: Padding(
-              //                   padding: const EdgeInsets.all(8.0),
-              //                   child: InkWell(
-              //                     onTap: () async {
-              //                       print('${teNant_Cancel.length}');
-              //                       // if (Visit_2 == '1' || Visit_2 == null) {
-              //                       //   captureAndConvertToBase64(chartKey3, '');
-              //                       // } else {
-              //                       //   captureAndConvertToBase64(chartKey4, '');
-              //                       // }
-              //                     },
-              //                     child: Container(
-              //                         width: 120,
-              //                         padding: const EdgeInsets.all(8.0),
-              //                         decoration: BoxDecoration(
-              //                           color: Colors.red[700],
-              //                           borderRadius: const BorderRadius.only(
-              //                               topLeft: Radius.circular(8),
-              //                               topRight: Radius.circular(8),
-              //                               bottomLeft: Radius.circular(8),
-              //                               bottomRight: Radius.circular(8)),
-              //                         ),
-              //                         child: Center(
-              //                           child: Text(
-              //                             'SAVE(.PNG)',
-              //                             style: TextStyle(
-              //                               color: Colors.white,
-              //                               fontWeight: FontWeight.bold,
-              //                               fontFamily: FontWeight_.Fonts_T,
-              //                             ),
-              //                           ),
-              //                         )),
-              //                   ),
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            if (Visit_1 == '1' || Visit_1 == null) {
+                              capture(chartKey1, chartKey3);
+                            } else {
+                              capture(chartKey2, chartKey4);
+                            }
+                          },
+                          child: Container(
+                              width: 120,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green[700],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'พิมพ์',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  dynamic capture(chartKey01, chartKey02) async {
+    final boundary01 =
+        chartKey01.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    final image01 = await boundary01.toImage(
+        pixelRatio: 3.0); // Adjust pixelRatio as needed
+
+    // Convert the captured image to bytes
+    final byteData01 = await image01.toByteData(format: ImageByteFormat.png);
+    final buffer01 = byteData01!.buffer.asUint8List();
+/////////------------------------------->
+
+    Man_ChartReport_GeneratePDF.man_chartReport_GeneratePDF(
+        context, buffer01, '', '5');
   }
 }
 

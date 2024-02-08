@@ -260,7 +260,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (int index = 0; index < 8; index++)
+                    for (int index = 0; index < 4; index++)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -283,7 +283,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                 ),
                                 child: Column(
                                   children: [
-                                    if (index + 1 == 8)
+                                    if (index + 1 == 4)
                                       (rtser.toString() == '72' ||
                                               rtser.toString() == '92' ||
                                               rtser.toString() == '93' ||
@@ -366,11 +366,11 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                                             tem_page_ser
                                                                 .toString()
                                                                 .trim())
-                                                        ? Icon(
+                                                        ? const Icon(
                                                             Icons.check_box,
                                                             color: Colors.green,
                                                           )
-                                                        : Icon(
+                                                        : const Icon(
                                                             Icons
                                                                 .check_box_outline_blank,
                                                             color: Colors.grey,
@@ -410,7 +410,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                     ),
                                     child: Image(
                                       image: AssetImage(
-                                        (index + 1 == 8)
+                                        (index + 1 == 4)
                                             ? (rtser.toString() == '72' ||
                                                     rtser.toString() == '92' ||
                                                     rtser.toString() == '93' ||
@@ -442,7 +442,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                                             Colors.grey[200],
                                                         title: Column(
                                                           children: [
-                                                            if (index + 1 == 8)
+                                                            if (index + 1 == 4)
                                                               Text(
                                                                 (rtser.toString() == '72' ||
                                                                         rtser.toString() ==
@@ -570,7 +570,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                                                   image:
                                                                       AssetImage(
                                                                     (index + 1 ==
-                                                                            8)
+                                                                            4)
                                                                         ? (rtser.toString() == '72' ||
                                                                                 rtser.toString() == '92' ||
                                                                                 rtser.toString() == '93' ||

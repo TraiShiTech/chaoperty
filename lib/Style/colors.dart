@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 ///////////////----------------------------------------------------------->
 class AppBarColors {
   static const ABar_Colors = Color.fromARGB(255, 141, 185, 90);
+  static const hexColor = Color(0xFF102456);
 }
 
 class AppbackgroundColor {
-  static const Abg_Colors = Color(0xffF2F2D6);
+  static const Abg_Colors = Color.fromARGB(188, 237, 239, 243);
+  //  Color.fromARGB(
+  //     57, 202, 191, 191); //Color(0xF3F3F3); // Color(0xffF2F2D6);
   static const Sub_Abg_Colors = Color(0xFFFFFFFF);
   static const TiTile_Colors = Color(0xFFD9D9B7); //Colors.blue[200],
+  static const TiTile_Box =
+      Color.fromARGB(255, 204, 204, 196); //Colors.blue[200],
 }
 
 class tappedIndex_Color {

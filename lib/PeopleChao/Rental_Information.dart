@@ -20,7 +20,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_limited_checkbox/flutter_limited_checkbox.dart';
 import 'package:group_radio_button/group_radio_button.dart';
-
+// import 'package:hand_signature/signature.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -32,7 +32,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
+// import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import '../ChaoArea/ChaoRe_contact_add.dart';
 import '../Constant/Myconstant.dart';
@@ -44,6 +44,7 @@ import '../Model/GetCustomer_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
+import '../Model/electricity_model.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement2.dart';
 import '../PDF/PDF_Agreement/pdf_RentalInforma.dart';
@@ -89,6 +90,7 @@ class _RentalInformationState extends State<RentalInformation> {
   List<ContractfModel> contractfModels = [];
   List<CustomerModel> customerModels = [];
   List<CustomerModel> customer_Models = [];
+  List<ElectricityModel> electricityModels = [];
   List<CustomerModel> _customerModels = <CustomerModel>[];
   final _formKey = GlobalKey<FormState>();
   final Form_nameshop = TextEditingController();
@@ -230,8 +232,10 @@ class _RentalInformationState extends State<RentalInformation> {
 
     var seruser = preferences.getString('ser');
     var utype = preferences.getString('utype');
+
+    var ren = preferences.getString('renTalSer');
     String url =
-        '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
+        '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -249,6 +253,31 @@ class _RentalInformationState extends State<RentalInformation> {
       }
     } catch (e) {}
   }
+
+  // Future<Null> read_GC_rental() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+
+  //   var seruser = preferences.getString('ser');
+  //   var utype = preferences.getString('utype');
+  //   String url =
+  //       '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
+
+  //   try {
+  //     var response = await http.get(Uri.parse(url));
+
+  //     var result = json.decode(response.body);
+  //     // print('read_GC_rental///// $result');
+  //     for (var map in result) {
+  //       RenTalModel renTalModel = RenTalModel.fromJson(map);
+  //       var foderx = renTalModel.dbn;
+  //       setState(() {
+  //         foder = foderx;
+  //         renTal_bill = renTalModel.bill_name!;
+  //         renTalModels.add(renTalModel);
+  //       });
+  //     }
+  //   } catch (e) {}
+  // }
 
   ///------------------------------------------------------>
   Future<Null> red_report() async {
@@ -2220,6 +2249,36 @@ class _RentalInformationState extends State<RentalInformation> {
         );
       }),
     );
+  }
+
+  Future<dynamic> showcountmiter(int index) async {
+    var ser = quotxSelectModels[index].ele_ty;
+    if (electricityModels.isNotEmpty) {
+      electricityModels.clear();
+    }
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_electricity.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        for (var map in result) {
+          ElectricityModel electricityModel = ElectricityModel.fromJson(map);
+
+          if (electricityModel.ser == ser) {
+            setState(() {
+              electricityModels.add(electricityModel);
+            });
+          }
+        }
+      } else {}
+    } catch (e) {}
   }
 
   Widget build(BuildContext context) {
@@ -4549,7 +4608,7 @@ class _RentalInformationState extends State<RentalInformation> {
                             bottomRight: Radius.circular(10)),
                       ),
 
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -4625,6 +4684,657 @@ class _RentalInformationState extends State<RentalInformation> {
                 ],
               ),
             ),
+            // const Row(
+            //   children: [
+            //     Padding(
+            //       padding: EdgeInsets.all(8.0),
+            //       child: AutoSizeText(
+            //         minFontSize: 10,
+            //         maxFontSize: 15,
+            //         '4.User & Password ',
+            //         style: TextStyle(
+            //             color: PeopleChaoScreen_Color.Colors_Text1_,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: FontWeight_.Fonts_T
+            //             //fontSize: 10.0
+            //             ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Row(
+            //     children: [
+            //       const Text(
+            //         'User & Password ของผู้เช่า ',
+            //         textAlign: TextAlign.start,
+            //         style: TextStyle(
+            //             color: PeopleChaoScreen_Color.Colors_Text2_,
+            //             // fontWeight: FontWeight.bold,
+            //             fontFamily: Font_.Fonts_T
+            //             //fontSize: 10.0
+            //             ),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.all(4.0),
+            //         child: InkWell(
+            //           child: Container(
+            //             decoration: const BoxDecoration(
+            //               color: Colors.green,
+            //               borderRadius: BorderRadius.only(
+            //                   topLeft: Radius.circular(8),
+            //                   topRight: Radius.circular(8),
+            //                   bottomLeft: Radius.circular(8),
+            //                   bottomRight: Radius.circular(8)),
+            //             ),
+            //             padding: const EdgeInsets.all(4.0),
+            //             child: const Text(
+            //               'แก้ไข / กำหนด',
+            //               textAlign: TextAlign.start,
+            //               style: TextStyle(
+            //                   color: Colors.white,
+            //                   // fontWeight: FontWeight.bold,
+            //                   fontFamily: Font_.Fonts_T
+            //                   //fontSize: 10.0
+            //                   ),
+            //             ),
+            //           ),
+            //           onTap: () {
+            //             showDialog<String>(
+            //               barrierDismissible: false,
+            //               context: context,
+            //               builder: (BuildContext context) => Form(
+            //                 key: _formKey,
+            //                 child: AlertDialog(
+            //                   shape: const RoundedRectangleBorder(
+            //                       borderRadius:
+            //                           BorderRadius.all(Radius.circular(20.0))),
+            //                   title: const Center(
+            //                       child: Text(
+            //                     'แก้ไข User & Password',
+            //                     style: TextStyle(
+            //                         color: AdminScafScreen_Color.Colors_Text1_,
+            //                         fontWeight: FontWeight.bold,
+            //                         fontFamily: FontWeight_.Fonts_T),
+            //                   )),
+            //                   actions: <Widget>[
+            //                     Column(
+            //                       children: [
+            //                         const Align(
+            //                           alignment: Alignment.centerLeft,
+            //                           child: Padding(
+            //                             padding: EdgeInsets.all(8.0),
+            //                             child: Text(
+            //                               'User',
+            //                               textAlign: TextAlign.start,
+            //                               style: TextStyle(
+            //                                   color: PeopleChaoScreen_Color
+            //                                       .Colors_Text2_,
+            //                                   //fontWeight: FontWeight.bold,
+            //                                   fontFamily: Font_.Fonts_T),
+            //                             ),
+            //                           ),
+            //                         ),
+            //                         Container(
+            //                           decoration: const BoxDecoration(
+            //                             // color: Colors.green,
+            //                             borderRadius: BorderRadius.only(
+            //                               topLeft: Radius.circular(6),
+            //                               topRight: Radius.circular(6),
+            //                               bottomLeft: Radius.circular(6),
+            //                               bottomRight: Radius.circular(6),
+            //                             ),
+            //                             // border: Border.all(color: Colors.grey, width: 1),
+            //                           ),
+            //                           padding: const EdgeInsets.all(8.0),
+            //                           child: TextFormField(
+            //                             keyboardType: TextInputType.text,
+            //                             showCursor: true, //add this line
+            //                             readOnly: false,
+            //                             controller: Form_User,
+            //                             cursorColor: Colors.green,
+            //                             validator: (value) {
+            //                               if (value == null || value.isEmpty) {
+            //                                 return 'ใส่ข้อมูลให้ครบถ้วน ';
+            //                               }
+            //                               // if (int.parse(value.toString()) < 13) {
+            //                               //   return '< 13';
+            //                               // }
+            //                               return null;
+            //                             },
+            //                             decoration: InputDecoration(
+            //                                 fillColor:
+            //                                     Colors.white.withOpacity(0.3),
+            //                                 // fillColor: Colors.green[100]!.withOpacity(0.5),
+            //                                 filled: true,
+            //                                 // labelText: 'User',
+            //                                 // prefixIcon:
+            //                                 //     const Icon(Icons.person, color: Colors.black),
+            //                                 // suffixIcon: Icon(Icons.clear, color: Colors.black),
+            //                                 focusedBorder:
+            //                                     const OutlineInputBorder(
+            //                                   borderRadius: BorderRadius.only(
+            //                                     topRight: Radius.circular(15),
+            //                                     topLeft: Radius.circular(15),
+            //                                     bottomRight:
+            //                                         Radius.circular(15),
+            //                                     bottomLeft: Radius.circular(15),
+            //                                   ),
+            //                                   borderSide: BorderSide(
+            //                                     width: 1,
+            //                                     color: Colors.black,
+            //                                   ),
+            //                                 ),
+            //                                 enabledBorder:
+            //                                     const OutlineInputBorder(
+            //                                   borderRadius: BorderRadius.only(
+            //                                     topRight: Radius.circular(15),
+            //                                     topLeft: Radius.circular(15),
+            //                                     bottomRight:
+            //                                         Radius.circular(15),
+            //                                     bottomLeft: Radius.circular(15),
+            //                                   ),
+            //                                   borderSide: BorderSide(
+            //                                     width: 1,
+            //                                     color: Colors.grey,
+            //                                   ),
+            //                                 ),
+            //                                 labelStyle: const TextStyle(
+            //                                     color: Colors.black54,
+            //                                     fontFamily: Font_.Fonts_T)),
+            //                             inputFormatters: <TextInputFormatter>[
+            //                               FilteringTextInputFormatter.deny(
+            //                                   RegExp("[' ']")),
+            //                               // for below version 2 use this
+            //                               // FilteringTextInputFormatter.allow(
+            //                               //     RegExp(r'[a-z A-Z 1-9]')),
+            //                               // for version 2 and greater youcan also use this
+            //                               // FilteringTextInputFormatter
+            //                               //     .digitsOnly
+            //                             ],
+            //                             onChanged: (value) {
+            //                               // print('User : ${value}');
+            //                             },
+            //                           ),
+            //                         ),
+            //                         const Align(
+            //                           alignment: Alignment.centerLeft,
+            //                           child: Padding(
+            //                             padding: EdgeInsets.all(8.0),
+            //                             child: Text(
+            //                               'Password',
+            //                               textAlign: TextAlign.start,
+            //                               style: TextStyle(
+            //                                   color: PeopleChaoScreen_Color
+            //                                       .Colors_Text2_,
+            //                                   //fontWeight: FontWeight.bold,
+            //                                   fontFamily: Font_.Fonts_T),
+            //                             ),
+            //                           ),
+            //                         ),
+            //                         Container(
+            //                           decoration: const BoxDecoration(
+            //                             // color: Colors.green,
+            //                             borderRadius: BorderRadius.only(
+            //                               topLeft: Radius.circular(6),
+            //                               topRight: Radius.circular(6),
+            //                               bottomLeft: Radius.circular(6),
+            //                               bottomRight: Radius.circular(6),
+            //                             ),
+            //                             // border: Border.all(color: Colors.grey, width: 1),
+            //                           ),
+            //                           padding: const EdgeInsets.all(8.0),
+            //                           child: TextFormField(
+            //                             keyboardType: TextInputType.text,
+            //                             showCursor: true, //add this line
+            //                             readOnly: false,
+            //                             validator: (value) {
+            //                               if (value == null || value.isEmpty) {
+            //                                 return 'ใส่ข้อมูลให้ครบถ้วน ';
+            //                               }
+            //                               // if (int.parse(value.toString()) < 13) {
+            //                               //   return '< 13';
+            //                               // }
+            //                               return null;
+            //                             },
+            //                             controller: Form_UserPass,
+            //                             cursorColor: Colors.green,
+            //                             decoration: InputDecoration(
+            //                                 fillColor:
+            //                                     Colors.white.withOpacity(0.3),
+            //                                 // fillColor: Colors.green[100]!.withOpacity(0.5),
+            //                                 filled: true,
+            //                                 // labelText: 'Password',
+            //                                 // prefixIcon:
+            //                                 //     const Icon(Icons.person, color: Colors.black),
+            //                                 // suffixIcon: Icon(Icons.clear, color: Colors.black),
+            //                                 focusedBorder:
+            //                                     const OutlineInputBorder(
+            //                                   borderRadius: BorderRadius.only(
+            //                                     topRight: Radius.circular(15),
+            //                                     topLeft: Radius.circular(15),
+            //                                     bottomRight:
+            //                                         Radius.circular(15),
+            //                                     bottomLeft: Radius.circular(15),
+            //                                   ),
+            //                                   borderSide: BorderSide(
+            //                                     width: 1,
+            //                                     color: Colors.black,
+            //                                   ),
+            //                                 ),
+            //                                 enabledBorder:
+            //                                     const OutlineInputBorder(
+            //                                   borderRadius: BorderRadius.only(
+            //                                     topRight: Radius.circular(15),
+            //                                     topLeft: Radius.circular(15),
+            //                                     bottomRight:
+            //                                         Radius.circular(15),
+            //                                     bottomLeft: Radius.circular(15),
+            //                                   ),
+            //                                   borderSide: BorderSide(
+            //                                     width: 1,
+            //                                     color: Colors.grey,
+            //                                   ),
+            //                                 ),
+            //                                 labelStyle: const TextStyle(
+            //                                     color: Colors.black54,
+            //                                     fontFamily: Font_.Fonts_T)),
+            //                             inputFormatters: <TextInputFormatter>[
+            //                               FilteringTextInputFormatter.deny(
+            //                                   RegExp("[' ']")),
+            //                               // for below version 2 use this
+            //                               // FilteringTextInputFormatter.allow(
+            //                               //     RegExp(r'[a-z A-Z 1-9]')),
+            //                               // for version 2 and greater youcan also use this
+            //                               // FilteringTextInputFormatter
+            //                               //     .digitsOnly
+            //                             ],
+            //                             onChanged: (value) {
+            //                               // print('Pass_User : ${value}');
+            //                             },
+            //                           ),
+            //                         ),
+            //                         const SizedBox(
+            //                           height: 5.0,
+            //                         ),
+            //                         const Divider(
+            //                           color: Colors.grey,
+            //                           height: 4.0,
+            //                         ),
+            //                         const SizedBox(
+            //                           height: 5.0,
+            //                         ),
+            //                         Padding(
+            //                           padding: const EdgeInsets.all(8.0),
+            //                           child: Row(
+            //                             mainAxisAlignment:
+            //                                 MainAxisAlignment.center,
+            //                             children: [
+            //                               Padding(
+            //                                 padding: const EdgeInsets.all(8.0),
+            //                                 child: Container(
+            //                                   width: 100,
+            //                                   decoration: const BoxDecoration(
+            //                                     color: Colors.green,
+            //                                     borderRadius: BorderRadius.only(
+            //                                         topLeft:
+            //                                             Radius.circular(10),
+            //                                         topRight:
+            //                                             Radius.circular(10),
+            //                                         bottomLeft:
+            //                                             Radius.circular(10),
+            //                                         bottomRight:
+            //                                             Radius.circular(10)),
+            //                                   ),
+            //                                   padding:
+            //                                       const EdgeInsets.all(8.0),
+            //                                   child: TextButton(
+            //                                     onPressed: () async {
+            //                                       SharedPreferences
+            //                                           preferences =
+            //                                           await SharedPreferences
+            //                                               .getInstance();
+            //                                       String? ren = preferences
+            //                                           .getString('renTalSer');
+            //                                       String? ser_user = preferences
+            //                                           .getString('ser');
+
+            //                                       String Cid_ =
+            //                                           '${widget.Get_Value_cid}';
+            //                                       print(
+            //                                           'User : ${Form_User.text}');
+            //                                       print(
+            //                                           'Cust_no_ : ${Cust_no_}');
+
+            //                                       String password = md5
+            //                                           .convert(utf8.encode(
+            //                                               Form_UserPass.text))
+            //                                           .toString();
+            //                                       print(
+            //                                           'password Md5 $password');
+            //                                       if (_formKey.currentState!
+            //                                           .validate()) {
+            //                                         String url =
+            //                                             '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&cust_no=$Cust_no_&user_U=${Form_User.text}&pass_U=$password&ren=$ren';
+            //                                         try {
+            //                                           var response = await http
+            //                                               .get(Uri.parse(url));
+
+            //                                           var result = json.decode(
+            //                                               response.body);
+            //                                           Insert_log.Insert_logs(
+            //                                               'ผู้เช่า',
+            //                                               'ข้อมูลผู้เช่า>>แก้ไขUser&password(${widget.Get_Value_cid})');
+            //                                           setState(() {
+            //                                             checkPreferance();
+            //                                             read_data();
+            //                                             red_report();
+            //                                             red_reporttrans();
+            //                                             read_GC_rental();
+            //                                             GC_contractf();
+            //                                             Form_UserPass.clear();
+            //                                             Form_User.clear();
+            //                                           });
+            //                                           Navigator.pop(
+            //                                               context, 'OK');
+            //                                           ScaffoldMessenger.of(
+            //                                                   context)
+            //                                               .showSnackBar(const SnackBar(
+            //                                                   content: Text(
+            //                                                       'แก้ไขข้อมูลเสร็จสิ้น !!',
+            //                                                       style: TextStyle(
+            //                                                           color: Colors
+            //                                                               .black,
+            //                                                           fontFamily:
+            //                                                               Font_
+            //                                                                   .Fonts_T))));
+            //                                         } catch (e) {
+            //                                           Navigator.pop(
+            //                                               context, 'OK');
+            //                                           ScaffoldMessenger.of(
+            //                                                   context)
+            //                                               .showSnackBar(
+            //                                             const SnackBar(
+            //                                                 content: Text(
+            //                                                     'เกิดข้อผิดพลาด',
+            //                                                     style: TextStyle(
+            //                                                         color: Colors
+            //                                                             .black,
+            //                                                         fontFamily:
+            //                                                             Font_
+            //                                                                 .Fonts_T))),
+            //                                           );
+            //                                         }
+            //                                       }
+            //                                     },
+            //                                     child: const Text(
+            //                                       'ยืนยัน',
+            //                                       style: TextStyle(
+            //                                           color: Colors.white,
+            //                                           fontWeight:
+            //                                               FontWeight.bold,
+            //                                           fontFamily:
+            //                                               FontWeight_.Fonts_T),
+            //                                     ),
+            //                                   ),
+            //                                 ),
+            //                               ),
+            //                               Padding(
+            //                                 padding: const EdgeInsets.all(8.0),
+            //                                 child: Row(
+            //                                   mainAxisAlignment:
+            //                                       MainAxisAlignment.center,
+            //                                   children: [
+            //                                     Container(
+            //                                       width: 100,
+            //                                       decoration:
+            //                                           const BoxDecoration(
+            //                                         color: Colors.redAccent,
+            //                                         borderRadius:
+            //                                             BorderRadius.only(
+            //                                                 topLeft:
+            //                                                     Radius.circular(
+            //                                                         10),
+            //                                                 topRight:
+            //                                                     Radius.circular(
+            //                                                         10),
+            //                                                 bottomLeft:
+            //                                                     Radius.circular(
+            //                                                         10),
+            //                                                 bottomRight:
+            //                                                     Radius.circular(
+            //                                                         10)),
+            //                                       ),
+            //                                       padding:
+            //                                           const EdgeInsets.all(8.0),
+            //                                       child: TextButton(
+            //                                         onPressed: () {
+            //                                           setState(() {
+            //                                             checkPreferance();
+            //                                             read_data();
+            //                                             red_report();
+            //                                             red_reporttrans();
+            //                                             read_GC_rental();
+            //                                             GC_contractf();
+            //                                             Form_UserPass.clear();
+            //                                             Form_User.clear();
+            //                                           });
+            //                                           Navigator.pop(
+            //                                               context, 'OK');
+            //                                         },
+            //                                         child: const Text(
+            //                                           'ยกเลิก',
+            //                                           style: TextStyle(
+            //                                               color: Colors.white,
+            //                                               fontWeight:
+            //                                                   FontWeight.bold,
+            //                                               fontFamily:
+            //                                                   FontWeight_
+            //                                                       .Fonts_T),
+            //                                         ),
+            //                                       ),
+            //                                     ),
+            //                                   ],
+            //                                 ),
+            //                               ),
+            //                             ],
+            //                           ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //             );
+            //           },
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       // color: AppbackgroundColor.Sub_Abg_Colors,
+            //       borderRadius: const BorderRadius.only(
+            //           topLeft: Radius.circular(10),
+            //           topRight: Radius.circular(10),
+            //           bottomLeft: Radius.circular(10),
+            //           bottomRight: Radius.circular(10)),
+            //       border: Border.all(color: Colors.grey, width: 1),
+            //     ),
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: Row(
+            //       children: [
+            //         const Expanded(
+            //           flex: 1,
+            //           child: Text(
+            //             'User',
+            //             textAlign: TextAlign.start,
+            //             style: TextStyle(
+            //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+            //                 //fontWeight: FontWeight.bold,
+            //                 fontFamily: Font_.Fonts_T),
+            //           ),
+            //         ),
+            //         Expanded(
+            //           flex: 2,
+            //           child: Container(
+            //             decoration: const BoxDecoration(
+            //               // color: Colors.green,
+            //               borderRadius: BorderRadius.only(
+            //                 topLeft: Radius.circular(6),
+            //                 topRight: Radius.circular(6),
+            //                 bottomLeft: Radius.circular(6),
+            //                 bottomRight: Radius.circular(6),
+            //               ),
+            //               // border: Border.all(color: Colors.grey, width: 1),
+            //             ),
+            //             padding: const EdgeInsets.all(8.0),
+            //             child: TextFormField(
+            //               keyboardType: TextInputType.text,
+            //               showCursor: false, //add this line
+            //               readOnly: true,
+            //               controller: Form_User,
+            //               // cursorColor: Colors.grey,
+            //               decoration: InputDecoration(
+            //                   fillColor: Colors.white.withOpacity(0.3),
+            //                   // fillColor: Colors.green[100]!.withOpacity(0.5),
+            //                   filled: true,
+            //                   // labelText: 'User',
+            //                   // prefixIcon:
+            //                   //     const Icon(Icons.person, color: Colors.black),
+            //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
+            //                   focusedBorder: const OutlineInputBorder(
+            //                     borderRadius: BorderRadius.only(
+            //                       topRight: Radius.circular(15),
+            //                       topLeft: Radius.circular(15),
+            //                       bottomRight: Radius.circular(15),
+            //                       bottomLeft: Radius.circular(15),
+            //                     ),
+            //                     borderSide: BorderSide(
+            //                       width: 1,
+            //                       color: Colors.black,
+            //                     ),
+            //                   ),
+            //                   enabledBorder: const OutlineInputBorder(
+            //                     borderRadius: BorderRadius.only(
+            //                       topRight: Radius.circular(15),
+            //                       topLeft: Radius.circular(15),
+            //                       bottomRight: Radius.circular(15),
+            //                       bottomLeft: Radius.circular(15),
+            //                     ),
+            //                     borderSide: BorderSide(
+            //                       width: 1,
+            //                       color: Colors.grey,
+            //                     ),
+            //                   ),
+            //                   labelStyle: const TextStyle(
+            //                       color: Colors.black54,
+            //                       fontFamily: Font_.Fonts_T)),
+            //               inputFormatters: <TextInputFormatter>[
+            //                 FilteringTextInputFormatter.deny(RegExp("[' ']")),
+            //                 // for below version 2 use this
+            //                 // FilteringTextInputFormatter.allow(
+            //                 //     RegExp(r'[a-z A-Z 1-9]')),
+            //                 // for version 2 and greater youcan also use this
+            //                 // FilteringTextInputFormatter
+            //                 //     .digitsOnly
+            //               ],
+            //               onChanged: (value) {
+            //                 print('User : ${value}');
+            //               },
+            //             ),
+            //           ),
+            //         ),
+            //         const Expanded(
+            //           flex: 3,
+            //           child: Text(
+            //             '',
+            //             textAlign: TextAlign.center,
+            //             style: TextStyle(
+            //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+            //                 //fontWeight: FontWeight.bold,
+            //                 fontFamily: Font_.Fonts_T),
+            //           ),
+            //         ),
+            //         // Expanded(
+            //         //   flex: 2,
+            //         //   child: Container(
+            //         //     decoration: const BoxDecoration(
+            //         //       // color: Colors.green,
+            //         //       borderRadius: BorderRadius.only(
+            //         //         topLeft: Radius.circular(6),
+            //         //         topRight: Radius.circular(6),
+            //         //         bottomLeft: Radius.circular(6),
+            //         //         bottomRight: Radius.circular(6),
+            //         //       ),
+            //         //       // border: Border.all(color: Colors.grey, width: 1),
+            //         //     ),
+            //         //     padding: const EdgeInsets.all(8.0),
+            //         //     child: TextFormField(
+            //         //       keyboardType: TextInputType.text,
+            //         //       showCursor: false, //add this line
+            //         //       readOnly: true,
+
+            //         //       controller: Form_UserPass,
+            //         //       // cursorColor: Colors.grey,
+            //         //       decoration: InputDecoration(
+            //         //           fillColor: Colors.white.withOpacity(0.3),
+            //         //           // fillColor: Colors.green[100]!.withOpacity(0.5),
+            //         //           filled: true,
+            //         //           // labelText: 'Password',
+            //         //           // prefixIcon:
+            //         //           //     const Icon(Icons.person, color: Colors.black),
+            //         //           // suffixIcon: Icon(Icons.clear, color: Colors.black),
+            //         //           focusedBorder: const OutlineInputBorder(
+            //         //             borderRadius: BorderRadius.only(
+            //         //               topRight: Radius.circular(15),
+            //         //               topLeft: Radius.circular(15),
+            //         //               bottomRight: Radius.circular(15),
+            //         //               bottomLeft: Radius.circular(15),
+            //         //             ),
+            //         //             borderSide: BorderSide(
+            //         //               width: 1,
+            //         //               color: Colors.black,
+            //         //             ),
+            //         //           ),
+            //         //           enabledBorder: const OutlineInputBorder(
+            //         //             borderRadius: BorderRadius.only(
+            //         //               topRight: Radius.circular(15),
+            //         //               topLeft: Radius.circular(15),
+            //         //               bottomRight: Radius.circular(15),
+            //         //               bottomLeft: Radius.circular(15),
+            //         //             ),
+            //         //             borderSide: BorderSide(
+            //         //               width: 1,
+            //         //               color: Colors.grey,
+            //         //             ),
+            //         //           ),
+            //         //           labelStyle: const TextStyle(
+            //         //               color: Colors.black54,
+            //         //               fontFamily: Font_.Fonts_T)),
+            //         //       inputFormatters: <TextInputFormatter>[
+            //         //         FilteringTextInputFormatter.deny(RegExp("[' ']")),
+            //         //         // for below version 2 use this
+            //         //         // FilteringTextInputFormatter.allow(
+            //         //         //     RegExp(r'[a-z A-Z 1-9]')),
+            //         //         // for version 2 and greater youcan also use this
+            //         //         // FilteringTextInputFormatter
+            //         //         //     .digitsOnly
+            //         //       ],
+            //         //       onChanged: (value) {
+            //         //         print('Pass_User : ${value}');
+            //         //       },
+            //         //     ),
+            //         //   ),
+            //         // ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             const Row(
               children: [
                 Padding(
@@ -4632,658 +5342,7 @@ class _RentalInformationState extends State<RentalInformation> {
                   child: AutoSizeText(
                     minFontSize: 10,
                     maxFontSize: 15,
-                    '4.User & Password ',
-                    style: TextStyle(
-                        color: PeopleChaoScreen_Color.Colors_Text1_,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: FontWeight_.Fonts_T
-                        //fontSize: 10.0
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Text(
-                    'User & Password ของผู้เช่า ',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                        // fontWeight: FontWeight.bold,
-                        fontFamily: Font_.Fonts_T
-                        //fontSize: 10.0
-                        ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: InkWell(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              topRight: Radius.circular(8),
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(8)),
-                        ),
-                        padding: const EdgeInsets.all(4.0),
-                        child: const Text(
-                          'แก้ไข / กำหนด',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: Colors.white,
-                              // fontWeight: FontWeight.bold,
-                              fontFamily: Font_.Fonts_T
-                              //fontSize: 10.0
-                              ),
-                        ),
-                      ),
-                      onTap: () {
-                        showDialog<String>(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) => Form(
-                            key: _formKey,
-                            child: AlertDialog(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0))),
-                              title: const Center(
-                                  child: Text(
-                                'แก้ไข User & Password',
-                                style: TextStyle(
-                                    color: AdminScafScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T),
-                              )),
-                              actions: <Widget>[
-                                Column(
-                                  children: [
-                                    const Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'User',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              //fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: const BoxDecoration(
-                                        // color: Colors.green,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(6),
-                                          topRight: Radius.circular(6),
-                                          bottomLeft: Radius.circular(6),
-                                          bottomRight: Radius.circular(6),
-                                        ),
-                                        // border: Border.all(color: Colors.grey, width: 1),
-                                      ),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.text,
-                                        showCursor: true, //add this line
-                                        readOnly: false,
-                                        controller: Form_User,
-                                        cursorColor: Colors.green,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                          }
-                                          // if (int.parse(value.toString()) < 13) {
-                                          //   return '< 13';
-                                          // }
-                                          return null;
-                                        },
-                                        decoration: InputDecoration(
-                                            fillColor:
-                                                Colors.white.withOpacity(0.3),
-                                            // fillColor: Colors.green[100]!.withOpacity(0.5),
-                                            filled: true,
-                                            // labelText: 'User',
-                                            // prefixIcon:
-                                            //     const Icon(Icons.person, color: Colors.black),
-                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                            focusedBorder:
-                                                const OutlineInputBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(15),
-                                                topLeft: Radius.circular(15),
-                                                bottomRight:
-                                                    Radius.circular(15),
-                                                bottomLeft: Radius.circular(15),
-                                              ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            enabledBorder:
-                                                const OutlineInputBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(15),
-                                                topLeft: Radius.circular(15),
-                                                bottomRight:
-                                                    Radius.circular(15),
-                                                bottomLeft: Radius.circular(15),
-                                              ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            labelStyle: const TextStyle(
-                                                color: Colors.black54,
-                                                fontFamily: Font_.Fonts_T)),
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.deny(
-                                              RegExp("[' ']")),
-                                          // for below version 2 use this
-                                          // FilteringTextInputFormatter.allow(
-                                          //     RegExp(r'[a-z A-Z 1-9]')),
-                                          // for version 2 and greater youcan also use this
-                                          // FilteringTextInputFormatter
-                                          //     .digitsOnly
-                                        ],
-                                        onChanged: (value) {
-                                          // print('User : ${value}');
-                                        },
-                                      ),
-                                    ),
-                                    const Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Password',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              //fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: const BoxDecoration(
-                                        // color: Colors.green,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(6),
-                                          topRight: Radius.circular(6),
-                                          bottomLeft: Radius.circular(6),
-                                          bottomRight: Radius.circular(6),
-                                        ),
-                                        // border: Border.all(color: Colors.grey, width: 1),
-                                      ),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.text,
-                                        showCursor: true, //add this line
-                                        readOnly: false,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                          }
-                                          // if (int.parse(value.toString()) < 13) {
-                                          //   return '< 13';
-                                          // }
-                                          return null;
-                                        },
-                                        controller: Form_UserPass,
-                                        cursorColor: Colors.green,
-                                        decoration: InputDecoration(
-                                            fillColor:
-                                                Colors.white.withOpacity(0.3),
-                                            // fillColor: Colors.green[100]!.withOpacity(0.5),
-                                            filled: true,
-                                            // labelText: 'Password',
-                                            // prefixIcon:
-                                            //     const Icon(Icons.person, color: Colors.black),
-                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                            focusedBorder:
-                                                const OutlineInputBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(15),
-                                                topLeft: Radius.circular(15),
-                                                bottomRight:
-                                                    Radius.circular(15),
-                                                bottomLeft: Radius.circular(15),
-                                              ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            enabledBorder:
-                                                const OutlineInputBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(15),
-                                                topLeft: Radius.circular(15),
-                                                bottomRight:
-                                                    Radius.circular(15),
-                                                bottomLeft: Radius.circular(15),
-                                              ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            labelStyle: const TextStyle(
-                                                color: Colors.black54,
-                                                fontFamily: Font_.Fonts_T)),
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.deny(
-                                              RegExp("[' ']")),
-                                          // for below version 2 use this
-                                          // FilteringTextInputFormatter.allow(
-                                          //     RegExp(r'[a-z A-Z 1-9]')),
-                                          // for version 2 and greater youcan also use this
-                                          // FilteringTextInputFormatter
-                                          //     .digitsOnly
-                                        ],
-                                        onChanged: (value) {
-                                          // print('Pass_User : ${value}');
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    const Divider(
-                                      color: Colors.grey,
-                                      height: 4.0,
-                                    ),
-                                    const SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              width: 100,
-                                              decoration: const BoxDecoration(
-                                                color: Colors.green,
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(10),
-                                                    topRight:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(10),
-                                                    bottomRight:
-                                                        Radius.circular(10)),
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: TextButton(
-                                                onPressed: () async {
-                                                  SharedPreferences
-                                                      preferences =
-                                                      await SharedPreferences
-                                                          .getInstance();
-                                                  String? ren = preferences
-                                                      .getString('renTalSer');
-                                                  String? ser_user = preferences
-                                                      .getString('ser');
-
-                                                  String Cid_ =
-                                                      '${widget.Get_Value_cid}';
-                                                  print(
-                                                      'User : ${Form_User.text}');
-                                                  print(
-                                                      'Cust_no_ : ${Cust_no_}');
-
-                                                  String password = md5
-                                                      .convert(utf8.encode(
-                                                          Form_UserPass.text))
-                                                      .toString();
-                                                  print(
-                                                      'password Md5 $password');
-                                                  if (_formKey.currentState!
-                                                      .validate()) {
-                                                    String url =
-                                                        '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&cust_no=$Cust_no_&user_U=${Form_User.text}&pass_U=$password&ren=$ren';
-                                                    try {
-                                                      var response = await http
-                                                          .get(Uri.parse(url));
-
-                                                      var result = json.decode(
-                                                          response.body);
-                                                      Insert_log.Insert_logs(
-                                                          'ผู้เช่า',
-                                                          'ข้อมูลผู้เช่า>>แก้ไขUser&password(${widget.Get_Value_cid})');
-                                                      setState(() {
-                                                        checkPreferance();
-                                                        read_data();
-                                                        red_report();
-                                                        red_reporttrans();
-                                                        read_GC_rental();
-                                                        GC_contractf();
-                                                        Form_UserPass.clear();
-                                                        Form_User.clear();
-                                                      });
-                                                      Navigator.pop(
-                                                          context, 'OK');
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(const SnackBar(
-                                                              content: Text(
-                                                                  'แก้ไขข้อมูลเสร็จสิ้น !!',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T))));
-                                                    } catch (e) {
-                                                      Navigator.pop(
-                                                          context, 'OK');
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        const SnackBar(
-                                                            content: Text(
-                                                                'เกิดข้อผิดพลาด',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T))),
-                                                      );
-                                                    }
-                                                  }
-                                                },
-                                                child: const Text(
-                                                  'ยืนยัน',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: 100,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.redAccent,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: TextButton(
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        checkPreferance();
-                                                        read_data();
-                                                        red_report();
-                                                        red_reporttrans();
-                                                        read_GC_rental();
-                                                        GC_contractf();
-                                                        Form_UserPass.clear();
-                                                        Form_User.clear();
-                                                      });
-                                                      Navigator.pop(
-                                                          context, 'OK');
-                                                    },
-                                                    child: const Text(
-                                                      'ยกเลิก',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  // color: AppbackgroundColor.Sub_Abg_Colors,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
-                  border: Border.all(color: Colors.grey, width: 1),
-                ),
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    const Expanded(
-                      flex: 1,
-                      child: Text(
-                        'User',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                            //fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          // color: Colors.green,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(6),
-                            topRight: Radius.circular(6),
-                            bottomLeft: Radius.circular(6),
-                            bottomRight: Radius.circular(6),
-                          ),
-                          // border: Border.all(color: Colors.grey, width: 1),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          showCursor: false, //add this line
-                          readOnly: true,
-                          controller: Form_User,
-                          // cursorColor: Colors.grey,
-                          decoration: InputDecoration(
-                              fillColor: Colors.white.withOpacity(0.3),
-                              // fillColor: Colors.green[100]!.withOpacity(0.5),
-                              filled: true,
-                              // labelText: 'User',
-                              // prefixIcon:
-                              //     const Icon(Icons.person, color: Colors.black),
-                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                              focusedBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  topLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  topLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              labelStyle: const TextStyle(
-                                  color: Colors.black54,
-                                  fontFamily: Font_.Fonts_T)),
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.deny(RegExp("[' ']")),
-                            // for below version 2 use this
-                            // FilteringTextInputFormatter.allow(
-                            //     RegExp(r'[a-z A-Z 1-9]')),
-                            // for version 2 and greater youcan also use this
-                            // FilteringTextInputFormatter
-                            //     .digitsOnly
-                          ],
-                          onChanged: (value) {
-                            print('User : ${value}');
-                          },
-                        ),
-                      ),
-                    ),
-                    const Expanded(
-                      flex: 3,
-                      child: Text(
-                        '',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                            //fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T),
-                      ),
-                    ),
-                    // Expanded(
-                    //   flex: 2,
-                    //   child: Container(
-                    //     decoration: const BoxDecoration(
-                    //       // color: Colors.green,
-                    //       borderRadius: BorderRadius.only(
-                    //         topLeft: Radius.circular(6),
-                    //         topRight: Radius.circular(6),
-                    //         bottomLeft: Radius.circular(6),
-                    //         bottomRight: Radius.circular(6),
-                    //       ),
-                    //       // border: Border.all(color: Colors.grey, width: 1),
-                    //     ),
-                    //     padding: const EdgeInsets.all(8.0),
-                    //     child: TextFormField(
-                    //       keyboardType: TextInputType.text,
-                    //       showCursor: false, //add this line
-                    //       readOnly: true,
-
-                    //       controller: Form_UserPass,
-                    //       // cursorColor: Colors.grey,
-                    //       decoration: InputDecoration(
-                    //           fillColor: Colors.white.withOpacity(0.3),
-                    //           // fillColor: Colors.green[100]!.withOpacity(0.5),
-                    //           filled: true,
-                    //           // labelText: 'Password',
-                    //           // prefixIcon:
-                    //           //     const Icon(Icons.person, color: Colors.black),
-                    //           // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                    //           focusedBorder: const OutlineInputBorder(
-                    //             borderRadius: BorderRadius.only(
-                    //               topRight: Radius.circular(15),
-                    //               topLeft: Radius.circular(15),
-                    //               bottomRight: Radius.circular(15),
-                    //               bottomLeft: Radius.circular(15),
-                    //             ),
-                    //             borderSide: BorderSide(
-                    //               width: 1,
-                    //               color: Colors.black,
-                    //             ),
-                    //           ),
-                    //           enabledBorder: const OutlineInputBorder(
-                    //             borderRadius: BorderRadius.only(
-                    //               topRight: Radius.circular(15),
-                    //               topLeft: Radius.circular(15),
-                    //               bottomRight: Radius.circular(15),
-                    //               bottomLeft: Radius.circular(15),
-                    //             ),
-                    //             borderSide: BorderSide(
-                    //               width: 1,
-                    //               color: Colors.grey,
-                    //             ),
-                    //           ),
-                    //           labelStyle: const TextStyle(
-                    //               color: Colors.black54,
-                    //               fontFamily: Font_.Fonts_T)),
-                    //       inputFormatters: <TextInputFormatter>[
-                    //         FilteringTextInputFormatter.deny(RegExp("[' ']")),
-                    //         // for below version 2 use this
-                    //         // FilteringTextInputFormatter.allow(
-                    //         //     RegExp(r'[a-z A-Z 1-9]')),
-                    //         // for version 2 and greater youcan also use this
-                    //         // FilteringTextInputFormatter
-                    //         //     .digitsOnly
-                    //       ],
-                    //       onChanged: (value) {
-                    //         print('Pass_User : ${value}');
-                    //       },
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-            ),
-            const Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: AutoSizeText(
-                    minFontSize: 10,
-                    maxFontSize: 15,
-                    '5.เอกสาร',
+                    '4.เอกสาร',
                     style: TextStyle(
                         color: PeopleChaoScreen_Color.Colors_Text1_,
                         fontWeight: FontWeight.bold,
@@ -7567,50 +7626,399 @@ class _RentalInformationState extends State<RentalInformation> {
                                                             ),
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: AutoSizeText(
-                                                            maxLines: 2,
-                                                            minFontSize: 8,
-                                                            // maxFontSize: 15,
-                                                                quotxSelectModels[
-                                                                            index]
-                                                                        .qty ==
-                                                                    '0.00'
-                                                                ? '${nFormat.format(double.parse(quotxSelectModels[index].total!))} / งวด'
-                                                                : '${nFormat.format(double.parse(quotxSelectModels[index].qty!))} / หน่วย',
-                                                            // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                            textAlign:
-                                                                TextAlign.end,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: AutoSizeText(
-                                                            maxLines: 2,
-                                                            minFontSize: 8,
-                                                            // maxFontSize: 15,
-                                                            '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
-                                                            textAlign:
-                                                                TextAlign.end,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                          ),
-                                                        ),
+                                                        quotxSelectModels[index]
+                                                                    .ele_ty ==
+                                                                '0'
+                                                            ? Expanded(
+                                                                flex: 1,
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  maxLines: 2,
+                                                                  minFontSize:
+                                                                      8,
+                                                                  // maxFontSize: 15,
+                                                                  quotxSelectModels[index]
+                                                                              .qty ==
+                                                                          '0.00'
+                                                                      ? '${nFormat.format(double.parse(quotxSelectModels[index].total!))} / งวด'
+                                                                      : '${nFormat.format(double.parse(quotxSelectModels[index].qty!))} / หน่วย',
+                                                                  // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .end,
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              )
+                                                            : Expanded(
+                                                                flex: 1,
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  maxLines: 2,
+                                                                  minFontSize:
+                                                                      8,
+                                                                  // maxFontSize: 15,
+                                                                  'อัตราพิเศษ',
+                                                                  // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .end,
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              ),
+                                                        quotxSelectModels[index]
+                                                                    .ele_ty ==
+                                                                '0'
+                                                            ? Expanded(
+                                                                flex: 1,
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  maxLines: 2,
+                                                                  minFontSize:
+                                                                      8,
+                                                                  // maxFontSize: 15,
+                                                                  '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .end,
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              )
+                                                            : Expanded(
+                                                                flex: 1,
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    showcountmiter(
+                                                                            index)
+                                                                        .then((value) => showDialog(
+                                                                            context: context,
+                                                                            builder: (_) {
+                                                                              return Dialog(
+                                                                                child: Container(
+                                                                                  width: MediaQuery.of(context).size.width * 0.5,
+                                                                                  height: MediaQuery.of(context).size.width * 0.2,
+                                                                                  child: SingleChildScrollView(
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        Row(
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                              child: Padding(
+                                                                                                padding: const EdgeInsets.all(15.0),
+                                                                                                child: Text(
+                                                                                                  // ignore: unnecessary_string_interpolations
+                                                                                                  'อัตราการคำนวณปัจจุบัน',
+                                                                                                  textAlign: TextAlign.center,
+                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: Font_.Fonts_T),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                        Divider(),
+                                                                                        (double.parse(electricityModels[0].eleMitOne!) + double.parse(electricityModels[0].eleGobOne!)) == 0.00
+                                                                                            ? SizedBox()
+                                                                                            : Row(
+                                                                                                children: [
+                                                                                                  Expanded(flex: 1, child: Text('')),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      'หน่วยที่ 0 - ${electricityModels[0].eleOne}',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitOne!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitOne!) == 0.00 ? '${electricityModels[0].eleGobOne}' : '${electricityModels[0].eleMitOne}',
+                                                                                                      textAlign: TextAlign.end,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 1,
+                                                                                                    child: Text(
+                                                                                                      'บาท',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                        SizedBox(
+                                                                                          height: 10,
+                                                                                        ),
+                                                                                        (double.parse(electricityModels[0].eleMitTwo!) + double.parse(electricityModels[0].eleGobTwo!)) == 0.00
+                                                                                            ? SizedBox()
+                                                                                            : Row(
+                                                                                                children: [
+                                                                                                  Expanded(flex: 1, child: Text('')),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      'หน่วยที่ ${int.parse(electricityModels[0].eleOne!) + 1} - ${electricityModels[0].eleTwo}',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? '${electricityModels[0].eleGobTwo}' : '${electricityModels[0].eleMitTwo}',
+                                                                                                      textAlign: TextAlign.end,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 1,
+                                                                                                    child: Text(
+                                                                                                      'บาท',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                        SizedBox(
+                                                                                          height: 10,
+                                                                                        ),
+                                                                                        (double.parse(electricityModels[0].eleMitThree!) + double.parse(electricityModels[0].eleGobThree!)) == 0.00
+                                                                                            ? SizedBox()
+                                                                                            : Row(
+                                                                                                children: [
+                                                                                                  Expanded(flex: 1, child: Text('')),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      'หน่วยที่ ${int.parse(electricityModels[0].eleTwo!) + 1} - ${electricityModels[0].eleThree}',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitThree!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitThree!) == 0.00 ? '${electricityModels[0].eleGobThree}' : '${electricityModels[0].eleMitThree}',
+                                                                                                      textAlign: TextAlign.end,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 1,
+                                                                                                    child: Text(
+                                                                                                      'บาท',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                        SizedBox(
+                                                                                          height: 10,
+                                                                                        ),
+                                                                                        (double.parse(electricityModels[0].eleMitTour!) + double.parse(electricityModels[0].eleGobTour!)) == 0.00
+                                                                                            ? SizedBox()
+                                                                                            : Row(
+                                                                                                children: [
+                                                                                                  Expanded(flex: 1, child: Text('')),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      'หน่วยที่ ${int.parse(electricityModels[0].eleThree!) + 1} - ${electricityModels[0].eleTour}',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitTour!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitTour!) == 0.00 ? '${electricityModels[0].eleGobTour}' : '${electricityModels[0].eleMitTour}',
+                                                                                                      textAlign: TextAlign.end,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 1,
+                                                                                                    child: Text(
+                                                                                                      'บาท',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                        SizedBox(
+                                                                                          height: 10,
+                                                                                        ),
+                                                                                        (double.parse(electricityModels[0].eleMitFive!) + double.parse(electricityModels[0].eleGobFive!)) == 0.00
+                                                                                            ? SizedBox()
+                                                                                            : Row(
+                                                                                                children: [
+                                                                                                  Expanded(flex: 1, child: Text('')),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      'หน่วยที่ ${int.parse(electricityModels[0].eleTour!) + 1} - ${electricityModels[0].eleFive}',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitFive!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitFive!) == 0.00 ? '${electricityModels[0].eleGobFive}' : '${electricityModels[0].eleMitFive}',
+                                                                                                      textAlign: TextAlign.end,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 1,
+                                                                                                    child: Text(
+                                                                                                      'บาท',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                        SizedBox(
+                                                                                          height: 10,
+                                                                                        ),
+                                                                                        (double.parse(electricityModels[0].eleMitSix!) + double.parse(electricityModels[0].eleGobSix!)) == 0.00
+                                                                                            ? SizedBox()
+                                                                                            : Row(
+                                                                                                children: [
+                                                                                                  Expanded(flex: 1, child: Text('')),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      'หน่วยที่ ${electricityModels[0].eleSix} ขึ้นไป',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitSix!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 2,
+                                                                                                    child: Text(
+                                                                                                      double.parse(electricityModels[0].eleMitSix!) == 0.00 ? '${electricityModels[0].eleGobSix}' : '${electricityModels[0].eleMitSix}',
+                                                                                                      textAlign: TextAlign.end,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    flex: 1,
+                                                                                                    child: Text(
+                                                                                                      'บาท',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                        Divider(),
+                                                                                        Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                              child: Padding(
+                                                                                                padding: const EdgeInsets.all(15.0),
+                                                                                                child: Text(
+                                                                                                  // ignore: unnecessary_string_interpolations
+                                                                                                  '* อัตราคำนวณปัจจุบันอาจไม่ตรงกับยอดชำระ ณ วันที่บันทึก',
+                                                                                                  textAlign: TextAlign.end,
+                                                                                                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12, fontFamily: Font_.Fonts_T),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                        SizedBox(
+                                                                                          height: 50,
+                                                                                        )
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            }));
+                                                                  },
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 2,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    // maxFontSize: 15,
+                                                                    'ดูอัตราคำนวณ',
+                                                                    // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                              ),
                                                       ],
                                                     )),
                                               ),
@@ -8793,61 +9201,6 @@ class _RentalInformationState extends State<RentalInformation> {
     );
   }
 
-  // void _display_IDCard(context) async {
-  //   final netImage = await networkImage('${renTalModels[0].img!.trim()}');
-
-  //   // pdf.addPage(pw.Page(build: (pw.Context context) {
-  //   //   return pw.Center(
-  //   //     child: pw.Image(netImage),
-  //   //   ); // Center
-  //   // })); // Page
-  //   final font = await rootBundle.load("fonts/Saysettha-OT.ttf");
-  //   final ttf = pw.Font.ttf(font.buffer.asByteData());
-  //   final doc = pw.Document();
-  //   doc.addPage(
-  //     pw.Page(
-  //       pageFormat:
-  //           // PdfPageFormat.a4,
-  //           PdfPageFormat(PdfPageFormat.a4.width, PdfPageFormat.a4.height,
-  //               marginAll: 20),
-  //       build: (pw.Context context) {
-  //         return pw.Stack(children: [
-  //           pw.Column(
-  //             mainAxisAlignment: pw.MainAxisAlignment.start,
-  //             children: [
-  //               pw.Row(
-  //                 mainAxisAlignment: pw.MainAxisAlignment.center,
-  //                 children: [
-  //                   pw.Expanded(
-  //                     flex: 1,
-  //                     child: pw.Container(
-  //                         padding: const pw.EdgeInsets.all(5),
-  //                         child: pw.Center(
-  //                           child: pw.Image(netImage),
-  //                         )),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ]);
-  //       },
-  //     ),
-  //   );
-  //   // await Printing.layoutPdf(
-  //   //     onLayout: (PdfPageFormat format) async => doc.save());
-
-  //   // open Preview Screen
-
-  //   Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => PreviewScreenRentalInforma(
-  //           doc: doc,
-  //           netImage_: netImage,
-  //         ),
-  //       ));
-  // }
   Future<void> Idcard_(context, Url) async {
     final pdf = pw.Document();
     final netImage = await networkImage('$Url');
@@ -9060,7 +9413,10 @@ class RentalInforman_Agreement extends StatelessWidget {
       900: Color(0xFF7A9B54),
     },
   );
-
+  // GlobalKey<SfSignaturePadState> _signaturePadKey1 = GlobalKey();
+  // GlobalKey<SfSignaturePadState> _signaturePadKey2 = GlobalKey();
+  // GlobalKey<SfSignaturePadState> _signaturePadKey3 = GlobalKey();
+  // GlobalKey<SfSignaturePadState> _signaturePadKey4 = GlobalKey();
   final _formKey = GlobalKey<FormState>();
   final _Form1 = TextEditingController();
   final _Form2 = TextEditingController();
@@ -9070,8 +9426,121 @@ class RentalInforman_Agreement extends StatelessWidget {
   var base64Image_2;
   var base64Image_3;
   var base64Image_4;
+  String CheckBase =
+      'iVBORw0KGgoAAAANSUhEUgAAAMgAAABkCAYAAADDhn8LAAAAAXNSR0IArs4c6QAAAARzQklUCAgICHwIZIgAAABkSURBVHic7cExAQAAAMKg9U9tDB+gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgYzjzAAF6bUzDAAAAAElFTkSuQmCC';
 
+//   Future<void> _saveSignature() async {
+//     SharedPreferences preferences = await SharedPreferences.getInstance();
+//     //////////-------------------------------------->
+//     final ui.Image image = await _signaturePadKey1.currentState!.toImage();
+//     final ByteData? byteData =
+//         await image.toByteData(format: ui.ImageByteFormat.png);
 
+//     if (byteData != null) {
+//       final Uint8List pngBytes1 = byteData.buffer.asUint8List();
+//       // final String base64Image = base64Encode(pngBytes1);
+//       // print(base64Image);
+//       base64Image_1 = pngBytes1;
+
+//       // preferences.setString('base64Image1', base64Image_1.toString());
+//       // String? base64Image1_ = preferences.getString('base64Image1');
+//       // print('base64Image1_');
+//       // print(base64Image1_);
+//       // Navigator.pop(context);
+
+//       // Navigator.push(
+//       //     context,
+//       //     MaterialPageRoute(
+//       //       builder: (context) =>
+//       //           RentalInforman_Agreement2(doc: doc, context: context),
+//       //     ));
+//     } else {
+//       base64Image_1 = null;
+//     }
+// //////////-------------------------------------->
+//     final ui.Image image2 = await _signaturePadKey2.currentState!.toImage();
+//     final ByteData? byteData2 =
+//         await image2.toByteData(format: ui.ImageByteFormat.png);
+//     if (byteData2 != null) {
+//       final Uint8List pngBytes2 = byteData2.buffer.asUint8List();
+//       // final String base64Image = base64Encode(pngBytes1);
+//       // print(base64Image);
+//       base64Image_2 = pngBytes2;
+
+//       // preferences.setString('base64Image1', base64Image_1.toString());
+//       // String? base64Image1_ = preferences.getString('base64Image1');
+//       // print('base64Image1_');
+//       // print(base64Image1_);
+//       // Navigator.pop(context);
+
+//       // Navigator.push(
+//       //     context,
+//       //     MaterialPageRoute(
+//       //       builder: (context) =>
+//       //           RentalInforman_Agreement2(doc: doc, context: context),
+//       //     ));
+//     } else {
+//       base64Image_2 = null;
+//     }
+
+//     //////////-------------------------------------->
+//     final ui.Image image3 = await _signaturePadKey3.currentState!.toImage();
+//     final ByteData? byteData3 =
+//         await image3.toByteData(format: ui.ImageByteFormat.png);
+//     if (byteData3 != null) {
+//       final Uint8List pngBytes3 = byteData3.buffer.asUint8List();
+//       final String base64Image3 = base64Encode(pngBytes3);
+//       // print(base64Image);
+//       base64Image_3 = pngBytes3;
+
+//       // preferences.setString('base64Image3', base64Image_3.toString());
+//       // String? base64Image3_ = preferences.getString('base64Image3');
+//       // print('base64Image3_');
+//       // print(base64Image3_);
+//     } else {
+//       base64Image_3 = null;
+//     }
+//     //////////-------------------------------------->
+//     // final ui.Image image4 = await _signaturePadKey4.currentState!.toImage();
+//     final ByteData? byteData4 =
+//         await image4.toByteData(format: ui.ImageByteFormat.png);
+//     if (byteData4 != null) {
+//       final Uint8List pngBytes4 = byteData4.buffer.asUint8List();
+//       final String base64Image4 = base64Encode(pngBytes4);
+//       // print(base64Image);
+//       base64Image_4 = pngBytes4;
+
+//       // preferences.setString('base64Image4', base64Image_4.toString());
+//       // String? base64Image4_ = preferences.getString('base64Image4');
+//       // print('base64Image4_');
+//       // print(base64Image4_);
+//     } else {
+//       base64Image_4 = '';
+//     }
+//     print(base64Image_1);
+//     // Navigator.pop(context);
+//   }
+
+  // HandSignatureControl control1 = new HandSignatureControl(
+  //   threshold: 0.01,
+  //   smoothRatio: 0.65,
+  //   velocityRange: 2.0,
+  // );
+  // HandSignatureControl control2 = new HandSignatureControl(
+  //   threshold: 0.01,
+  //   smoothRatio: 0.65,
+  //   velocityRange: 2.0,
+  // );
+  // HandSignatureControl control3 = new HandSignatureControl(
+  //   threshold: 0.01,
+  //   smoothRatio: 0.65,
+  //   velocityRange: 2.0,
+  // );
+  // HandSignatureControl control4 = new HandSignatureControl(
+  //   threshold: 0.01,
+  //   smoothRatio: 0.65,
+  //   velocityRange: 2.0,
+  // );
   ValueNotifier<ByteData?> rawImage1 = ValueNotifier<ByteData?>(null);
   ValueNotifier<ByteData?> rawImage2 = ValueNotifier<ByteData?>(null);
   ValueNotifier<ByteData?> rawImage3 = ValueNotifier<ByteData?>(null);

@@ -417,11 +417,6 @@ class Excgen_PeopleChoReport {
           .getRangeByName('N${i + 5}')
           .setText('${contractPhotoModels[i].pic_plan}');
 
-      // for (int index3 = 0; index3 < quotxSelectModels[i].length; index3++) {
-      //   sheet
-      //       .getRangeByName('${columns[14 + index3]}${i + 5}')
-      //       .setText('(${quotxSelectModels[i][index3].expname})');
-      // }
       for (int index3 = 0; index3 < expModels.length; index3++) {
         sheet.getRangeByName('${columns[14 + index3]}${i + 5}').cellStyle =
             numberColor;

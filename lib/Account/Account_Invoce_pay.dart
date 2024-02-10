@@ -1509,7 +1509,7 @@ class _AccountInvoicePayState extends State<AccountInvoicePay> {
                                     color: AppbackgroundColor.Sub_Abg_Colors,
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'ยอดชำระรวม',
+                                      'ยอดชำระรวม ',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color

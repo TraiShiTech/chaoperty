@@ -61,7 +61,8 @@ class Pdfgen_BillingNoteInvlice_TP8 {
       ptser1,
       ptname1,
       img1,
-      Preview_ser) async {
+      Preview_ser,
+      End_Bill_Paydate) async {
     final pdf = pw.Document();
     // final fontData = await rootBundle.load("ThaiFonts/Sarabun-Medium.ttf");
     // var dataint = fontData.buffer
@@ -802,7 +803,7 @@ class Pdfgen_BillingNoteInvlice_TP8 {
                                         pw.CrossAxisAlignment.center,
                                     children: [
                                       pw.Text(
-                                        'รูปแบบชำระ/Payment Type',
+                                        'ครบกำหนด /Due Date',
                                         textAlign: pw.TextAlign.center,
                                         style: pw.TextStyle(
                                           fontSize: font_Size,
@@ -812,15 +813,11 @@ class Pdfgen_BillingNoteInvlice_TP8 {
                                         ),
                                       ),
                                       pw.Text(
-                                        (payment_Ptser1 == null)
-                                            ? '-'
-                                            : (payment_Ptser1 == '1')
-                                                ? 'เงินสด'
-                                                : (payment_Ptser1 == '2' ||
-                                                        payment_Ptser1 == '5' ||
-                                                        payment_Ptser1 == '6')
-                                                    ? 'เงินโอน'
-                                                    : 'อื่นๆ',
+                                        (End_Bill_Paydate == null ||
+                                                End_Bill_Paydate.toString() ==
+                                                    '')
+                                            ? '${End_Bill_Paydate}'
+                                            : '${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543}',
                                         textAlign: pw.TextAlign.center,
                                         style: pw.TextStyle(
                                           fontSize: font_Size,
@@ -832,6 +829,48 @@ class Pdfgen_BillingNoteInvlice_TP8 {
                                     ],
                                   )),
                             ),
+                            // pw.Expanded(
+                            //   flex: 1,
+                            //   child: pw.Container(
+                            //       height: 35,
+                            //       padding: const pw.EdgeInsets.all(2.0),
+                            //       child: pw.Column(
+                            //         mainAxisAlignment:
+                            //             pw.MainAxisAlignment.center,
+                            //         crossAxisAlignment:
+                            //             pw.CrossAxisAlignment.center,
+                            //         children: [
+                            //           pw.Text(
+                            //             'รูปแบบชำระ/Payment Type',
+                            //             textAlign: pw.TextAlign.center,
+                            //             style: pw.TextStyle(
+                            //               fontSize: font_Size,
+                            //               font: ttf,
+                            //               fontWeight: pw.FontWeight.bold,
+                            //               color: Colors_pd,
+                            //             ),
+                            //           ),
+                            //           pw.Text(
+                            //             (payment_Ptser1 == null)
+                            //                 ? '-'
+                            //                 : (payment_Ptser1 == '1')
+                            //                     ? 'เงินสด'
+                            //                     : (payment_Ptser1 == '2' ||
+                            //                             payment_Ptser1 == '5' ||
+                            //                             payment_Ptser1 == '6')
+                            //                         ? 'เงินโอน'
+                            //                         : 'อื่นๆ',
+                            //             textAlign: pw.TextAlign.center,
+                            //             style: pw.TextStyle(
+                            //               fontSize: font_Size,
+                            //               font: ttf,
+                            //               fontWeight: pw.FontWeight.bold,
+                            //               color: Colors_pd,
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       )),
+                            // ),
                           ],
                         ),
                       )),
@@ -1943,7 +1982,7 @@ class Pdfgen_BillingNoteInvlice_TP8 {
                                   pw.Container(
                                     child: pw.BarcodeWidget(
                                         data:
-                                            '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('ddMM').format(DateTime.parse(date_Transaction))}${DateTime.parse('${date_Transaction}').year + 543}\r${newTotal_QR}\r',
+                                            '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('ddMM').format(DateTime.parse(End_Bill_Paydate))}${DateTime.parse('${End_Bill_Paydate}').year + 543}\r${newTotal_QR}\r',
                                         barcode: pw.Barcode.qrCode(),
                                         width: 55,
                                         height: 55),

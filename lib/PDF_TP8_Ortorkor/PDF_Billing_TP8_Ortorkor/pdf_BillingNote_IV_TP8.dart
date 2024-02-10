@@ -61,7 +61,8 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
       ptser1,
       ptname1,
       img1,
-      Preview_ser) async {
+      Preview_ser,
+      End_Bill_Paydate) async {
     final pdf = pw.Document();
     // final fontData = await rootBundle.load("ThaiFonts/Sarabun-Medium.ttf");
     // var dataint = fontData.buffer
@@ -1851,7 +1852,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                     pw.Container(
                                       child: pw.BarcodeWidget(
                                           data:
-                                              '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('ddMM').format(DateTime.parse(date_Transaction))}${DateTime.parse('${date_Transaction}').year + 543}\r${newTotal_QR}\r',
+                                              '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('ddMM').format(DateTime.parse(End_Bill_Paydate))}${DateTime.parse('${End_Bill_Paydate}').year + 543}\r${newTotal_QR}\r',
                                           barcode: pw.Barcode.qrCode(),
                                           width: 60,
                                           height: 60),

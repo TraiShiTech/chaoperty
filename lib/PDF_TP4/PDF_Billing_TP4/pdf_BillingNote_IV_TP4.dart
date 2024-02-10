@@ -53,7 +53,8 @@ class Pdfgen_BillingNoteInvlice_TP4 {
       ptser1,
       ptname1,
       img1,
-      Preview_ser) async {
+      Preview_ser,
+      End_Bill_Paydate) async {
     final pdf = pw.Document();
     // final fontData = await rootBundle.load("ThaiFonts/Sarabun-Medium.ttf");
     // var dataint = fontData.buffer
@@ -286,7 +287,7 @@ class Pdfgen_BillingNoteInvlice_TP4 {
                   'ใบวางบิล/ใบแจ้งหนี้',
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
-                    fontSize: font_Size,
+                    fontSize: font_Size + 2,
                     fontWeight: pw.FontWeight.bold,
                     font: ttf,
                     color: Colors_pd,
@@ -415,6 +416,25 @@ class Pdfgen_BillingNoteInvlice_TP4 {
                         (date_Transaction == null)
                             ? '-'
                             : '$formattedDate2 ${newYear2}',
+                        style: pw.TextStyle(
+                          fontSize: font_Size,
+                          fontWeight: pw.FontWeight.bold,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
+                      ),
+                      pw.Text(
+                        'วันที่ครบกำหนด(Due Date)',
+                        style: pw.TextStyle(
+                          fontSize: font_Size,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
+                      ),
+                      pw.Text(
+                        (End_Bill_Paydate == null)
+                            ? '-'
+                            : '${formatter.format(DateTime.parse(End_Bill_Paydate))} ${DateTime.parse(End_Bill_Paydate).year + 543}',
                         style: pw.TextStyle(
                           fontSize: font_Size,
                           fontWeight: pw.FontWeight.bold,
@@ -763,7 +783,11 @@ class Pdfgen_BillingNoteInvlice_TP4 {
                       child: pw.Align(
                         alignment: pw.Alignment.center,
                         child: pw.Text(
-                          '${tableData003[index][1]}',
+                          (tableData003[index][1] == null ||
+                                  tableData003[index][1].toString() == '')
+                              ? '${tableData003[index][1]}'
+                              : '${DateFormat('dd-MM').format(DateTime.parse(tableData003[index][1].toString()))}-${DateTime.parse(tableData003[index][1].toString()).year + 543}',
+                          // '${tableData003[index][1]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
@@ -1374,7 +1398,7 @@ class Pdfgen_BillingNoteInvlice_TP4 {
                                   pw.Container(
                                     child: pw.BarcodeWidget(
                                         data:
-                                            '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('ddMM').format(DateTime.parse(date_Transaction))}${DateTime.parse('${date_Transaction}').year + 543}\r${newTotal_QR}\r',
+                                            '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('ddMM').format(DateTime.parse(End_Bill_Paydate))}${DateTime.parse('${End_Bill_Paydate}').year + 543}\r${newTotal_QR}\r',
                                         barcode: pw.Barcode.qrCode(),
                                         width: 55,
                                         height: 55),

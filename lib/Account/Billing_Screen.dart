@@ -23,6 +23,7 @@ import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
+import 'Verifi_Exc_Billing.dart';
 
 class BillingScreen extends StatefulWidget {
   final Texts;
@@ -38,6 +39,7 @@ class _BillingScreenState extends State<BillingScreen> {
   DateTime datex = DateTime.now();
   int? show_more;
   String tappedIndex_ = '';
+  int Ser_Tap = 0;
   //-------------------------------------->
   List<ZoneModel> zoneModels = [];
   List<ZoneModel> zoneModels_report = [];
@@ -682,71 +684,135 @@ class _BillingScreenState extends State<BillingScreen> {
 
 ////////--------------------------------------------------------------->
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Container(
-            width: (Responsive.isDesktop(context))
-                ? MediaQuery.of(context).size.width * 0.85
-                : 1200,
-            decoration: const BoxDecoration(
-              color: AppbackgroundColor.Sub_Abg_Colors,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              // border: Border.all(color: Colors.grey, width: 1),
-            ),
-            child: Column(
-              children: [
-                Container(
-                    width: (Responsive.isDesktop(context))
-                        ? MediaQuery.of(context).size.width * 0.85
-                        : 1200,
-                    child: Column(
-                      children: [
-                        ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context)
-                              .copyWith(dragDevices: {
-                            PointerDeviceKind.touch,
-                            PointerDeviceKind.mouse,
-                          }),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            dragStartBehavior: DragStartBehavior.start,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        width: (Responsive.isDesktop(context))
-                                            ? MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.85
-                                            : 1200,
-                                        decoration: const BoxDecoration(
-                                          color:
-                                              AppbackgroundColor.TiTile_Colors,
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(0),
-                                              bottomRight: Radius.circular(0)),
-                                        ),
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          children: [
-                                            Row(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(23, 8, 8, 0),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      Ser_Tap = 0;
+                    });
+                  },
+                  child: Container(
+                    // width: 100, Verifi_Billing_Screen
+                    decoration: BoxDecoration(
+                      color: (Ser_Tap == 0)
+                          ? Colors.blueGrey[600]
+                          : Colors.blueGrey[200],
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(0)),
+                      border: Border.all(color: Colors.white, width: 1),
+                    ),
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      "ประวัติวางบิล",
+                      style: TextStyle(
+                        color: (Ser_Tap == 0) ? Colors.white : Colors.black,
+                        fontFamily: FontWeight_.Fonts_T,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      Ser_Tap = 1;
+                    });
+                  },
+                  child: Container(
+                    // width: 130,
+                    decoration: BoxDecoration(
+                      color: (Ser_Tap == 1)
+                          ? Colors.blueGrey[600]
+                          : Colors.blueGrey[200],
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(0)),
+                      border: Border.all(color: Colors.white, width: 1),
+                    ),
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      "ตรวจสอบวางบิล",
+                      style: TextStyle(
+                        color: (Ser_Tap == 1) ? Colors.white : Colors.black,
+                        fontFamily: FontWeight_.Fonts_T,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        (Ser_Tap == 1)
+            ? Verifi_Exc_Billing(InvoiceModelss: limitedList_InvoiceModels_)
+            : Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                child: Column(
+                  children: [
+                    Container(
+                      width: (Responsive.isDesktop(context))
+                          ? MediaQuery.of(context).size.width * 0.85
+                          : 1200,
+                      decoration: const BoxDecoration(
+                        color: AppbackgroundColor.Sub_Abg_Colors,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        // border: Border.all(color: Colors.grey, width: 1),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                              width: (Responsive.isDesktop(context))
+                                  ? MediaQuery.of(context).size.width * 0.85
+                                  : 1200,
+                              child: Column(
+                                children: [
+                                  ScrollConfiguration(
+                                    behavior: ScrollConfiguration.of(context)
+                                        .copyWith(dragDevices: {
+                                      PointerDeviceKind.touch,
+                                      PointerDeviceKind.mouse,
+                                    }),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      dragStartBehavior:
+                                          DragStartBehavior.start,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            child: Column(
                                               children: [
                                                 Container(
-                                                  decoration: BoxDecoration(
+                                                  width: (Responsive.isDesktop(
+                                                          context))
+                                                      ? MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.85
+                                                      : 1200,
+                                                  decoration:
+                                                      const BoxDecoration(
                                                     color: AppbackgroundColor
-                                                            .Sub_Abg_Colors
-                                                        .withOpacity(0.5),
+                                                        .TiTile_Colors,
                                                     borderRadius:
                                                         BorderRadius.only(
                                                             topLeft:
@@ -757,380 +823,157 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                     10),
                                                             bottomLeft:
                                                                 Radius.circular(
-                                                                    10),
+                                                                    0),
                                                             bottomRight:
                                                                 Radius.circular(
-                                                                    10)),
-                                                    // border: Border.all(color: Colors.white, width: 1),
+                                                                    0)),
                                                   ),
-                                                  child: Row(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
                                                     children: [
-                                                      const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(2.0),
-                                                        child: Text(
-                                                          'เดือน :',
-                                                          style: TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(2.0),
-                                                        child: Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(color: Colors.grey, width: 1),
-                                                          ),
-                                                          width: 120,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          child:
-                                                              DropdownButtonFormField2(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            focusColor:
-                                                                Colors.white,
-                                                            autofocus: false,
+                                                      Row(
+                                                        children: [
+                                                          Container(
                                                             decoration:
-                                                                InputDecoration(
-                                                              floatingLabelAlignment:
-                                                                  FloatingLabelAlignment
-                                                                      .center,
-                                                              enabled: true,
-                                                              hoverColor:
-                                                                  Colors.brown,
-                                                              prefixIconColor:
-                                                                  Colors.blue,
-                                                              fillColor: Colors
-                                                                  .white
+                                                                BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                      .Sub_Abg_Colors
                                                                   .withOpacity(
-                                                                      0.05),
-                                                              filled: false,
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    const BorderSide(
-                                                                        color: Colors
-                                                                            .red),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                              ),
-                                                              focusedBorder:
-                                                                  const OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
+                                                                      0.5),
+                                                              borderRadius: BorderRadius.only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           10),
-                                                                  bottomRight: Radius
+                                                                  topRight: Radius
                                                                       .circular(
                                                                           10),
                                                                   bottomLeft: Radius
                                                                       .circular(
                                                                           10),
-                                                                ),
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  width: 1,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          231,
-                                                                          227,
-                                                                          227),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            isExpanded: false,
-                                                            //value: MONTH_Now,
-                                                            hint: Text(
-                                                              MONTH_Now == null
-                                                                  ? 'เลือก'
-                                                                  : '${monthsInThai[int.parse('${MONTH_Now}') - 1]}',
-                                                              maxLines: 2,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                fontSize: 12,
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                            ),
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .arrow_drop_down,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                            iconSize: 20,
-                                                            buttonHeight: 30,
-                                                            buttonWidth: 200,
-                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                                            dropdownDecoration:
-                                                                BoxDecoration(
-                                                              // color: Colors
-                                                              //     .amber,
-                                                              borderRadius:
-                                                                  BorderRadius
+                                                                  bottomRight: Radius
                                                                       .circular(
-                                                                          10),
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  width: 1),
+                                                                          10)),
+                                                              // border: Border.all(color: Colors.white, width: 1),
                                                             ),
-                                                            items: [
-                                                              for (int item = 1;
-                                                                  item < 13;
-                                                                  item++)
-                                                                DropdownMenuItem<
-                                                                    String>(
-                                                                  value:
-                                                                      '${item}',
+                                                            child: Row(
+                                                              children: [
+                                                                const Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              2.0),
                                                                   child: Text(
-                                                                    '${monthsInThai[item - 1]}',
-                                                                    // '${item}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
+                                                                    'เดือน :',
                                                                     style:
-                                                                        const TextStyle(
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      fontSize:
-                                                                          14,
-                                                                      color: Colors
-                                                                          .grey,
+                                                                        TextStyle(
+                                                                      color: ReportScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
                                                                     ),
                                                                   ),
-                                                                )
-                                                            ],
-
-                                                            onChanged:
-                                                                (value) async {
-                                                              MONTH_Now = value;
-                                                              red_InvoiceMon_bill();
-
-                                                              // red_Trans_bill();
-                                                              // if (Value_Chang_Zone_Income !=
-                                                              //     null) {
-                                                              //   red_Trans_billIncome();
-                                                              //   red_Trans_billMovemen();
-                                                              // }
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(2.0),
-                                                        child: Text(
-                                                          'ปี :',
-                                                          style: TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(2.0),
-                                                        child: Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(color: Colors.grey, width: 1),
-                                                          ),
-                                                          width: 120,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          child:
-                                                              DropdownButtonFormField2(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            focusColor:
-                                                                Colors.white,
-                                                            autofocus: false,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              floatingLabelAlignment:
-                                                                  FloatingLabelAlignment
-                                                                      .center,
-                                                              enabled: true,
-                                                              hoverColor:
-                                                                  Colors.brown,
-                                                              prefixIconColor:
-                                                                  Colors.blue,
-                                                              fillColor: Colors
-                                                                  .white
-                                                                  .withOpacity(
-                                                                      0.05),
-                                                              filled: false,
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    const BorderSide(
-                                                                        color: Colors
-                                                                            .red),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                              ),
-                                                              focusedBorder:
-                                                                  const OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          10),
                                                                 ),
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  width: 1,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          231,
-                                                                          227,
-                                                                          227),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            isExpanded: false,
-                                                            // value: YEAR_Now,
-                                                            hint: Text(
-                                                              YEAR_Now == null
-                                                                  ? 'เลือก'
-                                                                  : '$YEAR_Now',
-                                                              maxLines: 2,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                fontSize: 12,
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                            ),
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .arrow_drop_down,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                            iconSize: 20,
-                                                            buttonHeight: 30,
-                                                            buttonWidth: 200,
-                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                                            dropdownDecoration:
-                                                                BoxDecoration(
-                                                              // color: Colors
-                                                              //     .amber,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  width: 1),
-                                                            ),
-                                                            items: YE_Th.map(
-                                                                (item) =>
-                                                                    DropdownMenuItem<
-                                                                        String>(
-                                                                      value:
-                                                                          '${item}',
-                                                                      child:
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          2.0),
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color: AppbackgroundColor
+                                                                          .Sub_Abg_Colors,
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    width: 120,
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            2.0),
+                                                                    child:
+                                                                        DropdownButtonFormField2(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      focusColor:
+                                                                          Colors
+                                                                              .white,
+                                                                      autofocus:
+                                                                          false,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        floatingLabelAlignment:
+                                                                            FloatingLabelAlignment.center,
+                                                                        enabled:
+                                                                            true,
+                                                                        hoverColor:
+                                                                            Colors.brown,
+                                                                        prefixIconColor:
+                                                                            Colors.blue,
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.05),
+                                                                        filled:
+                                                                            false,
+                                                                        isDense:
+                                                                            true,
+                                                                        contentPadding:
+                                                                            EdgeInsets.zero,
+                                                                        border:
+                                                                            OutlineInputBorder(
+                                                                          borderSide:
+                                                                              const BorderSide(color: Colors.red),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10),
+                                                                        ),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(10),
+                                                                            topLeft:
+                                                                                Radius.circular(10),
+                                                                            bottomRight:
+                                                                                Radius.circular(10),
+                                                                            bottomLeft:
+                                                                                Radius.circular(10),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color: Color.fromARGB(
+                                                                                255,
+                                                                                231,
+                                                                                227,
+                                                                                227),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      isExpanded:
+                                                                          false,
+                                                                      //value: MONTH_Now,
+                                                                      hint:
                                                                           Text(
-                                                                        '${item}',
+                                                                        MONTH_Now ==
+                                                                                null
+                                                                            ? 'เลือก'
+                                                                            : '${monthsInThai[int.parse('${MONTH_Now}') - 1]}',
+                                                                        maxLines:
+                                                                            2,
                                                                         textAlign:
                                                                             TextAlign.center,
                                                                         style:
@@ -1138,1245 +981,1433 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                           overflow:
                                                                               TextOverflow.ellipsis,
                                                                           fontSize:
-                                                                              14,
+                                                                              12,
                                                                           color:
                                                                               Colors.grey,
                                                                         ),
                                                                       ),
-                                                                    )).toList(),
+                                                                      icon:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .arrow_drop_down,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                      iconSize:
+                                                                          20,
+                                                                      buttonHeight:
+                                                                          30,
+                                                                      buttonWidth:
+                                                                          200,
+                                                                      // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                                      dropdownDecoration:
+                                                                          BoxDecoration(
+                                                                        // color: Colors
+                                                                        //     .amber,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            width: 1),
+                                                                      ),
+                                                                      items: [
+                                                                        for (int item =
+                                                                                1;
+                                                                            item <
+                                                                                13;
+                                                                            item++)
+                                                                          DropdownMenuItem<
+                                                                              String>(
+                                                                            value:
+                                                                                '${item}',
+                                                                            child:
+                                                                                Text(
+                                                                              '${monthsInThai[item - 1]}',
+                                                                              // '${item}',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                fontSize: 14,
+                                                                                color: Colors.grey,
+                                                                              ),
+                                                                            ),
+                                                                          )
+                                                                      ],
 
-                                                            onChanged:
-                                                                (value) async {
-                                                              YEAR_Now = value;
-                                                              red_InvoiceMon_bill();
+                                                                      onChanged:
+                                                                          (value) async {
+                                                                        MONTH_Now =
+                                                                            value;
+                                                                        red_InvoiceMon_bill();
 
-                                                              // red_Trans_bill();
-                                                              // if (Value_Chang_Zone_Income !=
-                                                              //     null) {
-                                                              //   red_Trans_billIncome();
-                                                              //   red_Trans_billMovemen();
-                                                              // }
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      if (InvoiceModels
-                                                              .length !=
-                                                          0)
-                                                        Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            // width: 130,
-                                                            child:
-                                                                Next_page_Save())
-                                                    ],
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                    child: SizedBox(
-                                                  child: Next_page(),
-                                                ))
-                                              ],
-                                            ),
-                                            const Divider(),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                (invoice_select.length != 0 &&
-                                                        InvoiceModels.length !=
-                                                            0)
-                                                    ? Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
-                                                                borderRadius: const BorderRadius
-                                                                        .only(
-                                                                    topLeft:
-                                                                        Radius.circular(
-                                                                            8),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            0),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            8),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            0)),
-                                                                border: Border.all(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(2),
-                                                              child: Text(
-                                                                'Save ( ${invoice_select.length} )',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 13,
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      800],
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .orange,
-                                                                borderRadius: const BorderRadius
-                                                                        .only(
-                                                                    topLeft:
-                                                                        Radius.circular(
-                                                                            0),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            8),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            0),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            8)),
-                                                                border: Border.all(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(2),
-                                                              child: InkWell(
-                                                                onTap:
-                                                                    () async {
-                                                                  List
-                                                                      newValuePDFimg =
-                                                                      [];
-
-                                                                  for (int index =
-                                                                          0;
-                                                                      index < 1;
-                                                                      index++) {
-                                                                    if (renTalModels[0]
-                                                                            .imglogo!
-                                                                            .trim() ==
-                                                                        '') {
-                                                                      // newValuePDFimg.add(
-                                                                      //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                                                    } else {
-                                                                      newValuePDFimg
-                                                                          .add(
-                                                                              '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                                                    }
-                                                                  }
-
-                                                                  _showMyDialog_SAVE2(
-                                                                      newValuePDFimg);
-                                                                },
-                                                                child:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .download,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  size: 22,
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      )
-                                                    : Container(
-                                                        width: 70,
-                                                        child: const Text(
-                                                          '...',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style: TextStyle(
-                                                            color: ManageScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'เลขสัญญา',
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'เลขที่ใบแจ้งหนี้',
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                // Expanded(
-                                                //   flex: 1,
-                                                //   child: Text(
-                                                //     'สถานะ',
-                                                //     textAlign: TextAlign.start,
-                                                //     style: TextStyle(
-                                                //       color: ManageScreen_Color
-                                                //           .Colors_Text1_,
-                                                //       fontWeight: FontWeight.bold,
-                                                //       fontFamily: FontWeight_.Fonts_T,
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'วันที่ออกใบแจ้งหนี้',
-                                                    textAlign: TextAlign.start,
-                                                    maxLines: 1,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                // Expanded(
-                                                //   flex: 2,
-                                                //   child: Text(
-                                                //     'วันที่ครบกำหนด',
-                                                //     textAlign: TextAlign.start,
-                                                //     maxLines: 1,
-                                                //     style: TextStyle(
-                                                //       color: ManageScreen_Color
-                                                //           .Colors_Text1_,
-                                                //       fontWeight: FontWeight.bold,
-                                                //       fontFamily: FontWeight_.Fonts_T,
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Text(
-                                                    'ชื่อร้านค้า',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                // Expanded(
-                                                //   flex: 2,
-                                                //   child: Text(
-                                                //     'รอบการเช่า',
-                                                //     textAlign: TextAlign.start,
-                                                //     style: TextStyle(
-                                                //       color: ManageScreen_Color
-                                                //           .Colors_Text1_,
-                                                //       fontWeight: FontWeight.bold,
-                                                //       fontFamily: FontWeight_.Fonts_T,
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'โซน',
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'รหัสพื้นที่',
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'ช่องทางชำระ',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                // for (int index = 0;
-                                                //     index < expModels.length;
-                                                //     index++)
-                                                //   Expanded(
-                                                //     flex: 2,
-                                                //     child: Text(
-                                                //       '${expModels[index].expname}',
-                                                //       textAlign: TextAlign.end,
-                                                //       style: TextStyle(
-                                                //         color: ManageScreen_Color
-                                                //             .Colors_Text1_,
-                                                //         fontWeight: FontWeight.bold,
-                                                //         fontFamily:
-                                                //             FontWeight_.Fonts_T,
-                                                //       ),
-                                                //     ),
-                                                //   ),
-                                                // Expanded(
-                                                //   flex: 2,
-                                                //   child: Text(
-                                                //     'ภาษีมูลค่าเพิ่ม',
-                                                //     textAlign: TextAlign.end,
-                                                //     style: TextStyle(
-                                                //       color: ManageScreen_Color
-                                                //           .Colors_Text1_,
-                                                //       fontWeight: FontWeight.bold,
-                                                //       fontFamily: FontWeight_.Fonts_T,
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                // Expanded(
-                                                //   flex: 2,
-                                                //   child: Text(
-                                                //     'ภาษีหัก ณ ที่จ่าย',
-                                                //     textAlign: TextAlign.end,
-                                                //     style: TextStyle(
-                                                //       color: ManageScreen_Color
-                                                //           .Colors_Text1_,
-                                                //       fontWeight: FontWeight.bold,
-                                                //       fontFamily: FontWeight_.Fonts_T,
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'ส่วนลด',
-                                                    textAlign: TextAlign.end,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'ยอดรวม',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'ยอดเงินคงเหลือ',
-                                                    textAlign: TextAlign.end,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-
-                                                // Expanded(
-                                                //   flex: 2,
-                                                //   child: Text(
-                                                //     'หมายเหตุ',
-                                                //     textAlign: TextAlign.end,
-                                                //     style: TextStyle(
-                                                //       color: ManageScreen_Color
-                                                //           .Colors_Text1_,
-                                                //       fontWeight: FontWeight.bold,
-                                                //       fontFamily: FontWeight_.Fonts_T,
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '....',
-                                                    textAlign: TextAlign.end,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.63,
-                                          width: Responsive.isDesktop(context)
-                                              ? MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.85
-                                              : 1200,
-                                          decoration: const BoxDecoration(
-                                            color: AppbackgroundColor
-                                                .Sub_Abg_Colors,
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(0),
-                                                topRight: Radius.circular(0),
-                                                bottomLeft: Radius.circular(0),
-                                                bottomRight:
-                                                    Radius.circular(0)),
-                                            // border: Border.all(color: Colors.grey, width: 1),
-                                          ),
-                                          child: InvoiceModels.isEmpty
-                                              ? SizedBox(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      const CircularProgressIndicator(),
-                                                      StreamBuilder(
-                                                        stream: Stream.periodic(
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    25),
-                                                            (i) => i),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          if (!snapshot.hasData)
-                                                            return const Text(
-                                                                '');
-                                                          double elapsed = double
-                                                                  .parse(snapshot
-                                                                      .data
-                                                                      .toString()) *
-                                                              0.05;
-                                                          return Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: (elapsed >
-                                                                    8.00)
-                                                                ? const Text(
-                                                                    'ไม่พบข้อมูล',
-                                                                    style: TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  )
-                                                                : Text(
-                                                                    'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
-                                                                    // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              : ListView.builder(
-                                                  controller:
-                                                      _scrollController2,
-                                                  // itemExtent: 50,
-                                                  physics:
-                                                      const AlwaysScrollableScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount:
-                                                      InvoiceModels.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return Column(
-                                                      children: [
-                                                        Material(
-                                                          color: tappedIndex_ ==
-                                                                  index
-                                                                      .toString()
-                                                              ? tappedIndex_Color
-                                                                  .tappedIndex_Colors
-                                                              : AppbackgroundColor
-                                                                  .Sub_Abg_Colors,
-                                                          child: Container(
-                                                            child: ListTile(
-                                                                // onTap:
-                                                                //     () async {
-                                                                //   setState(() {
-                                                                //     tappedIndex_ =
-                                                                //         '${index}';
-                                                                //   });
-                                                                // },
-                                                                title:
-                                                                    Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                // color: Colors.green[100]!
-                                                                //     .withOpacity(0.5),
-                                                                border: Border(
-                                                                  bottom:
-                                                                      BorderSide(
-                                                                    color: Colors
-                                                                        .black12,
-                                                                    width: 1,
+                                                                        // red_Trans_bill();
+                                                                        // if (Value_Chang_Zone_Income !=
+                                                                        //     null) {
+                                                                        //   red_Trans_billIncome();
+                                                                        //   red_Trans_billMovemen();
+                                                                        // }
+                                                                      },
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Padding(
+                                                                const Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              2.0),
+                                                                  child: Text(
+                                                                    'ปี :',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: ReportScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          2.0),
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color: AppbackgroundColor
+                                                                          .Sub_Abg_Colors,
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    width: 120,
                                                                     padding:
                                                                         const EdgeInsets.all(
-                                                                            8.0),
+                                                                            2.0),
                                                                     child:
-                                                                        InkWell(
-                                                                      onTap:
-                                                                          () async {
-                                                                        if (invoice_select.length >=
-                                                                            10) {
-                                                                          setState(
-                                                                              () {
-                                                                            invoice_select.remove('${InvoiceModels[index].docno}');
-                                                                          });
-                                                                        } else {
-                                                                          setState(
-                                                                              () {
-                                                                            if (invoice_select.contains('${InvoiceModels[index].docno}') ==
-                                                                                true) {
-                                                                              invoice_select.remove('${InvoiceModels[index].docno}');
-                                                                            } else {
-                                                                              invoice_select.add('${InvoiceModels[index].docno}');
-                                                                            }
-                                                                          });
-                                                                        }
+                                                                        DropdownButtonFormField2(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      focusColor:
+                                                                          Colors
+                                                                              .white,
+                                                                      autofocus:
+                                                                          false,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        floatingLabelAlignment:
+                                                                            FloatingLabelAlignment.center,
+                                                                        enabled:
+                                                                            true,
+                                                                        hoverColor:
+                                                                            Colors.brown,
+                                                                        prefixIconColor:
+                                                                            Colors.blue,
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.05),
+                                                                        filled:
+                                                                            false,
+                                                                        isDense:
+                                                                            true,
+                                                                        contentPadding:
+                                                                            EdgeInsets.zero,
+                                                                        border:
+                                                                            OutlineInputBorder(
+                                                                          borderSide:
+                                                                              const BorderSide(color: Colors.red),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10),
+                                                                        ),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(10),
+                                                                            topLeft:
+                                                                                Radius.circular(10),
+                                                                            bottomRight:
+                                                                                Radius.circular(10),
+                                                                            bottomLeft:
+                                                                                Radius.circular(10),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color: Color.fromARGB(
+                                                                                255,
+                                                                                231,
+                                                                                227,
+                                                                                227),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      isExpanded:
+                                                                          false,
+                                                                      // value: YEAR_Now,
+                                                                      hint:
+                                                                          Text(
+                                                                        YEAR_Now ==
+                                                                                null
+                                                                            ? 'เลือก'
+                                                                            : '$YEAR_Now',
+                                                                        maxLines:
+                                                                            2,
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.grey,
+                                                                        ),
+                                                                      ),
+                                                                      icon:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .arrow_drop_down,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                      iconSize:
+                                                                          20,
+                                                                      buttonHeight:
+                                                                          30,
+                                                                      buttonWidth:
+                                                                          200,
+                                                                      // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                                      dropdownDecoration:
+                                                                          BoxDecoration(
+                                                                        // color: Colors
+                                                                        //     .amber,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            width: 1),
+                                                                      ),
+                                                                      items: YE_Th.map((item) =>
+                                                                          DropdownMenuItem<
+                                                                              String>(
+                                                                            value:
+                                                                                '${item}',
+                                                                            child:
+                                                                                Text(
+                                                                              '${item}',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                fontSize: 14,
+                                                                                color: Colors.grey,
+                                                                              ),
+                                                                            ),
+                                                                          )).toList(),
+
+                                                                      onChanged:
+                                                                          (value) async {
+                                                                        YEAR_Now =
+                                                                            value;
+                                                                        red_InvoiceMon_bill();
+
+                                                                        // red_Trans_bill();
+                                                                        // if (Value_Chang_Zone_Income !=
+                                                                        //     null) {
+                                                                        //   red_Trans_billIncome();
+                                                                        //   red_Trans_billMovemen();
+                                                                        // }
                                                                       },
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                if (InvoiceModels
+                                                                        .length !=
+                                                                    0)
+                                                                  Container(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      // width: 130,
                                                                       child:
-                                                                          Container(
+                                                                          Next_page_Save())
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                              child: SizedBox(
+                                                            child: Next_page(),
+                                                          ))
+                                                        ],
+                                                      ),
+                                                      const Divider(),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          (invoice_select.length !=
+                                                                      0 &&
+                                                                  InvoiceModels
+                                                                          .length !=
+                                                                      0)
+                                                              ? Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Container(
                                                                         decoration:
                                                                             BoxDecoration(
-                                                                          color: Colors
-                                                                              .blueGrey[50]!
-                                                                              .withOpacity(0.5),
+                                                                          color:
+                                                                              Colors.white,
                                                                           borderRadius: const BorderRadius.only(
-                                                                              topLeft: Radius.circular(10),
-                                                                              topRight: Radius.circular(10),
-                                                                              bottomLeft: Radius.circular(10),
-                                                                              bottomRight: Radius.circular(10)),
+                                                                              topLeft: Radius.circular(8),
+                                                                              topRight: Radius.circular(0),
+                                                                              bottomLeft: Radius.circular(8),
+                                                                              bottomRight: Radius.circular(0)),
                                                                           border: Border.all(
                                                                               color: Colors.grey,
                                                                               width: 1),
                                                                         ),
-                                                                        width:
-                                                                            70,
                                                                         padding:
-                                                                            const EdgeInsets.all(5),
+                                                                            const EdgeInsets.all(2),
+                                                                        child:
+                                                                            Text(
+                                                                          'Save ( ${invoice_select.length} )',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                13,
+                                                                            color:
+                                                                                Colors.grey[800],
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontFamily:
+                                                                                FontWeight_.Fonts_T,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              Colors.orange,
+                                                                          borderRadius: const BorderRadius.only(
+                                                                              topLeft: Radius.circular(0),
+                                                                              topRight: Radius.circular(8),
+                                                                              bottomLeft: Radius.circular(0),
+                                                                              bottomRight: Radius.circular(8)),
+                                                                          border: Border.all(
+                                                                              color: Colors.grey,
+                                                                              width: 1),
+                                                                        ),
+                                                                        padding:
+                                                                            const EdgeInsets.all(2),
+                                                                        child:
+                                                                            InkWell(
+                                                                          onTap:
+                                                                              () async {
+                                                                            List
+                                                                                newValuePDFimg =
+                                                                                [];
+
+                                                                            for (int index = 0;
+                                                                                index < 1;
+                                                                                index++) {
+                                                                              if (renTalModels[0].imglogo!.trim() == '') {
+                                                                                // newValuePDFimg.add(
+                                                                                //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                                              } else {
+                                                                                newValuePDFimg.add('${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                                              }
+                                                                            }
+
+                                                                            _showMyDialog_SAVE2(newValuePDFimg);
+                                                                          },
+                                                                          child:
+                                                                              const Icon(
+                                                                            Icons.download,
+                                                                            color:
+                                                                                Colors.white,
+                                                                            size:
+                                                                                22,
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              : Container(
+                                                                  width: 70,
+                                                                  child:
+                                                                      const Text(
+                                                                    '...',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: ManageScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'เลขสัญญา',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'เลขที่ใบแจ้งหนี้',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          // Expanded(
+                                                          //   flex: 1,
+                                                          //   child: Text(
+                                                          //     'สถานะ',
+                                                          //     textAlign: TextAlign.start,
+                                                          //     style: TextStyle(
+                                                          //       color: ManageScreen_Color
+                                                          //           .Colors_Text1_,
+                                                          //       fontWeight: FontWeight.bold,
+                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'วันที่ออกใบแจ้งหนี้',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              maxLines: 1,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'วันที่ครบกำหนดชำระ',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              maxLines: 1,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 2,
+                                                            child: Text(
+                                                              'ชื่อร้านค้า',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          // Expanded(
+                                                          //   flex: 2,
+                                                          //   child: Text(
+                                                          //     'รอบการเช่า',
+                                                          //     textAlign: TextAlign.start,
+                                                          //     style: TextStyle(
+                                                          //       color: ManageScreen_Color
+                                                          //           .Colors_Text1_,
+                                                          //       fontWeight: FontWeight.bold,
+                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'โซน',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'รหัสพื้นที่',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'ช่องทางชำระ',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          // for (int index = 0;
+                                                          //     index < expModels.length;
+                                                          //     index++)
+                                                          //   Expanded(
+                                                          //     flex: 2,
+                                                          //     child: Text(
+                                                          //       '${expModels[index].expname}',
+                                                          //       textAlign: TextAlign.end,
+                                                          //       style: TextStyle(
+                                                          //         color: ManageScreen_Color
+                                                          //             .Colors_Text1_,
+                                                          //         fontWeight: FontWeight.bold,
+                                                          //         fontFamily:
+                                                          //             FontWeight_.Fonts_T,
+                                                          //       ),
+                                                          //     ),
+                                                          //   ),
+                                                          // Expanded(
+                                                          //   flex: 2,
+                                                          //   child: Text(
+                                                          //     'ภาษีมูลค่าเพิ่ม',
+                                                          //     textAlign: TextAlign.end,
+                                                          //     style: TextStyle(
+                                                          //       color: ManageScreen_Color
+                                                          //           .Colors_Text1_,
+                                                          //       fontWeight: FontWeight.bold,
+                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          // Expanded(
+                                                          //   flex: 2,
+                                                          //   child: Text(
+                                                          //     'ภาษีหัก ณ ที่จ่าย',
+                                                          //     textAlign: TextAlign.end,
+                                                          //     style: TextStyle(
+                                                          //       color: ManageScreen_Color
+                                                          //           .Colors_Text1_,
+                                                          //       fontWeight: FontWeight.bold,
+                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'ส่วนลด',
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'ยอดรวม',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'ยอดเงินคงเหลือ',
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+
+                                                          // Expanded(
+                                                          //   flex: 2,
+                                                          //   child: Text(
+                                                          //     'หมายเหตุ',
+                                                          //     textAlign: TextAlign.end,
+                                                          //     style: TextStyle(
+                                                          //       color: ManageScreen_Color
+                                                          //           .Colors_Text1_,
+                                                          //       fontWeight: FontWeight.bold,
+                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '....',
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              style: TextStyle(
+                                                                color: ManageScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.63,
+                                                    width: Responsive.isDesktop(
+                                                            context)
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.85
+                                                        : 1200,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: AppbackgroundColor
+                                                          .Sub_Abg_Colors,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(0),
+                                                              topRight: Radius
+                                                                  .circular(0),
+                                                              bottomLeft: Radius
+                                                                  .circular(0),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          0)),
+                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                    ),
+                                                    child: InvoiceModels.isEmpty
+                                                        ? SizedBox(
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                const CircularProgressIndicator(),
+                                                                StreamBuilder(
+                                                                  stream: Stream.periodic(
+                                                                      const Duration(
+                                                                          milliseconds:
+                                                                              25),
+                                                                      (i) => i),
+                                                                  builder: (context,
+                                                                      snapshot) {
+                                                                    if (!snapshot
+                                                                        .hasData)
+                                                                      return const Text(
+                                                                          '');
+                                                                    double
+                                                                        elapsed =
+                                                                        double.parse(snapshot.data.toString()) *
+                                                                            0.05;
+                                                                    return Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child: (elapsed >
+                                                                              8.00)
+                                                                          ? const Text(
+                                                                              'ไม่พบข้อมูล',
+                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T
+                                                                                  //fontSize: 10.0
+                                                                                  ),
+                                                                            )
+                                                                          : Text(
+                                                                              'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
+                                                                              // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
+                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T
+                                                                                  //fontSize: 10.0
+                                                                                  ),
+                                                                            ),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          )
+                                                        : ListView.builder(
+                                                            controller:
+                                                                _scrollController2,
+                                                            // itemExtent: 50,
+                                                            physics:
+                                                                const AlwaysScrollableScrollPhysics(),
+                                                            shrinkWrap: true,
+                                                            itemCount:
+                                                                InvoiceModels
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (BuildContext
+                                                                        context,
+                                                                    int index) {
+                                                              return Column(
+                                                                children: [
+                                                                  Material(
+                                                                    color: tappedIndex_ ==
+                                                                            index
+                                                                                .toString()
+                                                                        ? tappedIndex_Color
+                                                                            .tappedIndex_Colors
+                                                                        : AppbackgroundColor
+                                                                            .Sub_Abg_Colors,
+                                                                    child:
+                                                                        Container(
+                                                                      child: ListTile(
+                                                                          // onTap:
+                                                                          //     () async {
+                                                                          //   setState(() {
+                                                                          //     tappedIndex_ =
+                                                                          //         '${index}';
+                                                                          //   });
+                                                                          // },
+                                                                          title: Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          // color: Colors.green[100]!
+                                                                          //     .withOpacity(0.5),
+                                                                          border:
+                                                                              Border(
+                                                                            bottom:
+                                                                                BorderSide(
+                                                                              color: Colors.black12,
+                                                                              width: 1,
+                                                                            ),
+                                                                          ),
+                                                                        ),
                                                                         child:
                                                                             Row(
                                                                           mainAxisAlignment:
-                                                                              MainAxisAlignment.spaceBetween,
+                                                                              MainAxisAlignment.center,
                                                                           children: [
-                                                                            (invoice_select.contains('${InvoiceModels[index].docno}') == true)
-                                                                                ? Icon(Icons.check_box, color: AppBarColors.ABar_Colors)
-                                                                                : Icon(Icons.check_box_outline_blank, color: Colors.grey),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: InkWell(
+                                                                                onTap: () async {
+                                                                                  if (invoice_select.length >= 10) {
+                                                                                    setState(() {
+                                                                                      invoice_select.remove('${InvoiceModels[index].docno}');
+                                                                                    });
+                                                                                  } else {
+                                                                                    setState(() {
+                                                                                      if (invoice_select.contains('${InvoiceModels[index].docno}') == true) {
+                                                                                        invoice_select.remove('${InvoiceModels[index].docno}');
+                                                                                      } else {
+                                                                                        invoice_select.add('${InvoiceModels[index].docno}');
+                                                                                      }
+                                                                                    });
+                                                                                  }
+                                                                                },
+                                                                                child: Container(
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: Colors.blueGrey[50]!.withOpacity(0.5),
+                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    border: Border.all(color: Colors.grey, width: 1),
+                                                                                  ),
+                                                                                  width: 70,
+                                                                                  padding: const EdgeInsets.all(5),
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    children: [
+                                                                                      (invoice_select.contains('${InvoiceModels[index].docno}') == true) ? Icon(Icons.check_box, color: AppBarColors.ABar_Colors) : Icon(Icons.check_box_outline_blank, color: Colors.grey),
 
-                                                                            ///invoice_loade_Success
-                                                                            Icon(
-                                                                              Icons.download,
-                                                                              color: (invoice_loade_Success.contains('${InvoiceModels[index].docno}') == true) ? Colors.orange[600] : null,
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${InvoiceModels[index].cid}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${InvoiceModels[index].docno}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${DateFormat('dd-MM').format(DateTime.parse('${InvoiceModels[index].daterec}'))}-${DateTime.parse('${InvoiceModels[index].daterec}').year + 543}',
-                                                                      //'${DateFormat('dd-MM-yyyy').format(DateTime.parse('${InvoiceModels[index].daterec}'))}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                        // fontSize: 12.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 2,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${InvoiceModels[index].scname}',
-                                                                      // '${transMeterModels[index].ovalue}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                        //fontSize: 12.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${InvoiceModels[index].zn}',
-                                                                      //'${transMeterModels[index].qty}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight:
-                                                                        //     FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${InvoiceModels[index].ln}',
-                                                                      //'${transMeterModels[index].qty}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight:
-                                                                        //     FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      InvoiceModels[index].btype ==
-                                                                              null
-                                                                          ? ''
-                                                                          : '${InvoiceModels[index].btype}',
-                                                                      //'${transMeterModels[index].qty}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight:
-                                                                        //     FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      //'${InvoiceModels[index].total_bill}',
-                                                                      '${nFormat.format(double.parse(InvoiceModels[index].total_bill.toString()) - double.parse(InvoiceModels[index].total_dis.toString()))}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight:
-                                                                        //     FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      //'${InvoiceModels[index].total_bill}',
-                                                                      '${nFormat.format(double.parse(InvoiceModels[index].total_bill.toString()))}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight:
-                                                                        //     FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      '${nFormat.format(double.parse(InvoiceModels[index].total_dis.toString()))}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: ManageScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight:
-                                                                        //     FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .end,
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(4.0),
-                                                                          child:
-                                                                              InkWell(
-                                                                            onTap:
-                                                                                () async {
-                                                                              List newValuePDFimg = [];
-                                                                              for (int index = 0; index < 1; index++) {
-                                                                                if (renTalModels[0].imglogo!.trim() == '') {
-                                                                                  // newValuePDFimg.add(
-                                                                                  //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                                                                } else {
-                                                                                  newValuePDFimg.add('${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                                                                }
-                                                                              }
-                                                                              var ciddoc = InvoiceModels[index].cid;
-                                                                              var qutser = '1';
-                                                                              var tser = InvoiceModels[index].total_dis;
-                                                                              var tdocno = InvoiceModels[index].docno;
-
-                                                                              setState(() {
-                                                                                payment_Ptser1 = _InvoiceModels[index].ptser;
-                                                                                payment_Ptname1 = _InvoiceModels[index].ptname;
-                                                                                payment_Bno1 = _InvoiceModels[index].bno;
-
-                                                                                Datex_invoice = _InvoiceModels[index].daterec;
-
-                                                                                payment_type1 = _InvoiceModels[index].btype;
-                                                                                payment_bank1 = _InvoiceModels[index].bank;
-                                                                              });
-                                                                              red_Trans_select(index, ciddoc, qutser, tser, tdocno);
-                                                                            },
-                                                                            child:
-                                                                                Container(
-                                                                              width: 80,
-                                                                              decoration: BoxDecoration(
-                                                                                color: Colors.blue,
-                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                      ///invoice_loade_Success
+                                                                                      Icon(
+                                                                                        Icons.download,
+                                                                                        color: (invoice_loade_Success.contains('${InvoiceModels[index].docno}') == true) ? Colors.orange[600] : null,
+                                                                                      )
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
                                                                               ),
-                                                                              padding: const EdgeInsets.all(2.0),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
                                                                               child: AutoSizeText(
                                                                                 minFontSize: 10,
                                                                                 maxFontSize: 25,
                                                                                 maxLines: 1,
-                                                                                'เรียกดู',
-                                                                                textAlign: TextAlign.center,
+                                                                                '${InvoiceModels[index].cid}',
+                                                                                textAlign: TextAlign.start,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 style: const TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    //fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                  //fontSize: 10.0
+                                                                                ),
                                                                               ),
                                                                             ),
-                                                                          ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                '${InvoiceModels[index].docno}',
+                                                                                textAlign: TextAlign.start,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                  //fontSize: 10.0
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                '${DateFormat('dd-MM').format(DateTime.parse('${InvoiceModels[index].daterec}'))}-${DateTime.parse('${InvoiceModels[index].daterec}').year + 543}',
+                                                                                //'${DateFormat('dd-MM-yyyy').format(DateTime.parse('${InvoiceModels[index].daterec}'))}',
+                                                                                textAlign: TextAlign.center,
+
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                  // fontSize: 12.0
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                '${DateFormat('dd-MM').format(DateTime.parse('${InvoiceModels[index].date}'))}-${DateTime.parse('${InvoiceModels[index].date}').year + 543}',
+                                                                                //'${DateFormat('dd-MM-yyyy').format(DateTime.parse('${InvoiceModels[index].daterec}'))}',
+                                                                                textAlign: TextAlign.center,
+
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                  // fontSize: 12.0
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 2,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                '${InvoiceModels[index].scname}',
+                                                                                // '${transMeterModels[index].ovalue}',
+                                                                                textAlign: TextAlign.center,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                  //fontSize: 12.0
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                '${InvoiceModels[index].zn}',
+                                                                                //'${transMeterModels[index].qty}',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight:
+                                                                                  //     FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                '${InvoiceModels[index].ln}',
+                                                                                //'${transMeterModels[index].qty}',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight:
+                                                                                  //     FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                InvoiceModels[index].btype == null ? '' : '${InvoiceModels[index].btype}',
+                                                                                //'${transMeterModels[index].qty}',
+                                                                                textAlign: TextAlign.center,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight:
+                                                                                  //     FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                //'${InvoiceModels[index].total_bill}',
+                                                                                '${nFormat.format(double.parse(InvoiceModels[index].total_bill.toString()) - double.parse(InvoiceModels[index].total_dis.toString()))}',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight:
+                                                                                  //     FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                //'${InvoiceModels[index].total_bill}',
+                                                                                '${nFormat.format(double.parse(InvoiceModels[index].total_bill.toString()))}',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight:
+                                                                                  //     FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: AutoSizeText(
+                                                                                minFontSize: 10,
+                                                                                maxFontSize: 25,
+                                                                                maxLines: 1,
+                                                                                '${nFormat.format(double.parse(InvoiceModels[index].total_dis.toString()))}',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight:
+                                                                                  //     FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.all(4.0),
+                                                                                    child: InkWell(
+                                                                                      onTap: () async {
+                                                                                        List newValuePDFimg = [];
+                                                                                        for (int index = 0; index < 1; index++) {
+                                                                                          if (renTalModels[0].imglogo!.trim() == '') {
+                                                                                            // newValuePDFimg.add(
+                                                                                            //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                                                          } else {
+                                                                                            newValuePDFimg.add('${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                                                          }
+                                                                                        }
+                                                                                        var ciddoc = InvoiceModels[index].cid;
+                                                                                        var qutser = '1';
+                                                                                        var tser = InvoiceModels[index].total_dis;
+                                                                                        var tdocno = InvoiceModels[index].docno;
+
+                                                                                        setState(() {
+                                                                                          payment_Ptser1 = _InvoiceModels[index].ptser;
+                                                                                          payment_Ptname1 = _InvoiceModels[index].ptname;
+                                                                                          payment_Bno1 = _InvoiceModels[index].bno;
+
+                                                                                          Datex_invoice = _InvoiceModels[index].daterec;
+
+                                                                                          payment_type1 = _InvoiceModels[index].btype;
+                                                                                          payment_bank1 = _InvoiceModels[index].bank;
+                                                                                        });
+                                                                                        red_Trans_select(index, ciddoc, qutser, tser, tdocno);
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        width: 80,
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.blue,
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(2.0),
+                                                                                        child: AutoSizeText(
+                                                                                          minFontSize: 10,
+                                                                                          maxFontSize: 25,
+                                                                                          maxLines: 1,
+                                                                                          'เรียกดู',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                          style: const TextStyle(
+                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                              //fontWeight: FontWeight.bold,
+                                                                                              fontFamily: Font_.Fonts_T),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
                                                                         ),
-                                                                      ],
+                                                                      )),
                                                                     ),
                                                                   ),
+                                                                  if (index + 1 ==
+                                                                          InvoiceModels
+                                                                              .length &&
+                                                                      InvoiceModels
+                                                                              .length !=
+                                                                          0)
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                25,
+                                                                            maxLines:
+                                                                                1,
+                                                                            '<<- End ',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(color: tappedIndex_Color.End_Colors, fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                          Expanded(
+                                                                            child:
+                                                                                Container(
+                                                                              decoration: BoxDecoration(
+                                                                                // color: Colors
+                                                                                //     .orange,
+                                                                                border: Border.all(color: tappedIndex_Color.End_Colors, width: 1),
+                                                                              ),
+                                                                              height: 1,
+                                                                            ),
+                                                                          ),
+                                                                          AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                25,
+                                                                            maxLines:
+                                                                                1,
+                                                                            ' End ->>',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(color: tappedIndex_Color.End_Colors, fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
                                                                 ],
-                                                              ),
-                                                            )),
-                                                          ),
-                                                        ),
-                                                        if (index + 1 ==
-                                                                InvoiceModels
-                                                                    .length &&
-                                                            InvoiceModels
-                                                                    .length !=
-                                                                0)
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Row(
-                                                              children: [
-                                                                AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  '<<- End ',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      color: tappedIndex_Color
-                                                                          .End_Colors,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ),
-                                                                Expanded(
-                                                                  child:
-                                                                      Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      // color: Colors
-                                                                      //     .orange,
-                                                                      border: Border.all(
-                                                                          color: tappedIndex_Color
-                                                                              .End_Colors,
-                                                                          width:
-                                                                              1),
-                                                                    ),
-                                                                    height: 1,
-                                                                  ),
-                                                                ),
-                                                                AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  ' End ->>',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      color: tappedIndex_Color
-                                                                          .End_Colors,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                      ],
-                                                    );
-                                                  })),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                            width: (Responsive.isDesktop(context))
-                                ? MediaQuery.of(context).size.width * 0.85
-                                : MediaQuery.of(context).size.width,
-                            decoration: const BoxDecoration(
-                              color: AppbackgroundColor.Sub_Abg_Colors,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0),
-                                  topRight: Radius.circular(0),
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10)),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: InkWell(
-                                          onTap: () {
-                                            _scrollController2.animateTo(
-                                              0,
-                                              duration:
-                                                  const Duration(seconds: 1),
-                                              curve: Curves.easeOut,
-                                            );
-                                          },
-                                          child: Container(
-                                              decoration: BoxDecoration(
-                                                // color: AppbackgroundColor
-                                                //     .TiTile_Colors,
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(6),
-                                                        topRight:
-                                                            Radius.circular(6),
-                                                        bottomLeft:
-                                                            Radius.circular(6),
-                                                        bottomRight:
-                                                            Radius.circular(8)),
-                                                border: Border.all(
-                                                    color: Colors.grey,
-                                                    width: 1),
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(3.0),
-                                              child: const Text(
-                                                'Top',
-                                                style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          if (_scrollController2.hasClients) {
-                                            final position = _scrollController2
-                                                .position.maxScrollExtent;
-                                            _scrollController2.animateTo(
-                                              position,
-                                              duration:
-                                                  const Duration(seconds: 1),
-                                              curve: Curves.easeOut,
-                                            );
-                                          }
-                                        },
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                              // color: AppbackgroundColor
-                                              //     .TiTile_Colors,
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(6),
-                                                      topRight:
-                                                          Radius.circular(6),
-                                                      bottomLeft:
-                                                          Radius.circular(6),
-                                                      bottomRight:
-                                                          Radius.circular(6)),
-                                              border: Border.all(
-                                                  color: Colors.grey, width: 1),
+                                                              );
+                                                            })),
+                                              ],
                                             ),
-                                            padding: const EdgeInsets.all(3.0),
-                                            child: const Text(
-                                              'Down',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: _moveUp2,
-                                        child: const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Icon(
-                                                Icons.arrow_upward,
-                                                color: Colors.grey,
-                                              ),
-                                            )),
-                                      ),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                            // color: AppbackgroundColor
-                                            //     .TiTile_Colors,
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                                    topLeft: Radius.circular(6),
-                                                    topRight:
-                                                        Radius.circular(6),
-                                                    bottomLeft:
-                                                        Radius.circular(6),
-                                                    bottomRight:
-                                                        Radius.circular(6)),
-                                            border: Border.all(
-                                                color: Colors.grey, width: 1),
                                           ),
-                                          padding: const EdgeInsets.all(3.0),
-                                          child: const Text(
-                                            'Scroll',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )),
-                                      InkWell(
-                                        onTap: _moveDown2,
-                                        child: const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Icon(
-                                                Icons.arrow_downward,
-                                                color: Colors.grey,
-                                              ),
-                                            )),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                )
-                              ],
-                            )),
-                      ],
-                    )),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          )
-        ],
-      ),
+                                  Container(
+                                      width: (Responsive.isDesktop(context))
+                                          ? MediaQuery.of(context).size.width *
+                                              0.85
+                                          : MediaQuery.of(context).size.width,
+                                      decoration: const BoxDecoration(
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(0),
+                                            topRight: Radius.circular(0),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      _scrollController2
+                                                          .animateTo(
+                                                        0,
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 1),
+                                                        curve: Curves.easeOut,
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          // color: AppbackgroundColor
+                                                          //     .TiTile_Colors,
+                                                          borderRadius: const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(6),
+                                                              topRight: Radius
+                                                                  .circular(6),
+                                                              bottomLeft: Radius
+                                                                  .circular(6),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          8)),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey,
+                                                              width: 1),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(3.0),
+                                                        child: const Text(
+                                                          'Top',
+                                                          style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 10.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        )),
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    if (_scrollController2
+                                                        .hasClients) {
+                                                      final position =
+                                                          _scrollController2
+                                                              .position
+                                                              .maxScrollExtent;
+                                                      _scrollController2
+                                                          .animateTo(
+                                                        position,
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 1),
+                                                        curve: Curves.easeOut,
+                                                      );
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                      decoration: BoxDecoration(
+                                                        // color: AppbackgroundColor
+                                                        //     .TiTile_Colors,
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(6),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    6),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    6),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    6)),
+                                                        border: Border.all(
+                                                            color: Colors.grey,
+                                                            width: 1),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              3.0),
+                                                      child: const Text(
+                                                        'Down',
+                                                        style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 10.0,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      )),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Row(
+                                              children: [
+                                                InkWell(
+                                                  onTap: _moveUp2,
+                                                  child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Icon(
+                                                          Icons.arrow_upward,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      )),
+                                                ),
+                                                Container(
+                                                    decoration: BoxDecoration(
+                                                      // color: AppbackgroundColor
+                                                      //     .TiTile_Colors,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(6),
+                                                              topRight: Radius
+                                                                  .circular(6),
+                                                              bottomLeft: Radius
+                                                                  .circular(6),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          6)),
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 1),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            3.0),
+                                                    child: const Text(
+                                                      'Scroll',
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 10.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    )),
+                                                InkWell(
+                                                  onTap: _moveDown2,
+                                                  child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Align(
+                                                        alignment: Alignment
+                                                            .centerRight,
+                                                        child: Icon(
+                                                          Icons.arrow_downward,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      )),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                ],
+                              )),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
+              ),
+      ],
     );
   }
 
@@ -3467,6 +3498,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                 TitleType_Default_Receipt_Name = value;
                               });
                             }
+                            print(TitleType_Default_Receipt_Name);
                           },
                           items: const <String>[
                             'ไม่ระบุ',
@@ -3496,7 +3528,12 @@ class _BillingScreenState extends State<BillingScreen> {
                         child: InkWell(
                           onTap: () {
                             BillingNoteInvlice_History_Tempage(
-                                newValuePDFimg, renTal_name, cid, namenew, '0');
+                                newValuePDFimg,
+                                renTal_name,
+                                cid,
+                                namenew,
+                                '0',
+                                TitleType_Default_Receipt_Name);
                           },
                           child: Container(
                             width: 100,
@@ -3665,6 +3702,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                       TitleType_Default_Receipt_Name = value;
                                     });
                                   }
+                                  print(TitleType_Default_Receipt_Name);
                                 },
                                 items: const <String>[
                                   'ไม่ระบุ',
@@ -3715,7 +3753,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                           renTal_name,
                                           docno,
                                           namenew,
-                                          '1');
+                                          '1',
+                                          TitleType_Default_Receipt_Name);
                                       await Future.delayed(
                                           const Duration(milliseconds: 800));
                                       setState(() {
@@ -3803,16 +3842,16 @@ class _BillingScreenState extends State<BillingScreen> {
   }
   //////////////////////////------------------------------>
 
-  Future<Null> BillingNoteInvlice_History_Tempage(
-      newValuePDFimg, renTal_name, cid, namenew, Preview_ser) async {
-    String? TitleType_Default_Receipt_Name;
-    if (TitleType_Default_Receipt == 0) {
-    } else {
-      setState(() {
-        TitleType_Default_Receipt_Name =
-            '${TitleType_Default_Receipt_[TitleType_Default_Receipt]}';
-      });
-    }
+  Future<Null> BillingNoteInvlice_History_Tempage(newValuePDFimg, renTal_name,
+      cid, namenew, Preview_ser, TitleType_Default_Receipt_Name) async {
+    // String? TitleType_Default_Receipt_Name;
+    // if (TitleType_Default_Receipt == 0) {
+    // } else {
+    //   setState(() {
+    //     TitleType_Default_Receipt_Name =
+    //         '${TitleType_Default_Receipt_[TitleType_Default_Receipt]}';
+    //   });
+    // }
     Man_BillingNoteInvlice_PDF.ManBillingNoteInvlice_PDF(
         TitleType_Default_Receipt_Name,
         foder,

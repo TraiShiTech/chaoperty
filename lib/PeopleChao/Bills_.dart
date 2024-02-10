@@ -62,7 +62,9 @@ class Bills extends StatefulWidget {
 }
 
 class _BillsState extends State<Bills> {
+  DateTime newDatetime = DateTime.now();
   var nFormat = NumberFormat("#,##0.00", "en_US");
+  var End_Bill_Paydate;
 
   @override
   ScrollController _scrollController1 = ScrollController();
@@ -117,6 +119,7 @@ class _BillsState extends State<Bills> {
   ];
   @override
   void initState() {
+    End_Bill_Paydate = DateFormat('yyyy-MM-dd').format(newDatetime);
     super.initState();
     red_Trans_bill();
     red_Trans_select();
@@ -583,7 +586,50 @@ class _BillsState extends State<Bills> {
 
   final Set<int> _pressedIndices = Set();
 
-  ///----------------->
+  //////------------------------->
+  Future<Null> select_Date(BuildContext context) async {
+    final Future<DateTime?> picked = showDatePicker(
+      // locale: const Locale('th', 'TH'),
+      helpText: 'เลือกวันที่ครบกำหนด', confirmText: 'ตกลง',
+      cancelText: 'ยกเลิก',
+      context: context,
+      initialDate: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
+      initialDatePickerMode: DatePickerMode.day,
+      firstDate: DateTime(2023, 1, 1),
+      lastDate: DateTime(
+          DateTime.now().year, DateTime.now().month + 6, DateTime.now().day),
+      // selectableDayPredicate: _decideWhichDayToEnable,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppBarColors.ABar_Colors, // header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: Colors.black, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    picked.then((result) {
+      if (picked != null) {
+        var formatter = DateFormat('yyyy-MM-dd');
+        print("${formatter.format(result!)}");
+        setState(() {
+          End_Bill_Paydate = "${formatter.format(result)}";
+        });
+      }
+    });
+  }
+
+  //////------------------------->
   @override
   Widget build(BuildContext context) {
     return indexbill == 1
@@ -1159,7 +1205,7 @@ class _BillsState extends State<Bills> {
                                                         color: Colors
                                                             .grey.shade300,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -1212,7 +1258,7 @@ class _BillsState extends State<Bills> {
                                                         color: Colors
                                                             .yellow.shade700,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -2183,7 +2229,7 @@ class _BillsState extends State<Bills> {
                         Expanded(
                           flex: 2,
                           child: Container(
-                            height: 160,
+                            height: 195,
                             decoration: BoxDecoration(
                               color: AppbackgroundColor.Sub_Abg_Colors,
                               borderRadius: const BorderRadius.only(
@@ -2240,6 +2286,98 @@ class _BillsState extends State<Bills> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      select_Date(context);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        const AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 15,
+                                          textAlign: TextAlign.start,
+                                          'วันที่ครบกำหนดชำระ : ',
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                6, 6, 0, 6),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue[50]!
+                                                    .withOpacity(0.5),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(0),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(0)),
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 1),
+                                              ),
+                                              // width: 120,
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
+                                              child: Center(
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  textAlign: TextAlign.end,
+
+                                                  ///  '${DateFormat('ddMM').format(DateTime.parse('${InvoiceModels[index].daterec}'))}${DateTime.parse('${InvoiceModels[index].daterec}').year + 543}'
+                                                  '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${End_Bill_Paydate}'))}',
+                                                  // '${End_Bill_Paydate}',
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue[50]!
+                                                  .withOpacity(0.5),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(0),
+                                                      topRight:
+                                                          Radius.circular(10),
+                                                      bottomLeft:
+                                                          Radius.circular(0),
+                                                      bottomRight:
+                                                          Radius.circular(10)),
+                                              border: Border.all(
+                                                  color: Colors.grey, width: 1),
+                                            ),
+                                            // width: 120,
+                                            child: Icon(
+                                              Icons.arrow_drop_down,
+                                              color: Colors.black,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 Row(children: [
                                   const AutoSizeText(
@@ -2388,7 +2526,7 @@ class _BillsState extends State<Bills> {
                                             color: AppbackgroundColor
                                                 .Sub_Abg_Colors,
                                             borderRadius: const BorderRadius
-                                                .only(
+                                                    .only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
                                                 bottomLeft: Radius.circular(10),
@@ -3024,7 +3162,7 @@ class _BillsState extends State<Bills> {
     var textadd = text_add.text;
     var priceadd = price_add.text;
     var dtypeadd = '';
-
+    var End_Bill_Paydate_ = End_Bill_Paydate;
     String url =
         '${MyConstant().domain}/In_tran_select_add.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&textadd=$textadd&priceadd=$priceadd&user=$user&dtypeadd=$dtypeadd';
     try {
@@ -3088,7 +3226,7 @@ class _BillsState extends State<Bills> {
   }
 
   Future<Null> in_Trans_invoice() async {
-     // SharedPreferences preferences = await SharedPreferences.getInstance();
+    // SharedPreferences preferences = await SharedPreferences.getInstance();
     // var ren = preferences.getString('renTalSer');
     // var user = preferences.getString('ser');
     // var ciddoc = widget.Get_Value_cid;
@@ -3108,9 +3246,12 @@ class _BillsState extends State<Bills> {
     var sumdis = sum_disamt.text;
     var sumdisp = sum_disp.text;
     var c_payment_Ser = paymentSer1;
+
+    var End_Bill_Paydate_ = End_Bill_Paydate;
     String? cFinn;
     String url =
-        '${MyConstant().domain}/In_tran_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&pay_Ser1=$c_payment_Ser';
+        '${MyConstant().domain}/In_tran_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&pay_Ser1=$c_payment_Ser&pay_date=$End_Bill_Paydate_';
+
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -3237,21 +3378,21 @@ class _BillsState extends State<Bills> {
     }
     var selectedValue_bank_bno = selectedValue;
     Man_BillingNoteInvlice_PDF.ManBillingNoteInvlice_PDF(
-      TitleType_Default_Receipt_Name,
-      foder,
-      '${widget.Get_Value_NameShop_index}',
-      tem_page_ser,
-      context,
-      '${widget.Get_Value_cid}',
-      '${widget.namenew}',
-      '${renTalModels[0].bill_addr}',
-      '${renTalModels[0].bill_email}',
-      '${renTalModels[0].bill_tel}',
-      '${renTalModels[0].bill_tax}',
-      '${renTalModels[0].bill_name}',
-      newValuePDFimg,
-      cFinn,'0'
-    );
+        TitleType_Default_Receipt_Name,
+        foder,
+        '${widget.Get_Value_NameShop_index}',
+        tem_page_ser,
+        context,
+        '${widget.Get_Value_cid}',
+        '${widget.namenew}',
+        '${renTalModels[0].bill_addr}',
+        '${renTalModels[0].bill_email}',
+        '${renTalModels[0].bill_tel}',
+        '${renTalModels[0].bill_tax}',
+        '${renTalModels[0].bill_name}',
+        newValuePDFimg,
+        cFinn,
+        '0');
   }
 }
 

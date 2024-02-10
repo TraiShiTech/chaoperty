@@ -3210,7 +3210,7 @@ class _PaysState extends State<Pays> {
                                                                     .grey
                                                                     .shade300,
                                                                 borderRadius: const BorderRadius
-                                                                    .only(
+                                                                        .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             10),
@@ -3301,7 +3301,7 @@ class _PaysState extends State<Pays> {
                                                               color: Colors
                                                                   .grey[300],
                                                               borderRadius: const BorderRadius
-                                                                  .only(
+                                                                      .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -3371,7 +3371,7 @@ class _PaysState extends State<Pays> {
                                                           color: Colors
                                                               .grey.shade300,
                                                           borderRadius: const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -3451,7 +3451,7 @@ class _PaysState extends State<Pays> {
                                                               color: Colors
                                                                   .grey[300],
                                                               borderRadius: const BorderRadius
-                                                                  .only(
+                                                                      .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -4117,7 +4117,7 @@ class _PaysState extends State<Pays> {
                                                               child: Container(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           10),
                                                                   width: MediaQuery.of(
                                                                           context)
@@ -4355,9 +4355,9 @@ class _PaysState extends State<Pays> {
                                                                 },
                                                                 child:
                                                                     Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            10),
+                                                                        padding:
+                                                                            const EdgeInsets.all(
+                                                                                10),
                                                                         width: MediaQuery.of(context)
                                                                             .size
                                                                             .width,
@@ -4604,9 +4604,9 @@ class _PaysState extends State<Pays> {
                                                                 },
                                                                 child:
                                                                     Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            10),
+                                                                        padding:
+                                                                            const EdgeInsets.all(
+                                                                                10),
                                                                         width: MediaQuery.of(context)
                                                                             .size
                                                                             .width,
@@ -6984,7 +6984,7 @@ class _PaysState extends State<Pays> {
                                                               : Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       Container(
@@ -7008,8 +7008,7 @@ class _PaysState extends State<Pays> {
                                                                               Radius.circular(10)),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         TextButton(
@@ -10865,7 +10864,7 @@ class _PaysState extends State<Pays> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -10874,8 +10873,7 @@ class _PaysState extends State<Pays> {
                                                                         decoration: BoxDecoration(
                                                                           color:
                                                                               Colors.red[600],
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(10),
                                                                               topRight: Radius.circular(10),
                                                                               bottomLeft: Radius.circular(10),
@@ -10907,7 +10905,7 @@ class _PaysState extends State<Pays> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -11578,7 +11576,7 @@ class _PaysState extends State<Pays> {
                                                               ? Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       Container(
@@ -11596,9 +11594,8 @@ class _PaysState extends State<Pays> {
                                                                           ),
                                                                         ),
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child: Container(
                                                                               color: Colors.grey,
                                                                               width: 200,

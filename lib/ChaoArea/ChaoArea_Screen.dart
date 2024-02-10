@@ -6865,17 +6865,19 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         ? SizedBox()
         : Card(
             color: areaModels[index].quantity == '1'
-                ? datex.isAfter(DateTime.parse(
-                                '${areaModels[index].ldate} 00:00:00.000')
-                            .subtract(Duration(days: open_set_date))) ==
-                        true //datex
-                    ? datex.isAfter(DateTime.parse(
+                ? (areaModels[index].ldate == null)
+                    ? Colors.red.shade200
+                    : datex.isAfter(DateTime.parse(
                                     '${areaModels[index].ldate} 00:00:00.000')
-                                .subtract(Duration(days: 0))) ==
-                            false
-                        ? Colors.orange.shade200
-                        : Colors.grey.shade200
-                    : Colors.red.shade200
+                                .subtract(Duration(days: open_set_date))) ==
+                            true //datex
+                        ? datex.isAfter(DateTime.parse(
+                                        '${areaModels[index].ldate} 00:00:00.000')
+                                    .subtract(Duration(days: 0))) ==
+                                false
+                            ? Colors.orange.shade200
+                            : Colors.grey.shade200
+                        : Colors.red.shade200
                 : areaModels[index].quantity == '2'
                     ? Colors.blue.shade200
                     : areaModels[index].quantity == '3'
@@ -6909,17 +6911,20 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               },
               child: Container(
                   color: areaModels[index].quantity == '1'
-                      ? datex.isAfter(DateTime.parse(
-                                      '${areaModels[index].ldate} 00:00:00.000')
-                                  .subtract(Duration(days: open_set_date))) ==
-                              true //datex
-                          ? datex.isAfter(DateTime.parse(
+                      ? (areaModels[index].ldate == null)
+                          ? Colors.red.shade200
+                          : datex.isAfter(DateTime.parse(
                                           '${areaModels[index].ldate} 00:00:00.000')
-                                      .subtract(Duration(days: 0))) ==
-                                  false
-                              ? Colors.orange.shade200
-                              : Colors.grey.shade200
-                          : Colors.red.shade200
+                                      .subtract(
+                                          Duration(days: open_set_date))) ==
+                                  true //datex
+                              ? datex.isAfter(DateTime.parse(
+                                              '${areaModels[index].ldate} 00:00:00.000')
+                                          .subtract(Duration(days: 0))) ==
+                                      false
+                                  ? Colors.orange.shade200
+                                  : Colors.grey.shade200
+                              : Colors.red.shade200
                       : areaModels[index].quantity == '2'
                           ? Colors.blue.shade200
                           : areaModels[index].quantity == '3'
@@ -6946,18 +6951,21 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       )),
                       AutoSizeText(
                         areaModels[index].quantity == '1'
-                            ? datex.isAfter(DateTime.parse(
-                                            '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
-                                        .subtract(const Duration(days: 0))) ==
-                                    true
+                            ? (areaModels[index].ldate == null)
                                 ? 'หมดสัญญา'
                                 : datex.isAfter(DateTime.parse(
                                                 '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
-                                            .subtract(Duration(
-                                                days: open_set_date))) ==
+                                            .subtract(
+                                                const Duration(days: 0))) ==
                                         true
-                                    ? 'ใกล้หมดสัญญา'
-                                    : 'เช่าอยู่'
+                                    ? 'หมดสัญญา'
+                                    : datex.isAfter(DateTime.parse(
+                                                    '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+                                                .subtract(Duration(
+                                                    days: open_set_date))) ==
+                                            true
+                                        ? 'ใกล้หมดสัญญา'
+                                        : 'เช่าอยู่'
                             : areaModels[index].quantity == '2'
                                 ? 'เสนอราคา'
                                 : areaModels[index].quantity == '3'

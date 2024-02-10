@@ -91,6 +91,7 @@ class Man_BillingNoteInvlice_PDF {
         ptname2,
         ptser2;
     String? Datex_invoice;
+    String? End_Bill_Paydate;
     double sum_pvat = 0.00,
         sum_vat = 0.00,
         sum_wht = 0.00,
@@ -134,6 +135,7 @@ class Man_BillingNoteInvlice_PDF {
           payment_Bno1 = _InvoiceModel.bno;
           numinvoice = _InvoiceModel.docno;
           Datex_invoice = _InvoiceModel.daterec;
+          End_Bill_Paydate = _InvoiceModel.date;
           bank1 = _InvoiceModel.bank;
           img1 = _InvoiceModel.img;
           btype1 = _InvoiceModel.btype;
@@ -311,7 +313,8 @@ class Man_BillingNoteInvlice_PDF {
             ptser1,
             ptname1,
             img1,
-            Preview_ser);
+            Preview_ser,
+            End_Bill_Paydate);
       } else if (tem_page_ser.toString() == '1') {
         Pdfgen_BillingNoteInvlice_TP4.exportPDF_BillingNoteInvlice_TP4(
             foder,
@@ -347,7 +350,8 @@ class Man_BillingNoteInvlice_PDF {
             ptser1,
             ptname1,
             img1,
-            Preview_ser);
+            Preview_ser,
+            End_Bill_Paydate);
       } else if (tem_page_ser.toString() == '2') {
         Pdfgen_BillingNoteInvlice_TP7.exportPDF_BillingNoteInvlice_TP7(
             foder,
@@ -386,7 +390,8 @@ class Man_BillingNoteInvlice_PDF {
             btype1,
             ptser1,
             ptname1,
-            Preview_ser);
+            Preview_ser,
+            End_Bill_Paydate);
       } else if (tem_page_ser.toString() == '3') {
         if (rtser.toString() == '72' ||
             rtser.toString() == '92' ||
@@ -435,7 +440,8 @@ class Man_BillingNoteInvlice_PDF {
                   ptser1,
                   ptname1,
                   img1,
-                  Preview_ser);
+                  Preview_ser,
+                  End_Bill_Paydate);
         } else {
           Pdfgen_BillingNoteInvlice_TP8.exportPDF_BillingNoteInvlice_TP8(
               foder,
@@ -479,7 +485,8 @@ class Man_BillingNoteInvlice_PDF {
               ptser1,
               ptname1,
               img1,
-              Preview_ser);
+              Preview_ser,
+              End_Bill_Paydate);
         }
       }
     });

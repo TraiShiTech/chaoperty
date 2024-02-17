@@ -67,6 +67,7 @@ import 'package:http/http.dart' as http;
 import '../Style/view_pagenow.dart';
 import 'Report_cm_ScreenA.dart';
 import 'Report_cm_ScreenB.dart';
+import 'Report_cm_ScreenC.dart';
 
 class Report_cm_Screen extends StatefulWidget {
   const Report_cm_Screen({super.key});
@@ -76,7 +77,7 @@ class Report_cm_Screen extends StatefulWidget {
 }
 
 class _Report_cm_ScreenState extends State<Report_cm_Screen> {
-  int ser_pang = -1;
+  int ser_pang = -2;
 
   DateTime datex = DateTime.now();
   int Status_ = 1;
@@ -3337,13 +3338,15 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                for (int index = 0; index < 2; index++)
+                                for (int index = 0; index < 3; index++)
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
                                           if (index == 0) {
+                                            ser_pang = -2;
+                                          } else if (index == 1) {
                                             ser_pang = -1;
                                           } else {
                                             ser_pang = 0;
@@ -3353,11 +3356,14 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                       child: Container(
                                         width: 125,
                                         decoration: BoxDecoration(
-                                          color: (ser_pang == -1 && index == 0)
+                                          color: (ser_pang == -2 && index == 0)
                                               ? Colors.blueGrey
-                                              : (ser_pang == 0 && index == 1)
+                                              : (ser_pang == -1 && index == 1)
                                                   ? Colors.blueGrey
-                                                  : Colors.blueGrey[200],
+                                                  : (ser_pang == 0 &&
+                                                          index == 2)
+                                                      ? Colors.blueGrey
+                                                      : Colors.blueGrey[200],
                                           borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(10),
                                             topRight: Radius.circular(10),
@@ -3374,7 +3380,9 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                             maxFontSize: 20,
                                             (index == 0)
                                                 ? 'Exclusive - A'
-                                                : 'Exclusive - B',
+                                                : (index == 1)
+                                                    ? 'Exclusive - B'
+                                                    : 'Exclusive - C',
                                             style: const TextStyle(
                                               color: Colors.white,
                                               // fontWeight: FontWeight.bold,
@@ -3438,37 +3446,39 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                       ),
                     ],
                   ),
-                  (ser_pang == -1)
+                  (ser_pang == -2)
                       ? Report_cm_ScreenA()
-                      : (ser_pang == 0)
+                      : (ser_pang == -1)
                           ? Report_cm_ScreenB()
-                          : (ser_pang == 1)
-                              ? const ReportScreen1()
-                              : (ser_pang == 2)
-                                  ? const ReportScreen2()
-                                  : (ser_pang == 3)
-                                      ? const ReportScreen3()
-                                      : (ser_pang == 4)
-                                          ? const ReportScreen4()
-                                          : (ser_pang == 5)
-                                              ? const ReportScreen5()
-                                              : (ser_pang == 6)
-                                                  ? const ReportScreen6()
-                                                  : (ser_pang == 7)
-                                                      ? const ReportScreen7()
-                                                      : (ser_pang == 8)
-                                                          ? const ReportScreen8()
-                                                          : (ser_pang == 9)
-                                                              ? (rtser.toString() == '72' ||
-                                                                      rtser.toString() ==
-                                                                          '92' ||
-                                                                      rtser.toString() ==
-                                                                          '93' ||
-                                                                      rtser.toString() ==
-                                                                          '94')
-                                                                  ? const ReportScreen9_1() ////องค์การตลาด กระทรวงมหาดไทย
-                                                                  : const ReportScreen9()
-                                                              : const ReportScreen10()
+                          : (ser_pang == 0)
+                              ? Report_cm_ScreenC()
+                              : (ser_pang == 1)
+                                  ? const ReportScreen1()
+                                  : (ser_pang == 2)
+                                      ? const ReportScreen2()
+                                      : (ser_pang == 3)
+                                          ? const ReportScreen3()
+                                          : (ser_pang == 4)
+                                              ? const ReportScreen4()
+                                              : (ser_pang == 5)
+                                                  ? const ReportScreen5()
+                                                  : (ser_pang == 6)
+                                                      ? const ReportScreen6()
+                                                      : (ser_pang == 7)
+                                                          ? const ReportScreen7()
+                                                          : (ser_pang == 8)
+                                                              ? const ReportScreen8()
+                                                              : (ser_pang == 9)
+                                                                  ? (rtser.toString() == '72' ||
+                                                                          rtser.toString() ==
+                                                                              '92' ||
+                                                                          rtser.toString() ==
+                                                                              '93' ||
+                                                                          rtser.toString() ==
+                                                                              '94')
+                                                                      ? const ReportScreen9_1() ////องค์การตลาด กระทรวงมหาดไทย
+                                                                      : const ReportScreen9()
+                                                                  : const ReportScreen10()
                 ],
               ),
             ),

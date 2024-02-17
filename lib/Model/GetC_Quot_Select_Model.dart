@@ -34,6 +34,9 @@ class QuotxSelectModel {
   String? etype;
   String? ele_ty;
   String? amt_ty;
+  String? fine_three;
+  String? fine_late_three;
+  String? fine_cal_three;
 
   QuotxSelectModel(
       {this.ser,
@@ -70,7 +73,10 @@ class QuotxSelectModel {
       this.dtype,
       this.etype,
       this.ele_ty,
-      this.amt_ty});
+      this.amt_ty,
+      this.fine_three,
+      this.fine_late_three,
+      this.fine_cal_three});
 
   QuotxSelectModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -108,6 +114,9 @@ class QuotxSelectModel {
     etype = json['etype'];
     ele_ty = json['ele_ty'];
     amt_ty = json['amt_ty'];
+    fine_three = json['fine_three'];
+    fine_late_three = json['fine_late_three'];
+    fine_cal_three = json['fine_cal_three'];
   }
 
   Map<String, dynamic> toJson() {
@@ -147,6 +156,9 @@ class QuotxSelectModel {
     data['etype'] = this.etype;
     data['ele_ty'] = this.ele_ty;
     data['amt_ty'] = this.amt_ty;
+    data['fine_three'] = this.fine_three;
+    data['fine_late_three'] = this.fine_late_three;
+    data['fine_cal_three'] = this.fine_cal_three;
     return data;
   }
 }

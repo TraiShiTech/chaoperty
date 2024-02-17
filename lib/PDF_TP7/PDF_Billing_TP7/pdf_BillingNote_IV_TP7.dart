@@ -58,6 +58,10 @@ class Pdfgen_BillingNoteInvlice_TP7 {
       ptname1,
       Preview_ser,
       End_Bill_Paydate) async {
+    int YearQRthai = await int.parse(DateFormat('yyyy')
+            .format(DateTime.parse(End_Bill_Paydate))
+            .toString()) +
+        543;
     final pdf = pw.Document();
     // final fontData = await rootBundle.load("ThaiFonts/Sarabun-Medium.ttf");
     // var dataint = fontData.buffer
@@ -514,7 +518,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                     children: [
                       pw.BarcodeWidget(
                         data:
-                            '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('ddMM').format(DateTime.parse(End_Bill_Paydate))}${DateTime.parse('${End_Bill_Paydate}').year + 543}\r${newTotal_QR}\r',
+                            '|$selectedValue_bank_bno\r${cFinn.replaceAll('-', '')}\r${DateFormat('ddMM').format(DateTime.parse(End_Bill_Paydate))}$YearQRthai\r${newTotal_QR}',
                         barcode: pw.Barcode.qrCode(),
                         height: 35,
                         width: 40,

@@ -1498,7 +1498,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   child: Container(
                                     width: 100,
                                     decoration: BoxDecoration(
-                          color: AppbackgroundColor.TiTile_Box,
+                                      color: AppbackgroundColor.TiTile_Box,
                                       borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(10),
                                         topRight: Radius.circular(10),
@@ -1564,7 +1564,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                           child: Container(
-                             decoration: const BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: AppbackgroundColor.TiTile_Box,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
@@ -1922,7 +1922,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                               border: Border.all(
                                                   color: Colors.grey, width: 1),
                                             ),
-                                             // width: 120,
+                                            // width: 120,
                                             height: 40,
                                             child: _searchBar(),
                                           ),
@@ -1985,7 +1985,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                               i < Status.length;
                                               i++)
                                             Padding(
-                                                 padding:
+                                                padding:
                                                     const EdgeInsets.fromLTRB(
                                                         8, 4, 8, 4),
                                                 child: InkWell(

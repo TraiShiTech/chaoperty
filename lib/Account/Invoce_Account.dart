@@ -1,29 +1,26 @@
 import 'dart:convert';
-
+import 'dart:ui';
+import 'package:http/http.dart' as http;
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-// import 'package:ftpconnect/ftpconnect.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:dropdown_button2/dropdown_button2.dart';
 import '../Constant/Myconstant.dart';
-import '../INSERT_Log/Insert_log.dart';
+import '../Model/GetPayMent_Model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
-import '../Model/GetPayMent_Model.dart';
 
-class AccountInvoice extends StatefulWidget {
-  const AccountInvoice({super.key});
+class InvoceAccount extends StatefulWidget {
+  const InvoceAccount({super.key});
 
   @override
-  State<AccountInvoice> createState() => _AccountInvoiceState();
+  State<InvoceAccount> createState() => _InvoceAccountState();
 }
 
-class _AccountInvoiceState extends State<AccountInvoice> {
+class _InvoceAccountState extends State<InvoceAccount> {
   String tappedIndex_ = '';
   DateTime newDatetime = DateTime.now();
   var nFormat = NumberFormat("#,##0.00", "en_US");
@@ -396,7 +393,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                             color: AppbackgroundColor
                                                                 .Sub_Abg_Colors,
                                                             borderRadius: const BorderRadius
-                                                                .only(
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -457,7 +454,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                             buttonHeight: 42,
                                                             buttonPadding:
                                                                 const EdgeInsets
-                                                                    .only(
+                                                                        .only(
                                                                     left: 10,
                                                                     right: 10),
                                                             dropdownDecoration:
@@ -583,7 +580,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                                 child: Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .fromLTRB(
+                                                                              .fromLTRB(
                                                                           6,
                                                                           6,
                                                                           0,
@@ -598,7 +595,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                                           .withOpacity(
                                                                               0.5),
                                                                       borderRadius: const BorderRadius
-                                                                          .only(
+                                                                              .only(
                                                                           topLeft: Radius.circular(
                                                                               10),
                                                                           topRight: Radius.circular(
@@ -615,8 +612,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                                     ),
                                                                     // width: 120,
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             2.0),
                                                                     child:
                                                                         Center(
@@ -642,7 +638,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                                         .withOpacity(
                                                                             0.5),
                                                                     borderRadius: const BorderRadius
-                                                                        .only(
+                                                                            .only(
                                                                         topLeft:
                                                                             Radius.circular(
                                                                                 0),
@@ -1574,8 +1570,8 @@ class _AccountInvoiceState extends State<AccountInvoice> {
         //   // print('docnodocnodocnodocnodocno123456>>>>  ${transBillModel.docno}');
         // }
 
-        Insert_log.Insert_logs(
-            'บัญชี', 'วางบิลทั้งหมด>>บันทึก(${user.toString()})');
+        // Insert_log.Insert_logs(
+        //     'บัญชี', 'วางบิลทั้งหมด>>บันทึก(${user.toString()})');
         setState(() {
           read_Trans_invoice_all();
         });

@@ -1563,7 +1563,7 @@ class Pdfgen_his_statusbill_TP3 {
                                   pw.Container(
                                     child: pw.BarcodeWidget(
                                         data:
-                                            '|${finnancetransModels.where((model) => model.ptser == '6' && model.dtype == 'KP').map((model) => model.bno).join(', ')}\r$numinvoice\r${DateFormat('ddMM').format(DateTime.parse(dayfinpay))}${DateTime.parse('${dayfinpay}').year + 543}\r${newTotal_QR}\r',
+                                            '|${finnancetransModels.where((model) => model.ptser == '6' && model.dtype == 'KP').map((model) => model.bno).join(', ')}\r${numinvoice.replaceAll('-', '')}\r${DateFormat('ddMM').format(DateTime.parse(dayfinpay))}${DateTime.parse('${dayfinpay}').year + 543}\r${newTotal_QR}',
                                         barcode: pw.Barcode.qrCode(),
                                         width: 55,
                                         height: 55),

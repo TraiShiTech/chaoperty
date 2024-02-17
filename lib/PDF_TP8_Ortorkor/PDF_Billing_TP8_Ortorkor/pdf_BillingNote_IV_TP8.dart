@@ -63,6 +63,10 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
       img1,
       Preview_ser,
       End_Bill_Paydate) async {
+    int YearQRthai = await int.parse(DateFormat('yyyy')
+            .format(DateTime.parse(End_Bill_Paydate))
+            .toString()) +
+        543;
     final pdf = pw.Document();
     // final fontData = await rootBundle.load("ThaiFonts/Sarabun-Medium.ttf");
     // var dataint = fontData.buffer
@@ -864,6 +868,20 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                           color: Colors_pd,
                                         ),
                                       ),
+                                      // pw.Text(
+                                      //   (End_Bill_Paydate == null ||
+                                      //           End_Bill_Paydate.toString() ==
+                                      //               '')
+                                      //       ? '${End_Bill_Paydate} '
+                                      //       : '${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543}',
+                                      //   textAlign: pw.TextAlign.center,
+                                      //   style: pw.TextStyle(
+                                      //     fontSize: font_Size,
+                                      //     font: ttf,
+                                      //     fontWeight: pw.FontWeight.bold,
+                                      //     color: Colors_pd,
+                                      //   ),
+                                      // ),
                                       pw.Text(
                                         'วันที่ 5 ของเดือน',
                                         textAlign: pw.TextAlign.center,
@@ -894,7 +912,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
               child: pw.Row(
                 children: [
                   pw.Container(
-                    width: 45,
+                    width: 30,
                     decoration: const pw.BoxDecoration(
                       // color: PdfColors.green100,
                       border: pw.Border(
@@ -930,7 +948,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
                         // color: PdfColors.green100,
@@ -1120,7 +1138,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                     ),
                   ),
                   pw.Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: pw.Container(
                       decoration: const pw.BoxDecoration(
                         // color: PdfColors.green100,
@@ -1178,7 +1196,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                   for (int index = 0; index < tableData003.length; index++)
                     pw.TableRow(children: [
                       pw.Container(
-                        width: 45,
+                        width: 30,
                         padding: const pw.EdgeInsets.all(2.0),
                         child: pw.Align(
                           alignment: pw.Alignment.topCenter,
@@ -1194,7 +1212,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                         ),
                       ),
                       pw.Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: pw.Container(
                           padding: const pw.EdgeInsets.all(2.0),
                           child: pw.Align(
@@ -1289,7 +1307,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                             ),
                           )),
                       pw.Expanded(
-                          flex: 2,
+                          flex: 1,
                           child: pw.Container(
                             padding: const pw.EdgeInsets.all(2.0),
                             child: pw.Align(
@@ -1829,7 +1847,11 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                   ),
                                 ),
                                 pw.Text(
-                                  '3. ค่าปรับผิดนักชำระ วันละ 100.00 บาท (หลังวันที่ 5 ของเดือน)',
+                                  (End_Bill_Paydate == null ||
+                                          End_Bill_Paydate.toString() == '')
+                                      ? '3. ค่าปรับผิดนักชำระ วันละ 100.00 บาท (หลังวันที่ ${End_Bill_Paydate}) '
+                                      : '3. ค่าปรับผิดนักชำระ วันละ 100.00 บาท (หลังวันที่ ${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543})',
+                                  // '3. ค่าปรับผิดนักชำระ วันละ 100.00 บาท (หลังวันที่ 5 ของเดือน)',
                                   textAlign: pw.TextAlign.left,
                                   style: pw.TextStyle(
                                     fontSize: font_Size,
@@ -1848,11 +1870,12 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                 mainAxisAlignment: pw.MainAxisAlignment.end,
                                 crossAxisAlignment: pw.CrossAxisAlignment.end,
                                 children: [
+                                  pw.SizedBox(height: 2),
                                   if (ptser1.toString() == '6')
                                     pw.Container(
                                       child: pw.BarcodeWidget(
                                           data:
-                                              '|$selectedValue_bank_bno\r$cFinn\r${DateFormat('ddMM').format(DateTime.parse(End_Bill_Paydate))}${DateTime.parse('${End_Bill_Paydate}').year + 543}\r${newTotal_QR}\r',
+                                              '|$selectedValue_bank_bno\r${cFinn.replaceAll('-', '')}\r${DateFormat('ddMM').format(DateTime.parse(End_Bill_Paydate))}$YearQRthai\r${newTotal_QR}',
                                           barcode: pw.Barcode.qrCode(),
                                           width: 60,
                                           height: 60),
@@ -1876,6 +1899,20 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                         height: 60,
                                         width: 60,
                                       ),
+                                  pw.SizedBox(height: 2),
+                                  pw.Text(
+                                    (End_Bill_Paydate == null ||
+                                            End_Bill_Paydate.toString() == '')
+                                        ? 'ชำระไม่เกินวันที่ ${End_Bill_Paydate} '
+                                        : 'ชำระไม่เกินวันที่ ${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543}',
+                                    textAlign: pw.TextAlign.center,
+                                    style: pw.TextStyle(
+                                      fontSize: font_Size - 1.5,
+                                      font: ttf,
+                                      // fontWeight: pw.FontWeight.bold,
+                                      color: Colors_pd,
+                                    ),
+                                  ),
                                 ]),
                           )),
                       // if (paymentName1.toString().trim() != 'เงินสด')

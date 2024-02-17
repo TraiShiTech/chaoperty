@@ -3430,7 +3430,7 @@ class PreviewPdfgen_Bills extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          // backgroundColor: Color.fromARGB(255, 141, 185, 90),
+          backgroundColor: AppBarColors.hexColor,
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(

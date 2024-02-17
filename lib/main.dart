@@ -30,7 +30,10 @@ void main() {
   runApp(const MyApp());
 }
 
+//
+//
 ///----------------------------------------------------->
+///
 /// flutter run --enable-software-rendering
 /// flutter run -d chrome --web-renderer html --enable-software-rendering
 /// flutter run -d chrome  --no-sound-null-safety
@@ -51,6 +54,7 @@ void main() {
 ///flutter build web --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false-define=web-browser-flag=--disable-web-security --no-tree-shake-icons  (แก้ปัญหา Security Capture Screen + security  CORS + icons )
 ///
 ///flutter build web --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false-browser-flag=--disable-web-security --no-tree-shake-icons
+///
 //----(Git Lab)
 //1.----> git add .
 //2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
@@ -63,6 +67,7 @@ void main() {
 //3.-------->git commit -m "commit message"
 //4.-----------> git push origin main
 //----------------------------------------------------->
+//
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   // This widget is the root of your application.

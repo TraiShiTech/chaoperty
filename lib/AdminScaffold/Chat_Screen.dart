@@ -149,10 +149,11 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<Null> red_Chat() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     if (chatModel.isNotEmpty) {
       chatModel.clear();
     }
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+
     var ren = preferences.getString('renTalSer');
     var email_ = preferences.getString('email');
     String url = '${MyConstant().domain}/GC_chat.php?isAdd=true&ren=$ren';
@@ -232,10 +233,16 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<Null> startTimer() async {
-    // Create a timer that runs the read_connected function every 1 minute
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     Timer.periodic(Duration(seconds: 5), (timer) {
+      setState(() {
+        Chat_no_read = preferences.getInt('Chatno_read')!;
+      });
       if (no_read == true) {
-        red_Chat3();
+        if (Chat_no_read != 0) {
+        } else {
+          red_Chat3();
+        }
       } else {}
     });
   }
@@ -245,9 +252,9 @@ class _ChatScreenState extends State<ChatScreen> {
     var ren = preferences.getString('renTalSer');
     var email_ = preferences.getString('email');
     String url = '${MyConstant().domain}/GC_chat.php?isAdd=true&ren=$ren';
-    setState(() {
-      Chat_no_read = 0;
-    });
+    // setState(() {
+    //   Chat_no_read = 0;
+    // });
     try {
       int index = 0;
       var response = await http.get(Uri.parse(url));
@@ -265,7 +272,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (index < chatModel.length) {
         setState(() {
           red_Chat();
-          Chat_no_read = 0;
+          // Chat_no_read = 0;
         });
       } else {
         setState(() {
@@ -275,6 +282,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
       //    print('object//$Chat_no_read  //$index  ///${chatModel.length}');
     } catch (e) {}
+    setState(() {
+      preferences.setInt('Chatno_read', Chat_no_read);
+    });
 
     // startUpdates();
   }
@@ -304,12 +314,15 @@ class _ChatScreenState extends State<ChatScreen> {
                   padding: const EdgeInsets.all(6.0),
                   child: InkWell(
                     onTap: () async {
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
                       await red_Chat();
 
                       setState(() {
                         no_read = false;
                         _streamController = StreamController<int>();
                         _counter = 0;
+                        preferences.setInt('Chatno_read', 0);
                       });
 
                       Future.delayed(Duration(milliseconds: 500), () {

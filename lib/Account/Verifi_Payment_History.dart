@@ -2494,7 +2494,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                     : Colors
                                                                         .orange,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -2634,202 +2634,683 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                           children: [
                                             Row(
                                               children: [
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: AppbackgroundColor
-                                                            .Sub_Abg_Colors
-                                                        .withOpacity(0.5),
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                    // border: Border.all(color: Colors.white, width: 1),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(2.0),
-                                                        child: Text(
-                                                          'เดือน :',
-                                                          style: TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
+                                                Expanded(
+                                                  flex: 10,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: AppbackgroundColor
+                                                              .Sub_Abg_Colors
+                                                          .withOpacity(0.5),
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  2.0),
+                                                          child: Text(
+                                                            'เดือน :',
+                                                            style: TextStyle(
+                                                              color: ReportScreen_Color
+                                                                  .Colors_Text2_,
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(2.0),
-                                                        child: Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(color: Colors.grey, width: 1),
-                                                          ),
-                                                          width: 120,
+                                                        Padding(
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(2.0),
-                                                          child:
-                                                              DropdownButtonFormField2(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            focusColor:
-                                                                Colors.white,
-                                                            autofocus: false,
+                                                          child: Container(
                                                             decoration:
-                                                                InputDecoration(
-                                                              floatingLabelAlignment:
-                                                                  FloatingLabelAlignment
-                                                                      .center,
-                                                              enabled: true,
-                                                              hoverColor:
-                                                                  Colors.brown,
-                                                              prefixIconColor:
-                                                                  Colors.blue,
-                                                              fillColor: Colors
-                                                                  .white
-                                                                  .withOpacity(
-                                                                      0.05),
-                                                              filled: false,
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    const BorderSide(
-                                                                        color: Colors
-                                                                            .red),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                              ),
-                                                              focusedBorder:
-                                                                  const OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
+                                                                const BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                              borderRadius: BorderRadius.only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           10),
-                                                                  bottomRight: Radius
+                                                                  topRight: Radius
                                                                       .circular(
                                                                           10),
                                                                   bottomLeft: Radius
                                                                       .circular(
                                                                           10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              // border: Border.all(color: Colors.grey, width: 1),
+                                                            ),
+                                                            width: 120,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(2.0),
+                                                            child:
+                                                                DropdownButtonFormField2(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              focusColor:
+                                                                  Colors.white,
+                                                              autofocus: false,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                floatingLabelAlignment:
+                                                                    FloatingLabelAlignment
+                                                                        .center,
+                                                                enabled: true,
+                                                                hoverColor:
+                                                                    Colors
+                                                                        .brown,
+                                                                prefixIconColor:
+                                                                    Colors.blue,
+                                                                fillColor: Colors
+                                                                    .white
+                                                                    .withOpacity(
+                                                                        0.05),
+                                                                filled: false,
+                                                                isDense: true,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      const BorderSide(
+                                                                          color:
+                                                                              Colors.red),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
                                                                 ),
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  width: 1,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          231,
-                                                                          227,
-                                                                          227),
+                                                                focusedBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                  ),
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    width: 1,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            231,
+                                                                            227,
+                                                                            227),
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                            isExpanded: false,
-                                                            //value: MONTH_Now,
-                                                            hint: Text(
-                                                              MONTH_Now == null
-                                                                  ? 'เลือก'
-                                                                  : '${monthsInThai[int.parse('${MONTH_Now}') - 1]}',
-                                                              maxLines: 2,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
+                                                              isExpanded: false,
+                                                              //value: MONTH_Now,
+                                                              hint: Text(
+                                                                MONTH_Now ==
+                                                                        null
+                                                                    ? 'เลือก'
+                                                                    : '${monthsInThai[int.parse('${MONTH_Now}') - 1]}',
+                                                                maxLines: 2,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_drop_down,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
                                                               style:
                                                                   const TextStyle(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                fontSize: 12,
                                                                 color:
                                                                     Colors.grey,
                                                               ),
+                                                              iconSize: 20,
+                                                              buttonHeight: 30,
+                                                              buttonWidth: 200,
+                                                              // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                              dropdownDecoration:
+                                                                  BoxDecoration(
+                                                                // color: Colors
+                                                                //     .amber,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    width: 1),
+                                                              ),
+                                                              items: [
+                                                                for (int item =
+                                                                        1;
+                                                                    item < 13;
+                                                                    item++)
+                                                                  DropdownMenuItem<
+                                                                      String>(
+                                                                    value:
+                                                                        '${item}',
+                                                                    child: Text(
+                                                                      '${monthsInThai[item - 1]}',
+                                                                      // '${item}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                              ],
+
+                                                              onChanged:
+                                                                  (value) async {
+                                                                MONTH_Now =
+                                                                    value;
+                                                                red_Trans_bill();
+                                                                // if (Value_Chang_Zone_Income !=
+                                                                //     null) {
+                                                                //   red_Trans_billIncome();
+                                                                //   red_Trans_billMovemen();
+                                                                // }
+                                                              },
                                                             ),
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .arrow_drop_down,
-                                                              color:
-                                                                  Colors.black,
+                                                          ),
+                                                        ),
+                                                        const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  2.0),
+                                                          child: Text(
+                                                            'ปี :',
+                                                            style: TextStyle(
+                                                              color: ReportScreen_Color
+                                                                  .Colors_Text2_,
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
                                                             ),
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                            iconSize: 20,
-                                                            buttonHeight: 30,
-                                                            buttonWidth: 200,
-                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                                            dropdownDecoration:
-                                                                BoxDecoration(
-                                                              // color: Colors
-                                                              //     .amber,
-                                                              borderRadius:
-                                                                  BorderRadius
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          child: Container(
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
                                                                       .circular(
                                                                           10),
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  width: 1),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              // border: Border.all(color: Colors.grey, width: 1),
                                                             ),
-                                                            items: [
-                                                              for (int item = 1;
-                                                                  item < 13;
-                                                                  item++)
+                                                            width: 120,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(2.0),
+                                                            child:
+                                                                DropdownButtonFormField2(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              focusColor:
+                                                                  Colors.white,
+                                                              autofocus: false,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                floatingLabelAlignment:
+                                                                    FloatingLabelAlignment
+                                                                        .center,
+                                                                enabled: true,
+                                                                hoverColor:
+                                                                    Colors
+                                                                        .brown,
+                                                                prefixIconColor:
+                                                                    Colors.blue,
+                                                                fillColor: Colors
+                                                                    .white
+                                                                    .withOpacity(
+                                                                        0.05),
+                                                                filled: false,
+                                                                isDense: true,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      const BorderSide(
+                                                                          color:
+                                                                              Colors.red),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                ),
+                                                                focusedBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                  ),
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    width: 1,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            231,
+                                                                            227,
+                                                                            227),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              isExpanded: false,
+                                                              // value: YEAR_Now,
+                                                              hint: Text(
+                                                                YEAR_Now == null
+                                                                    ? 'เลือก'
+                                                                    : '$YEAR_Now',
+                                                                maxLines: 2,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_drop_down,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                              iconSize: 20,
+                                                              buttonHeight: 30,
+                                                              buttonWidth: 200,
+                                                              // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                              dropdownDecoration:
+                                                                  BoxDecoration(
+                                                                // color: Colors
+                                                                //     .amber,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    width: 1),
+                                                              ),
+                                                              items: YE_Th.map((item) =>
+                                                                  DropdownMenuItem<
+                                                                      String>(
+                                                                    value:
+                                                                        '${item}',
+                                                                    child: Text(
+                                                                      '${item}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                  )).toList(),
+
+                                                              onChanged:
+                                                                  (value) async {
+                                                                YEAR_Now =
+                                                                    value;
+                                                                red_Trans_bill();
+                                                                // if (Value_Chang_Zone_Income !=
+                                                                //     null) {
+                                                                //   red_Trans_billIncome();
+                                                                //   red_Trans_billMovemen();
+                                                                // }
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  2.0),
+                                                          child: Text(
+                                                            'ระบบ :',
+                                                            style: TextStyle(
+                                                              color: ReportScreen_Color
+                                                                  .Colors_Text2_,
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          child: Container(
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              // border: Border.all(color: Colors.grey, width: 1),
+                                                            ),
+                                                            width: 160,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(2.0),
+                                                            child:
+                                                                DropdownButtonFormField2(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              focusColor:
+                                                                  Colors.white,
+                                                              autofocus: false,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                floatingLabelAlignment:
+                                                                    FloatingLabelAlignment
+                                                                        .center,
+                                                                enabled: true,
+                                                                hoverColor:
+                                                                    Colors
+                                                                        .brown,
+                                                                prefixIconColor:
+                                                                    Colors.blue,
+                                                                fillColor: Colors
+                                                                    .white
+                                                                    .withOpacity(
+                                                                        0.05),
+                                                                filled: false,
+                                                                isDense: true,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      const BorderSide(
+                                                                          color:
+                                                                              Colors.red),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                ),
+                                                                focusedBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                  ),
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    width: 1,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            231,
+                                                                            227,
+                                                                            227),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              isExpanded: false,
+                                                              // value: YEAR_Now,
+                                                              hint: Text(
+                                                                (ser_payby ==
+                                                                            null ||
+                                                                        ser_payby ==
+                                                                            '0')
+                                                                    ? 'ทั้งหมด'
+                                                                    : '$ser_payby',
+                                                                maxLines: 2,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_drop_down,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                              iconSize: 20,
+                                                              buttonHeight: 30,
+                                                              buttonWidth: 200,
+                                                              // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                              dropdownDecoration:
+                                                                  BoxDecoration(
+                                                                // color: Colors
+                                                                //     .amber,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    width: 1),
+                                                              ),
+                                                              items: const [
                                                                 DropdownMenuItem<
                                                                     String>(
-                                                                  value:
-                                                                      '${item}',
+                                                                  value: '0',
                                                                   child: Text(
-                                                                    '${monthsInThai[item - 1]}',
-                                                                    // '${item}',
+                                                                    'ทั้งหมด',
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
                                                                     style:
-                                                                        const TextStyle(
+                                                                        TextStyle(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                DropdownMenuItem<
+                                                                    String>(
+                                                                  value: '1',
+                                                                  child: Text(
+                                                                    'เว็ป หลักแอดมิน(W)',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                DropdownMenuItem<
+                                                                    String>(
+                                                                  value: '2',
+                                                                  child: Text(
+                                                                    'เว็ป User(U)',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                DropdownMenuItem<
+                                                                    String>(
+                                                                  value: '3',
+                                                                  child: Text(
+                                                                    'เว็ป Market(LP)',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                DropdownMenuItem<
+                                                                    String>(
+                                                                  value: '4',
+                                                                  child: Text(
+                                                                    'เครื่อง Handheld(H)',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
                                                                       overflow:
                                                                           TextOverflow
                                                                               .ellipsis,
@@ -2840,499 +3321,57 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                     ),
                                                                   ),
                                                                 )
-                                                            ],
+                                                              ],
 
-                                                            onChanged:
-                                                                (value) async {
-                                                              MONTH_Now = value;
-                                                              red_Trans_bill();
-                                                              // if (Value_Chang_Zone_Income !=
-                                                              //     null) {
-                                                              //   red_Trans_billIncome();
-                                                              //   red_Trans_billMovemen();
-                                                              // }
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(2.0),
-                                                        child: Text(
-                                                          'ปี :',
-                                                          style: TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(2.0),
-                                                        child: Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(color: Colors.grey, width: 1),
-                                                          ),
-                                                          width: 120,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          child:
-                                                              DropdownButtonFormField2(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            focusColor:
-                                                                Colors.white,
-                                                            autofocus: false,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              floatingLabelAlignment:
-                                                                  FloatingLabelAlignment
-                                                                      .center,
-                                                              enabled: true,
-                                                              hoverColor:
-                                                                  Colors.brown,
-                                                              prefixIconColor:
-                                                                  Colors.blue,
-                                                              fillColor: Colors
-                                                                  .white
-                                                                  .withOpacity(
-                                                                      0.05),
-                                                              filled: false,
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    const BorderSide(
-                                                                        color: Colors
-                                                                            .red),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                              ),
-                                                              focusedBorder:
-                                                                  const OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                ),
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  width: 1,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          231,
-                                                                          227,
-                                                                          227),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            isExpanded: false,
-                                                            // value: YEAR_Now,
-                                                            hint: Text(
-                                                              YEAR_Now == null
-                                                                  ? 'เลือก'
-                                                                  : '$YEAR_Now',
-                                                              maxLines: 2,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                fontSize: 12,
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                            ),
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .arrow_drop_down,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                            iconSize: 20,
-                                                            buttonHeight: 30,
-                                                            buttonWidth: 200,
-                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                                            dropdownDecoration:
-                                                                BoxDecoration(
-                                                              // color: Colors
-                                                              //     .amber,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  width: 1),
-                                                            ),
-                                                            items: YE_Th.map(
-                                                                (item) =>
-                                                                    DropdownMenuItem<
-                                                                        String>(
-                                                                      value:
-                                                                          '${item}',
-                                                                      child:
-                                                                          Text(
-                                                                        '${item}',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          fontSize:
-                                                                              14,
-                                                                          color:
-                                                                              Colors.grey,
-                                                                        ),
-                                                                      ),
-                                                                    )).toList(),
+                                                              onChanged:
+                                                                  (value) async {
+                                                                setState(() {
+                                                                  ser_payby =
+                                                                      value;
+                                                                });
 
-                                                            onChanged:
-                                                                (value) async {
-                                                              YEAR_Now = value;
-                                                              red_Trans_bill();
-                                                              // if (Value_Chang_Zone_Income !=
-                                                              //     null) {
-                                                              //   red_Trans_billIncome();
-                                                              //   red_Trans_billMovemen();
-                                                              // }
-                                                            },
+                                                                // print(value);
+                                                                red_Trans_bill();
+                                                                // if (Value_Chang_Zone_Income !=
+                                                                //     null) {
+                                                                //   red_Trans_billIncome();
+                                                                //   red_Trans_billMovemen();
+                                                                // }
+                                                              },
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(2.0),
-                                                        child: Text(
-                                                          'ระบบ :',
-                                                          style: TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(2.0),
-                                                        child: Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(color: Colors.grey, width: 1),
-                                                          ),
-                                                          width: 160,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          child:
-                                                              DropdownButtonFormField2(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            focusColor:
-                                                                Colors.white,
-                                                            autofocus: false,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              floatingLabelAlignment:
-                                                                  FloatingLabelAlignment
-                                                                      .center,
-                                                              enabled: true,
-                                                              hoverColor:
-                                                                  Colors.brown,
-                                                              prefixIconColor:
-                                                                  Colors.blue,
-                                                              fillColor: Colors
-                                                                  .white
-                                                                  .withOpacity(
-                                                                      0.05),
-                                                              filled: false,
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderSide:
-                                                                    const BorderSide(
-                                                                        color: Colors
-                                                                            .red),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                              ),
-                                                              focusedBorder:
-                                                                  const OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                ),
-                                                                borderSide:
-                                                                    BorderSide(
-                                                                  width: 1,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          231,
-                                                                          227,
-                                                                          227),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            isExpanded: false,
-                                                            // value: YEAR_Now,
-                                                            hint: Text(
-                                                              (ser_payby ==
-                                                                          null ||
-                                                                      ser_payby ==
-                                                                          '0')
-                                                                  ? 'ทั้งหมด'
-                                                                  : '$ser_payby',
-                                                              maxLines: 2,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                fontSize: 12,
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                            ),
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .arrow_drop_down,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            style:
-                                                                const TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                            iconSize: 20,
-                                                            buttonHeight: 30,
-                                                            buttonWidth: 200,
-                                                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                                            dropdownDecoration:
-                                                                BoxDecoration(
-                                                              // color: Colors
-                                                              //     .amber,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  width: 1),
-                                                            ),
-                                                            items: const [
-                                                              DropdownMenuItem<
-                                                                  String>(
-                                                                value: '0',
-                                                                child: Text(
-                                                                  'ทั้งหมด',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              DropdownMenuItem<
-                                                                  String>(
-                                                                value: '1',
-                                                                child: Text(
-                                                                  'เว็ป หลักแอดมิน(W)',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              DropdownMenuItem<
-                                                                  String>(
-                                                                value: '2',
-                                                                child: Text(
-                                                                  'เว็ป User(U)',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              DropdownMenuItem<
-                                                                  String>(
-                                                                value: '3',
-                                                                child: Text(
-                                                                  'เว็ป Market(LP)',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              DropdownMenuItem<
-                                                                  String>(
-                                                                value: '4',
-                                                                child: Text(
-                                                                  'เครื่อง Handheld(H)',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-
-                                                            onChanged:
-                                                                (value) async {
-                                                              setState(() {
-                                                                ser_payby =
-                                                                    value;
-                                                              });
-
-                                                              // print(value);
-                                                              red_Trans_bill();
-                                                              // if (Value_Chang_Zone_Income !=
-                                                              //     null) {
-                                                              //   red_Trans_billIncome();
-                                                              //   red_Trans_billMovemen();
-                                                              // }
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                                Expanded(child: Next_page()),
+                                                // Expanded(
+                                                //   flex: 2,
+                                                //   child: Container(
+                                                //     // color: Colors.green,
+                                                //     child: Padding(
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               8.0),
+                                                //       child: TextButton(
+                                                //         onPressed: () async {},
+                                                //         child: const Text(
+                                                //           "Excel",
+                                                //           style: TextStyle(
+                                                //             color: Colors.black,
+                                                //             fontFamily:
+                                                //                 Font_.Fonts_T,
+                                                //             fontWeight:
+                                                //                 FontWeight.bold,
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Next_page()),
                                               ],
                                             ),
                                             const Divider(),
@@ -5061,7 +5100,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                             color: AppbackgroundColor
                                                 .Sub_Abg_Colors,
                                             borderRadius: const BorderRadius
-                                                    .only(
+                                                .only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
                                                 bottomLeft: Radius.circular(10),
@@ -5538,14 +5577,16 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                   ),
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         Container(
                                                                       decoration:
                                                                           BoxDecoration(
                                                                         // color: Colors.grey,
-                                                                        borderRadius: const BorderRadius.only(
+                                                                        borderRadius: const BorderRadius
+                                                                            .only(
                                                                             topLeft:
                                                                                 Radius.circular(6),
                                                                             topRight: Radius.circular(6),
@@ -5556,9 +5597,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 Colors.grey,
                                                                             width: 1),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Column(
                                                                         crossAxisAlignment:
@@ -5739,8 +5780,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                             .end,
                                                                     children: [
                                                                       Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             Container(
                                                                           width:
@@ -5805,8 +5847,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                         ),
                                                                       ),
                                                                       Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             Container(
                                                                           width:
@@ -6037,8 +6080,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                             .end,
                                                                     children: [
                                                                       Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             Container(
                                                                           width:
@@ -6053,8 +6097,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 bottomLeft: Radius.circular(10),
                                                                                 bottomRight: Radius.circular(10)),
                                                                           ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               TextButton(
                                                                             onPressed: () =>
@@ -6079,7 +6124,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                       decoration: BoxDecoration(
                                                         color: Colors.blue[200],
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(6),
                                                             topRight:
@@ -6329,9 +6374,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                   )),
                                                                   actions: <Widget>[
                                                                     Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Row(
                                                                         mainAxisAlignment:

@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 // import 'package:ftpconnect/ftpconnect.dart';
 import 'package:http/http.dart' as http;
@@ -57,7 +59,8 @@ class _AccountInvoicePayState extends State<AccountInvoicePay> {
       bills_name_,
       zone_Subser,
       zone_Subname,
-      newValuePDFimg_QR;
+      newValuePDFimg_QR,
+      cidSelect;
   double sum_pvat = 0.00,
       sum_vat = 0.00,
       sum_wht = 0.00,
@@ -90,6 +93,8 @@ class _AccountInvoicePayState extends State<AccountInvoicePay> {
       selectedValue,
       bname1,
       Value_newDateD1 = '';
+
+  // String? base64_Slip, fileName_Slip;
   String? tem_page_ser, doctax;
   int limit = 50; // The maximum number of items you want
   int offset = 0; // The starting index of items you want
@@ -754,6 +759,10 @@ class _AccountInvoicePayState extends State<AccountInvoicePay> {
                                           onPressed: () async {
                                             if (_TransModels.length != 10) {
                                               in_Trans_select(index);
+                                              setState(() {
+                                                cidSelect =
+                                                    InvoiceModels[index].cid;
+                                              });
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -1509,7 +1518,7 @@ class _AccountInvoicePayState extends State<AccountInvoicePay> {
                                     color: AppbackgroundColor.Sub_Abg_Colors,
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'ยอดชำระรวม ',
+                                      'ยอดชำระรวม',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
@@ -2172,7 +2181,7 @@ class _AccountInvoicePayState extends State<AccountInvoicePay> {
                                         onPressed: () async {
                                           in_Trans_invoice_refno()
                                               .then((value) {
-                                            setState(() async {
+                                            setState(() {
                                               for (int index = 0;
                                                   index < _TransModels.length;
                                                   index++) {
@@ -2212,6 +2221,23 @@ class _AccountInvoicePayState extends State<AccountInvoicePay> {
         ));
   }
 
+  // List<String> rowdetail = [];
+
+  // _importFromExcel() async {
+  //   var file = "${MyConstant().domain}/IMG/report.xlsx";
+  //   var bytes = File(file).readAsBytesSync();
+  //   var excel = Excel.decodeBytes(bytes);
+
+  //   for (var table in excel.tables.keys) {
+  //     for (var row in excel.tables[table]!.rows) {
+  //       print(row.toString());
+  //       // rowdetail.add(row.toString());
+  //     }
+  //   }
+
+  //   // print(rowdetail.map((e) => e.toString()));
+  // }
+
   Future<Null> de_Trans_item_inv(index) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
@@ -2238,72 +2264,75 @@ class _AccountInvoicePayState extends State<AccountInvoicePay> {
   }
 
   Future<Null> in_Trans_invoice_refno() async {
-    for (int index = 0; index < _TransModels.length; index++) {
-      String? fileName_Slip_ = '';
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      var ren = preferences.getString('renTalSer');
-      var user = preferences.getString('ser');
-      var ciddoc = _TransModels[index].refno;
-      var qutser = '1';
-      var sumdis = double.parse(_TransModels[index].dis.toString()).toString();
-      var sumdisp = '0.00';
-      var dateY = Value_newDateY;
-      var dateY1 = Value_newDateY1;
-      var time = DateFormat('HH:mm:ss').format(newDatetime).toString();
-      //pamentpage == 0
-      var dis_akan = '0.00';
-      var dis_Matjum = '0.00';
-      var payment1 = (double.parse(_TransModels[index].total.toString()) +
-              double.parse(_TransModels[index].fine.toString()))
-          .toString();
-      var payment2 = 0.toString();
-      var pSer1 = paymentSer1;
-      var pSer2 = paymentSer2;
-      var ref = _TransModels[index].docno;
-      var sum_whta =
-          double.parse(_TransModels[index].wht.toString()).toString();
-      var bill = 'P';
-      var comment = '';
-      var sum_fine =
-          double.parse(_TransModels[index].fine.toString()).toString();
-      var fine_total_amt = fine_total;
-      // print('in_Trans_invoice_refno()///$fileName_Slip_');
-      // print('in_Trans_invoice_refno >>> $payment1  $payment2  $bill ');
+    // for (int index = 0; index < _TransModels.length; index++) {
+    String? fileName_Slip_ = '';
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var ciddoc = cidSelect; //_TransModels[index].refno;
+    var qutser = '1';
+    var sumdis =
+        sum_tran_dis; // double.parse(_TransModels[index].dis.toString()).toString();
+    var sumdisp = '0.00';
+    var dateY = Value_newDateY;
+    var dateY1 = Value_newDateY1;
+    var time = DateFormat('HH:mm:ss').format(newDatetime).toString();
+    //pamentpage == 0
+    var dis_akan = '0.00';
+    var dis_Matjum = '0.00';
+    var payment1 = (sum_amt +
+        sum_fine +
+        (fine_total *
+            _TransModels
+                .length)); // (double.parse(_TransModels[index].total.toString()) + double.parse(_TransModels[index].fine.toString())).toString();
+    var payment2 = 0.toString();
+    var pSer1 = paymentSer1;
+    var pSer2 = paymentSer2;
+    var ref = ''; //_TransModels[index].docno;
+    var sum_whta =
+        sum_wht; // double.parse(_TransModels[index].wht.toString()).toString();
+    var bill = 'P';
+    var comment = '';
+    // var sum_fine =
+    //     double.parse(_TransModels[index].fine.toString()).toString();
+    var fine_total_amt = fine_total;
+    // print('in_Trans_invoice_refno()///$fileName_Slip_');
+    // print('in_Trans_invoice_refno >>> $payment1  $payment2  $bill ');
+//In_tran_financet1 //In_tran_finanref1
+    String url =
+        '${MyConstant().domain}/In_tran_INV_all.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt';
+    try {
+      var response = await http.get(Uri.parse(url));
 
-      String url =
-          '${MyConstant().domain}/In_tran_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt';
-      try {
-        var response = await http.get(Uri.parse(url));
+      var result = json.decode(response.body);
+      print(result);
+      if (result.toString() != 'No') {
+        print('result.toString() != No');
+        for (var map in result) {
+          CFinnancetransModel cFinnancetransModel =
+              CFinnancetransModel.fromJson(map);
+          setState(() {
+            cFinn = cFinnancetransModel.docno;
 
-        var result = json.decode(response.body);
-        print(result);
-        if (result.toString() != 'No') {
-          print('result.toString() != No');
-          for (var map in result) {
-            CFinnancetransModel cFinnancetransModel =
-                CFinnancetransModel.fromJson(map);
-            setState(() {
-              cFinn = cFinnancetransModel.docno;
-
-              doctax = cFinnancetransModel.doctax;
-            });
-            print('zzzzasaaa123454>>>>  $cFinn');
-            print(
-                'in_Trans_invoice_refno bno123454>>>>  ${cFinnancetransModel.bno}//// ${cFinnancetransModel.doctax}');
-          }
-
-          // Insert_log.Insert_logs(
-          //     'บัญชี',
-          //     (Slip_status.toString() == '1')
-          //         ? 'รับชำระ:$numinvoice '
-          //         : 'รับชำระ:$cFinn ');
-          // (Default_Receipt_type == 1)
-          //     ? Show_Dialog()
-          //     : Receipt_Tempage_Pay(tableData00, newValuePDFimg);
-
-          print('rrrrrrrrrrrrrr');
+            doctax = cFinnancetransModel.doctax;
+          });
+          print('zzzzasaaa123454>>>>  $cFinn');
+          print(
+              'in_Trans_invoice_refno bno123454>>>>  ${cFinnancetransModel.bno}//// ${cFinnancetransModel.doctax}');
         }
-      } catch (e) {}
-    }
+
+        // Insert_log.Insert_logs(
+        //     'บัญชี',
+        //     (Slip_status.toString() == '1')
+        //         ? 'รับชำระ:$numinvoice '
+        //         : 'รับชำระ:$cFinn ');
+        // (Default_Receipt_type == 1)
+        //     ? Show_Dialog()
+        //     : Receipt_Tempage_Pay(tableData00, newValuePDFimg);
+
+        print('rrrrrrrrrrrrrr');
+      }
+    } catch (e) {}
+    // }
   }
 }

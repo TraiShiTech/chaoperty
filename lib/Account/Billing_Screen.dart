@@ -10,12 +10,14 @@ import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import '../Constant/Myconstant.dart';
 import '../Man_PDF/Man_BillingNoteInvlice_PDF.dart';
 import '../Model/GetExp_Model.dart';
 import '../Model/GetInvoiceRe_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
 import '../Model/GetPayMent_Model.dart';
+import '../Model/GetRegis_model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Model/GetZone_Model.dart';
@@ -45,6 +47,7 @@ class _BillingScreenState extends State<BillingScreen> {
   List<ZoneModel> zoneModels_report = [];
   List<InvoiceReModel> InvoiceModels_Save = [];
   List<InvoiceReModel> InvoiceModels = [];
+  List<Regis_model> regis_models = [];
   List<InvoiceReModel> _InvoiceModels = <InvoiceReModel>[];
   List<InvoiceReModel> limitedList_InvoiceModels_ = [];
   List<TransReBillModel> TransReBillModels_ = [];
@@ -118,7 +121,7 @@ class _BillingScreenState extends State<BillingScreen> {
   int offset = 0; // The starting index of items you want
   int endIndex = 0;
   ///////////--------------------------------------------->
-  int limit_save = 10; // The maximum number of items you want
+  int limit_save = 50; // The maximum number of items you want
   int offset_save = 0; // The starting index of items you want
   int endIndex_save = 0;
 
@@ -686,6 +689,84 @@ class _BillingScreenState extends State<BillingScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        if (Ser_Tap == 1)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: PopupMenuButton(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5),
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(5)),
+                      border: Border.all(color: Colors.grey, width: 1),
+                    ),
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      'ตัวอย่างไฟล์ Excel',
+                      style: TextStyle(
+                        color: Colors.green[600],
+                        fontWeight: FontWeight.bold,
+                        fontFamily: Font_.Fonts_T,
+                      ),
+                    ),
+                  ),
+                  itemBuilder: (BuildContext context) => [
+                    PopupMenuItem(
+                        onTap: () async {
+                          final fileUrl =
+                              '${MyConstant().domain}/Awaitdownload/ตย.ไฟล์_KTB_รับชำระ.xlsx';
+
+                          if (await canLaunch(fileUrl)) {
+                            await launch(fileUrl);
+                          } else {
+                            // Handle error
+                            print('Could not launch $fileUrl');
+                          }
+                        },
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            // color: Colors.green[100]!
+                            //     .withOpacity(0.5),
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Colors.black12,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          padding: const EdgeInsets.all(2.0),
+                          // width: 200,บช.ที่จะใช้  Online Standard QR ต้องไปสมัคร
+                          child: Row(
+                            children: [
+                              Text(
+                                'รูปแบบ : ธนาคารกรุงไทย (KTB)  ',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: ReportScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                              CircleAvatar(
+                                radius: 12.0,
+                                backgroundImage:
+                                    AssetImage('images/LogoBank/KTB.png'),
+                                backgroundColor: Colors.transparent,
+                              ),
+                            ],
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+            ],
+          ),
         Padding(
           padding: const EdgeInsets.fromLTRB(23, 8, 8, 0),
           child: Row(
@@ -760,7 +841,7 @@ class _BillingScreenState extends State<BillingScreen> {
           ),
         ),
         (Ser_Tap == 1)
-            ? Verifi_Exc_Billing(InvoiceModelss: limitedList_InvoiceModels_)
+            ? Verifi_Exc_Billing()
             : Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Column(
@@ -1844,7 +1925,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                               padding: const EdgeInsets.all(8.0),
                                                                               child: InkWell(
                                                                                 onTap: () async {
-                                                                                  if (invoice_select.length >= 10) {
+                                                                                  if (invoice_select.length >= 50) {
                                                                                     setState(() {
                                                                                       invoice_select.remove('${InvoiceModels[index].docno}');
                                                                                     });
@@ -2411,8 +2492,44 @@ class _BillingScreenState extends State<BillingScreen> {
     );
   }
 
+  Future<Null> read_GC_Line(index) async {
+    if (regis_models.isNotEmpty) {
+      setState(() {
+        regis_models.clear();
+      });
+    }
+    var custno = _InvoiceModels[index].custno;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_line_regis.php?isAdd=true&ren=$ren&custno=$custno';
+    renTal_name = preferences.getString('renTalName');
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          Regis_model regis_model = Regis_model.fromJson(map);
+          setState(() {
+            if (regis_model.userid != '') {
+              regis_models.add(regis_model);
+            }
+          });
+        }
+      } else {}
+    } catch (e) {
+      print('Error-Dis(read_GC_rental) : ${e}');
+    }
+    // print('name>>>>>  $renname');
+  }
+
   ///---------------------------------------------------------------------->
   Future<Null> checkshowDialog(index) async {
+    setState(() {
+      read_GC_Line(index);
+    });
     showDialog(
         context: context,
         builder: (context) => StatefulBuilder(
@@ -3339,6 +3456,95 @@ class _BillingScreenState extends State<BillingScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: [
+                                            //regis_models
+                                            regis_models.length == 0
+                                                ? SizedBox()
+                                                : Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    width: 200,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        showdialog_Coming(
+                                                            index);
+                                                      },
+                                                      child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.blue,
+                                                            borderRadius: const BorderRadius
+                                                                    .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        6),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        6),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        6),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            6)),
+                                                            border: Border.all(
+                                                                color:
+                                                                    Colors.grey,
+                                                                width: 1),
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            4.0),
+                                                                child: Text(
+                                                                  'แจ้งเตือนชำระ',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    // fontWeight:
+                                                                    //     FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              4.0),
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      image:
+                                                                          DecorationImage(
+                                                                        image: AssetImage(
+                                                                            "images/lineicon.png"),
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
+                                                                    ),
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width: 20,
+                                                                      height:
+                                                                          20,
+                                                                    ),
+                                                                  )),
+                                                            ],
+                                                          )),
+                                                    ),
+                                                  ),
                                             Container(
                                               padding:
                                                   const EdgeInsets.all(8.0),
@@ -3431,6 +3637,86 @@ class _BillingScreenState extends State<BillingScreen> {
                 ],
               ),
             ));
+  }
+
+  showdialog_Coming(int index) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            content: Container(
+              height: MediaQuery.of(context).size.width * 0.1,
+              child: Column(
+                children: [
+                  for (int inregis = 0;
+                      inregis < regis_models.length;
+                      inregis++)
+                    // if(regis_models[inregis].cid ==_InvoiceModels[index].cid)
+                    GestureDetector(
+                      onTap: () async {
+                        var serregis = regis_models[inregis].ser;
+                        var incid = _InvoiceModels[index].cid;
+                        var indocno = _InvoiceModels[index].docno;
+                        var insum = nFormat.format(sum_amt - sum_disamt);
+                        SharedPreferences preferences =
+                            await SharedPreferences.getInstance();
+                        var ren = preferences.getString('renTalSer');
+                        String url =
+                            '${MyConstant().domain}/sent_line_noti.php?isAdd=true&ren=$ren&serregis=$serregis&incid=$incid&indocno=$indocno&insum=$insum';
+                        renTal_name = preferences.getString('renTalName');
+                        try {
+                          var response = await http.get(Uri.parse(url));
+
+                          var result = json.decode(response.body);
+
+                          if (result.toString() == 'Line Successfully') {
+                            print('Line Successfully');
+                          } else {
+                            print('Line No Successfully');
+                          }
+                        } catch (e) {
+                          print('Error-Dis(read_GC_rental) : ${e}');
+                        }
+                        Navigator.pop(context);
+                      },
+                      child: Center(
+                        child: Row(
+                          children: [
+                            Container(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  'Line UserName : ${regis_models[inregis].username}',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                )),
+                            Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage("images/lineicon.png"),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  Divider(),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   ////////////------------------------------------------------------>(Export file)

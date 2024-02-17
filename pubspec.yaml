@@ -128,6 +128,7 @@ dependencies:
   chat_bubbles: ^1.5.0
   cached_network_image: ^3.3.1
   my_popup_menu: ^3.0.5
+  csv: ^5.1.1
 
 
 dev_dependencies:

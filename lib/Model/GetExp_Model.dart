@@ -27,6 +27,10 @@ class ExpModel {
   String? show_book;
   String? pri_book;
 
+  String? fine_three;
+  String? fine_late_three;
+  String? fine_cal_three;
+
   ExpModel(
       {this.ser,
       this.user,
@@ -54,7 +58,10 @@ class ExpModel {
       this.pri_han,
       this.show_han,
       this.show_book,
-      this.pri_book});
+      this.pri_book,
+      this.fine_three,
+      this.fine_late_three,
+      this.fine_cal_three});
 
   ExpModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -82,8 +89,12 @@ class ExpModel {
     data_update = json['data_update'];
     pri_han = json['pri_han'];
     show_han = json['show_han'];
-      show_book = json['show_book'];
+    show_book = json['show_book'];
     pri_book = json['pri_book'];
+
+    fine_three = json['fine_three'];
+    fine_late_three = json['fine_late_three'];
+    fine_cal_three = json['fine_cal_three'];
   }
 
   Map<String, dynamic> toJson() {
@@ -113,8 +124,11 @@ class ExpModel {
     data['data_update'] = this.data_update;
     data['pri_han'] = this.pri_han;
     data['show_han'] = this.show_han;
-     data['show_book'] = this.show_book;
+    data['show_book'] = this.show_book;
     data['pri_book'] = this.pri_book;
+    data['fine_three'] = this.fine_three;
+    data['fine_late_three'] = this.fine_late_three;
+    data['fine_cal_three'] = this.fine_cal_three;
     return data;
   }
 }

@@ -343,6 +343,10 @@ class _ReportScreen8State extends State<ReportScreen8> {
     } catch (e) {}
   }
 
+  // $Sertype = $_GET['sertype'];
+  // $Serzone = $_GET['serzone'];
+  //   $monx_S = $_GET['monx'];
+  //   $yex_S = $_GET['yex'];
   Future<Null> red_Trans_bill() async {
     setState(() {
       transMeterModels.clear();

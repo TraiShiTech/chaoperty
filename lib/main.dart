@@ -67,7 +67,7 @@ void main() {
 //3.-------->git commit -m "commit message"
 //4.-----------> git push origin main
 //----------------------------------------------------->
-//
+// อัพเดตระบบเสร็จสิ้นแล้ว กรุณาออกจากระบบและรีเฟรช..
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   // This widget is the root of your application.

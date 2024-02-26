@@ -14,7 +14,8 @@ import '../Model/GetZone_Model.dart';
 import '../Model/trans_re_bill_model_REprot_CM.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
-import 'Excel_Mon_income_category_cm.dart';
+import 'Excel_CDaily_income_category_cm.dart';
+import 'Excel_CMon_income_category_cm.dart';
 
 class Report_cm_ScreenC extends StatefulWidget {
   const Report_cm_ScreenC({super.key});
@@ -36,13 +37,18 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
   String? Mon_Income_Type_Mon_User;
   List<String> YE_Th = [];
   List<String> Mont_Th = [];
-  // List<TransReBillModelRECM> _TransReBillModels = [];
 
-  List<TransReBillModelRECM> _TransReBillModels_GropType_Mon = [];
-  List<TransReBillModelRECM> _TransReBillModels_GropType_Sub_zone = [];
+  // List<TransReBillModelRECM> _TransReBillModels_GropType_Mon = [];
 
-  List<TransReBillModelRECM> _TransReBillModels_GropType_Daily = [];
-  List<TransReBillModelRECM> _TransReBillModels_GropType_Daily_Sub_zone = [];
+  ///** */
+  // List<TransReBillModelRECM> _TransReBillModels_GropType_Sub_zone = [];
+
+  late List<List<TransReBillModelRECM>> _TransReBillModels_GropType_Mon;
+
+  late List<List<TransReBillModelRECM>> _TransReBillModels_GropType_Sub_zone;
+
+  // List<TransReBillModelRECM> _TransReBillModels_GropType_Daily = [];
+  // List<TransReBillModelRECM> _TransReBillModels_GropType_Daily_Sub_zone = [];
 
   String? Value_selectDate_Daily_Type_;
   String? Value_select_lastDate_Daily_Type_;
@@ -72,6 +78,14 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
   @override
   void initState() {
     super.initState();
+    _TransReBillModels_GropType_Mon = List.generate(
+      5,
+      (_) => <TransReBillModelRECM>[],
+    );
+    _TransReBillModels_GropType_Sub_zone = List.generate(
+      5,
+      (_) => <TransReBillModelRECM>[],
+    );
     checkPreferance();
     read_GC_zone();
     read_GC_Exp();
@@ -215,9 +229,9 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
 //////////////////////---------------------------------------->(รายงานรายรับรายเดือนแยกตามประเภท)
 
   Future<Null> red_Trans_bill_Groptype_Mon() async {
-    if (_TransReBillModels_GropType_Mon.length != 0) {
+    if (_TransReBillModels_GropType_Mon[0].length != 0) {
       setState(() {
-        _TransReBillModels_GropType_Mon.clear();
+        _TransReBillModels_GropType_Mon[0].clear();
       });
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -236,19 +250,18 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
               TransReBillModelRECM.fromJson(map);
 
           setState(() {
-            _TransReBillModels_GropType_Mon.add(transReBillModel);
+            _TransReBillModels_GropType_Mon[0].add(transReBillModel);
           });
         }
-
-        print('result ${_TransReBillModels_GropType_Mon.length}');
       }
     } catch (e) {}
+    print('result ${_TransReBillModels_GropType_Mon[0].length}  ****');
   }
 
   Future<Null> red_Trans_bill_Groptype_Mon_Sub_zone() async {
-    if (_TransReBillModels_GropType_Sub_zone.length != 0) {
+    if (_TransReBillModels_GropType_Sub_zone[0].length != 0) {
       setState(() {
-        _TransReBillModels_GropType_Sub_zone.clear();
+        _TransReBillModels_GropType_Sub_zone[0].clear();
       });
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -267,47 +280,60 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
               TransReBillModelRECM.fromJson(map);
 
           setState(() {
-            _TransReBillModels_GropType_Sub_zone.add(transReBillModel);
+            _TransReBillModels_GropType_Sub_zone[0].add(transReBillModel);
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Sub_zone.length}');
+        print('result ${_TransReBillModels_GropType_Sub_zone[0].length}');
       }
     } catch (e) {}
   }
 
 ///////////////////////////---------------------------------->
-  String calculateTotalArea_Zone(int index1) {
+  String calculateTotalArea_Zone(int index_day, int index1) {
     Set<String> uniqueDocnos = {};
     double totalArea = 0.0;
 
     for (int index = 0;
-        index < _TransReBillModels_GropType_Mon.length;
+        index < _TransReBillModels_GropType_Mon[index_day].length;
         index++) {
-      if (_TransReBillModels_GropType_Mon[index].room_number.toString() !=
+      if (_TransReBillModels_GropType_Mon[index_day][index]
+              .room_number
+              .toString() !=
           'ล็อคเสียบ') {
-        if (!uniqueDocnos
-            .contains(_TransReBillModels_GropType_Mon[index].docno)) {
-          if (_TransReBillModels_GropType_Mon[index].zser == null) {
+        if (!uniqueDocnos.contains(
+            _TransReBillModels_GropType_Mon[index_day][index].docno)) {
+          if (_TransReBillModels_GropType_Mon[index_day][index].zser == null) {
             totalArea += double.parse(
-                _TransReBillModels_GropType_Mon[index].zser1 ==
+                _TransReBillModels_GropType_Mon[index_day][index].zser1 ==
                         zoneModels_report[index1].ser
-                    ? _TransReBillModels_GropType_Mon[index].area == null ||
-                            _TransReBillModels_GropType_Mon[index].area! == ''
+                    ? _TransReBillModels_GropType_Mon[index_day][index].area ==
+                                null ||
+                            _TransReBillModels_GropType_Mon[index_day][index]
+                                    .area! ==
+                                ''
                         ? 1.toString()
-                        : _TransReBillModels_GropType_Mon[index].area.toString()
+                        : _TransReBillModels_GropType_Mon[index_day][index]
+                            .area
+                            .toString()
                     : 0.toString());
           } else {
             totalArea += double.parse(
-                _TransReBillModels_GropType_Mon[index].zser ==
+                _TransReBillModels_GropType_Mon[index_day][index].zser ==
                         zoneModels_report[index1].ser
-                    ? _TransReBillModels_GropType_Mon[index].area == null ||
-                            _TransReBillModels_GropType_Mon[index].area! == ''
+                    ? _TransReBillModels_GropType_Mon[index_day][index].area ==
+                                null ||
+                            _TransReBillModels_GropType_Mon[index_day][index]
+                                    .area! ==
+                                ''
                         ? 1.toString()
-                        : _TransReBillModels_GropType_Mon[index].area.toString()
+                        : _TransReBillModels_GropType_Mon[index_day][index]
+                            .area
+                            .toString()
                     : 0.toString());
           }
-          uniqueDocnos.add(_TransReBillModels_GropType_Mon[index].docno!);
+          uniqueDocnos
+              .add(_TransReBillModels_GropType_Mon[index_day][index].docno!);
         }
       }
     }
@@ -315,45 +341,55 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
     return totalArea.toString();
   }
 
-  String calculateTotalArea_Zone_Sub(int index1) {
+  String calculateTotalArea_Zone_Sub(int index_day, int index1) {
     Set<String> uniqueDocnos = {};
     double totalArea = 0.0;
 
     for (int index = 0;
-        index < _TransReBillModels_GropType_Sub_zone.length;
+        index < _TransReBillModels_GropType_Sub_zone[index_day].length;
         index++) {
-      if (_TransReBillModels_GropType_Sub_zone[index].room_number.toString() !=
+      if (_TransReBillModels_GropType_Sub_zone[index_day][index]
+              .room_number
+              .toString() !=
           'ล็อคเสียบ') {
-        if (!uniqueDocnos
-            .contains(_TransReBillModels_GropType_Sub_zone[index].docno)) {
-          if (_TransReBillModels_GropType_Sub_zone[index].zser == null) {
+        if (!uniqueDocnos.contains(
+            _TransReBillModels_GropType_Sub_zone[index_day][index].docno)) {
+          if (_TransReBillModels_GropType_Sub_zone[index_day][index].zser ==
+              null) {
             totalArea += double.parse(
-                _TransReBillModels_GropType_Sub_zone[index].zser1 ==
+                _TransReBillModels_GropType_Sub_zone[index_day][index].zser1 ==
                         zoneModeels_report_Ser_Sub_zone[index1].ser
-                    ? _TransReBillModels_GropType_Sub_zone[index].area ==
+                    ? _TransReBillModels_GropType_Sub_zone[index_day][index]
+                                    .area ==
                                 null ||
-                            _TransReBillModels_GropType_Sub_zone[index].area! ==
+                            _TransReBillModels_GropType_Sub_zone[index_day]
+                                        [index]
+                                    .area! ==
                                 ''
                         ? 1.toString()
-                        : _TransReBillModels_GropType_Sub_zone[index]
+                        : _TransReBillModels_GropType_Sub_zone[index_day][index]
                             .area
                             .toString()
                     : 0.toString());
           } else {
             totalArea += double.parse(
-                _TransReBillModels_GropType_Sub_zone[index].zser ==
+                _TransReBillModels_GropType_Sub_zone[index_day][index].zser ==
                         zoneModeels_report_Ser_Sub_zone[index1].ser
-                    ? _TransReBillModels_GropType_Sub_zone[index].area ==
+                    ? _TransReBillModels_GropType_Sub_zone[index_day][index]
+                                    .area ==
                                 null ||
-                            _TransReBillModels_GropType_Sub_zone[index].area! ==
+                            _TransReBillModels_GropType_Sub_zone[index_day]
+                                        [index]
+                                    .area! ==
                                 ''
                         ? 1.toString()
-                        : _TransReBillModels_GropType_Sub_zone[index]
+                        : _TransReBillModels_GropType_Sub_zone[index_day][index]
                             .area
                             .toString()
                     : 0.toString());
           }
-          uniqueDocnos.add(_TransReBillModels_GropType_Sub_zone[index].docno!);
+          uniqueDocnos.add(
+              _TransReBillModels_GropType_Sub_zone[index_day][index].docno!);
         }
       }
     }
@@ -361,14 +397,14 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
     return totalArea.toString();
   }
 
-  String calculateTotalBills_Zone(int index1) {
+  String calculateTotalBills_Zone(int index_day, int index1) {
     Set<String> uniqueDocnos = {};
     double totalBills = 0.0;
 
-    totalBills = (_TransReBillModels_GropType_Mon.length == 0)
+    totalBills = (_TransReBillModels_GropType_Mon[index_day].length == 0)
         ? 0.00
-        : double.parse((_TransReBillModels_GropType_Mon.map((e) =>
-            (e.zser == null)
+        : double.parse((_TransReBillModels_GropType_Mon[index_day]
+            .map((e) => (e.zser == null)
                 ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
                         e.expser! == '1' &&
                         e.room_number.toString() != 'ล็อคเสียบ'
@@ -382,18 +418,19 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                     ? e.total_expname == null || e.total_expname! == ''
                         ? 0.toString()
                         : e.total_expname.toString()
-                    : 0.toString())).reduce((a, b) => a + b)).toString());
+                    : 0.toString()))
+            .reduce((a, b) => a + b)).toString());
     return totalBills.toString();
   }
 
-  String calculateTotalBills_Zone_Sub(int index1) {
+  String calculateTotalBills_Zone_Sub(int index_day, int index1) {
     Set<String> uniqueDocnos = {};
     double totalBills = 0.0;
 
-    totalBills = (_TransReBillModels_GropType_Sub_zone.length == 0)
+    totalBills = (_TransReBillModels_GropType_Sub_zone[index_day].length == 0)
         ? 0.00
-        : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) =>
-            (e.zser == null)
+        : double.parse((_TransReBillModels_GropType_Sub_zone[index_day]
+            .map((e) => (e.zser == null)
                 ? double.parse(
                     e.zser1 == zoneModeels_report_Ser_Sub_zone[index1].ser &&
                             e.expser! == '1' &&
@@ -409,19 +446,20 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                         ? e.total_expname == null || e.total_expname! == ''
                             ? 0.toString()
                             : e.total_expname.toString()
-                        : 0.toString())).reduce((a, b) => a + b)).toString());
+                        : 0.toString()))
+            .reduce((a, b) => a + b)).toString());
     return totalBills.toString();
   }
 
-  String calculateTotalBills_AllZone() {
+  String calculateTotalBills_AllZone(int index_day) {
     Set<String> uniqueDocnos = {};
     double totalAllBills = 0.0;
 
     for (int index = 0; index < zoneModels_report.length; index++) {
-      totalAllBills += (_TransReBillModels_GropType_Mon.length == 0)
+      totalAllBills += (_TransReBillModels_GropType_Mon[index_day].length == 0)
           ? 0.00
-          : double.parse((_TransReBillModels_GropType_Mon.map((e) =>
-              (e.zser == null)
+          : double.parse((_TransReBillModels_GropType_Mon[index_day]
+              .map((e) => (e.zser == null)
                   ? double.parse(e.zser1 == zoneModels_report[index].ser &&
                           e.expser! == '1' &&
                           e.room_number.toString() != 'ล็อคเสียบ'
@@ -435,69 +473,84 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                       ? e.total_expname == null || e.total_expname! == ''
                           ? 0.toString()
                           : e.total_expname.toString()
-                      : 0.toString())).reduce((a, b) => a + b)).toString());
+                      : 0.toString()))
+              .reduce((a, b) => a + b)).toString());
     }
     for (int index = 0; index < zoneModels_report.length; index++) {
-      totalAllBills += (_TransReBillModels_GropType_Sub_zone.length == 0)
-          ? 0.00
-          : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) =>
-              (e.zser == null)
-                  ? double.parse(e.zser1 == zoneModels_report[index].ser &&
-                          e.expser! == '1' &&
-                          e.room_number.toString() != 'ล็อคเสียบ'
-                      ? e.total_expname == null || e.total_expname! == ''
-                          ? 0.toString()
-                          : e.total_expname.toString()
-                      : 0.toString())
-                  : double.parse(e.zser == zoneModels_report[index].ser &&
-                          e.expser! == '1' &&
-                          e.room_number.toString() != 'ล็อคเสียบ'
-                      ? e.total_expname == null || e.total_expname! == ''
-                          ? 0.toString()
-                          : e.total_expname.toString()
-                      : 0.toString())).reduce((a, b) => a + b)).toString());
+      totalAllBills +=
+          (_TransReBillModels_GropType_Sub_zone[index_day].length == 0)
+              ? 0.00
+              : double.parse((_TransReBillModels_GropType_Sub_zone[index_day]
+                  .map((e) => (e.zser == null)
+                      ? double.parse(e.zser1 == zoneModels_report[index].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())
+                      : double.parse(e.zser == zoneModels_report[index].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString());
     }
 
     return totalAllBills.toString();
   }
 
-  String calculateTotalArea_AllZone() {
+  String calculateTotalArea_AllZone(int index_day) {
     Set<String> uniqueDocnos = {};
     double totalAllArea = 0.0;
 
     for (int index = 0;
-        index < _TransReBillModels_GropType_Mon.length;
+        index < _TransReBillModels_GropType_Mon[index_day].length;
         index++) {
-      if (_TransReBillModels_GropType_Mon[index].room_number.toString() !=
+      if (_TransReBillModels_GropType_Mon[index_day][index]
+              .room_number
+              .toString() !=
           'ล็อคเสียบ') {
-        if (!uniqueDocnos
-            .contains(_TransReBillModels_GropType_Mon[index].docno)) {
+        if (!uniqueDocnos.contains(
+            _TransReBillModels_GropType_Mon[index_day][index].docno)) {
           totalAllArea += double.parse(
-              _TransReBillModels_GropType_Mon[index].area == null ||
-                      _TransReBillModels_GropType_Mon[index].area! == ''
+              _TransReBillModels_GropType_Mon[index_day][index].area == null ||
+                      _TransReBillModels_GropType_Mon[index_day][index].area! ==
+                          ''
                   ? 1.toString()
-                  : _TransReBillModels_GropType_Mon[index].area.toString());
+                  : _TransReBillModels_GropType_Mon[index_day][index]
+                      .area
+                      .toString());
 
-          uniqueDocnos.add(_TransReBillModels_GropType_Mon[index].docno!);
+          uniqueDocnos
+              .add(_TransReBillModels_GropType_Mon[index_day][index].docno!);
         }
       }
     }
     for (int index = 0;
-        index < _TransReBillModels_GropType_Sub_zone.length;
+        index < _TransReBillModels_GropType_Sub_zone[index_day].length;
         index++) {
-      if (_TransReBillModels_GropType_Sub_zone[index].room_number.toString() !=
+      if (_TransReBillModels_GropType_Sub_zone[index_day][index]
+              .room_number
+              .toString() !=
           'ล็อคเสียบ') {
-        if (!uniqueDocnos
-            .contains(_TransReBillModels_GropType_Sub_zone[index].docno)) {
+        if (!uniqueDocnos.contains(
+            _TransReBillModels_GropType_Sub_zone[index_day][index].docno)) {
           totalAllArea += double.parse(
-              _TransReBillModels_GropType_Sub_zone[index].area == null ||
-                      _TransReBillModels_GropType_Sub_zone[index].area! == ''
+              _TransReBillModels_GropType_Sub_zone[index_day][index].area ==
+                          null ||
+                      _TransReBillModels_GropType_Sub_zone[index_day][index]
+                              .area! ==
+                          ''
                   ? 1.toString()
-                  : _TransReBillModels_GropType_Sub_zone[index]
+                  : _TransReBillModels_GropType_Sub_zone[index_day][index]
                       .area
                       .toString());
 
-          uniqueDocnos.add(_TransReBillModels_GropType_Sub_zone[index].docno!);
+          uniqueDocnos.add(
+              _TransReBillModels_GropType_Sub_zone[index_day][index].docno!);
         }
       }
     }
@@ -505,34 +558,35 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
     return totalAllArea.toString();
   }
 
-  String calculateTotal_B1_AllZone() {
+  String calculateTotal_B1_AllZone(int index_day) {
     double total7Kana = 0.0;
 
     for (int index1 = 0; index1 < zoneModels_report.length; index1++) {
       (zoneModels_report[index1].jon! == '1' &&
               zoneModels_report[index1].jon_book! == '1')
-          ? total7Kana += double.parse(calculateTotalBills_Zone(index1)!) -
-              ((double.parse(calculateTotalArea_Zone(index1)!) *
+          ? total7Kana += double.parse(calculateTotalBills_Zone(0, index1)!) -
+              ((double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_1}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_2}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_3}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_4}')))
-          : total7Kana += double.parse(calculateTotalArea_Zone(index1)!) *
-              double.parse('${zoneModels_report[index1].b_1}');
+          : total7Kana +=
+              double.parse(calculateTotalArea_Zone(index_day, index1)!) *
+                  double.parse('${zoneModels_report[index1].b_1}');
     }
 
     for (int index2 = 0; index2 < zoneModels_report_Sub_zone.length; index2++) {
       total7Kana += double.parse(calculateTotal_B1_SubZone(
-          '${zoneModels_report_Sub_zone[index2].ser}'));
+          index_day, '${zoneModels_report_Sub_zone[index2].ser}'));
     }
 
     return total7Kana.toString();
   }
 
-  String calculateTotal_B1_SubZone(Subzone) {
+  String calculateTotal_B1_SubZone(int index_day, Subzone) {
     double total7Kana = 0.0;
 
     for (int index3 = 0;
@@ -542,50 +596,52 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
           '${Subzone}') {
         (zoneModeels_report_Ser_Sub_zone[index3].jon! == '1' &&
                 zoneModeels_report_Ser_Sub_zone[index3].jon_book! == '1')
-            ? total7Kana += double.parse(
-                    calculateTotalBills_Zone_Sub(index3)!) -
-                ((double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+            ? total7Kana += double.parse(calculateTotalBills_Zone_Sub(index_day, index3)!) -
+                ((double.parse(
+                            calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_1}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_2}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_3}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_4}')))
-            : total7Kana += double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-                double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_1}');
+            : total7Kana +=
+                double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
+                    double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_1}');
       }
     }
 
     return total7Kana.toString();
   }
 
-  String calculateTotal_B2_AllZone() {
+  String calculateTotal_B2_AllZone(int index_day) {
     double totalBA = 0.0;
 
     for (int index1 = 0; index1 < zoneModels_report.length; index1++) {
       (zoneModels_report[index1].jon! == '1' &&
               zoneModels_report[index1].jon_book! == '2')
-          ? totalBA += double.parse(calculateTotalBills_Zone(index1)!) -
-              ((double.parse(calculateTotalArea_Zone(index1)!) *
+          ? totalBA += double.parse(calculateTotalBills_Zone(0, index1)!) -
+              ((double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_1}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_2}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_3}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_4}')))
-          : totalBA += double.parse(calculateTotalArea_Zone(index1)!) *
-              double.parse('${zoneModels_report[index1].b_2}');
+          : totalBA +=
+              double.parse(calculateTotalArea_Zone(index_day, index1)!) *
+                  double.parse('${zoneModels_report[index1].b_2}');
       //////////------------------------>
-      totalBA += (_TransReBillModels_GropType_Mon.length == 0)
+      totalBA += (_TransReBillModels_GropType_Mon[index_day].length == 0)
           ? 0.00
-          : double.parse((_TransReBillModels_GropType_Mon.map((e) =>
-              (e.zser == null)
+          : double.parse((_TransReBillModels_GropType_Mon[index_day]
+              .map((e) => (e.zser == null)
                   ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
                           e.expser! == '1' &&
                           e.room_number.toString() == 'ล็อคเสียบ'
@@ -599,14 +655,15 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                       ? e.total_expname == null || e.total_expname! == ''
                           ? 0.toString()
                           : e.total_expname.toString()
-                      : 0.toString())).reduce((a, b) => a + b)).toString());
+                      : 0.toString()))
+              .reduce((a, b) => a + b)).toString());
       //////////------------------------>
       for (int index_exp = 0; index_exp < expModels.length; index_exp++) {
         if (expModels[index_exp].ser.toString() != '1') {
-          totalBA += (_TransReBillModels_GropType_Mon.length == 0)
+          totalBA += (_TransReBillModels_GropType_Mon[index_day].length == 0)
               ? 0.00
-              : double.parse((_TransReBillModels_GropType_Mon.map((e) =>
-                  (e.zser == null)
+              : double.parse((_TransReBillModels_GropType_Mon[index_day]
+                  .map((e) => (e.zser == null)
                       ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
                               e.expser! == '${expModels[index_exp].ser}'
                           ? e.total_expname == null || e.total_expname! == ''
@@ -618,7 +675,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                           ? e.total_expname == null || e.total_expname! == ''
                               ? 0.toString()
                               : e.total_expname.toString()
-                          : 0.toString())).reduce((a, b) => a + b)).toString());
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString());
         }
       }
       //////////------------------------>
@@ -627,12 +685,12 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
     for (int index2 = 0; index2 < zoneModels_report_Sub_zone.length; index2++) {
       ////---------------->
       totalBA += double.parse(calculateTotal_B2_SubZone(
-          '${zoneModels_report_Sub_zone[index2].ser}'));
+          index_day, '${zoneModels_report_Sub_zone[index2].ser}'));
       ////---------------->
-      totalBA += (_TransReBillModels_GropType_Sub_zone.length < 1)
+      totalBA += (_TransReBillModels_GropType_Sub_zone[index_day].length < 1)
           ? 0.00
-          : (double.parse((_TransReBillModels_GropType_Sub_zone.map((e) =>
-              (e.zser == null)
+          : (double.parse((_TransReBillModels_GropType_Sub_zone[index_day]
+              .map((e) => (e.zser == null)
                   ? double.parse(
                       e.zser1 == zoneModels_report_Sub_zone[index2].ser &&
                               e.expser! == '1' &&
@@ -641,21 +699,23 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                               ? 0.toString()
                               : e.total_expname.toString()
                           : 0.toString())
-                  : double.parse(e.zser ==
-                              zoneModels_report_Sub_zone[index2].ser &&
-                          e.expser! == '1' &&
-                          e.room_number.toString() == 'ล็อคเสียบ'
-                      ? e.total_expname == null || e.total_expname! == ''
-                          ? 0.toString()
-                          : e.total_expname.toString()
-                      : 0.toString())).reduce((a, b) => a + b)).toString()));
+                  : double.parse(
+                      e.zser == zoneModels_report_Sub_zone[index2].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() == 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString()))
+              .reduce((a, b) => a + b)).toString()));
       ////---------------->
       for (int index_exp = 0; index_exp < expModels.length; index_exp++) {
         if (expModels[index_exp].ser.toString() != '1') {
-          totalBA += (_TransReBillModels_GropType_Sub_zone.length == 0)
+          totalBA += (_TransReBillModels_GropType_Sub_zone[index_day].length ==
+                  0)
               ? 0.00
-              : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) =>
-                  (e.zser == null)
+              : double.parse((_TransReBillModels_GropType_Sub_zone[index_day]
+                  .map((e) => (e.zser == null)
                       ? double.parse(e.zser1 == zoneModels_report[index2].ser &&
                               e.expser! == '${expModels[index_exp].ser}'
                           ? e.total_expname == null || e.total_expname! == ''
@@ -667,7 +727,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                           ? e.total_expname == null || e.total_expname! == ''
                               ? 0.toString()
                               : e.total_expname.toString()
-                          : 0.toString())).reduce((a, b) => a + b)).toString());
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString());
         }
       }
       ////---------------->
@@ -676,7 +737,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
     return totalBA.toString();
   }
 
-  String calculateTotal_B2_SubZone(Subzone) {
+  String calculateTotal_B2_SubZone(int index_day, Subzone) {
     double totalBA = 0.0;
 
     for (int index3 = 0;
@@ -686,44 +747,48 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
           '${Subzone}') {
         (zoneModeels_report_Ser_Sub_zone[index3].jon! == '1' &&
                 zoneModeels_report_Ser_Sub_zone[index3].jon_book! == '2')
-            ? totalBA += double.parse(calculateTotalBills_Zone_Sub(index3)!) -
-                ((double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+            ? totalBA += double.parse(calculateTotalBills_Zone_Sub(index_day, index3)!) -
+                ((double.parse(
+                            calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_1}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_2}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_3}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_4}')))
-            : totalBA += double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-                double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_2}');
+            : totalBA +=
+                double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
+                    double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_2}');
       }
     }
 
     return totalBA.toString();
   }
 
-  String calculateTotal_B3_AllZone() {
+  String calculateTotal_B3_AllZone(int index_day) {
     double totalB3 = 0.0;
 
     for (int index1 = 0; index1 < zoneModels_report.length; index1++) {
       (zoneModels_report[index1].jon! == '1' &&
               zoneModels_report[index1].jon_book! == '3')
-          ? totalB3 += double.parse(calculateTotalBills_Zone(index1)!) -
-              ((double.parse(calculateTotalArea_Zone(index1)!) *
+          ? totalB3 += double.parse(
+                  calculateTotalBills_Zone(index_day, index1)!) -
+              ((double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_1}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_2}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_3}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_4}')))
-          : totalB3 += double.parse(calculateTotalArea_Zone(index1)!) *
-              double.parse('${zoneModels_report[index1].b_3}');
+          : totalB3 +=
+              double.parse(calculateTotalArea_Zone(index_day, index1)!) *
+                  double.parse('${zoneModels_report[index1].b_3}');
     }
 
     for (int index1 = 0; index1 < zoneModels_report.length; index1++) {}
@@ -733,7 +798,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
     return totalB3.toString();
   }
 
-  String calculateTotal_B3_SubZone(Subzone) {
+  String calculateTotal_B3_SubZone(int index_day, Subzone) {
     double totalB3 = 0.0;
 
     for (int in_dex = 0;
@@ -741,27 +806,27 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
         in_dex++) {
       if (zoneModeels_report_Ser_Sub_zone[in_dex].sub_zone.toString() ==
           '${Subzone}') {
-        (_TransReBillModels_GropType_Sub_zone.length == 0)
+        (_TransReBillModels_GropType_Sub_zone[index_day].length == 0)
             ? totalB3 += 0.00
             : (zoneModeels_report_Ser_Sub_zone[in_dex].jon! == '1' &&
                     zoneModeels_report_Ser_Sub_zone[in_dex].jon_book! == '3')
-                ? totalB3 += (double.parse(calculateTotalBills_Zone_Sub(in_dex)!) -
-                    ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                ? totalB3 += (double.parse(calculateTotalBills_Zone_Sub(index_day, in_dex)!) -
+                    ((double.parse(calculateTotalArea_Zone_Sub(
+                                index_day, in_dex)!) *
                             double.parse(
                                 '${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) +
-                        (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                        (double.parse(calculateTotalArea_Zone_Sub(index_day, in_dex)!) *
                             double.parse(
                                 '${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) +
-                        (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                        (double.parse(calculateTotalArea_Zone_Sub(index_day, in_dex)!) *
                             double.parse(
                                 '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) +
-                        (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
+                        (double.parse(calculateTotalArea_Zone_Sub(index_day, in_dex)!) *
                             double.parse(
                                 '${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))
                 : totalB3 +=
-                    (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
-                        double.parse(
-                            '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}'));
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, in_dex)!) *
+                        double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}'));
         // (zoneModeels_report_Ser_Sub_zone[index3].jon! == '1' &&
         //         zoneModeels_report_Ser_Sub_zone[index3].jon_book! == '3')
         //     ? totalB3 += double.parse(calculateTotalBills_Zone_Sub(index3)!) -
@@ -785,32 +850,34 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
     return totalB3.toString();
   }
 
-  String calculateTotal_B4_AllZone() {
+  String calculateTotal_B4_AllZone(int index_day) {
     double totalB4 = 0.0;
 
     for (int index1 = 0; index1 < zoneModels_report.length; index1++) {
       (zoneModels_report[index1].jon! == '1' &&
               zoneModels_report[index1].jon_book! == '4')
-          ? totalB4 += double.parse(calculateTotalBills_Zone(index1)!) -
-              ((double.parse(calculateTotalArea_Zone(index1)!) *
+          ? totalB4 += double.parse(
+                  calculateTotalBills_Zone(index_day, index1)!) -
+              ((double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_1}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_2}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_3}')) +
-                  (double.parse(calculateTotalArea_Zone(index1)!) *
+                  (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
                       double.parse('${zoneModels_report[index1].b_4}')))
-          : totalB4 += double.parse(calculateTotalArea_Zone(index1)!) *
-              double.parse('${zoneModels_report[index1].b_4}');
+          : totalB4 +=
+              double.parse(calculateTotalArea_Zone(index_day, index1)!) *
+                  double.parse('${zoneModels_report[index1].b_4}');
     }
     for (int index2 = 0; index2 < zoneModels_report_Sub_zone.length; index2++) {
-      totalB4 += double.parse(
-          calculateTotal_B4_SubZone(zoneModels_report_Sub_zone[index2].ser));
+      totalB4 += double.parse(calculateTotal_B4_SubZone(
+          index_day, zoneModels_report_Sub_zone[index2].ser));
     }
     return totalB4.toString();
   }
 
-  String calculateTotal_B4_SubZone(Subzone) {
+  String calculateTotal_B4_SubZone(int index_day, Subzone) {
     double totalB4 = 0.0;
 
     for (int index3 = 0;
@@ -820,92 +887,304 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
           '${Subzone}') {
         (zoneModeels_report_Ser_Sub_zone[index3].jon! == '1' &&
                 zoneModeels_report_Ser_Sub_zone[index3].jon_book! == '4')
-            ? totalB4 += double.parse(calculateTotalBills_Zone_Sub(index3)!) -
-                ((double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+            ? totalB4 += double.parse(calculateTotalBills_Zone_Sub(index_day, index3)!) -
+                ((double.parse(
+                            calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_1}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_2}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_3}')) +
-                    (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
+                    (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[index3].b_4}')))
-            : totalB4 += double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-                double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_4}');
+            : totalB4 +=
+                double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
+                    double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_4}');
       }
     }
 
     return totalB4.toString();
   }
 
-  Future<Null> red_Trans_bill_Groptype_daly() async {
-    if (_TransReBillModels_GropType_Mon.length != 0) {
-      setState(() {
-        _TransReBillModels_GropType_Mon.clear();
-      });
+/////////--------------------------------------------------->
+
+  String calculateTotal_5dayNolocpay_zone(index1) {
+    double total5dayNolocpay_zone = 0.0;
+
+    for (int index_total_day = 0; index_total_day < 5; index_total_day++) {
+      total5dayNolocpay_zone +=
+          (_TransReBillModels_GropType_Mon[index_total_day].length == 0)
+              ? 0.00
+              : double.parse((_TransReBillModels_GropType_Mon[index_total_day]
+                  .map((e) => (e.zser == null)
+                      ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())
+                      : double.parse(e.zser == zoneModels_report[index1].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString());
     }
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
 
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_BC_DailyReport_CMma_type.php?isAdd=true&ren=$ren&date=$Value_selectDate_Daily_Type_&ldate=$Value_select_lastDate_Daily_Type_';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      print(result);
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillModelRECM transReBillModel =
-              TransReBillModelRECM.fromJson(map);
-
-          setState(() {
-            _TransReBillModels_GropType_Mon.add(transReBillModel);
-          });
-        }
-
-        print('result ${_TransReBillModels_GropType_Mon.length}');
-      }
-    } catch (e) {}
+    return total5dayNolocpay_zone.toString();
   }
 
-  Future<Null> red_Trans_bill_Groptype_daly_Sub_zone() async {
-    if (_TransReBillModels_GropType_Sub_zone.length != 0) {
-      setState(() {
-        _TransReBillModels_GropType_Sub_zone.clear();
-      });
+  String calculateTotal_5daylocpay_zone(index1) {
+    double total5daylocpay_zone = 0.0;
+
+    for (int index_locpay_day = 0; index_locpay_day < 5; index_locpay_day++) {
+      total5daylocpay_zone +=
+          (_TransReBillModels_GropType_Mon[index_locpay_day].length == 0)
+              ? 0.00
+              : double.parse((_TransReBillModels_GropType_Mon[index_locpay_day]
+                  .map((e) => (e.zser == null)
+                      ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() == 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())
+                      : double.parse(e.zser == zoneModels_report[index1].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() == 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString());
     }
+
+    return total5daylocpay_zone.toString();
+  }
+
+  String calculateTotalexp_5day_zone(index1) {
+    double total5dayexp_zone = 0.0;
+
+    for (int index_exp_day = 0; index_exp_day < 5; index_exp_day++) {
+      total5dayexp_zone +=
+          (_TransReBillModels_GropType_Mon[index_exp_day].length == 0)
+              ? 0.00
+              : double.parse((_TransReBillModels_GropType_Mon[index_exp_day]
+                  .map((e) => (e.zser == null)
+                      ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
+                              e.expser! != '1'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())
+                      : double.parse(e.zser == zoneModels_report[index1].ser &&
+                              e.expser! != '1'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString());
+    }
+
+    return total5dayexp_zone.toString();
+  }
+
+  String calculateTotal_5dayNolocpay_Subzone(index3) {
+    double total5dayNolocpay_Subzone = 0.0;
+
+    for (int index_total_day = 0; index_total_day < 5; index_total_day++) {
+      total5dayNolocpay_Subzone +=
+          (_TransReBillModels_GropType_Sub_zone[index_total_day].length == 0)
+              ? 0.00
+              : double.parse((_TransReBillModels_GropType_Sub_zone[
+                      index_total_day]
+                  .map((e) => (e.zser == null)
+                      ? double.parse(e.sub_zone ==
+                                  '${zoneModels_report_Sub_zone[index3].ser}' &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())
+                      : double.parse(e.sub_zone ==
+                                  '${zoneModels_report_Sub_zone[index3].ser}' &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString());
+    }
+
+    return total5dayNolocpay_Subzone.toString();
+  }
+
+  String calculateTotal_5daylocpay_Subzone(index3) {
+    double total5daylocpay_Subzone = 0.0;
+
+    for (int index_locpay_day = 0; index_locpay_day < 5; index_locpay_day++) {
+      total5daylocpay_Subzone +=
+          (_TransReBillModels_GropType_Sub_zone[index_locpay_day].length == 0)
+              ? 0.00
+              : double.parse((_TransReBillModels_GropType_Sub_zone[
+                      index_locpay_day]
+                  .map((e) => (e.zser == null)
+                      ? double.parse(e.sub_zone ==
+                                  '${zoneModels_report_Sub_zone[index3].ser}' &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() == 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())
+                      : double.parse(e.sub_zone ==
+                                  '${zoneModels_report_Sub_zone[index3].ser}' &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() == 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString());
+    }
+
+    return total5daylocpay_Subzone.toString();
+  }
+
+  String calculateTotalexp_5day_Subzone(index3) {
+    double total5dayexp_Subzone = 0.0;
+
+    for (int index_exp_day = 0; index_exp_day < 5; index_exp_day++) {
+      total5dayexp_Subzone +=
+          (_TransReBillModels_GropType_Sub_zone[index_exp_day].length == 0)
+              ? 0.00
+              : double.parse((_TransReBillModels_GropType_Sub_zone[
+                      index_exp_day]
+                  .map((e) => (e.zser == null)
+                      ? double.parse(e.sub_zone! ==
+                                  '${zoneModels_report_Sub_zone[index3].ser}' &&
+                              e.expser! != '1'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())
+                      : double.parse(e.sub_zone! ==
+                                  '${zoneModels_report_Sub_zone[index3].ser}' &&
+                              e.expser! != '1'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString());
+    }
+
+    return total5dayexp_Subzone.toString();
+  }
+
+  String calculateTotal_5day_AllZone() {
+    double total5day = 0.0;
+
+    for (int index_TotalBills = 0; index_TotalBills < 5; index_TotalBills++) {
+      total5day += (_TransReBillModels_GropType_Mon[index_TotalBills].length ==
+                  0 &&
+              _TransReBillModels_GropType_Sub_zone[index_TotalBills].length ==
+                  0)
+          ? 0.00
+          : double.parse(
+              '${calculateTotalBills_AllZone(index_TotalBills).toString()}');
+    }
+
+    return total5day.toString();
+  }
+
+//////////////////////---------------------------------------->(รายงานรายรับรายวันแยกตามประเภท)
+  Future<Null> red_Trans_bill_Groptype_daly() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
-
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_BC_DailyReport_CMma_type_Sub_zone.php?isAdd=true&ren=$ren&date=$Value_selectDate_Daily_Type_&ldate=$Value_select_lastDate_Daily_Type_';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      print(result);
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillModelRECM transReBillModel =
-              TransReBillModelRECM.fromJson(map);
-
-          setState(() {
-            _TransReBillModels_GropType_Sub_zone.add(transReBillModel);
-          });
-        }
-
-        print('result ${_TransReBillModels_GropType_Sub_zone.length}');
+    for (int index = 0; index < 5; index++) {
+      var NEW_Value_select_lastDate_Daily_Type_ = (index == 0)
+          ? '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: 0)))}'
+          : '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: index)))}';
+      print(NEW_Value_select_lastDate_Daily_Type_);
+      if (_TransReBillModels_GropType_Mon[index].length != 0) {
+        setState(() {
+          _TransReBillModels_GropType_Mon[index].clear();
+        });
       }
-    } catch (e) {}
+
+      String url =
+          '${MyConstant().domain}/GC_bill_pay_BC_DailyReport_CMma_type.php?isAdd=true&ren=$ren&date=$NEW_Value_select_lastDate_Daily_Type_&ldate=$NEW_Value_select_lastDate_Daily_Type_';
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        print(result);
+        if (result.toString() != 'null') {
+          for (var map in result) {
+            TransReBillModelRECM transReBillModel =
+                TransReBillModelRECM.fromJson(map);
+
+            setState(() {
+              _TransReBillModels_GropType_Mon[index].add(transReBillModel);
+            });
+          }
+
+          print('result ${_TransReBillModels_GropType_Mon[index].length}');
+        }
+      } catch (e) {}
+    }
+  }
+
+///////--------------------------------------------------->
+  Future<Null> red_Trans_bill_Groptype_daly_Sub_zone() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    for (int index = 0; index < 5; index++) {
+      setState(() {
+        _TransReBillModels_GropType_Sub_zone[index].clear();
+      });
+
+      var NEW_Value_select_lastDate_Daily_Type_ = (index == 0)
+          ? '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: 0)))}'
+          : '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: index)))}';
+      print(NEW_Value_select_lastDate_Daily_Type_);
+      String url =
+          '${MyConstant().domain}/GC_bill_pay_BC_DailyReport_CMma_type_Sub_zone.php?isAdd=true&ren=$ren&date=$NEW_Value_select_lastDate_Daily_Type_&ldate=$NEW_Value_select_lastDate_Daily_Type_';
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        // print(result);
+        if (result.toString() != 'null') {
+          for (var map in result) {
+            TransReBillModelRECM transReBillModel =
+                TransReBillModelRECM.fromJson(map);
+
+            setState(() {
+              _TransReBillModels_GropType_Sub_zone[index].add(transReBillModel);
+            });
+          }
+
+          print(
+              'result $index / ${_TransReBillModels_GropType_Sub_zone[index].length}');
+        }
+      } catch (e) {}
+    }
   }
 
 ////////////-----------------------(วันที่รายงาน รายชื่อผู้เช่ารายวันแยกตามประเภท)
-  String first_Date = '2023-09-01';
-  String last_Date = '2023-09-05';
+  // String first_Date = '2023-09-01';
+  // String last_Date = '2023-09-05';
   Future<Null> _select_Date_Daily_type(BuildContext context) async {
     final Future<DateTime?> picked = showDatePicker(
       // locale: const Locale('th', 'TH'),
@@ -1419,8 +1698,9 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                         ),
                       ),
                     ),
-                    onTap: (_TransReBillModels_GropType_Mon.length == 0 &&
-                            _TransReBillModels_GropType_Sub_zone.length == 0 &&
+                    onTap: (_TransReBillModels_GropType_Mon[0].length == 0 &&
+                            _TransReBillModels_GropType_Sub_zone[0].length ==
+                                0 &&
                             Value_selectDate_Daily_Type_ == null &&
                             Value_select_lastDate_Daily_Type_ == null)
                         ? null
@@ -1437,17 +1717,19 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                       (Value_selectDate_Daily_Type_ != null ||
                               Value_select_lastDate_Daily_Type_ != null)
                           ? 'รายงาน แสดงรายได้ (รายเดือน)'
-                          : (_TransReBillModels_GropType_Mon.length != 0 ||
-                                  _TransReBillModels_GropType_Sub_zone.length !=
+                          : (_TransReBillModels_GropType_Mon[0].length != 0 ||
+                                  _TransReBillModels_GropType_Sub_zone[0]
+                                          .length !=
                                       0)
                               ? (YE_Income_Type_Mon_User != null &&
                                           Mon_Income_Type_Mon_User != null ||
-                                      _TransReBillModels_GropType_Mon.length !=
+                                      _TransReBillModels_GropType_Mon[0]
+                                              .length !=
                                           0 ||
-                                      _TransReBillModels_GropType_Sub_zone
+                                      _TransReBillModels_GropType_Sub_zone[0]
                                               .length !=
                                           0)
-                                  ? 'รายงาน แสดงรายได้ (รายเดือน) (ไม่พบข้อมูล ✔️)'
+                                  ? 'รายงาน แสดงรายได้ (รายเดือน) (พบข้อมูล ✔️)'
                                   : 'รายงาน แสดงรายได้ (รายเดือน) (ไม่พบข้อมูล ✖️)'
                               : 'รายงาน แสดงรายได้ (รายเดือน)',
                       // (YE_Income_Type_Mon_User != null &&
@@ -1507,7 +1789,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                       },
                       child: Container(
                           decoration: BoxDecoration(
-                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            color: Colors.green[50],
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10),
@@ -1534,9 +1816,10 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
-                      (Value_selectDate_Daily_Type_ != null)
-                          ? 'ถึง  ( กรุณาเลือกวันที่เริ่ม )'
-                          : 'ถึง',
+                      // (Value_selectDate_Daily_Type_ != null)
+                      //     ? 'ถึง  ( กรุณาเลือกวันที่เริ่ม )'
+                      //     :
+                      'ถึง',
                       style: const TextStyle(
                         color: ReportScreen_Color.Colors_Text2_,
                         // fontWeight: FontWeight.bold,
@@ -1547,53 +1830,80 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                   if (Value_selectDate_Daily_Type_ != null)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        onTap: () {
-                          _select_LastDate_Daily_type(context);
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: AppbackgroundColor.Sub_Abg_Colors,
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10)),
-                              border: Border.all(color: Colors.grey, width: 1),
-                            ),
-                            width: 120,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                (Value_select_lastDate_Daily_Type_ == null)
-                                    ? 'เลือก'
-                                    : '$Value_select_lastDate_Daily_Type_',
-                                style: const TextStyle(
-                                  color: ReportScreen_Color.Colors_Text2_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 120,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              (Value_selectDate_Daily_Type_ == null)
+                                  ? 'เลือก'
+                                  : '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: 4)))}',
+                              style: const TextStyle(
+                                color: ReportScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
                               ),
-                            )),
-                      ),
+                            ),
+                          )),
+                      // InkWell(
+                      //   onTap: () {
+                      //     _select_LastDate_Daily_type(context);
+                      //   },
+                      //   child:
+                      // Container(
+                      //       decoration: BoxDecoration(
+                      //         color: AppbackgroundColor.Sub_Abg_Colors,
+                      //         borderRadius: const BorderRadius.only(
+                      //             topLeft: Radius.circular(10),
+                      //             topRight: Radius.circular(10),
+                      //             bottomLeft: Radius.circular(10),
+                      //             bottomRight: Radius.circular(10)),
+                      //         border: Border.all(color: Colors.grey, width: 1),
+                      //       ),
+                      //       width: 120,
+                      //       padding: const EdgeInsets.all(8.0),
+                      //       child: Center(
+                      //         child: Text(
+                      //           (Value_select_lastDate_Daily_Type_ == null)
+                      //               ? 'เลือก'
+                      //               : '$Value_select_lastDate_Daily_Type_',
+                      //           style: const TextStyle(
+                      //             color: ReportScreen_Color.Colors_Text2_,
+                      //             // fontWeight: FontWeight.bold,
+                      //             fontFamily: Font_.Fonts_T,
+                      //           ),
+                      //         ),
+                      //       )),
+                      // ),
                     ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
                       onTap: () async {
-                        setState(() {
-                          YE_Income_Type_Mon_User = null;
-                          Mon_Income_Type_Mon_User = null;
-                          _TransReBillModels_GropType_Mon.clear();
-                          _TransReBillModels_GropType_Sub_zone.clear();
-                        });
+                        red_Trans_bill_Groptype_daly();
+                        red_Trans_bill_Groptype_daly_Sub_zone();
+                        // setState(() {
+                        //   YE_Income_Type_Mon_User = null;
+                        //   Mon_Income_Type_Mon_User = null;
+                        //   // _TransReBillModels_GropType_Mon.clear();
+                        //   // _TransReBillModels_GropType_Sub_zone[0].clear();
+                        // });
 
-                        if (Value_select_lastDate_Daily_Type_ != null &&
-                            Value_selectDate_Daily_Type_ != null) {
-                          Dia_log();
-                          red_Trans_bill_Groptype_daly();
-                          red_Trans_bill_Groptype_daly_Sub_zone();
-                        }
+                        // if (Value_select_lastDate_Daily_Type_ != null &&
+                        //     Value_selectDate_Daily_Type_ != null) {
+                        //   Dia_log();
+                        //   red_Trans_bill_Groptype_daly();
+                        //   red_Trans_bill_Groptype_daly_Sub_zone();
+                        // }
                       },
                       child: Container(
                           width: 100,
@@ -1606,7 +1916,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                 bottomLeft: Radius.circular(10),
                                 bottomRight: Radius.circular(10)),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               'ค้นหา',
                               style: TextStyle(
@@ -1654,36 +1964,40 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                         ),
                       ),
                     ),
-                    onTap: (YE_Income_Type_Mon_User != null ||
-                            Mon_Income_Type_Mon_User != null)
-                        ? null
-                        : (Value_selectDate_Daily_Type_ == null ||
-                                Value_select_lastDate_Daily_Type_ == null)
-                            ? null
-                            : () {
-                                RE_Income_Daily_Type_Widget();
-                              },
+                    onTap:
+                        // (YE_Income_Type_Mon_User != null ||
+                        //         Mon_Income_Type_Mon_User != null)
+                        //     ? null
+                        //     : (Value_selectDate_Daily_Type_ == null ||
+                        //             Value_select_lastDate_Daily_Type_ == null)
+                        //         ? null
+                        //         :
+                        () {
+                      RE_Income_Daily_Type_Widget();
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       (YE_Income_Type_Mon_User != null ||
                               Mon_Income_Type_Mon_User != null)
-                          ? 'รายงาน รายรับแยกตามประเภท (รายวัน)'
-                          : (_TransReBillModels_GropType_Mon.length != 0 ||
-                                  _TransReBillModels_GropType_Sub_zone.length !=
+                          ? 'รายงาน แสดงรายได้ (รายวัน)'
+                          : (_TransReBillModels_GropType_Mon[0].length != 0 ||
+                                  _TransReBillModels_GropType_Sub_zone[0]
+                                          .length !=
                                       0)
                               ? (Value_selectDate_Daily_Type_ != null &&
                                           Value_select_lastDate_Daily_Type_ !=
                                               null ||
-                                      _TransReBillModels_GropType_Mon.length !=
+                                      _TransReBillModels_GropType_Mon[0]
+                                              .length !=
                                           0 ||
-                                      _TransReBillModels_GropType_Sub_zone
+                                      _TransReBillModels_GropType_Sub_zone[0]
                                               .length !=
                                           0)
-                                  ? 'รายงาน รายรับแยกตามประเภท (รายวัน) (ไม่พบข้อมูล ✔️)'
-                                  : 'รายงาน รายรับแยกตามประเภท (รายวัน) (ไม่พบข้อมูล ✖️)'
-                              : 'รายงาน รายรับแยกตามประเภท (รายวัน)',
+                                  ? 'รายงาน แสดงรายได้ (รายวัน) (พบข้อมูล ✔️)'
+                                  : 'รายงาน แสดงรายได้ (รายวัน ) (ไม่พบข้อมูล ✖️)'
+                              : 'รายงาน แสดงรายได้ (รายวัน)',
                       style: const TextStyle(
                         color: ReportScreen_Color.Colors_Text2_,
                         // fontWeight: FontWeight.bold,
@@ -1766,7 +2080,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                             // color: Colors.grey[50],
                             width: (Responsive.isDesktop(context))
                                 ? MediaQuery.of(context).size.width * 0.925
-                                : (_TransReBillModels_GropType_Mon.length == 0)
+                                : (_TransReBillModels_GropType_Mon[0].length ==
+                                        0)
                                     ? MediaQuery.of(context).size.width
                                     : 1200,
                             child: Column(
@@ -1883,100 +2198,297 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                 .sub_zone
                                                 .toString() ==
                                             '0')
-                                          ListTile(
-                                            title: Container(
-                                              decoration: const BoxDecoration(
-                                                border: Border(
-                                                  bottom: BorderSide(
-                                                    color: Colors.black12,
-                                                    width: 1,
-                                                  ),
+                                          Container(
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(
+                                                  color: Colors.black12,
+                                                  width: 1,
                                                 ),
                                               ),
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 4),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      const SizedBox(
-                                                        width: 20,
+                                            ),
+                                            // padding:
+                                            //     const EdgeInsets.fromLTRB(
+                                            //         0, 0, 0, 4),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        '${zoneModels_report[index1].zn}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                          color:
+                                                              ReportScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        ),
                                                       ),
-                                                      Expanded(
-                                                        flex: 1,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
                                                         child: Text(
-                                                          '${zoneModels_report[index1].zn}',
+                                                          (_TransReBillModels_GropType_Mon[
+                                                                          0]
+                                                                      .length <
+                                                                  1)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon[0].map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          // '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}',
+
                                                           textAlign:
-                                                              TextAlign.start,
-                                                          style:
-                                                              const TextStyle(
+                                                              TextAlign.right,
+                                                          style: TextStyle(
                                                             color: ReportScreen_Color
                                                                 .Colors_Text1_,
-                                                            // fontWeight: FontWeight.w100,
+                                                            fontWeight:
+                                                                FontWeight.w700,
                                                             fontFamily:
                                                                 Font_.Fonts_T,
                                                           ),
                                                         ),
                                                       ),
-                                                      Expanded(
-                                                        flex: 1,
+                                                    ),
+                                                    // Expanded(
+                                                    //   flex: 1,
+                                                    //   child: Text(
+                                                    //     '${nFormat.format(double.parse(calculateTotalBills_Sumdis_Zone(index1)!))}',
+                                                    //     textAlign: TextAlign.right,
+                                                    //     style: TextStyle(
+                                                    //       color: ('${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}' == '0.00') ? Colors.red[400] : ReportScreen_Color.Colors_Text1_,
+                                                    //       // fontWeight: FontWeight.bold,
+                                                    //       fontFamily: Font_.Fonts_T,
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
                                                         child: Text(
-                                                          (_TransReBillModels_GropType_Mon
+                                                          (_TransReBillModels_GropType_Mon[
+                                                                          0]
                                                                       .length <
                                                                   1)
                                                               ? '0.00'
-                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                          // '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}',
-
+                                                              : '${nFormat.format(double.parse(calculateTotalArea_Zone(0, index1)!))}',
                                                           textAlign:
                                                               TextAlign.right,
-                                                          style:
-                                                              const TextStyle(
+                                                          style: TextStyle(
                                                             color: ReportScreen_Color
                                                                 .Colors_Text1_,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        child: Text(
+                                                          'ล็อคเสียบ/ขาจร :',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
                                                             // fontWeight: FontWeight.bold,
                                                             fontFamily:
                                                                 Font_.Fonts_T,
                                                           ),
                                                         ),
                                                       ),
-                                                      // Expanded(
-                                                      //   flex: 1,
-                                                      //   child: Text(
-                                                      //     '${nFormat.format(double.parse(calculateTotalBills_Sumdis_Zone(index1)!))}',
-                                                      //     textAlign: TextAlign.right,
-                                                      //     style: TextStyle(
-                                                      //       color: ('${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}' == '0.00') ? Colors.red[400] : ReportScreen_Color.Colors_Text1_,
-                                                      //       // fontWeight: FontWeight.bold,
-                                                      //       fontFamily: Font_.Fonts_T,
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
-                                                      Expanded(
-                                                        flex: 1,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
                                                         child: Text(
-                                                          (_TransReBillModels_GropType_Mon
-                                                                      .length <
-                                                                  1)
+                                                          (_TransReBillModels_GropType_Mon[
+                                                                          0]
+                                                                      .length ==
+                                                                  0)
                                                               ? '0.00'
-                                                              : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!))}',
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon[0].map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                           textAlign:
                                                               TextAlign.right,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
                                                             fontFamily:
                                                                 Font_.Fonts_T,
                                                           ),
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                  //////////////------------------------------------------------>
-                                                ],
-                                              ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          '-',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                // for (int index_exp = 0;
+                                                //     index_exp < expModels.length;
+                                                //     index_exp++)
+                                                // if (expModels[index_exp]
+                                                //         .ser
+                                                //         .toString() !=
+                                                //     '1')
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        '${expModels.where((model) => model.ser.toString() != '1').map((model) => model.expname).join(',')} :',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors.grey[600],
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon[
+                                                                          0]
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon[0].map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          '-',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                //////////////------------------------------------------------>
+                                              ],
                                             ),
                                           ),
                                       for (int index3 = 0;
@@ -2031,8 +2543,11 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                       textAlign:
                                                           TextAlign.start,
                                                       style: TextStyle(
-                                                        color: Colors.grey[600],
-                                                        // fontWeight: FontWeight.bold,
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.w700,
                                                         fontFamily:
                                                             Font_.Fonts_T,
                                                       ),
@@ -2052,17 +2567,20 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                         ),
                                                       ),
                                                       child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
+                                                        (_TransReBillModels_GropType_Sub_zone[
+                                                                        0]
                                                                     .length ==
                                                                 0)
                                                             ? '0.00'
-                                                            : ' ${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                            : ' ${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone[0].map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                         textAlign:
                                                             TextAlign.right,
                                                         style: TextStyle(
                                                           color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
+                                                              ReportScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.w700,
                                                           fontFamily:
                                                               Font_.Fonts_T,
                                                         ),
@@ -2083,17 +2601,20 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                         ),
                                                       ),
                                                       child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
+                                                        (_TransReBillModels_GropType_Sub_zone[
+                                                                        0]
                                                                     .length ==
                                                                 0)
                                                             ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone[0].map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                         textAlign:
                                                             TextAlign.right,
                                                         style: TextStyle(
                                                           color:
-                                                              Colors.grey[600],
-                                                          // fontWeight: FontWeight.bold,
+                                                              ReportScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.w700,
                                                           fontFamily:
                                                               Font_.Fonts_T,
                                                         ),
@@ -2138,11 +2659,12 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                         ),
                                                       ),
                                                       child: Text(
-                                                        (_TransReBillModels_GropType_Sub_zone
+                                                        (_TransReBillModels_GropType_Sub_zone[
+                                                                        0]
                                                                     .length ==
                                                                 0)
                                                             ? '0.00'
-                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone[0].map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                         textAlign:
                                                             TextAlign.right,
                                                         style: TextStyle(
@@ -2229,7 +2751,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                         //         0)
                                                         //     ? '0.00'
                                                         //     :
-                                                        '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                        '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone[0].map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                         textAlign:
                                                             TextAlign.right,
                                                         style: TextStyle(
@@ -2303,7 +2825,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                               height: 120,
                               width: (Responsive.isDesktop(context))
                                   ? MediaQuery.of(context).size.width * 0.925
-                                  : (_TransReBillModels_GropType_Mon.length ==
+                                  : (_TransReBillModels_GropType_Mon[0]
+                                              .length ==
                                           0)
                                       ? MediaQuery.of(context).size.width
                                       : 1200,
@@ -2472,14 +2995,16 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                           Expanded(
                                             flex: 1,
                                             child: Text(
-                                              (_TransReBillModels_GropType_Mon
+                                              (_TransReBillModels_GropType_Mon[
+                                                                  0]
                                                               .length ==
                                                           0 &&
-                                                      _TransReBillModels_GropType_Sub_zone
+                                                      _TransReBillModels_GropType_Sub_zone[
+                                                                  0]
                                                               .length ==
                                                           0)
                                                   ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotalBills_AllZone().toString()}'))}',
+                                                  : '${nFormat.format(double.parse('${calculateTotalBills_AllZone(0).toString()}'))}',
                                               textAlign: TextAlign.right,
                                               style: const TextStyle(
                                                 color: ReportScreen_Color
@@ -2510,14 +3035,16 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                           Expanded(
                                             flex: 1,
                                             child: Text(
-                                              (_TransReBillModels_GropType_Mon
+                                              (_TransReBillModels_GropType_Mon[
+                                                                  0]
                                                               .length ==
                                                           0 &&
-                                                      _TransReBillModels_GropType_Sub_zone
+                                                      _TransReBillModels_GropType_Sub_zone[
+                                                                  0]
                                                               .length ==
                                                           0)
                                                   ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotalArea_AllZone().toString()}'))}',
+                                                  : '${nFormat.format(double.parse('${calculateTotalArea_AllZone(0).toString()}'))}',
                                               textAlign: TextAlign.right,
                                               style: const TextStyle(
                                                 color: ReportScreen_Color
@@ -2637,9 +3164,9 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ///_TransReBillModels_GropType_Sub_zone _TransReBillModels_GropType_Mon
-                          if (_TransReBillModels_GropType_Sub_zone.length !=
+                          if (_TransReBillModels_GropType_Sub_zone[0].length !=
                                   0 ||
-                              _TransReBillModels_GropType_Mon.length != 0)
+                              _TransReBillModels_GropType_Mon[0].length != 0)
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: InkWell(
@@ -2666,10 +3193,11 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                   ),
                                 ),
                                 onTap: () {
-                                  if (_TransReBillModels_GropType_Sub_zone
+                                  if (_TransReBillModels_GropType_Sub_zone[0]
                                               .length ==
                                           0 &&
-                                      _TransReBillModels_GropType_Mon.length ==
+                                      _TransReBillModels_GropType_Mon[0]
+                                              .length ==
                                           0) {
                                   } else {
                                     setState(() {
@@ -2710,8 +3238,9 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                 setState(() {
                                   Mon_Income_Type_Mon_User = null;
                                   YE_Income_Type_Mon_User = null;
-                                  _TransReBillModels_GropType_Mon.clear();
-                                  _TransReBillModels_GropType_Sub_zone.clear();
+                                  // _TransReBillModels_GropType_Mon[0].clear();
+                                  _TransReBillModels_GropType_Sub_zone[0]
+                                      .clear();
                                 });
                                 Navigator.of(context).pop();
                               },
@@ -2755,10 +3284,9 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                     Expanded(
                         flex: 1,
                         child: Text(
-                          (Value_selectDate_Daily_Type_ == null ||
-                                  Value_select_lastDate_Daily_Type_ == null)
+                          (Value_selectDate_Daily_Type_ == null)
                               ? 'วันที่: ?'
-                              : 'วันที่: ${Value_selectDate_Daily_Type_} ถึง $Value_select_lastDate_Daily_Type_',
+                              : 'วันที่: ${Value_selectDate_Daily_Type_} ถึง ${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: 4)))}',
                           textAlign: TextAlign.start,
                           style: const TextStyle(
                             color: ReportScreen_Color.Colors_Text1_,
@@ -2803,7 +3331,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                             // color: Colors.grey[50],
                             width: (Responsive.isDesktop(context))
                                 ? MediaQuery.of(context).size.width * 0.925
-                                : (_TransReBillModels_GropType_Mon.length == 0)
+                                : (_TransReBillModels_GropType_Mon[0].length ==
+                                        0)
                                     ? MediaQuery.of(context).size.width
                                     : 1200,
                             child: Column(
@@ -2819,7 +3348,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                         bottomRight: Radius.circular(0)),
                                   ),
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Row(
+                                  child: const Row(
                                     children: [
                                       Expanded(
                                         flex: 1,
@@ -2959,236 +3488,207 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                 .sub_zone
                                                 .toString() ==
                                             '0')
-                                          ListTile(
-                                            title: Container(
-                                              decoration: const BoxDecoration(
-                                                border: Border(
-                                                  bottom: BorderSide(
-                                                    color: Colors.black12,
-                                                    width: 1,
-                                                  ),
+                                          Container(
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(
+                                                  color: Colors.black12,
+                                                  width: 1,
                                                 ),
                                               ),
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 0, 0, 4),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      const SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          '${zoneModels_report[index1].zn}',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
-                                                            // fontWeight: FontWeight.w100,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
+                                            ),
+                                            // padding:
+                                            //     const EdgeInsets.fromLTRB(
+                                            //         0, 0, 0, 4),
+                                            child: Column(
+                                              children: [
+                                                // Row(
+                                                //   children: [
+                                                //     Expanded(
+                                                //       flex: 1,
+                                                //       child: Text(
+                                                //         '${zoneModels_report[index1].zn}',
+                                                //         textAlign:
+                                                //             TextAlign.start,
+                                                //         style: const TextStyle(
+                                                //           color:
+                                                //               ReportScreen_Color
+                                                //                   .Colors_Text1_,
+                                                //           fontWeight:
+                                                //               FontWeight.w400,
+                                                //           fontFamily:
+                                                //               FontWeight_
+                                                //                   .Fonts_T,
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //   ],
+                                                // ),
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        '${zoneModels_report[index1].zn}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                          color:
+                                                              ReportScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
                                                         ),
                                                       ),
+                                                    ),
+                                                    for (int index_total_day =
+                                                            0;
+                                                        index_total_day < 5;
+                                                        index_total_day++)
                                                       Expanded(
                                                         flex: 1,
-                                                        child: Text(
-                                                          (_TransReBillModels_GropType_Mon
-                                                                      .length <
-                                                                  1)
-                                                              ? '0.00'
-                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                          // '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}',
+                                                        child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            border: Border(
+                                                              left: BorderSide(
+                                                                color: Colors
+                                                                    .black12,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: Text(
+                                                            (_TransReBillModels_GropType_Mon[
+                                                                            index_total_day]
+                                                                        .length ==
+                                                                    0)
+                                                                ? '0.00'
+                                                                : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon[index_total_day].map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                            // '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}',
 
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                            style: TextStyle(
+                                                              color: ReportScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          '${nFormat.format(double.parse('${calculateTotal_5dayNolocpay_zone(index1)}'))}',
                                                           textAlign:
                                                               TextAlign.right,
-                                                          style:
-                                                              const TextStyle(
+                                                          style: TextStyle(
                                                             color: ReportScreen_Color
                                                                 .Colors_Text1_,
-                                                            // fontWeight: FontWeight.bold,
+                                                            fontWeight:
+                                                                FontWeight.w700,
                                                             fontFamily:
                                                                 Font_.Fonts_T,
                                                           ),
                                                         ),
                                                       ),
-                                                      // Expanded(
-                                                      //   flex: 1,
-                                                      //   child: Text(
-                                                      //     '${nFormat.format(double.parse(calculateTotalBills_Sumdis_Zone(index1)!))}',
-                                                      //     textAlign: TextAlign.right,
-                                                      //     style: TextStyle(
-                                                      //       color: ('${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!))}' == '0.00') ? Colors.red[400] : ReportScreen_Color.Colors_Text1_,
-                                                      //       // fontWeight: FontWeight.bold,
-                                                      //       fontFamily: Font_.Fonts_T,
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          (_TransReBillModels_GropType_Mon
-                                                                      .length <
-                                                                  1)
-                                                              ? '0.00'
-                                                              : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!))}',
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          (_TransReBillModels_GropType_Mon
-                                                                      .length <
-                                                                  1)
-                                                              ? '0.00'
-                                                              : (zoneModels_report[index1]
-                                                                              .jon! ==
-                                                                          '1' &&
-                                                                      zoneModels_report[index1]
-                                                                              .jon_book! ==
-                                                                          '1')
-                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}'))}',
+                                                    ),
+                                                  ],
+                                                ),
+                                                //////////////------------------------------------------------>
 
-                                                          // 'คูณ ${zoneModels_report[index1].b_1}',
-
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        'ล็อคเสียบ/ขาจร :',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors.grey[600],
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    for (int index_locpay_day =
+                                                            0;
+                                                        index_locpay_day < 5;
+                                                        index_locpay_day++)
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            border: Border(
+                                                              left: BorderSide(
+                                                                color: Colors
+                                                                    .black12,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: Text(
+                                                            (_TransReBillModels_GropType_Mon[
+                                                                            index_locpay_day]
+                                                                        .length ==
+                                                                    0)
+                                                                ? '0.00'
+                                                                : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon[index_locpay_day].map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                            style: TextStyle(
+                                                              color: Colors
+                                                                  .grey[600],
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          (_TransReBillModels_GropType_Mon
-                                                                      .length <
-                                                                  1)
-                                                              ? '0.00'
-                                                              : (zoneModels_report[index1]
-                                                                              .jon! ==
-                                                                          '1' &&
-                                                                      zoneModels_report[index1]
-                                                                              .jon_book! ==
-                                                                          '2')
-                                                                  ?
-                                                                  //'${calculateTotalBills_Zone(index1)}'
-
-                                                                  //'${calculateTotalBills_Zone(index1)} - [ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_1})+ ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_2}) +( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_3}) + ( ${calculateTotalArea_Zone(index1)} x ${zoneModels_report[index1].b_4})'
-                                                                  '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}'))}',
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
                                                         child: Text(
-                                                          (_TransReBillModels_GropType_Mon
-                                                                      .length <
-                                                                  1)
-                                                              ? '0.00'
-                                                              : (zoneModels_report[index1]
-                                                                              .jon! ==
-                                                                          '1' &&
-                                                                      zoneModels_report[index1]
-                                                                              .jon_book! ==
-                                                                          '3')
-                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}'))}',
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          (_TransReBillModels_GropType_Mon
-                                                                      .length <
-                                                                  1)
-                                                              ? '0.00'
-                                                              : (zoneModels_report[index1]
-                                                                              .jon! ==
-                                                                          '1' &&
-                                                                      zoneModels_report[index1]
-                                                                              .jon_book! ==
-                                                                          '4')
-                                                                  ? '${nFormat.format(double.parse(calculateTotalBills_Zone(index1)!) - ((double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_1}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_2}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_3}')) + (double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))))}'
-                                                                  : '${nFormat.format(double.parse(calculateTotalArea_Zone(index1)!) * double.parse('${zoneModels_report[index1].b_4}'))}',
-                                                          // 'คูณ ${zoneModels_report[index1].b_4}',
-                                                          // '${TransReBillModels[index1].length}',
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  //////////////------------------------------------------------>
-
-                                                  Row(
-                                                    children: [
-                                                      const SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          '- ล็อคเสียบ/ขาจร',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .grey[600],
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          '',
+                                                          '${nFormat.format(double.parse('${calculateTotal_5daylocpay_zone(index1)}'))}',
                                                           textAlign:
                                                               TextAlign.right,
                                                           style: TextStyle(
@@ -3200,10 +3700,87 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                           ),
                                                         ),
                                                       ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                // for (int index_exp = 0;
+                                                //     index_exp <
+                                                //         expModels.length;
+                                                //     index_exp++)
+                                                //   if (expModels[index_exp]
+                                                //           .ser
+                                                //           .toString() !=
+                                                //       '1')
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        '${expModels.where((model) => model.ser.toString() != '1').map((model) => model.expname).join(',')} :',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors.grey[600],
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    for (int index_exp_day = 0;
+                                                        index_exp_day < 5;
+                                                        index_exp_day++)
                                                       Expanded(
                                                         flex: 1,
+                                                        child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            border: Border(
+                                                              left: BorderSide(
+                                                                color: Colors
+                                                                    .black12,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: Text(
+                                                            (_TransReBillModels_GropType_Mon[
+                                                                            index_exp_day]
+                                                                        .length ==
+                                                                    0)
+                                                                ? '0.00'
+                                                                : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon[index_exp_day].map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                            style: TextStyle(
+                                                              color: Colors
+                                                                  .grey[600],
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
                                                         child: Text(
-                                                          '',
+                                                          '${nFormat.format(double.parse('${calculateTotalexp_5day_zone(index1)}'))}',
                                                           textAlign:
                                                               TextAlign.right,
                                                           style: TextStyle(
@@ -3215,217 +3792,10 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                           ),
                                                         ),
                                                       ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          '',
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .grey[600],
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          (_TransReBillModels_GropType_Mon
-                                                                      .length <
-                                                                  1)
-                                                              ? '0.00'
-                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .grey[600],
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          '',
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .grey[600],
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          '',
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .grey[600],
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  for (int index_exp = 0;
-                                                      index_exp <
-                                                          expModels.length;
-                                                      index_exp++)
-                                                    if (expModels[index_exp]
-                                                            .ser
-                                                            .toString() !=
-                                                        '1')
-                                                      Row(
-                                                        children: [
-                                                          const SizedBox(
-                                                            width: 20,
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '- ${expModels[index_exp].expname}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .grey[600],
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .right,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .grey[600],
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          // const Expanded(
-                                                          //   flex: 1,
-                                                          //   child: Text(
-                                                          //     '',
-                                                          //     textAlign: TextAlign.right,
-                                                          //     style: TextStyle(
-                                                          //       color: ReportScreen_Color.Colors_Text1_,
-                                                          //       // fontWeight: FontWeight.bold,
-                                                          //       fontFamily: Font_.Fonts_T,
-                                                          //     ),
-                                                          //   ),
-                                                          // ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .right,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .grey[600],
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .right,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .grey[600],
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              (_TransReBillModels_GropType_Mon
-                                                                          .length <
-                                                                      1)
-                                                                  ? '0.00'
-                                                                  : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .right,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .grey[600],
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .right,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .grey[600],
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .right,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .grey[600],
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                ],
-                                              ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                           ),
                                       for (int index3 = 0;
@@ -3466,181 +3836,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                   ),
                                                 ],
                                               ),
-                                              // for (int in_dex = 0;
-                                              //     in_dex <
-                                              //         zoneModeels_report_Ser_Sub_zone
-                                              //             .length;
-                                              //     in_dex++)
-                                              //   if (zoneModeels_report_Ser_Sub_zone[
-                                              //               in_dex]
-                                              //           .sub_zone
-                                              //           .toString() ==
-                                              //       zoneModels_report_Sub_zone[
-                                              //               index3]
-                                              //           .ser
-                                              //           .toString())
-                                              //     Row(
-                                              //       children: [
-                                              //         const SizedBox(
-                                              //           width: 20,
-                                              //         ),
-                                              //         Expanded(
-                                              //           flex: 1,
-                                              //           child: Text(
-                                              //             //  '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString()) : double.parse(e.sub_zone == '1' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.area == null || e.area! == '' ? 0.toString() : e.area.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                              //             '** ${zoneModeels_report_Ser_Sub_zone[in_dex].zn} ',
 
-                                              //             textAlign:
-                                              //                 TextAlign.start,
-                                              //             style: TextStyle(
-                                              //               color: Colors
-                                              //                   .grey[600],
-                                              //               // fontWeight: FontWeight.w100,
-                                              //               fontFamily:
-                                              //                   Font_.Fonts_T,
-                                              //             ),
-                                              //           ),
-                                              //         ),
-                                              //         Expanded(
-                                              //           flex: 1,
-                                              //           child: Text(
-                                              //             (_TransReBillModels_GropType_Sub_zone
-                                              //                         .length ==
-                                              //                     0)
-                                              //                 ? '0.00'
-                                              //                 : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModeels_report_Ser_Sub_zone[in_dex].ser && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
-                                              //             textAlign:
-                                              //                 TextAlign.right,
-                                              //             style: TextStyle(
-                                              //               color: Colors
-                                              //                   .grey[600],
-                                              //               // fontWeight: FontWeight.bold,
-                                              //               fontFamily:
-                                              //                   Font_.Fonts_T,
-                                              //             ),
-                                              //           ),
-                                              //         ),
-                                              //         Expanded(
-                                              //           flex: 1,
-                                              //           child: Text(
-                                              //             '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!))}',
-                                              //             textAlign:
-                                              //                 TextAlign.right,
-                                              //             style: TextStyle(
-                                              //               color: Colors
-                                              //                   .grey[600],
-                                              //               fontFamily:
-                                              //                   Font_.Fonts_T,
-                                              //             ),
-                                              //           ),
-                                              //         ),
-                                              //         Expanded(
-                                              //           flex: 1,
-                                              //           child: Text(
-                                              //             (_TransReBillModels_GropType_Sub_zone
-                                              //                         .length ==
-                                              //                     0)
-                                              //                 ? '0.00'
-                                              //                 : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                              //                                 .jon! ==
-                                              //                             '1' &&
-                                              //                         zoneModeels_report_Ser_Sub_zone[in_dex]
-                                              //                                 .jon_book! ==
-                                              //                             '1')
-                                              //                     ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                              //                     : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}'))}',
-
-                                              //             // 'คูณ ${zoneModels_report[index1].b_1}',
-
-                                              //             textAlign:
-                                              //                 TextAlign.right,
-                                              //             style: TextStyle(
-                                              //               color: Colors
-                                              //                   .grey[600],
-                                              //               fontFamily:
-                                              //                   Font_.Fonts_T,
-                                              //             ),
-                                              //           ),
-                                              //         ),
-                                              //         Expanded(
-                                              //           flex: 1,
-                                              //           child: Text(
-                                              //             (_TransReBillModels_GropType_Sub_zone
-                                              //                         .length ==
-                                              //                     0)
-                                              //                 ? '0.00'
-                                              //                 : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                              //                                 .jon! ==
-                                              //                             '1' &&
-                                              //                         zoneModeels_report_Ser_Sub_zone[in_dex]
-                                              //                                 .jon_book! ==
-                                              //                             '2')
-                                              //                     ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                              //                     : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}'))}',
-                                              //             textAlign:
-                                              //                 TextAlign.right,
-                                              //             style: TextStyle(
-                                              //               color: Colors
-                                              //                   .grey[600],
-                                              //               fontFamily:
-                                              //                   Font_.Fonts_T,
-                                              //             ),
-                                              //           ),
-                                              //         ),
-                                              //         Expanded(
-                                              //           flex: 1,
-                                              //           child: Text(
-                                              //             (_TransReBillModels_GropType_Sub_zone
-                                              //                         .length ==
-                                              //                     0)
-                                              //                 ? '0.00'
-                                              //                 : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                              //                                 .jon! ==
-                                              //                             '1' &&
-                                              //                         zoneModeels_report_Ser_Sub_zone[in_dex]
-                                              //                                 .jon_book! ==
-                                              //                             '3')
-                                              //                     ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                              //                     : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}'))}',
-                                              //             textAlign:
-                                              //                 TextAlign.right,
-                                              //             style: TextStyle(
-                                              //               color: Colors
-                                              //                   .grey[600],
-                                              //               fontFamily:
-                                              //                   Font_.Fonts_T,
-                                              //             ),
-                                              //           ),
-                                              //         ),
-                                              //         Expanded(
-                                              //           flex: 1,
-                                              //           child: Text(
-                                              //             (_TransReBillModels_GropType_Sub_zone
-                                              //                         .length ==
-                                              //                     0)
-                                              //                 ? '0.00'
-                                              //                 : (zoneModeels_report_Ser_Sub_zone[in_dex]
-                                              //                                 .jon! ==
-                                              //                             '1' &&
-                                              //                         zoneModeels_report_Ser_Sub_zone[in_dex]
-                                              //                                 .jon_book! ==
-                                              //                             '4')
-                                              //                     ? '${nFormat.format(double.parse(calculateTotalBills_Zone_Sub(in_dex)!) - ((double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_1}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_2}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}')) + (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))))}'
-                                              //                     : '${nFormat.format(double.parse(calculateTotalArea_Zone_Sub(in_dex)!) * double.parse('${zoneModeels_report_Ser_Sub_zone[in_dex].b_4}'))}',
-                                              //             // 'คูณ ${zoneModels_report[index1].b_4}',
-                                              //             // '${TransReBillModels[index1].length}',
-                                              //             textAlign:
-                                              //                 TextAlign.right,
-                                              //             style: TextStyle(
-                                              //               color: Colors
-                                              //                   .grey[600],
-                                              //               fontFamily:
-                                              //                   Font_.Fonts_T,
-                                              //             ),
-                                              //           ),
-                                              //         ),
-                                              //       ],
-                                              //     ),
                                               Row(
                                                 children: [
                                                   const SizedBox(
@@ -3682,11 +3878,12 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                           ),
                                                         ),
                                                         child: Text(
-                                                          (_TransReBillModels_GropType_Sub_zone
+                                                          (_TransReBillModels_GropType_Sub_zone[
+                                                                          index_total_day]
                                                                       .length ==
                                                                   0)
                                                               ? '0.00'
-                                                              : ' ${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                              : ' ${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone[index_total_day].map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                           textAlign:
                                                               TextAlign.right,
                                                           style:
@@ -3715,7 +3912,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                         ),
                                                       ),
                                                       child: Text(
-                                                        '-',
+                                                        ' ${nFormat.format(double.parse('${calculateTotal_5dayNolocpay_Subzone(index3)}'))}',
                                                         textAlign:
                                                             TextAlign.right,
                                                         style: const TextStyle(
@@ -3765,11 +3962,12 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                           ),
                                                         ),
                                                         child: Text(
-                                                          (_TransReBillModels_GropType_Sub_zone
+                                                          (_TransReBillModels_GropType_Sub_zone[
+                                                                          index_locpay_day]
                                                                       .length ==
                                                                   0)
                                                               ? '0.00'
-                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone[index_locpay_day].map((e) => (e.zser == null) ? double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '1' && e.room_number.toString() == 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                           textAlign:
                                                               TextAlign.right,
                                                           style: TextStyle(
@@ -3796,7 +3994,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                         ),
                                                       ),
                                                       child: Text(
-                                                        '-',
+                                                        '${nFormat.format(double.parse('${calculateTotal_5daylocpay_Subzone(index3)}'))}',
                                                         textAlign:
                                                             TextAlign.right,
                                                         style: TextStyle(
@@ -3847,12 +4045,12 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                           ),
                                                         ),
                                                         child: Text(
-                                                          // (_TransReBillModels_GropType_Sub_zone
-                                                          //             .length ==
-                                                          //         0)
-                                                          //     ? '0.00'
-                                                          //     :
-                                                          '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          (_TransReBillModels_GropType_Sub_zone[
+                                                                          index_exp_day]
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone[index_exp_day].map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                           textAlign:
                                                               TextAlign.right,
                                                           style: TextStyle(
@@ -3879,7 +4077,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                         ),
                                                       ),
                                                       child: Text(
-                                                        '-',
+                                                        '${nFormat.format(double.parse('${calculateTotalexp_5day_Subzone(index3)}'))}',
                                                         textAlign:
                                                             TextAlign.right,
                                                         style: TextStyle(
@@ -4062,7 +4260,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                               height: 120,
                               width: (Responsive.isDesktop(context))
                                   ? MediaQuery.of(context).size.width * 0.925
-                                  : (_TransReBillModels_GropType_Mon.length ==
+                                  : (_TransReBillModels_GropType_Mon[0]
+                                              .length ==
                                           0)
                                       ? MediaQuery.of(context).size.width
                                       : 1200,
@@ -4228,143 +4427,38 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              (_TransReBillModels_GropType_Mon
-                                                              .length ==
-                                                          0 &&
-                                                      _TransReBillModels_GropType_Sub_zone
-                                                              .length ==
-                                                          0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotalBills_AllZone().toString()}'))}',
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text1_,
-                                                fontFamily: Font_.Fonts_T,
+                                          for (int index_TotalBills = 0;
+                                              index_TotalBills < 5;
+                                              index_TotalBills++)
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                (_TransReBillModels_GropType_Mon[
+                                                                    index_TotalBills]
+                                                                .length ==
+                                                            0 &&
+                                                        _TransReBillModels_GropType_Sub_zone[
+                                                                    index_TotalBills]
+                                                                .length ==
+                                                            0)
+                                                    ? '0.00'
+                                                    : '${nFormat.format(double.parse('${calculateTotalBills_AllZone(index_TotalBills).toString()}'))}',
+                                                textAlign: TextAlign.right,
+                                                style: const TextStyle(
+                                                  color: ReportScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontFamily: Font_.Fonts_T,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          // Expanded(
-                                          //   flex: 1,
-                                          //   child:
-                                          //       Text(
-                                          //     (_TransReBillModels_GropType.length ==
-                                          //             0)
-                                          //         ? '0.00'
-                                          //         : '${nFormat.format(double.parse('${calculateTotalBills_Sumdis_AllZone().toString()}'))}',
-                                          //     textAlign:
-                                          //         TextAlign.right,
-                                          //     style:
-                                          //         const TextStyle(
-                                          //       color:
-                                          //           ReportScreen_Color.Colors_Text1_,
-                                          //       fontFamily:
-                                          //           Font_.Fonts_T,
-                                          //     ),
-                                          //   ),
-                                          // ),
                                           Expanded(
                                             flex: 1,
                                             child: Text(
-                                              (_TransReBillModels_GropType_Mon
-                                                              .length ==
-                                                          0 &&
-                                                      _TransReBillModels_GropType_Sub_zone
-                                                              .length ==
-                                                          0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotalArea_AllZone().toString()}'))}',
+                                              '${nFormat.format(double.parse('${calculateTotal_5day_AllZone()}'))}',
                                               textAlign: TextAlign.right,
                                               style: const TextStyle(
                                                 color: ReportScreen_Color
                                                     .Colors_Text1_,
-                                                // fontWeight:
-                                                //     FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              (_TransReBillModels_GropType_Mon
-                                                              .length ==
-                                                          0 &&
-                                                      _TransReBillModels_GropType_Sub_zone
-                                                              .length ==
-                                                          0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotal_B1_AllZone().toString()}'))}',
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text1_,
-                                                // fontWeight:
-                                                //     FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              (_TransReBillModels_GropType_Mon
-                                                              .length ==
-                                                          0 &&
-                                                      _TransReBillModels_GropType_Sub_zone
-                                                              .length ==
-                                                          0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotal_B2_AllZone().toString()}'))}',
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text1_,
-                                                // fontWeight:
-                                                //     FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              (_TransReBillModels_GropType_Mon
-                                                              .length ==
-                                                          0 &&
-                                                      _TransReBillModels_GropType_Sub_zone
-                                                              .length ==
-                                                          0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotal_B3_AllZone().toString()}'))}',
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text1_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              (_TransReBillModels_GropType_Mon
-                                                              .length ==
-                                                          0 &&
-                                                      _TransReBillModels_GropType_Sub_zone
-                                                              .length ==
-                                                          0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotal_B4_AllZone().toString()}'))}',
-                                              textAlign: TextAlign.right,
-                                              style: const TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text1_,
-                                                // fontWeight: FontWeight.bold,
                                                 fontFamily: Font_.Fonts_T,
                                               ),
                                             ),
@@ -4472,8 +4566,9 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                   Value_selectDate_Daily_Type_ = null;
                                   Mon_Income_Type_Mon_User = null;
                                   YE_Income_Type_Mon_User = null;
-                                  _TransReBillModels_GropType_Mon.clear();
-                                  _TransReBillModels_GropType_Sub_zone.clear();
+                                  _TransReBillModels_GropType_Mon[0].clear();
+                                  _TransReBillModels_GropType_Sub_zone[0]
+                                      .clear();
                                 });
                                 Navigator.of(context).pop();
                               },
@@ -4685,20 +4780,35 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
       } else {
         if (Value_Report == 'ภาษี') {
         } else if (Value_Report == 'รายงานแสดงรายได้รายเดือน') {
-          Excgen_Mon_income_Report.excgen_Mon_income_Report(
+          Excgen_CMon_income_Report.excgen_CMon_income_Report(
               '2',
               context,
               NameFile_,
               renTal_name,
               _verticalGroupValue_NameFile,
-              '${monthsInThai[int.parse('${Mon_Income_Type_Mon_User}') - 1]} ($YE_Income_Type_Mon_User)',
+              '${monthsInThai[int.parse('${Mon_Income_Type_Mon_User}') - 1]} ${int.parse('$YE_Income_Type_Mon_User') + 543}',
+              zoneModels_report,
+              zoneModels_report_Sub_zone,
+              zoneModeels_report_Ser_Sub_zone,
+              _TransReBillModels_GropType_Mon[0],
+              _TransReBillModels_GropType_Sub_zone[0],
+              expModels);
+        } else if (Value_Report == 'รายงานรายรับรายวันแยกตามประเภท') {
+          print('รายงานรายรับรายวันแยกตามประเภท');
+          Excgen_CDaily_income_Report.excgen_CDaily_income_Report(
+              '2',
+              context,
+              NameFile_,
+              renTal_name,
+              _verticalGroupValue_NameFile,
+              '${DateFormat('d MMMM', 'th_TH').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()))} ${int.parse('${DateFormat('yyyy').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()))}') + 543} ถึง ${DateFormat('d MMMM', 'th_TH').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: 4)))} ${int.parse('${DateFormat('yyyy').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()))}') + 543}',
               zoneModels_report,
               zoneModels_report_Sub_zone,
               zoneModeels_report_Ser_Sub_zone,
               _TransReBillModels_GropType_Mon,
               _TransReBillModels_GropType_Sub_zone,
               expModels);
-        } else if (Value_Report == 'รายงานรายรับรายวันแยกตามประเภท') {}
+        }
 
         Navigator.of(context).pop();
       }

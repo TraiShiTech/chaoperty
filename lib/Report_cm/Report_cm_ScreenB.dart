@@ -1448,7 +1448,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                       _TransReBillModels_GropType_Sub_zone
                                               .length !=
                                           0)
-                                  ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✔️)'
+                                  ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (พบข้อมูล ✔️)'
                                   : 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✖️)'
                               : 'รายงาน รายรับแยกตามประเภท (รายเดือน)',
                       // (YE_Income_Type_Mon_User != null &&
@@ -1682,7 +1682,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                       _TransReBillModels_GropType_Sub_zone
                                               .length !=
                                           0)
-                                  ? 'รายงาน รายรับแยกตามประเภท (รายวัน) (ไม่พบข้อมูล ✔️)'
+                                  ? 'รายงาน รายรับแยกตามประเภท (รายวัน) (พบข้อมูล ✔️)'
                                   : 'รายงาน รายรับแยกตามประเภท (รายวัน) (ไม่พบข้อมูล ✖️)'
                               : 'รายงาน รายรับแยกตามประเภท (รายวัน)',
                       style: const TextStyle(

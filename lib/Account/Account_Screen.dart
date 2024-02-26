@@ -75,6 +75,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 import 'AcFloorplans_Screen.dart';
+import 'Ac_Main_CancelBils.dart';
 import 'Account_Invoce.dart';
 import 'Account_Invoce_pay.dart';
 import 'Play_column.dart';
@@ -91,6 +92,10 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
+  TextEditingController Text_searchBar_Main_Payhis = TextEditingController();
+  TextEditingController Text_searchBar_Main_Overdue = TextEditingController();
+  TextEditingController Text_searchBar_Sub_Payhis = TextEditingController();
+  ////---------------------->
   TextEditingController Text_searchBar1 = TextEditingController();
   TextEditingController Text_searchBar2 = TextEditingController();
   DateTime datex = DateTime.now();
@@ -169,7 +174,7 @@ class _AccountScreenState extends State<AccountScreen> {
     'ชำระบิล', //8
     'ประวัติชำระ', //3
     'ใบเสร็จอื่นๆ', //6
-    // 'บัญชีผู้เช่า',
+    'ประวัติยกเลิกชำระ/วางบิล',
   ];
 
   String? base64_Slip, fileName_Slip, Slip_history;
@@ -1177,10 +1182,204 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  _searchBar2() {
+  _searchBarBody_Main_Overview() {
+    return TextField(
+      textAlign: TextAlign.start,
+      controller: Text_searchBar_Main_Overdue,
+      autofocus: false,
+      cursorHeight: 20,
+      keyboardType: TextInputType.text,
+      style: const TextStyle(
+          color: PeopleChaoScreen_Color.Colors_Text2_,
+          fontFamily: Font_.Fonts_T),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey[100]!.withOpacity(0.5),
+        hintText: ' Search...',
+        hintStyle: const TextStyle(
+            // fontSize: 12,
+            color: PeopleChaoScreen_Color.Colors_Text2_,
+            fontFamily: Font_.Fonts_T),
+        contentPadding:
+            const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      onChanged: (text) {
+        var Text_searchBar2_ = Text_searchBar_Main_Overdue.text.toLowerCase();
+        setState(() {
+          teNantModels = _teNantModels.where((teNantModels) {
+            var notTitle = teNantModels.lncode.toString().toLowerCase();
+            var notTitle2 = teNantModels.cid.toString().toLowerCase();
+            var notTitle3 = teNantModels.docno.toString().toLowerCase();
+            var notTitle4 = teNantModels.sname.toString().toLowerCase();
+            var notTitle5 = teNantModels.cname.toString().toLowerCase();
+            var notTitle6 = teNantModels.invoice.toString().toLowerCase();
+                           var notTitle7 = teNantModels.sdate.toString().toLowerCase();
+                              var notTitle8 = teNantModels.ldate.toString().toLowerCase();
+            return notTitle.contains(text) ||
+                notTitle2.contains(text) ||
+                notTitle3.contains(text) ||
+                notTitle4.contains(text) ||
+                notTitle5.contains(text) ||
+                notTitle6.contains(text)||
+                notTitle7.contains(text)||
+                notTitle8.contains(text);
+          }).toList();
+        });
+        if (text.isEmpty) {
+          read_tenant_limit();
+        } else {}
+      },
+    );
+  }
+
+  _searchBarBody_Main_Overdue() {
+    return TextField(
+      textAlign: TextAlign.start,
+      controller: Text_searchBar_Main_Overdue,
+      autofocus: false,
+      cursorHeight: 20,
+      keyboardType: TextInputType.text,
+      style: const TextStyle(
+          color: PeopleChaoScreen_Color.Colors_Text2_,
+          fontFamily: Font_.Fonts_T),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey[100]!.withOpacity(0.5),
+        hintText: ' Search...',
+        hintStyle: const TextStyle(
+            // fontSize: 12,
+            color: PeopleChaoScreen_Color.Colors_Text2_,
+            fontFamily: Font_.Fonts_T),
+        contentPadding:
+            const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      onChanged: (text) {
+        var Text_searchBar2_ = Text_searchBar_Main_Overdue.text.toLowerCase();
+        setState(() {
+          teNantModels = _teNantModels.where((teNantModels) {
+            var notTitle = teNantModels.lncode.toString().toLowerCase();
+            var notTitle2 = teNantModels.cid.toString().toLowerCase();
+            var notTitle3 = teNantModels.docno.toString().toLowerCase();
+            var notTitle4 = teNantModels.sname.toString().toLowerCase();
+            var notTitle5 = teNantModels.cname.toString().toLowerCase();
+            var notTitle6 = teNantModels.invoice.toString().toLowerCase();
+            return notTitle.contains(text) ||
+                notTitle2.contains(text) ||
+                notTitle3.contains(text) ||
+                notTitle4.contains(text) ||
+                notTitle5.contains(text) ||
+                notTitle6.contains(text);
+          }).toList();
+        });
+        if (text.isEmpty) {
+          read_tenant_limit();
+        } else {}
+      },
+    );
+  }
+
+  _searchBarBody_Main_Payhis() {
+    return TextField(
+      textAlign: TextAlign.start,
+      controller: Text_searchBar_Main_Payhis,
+      autofocus: false,
+      cursorHeight: 20,
+      keyboardType: TextInputType.text,
+      style: const TextStyle(
+          color: PeopleChaoScreen_Color.Colors_Text2_,
+          fontFamily: Font_.Fonts_T),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey[100]!.withOpacity(0.5),
+        hintText: ' Search...',
+        hintStyle: const TextStyle(
+            // fontSize: 12,
+            color: PeopleChaoScreen_Color.Colors_Text2_,
+            fontFamily: Font_.Fonts_T),
+        contentPadding:
+            const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      onChanged: (text) {
+        var Text_searchBar2_ = Text_searchBar_Main_Payhis.text.toLowerCase();
+        setState(() {
+          Text_searchBar_Sub_Payhis.clear();
+          _TransReBillModels = TransReBillModels_.where((TransReBillModels) {
+            var daterec_ =
+                '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.daterec} 00:00:00'))}-${DateTime.parse('${TransReBillModels.daterec} 00:00:00').year + 543}';
+            var pdate_ =
+                '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels.pdate} 00:00:00'))}-${DateTime.parse('${TransReBillModels.pdate} 00:00:00').year + 543}';
+
+            var notTitle = TransReBillModels.cid.toString().toLowerCase();
+            var notTitle2 = TransReBillModels.daterec.toString().toLowerCase();
+            var notTitle3 = pdate_.toString().toLowerCase();
+            var notTitle4 = TransReBillModels.docno.toString().toLowerCase();
+            var notTitle5 = TransReBillModels.doctax.toString().toLowerCase();
+            var notTitle6 = TransReBillModels.inv.toString().toLowerCase();
+            var notTitle7 =
+                TransReBillModels.room_number.toString().toLowerCase();
+            var notTitle8 = TransReBillModels.ln.toString().toLowerCase();
+            var notTitle9 = TransReBillModels.remark.toString().toLowerCase();
+            var notTitle10 = TransReBillModels.sname.toString().toLowerCase();
+            var notTitle11 =
+                TransReBillModels.total_bill.toString().toLowerCase();
+            var notTitle12 = TransReBillModels.doctax.toString().toLowerCase();
+            var notTitle13 = TransReBillModels.type.toString().toLowerCase();
+
+            var notTitle14 = TransReBillModels.date.toString().toLowerCase();
+
+            var notTitle15 = daterec_.toString().toLowerCase();
+            return notTitle.contains(text) ||
+                notTitle2.contains(text) ||
+                notTitle3.contains(text) ||
+                notTitle4.contains(text) ||
+                notTitle5.contains(text) ||
+                notTitle6.contains(text) ||
+                notTitle7.contains(text) ||
+                notTitle8.contains(text) ||
+                notTitle9.contains(text) ||
+                notTitle10.contains(text) ||
+                notTitle11.contains(text) ||
+                notTitle12.contains(text) ||
+                notTitle13.contains(text) ||
+                notTitle14.contains(text) ||
+                notTitle15.contains(text);
+          }).toList();
+        });
+        if (text.isEmpty) {
+          read_TransReBill_limit();
+        } else {}
+      },
+    );
+  }
+
+  _searchBar_Sub_Payhis() {
     return TextField(
       textAlign: TextAlign.center,
-      controller: Text_searchBar2,
+      controller: Text_searchBar_Sub_Payhis,
       autofocus: false,
       cursorHeight: 14,
       keyboardType: TextInputType.text,
@@ -1189,7 +1388,7 @@ class _AccountScreenState extends State<AccountScreen> {
           fontFamily: Font_.Fonts_T),
       decoration: InputDecoration(
         filled: true,
-        // fillColor: Colors.white,
+        // fillColor: Colors.grey[100]!.withOpacity(0.5),
         hintText: ' Search...',
         hintStyle: const TextStyle(
             // fontSize: 12,
@@ -1207,7 +1406,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
       ),
       onChanged: (text) {
-        var Text_searchBar2_ = Text_searchBar2.text.toLowerCase();
+        var Text_searchBar2_ = Text_searchBar_Sub_Payhis.text.toLowerCase();
         //         Widget BodyHome_Web() {
         //   return (Status_ == 1)
         //       ? viewTab == 0
@@ -1219,7 +1418,9 @@ class _AccountScreenState extends State<AccountScreen> {
         //               ? BodyStatus3_Web()
         //               : BodyStatus4_Web();
         // }
-
+        setState(() {
+          Text_searchBar_Main_Payhis.clear();
+        });
         if (Date_ser == 0) {
           setState(() {
             _TransReBillModels = TransReBillModels_.where((TransReBillModels) {
@@ -1272,6 +1473,9 @@ class _AccountScreenState extends State<AccountScreen> {
             }).toList();
           });
         }
+        if (text.isEmpty) {
+          read_TransReBill_limit();
+        } else {}
       },
     );
   }
@@ -1857,6 +2061,18 @@ class _AccountScreenState extends State<AccountScreen> {
                                             // read_GC_tenant();
                                             read_GC_areaSelect();
                                           });
+                                          String? _route =
+                                              preferences.getString('route');
+                                          MaterialPageRoute materialPageRoute =
+                                              MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AdminScafScreen(
+                                                              route: _route));
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              materialPageRoute,
+                                              (route) => false);
                                         },
                                         // onSaved: (value) {
                                         //   // selectedValue = value.toString();
@@ -1866,12 +2082,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                   ),
                                 ),
                                 if (Status_ != 6)
-                                  const Expanded(
+                                  Expanded(
                                     flex: 1,
                                     child: Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: Text(
-                                        'ค้นหา:',
+                                        (Status_ == 9) ? '' : 'ค้นหา:',
                                         textAlign: TextAlign.end,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -1881,7 +2097,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                       ),
                                     ),
                                   ),
-                                (Status_ == 6)
+                                (Status_ == 6 || Status_ == 9)
                                     ? Expanded(
                                         flex: MediaQuery.of(context)
                                                     .size
@@ -2056,12 +2272,16 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                   ? (Status_ == i + 1)
                                                                                       ? Colors.green[700]
                                                                                       : Colors.green[200] //3
-                                                                                  : (Status_ == i + 1)
-                                                                                      ? Colors.brown
-                                                                                      : Colors.brown[200], //6
+                                                                                  : (i + 1 == 8)
+                                                                                      ? (Status_ == i + 1)
+                                                                                          ? Colors.brown
+                                                                                          : Colors.brown[200] //3
+                                                                                      : (Status_ == i + 1)
+                                                                                          ? Colors.pink
+                                                                                          : Colors.pink[200], //6
                                                       borderRadius:
                                                           const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -2373,7 +2593,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                     color: AppbackgroundColor
                                                                         .Sub_Abg_Colors,
                                                                     borderRadius: const BorderRadius
-                                                                        .only(
+                                                                            .only(
                                                                         topLeft:
                                                                             Radius.circular(
                                                                                 10),
@@ -2395,7 +2615,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                   height: 35,
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           4.0),
                                                                   child: Center(
                                                                     child: Text(
@@ -2740,7 +2960,6 @@ class _AccountScreenState extends State<AccountScreen> {
     red_Trans_bill();
   }
 
-  // ignore: non_constant_identifier_names
   Widget BodyHome_Web() {
     return (Status_ == 1)
         ? (viewTab == 0)
@@ -2760,11 +2979,38 @@ class _AccountScreenState extends State<AccountScreen> {
                             ? AccountInvoicePay() //8
                             : (Status_ == 7)
                                 ? BodyStatus3_Web() //3
-                                : BodyStatus4_Web(); //6
+                                : (Status_ == 8)
+                                    ? BodyStatus4_Web() //6
+                                    : MainCancelBilsScreen(); //9
 //  (Status_ == 5)
 //         ? Verifi_Payment_History()
-//         : Rental_customers(updateMessage: updateMessage);
+//         : Rental_customers(updateMessage: updateMessage); Ac_Main_CancelBils
   }
+  // ignore: non_constant_identifier_names
+//   Widget BodyHome_Web() {
+//     return (Status_ == 1)
+//         ? (viewTab == 0)
+//             ? PlayColumn()
+//             : (viewTab == 1)
+//                 ? BodyStatus2_Web()
+//                 : AcFloorplans_Screen()
+//         : (Status_ == 2)
+//             ? BodyStatus1_Web() //2
+//             : (Status_ == 3)
+//                 ? AccountInvoice() //7
+//                 : (Status_ == 4)
+//                     ? BodyBillingScreen_Web() //4
+//                     : (Status_ == 5)
+//                         ? BodyVerifi_Payment_Web() //5
+//                         : (Status_ == 6)
+//                             ? AccountInvoicePay() //8
+//                             : (Status_ == 7)
+//                                 ? BodyStatus3_Web() //3
+//                                 : BodyStatus4_Web(); //6
+// //  (Status_ == 5)
+// //         ? Verifi_Payment_History()
+// //         : Rental_customers(updateMessage: updateMessage);
+//   }
 
   // Widget BodyStatusPlay_Web() {
   //   return PlayColumn();
@@ -2924,7 +3170,64 @@ class _AccountScreenState extends State<AccountScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
-                                      Next_page_BodyStatus1_Web(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Row(
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.all(2.0),
+                                              child: Text(
+                                                'ค้นหา :',
+                                                style: TextStyle(
+                                                  color: ReportScreen_Color
+                                                      .Colors_Text2_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              // flex: 1,
+                                              child: Container(
+                                                height: 35, //Date_ser
+                                                // width: 150,
+                                                decoration: BoxDecoration(
+                                                  color: AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  8)),
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                child:
+                                                    _searchBarBody_Main_Overdue(),
+                                              ),
+                                            ),
+                                            Container(
+                                                width: 150,
+                                                child:
+                                                    Next_page_BodyStatus1_Web())
+                                            // Expanded(
+                                            //     child:
+                                            //         Next_page_billCancel())
+                                          ],
+                                        ),
+                                      ),
+                                      const Divider(),
+                                      // Next_page_BodyStatus1_Web(),
                                       const Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -3764,8 +4067,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             BoxDecoration(
                                                                           color:
                                                                               Colors.red[400],
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(10),
                                                                               topRight: Radius.circular(10),
                                                                               bottomLeft: Radius.circular(10),
@@ -3774,9 +4076,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                               color: Colors.white,
                                                                               width: 1),
                                                                         ),
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            4.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(4.0),
                                                                         child:
                                                                             AutoSizeText(
                                                                           minFontSize:
@@ -6465,9 +6766,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           ),
                                                                           // border: Border.all(color: Colors.grey, width: 1),
                                                                         ),
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             Row(
                                                                           children: [
@@ -7019,9 +7319,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       color: Colors
                                                                               .green[
                                                                           200],
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           const Center(
                                                                         child:
@@ -7047,9 +7347,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: Colors
                                                                           .green[50],
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Center(
                                                                         child:
@@ -7080,9 +7380,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: AppbackgroundColor
                                                                           .Sub_Abg_Colors,
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Center(
                                                                         child:
@@ -7380,9 +7680,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: AppbackgroundColor
                                                                           .Sub_Abg_Colors,
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           const Center(
                                                                         child:
@@ -7868,9 +8168,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .Sub_Abg_Colors,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
@@ -7898,9 +8197,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .Sub_Abg_Colors,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             Center(
                                                                           child:
@@ -8129,7 +8427,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: [
@@ -8317,9 +8615,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       //         .size
                                                                       //         .width *
                                                                       //     0.33,
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Column(
                                                                         mainAxisAlignment:
@@ -8404,9 +8702,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                     flex: 4,
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           InkWell(
                                                                         onTap:
@@ -9458,7 +9756,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9498,7 +9796,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9538,7 +9836,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9578,7 +9876,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9618,7 +9916,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9658,7 +9956,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -9698,7 +9996,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       200],
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -10534,9 +10832,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       color: Colors
                                                                               .green[
                                                                           200],
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           const Center(
                                                                         child:
@@ -10562,9 +10860,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: Colors
                                                                           .green[50],
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Center(
                                                                         child:
@@ -10595,9 +10893,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: AppbackgroundColor
                                                                           .Sub_Abg_Colors,
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Center(
                                                                         child:
@@ -10910,9 +11208,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           50,
                                                                       color: AppbackgroundColor
                                                                           .Sub_Abg_Colors,
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           const Center(
                                                                         child:
@@ -11391,9 +11689,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .Sub_Abg_Colors,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
@@ -11421,9 +11718,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .Sub_Abg_Colors,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             Center(
                                                                           child:
@@ -11657,7 +11953,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: [
@@ -11842,9 +12138,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       //         .size
                                                                       //         .width *
                                                                       //     0.33,
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Column(
                                                                         mainAxisAlignment:
@@ -12272,9 +12568,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                     flex: 4,
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           InkWell(
                                                                         onTap:
@@ -12668,7 +12964,70 @@ class _AccountScreenState extends State<AccountScreen> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Column(
                                             children: [
-                                              Next_page_BodyStatus2_Web(),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child: Row(
+                                                  children: [
+                                                    const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(2.0),
+                                                      child: Text(
+                                                        'ค้นหา :',
+                                                        style: TextStyle(
+                                                          color:
+                                                              ReportScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      // flex: 1,
+                                                      child: Container(
+                                                        height: 35, //Date_ser
+                                                        // width: 150,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                          borderRadius: const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(8),
+                                                              topRight: Radius
+                                                                  .circular(8),
+                                                              bottomLeft: Radius
+                                                                  .circular(8),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          8)),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey,
+                                                              width: 1),
+                                                        ),
+                                                        child:
+                                                            _searchBarBody_Main_Overview(),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                        width: 150,
+                                                        child:
+                                                            Next_page_BodyStatus2_Web())
+                                                    // Expanded(
+                                                    //     child:
+                                                    //         Next_page_billCancel())
+                                                  ],
+                                                ),
+                                              ),
+                                          const Divider(),
+                                              //   Next_page_BodyStatus2_Web(),
                                               const Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -13365,7 +13724,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: [
@@ -14174,6 +14533,68 @@ class _AccountScreenState extends State<AccountScreen> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
                                           children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
+                                              child: Row(
+                                                children: [
+                                                  const Padding(
+                                                    padding:
+                                                        EdgeInsets.all(2.0),
+                                                    child: Text(
+                                                      'ค้นหา :',
+                                                      style: TextStyle(
+                                                        color:
+                                                            ReportScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    // flex: 1,
+                                                    child: Container(
+                                                      height: 35, //Date_ser
+                                                      // width: 150,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            AppbackgroundColor
+                                                                .Sub_Abg_Colors,
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(8),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    8),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    8)),
+                                                        border: Border.all(
+                                                            color: Colors.grey,
+                                                            width: 1),
+                                                      ),
+                                                      child:
+                                                          _searchBarBody_Main_Payhis(),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                      width: 150,
+                                                      child:
+                                                          Next_page_BodyStatus3_Web())
+                                                  // Expanded(
+                                                  //     child:
+                                                  //         Next_page_billCancel())
+                                                ],
+                                              ),
+                                            ),
+                                            const Divider(),
                                             //${MONTH_Now}//${YEAR_Now}
                                             Row(
                                               children: [
@@ -15148,7 +15569,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                             onChanged:
                                                                 (value) async {
                                                               setState(() {
-                                                                Text_searchBar2
+                                                                Text_searchBar_Sub_Payhis
                                                                     .clear();
                                                                 _TransReBillModels =
                                                                     TransReBillModels_;
@@ -15164,7 +15585,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                         padding:
                                                             EdgeInsets.all(2.0),
                                                         child: Text(
-                                                          'ค้นหา :',
+                                                          'ค้นหาวันที่ :',
                                                           style: TextStyle(
                                                             color: ReportScreen_Color
                                                                 .Colors_Text2_,
@@ -15188,7 +15609,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -15204,14 +15625,15 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                   Colors.grey,
                                                               width: 1),
                                                         ),
-                                                        child: _searchBar2(),
+                                                        child:
+                                                            _searchBar_Sub_Payhis(),
                                                       )
                                                     ],
                                                   ),
                                                 ),
-                                                Expanded(
-                                                    child:
-                                                        Next_page_BodyStatus3_Web())
+                                                // Expanded(
+                                                //     child:
+                                                //         Next_page_BodyStatus3_Web())
                                               ],
                                             ),
                                             const Divider(),
@@ -15636,9 +16058,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Tooltip(
                                                                             richMessage:
@@ -15673,9 +16094,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Tooltip(
                                                                             richMessage:
@@ -15799,9 +16219,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Tooltip(
                                                                             richMessage:
@@ -17120,7 +17539,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                             color: AppbackgroundColor
                                                 .Sub_Abg_Colors,
                                             borderRadius: const BorderRadius
-                                                .only(
+                                                    .only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
                                                 bottomLeft: Radius.circular(10),
@@ -17773,8 +18192,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         Container(
@@ -17791,9 +18209,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed: () => Navigator.pop(
@@ -17822,7 +18240,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                       color: Colors.blue[200],
                                                       borderRadius:
                                                           const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius
@@ -18071,8 +18489,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 actions: <Widget>[
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child: Row(
                                                                       mainAxisAlignment:
@@ -18092,9 +18509,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                 bottomLeft: Radius.circular(10),
                                                                                 bottomRight: Radius.circular(10)),
                                                                           ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               TextButton(
                                                                             onPressed: () =>
@@ -18410,7 +18826,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                       color: Colors.green[200],
                                                       borderRadius:
                                                           const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius

@@ -83,7 +83,6 @@ class TransKonModel {
   String? pass;
   String? datepass;
   String? remark;
-
   String? ovalue;
   String? nvalue;
   String? qty;
@@ -112,6 +111,8 @@ class TransKonModel {
   String? zser1;
   String? znn;
   String? zser;
+  String? bank;
+  String? bno;
 
   TransKonModel({
     this.ser,
@@ -223,6 +224,8 @@ class TransKonModel {
     this.zser1,
     this.znn,
     this.zser,
+    this.bank,
+    this.bno,
   });
 
   TransKonModel.fromJson(Map<String, dynamic> json) {
@@ -337,6 +340,8 @@ class TransKonModel {
     zser1 = json['zser1'];
     znn = json['znn'];
     zser = json['zser'];
+    bank = json['bank'];
+    bno = json['bno'];
   }
 
   Map<String, dynamic> toJson() {
@@ -452,6 +457,8 @@ class TransKonModel {
     data['zser1'] = this.zser1;
     data['znn'] = this.znn;
     data['zser'] = this.zser;
+    data['bank'] = this.bank;
+    data['bno'] = this.bno;
     return data;
   }
 }

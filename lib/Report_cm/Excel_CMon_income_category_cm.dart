@@ -15,8 +15,8 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart' as x;
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:math' as math;
 
-class Excgen_Mon_income_Report {
-  static void excgen_Mon_income_Report(
+class Excgen_CMon_income_Report {
+  static void excgen_CMon_income_Report(
       ser_report,
       context,
       NameFile_,
@@ -167,7 +167,7 @@ class Excgen_Mon_income_Report {
     // sheet.getRangeByName('G1').cellStyle = globalStyle22;
 
     final x.Range range = sheet.getRangeByName('A1');
-    range.setText('รายงาน แสดงรายได้รายเดือน(รายเดือน)');
+    range.setText('รายงาน แสดงรายได้ประจำเดือน');
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -625,8 +625,9 @@ class Excgen_Mon_income_Report {
     MimeType type = MimeType.MICROSOFTEXCEL;
 
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
-      String path = await FileSaver.instance
-          .saveFile('รายงานแสดงรายได้(รายเดือน)', data, "xlsx", mimeType: type);
+      String path = await FileSaver.instance.saveFile(
+          'รายงานแสดงรายได้ประจำเดือน(${Value_selectDate})', data, "xlsx",
+          mimeType: type);
       log(path);
     } else {
       String path = await FileSaver.instance

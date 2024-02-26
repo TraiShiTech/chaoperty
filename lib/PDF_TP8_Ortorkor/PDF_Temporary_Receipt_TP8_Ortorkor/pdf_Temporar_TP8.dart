@@ -1306,8 +1306,11 @@ class Pdfgen_Temporary_receipt_TP8_Ortorkor {
                               alignment: pw.Alignment.topLeft,
                               child: pw.Text(
                                 (tableData00[index][0].toString() == '6')
-                                    ? '${tableData00[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData00[index][1]}'))} ${DateTime.parse('${tableData00[index][1]}').year + 543} ${DateFormat('dd/MM').format(DateTime.parse(tableData00[index][1]))}/${DateTime.parse('${tableData00[index][1]}').year + 543}) [ หน่วยที่ใช้ไป ${tableData00[index][8]}-${tableData00[index][9]} ]'
-                                    : '${tableData00[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData00[index][1]}'))} ${DateTime.parse('${tableData00[index][1]}').year + 543} ${DateFormat('dd/MM').format(DateTime.parse(tableData00[index][1]))}/${DateTime.parse('${tableData00[index][1]}').year + 543})',
+                                    ? '${tableData00[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData00[index][1]}'))} ${DateTime.parse('${tableData00[index][1]}').year + 543} ) [ หน่วยที่ใช้ไป ${tableData00[index][8]}-${tableData00[index][9]} ]'
+                                    : '${tableData00[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData00[index][1]}'))} ${DateTime.parse('${tableData00[index][1]}').year + 543} )',
+                                // (tableData00[index][0].toString() == '6')
+                                //     ? '${tableData00[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData00[index][1]}'))} ${DateTime.parse('${tableData00[index][1]}').year + 543} ${DateFormat('dd/MM').format(DateTime.parse(tableData00[index][1]))}/${DateTime.parse('${tableData00[index][1]}').year + 543}) [ หน่วยที่ใช้ไป ${tableData00[index][8]}-${tableData00[index][9]} ]'
+                                //     : '${tableData00[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData00[index][1]}'))} ${DateTime.parse('${tableData00[index][1]}').year + 543} ${DateFormat('dd/MM').format(DateTime.parse(tableData00[index][1]))}/${DateTime.parse('${tableData00[index][1]}').year + 543})',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.left,
                                 style: pw.TextStyle(

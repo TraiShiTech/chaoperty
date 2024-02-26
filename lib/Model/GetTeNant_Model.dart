@@ -63,7 +63,7 @@ class TeNantModel {
   String? user_name;
   String? passw;
   String? fid;
-
+  String? cc_date;
   TeNantModel(
       {this.ser,
       this.datex,
@@ -128,7 +128,8 @@ class TeNantModel {
       this.custno,
       this.user_name,
       this.passw,
-      this.fid});
+      this.fid,
+      this.cc_date});
 
   TeNantModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -198,6 +199,7 @@ class TeNantModel {
     user_name = json['user_name'];
     passw = json['passw'];
     fid = json['fid'];
+    cc_date = json['cc_date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -268,6 +270,7 @@ class TeNantModel {
     data['user_name'] = this.user_name;
     data['passw'] = this.passw;
     data['fid'] = this.fid;
+    data['cc_date'] = this.cc_date;
 
     return data;
   }

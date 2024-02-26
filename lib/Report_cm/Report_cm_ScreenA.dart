@@ -2366,7 +2366,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
                                 : (Value_selectDate_Daily != null &&
                                         Value_Chang_Zone_Daily != null &&
                                         _TransReBillModels.length != 0)
-                                    ? 'รายงาน ประจำวัน (ไม่พบข้อมูล ✔️)'
+                                    ? 'รายงาน ประจำวัน (พบข้อมูล ✔️)'
                                     : 'รายงาน ประจำวัน',
                             style: const TextStyle(
                               color: ReportScreen_Color.Colors_Text2_,
@@ -3954,7 +3954,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
                                 ? 'รายงาน รายชื่อผู้เช่าแยกตามโซน (ไม่พบข้อมูล ✖️)'
                                 : (Value_Chang_Zone_ != null &&
                                         teNantModels.length != 0)
-                                    ? 'รายงาน รายชื่อผู้เช่าแยกตามโซน (ไม่พบข้อมูล ✔️)'
+                                    ? 'รายงาน รายชื่อผู้เช่าแยกตามโซน (พบข้อมูล ✔️)'
                                     : 'รายงาน รายชื่อผู้เช่าแยกตามโซน',
                             style: const TextStyle(
                               color: ReportScreen_Color.Colors_Text2_,

@@ -55,7 +55,8 @@ class PdfgeCancel_Rental {
       Formbecause_cancel,
       quotxSelectModels,
       transKonModels,
-      TitleType_Default_Receipt_Name) async {
+      TitleType_Default_Receipt_Name,
+      cc_date) async {
     //////--------------------------------------------->
 
     final pdf = pw.Document();
@@ -70,11 +71,11 @@ class PdfgeCancel_Rental {
     DateTime date = DateTime.now();
     // var formatter = new DateFormat.MMMMd('th_TH');
     // String thaiDate = formatter.format(date);
-    final thaiDate = DateTime.parse(date.toString());
+    final thaiDate = DateTime.parse(cc_date.toString());
     final formatter = DateFormat('d MMMM', 'th_TH');
     final formattedDate = formatter.format(thaiDate);
     //////--------------->พ.ศ.
-    DateTime dateTime = DateTime.parse(date.toString());
+    DateTime dateTime = DateTime.parse(cc_date.toString());
     int newYear = dateTime.year + 543;
     //////--------------------------------------------->
     var nFormat = NumberFormat("#,##0.00", "en_US");

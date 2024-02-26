@@ -27,6 +27,7 @@ class Excgen_PeopleChoReport {
       teNantModels,
       contractPhotoModels,
       quotxSelectModels) async {
+    var nFormat = NumberFormat("#,##0.00", "en_US");
     DateTime datex = DateTime.now();
     String day_ =
         '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
@@ -424,7 +425,7 @@ class Excgen_PeopleChoReport {
           (expModels[index3].ser != quotxSelectModels[i][index4].expser)
               ? null
               : sheet.getRangeByName('${columns[14 + index3]}${i + 5}').setText(
-                  '${quotxSelectModels[i][index4].expname} / ${quotxSelectModels[i][index4].unit} ${quotxSelectModels[i][index4].term} (งวด)');
+                  '${quotxSelectModels[i][index4].expname} / ${quotxSelectModels[i][index4].unit} ${quotxSelectModels[i][index4].term} (งวด) (${nFormat.format(double.parse(quotxSelectModels[i][index4].total!))}/งวด)');
         }
       }
       for (int index5 = 0; index5 < quotxSelectModels[i].length; index5++) {
@@ -434,7 +435,7 @@ class Excgen_PeopleChoReport {
                 .getRangeByName(
                     '${columns[14 + int.parse('${expModels.length}')]}${i + 5}')
                 .setText(
-                    '${quotxSelectModels[i][index5].expname}/ ${quotxSelectModels[i][index5].unit} ${quotxSelectModels[i][index5].term} (งวด)');
+                    '${quotxSelectModels[i][index5].expname}/ ${quotxSelectModels[i][index5].unit} ${quotxSelectModels[i][index5].term} (งวด) (${nFormat.format(double.parse(quotxSelectModels[i][index5].total!))}/งวด)');
       }
       sheet
           .getRangeByName(

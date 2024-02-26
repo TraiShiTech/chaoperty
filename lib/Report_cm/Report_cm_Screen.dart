@@ -1416,7 +1416,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: const BoxDecoration(
-                        color: AppbackgroundColor.TiTile_Colors,
+                              color: AppbackgroundColor.TiTile_Box,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10),
@@ -1547,7 +1547,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                         width: MediaQuery.of(context).size.width,
                         // height: 270,
                         decoration: const BoxDecoration(
-                          color: AppbackgroundColor.TiTile_Colors,
+                          color: AppbackgroundColor.TiTile_Box,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10),
@@ -3394,7 +3394,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                       ),
                                     ),
                                   ),
-                                for (int index = 1; index < 10; index++)
+                                for (int index = 1; index < 11; index++)
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: InkWell(

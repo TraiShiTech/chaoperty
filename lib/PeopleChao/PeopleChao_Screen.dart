@@ -484,8 +484,8 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
 
 ////////////----------------------------------------------------->(รายงาน ข้อมูลผู้เช่า(ยกเลิกสัญญา))
   Future<Null> read_GC_tenant_Cancel() async {
-    if (teNantModels.isNotEmpty) {
-      teNantModels.clear();
+    if (limitedList_teNantModels.isNotEmpty) {
+      limitedList_teNantModels.clear();
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -509,14 +509,15 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
         for (var map in result) {
           TeNantModel teNantModelsCancel = TeNantModel.fromJson(map);
           setState(() {
-            teNantModels.add(teNantModelsCancel);
+            limitedList_teNantModels.add(teNantModelsCancel);
           });
         }
       } else {}
-      print('teNantModels///result ${teNantModels.length}');
+      print('teNantModels///result ${limitedList_teNantModels.length}');
       setState(() {
-        _teNantModels = teNantModels;
+        _teNantModels = limitedList_teNantModels;
       });
+      read_tenant_limit();
     } catch (e) {}
   }
 
@@ -2289,10 +2290,10 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                           padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                           child: Container(
                             decoration: const BoxDecoration(
-                              color: Colors.white60,
+                              color: Colors.white30,
                               borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(0),
+                                  topRight: Radius.circular(0),
                                   bottomLeft: Radius.circular(10),
                                   bottomRight: Radius.circular(10)),
                               // border: Border.all(color: Colors.grey, width: 1),
@@ -2345,7 +2346,9 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                       setState(() {
                                                         Status_pe = Status[i]!;
                                                       });
-                                                      if (Status_ == 5) {
+                                                      print(
+                                                          'Status_ //////// $Status_');
+                                                      if (Status_ == 6) {
                                                         print('ยกเลิกสัญญา');
                                                         read_GC_tenant_Cancel();
                                                       } else {
@@ -6097,7 +6100,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                     maxFontSize: 25,
                                     maxLines: 2,
                                     'เลขที่สัญญา/เสนอราคา',
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
                                             .Colors_Text1_,
@@ -6114,7 +6117,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                     maxFontSize: 25,
                                     maxLines: 2,
                                     'ชื่อผู้ติดต่อ',
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
                                             .Colors_Text1_,
@@ -6131,7 +6134,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                     maxFontSize: 25,
                                     maxLines: 2,
                                     'ชื่อร้านค้า',
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
                                             .Colors_Text1_,
@@ -6148,7 +6151,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                     maxFontSize: 25,
                                     maxLines: 2,
                                     'โซนพื้นที่',
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
                                             .Colors_Text1_,
@@ -6165,7 +6168,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                     maxFontSize: 25,
                                     maxLines: 2,
                                     'รหัสพื้นที่',
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
                                             .Colors_Text1_,
@@ -6182,7 +6185,24 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                     maxFontSize: 25,
                                     maxLines: 2,
                                     'ประเภท',
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 25,
+                                    maxLines: 2,
+                                    'วันที่ยกเลิก/ทำรายการ',
+                                    textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
                                             .Colors_Text1_,
@@ -6199,7 +6219,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                     maxFontSize: 25,
                                     maxLines: 2,
                                     'เหตุผล',
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
                                             .Colors_Text1_,
@@ -6584,6 +6604,27 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                       maxFontSize: 25,
                                                       maxLines: 1,
                                                       '${teNantModels[index].rtname}',
+                                                      textAlign: TextAlign.left,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 25,
+                                                      maxLines: 1,
+                                                      //+ 543
+                                                      '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels[index].cc_date} 00:00:00'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${teNantModels[index].cc_date} 00:00:00'))}') + 543}',
+                                                      // '${teNantModels[index].cc_date}',
                                                       textAlign: TextAlign.left,
                                                       overflow:
                                                           TextOverflow.ellipsis,

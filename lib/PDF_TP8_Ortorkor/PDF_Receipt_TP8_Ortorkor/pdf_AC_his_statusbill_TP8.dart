@@ -1427,8 +1427,11 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                               alignment: pw.Alignment.topLeft,
                               child: pw.Text(
                                 (tableData01[index][0].toString() == '6')
-                                    ? '${tableData01[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData01[index][1]}'))} ${DateTime.parse('${tableData01[index][1]}').year + 543} ${DateFormat('dd/MM').format(DateTime.parse(tableData01[index][1]))}/${DateTime.parse('${tableData01[index][1]}').year + 543}) [ หน่วยที่ใช้ไป ${tableData01[index][8]}-${tableData01[index][9]} ]'
-                                    : '${tableData01[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData01[index][1]}'))} ${DateTime.parse('${tableData01[index][1]}').year + 543} ${DateFormat('dd/MM').format(DateTime.parse(tableData01[index][1]))}/${DateTime.parse('${tableData01[index][1]}').year + 543})',
+                                    ? '${tableData01[index][2]} [ หน่วยที่ใช้ไป ${tableData01[index][8]}-${tableData01[index][9]} ]'
+                                    : '${tableData01[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData01[index][1]}'))} ${DateTime.parse('${tableData01[index][1]}').year + 543} )',
+                                // (tableData01[index][0].toString() == '6')
+                                //     ? '${tableData01[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData01[index][1]}'))} ${DateTime.parse('${tableData01[index][1]}').year + 543} ${DateFormat('dd/MM').format(DateTime.parse(tableData01[index][1]))}/${DateTime.parse('${tableData01[index][1]}').year + 543}) [ หน่วยที่ใช้ไป ${tableData01[index][8]}-${tableData01[index][9]} ]'
+                                //     : '${tableData01[index][2]}(${DateFormat('MMM', 'th_TH').format(DateTime.parse('${tableData01[index][1]}'))} ${DateTime.parse('${tableData01[index][1]}').year + 543} ${DateFormat('dd/MM').format(DateTime.parse(tableData01[index][1]))}/${DateTime.parse('${tableData01[index][1]}').year + 543})',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.left,
                                 style: pw.TextStyle(

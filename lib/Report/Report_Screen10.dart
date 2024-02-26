@@ -14,13 +14,17 @@ import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetC_Quot_Select_Model.dart';
 import '../Model/GetExp_Model.dart';
+import '../Model/GetPakan_Contractx_Model.dart';
 import '../Model/GetPayMent_Model.dart';
 import '../Model/GetRenTal_Model.dart';
+import '../Model/GetTrans_Kon_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/Get_TenantAll_billpay_Model.dart';
 import '../Model/Get_TransReteNantModels.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
+import 'Excel_GetPakan_Report.dart';
+import 'Excel_PayPakan_Report.dart';
 import 'Excel_PeopleChoAllbill_Report.dart';
 
 class ReportScreen10 extends StatefulWidget {
@@ -59,6 +63,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
   ///------------------------>
   String? Status_pe, Status_pe_ser, YE_Transte_People;
   String? Value_Chang_Zone_People, Value_Chang_Zone_People_Ser;
+  String? Value_Chang_Zone_Pakan, Value_Chang_Zone_Pakan_Ser;
   ////////--------------------------------------------->
   List<String> YE_Th = [];
   List<String> Mont_Th = [];
@@ -73,7 +78,11 @@ class _ReportScreen10State extends State<ReportScreen10> {
   List<TenantAllbillPayModel> _teNantModels = <TenantAllbillPayModel>[];
   List<TransteNantModels> transteNantModels = [];
   List<TransteNantModels> transteNantModels_Select = [];
+  List<ContractxPakanModel> contractxPakanModels = [];
+  List<ContractxPakanModel> _contractxPakanModels = <ContractxPakanModel>[];
 
+  List<TransKonModel> transKonModels = [];
+  List<TransKonModel> _transKonModels = <TransKonModel>[];
 ///////----------------------------------->
   List Status = [
     'ปัจจุบัน',
@@ -527,8 +536,88 @@ class _ReportScreen10State extends State<ReportScreen10> {
       Await_Status_Report1 = 1;
     });
   }
-////////////------------------------------------------>
 
+  ////////-------------------------------------------------------->(รับเงินประกัน)
+  Future<Null> tenant_Pakan() async {
+    if (contractxPakanModels.isNotEmpty) {
+      contractxPakanModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    var zone =
+        (Value_Chang_Zone_Pakan_Ser == null) ? '0' : Value_Chang_Zone_Pakan_Ser;
+    String url =
+        '${MyConstant().domain}/GC_PakanReport.php?isAdd=true&ren=$ren&zser=$zone';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          ContractxPakanModel contractxPakanModelss =
+              ContractxPakanModel.fromJson(map);
+
+          setState(() {
+            contractxPakanModels.add(contractxPakanModelss);
+          });
+        }
+        setState(() {
+          _contractxPakanModels = contractxPakanModels;
+        });
+      } else {}
+    } catch (e) {}
+    print('tenant_Pakan : ${contractxPakanModels.length}');
+    setState(() {
+      Await_Status_Report2 = 1;
+    });
+  }
+
+////////////------------------------------------------>(คืนเงินประกัน)
+  Future<Null> red_Trans_Kon() async {
+    if (transKonModels.isNotEmpty) {
+      setState(() {
+        transKonModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var zone =
+        (Value_Chang_Zone_Pakan_Ser == null) ? '0' : Value_Chang_Zone_Pakan_Ser;
+    String url =
+        '${MyConstant().domain}/GC_tran_Kon_pakanReport.php?isAdd=true&ren=$ren&zser_zone=$zone';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          TransKonModel transKonModel = TransKonModel.fromJson(map);
+          var sum_amtx = double.parse(transKonModel.total!);
+          setState(() {
+            // sum_Kon = sum_Kon + sum_amtx;
+            // bot = 1;
+            transKonModels.add(transKonModel);
+          });
+        }
+      }
+    } catch (e) {}
+    setState(() {
+      _transKonModels = transKonModels;
+    });
+    if (transKonModels.length != 0) {
+      // read_his_list();
+    }
+    print('red_Trans_Kon : ${transKonModels.length}');
+    setState(() {
+      Await_Status_Report3 = 1;
+    });
+  }
+
+  ////////////------------------------------------------>
   _searchBar_tenantSelect() {
     return StreamBuilder(
         stream: Stream.periodic(const Duration(seconds: 0)),
@@ -574,6 +663,131 @@ class _ReportScreen10State extends State<ReportScreen10> {
                   var notTitle4 = teNantModel.sname.toString().toLowerCase();
                   var notTitle5 = teNantModel.ln_c.toString().toLowerCase();
                   var notTitle6 = teNantModel.area_c.toString().toLowerCase();
+                  return notTitle.contains(text) ||
+                      notTitle2.contains(text) ||
+                      notTitle3.contains(text) ||
+                      notTitle4.contains(text) ||
+                      notTitle5.contains(text) ||
+                      notTitle6.contains(text);
+                }).toList();
+              });
+            },
+          );
+        });
+  }
+
+  _searchBar_Pakan() {
+    return StreamBuilder(
+        stream: Stream.periodic(const Duration(seconds: 0)),
+        builder: (context, snapshot) {
+          return TextField(
+            autofocus: false,
+            keyboardType: TextInputType.text,
+            style: const TextStyle(
+              // fontSize: 22.0,
+              color: TextHome_Color.TextHome_Colors,
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              // fillColor: Colors.white,
+              hintText: ' Search...',
+              hintStyle: const TextStyle(
+                  color: CustomerScreen_Color.Colors_Text2_,
+                  // fontWeight: FontWeight.bold,
+                  fontFamily: Font_.Fonts_T),
+              contentPadding:
+                  const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+              // focusedBorder: OutlineInputBorder(
+              //   borderSide: const BorderSide(color: Colors.white),
+              //   borderRadius: BorderRadius.circular(10),
+              // ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onChanged: (text) {
+              text = text.toLowerCase();
+              // print(text);_teNantModels
+
+              // print(customerModels.map((e) => e.docno));
+              // print(_customerModels.map((e) => e.docno));
+
+              setState(() {
+                contractxPakanModels =
+                    _contractxPakanModels.where((contractxPakanModel) {
+                  var notTitle =
+                      contractxPakanModel.cid.toString().toLowerCase();
+                  var notTitle2 =
+                      contractxPakanModel.cname.toString().toLowerCase();
+                  var notTitle3 =
+                      contractxPakanModel.zn.toString().toLowerCase();
+
+                  var notTitle4 =
+                      contractxPakanModel.sname.toString().toLowerCase();
+                  var notTitle5 =
+                      contractxPakanModel.unit.toString().toLowerCase();
+                  var notTitle6 =
+                      contractxPakanModel.expname.toString().toLowerCase();
+                  return notTitle.contains(text) ||
+                      notTitle2.contains(text) ||
+                      notTitle3.contains(text) ||
+                      notTitle4.contains(text) ||
+                      notTitle5.contains(text) ||
+                      notTitle6.contains(text);
+                }).toList();
+              });
+            },
+          );
+        });
+  }
+
+  _searchBar_GetbackPakan() {
+    return StreamBuilder(
+        stream: Stream.periodic(const Duration(seconds: 0)),
+        builder: (context, snapshot) {
+          return TextField(
+            autofocus: false,
+            keyboardType: TextInputType.text,
+            style: const TextStyle(
+              // fontSize: 22.0,
+              color: TextHome_Color.TextHome_Colors,
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              // fillColor: Colors.white,
+              hintText: ' Search...',
+              hintStyle: const TextStyle(
+                  color: CustomerScreen_Color.Colors_Text2_,
+                  // fontWeight: FontWeight.bold,
+                  fontFamily: Font_.Fonts_T),
+              contentPadding:
+                  const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+              // focusedBorder: OutlineInputBorder(
+              //   borderSide: const BorderSide(color: Colors.white),
+              //   borderRadius: BorderRadius.circular(10),
+              // ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onChanged: (text) {
+              text = text.toLowerCase();
+              // print(text);_teNantModels
+
+              // print(customerModels.map((e) => e.docno));
+              // print(_customerModels.map((e) => e.docno));
+
+              setState(() {
+                transKonModels = _transKonModels.where((transKonModel) {
+                  var notTitle = transKonModel.cid.toString().toLowerCase();
+                  var notTitle2 = transKonModel.cname.toString().toLowerCase();
+                  var notTitle3 = transKonModel.zn.toString().toLowerCase();
+
+                  var notTitle4 = transKonModel.pdate.toString().toLowerCase();
+                  var notTitle5 = transKonModel.type.toString().toLowerCase();
+                  var notTitle6 = transKonModel.docno.toString().toLowerCase();
                   return notTitle.contains(text) ||
                       notTitle2.contains(text) ||
                       notTitle3.contains(text) ||
@@ -1090,7 +1304,353 @@ class _ReportScreen10State extends State<ReportScreen10> {
               ),
               const SizedBox(
                 height: 5.0,
-              )
+              ),
+              ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(dragDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                }),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'โซน :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 260,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: Value_Chang_Zone_Pakan,
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 250,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: zoneModels_report
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: '${item.zn}',
+                                      child: Text(
+                                        '${item.zn}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+
+                            onChanged: (value) async {
+                              int selectedIndex = zoneModels_report
+                                  .indexWhere((item) => item.zn == value);
+
+                              setState(() {
+                                Value_Chang_Zone_Pakan = value!;
+                                Value_Chang_Zone_Pakan_Ser =
+                                    zoneModels_report[selectedIndex].ser!;
+                              });
+                              print(
+                                  'Selected Index: $Value_Chang_Zone_Pakan  //${Value_Chang_Zone_Pakan_Ser}');
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            if (Value_Chang_Zone_Pakan != null) {
+                              setState(() {
+                                Await_Status_Report2 = 0;
+                                Await_Status_Report3 = 0;
+                              });
+                              Dia_log();
+                            }
+
+                            tenant_Pakan();
+                            red_Trans_Kon();
+                          },
+                          child: Container(
+                              width: 100,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green[700],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'ค้นหา',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.yellow[600],
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'เรียกดู',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.grey,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: (Value_Chang_Zone_Pakan == null ||
+                                contractxPakanModels.isEmpty)
+                            ? null
+                            : () async {
+                                Insert_log.Insert_logs(
+                                    'รายงาน', 'กดดูรายงานรับเงินประกันผู้เช่า');
+                                RE_Pakan_Widget();
+                              }),
+                    (contractxPakanModels.isEmpty ||
+                            Await_Status_Report2 == null)
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              (contractxPakanModels.isEmpty &&
+                                      Value_Chang_Zone_Pakan != null &&
+                                      Await_Status_Report2 != null)
+                                  ? 'รายงานรับเงินประกันผู้เช่า (ไม่พบข้อมูล ✖️)'
+                                  : 'รายงานรับเงินประกันผู้เช่า',
+                              style: const TextStyle(
+                                color: ReportScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          )
+                        : (Await_Status_Report2 == 0)
+                            ? SizedBox(
+                                // height: 20,
+                                child: Row(
+                                children: [
+                                  Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: const CircularProgressIndicator()),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'กำลังโหลดรายงานรับเงินประกันผู้เช่า...',
+                                      style: TextStyle(
+                                        color: ReportScreen_Color.Colors_Text2_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                            : const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'รายงานรับเงินประกันผู้เช่า ✔️',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.yellow[600],
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'เรียกดู',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.grey,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: (Value_Chang_Zone_Pakan == null ||
+                                transKonModels.isEmpty)
+                            ? null
+                            : () async {
+                                Insert_log.Insert_logs(
+                                    'รายงาน', 'กดดูรายงานคืนเงินประกันผู้เช่า');
+                                RE_Getback_Pakan_Widget();
+                              }),
+                    (transKonModels.isEmpty || Await_Status_Report3 == null)
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              (transKonModels.isEmpty &&
+                                      Value_Chang_Zone_Pakan != null &&
+                                      Await_Status_Report3 != null)
+                                  ? 'รายงานคืนเงินประกันผู้เช่า (ไม่พบข้อมูล ✖️)'
+                                  : 'รายงานคืนเงินประกันผู้เช่า',
+                              style: const TextStyle(
+                                color: ReportScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          )
+                        : (Await_Status_Report3 == 0)
+                            ? SizedBox(
+                                // height: 20,
+                                child: Row(
+                                children: [
+                                  Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: const CircularProgressIndicator()),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'กำลังโหลดรายงานคืนเงินประกันผู้เช่า...',
+                                      style: TextStyle(
+                                        color: ReportScreen_Color.Colors_Text2_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                            : const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'รายงานคืนเงินประกันผู้เช่า ✔️',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              )
+                  ],
+                ),
+              ),
             ])));
   }
 
@@ -2395,6 +2955,1237 @@ class _ReportScreen10State extends State<ReportScreen10> {
     );
   }
 
+  ///////////////////////////----------------------------------------------->(รายงานรับเงินประกันผู้เช่า)
+  RE_Pakan_Widget() {
+    int? ser_index;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 0)),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    Center(
+                        child: Text(
+                      (Value_Chang_Zone_Pakan == null)
+                          ? 'รายงานรับเงินประกันผู้เช่า  (กรุณาเลือกโซน)'
+                          : 'รายงานรับเงินประกันผู้เช่า  (โซน : $Value_Chang_Zone_Pakan)',
+                      style: const TextStyle(
+                        color: ReportScreen_Color.Colors_Text1_,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: FontWeight_.Fonts_T,
+                      ),
+                    )),
+                    Row(
+                      children: [
+                        // Expanded(
+                        //     flex: 1,
+                        //     child: Text(
+                        //       'ผู้เช่า: ${Status_pe}',
+                        //       textAlign: TextAlign.start,
+                        //       style: const TextStyle(
+                        //         fontSize: 14,
+                        //         color: ReportScreen_Color.Colors_Text1_,
+                        //         // fontWeight: FontWeight.bold,
+                        //         fontFamily: FontWeight_.Fonts_T,
+                        //       ),
+                        //     )),
+                        Expanded(
+                            flex: 1,
+                            child: Text(
+                              'ทั้งหมด: ${contractxPakanModels.length}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: ReportScreen_Color.Colors_Text1_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(height: 1),
+                    const Divider(),
+                    const SizedBox(height: 1),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      // padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: _searchBar_Pakan(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
+          content: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 1)),
+              builder: (context, snapshot) {
+                return ScrollConfiguration(
+                  behavior:
+                      ScrollConfiguration.of(context).copyWith(dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  }),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Container(
+                          // color: Colors.grey[50],
+                          width: (Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width * 0.925
+                              : (contractxPakanModels.length == 0)
+                                  ? MediaQuery.of(context).size.width
+                                  : 1200,
+                          // height:
+                          //     MediaQuery.of(context)
+                          //             .size
+                          //             .height *
+                          //         0.3,
+                          child:
+                              // (teNantModels.length == 0)
+                              //     ? const Column(
+                              //         mainAxisAlignment: MainAxisAlignment.center,
+                              //         children: [
+                              //           Center(
+                              //             child: Text(
+                              //               'ไม่พบข้อมูล ณ วันที่เลือก',
+                              //               style: TextStyle(
+                              //                 color:
+                              //                     ReportScreen_Color.Colors_Text1_,
+                              //                 fontWeight: FontWeight.bold,
+                              //                 fontFamily: FontWeight_.Fonts_T,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       )
+                              //     :
+                              Column(
+                            children: <Widget>[
+                              Container(
+                                // width: 1050,
+                                decoration: const BoxDecoration(
+                                  color: AppbackgroundColor.TiTile_Colors,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(0),
+                                      bottomRight: Radius.circular(0)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'โซน',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'เลขที่สัญญา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'ชื่อผู้ติดต่อ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'ชื่อร้านค้า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'รายการ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'ประเภท',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'ยอดสุทธิ',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  // height: (Responsive.isDesktop(context))
+                                  //     ? MediaQuery.of(context).size.width * 0.255
+                                  //     : MediaQuery.of(context).size.height * 0.45,
+                                  child: ListView.builder(
+                                itemCount: contractxPakanModels.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Container(
+                                      decoration: BoxDecoration(
+                                        // color: Colors.green[100]!
+                                        //     .withOpacity(0.5),
+                                        border: const Border(
+                                          bottom: BorderSide(
+                                            color: Colors.black12,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text:
+                                                    '${contractxPakanModels[index].zn}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 2,
+                                                '${contractxPakanModels[index].zn}',
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Tooltip(
+                                                richMessage: TextSpan(
+                                                  text:
+                                                      '${contractxPakanModels[index].cid}',
+                                                  style: const TextStyle(
+                                                    color: HomeScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: Colors.grey[200],
+                                                ),
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  '${contractxPakanModels[index].cid}',
+                                                  textAlign: TextAlign.start,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                '${contractxPakanModels[index].cname}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Tooltip(
+                                                richMessage: TextSpan(
+                                                  text:
+                                                      '${contractxPakanModels[index].sname}',
+                                                  style: const TextStyle(
+                                                    color: HomeScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: Colors.grey[200],
+                                                ),
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  '${contractxPakanModels[index].sname}',
+                                                  textAlign: TextAlign.start,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                '${contractxPakanModels[index].expname}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${contractxPakanModels[index].unit}',
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              nFormat
+                                                  .format(double.parse(
+                                                      '${contractxPakanModels[index].total}'))
+                                                  .toString(),
+                                              textAlign: TextAlign.right,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+          actions: <Widget>[
+            const SizedBox(height: 1),
+            const Divider(),
+            const SizedBox(height: 1),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (contractxPakanModels.length != 0)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                              child: Text(
+                                'Export file',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: () async {
+                            setState(() {
+                              Value_Report = 'รายงานรับเงินประกันผู้เช่า';
+                              Pre_and_Dow = 'Download';
+                            });
+                            _showMyDialog_SAVE();
+                          },
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Text(
+                              'ปิด',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          setState(() {
+                            Value_Chang_Zone_Pakan_Ser = null;
+                            Value_Chang_Zone_Pakan = null;
+
+                            Await_Status_Report2 = null;
+
+                            contractxPakanModels.clear();
+                            _contractxPakanModels.clear();
+                          });
+                          // check_clear();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  ///////////////////////////----------------------------------------------->(รายงาน คืนเงินประกันผู้เช่า)
+  RE_Getback_Pakan_Widget() {
+    int? ser_index;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 0)),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    Center(
+                        child: Text(
+                      (Value_Chang_Zone_Pakan == null)
+                          ? 'รายงานคืนเงินประกันผู้เช่า  (กรุณาเลือกโซน)'
+                          : 'รายงานคืนเงินประกันผู้เช่า  (โซน : $Value_Chang_Zone_Pakan)',
+                      style: const TextStyle(
+                        color: ReportScreen_Color.Colors_Text1_,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: FontWeight_.Fonts_T,
+                      ),
+                    )),
+                    Row(
+                      children: [
+                        // Expanded(
+                        //     flex: 1,
+                        //     child: Text(
+                        //       'ผู้เช่า: ${Status_pe}',
+                        //       textAlign: TextAlign.start,
+                        //       style: const TextStyle(
+                        //         fontSize: 14,
+                        //         color: ReportScreen_Color.Colors_Text1_,
+                        //         // fontWeight: FontWeight.bold,
+                        //         fontFamily: FontWeight_.Fonts_T,
+                        //       ),
+                        //     )),
+                        Expanded(
+                            flex: 1,
+                            child: Text(
+                              'ทั้งหมด: ${transKonModels.length}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: ReportScreen_Color.Colors_Text1_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(height: 1),
+                    const Divider(),
+                    const SizedBox(height: 1),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      // padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: _searchBar_GetbackPakan(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
+          content: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 1)),
+              builder: (context, snapshot) {
+                return ScrollConfiguration(
+                  behavior:
+                      ScrollConfiguration.of(context).copyWith(dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  }),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Container(
+                          // color: Colors.grey[50],
+                          width: (Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width * 0.925
+                              : (transKonModels.length == 0)
+                                  ? MediaQuery.of(context).size.width
+                                  : 1200,
+                          // height:
+                          //     MediaQuery.of(context)
+                          //             .size
+                          //             .height *
+                          //         0.3,
+                          child:
+                              // (teNantModels.length == 0)
+                              //     ? const Column(
+                              //         mainAxisAlignment: MainAxisAlignment.center,
+                              //         children: [
+                              //           Center(
+                              //             child: Text(
+                              //               'ไม่พบข้อมูล ณ วันที่เลือก',
+                              //               style: TextStyle(
+                              //                 color:
+                              //                     ReportScreen_Color.Colors_Text1_,
+                              //                 fontWeight: FontWeight.bold,
+                              //                 fontFamily: FontWeight_.Fonts_T,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       )
+                              //     :
+                              Column(
+                            children: <Widget>[
+                              Container(
+                                // width: 1050,
+                                decoration: const BoxDecoration(
+                                  color: AppbackgroundColor.TiTile_Colors,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(0),
+                                      bottomRight: Radius.circular(0)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'โซน',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'เลขที่สัญญา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'ชื่อร้านค้า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'เลขที่ใบเสร็จ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'วันที่',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'รูปแบบชำระ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'ยอดคืนสุทธิ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    // Expanded(
+                                    //   flex: 1,
+                                    //   child: const Text(
+                                    //     'Slip',
+                                    //     textAlign: TextAlign.right,
+                                    //     style: TextStyle(
+                                    //         color: PeopleChaoScreen_Color
+                                    //             .Colors_Text1_,
+                                    //         fontWeight: FontWeight.bold,
+                                    //         fontFamily: FontWeight_.Fonts_T,
+                                    //         fontSize: 14.0
+                                    //         //fontSize: 10.0
+                                    //         //fontSize: 10.0
+                                    //         ),
+                                    //   ),
+                                    // ),
+                                    // Expanded(
+                                    //   flex: 1,
+                                    //   child: const Text(
+                                    //     '...',
+                                    //     textAlign: TextAlign.right,
+                                    //     style: TextStyle(
+                                    //         color: PeopleChaoScreen_Color
+                                    //             .Colors_Text1_,
+                                    //         fontWeight: FontWeight.bold,
+                                    //         fontFamily: FontWeight_.Fonts_T,
+                                    //         fontSize: 14.0
+                                    //         //fontSize: 10.0
+                                    //         //fontSize: 10.0
+                                    //         ),
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  // height: (Responsive.isDesktop(context))
+                                  //     ? MediaQuery.of(context).size.width * 0.255
+                                  //     : MediaQuery.of(context).size.height * 0.45,
+                                  child: ListView.builder(
+                                itemCount: transKonModels.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Container(
+                                      decoration: BoxDecoration(
+                                        // color: Colors.green[100]!
+                                        //     .withOpacity(0.5),
+                                        border: const Border(
+                                          bottom: BorderSide(
+                                            color: Colors.black12,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text:
+                                                    '${transKonModels[index].zn}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 2,
+                                                '${transKonModels[index].zn}',
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text:
+                                                    '${transKonModels[index].cid}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 2,
+                                                '${transKonModels[index].cid}',
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text:
+                                                    '${transKonModels[index].cname}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                '${transKonModels[index].cname}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text:
+                                                    '${transKonModels[index].docno}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                '${transKonModels[index].docno}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${DateFormat('dd-MM').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}') + 543}',
+                                              // '${transKonModels[index].pdate}',
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text:
+                                                    '${transKonModels[index].type}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                '${transKonModels[index].type}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              nFormat
+                                                  .format(double.parse(
+                                                      '${transKonModels[index].total}'))
+                                                  .toString(),
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          // Expanded(
+                                          //   flex: 1,
+                                          //   child: AutoSizeText(
+                                          //     minFontSize: 10,
+                                          //     maxFontSize: 25,
+                                          //     maxLines: 1,
+                                          //     '',
+                                          //     // '${transKonModels[index].slip}',
+                                          //     textAlign: TextAlign.start,
+                                          //     overflow: TextOverflow.ellipsis,
+                                          //     style: const TextStyle(
+                                          //         color: PeopleChaoScreen_Color
+                                          //             .Colors_Text2_,
+                                          //         //fontWeight: FontWeight.bold,
+                                          //         fontFamily: Font_.Fonts_T),
+                                          //   ),
+                                          // ),
+                                          // Expanded(
+                                          //   flex: 1,
+                                          //   child: AutoSizeText(
+                                          //     minFontSize: 10,
+                                          //     maxFontSize: 25,
+                                          //     maxLines: 1,
+                                          //     '...',
+                                          //     textAlign: TextAlign.right,
+                                          //     overflow: TextOverflow.ellipsis,
+                                          //     style: const TextStyle(
+                                          //         color: PeopleChaoScreen_Color
+                                          //             .Colors_Text2_,
+                                          //         //fontWeight: FontWeight.bold,
+                                          //         fontFamily: Font_.Fonts_T),
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+          actions: <Widget>[
+            const SizedBox(height: 1),
+            const Divider(),
+            const SizedBox(height: 1),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (transKonModels.length != 0)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                              child: Text(
+                                'Export file',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: () async {
+                            setState(() {
+                              Value_Report = 'รายงานคืนเงินประกันผู้เช่า';
+                              Pre_and_Dow = 'Download';
+                            });
+                            _showMyDialog_SAVE();
+                          },
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Text(
+                              'ปิด',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          setState(() {
+                            Value_Chang_Zone_Pakan_Ser = null;
+                            Value_Chang_Zone_Pakan = null;
+
+                            Await_Status_Report2 = null;
+
+                            transKonModels.clear();
+                            _transKonModels.clear();
+                          });
+                          // check_clear();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   ////////////------------------------------------------------------>(Export file 2)
   Future<void> _showMyDialog_SAVE() async {
     return showDialog<void>(
@@ -2634,23 +4425,29 @@ class _ReportScreen10State extends State<ReportScreen10> {
       if (_verticalGroupValue_PassW == 'PDF') {
         Navigator.of(context).pop();
       } else {
-        if (Value_Report == 'รายงานรายรับตามผู้เช่า') {
-          Excgen_PeopleCho_AllbillReport.exportExcel_PeopleCho_AllbillReport(
-              expModels,
+        if (Value_Report == 'รายงานรับเงินประกันผู้เช่า') {
+          Excgen_GetPakanReport.exportExcel_GetPakanReport(
               context,
               NameFile_,
               _verticalGroupValue_NameFile,
-              zone_name,
-              Status_pe,
-              teNantModels,
-              transteNantModels_Select,
-              YE_Transte_People,
-              Value_Chang_Zone_People);
+              renTal_name,
+              Value_Chang_Zone_Pakan,
+              contractxPakanModels);
+        } else if (Value_Report == 'รายงานคืนเงินประกันผู้เช่า') {
+          Excgen_PayPakanReport.exportExcel_PayPakanReport(
+              context,
+              NameFile_,
+              _verticalGroupValue_NameFile,
+              renTal_name,
+              Value_Chang_Zone_Pakan,
+              transKonModels);
         }
-        Navigator.of(context).pop();
       }
+      Navigator.of(context).pop();
     }
   }
 }
+
+
 
 ///​กรรมกรข่าว X ​ทีมพากย์พันธมิตร

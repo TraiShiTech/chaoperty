@@ -27,34 +27,55 @@ class ContractxPakanModel {
   String? dataUpdate;
   String? sum_total;
 
-  ContractxPakanModel(
-      {this.ser,
-      this.datex,
-      this.timex,
-      this.cser,
-      this.cid,
-      this.expser,
-      this.exptser,
-      this.expname,
-      this.unitser,
-      this.unit,
-      this.term,
-      this.sday,
-      this.sdate,
-      this.ldate,
-      this.meter,
-      this.qty,
-      this.amt,
-      this.vtype,
-      this.nvat,
-      this.vat,
-      this.pvat,
-      this.nwht,
-      this.wht,
-      this.total,
-      this.st,
-      this.sum_total,
-      this.dataUpdate});
+  String? etype;
+  String? dtype;
+
+  String? sname;
+  String? cname;
+  String? ctype;
+  String? stype;
+  String? zser;
+  String? zn;
+  String? ln;
+
+  ContractxPakanModel({
+    this.ser,
+    this.datex,
+    this.timex,
+    this.cser,
+    this.cid,
+    this.expser,
+    this.exptser,
+    this.expname,
+    this.unitser,
+    this.unit,
+    this.term,
+    this.sday,
+    this.sdate,
+    this.ldate,
+    this.meter,
+    this.qty,
+    this.amt,
+    this.vtype,
+    this.nvat,
+    this.vat,
+    this.pvat,
+    this.nwht,
+    this.wht,
+    this.total,
+    this.st,
+    this.sum_total,
+    this.dataUpdate,
+    this.etype,
+    this.dtype,
+    this.sname,
+    this.cname,
+    this.ctype,
+    this.stype,
+    this.zser,
+    this.zn,
+    this.ln,
+  });
 
   ContractxPakanModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -84,6 +105,17 @@ class ContractxPakanModel {
     st = json['st'];
     dataUpdate = json['data_update'];
     sum_total = json['sum_total'];
+
+    etype = json['etype'];
+    dtype = json['dtype'];
+
+    sname = json['sname'];
+    cname = json['cname'];
+    ctype = json['ctype'];
+    stype = json['stype'];
+    zser = json['zser'];
+    zn = json['zn'];
+    ln = json['ln'];
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +147,18 @@ class ContractxPakanModel {
     data['st'] = this.st;
     data['data_update'] = this.dataUpdate;
     data['sum_total'] = this.sum_total;
+
+    data['etype'] = this.etype;
+    data['dtype'] = this.dtype;
+
+    data['sname'] = this.sname;
+    data['cname'] = this.cname;
+    data['ctype'] = this.ctype;
+    data['stype'] = this.stype;
+    data['zser'] = this.zser;
+    data['zn'] = this.zn;
+    data['ln'] = this.ln;
+
     return data;
   }
 }

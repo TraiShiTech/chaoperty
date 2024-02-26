@@ -143,6 +143,7 @@ class Man_BillingNoteInvlice_PDF {
           Zone_s = _InvoiceModel.c_zn;
           Ln_s = _InvoiceModel.c_ln;
           cid_ = _InvoiceModel.cid;
+          ciddoc = _InvoiceModel.cid;
           ser_user = _InvoiceModel.user;
           ptname1 = _InvoiceModel.ptname;
           ptser1 = _InvoiceModel.ptser;

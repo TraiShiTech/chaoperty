@@ -166,6 +166,7 @@ class Man_CancelRental_PDF {
     } catch (e) {}
 ///////////----------------------------------------------->
     var Formbecause_cancel;
+    var cc_date;
     String url4 =
         '${MyConstant().domain}/GC_tenantCancel_PDF.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc';
     try {
@@ -177,6 +178,7 @@ class Man_CancelRental_PDF {
         for (var map in result) {
           TeNantModel teNantModelsCancel = TeNantModel.fromJson(map);
           Formbecause_cancel = teNantModelsCancel.cc_remark.toString();
+          cc_date = teNantModelsCancel.cc_date.toString();
         }
       }
     } catch (e) {}
@@ -225,7 +227,8 @@ class Man_CancelRental_PDF {
           Formbecause_cancel,
           quotxSelectModels,
           transKonModels,
-          TitleType_Default_Receipt_Name);
+          TitleType_Default_Receipt_Name,
+          cc_date);
     });
   }
 }

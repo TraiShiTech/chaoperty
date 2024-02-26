@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:fl_pin_code/pin_code.dart';
+import 'package:fl_pin_code/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import '../Constant/Myconstant.dart';
+import '../INSERT_Log/Insert_log.dart';
 import '../Man_PDF/Man_BillingNoteInvlice_PDF.dart';
 import '../Model/GetExp_Model.dart';
 import '../Model/GetInvoiceRe_Model.dart';
@@ -38,6 +42,12 @@ class BillingScreen extends StatefulWidget {
 class _BillingScreenState extends State<BillingScreen> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
   var nFormat2 = NumberFormat("###0.00", "en_US");
+  TextEditingController Text_searchBar_main1 = TextEditingController();
+  TextEditingController Text_searchBar_main2 = TextEditingController();
+  //-------------------------------------->
+  TextEditingController Text_searchBar1 = TextEditingController();
+  TextEditingController Text_searchBar2 = TextEditingController();
+  //-------------------------------------->
   DateTime datex = DateTime.now();
   int? show_more;
   String tappedIndex_ = '';
@@ -110,6 +120,10 @@ class _BillingScreenState extends State<BillingScreen> {
   List<String> invoice_select = [];
   List<String> invoice_loade_Success = [];
   ///////////--------------------------------------------->
+  List<String> invoice_select_delete = [];
+  List<String> invoice_loade_Success_delete = [];
+
+  ///////////--------------------------------------------->
   double sum_pvat = 0.00,
       sum_vat = 0.00,
       sum_wht = 0.00,
@@ -149,6 +163,28 @@ class _BillingScreenState extends State<BillingScreen> {
   }
 
   ///////////--------------------------------------------->
+  String randomString = '';
+
+  String? email_login;
+  String? seremail_login;
+  final Pincontroller = TextEditingController();
+  generateRandomString() {
+    setState(() {
+      randomString = '';
+    });
+    final random = Random();
+    const characters = '0123456789';
+    final length = 2; // Change this to the desired length
+
+    for (int i = 0; i < length; i++) {
+      final index = random.nextInt(characters.length);
+      randomString += characters[index];
+    }
+
+    // return randomString;
+  }
+
+  ///////////--------------------------------------------->
   @override
   void initState() {
     // TODO: implement initState
@@ -170,6 +206,8 @@ class _BillingScreenState extends State<BillingScreen> {
       YEAR_Now = DateFormat('yyyy').format(DateTime.parse('${datex}'));
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
+      email_login = preferences.getString('email');
+      seremail_login = preferences.getString('ser');
       // fname_ = preferences.getString('fname');
       // if (preferences.getString('renTalSer') == '65') {
       //   viewTab = 0;
@@ -278,7 +316,7 @@ class _BillingScreenState extends State<BillingScreen> {
         });
       });
       read_Invoice_limit();
-      read_Invoice_limit2();
+      // read_Invoice_limit2();
     } catch (e) {}
   }
 
@@ -305,63 +343,125 @@ class _BillingScreenState extends State<BillingScreen> {
               : limitedList_InvoiceModels_.length // End index
           );
     });
-    for (int index = 0; index < InvoiceModels_Save.length; index++) {
-      setState(() {
-        invoice_select.add('${InvoiceModels_Save[index].docno}');
-      });
-    }
+    // for (int index = 0; index < InvoiceModels_Save.length; index++) {
+    //   setState(() {
+    //     invoice_select.add('${InvoiceModels_Save[index].docno}');
+    //   });
+    // }
   }
 
-//////////////----------------------------->
-  void checkAutoSearch() {
-    if (widget.Texts != null && widget.Texts.isNotEmpty) {
-      checkAutoSearch_Invoice();
-    }
-  }
+// //////////////----------------------------->
+//   void checkAutoSearch() {
+//     if (widget.Texts != null && widget.Texts.isNotEmpty) {
+//       checkAutoSearch_Invoice();
+//     }
+//   }
 
-//////////////----------------------------->
-  String? _previousText;
+// //////////////----------------------------->
+//   String? _previousText;
 
-  void didUpdateWidget(covariant BillingScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
+//   void didUpdateWidget(covariant BillingScreen oldWidget) {
+//     super.didUpdateWidget(oldWidget);
 
-    if (_previousText != widget.Texts) {
-      _previousText = widget.Texts;
-      if (widget.Texts != null) {
-        checkAutoSearch_Invoice();
-      }
-    }
-  }
+//     if (_previousText != widget.Texts) {
+//       _previousText = widget.Texts;
+//       if (widget.Texts != null) {
+//         checkAutoSearch_Invoice();
+//       }
+//     }
+//   }
 
-//////////////----------------------------->
-  Future<Null> checkAutoSearch_Invoice() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var Text = widget.Texts.toString();
-    var text = Text.toLowerCase();
+// //////////////----------------------------->
+//   Future<Null> checkAutoSearch_Invoice() async {
+//     SharedPreferences preferences = await SharedPreferences.getInstance();
+//     var Text = widget.Texts.toString();
+//     var text = Text.toLowerCase();
 
-    setState(() {
-      InvoiceModels = _InvoiceModels.where((Invoice) {
-        var notTitle = Invoice.cid.toString().toLowerCase();
-        var notTitle2 = Invoice.docno.toString().toLowerCase();
-        var notTitle3 = Invoice.ln.toString().toLowerCase();
-        var notTitle4 = Invoice.btype.toString().toLowerCase();
-        var notTitle5 = Invoice.bank.toString().toLowerCase();
-        var notTitle6 = Invoice.cname.toString().toLowerCase();
-        var notTitle7 = Invoice.expname.toString().toLowerCase();
-        var notTitle8 = Invoice.date.toString().toLowerCase();
-        var notTitle9 = Invoice.remark.toString().toLowerCase();
-        return notTitle.contains(text) ||
-            notTitle2.contains(text) ||
-            notTitle3.contains(text) ||
-            notTitle4.contains(text) ||
-            notTitle5.contains(text) ||
-            notTitle6.contains(text) ||
-            notTitle7.contains(text) ||
-            notTitle8.contains(text) ||
-            notTitle9.contains(text);
-      }).toList();
-    });
-    print('checkAutoSearch_TransReBill : $text // ${InvoiceModels.length}');
+//     setState(() {
+//       InvoiceModels = _InvoiceModels.where((Invoice) {
+//         var notTitle = Invoice.cid.toString().toLowerCase();
+//         var notTitle2 = Invoice.docno.toString().toLowerCase();
+//         var notTitle3 = Invoice.ln.toString().toLowerCase();
+//         var notTitle4 = Invoice.btype.toString().toLowerCase();
+//         var notTitle5 = Invoice.bank.toString().toLowerCase();
+//         var notTitle6 = Invoice.cname.toString().toLowerCase();
+//         var notTitle7 = Invoice.expname.toString().toLowerCase();
+//         var notTitle8 = Invoice.date.toString().toLowerCase();
+//         var notTitle9 = Invoice.remark.toString().toLowerCase();
+//         return notTitle.contains(text) ||
+//             notTitle2.contains(text) ||
+//             notTitle3.contains(text) ||
+//             notTitle4.contains(text) ||
+//             notTitle5.contains(text) ||
+//             notTitle6.contains(text) ||
+//             notTitle7.contains(text) ||
+//             notTitle8.contains(text) ||
+//             notTitle9.contains(text);
+//       }).toList();
+//     });
+//     print('checkAutoSearch_TransReBill : $text // ${InvoiceModels.length}');
+//   }
+
+  ////////--------------------------------------------------------------->
+  _searchBarMain1() {
+    return TextField(
+      textAlign: TextAlign.start,
+      controller: Text_searchBar_main1,
+      autofocus: false,
+      cursorHeight: 20,
+      keyboardType: TextInputType.text,
+      style: const TextStyle(
+          color: PeopleChaoScreen_Color.Colors_Text2_,
+          fontFamily: Font_.Fonts_T),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey[100]!.withOpacity(0.5),
+        hintText: ' Search...',
+        hintStyle: const TextStyle(
+            // fontSize: 12,
+            color: PeopleChaoScreen_Color.Colors_Text2_,
+            fontFamily: Font_.Fonts_T),
+        contentPadding:
+            const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      onChanged: (text) {
+        // var Text_searchBar2_ = Text_searchBar_main1.text.toLowerCase();
+        setState(() {
+          InvoiceModels = _InvoiceModels.where((Invoice) {
+            var notTitle = Invoice.cid.toString().toLowerCase();
+            var notTitle2 = Invoice.docno.toString().toLowerCase();
+            var notTitle3 = Invoice.ln.toString().toLowerCase();
+            var notTitle4 = Invoice.btype.toString().toLowerCase();
+            var notTitle5 = Invoice.bank.toString().toLowerCase();
+            var notTitle6 = Invoice.cname.toString().toLowerCase();
+            var notTitle7 = Invoice.expname.toString().toLowerCase();
+            var notTitle8 = Invoice.date.toString().toLowerCase();
+            var notTitle9 = Invoice.remark.toString().toLowerCase();
+            return notTitle.contains(text) ||
+                notTitle2.contains(text) ||
+                notTitle3.contains(text) ||
+                notTitle4.contains(text) ||
+                notTitle5.contains(text) ||
+                notTitle6.contains(text) ||
+                notTitle7.contains(text) ||
+                notTitle8.contains(text) ||
+                notTitle9.contains(text);
+          }).toList();
+        });
+
+        if (text.isEmpty) {
+          read_Invoice_limit();
+        } else {}
+      },
+    );
   }
 
 //////////////----------------------------->
@@ -777,6 +877,8 @@ class _BillingScreenState extends State<BillingScreen> {
                   onTap: () {
                     setState(() {
                       Ser_Tap = 0;
+                      invoice_select_delete.clear();
+                      invoice_loade_Success_delete.clear();
                     });
                   },
                   child: Container(
@@ -810,6 +912,8 @@ class _BillingScreenState extends State<BillingScreen> {
                   onTap: () {
                     setState(() {
                       Ser_Tap = 1;
+                      invoice_select_delete.clear();
+                      invoice_loade_Success_delete.clear();
                     });
                   },
                   child: Container(
@@ -913,6 +1017,74 @@ class _BillingScreenState extends State<BillingScreen> {
                                                       const EdgeInsets.all(8.0),
                                                   child: Column(
                                                     children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(2.0),
+                                                        child: Row(
+                                                          children: [
+                                                            const Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Text(
+                                                                'ค้นหา :',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              // flex: 1,
+                                                              child: Container(
+                                                                height:
+                                                                    35, //Date_ser
+                                                                // width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: AppbackgroundColor
+                                                                      .Sub_Abg_Colors,
+                                                                  borderRadius: const BorderRadius
+                                                                          .only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              8)),
+                                                                  border: Border.all(
+                                                                      color: Colors
+                                                                          .grey,
+                                                                      width: 1),
+                                                                ),
+                                                                child:
+                                                                    _searchBarMain1(),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                                width: 150,
+                                                                child:
+                                                                    Next_page())
+                                                            // Expanded(
+                                                            //     child:
+                                                            //         Next_page_billCancel())
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      const Divider(),
                                                       Row(
                                                         children: [
                                                           Container(
@@ -1328,23 +1500,23 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                if (InvoiceModels
-                                                                        .length !=
-                                                                    0)
-                                                                  Container(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      // width: 130,
-                                                                      child:
-                                                                          Next_page_Save())
+                                                                // if (InvoiceModels
+                                                                //         .length !=
+                                                                //     0)
+                                                                //   Container(
+                                                                //       padding:
+                                                                //           const EdgeInsets.all(
+                                                                //               8.0),
+                                                                //       // width: 130,
+                                                                //       child:
+                                                                //           Next_page_Save())
                                                               ],
                                                             ),
                                                           ),
-                                                          Expanded(
-                                                              child: SizedBox(
-                                                            child: Next_page(),
-                                                          ))
+                                                          // Expanded(
+                                                          //     child: SizedBox(
+                                                          //   child: Next_page(),
+                                                          // ))
                                                         ],
                                                       ),
                                                       const Divider(),
@@ -1402,43 +1574,23 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color:
-                                                                              Colors.orange,
-                                                                          borderRadius: const BorderRadius.only(
-                                                                              topLeft: Radius.circular(0),
-                                                                              topRight: Radius.circular(8),
-                                                                              bottomLeft: Radius.circular(0),
-                                                                              bottomRight: Radius.circular(8)),
-                                                                          border: Border.all(
-                                                                              color: Colors.grey,
-                                                                              width: 1),
-                                                                        ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(2),
+                                                                      PopupMenuButton(
                                                                         child:
-                                                                            InkWell(
-                                                                          onTap:
-                                                                              () async {
-                                                                            List
-                                                                                newValuePDFimg =
-                                                                                [];
-
-                                                                            for (int index = 0;
-                                                                                index < 1;
-                                                                                index++) {
-                                                                              if (renTalModels[0].imglogo!.trim() == '') {
-                                                                                // newValuePDFimg.add(
-                                                                                //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                                                              } else {
-                                                                                newValuePDFimg.add('${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                                                              }
-                                                                            }
-
-                                                                            _showMyDialog_SAVE2(newValuePDFimg);
-                                                                          },
+                                                                            Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Colors.orange,
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(0),
+                                                                                topRight: Radius.circular(8),
+                                                                                bottomLeft: Radius.circular(0),
+                                                                                bottomRight: Radius.circular(8)),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey, width: 1),
+                                                                          ),
+                                                                          padding:
+                                                                              const EdgeInsets.all(2),
                                                                           child:
                                                                               const Icon(
                                                                             Icons.download,
@@ -1448,31 +1600,241 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 22,
                                                                           ),
                                                                         ),
-                                                                      )
+                                                                        itemBuilder:
+                                                                            (BuildContext context) =>
+                                                                                [
+                                                                          PopupMenuItem(
+                                                                              onTap: () async {
+                                                                                Future.delayed(Duration(microseconds: 800), () async {
+                                                                                  List newValuePDFimg = [];
+
+                                                                                  for (int index = 0; index < 1; index++) {
+                                                                                    if (renTalModels[0].imglogo!.trim() == '') {
+                                                                                      // newValuePDFimg.add(
+                                                                                      //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                                                    } else {
+                                                                                      newValuePDFimg.add('${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                                                    }
+                                                                                  }
+
+                                                                                  _showMyDialog_SAVE2(newValuePDFimg);
+                                                                                });
+                                                                              },
+                                                                              child: Container(
+                                                                                decoration: const BoxDecoration(
+                                                                                  // color: Colors.green[100]!
+                                                                                  //     .withOpacity(0.5),
+                                                                                  border: Border(
+                                                                                    bottom: BorderSide(
+                                                                                      color: Colors.black12,
+                                                                                      width: 1,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(2.0),
+                                                                                // width: 200,
+                                                                                child: Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'อนุมัติทั้งหมด( ${invoice_select.length} ) : ',
+                                                                                      style: TextStyle(
+                                                                                        fontSize: 14,
+                                                                                        color: ReportScreen_Color.Colors_Text2_,
+                                                                                        // fontWeight: FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                    Icon(Icons.check_box, color: AppBarColors.ABar_Colors)
+                                                                                  ],
+                                                                                ),
+                                                                              )),
+                                                                          PopupMenuItem(
+                                                                              onTap: () async {
+                                                                                setState(() {
+                                                                                  invoice_select.clear();
+                                                                                });
+                                                                              },
+                                                                              child: Container(
+                                                                                decoration: const BoxDecoration(
+                                                                                  // color: Colors.green[100]!
+                                                                                  //     .withOpacity(0.5),
+                                                                                  border: Border(
+                                                                                    bottom: BorderSide(
+                                                                                      color: Colors.black12,
+                                                                                      width: 1,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(2.0),
+                                                                                // width: 200,
+                                                                                child: Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'ยกเลิกทั้งหมด( ${invoice_select.length} ) : ',
+                                                                                      style: TextStyle(
+                                                                                        fontSize: 14,
+                                                                                        color: ReportScreen_Color.Colors_Text2_,
+                                                                                        // fontWeight: FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                    Icon(
+                                                                                      Icons.check_box_outline_blank,
+                                                                                      color: Colors.red,
+                                                                                      size: 22,
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              )),
+                                                                        ],
+                                                                      ),
+                                                                      // Container(
+                                                                      //   decoration:
+                                                                      //       BoxDecoration(
+                                                                      //     color:
+                                                                      //         Colors.orange,
+                                                                      //     borderRadius: const BorderRadius.only(
+                                                                      //         topLeft: Radius.circular(0),
+                                                                      //         topRight: Radius.circular(8),
+                                                                      //         bottomLeft: Radius.circular(0),
+                                                                      //         bottomRight: Radius.circular(8)),
+                                                                      //     border: Border.all(
+                                                                      //         color: Colors.grey,
+                                                                      //         width: 1),
+                                                                      //   ),
+                                                                      //   padding:
+                                                                      //       const EdgeInsets.all(2),
+                                                                      //   child:
+                                                                      //       InkWell(
+                                                                      //     onTap:
+                                                                      //         () async {
+                                                                      //       List
+                                                                      //           newValuePDFimg =
+                                                                      //           [];
+
+                                                                      //       for (int index = 0;
+                                                                      //           index < 1;
+                                                                      //           index++) {
+                                                                      //         if (renTalModels[0].imglogo!.trim() == '') {
+                                                                      //           // newValuePDFimg.add(
+                                                                      //           //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                                      //         } else {
+                                                                      //           newValuePDFimg.add('${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                                      //         }
+                                                                      //       }
+
+                                                                      //       _showMyDialog_SAVE2(newValuePDFimg);
+                                                                      //     },
+                                                                      //     child:
+                                                                      //         const Icon(
+                                                                      //       Icons.download,
+                                                                      //       color:
+                                                                      //           Colors.white,
+                                                                      //       size:
+                                                                      //           22,
+                                                                      //     ),
+                                                                      //   ),
+                                                                      // )
                                                                     ],
                                                                   ),
                                                                 )
-                                                              : Container(
-                                                                  width: 70,
-                                                                  child:
-                                                                      const Text(
-                                                                    '...',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: ManageScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
+                                                              : (Text_searchBar_main1
+                                                                      .text
+                                                                      .isNotEmpty)
+                                                                  ? Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Text(
+                                                                        '...',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.green,
+                                                                          // fontWeight:
+                                                                          //     FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                        ),
+                                                                      ))
+                                                                  : Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        borderRadius: BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(8),
+                                                                            topRight: Radius.circular(8),
+                                                                            bottomLeft: Radius.circular(8),
+                                                                            bottomRight: Radius.circular(8)),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.grey,
+                                                                            width: 1),
+                                                                      ),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      width: 80,
+                                                                      child:
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () async {
+                                                                          setState(
+                                                                              () {
+                                                                            invoice_select_delete.clear();
+                                                                            invoice_select.clear();
+                                                                          });
+                                                                          // print(InvoiceModels
+                                                                          //     .length);
+                                                                          for (int index = 0;
+                                                                              index < InvoiceModels.length;
+                                                                              index++) {
+                                                                            setState(() {
+                                                                              invoice_select.add('${InvoiceModels[index].docno}');
+                                                                            });
+                                                                          }
+                                                                        },
+                                                                        child:
+                                                                            Text(
+                                                                          'All: ${(endIndex / limit)}/${(limitedList_InvoiceModels_.length / limit).ceil()} [✔]',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Colors.green,
+                                                                            // fontWeight:
+                                                                            //     FontWeight.bold,
+                                                                            fontFamily:
+                                                                                Font_.Fonts_T,
+                                                                          ),
+                                                                        ),
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                ),
+                                                          //  Container(
+                                                          //     width: 70,
+                                                          //     child:
+                                                          //         const Text(
+                                                          //       '...',
+                                                          //       textAlign:
+                                                          //           TextAlign
+                                                          //               .start,
+                                                          //       style:
+                                                          //           TextStyle(
+                                                          //         color: ManageScreen_Color
+                                                          //             .Colors_Text1_,
+                                                          //         fontWeight:
+                                                          //             FontWeight
+                                                          //                 .bold,
+                                                          //         fontFamily:
+                                                          //             FontWeight_
+                                                          //                 .Fonts_T,
+                                                          //       ),
+                                                          //     ),
+                                                          //   ),
                                                           Expanded(
                                                             flex: 1,
                                                             child: Text(
@@ -1736,7 +2098,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           Expanded(
                                                             flex: 1,
                                                             child: Text(
-                                                              'ยอดเงินคงเหลือ',
+                                                              'ยอดสุทธิ',
                                                               textAlign:
                                                                   TextAlign.end,
                                                               style: TextStyle(
@@ -1765,23 +2127,215 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           //     ),
                                                           //   ),
                                                           // ),
+                                                          // Expanded(
+                                                          //   flex: 1,
+                                                          //   child: Text(
+                                                          //     '....',
+                                                          //     textAlign:
+                                                          //         TextAlign.end,
+                                                          //     style: TextStyle(
+                                                          //       color: ManageScreen_Color
+                                                          //           .Colors_Text1_,
+                                                          //       fontWeight:
+                                                          //           FontWeight
+                                                          //               .bold,
+                                                          //       fontFamily:
+                                                          //           FontWeight_
+                                                          //               .Fonts_T,
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
                                                           Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '....',
-                                                              textAlign:
-                                                                  TextAlign.end,
-                                                              style: TextStyle(
-                                                                color: ManageScreen_Color
-                                                                    .Colors_Text1_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T,
-                                                              ),
-                                                            ),
+                                                            flex: 2,
+                                                            child: (invoice_select_delete
+                                                                            .length !=
+                                                                        0 &&
+                                                                    InvoiceModels
+                                                                            .length !=
+                                                                        0)
+                                                                ? Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(8),
+                                                                                topRight: Radius.circular(0),
+                                                                                bottomLeft: Radius.circular(8),
+                                                                                bottomRight: Radius.circular(0)),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey, width: 1),
+                                                                          ),
+                                                                          padding:
+                                                                              const EdgeInsets.all(2),
+                                                                          child:
+                                                                              Text(
+                                                                            'delete ( ${invoice_select_delete.length} )',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 13,
+                                                                              color: Colors.grey[800],
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        PopupMenuButton(
+                                                                          child:
+                                                                              Container(
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Colors.red,
+                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(8), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(8)),
+                                                                              border: Border.all(color: Colors.grey, width: 1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(2),
+                                                                            child:
+                                                                                const Icon(
+                                                                              Icons.delete,
+                                                                              color: Colors.white,
+                                                                              size: 22,
+                                                                            ),
+                                                                          ),
+                                                                          itemBuilder:
+                                                                              (BuildContext context) => [
+                                                                            PopupMenuItem(
+                                                                                onTap: () async {
+                                                                                  Future.delayed(Duration(microseconds: 800), () async {
+                                                                                    _showMyDialog_delete();
+                                                                                  });
+                                                                                },
+                                                                                child: Container(
+                                                                                  decoration: const BoxDecoration(
+                                                                                    // color: Colors.green[100]!
+                                                                                    //     .withOpacity(0.5),
+                                                                                    border: Border(
+                                                                                      bottom: BorderSide(
+                                                                                        color: Colors.black12,
+                                                                                        width: 1,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  padding: const EdgeInsets.all(2.0),
+                                                                                  // width: 200,
+                                                                                  child: Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        'ยืนยันทั้งหมด( ${invoice_select_delete.length} ) : ',
+                                                                                        style: TextStyle(
+                                                                                          fontSize: 14,
+                                                                                          color: ReportScreen_Color.Colors_Text2_,
+                                                                                          // fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T,
+                                                                                        ),
+                                                                                      ),
+                                                                                      Icon(Icons.check_box, color: AppBarColors.ABar_Colors)
+                                                                                    ],
+                                                                                  ),
+                                                                                )),
+                                                                            PopupMenuItem(
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    invoice_select_delete.clear();
+                                                                                  });
+                                                                                },
+                                                                                child: Container(
+                                                                                  decoration: const BoxDecoration(
+                                                                                    // color: Colors.green[100]!
+                                                                                    //     .withOpacity(0.5),
+                                                                                    border: Border(
+                                                                                      bottom: BorderSide(
+                                                                                        color: Colors.black12,
+                                                                                        width: 1,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  padding: const EdgeInsets.all(2.0),
+                                                                                  // width: 200,
+                                                                                  child: Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        'ยกเลิกทั้งหมด( ${invoice_select_delete.length} ) : ',
+                                                                                        style: TextStyle(
+                                                                                          fontSize: 14,
+                                                                                          color: ReportScreen_Color.Colors_Text2_,
+                                                                                          // fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T,
+                                                                                        ),
+                                                                                      ),
+                                                                                      Icon(
+                                                                                        Icons.check_box_outline_blank,
+                                                                                        color: Colors.red,
+                                                                                        size: 22,
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                )),
+                                                                          ],
+                                                                        ),
+                                                                        // Container(
+                                                                        //   decoration:
+                                                                        //       BoxDecoration(
+                                                                        //     color:
+                                                                        //         Colors.red,
+                                                                        //     borderRadius: const BorderRadius.only(
+                                                                        //         topLeft: Radius.circular(0),
+                                                                        //         topRight: Radius.circular(8),
+                                                                        //         bottomLeft: Radius.circular(0),
+                                                                        //         bottomRight: Radius.circular(8)),
+                                                                        //     border:
+                                                                        //         Border.all(color: Colors.grey, width: 1),
+                                                                        //   ),
+                                                                        //   padding:
+                                                                        //       const EdgeInsets.all(2),
+                                                                        //   child:
+                                                                        //       InkWell(
+                                                                        //     onTap:
+                                                                        //         () async {
+                                                                        //       _showMyDialog_delete();
+                                                                        //     },
+                                                                        //     child:
+                                                                        //         const Icon(
+                                                                        //       Icons.delete,
+                                                                        //       color: Colors.white,
+                                                                        //       size: 22,
+                                                                        //     ),
+                                                                        //   ),
+                                                                        // )
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                                : Container(
+                                                                    width: 70,
+                                                                    child:
+                                                                        const Text(
+                                                                      '',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: ManageScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                           ),
                                                         ],
                                                       ),
@@ -1925,10 +2479,14 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                               padding: const EdgeInsets.all(8.0),
                                                                               child: InkWell(
                                                                                 onTap: () async {
+                                                                                  setState(() {
+                                                                                    invoice_select_delete.clear();
+                                                                                  });
                                                                                   if (invoice_select.length >= 50) {
                                                                                     setState(() {
                                                                                       invoice_select.remove('${InvoiceModels[index].docno}');
                                                                                     });
+                                                                                    Dialog_notimax(50);
                                                                                   } else {
                                                                                     setState(() {
                                                                                       if (invoice_select.contains('${InvoiceModels[index].docno}') == true) {
@@ -2042,7 +2600,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 maxLines: 1,
                                                                                 '${InvoiceModels[index].scname}',
                                                                                 // '${transMeterModels[index].ovalue}',
-                                                                                textAlign: TextAlign.center,
+                                                                                textAlign: TextAlign.start,
                                                                                 style: const TextStyle(
                                                                                   color: ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight: FontWeight.bold,
@@ -2149,6 +2707,51 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                   // fontWeight:
                                                                                   //     FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: InkWell(
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    invoice_select.clear();
+                                                                                  });
+                                                                                  if (invoice_select_delete.length >= 5) {
+                                                                                    setState(() {
+                                                                                      invoice_select_delete.remove('${InvoiceModels[index].docno}');
+                                                                                    });
+                                                                                    Dialog_notimax(5);
+                                                                                  } else {
+                                                                                    setState(() {
+                                                                                      if (invoice_select_delete.contains('${InvoiceModels[index].docno}') == true) {
+                                                                                        invoice_select_delete.remove('${InvoiceModels[index].docno}');
+                                                                                      } else {
+                                                                                        invoice_select_delete.add('${InvoiceModels[index].docno}');
+                                                                                      }
+                                                                                    });
+                                                                                  }
+                                                                                },
+                                                                                child: Container(
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: Colors.blueGrey[50]!.withOpacity(0.5),
+                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    border: Border.all(color: Colors.grey, width: 1),
+                                                                                  ),
+                                                                                  width: 70,
+                                                                                  padding: const EdgeInsets.all(5),
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    children: [
+                                                                                      (invoice_select_delete.contains('${InvoiceModels[index].docno}') == true) ? Icon(Icons.check_box, color: Colors.red[300]) : Icon(Icons.check_box_outline_blank, color: Colors.grey),
+
+                                                                                      ///invoice_loade_Success
+                                                                                      Icon(
+                                                                                        Icons.delete,
+                                                                                        color: (invoice_loade_Success_delete.contains('${InvoiceModels[index].docno}') == true) ? Colors.red[600] : null,
+                                                                                      )
+                                                                                    ],
+                                                                                  ),
                                                                                 ),
                                                                               ),
                                                                             ),
@@ -3456,7 +4059,200 @@ class _BillingScreenState extends State<BillingScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: [
-                                            //regis_models
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  if (numinvoice != null) {
+                                                    showDialog<String>(
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          AlertDialog(
+                                                        shape: const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        20.0))),
+                                                        title: const Center(
+                                                            child: Text(
+                                                          'ยืนยันการยกเลิกวางบิล',
+                                                          style: TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        )),
+                                                        content:
+                                                            SingleChildScrollView(
+                                                          child: Container(
+                                                            child: Column(
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child:
+                                                                          Text(
+                                                                        'เลขที่ใบเสร็จ',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child:
+                                                                          Text(
+                                                                        '$numinvoice',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            InkWell(
+                                                                          onTap:
+                                                                              () {
+                                                                            if (numinvoice !=
+                                                                                null) {
+                                                                              Insert_log.Insert_logs('ผู้เช่า', 'วางบิล>>ประวัติวางบิล>>ยกเลิกการวางบิล(${numinvoice.toString()})');
+                                                                              print(numinvoice);
+                                                                              de_invoice(numinvoice, '1');
+                                                                              Navigator.pop(context);
+                                                                            }
+                                                                          },
+                                                                          child: Container(
+                                                                              height: 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.green.shade500,
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                                                border: Border.all(color: Colors.grey, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(3.0),
+                                                                              child: const Center(
+                                                                                child: Text(
+                                                                                  'ตกลง',
+                                                                                  style: TextStyle(
+                                                                                      color: Colors.white,
+                                                                                      // fontSize: 10.0,
+                                                                                      fontFamily: FontWeight_.Fonts_T),
+                                                                                ),
+                                                                              )),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            InkWell(
+                                                                          onTap:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child: Container(
+                                                                              height: 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.black,
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
+                                                                                border: Border.all(color: Colors.grey, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(3.0),
+                                                                              child: const Center(
+                                                                                child: Text(
+                                                                                  'ยกเลิก',
+                                                                                  style: TextStyle(
+                                                                                      color: Colors.white,
+                                                                                      // fontSize: 10.0,
+                                                                                      fontFamily: FontWeight_.Fonts_T),
+                                                                                ),
+                                                                              )),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                                child: Container(
+                                                    // height: 50,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.red,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(8),
+                                                              topRight: Radius
+                                                                  .circular(8),
+                                                              bottomLeft: Radius
+                                                                  .circular(8),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          8)),
+                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: const Center(
+                                                        child: Text(
+                                                      'ยกเลิกการวางบิล',
+                                                      style: TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text3_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T),
+                                                    ))),
+                                              ),
+                                            ),
                                             regis_models.length == 0
                                                 ? SizedBox()
                                                 : Container(
@@ -4124,6 +4920,386 @@ class _BillingScreenState extends State<BillingScreen> {
           },
         );
       },
+    );
+  }
+
+  Future<void> _showMyDialog_delete() async {
+    int invoice_select_Ser = 0;
+    String invoice_Now = '';
+    setState(() {
+      generateRandomString();
+    });
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return StreamBuilder(
+          stream: Stream.periodic(const Duration(seconds: 0)),
+          builder: (context, snapshot) {
+            return Form(
+              // key: _formKey,
+              child: AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                content: SingleChildScrollView(
+                  child: (invoice_select_Ser == 1)
+                      ? ListBody(children: <Widget>[
+                          Center(
+                              child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: const CircularProgressIndicator())),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                '${invoice_Now} ',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ])
+                      : ListBody(
+                          children: <Widget>[
+                            Text(
+                              'ลบ ทั้งหมด : ${invoice_select_delete.length} รายการ',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: ReportScreen_Color.Colors_Text2_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            const Divider(
+                              color: Colors.grey,
+                              height: 1.0,
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                              child: Text(
+                                'ผู้ดำเนินการ',
+                                style: TextStyle(
+                                    color: AccountScreen_Color.Colors_Text2_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                              child: Text(
+                                '- ${email_login}($seremail_login)',
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: AccountScreen_Color.Colors_Text2_,
+                                    // fontWeight:
+                                    //     FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'CODE : ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(2),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                          color: Color.fromARGB(
+                                              255, 179, 177, 170),
+                                          // image:
+                                          //     const DecorationImage(
+                                          //   image: AssetImage(
+                                          //       "assets/pngegg2.png"),
+                                          //   fit: BoxFit
+                                          //       .cover,
+                                          // ),
+                                        ),
+                                        width: 65,
+                                        // color: Colors.black,
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Center(
+                                          child: Text(
+                                            '${randomString}',
+                                            style: TextStyle(
+                                                color: Colors.red[800],
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Center(
+                                child: Container(
+                                  height: 40,
+                                  width: 90,
+                                  child: PinCode(
+                                    keyboardType: TextInputType.number,
+                                    numberOfFields: 2,
+                                    fieldWidth: 40.0,
+                                    style: const TextStyle(
+                                      fontFamily: Font_.Fonts_T,
+                                      color: Colors.black,
+                                    ),
+                                    fieldStyle: PinCodeStyle.box,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        Pincontroller.text = value.trim();
+                                      });
+                                    },
+                                    onCompleted: (text) {
+                                      setState(() {
+                                        Pincontroller.text = text.trim();
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            const Divider(
+                              color: Colors.grey,
+                              height: 1.0,
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                          ],
+                        ),
+                ),
+                actions: (invoice_select_Ser == 1)
+                    ? null
+                    : <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: InkWell(
+                                onTap: (Pincontroller.text != "$randomString")
+                                    ? null
+                                    : () async {
+                                        setState(() {
+                                          invoice_select_Ser = 1;
+                                        });
+                                        try {
+                                          for (int index = 0;
+                                              index <
+                                                  invoice_select_delete.length;
+                                              index++) {
+                                            var docno =
+                                                invoice_select_delete[index]
+                                                    .toString();
+                                            setState(() {
+                                              numinvoice =
+                                                  invoice_select_delete[index];
+                                              invoice_Now =
+                                                  'delete (${index + 1} / ${invoice_select_delete.length}) : ${invoice_select_delete[index]}';
+                                            });
+                                            var namenew = '';
+                                            de_invoice2(numinvoice, '1');
+                                            await Future.delayed(const Duration(
+                                                milliseconds: 800));
+                                            setState(() {
+                                              invoice_loade_Success_delete.add(
+                                                  invoice_select_delete[index]
+                                                      .toString());
+                                            });
+                                            await Future.delayed(const Duration(
+                                                milliseconds: 500));
+                                            if (index + 1 ==
+                                                invoice_select_delete.length) {
+                                              setState(() {
+                                                invoice_select_delete.clear();
+                                              });
+                                              Navigator.pop(context, 'OK');
+                                            }
+                                          }
+                                        } catch (e) {
+                                          Navigator.pop(context, 'OK');
+                                        }
+                                      },
+                                child: Container(
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        (Pincontroller.text != "$randomString")
+                                            ? Colors.grey
+                                            : Colors.green,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'ลบ',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        //fontWeight: FontWeight.bold, color:
+
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: InkWell(
+                                onTap: () => Navigator.pop(context, 'OK'),
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'ปิด',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        //fontWeight: FontWeight.bold, color:
+
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  //////////////////////////------------------------------>
+  Future<Null> de_invoice(Get_Value_cid, Get_Value_NameShop_index) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var ciddoc = Get_Value_cid;
+    var qutser = Get_Value_NameShop_index;
+    print('numinvoice 1 $numinvoice');
+    String url =
+        '${MyConstant().domain}/UPC_Invoice_history.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&numinvoice=$numinvoice';
+    try {
+      print('numinvoice 2 $numinvoice');
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print('result>>>>>>> $result');
+      print('numinvoice 3 $numinvoice');
+
+      if (result.toString() == 'true') {
+        setState(() async {
+          print('numinvoice 4 $numinvoice');
+          red_InvoiceMon_bill();
+          _InvoiceHistoryModels.clear();
+          sum_pvat = 0;
+          sum_vat = 0;
+          sum_wht = 0;
+          sum_amt = 0;
+          sum_disamt = 0;
+          sum_disp = 0;
+        });
+        print('rrrrrrrrrrrrrr');
+      }
+    } catch (e) {}
+    Navigator.pop(context, 'OK');
+  }
+
+  Future<Null> de_invoice2(Get_Value_cid, Get_Value_NameShop_index) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var ciddoc = Get_Value_cid;
+    var qutser = Get_Value_NameShop_index;
+    print('numinvoice 1 $numinvoice');
+    String url =
+        '${MyConstant().domain}/UPC_Invoice_history.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&numinvoice=$numinvoice';
+    try {
+      print('numinvoice 2 $numinvoice');
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print('result>>>>>>> $result');
+      print('numinvoice 3 $numinvoice');
+
+      if (result.toString() == 'true') {
+        setState(() async {
+          print('numinvoice 4 $numinvoice');
+          red_InvoiceMon_bill();
+          _InvoiceHistoryModels.clear();
+          sum_pvat = 0;
+          sum_vat = 0;
+          sum_wht = 0;
+          sum_amt = 0;
+          sum_disamt = 0;
+          sum_disp = 0;
+        });
+        print('rrrrrrrrrrrrrr');
+      }
+    } catch (e) {}
+  }
+
+  Dialog_notimax(max) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('เลือกได้สูงสุด $max รายการ...!!',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontWeight_.Fonts_T))),
     );
   }
   //////////////////////////------------------------------>

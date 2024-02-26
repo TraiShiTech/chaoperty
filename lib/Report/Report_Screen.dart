@@ -470,6 +470,7 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
 /////////////////----https://flutterawesome.com/tag/dashboard-tag/------------------------------->(รวมรายรับ ชำระแล้ว)https://flutterawesome.com/responsive-flutter-bank-dashboard-ui/
+
   Future<Null> red_Sum_billIncome() async {
     setState(() {
       total1_ = 0.00;

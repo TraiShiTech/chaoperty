@@ -44,6 +44,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
       Await_Status_Report2,
       Await_Status_Report3,
       Await_Status_Report4;
+  int open_set_date = 30;
 //-------------------------------------->
   String _verticalGroupValue_PassW = "EXCEL";
   String _ReportValue_type = "ปกติ";
@@ -100,9 +101,33 @@ class _ReportScreen5State extends State<ReportScreen5> {
   List Status = [
     'ปัจจุบัน',
     'หมดสัญญา',
+    'ใกล้หมดสัญญา',
     'ผู้สนใจ',
   ];
-
+  int Ser_Cid_ldate = 0;
+  List Cid_ldate = [
+    'ทั้งหมด',
+    'ระบุ (ด/ป)',
+  ];
+  ///////////--------------------------------------------->
+  String? YE_People_Cancel, Mon_People_Cancel;
+  String? YE_Cid_ldate, Mon_Cid_ldate;
+  // var Value_People_Cancel;
+  List<String> monthsInThai = [
+    'มกราคม', // January
+    'กุมภาพันธ์', // February
+    'มีนาคม', // March
+    'เมษายน', // April
+    'พฤษภาคม', // May
+    'มิถุนายน', // June
+    'กรกฎาคม', // July
+    'สิงหาคม', // August
+    'กันยายน', // September
+    'ตุลาคม', // October
+    'พฤศจิกายน', // November
+    'ธันวาคม', // December
+  ];
+  ///////////--------------------------------------------->
   @override
   void initState() {
     super.initState();
@@ -291,48 +316,48 @@ class _ReportScreen5State extends State<ReportScreen5> {
   }
 
 ////////////----------------------------------------------------->(รายงาน ข้อมูลผู้เช่า)
-  Future<Null> read_GC_tenant() async {
-    if (teNantModels.isNotEmpty) {
-      teNantModels.clear();
-      contractPhotoModels.clear();
-    }
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+  // Future<Null> read_GC_tenant() async {
+  //   if (teNantModels.isNotEmpty) {
+  //     teNantModels.clear();
+  //     contractPhotoModels.clear();
+  //   }
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    var ren = preferences.getString('renTalSer');
-    var zone = Value_Chang_Zone_People_Ser;
+  //   var ren = preferences.getString('renTalSer');
+  //   var zone = Value_Chang_Zone_People_Ser;
 
-    print('zone>>>>>>zone>>>>>$zone');
+  //   print('zone>>>>>>zone>>>>>$zone');
 
-    String url = (zone == '0')
-        ? '${MyConstant().domain}/GC_tenantAll.php?isAdd=true&ren=$ren&zone=$zone'
-        : '${MyConstant().domain}/GC_tenant.php?isAdd=true&ren=$ren&zone=$zone';
+  //   String url = (zone == '0')
+  //       ? '${MyConstant().domain}/GC_tenantAll.php?isAdd=true&ren=$ren&zone=$zone'
+  //       : '${MyConstant().domain}/GC_tenant.php?isAdd=true&ren=$ren&zone=$zone';
 
-    try {
-      var response = await http.get(Uri.parse(url));
+  //   try {
+  //     var response = await http.get(Uri.parse(url));
 
-      var result = json.decode(response.body);
-      // print(result);
-      if (result != null) {
-        for (var map in result) {
-          TeNantModel teNantModel = TeNantModel.fromJson(map);
-          setState(() {
-            teNantModels.add(teNantModel);
-          });
-          read_GC_photo(
-              teNantModel.docno == null
-                  ? teNantModel.cid == null
-                      ? ''
-                      : '${teNantModel.cid}'
-                  : '${teNantModel.docno}',
-              teNantModel.quantity);
-        }
-      } else {}
+  //     var result = json.decode(response.body);
+  //     // print(result);
+  //     if (result != null) {
+  //       for (var map in result) {
+  //         TeNantModel teNantModel = TeNantModel.fromJson(map);
+  //         setState(() {
+  //           teNantModels.add(teNantModel);
+  //         });
+  //         read_GC_photo(
+  //             teNantModel.docno == null
+  //                 ? teNantModel.cid == null
+  //                     ? ''
+  //                     : '${teNantModel.cid}'
+  //                 : '${teNantModel.docno}',
+  //             teNantModel.quantity);
+  //       }
+  //     } else {}
 
-      setState(() {
-        _teNantModels = teNantModels;
-      });
-    } catch (e) {}
-  }
+  //     setState(() {
+  //       _teNantModels = teNantModels;
+  //     });
+  //   } catch (e) {}
+  // }
 
   Future<Null> read_GC_tenantSelect() async {
     if (teNantModels.isNotEmpty) {
@@ -349,9 +374,12 @@ class _ReportScreen5State extends State<ReportScreen5> {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser');
 
     if (Status_pe_ser == '1') {
-      String url = (zone == '0')
+      String url = zone == null
           ? '${MyConstant().domain}/GC_tenantAll.php?isAdd=true&ren=$ren&zone=$zone'
-          : '${MyConstant().domain}/GC_tenant.php?isAdd=true&ren=$ren&zone=$zone';
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAll.php?isAdd=true&ren=$ren&zone=$zone'
+              : '${MyConstant().domain}/GC_tenant.php?isAdd=true&ren=$ren&zone=$zone';
+
       try {
         var response = await http.get(Uri.parse(url));
 
@@ -473,6 +501,76 @@ class _ReportScreen5State extends State<ReportScreen5> {
         });
       } catch (e) {}
     } else if (Status_pe_ser == '3') {
+      String url = zone == null
+          ? '${MyConstant().domain}/GC_tenantAll.php?isAdd=true&ren=$ren&zone=$zone'
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAll.php?isAdd=true&ren=$ren&zone=$zone'
+              : '${MyConstant().domain}/GC_tenant.php?isAdd=true&ren=$ren&zone=$zone';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        print(result);
+        if (result != null) {
+          for (var map in result) {
+            TeNantModel teNantModel = TeNantModel.fromJson(map);
+            if (teNantModel.quantity == '1') {
+              if (datex.isAfter(
+                      DateTime.parse('${teNantModel.ldate} 00:00:00.000')
+                          .subtract(Duration(days: open_set_date))) ==
+                  true) {
+                var daterx = teNantModel.ldate == null
+                    ? teNantModel.ldate_q
+                    : teNantModel.ldate;
+
+                if (daterx != null) {
+                  int daysBetween(DateTime from, DateTime to) {
+                    from = DateTime(from.year, from.month, from.day);
+                    to = DateTime(to.year, to.month, to.day);
+                    return (to.difference(from).inHours / 24).round();
+                  }
+
+                  var birthday = DateTime.parse('$daterx 00:00:00.000')
+                      .add(const Duration(days: -30));
+                  var date2 = DateTime.now();
+                  var difference = daysBetween(birthday, date2);
+
+                  print('difference == $difference');
+
+                  var daterx_now = DateTime.now();
+
+                  var daterx_ldate = DateTime.parse('$daterx 00:00:00.000');
+
+                  final now = DateTime.now();
+                  final earlier =
+                      daterx_ldate.subtract(const Duration(days: 0));
+                  var daterx_A = now.isAfter(earlier);
+                  print(now.isAfter(earlier)); // true
+                  print(now.isBefore(earlier)); // true
+
+                  if (daterx_A != true) {
+                    setState(() {
+                      teNantModels.add(teNantModel);
+                    });
+                    read_GC_photo(
+                        teNantModel.docno == null
+                            ? teNantModel.cid == null
+                                ? ''
+                                : '${teNantModel.cid}'
+                            : '${teNantModel.docno}',
+                        teNantModel.quantity);
+                  }
+                }
+              }
+            }
+          }
+        } else {}
+        setState(() {
+          _teNantModels = teNantModels;
+        });
+      } catch (e) {}
+    } else if (Status_pe_ser == '4') {
       String url = (zone == '0')
           ? '${MyConstant().domain}/GC_tenantAll.php?isAdd=true&ren=$ren&zone=$zone'
           : '${MyConstant().domain}/GC_tenant.php?isAdd=true&ren=$ren&zone=$zone';
@@ -509,6 +607,259 @@ class _ReportScreen5State extends State<ReportScreen5> {
     red_report();
   }
 
+////////------------------------------------->
+  ///  String? YE_Cid_ldate, Mon_Cid_ldate;
+  Future<Null> read_GC_tenantSelect2_ldate() async {
+    if (teNantModels.isNotEmpty) {
+      setState(() {
+        teNantModels.clear();
+        _teNantModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    var zone = Value_Chang_Zone_People_Ser;
+
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser');
+
+    if (Status_pe_ser == '1') {
+      String url = zone == null
+          ? '${MyConstant().domain}/GC_tenantAll_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate'
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAll_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate'
+              : '${MyConstant().domain}/GC_tenant_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        // print(result);
+        if (result != null) {
+          for (var map in result) {
+            TeNantModel teNantModel = TeNantModel.fromJson(map);
+            if (teNantModel.quantity == '1') {
+              var daterx = teNantModel.ldate == null
+                  ? teNantModel.ldate_q
+                  : teNantModel.ldate;
+
+              if (daterx != null) {
+                int daysBetween(DateTime from, DateTime to) {
+                  from = DateTime(from.year, from.month, from.day);
+                  to = DateTime(to.year, to.month, to.day);
+                  return (to.difference(from).inHours / 24).round();
+                }
+
+                var birthday = DateTime.parse('$daterx 00:00:00.000')
+                    .add(const Duration(days: -30));
+                var date2 = DateTime.now();
+                var difference = daysBetween(birthday, date2);
+
+                print('difference == $difference');
+
+                var daterx_now = DateTime.now();
+
+                var daterx_ldate = DateTime.parse('$daterx 00:00:00.000');
+
+                final now = DateTime.now();
+                final earlier = daterx_ldate.subtract(const Duration(days: 0));
+                var daterx_A = now.isAfter(earlier);
+                print(now.isAfter(earlier)); // true
+                print(now.isBefore(earlier)); // true
+
+                if (daterx_A != true) {
+                  setState(() {
+                    teNantModels.add(teNantModel);
+                  });
+                  read_GC_photo(
+                      teNantModel.docno == null
+                          ? teNantModel.cid == null
+                              ? ''
+                              : '${teNantModel.cid}'
+                          : '${teNantModel.docno}',
+                      teNantModel.quantity);
+                }
+              }
+            }
+          }
+        } else {}
+
+        setState(() {
+          _teNantModels = teNantModels;
+        });
+      } catch (e) {}
+    } else if (Status_pe_ser == '2') {
+      String url = zone == null
+          ? '${MyConstant().domain}/GC_tenantAll_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate'
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAll_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate'
+              : '${MyConstant().domain}/GC_tenant_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        // print(result);
+        if (result != null) {
+          for (var map in result) {
+            TeNantModel teNantModel = TeNantModel.fromJson(map);
+            var daterx = teNantModel.ldate == null
+                ? teNantModel.ldate_q
+                : teNantModel.ldate;
+
+            if (daterx != null) {
+              int daysBetween(DateTime from, DateTime to) {
+                from = DateTime(from.year, from.month, from.day);
+                to = DateTime(to.year, to.month, to.day);
+                return (to.difference(from).inHours / 24).round();
+              }
+
+              var birthday = DateTime.parse('$daterx 00:00:00.000')
+                  .add(const Duration(days: -30));
+              var date2 = DateTime.now();
+              var difference = daysBetween(birthday, date2);
+
+              print('difference == $difference');
+
+              var daterx_now = DateTime.now();
+
+              var daterx_ldate = DateTime.parse('$daterx 00:00:00.000');
+
+              final now = DateTime.now();
+              final earlier = daterx_ldate.subtract(const Duration(days: 0));
+              var daterx_A = now.isAfter(earlier);
+              print(now.isAfter(earlier)); // true
+              print(now.isBefore(earlier)); // true
+
+              if (daterx_A == true) {
+                setState(() {
+                  if (teNantModel.quantity == '1') {
+                    teNantModels.add(teNantModel);
+                  }
+                });
+                read_GC_photo(
+                    teNantModel.docno == null
+                        ? teNantModel.cid == null
+                            ? ''
+                            : '${teNantModel.cid}'
+                        : '${teNantModel.docno}',
+                    teNantModel.quantity);
+              }
+            }
+          }
+        } else {}
+        setState(() {
+          _teNantModels = teNantModels;
+        });
+      } catch (e) {}
+    } else if (Status_pe_ser == '3') {
+      String url = zone == null
+          ? '${MyConstant().domain}/GC_tenantAll_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate'
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAll_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate'
+              : '${MyConstant().domain}/GC_tenant_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        print(result);
+        if (result != null) {
+          for (var map in result) {
+            TeNantModel teNantModel = TeNantModel.fromJson(map);
+            if (teNantModel.quantity == '1') {
+              if (datex.isAfter(
+                      DateTime.parse('${teNantModel.ldate} 00:00:00.000')
+                          .subtract(Duration(days: open_set_date))) ==
+                  true) {
+                var daterx = teNantModel.ldate == null
+                    ? teNantModel.ldate_q
+                    : teNantModel.ldate;
+
+                if (daterx != null) {
+                  int daysBetween(DateTime from, DateTime to) {
+                    from = DateTime(from.year, from.month, from.day);
+                    to = DateTime(to.year, to.month, to.day);
+                    return (to.difference(from).inHours / 24).round();
+                  }
+
+                  var birthday = DateTime.parse('$daterx 00:00:00.000')
+                      .add(const Duration(days: -30));
+                  var date2 = DateTime.now();
+                  var difference = daysBetween(birthday, date2);
+
+                  print('difference == $difference');
+
+                  var daterx_now = DateTime.now();
+
+                  var daterx_ldate = DateTime.parse('$daterx 00:00:00.000');
+
+                  final now = DateTime.now();
+                  final earlier =
+                      daterx_ldate.subtract(const Duration(days: 0));
+                  var daterx_A = now.isAfter(earlier);
+                  print(now.isAfter(earlier)); // true
+                  print(now.isBefore(earlier)); // true
+
+                  if (daterx_A != true) {
+                    setState(() {
+                      teNantModels.add(teNantModel);
+                    });
+                    read_GC_photo(
+                        teNantModel.docno == null
+                            ? teNantModel.cid == null
+                                ? ''
+                                : '${teNantModel.cid}'
+                            : '${teNantModel.docno}',
+                        teNantModel.quantity);
+                  }
+                }
+              }
+            }
+          }
+        } else {}
+        setState(() {
+          _teNantModels = teNantModels;
+        });
+      } catch (e) {}
+    } else if (Status_pe_ser == '4') {
+      String url = zone == null
+          ? '${MyConstant().domain}/GC_tenantAll_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate'
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAll_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate'
+              : '${MyConstant().domain}/GC_tenant_Selectldate.php?isAdd=true&ren=$ren&zone=$zone&mon_s=$Mon_Cid_ldate&ye_s=$YE_Cid_ldate';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        // print(result);
+        if (result != null) {
+          for (var map in result) {
+            TeNantModel teNantModel = TeNantModel.fromJson(map);
+            if (teNantModel.quantity == '2' || teNantModel.quantity == '3') {
+              setState(() {
+                teNantModels.add(teNantModel);
+              });
+              read_GC_photo(
+                  teNantModel.docno == null
+                      ? teNantModel.cid == null
+                          ? ''
+                          : '${teNantModel.cid}'
+                      : '${teNantModel.docno}',
+                  teNantModel.quantity);
+            }
+          }
+        } else {}
+        setState(() {
+          _teNantModels = teNantModels;
+        });
+      } catch (e) {}
+    }
+
+    quotxSelectModels = List.generate(teNantModels.length, (_) => []);
+    red_report();
+  }
 ////////////////////------------------------------------------------>(รูปผู้เช่า)
 
   Future<Null> read_GC_photo(ciddoc_, qutser_) async {
@@ -711,8 +1062,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
     print('zone>>>>>>zone>>>>>$zone');
 
     String url = (zone != '0')
-        ? '${MyConstant().domain}/GC_tenant_Cancel_Zone.php?isAdd=true&ren=$ren&ser_zone=$zone'
-        : '${MyConstant().domain}/GC_tenant_Cancel_All.php?isAdd=true&ren=$ren';
+        ? '${MyConstant().domain}/GC_tenant_Cancel_ZoneReport.php?isAdd=true&ren=$ren&ser_zone=$zone&mon_s=$Mon_People_Cancel&ye_s=$YE_People_Cancel'
+        : '${MyConstant().domain}/GC_tenant_Cancel_AllReport.php?isAdd=true&ren=$ren&mon_s=$Mon_People_Cancel&ye_s=$YE_People_Cancel';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -1438,20 +1789,406 @@ class _ReportScreen5State extends State<ReportScreen5> {
                         ),
                       ),
                     ),
+
+                    //                     int Ser_Cid_ldate = 0;
+                    // List Cid_ldate = [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'วันที่ใกล้หมดสัญญา :',
+                        style: TextStyle(
+                          color: ReportScreen_Color.Colors_Text2_,
+                          // fontWeight: FontWeight.bold,
+                          fontFamily: Font_.Fonts_T,
+                        ),
+                      ),
+                    ),
+/////----------------------------->
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: AppbackgroundColor.Sub_Abg_Colors,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          // border: Border.all(color: Colors.grey, width: 1),
+                        ),
+                        width: 150,
+                        padding: const EdgeInsets.all(8.0),
+                        child: DropdownButtonFormField2(
+                          value: Cid_ldate[Ser_Cid_ldate].toString(),
+
+                          alignment: Alignment.center,
+                          focusColor: Colors.white,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            enabled: true,
+                            hoverColor: Colors.brown,
+                            prefixIconColor: Colors.blue,
+                            fillColor: Colors.white.withOpacity(0.05),
+                            filled: false,
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                topLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                              ),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(255, 231, 227, 227),
+                              ),
+                            ),
+                          ),
+                          isExpanded: false,
+                          // hint: StreamBuilder(
+                          //     stream: Stream.periodic(const Duration(seconds: 1)),
+                          //     builder: (context, snapshot) {
+                          //       return Text(
+                          //         Status_pe == null ? 'เลือก' : '$Status_pe',
+                          //         maxLines: 2,
+                          //         textAlign: TextAlign.center,
+                          //         style: const TextStyle(
+                          //           overflow: TextOverflow.ellipsis,
+                          //           fontSize: 14,
+                          //           color: Colors.grey,
+                          //         ),
+                          //       );
+                          //     }),
+                          icon: const Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.black,
+                          ),
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                          iconSize: 20,
+                          buttonHeight: 40,
+                          buttonWidth: 250,
+                          // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                          dropdownDecoration: BoxDecoration(
+                            // color: Colors
+                            //     .amber,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.white, width: 1),
+                          ),
+                          items:
+                              Cid_ldate.map((item) => DropdownMenuItem<String>(
+                                    value: '${item}',
+                                    child: Text(
+                                      '${item}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  )).toList(),
+
+                          onChanged: (value) async {
+                            int selectedIndex =
+                                Cid_ldate.indexWhere((item) => item == value);
+                            setState(() {
+                              teNantModels.clear();
+                              contractPhotoModels.clear();
+
+                              Mon_Cid_ldate = null;
+                              YE_Cid_ldate = null;
+                            });
+                            setState(() {
+                              Ser_Cid_ldate = selectedIndex;
+                              YE_Cid_ldate = null;
+                              Mon_Cid_ldate = null;
+                            });
+
+                            print(Ser_Cid_ldate);
+                          },
+                        ),
+                      ),
+                    ),
+
+                    if (Ser_Cid_ldate == 1)
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'เดือน :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                    if (Ser_Cid_ldate == 1)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 120,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value:
+                                (Mon_Cid_ldate == null) ? null : Mon_Cid_ldate,
+
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 200,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: [
+                              for (int item = 1; item < 13; item++)
+                                DropdownMenuItem<String>(
+                                  value: '${item}',
+                                  child: Text(
+                                    '${monthsInThai[item - 1]}',
+                                    // '${item}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )
+                            ],
+
+                            onChanged: (value) async {
+                              Mon_Cid_ldate = value.toString();
+                            },
+                          ),
+                        ),
+                      ),
+                    if (Ser_Cid_ldate == 1)
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'ปี :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                    if (Ser_Cid_ldate == 1)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 120,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: (YE_Cid_ldate == null) ? null : YE_Cid_ldate,
+
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 200,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: [
+                              DropdownMenuItem<String>(
+                                value: '${int.parse('${YE_Th[0]}') + 1}',
+                                child: Text(
+                                  '${int.parse('${YE_Th[0]}') + 1}',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              for (int index = 0; index < YE_Th.length; index++)
+                                DropdownMenuItem<String>(
+                                  value: '${YE_Th[index]}',
+                                  child: Text(
+                                    '${YE_Th[index]}',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                      color: (index == 0)
+                                          ? Colors.green
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              // YE_Th.map((item) => DropdownMenuItem<String>(
+                              //                               value: '${item}',
+                              //                               child: Text(
+                              //                                 '${item}',
+                              //                                 // '${int.parse(item) + 543}',
+                              //                                 textAlign: TextAlign.center,
+                              //                                 style: const TextStyle(
+                              //                                   overflow: TextOverflow.ellipsis,
+                              //                                   fontSize: 14,
+                              //                                   color: Colors.grey,
+                              //                                 ),
+                              //                               ),
+                              //                             )).toList(),
+                            ],
+
+                            onChanged: (value) async {
+                              YE_Cid_ldate = value.toString();
+                            },
+                          ),
+                        ),
+                      ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                         onTap: () async {
-                          if (Status_pe != null &&
-                              Value_Chang_Zone_People != null) {
-                            setState(() {
-                              Await_Status_Report1 = 0;
-                            });
-                            Dia_log();
+                          if (Ser_Cid_ldate == 0) {
+                            if (Status_pe != null &&
+                                Value_Chang_Zone_People != null) {
+                              setState(() {
+                                Await_Status_Report1 = 0;
+                              });
+                              Dia_log();
+                            }
+                          } else {
+                            if (Status_pe != null &&
+                                Value_Chang_Zone_People != null &&
+                                Mon_Cid_ldate != null &&
+                                YE_Cid_ldate != null) {
+                              setState(() {
+                                Await_Status_Report1 = 0;
+                              });
+                              Dia_log();
+                            }
                           }
 
-                          // read_GC_tenant();
-                          read_GC_tenantSelect();
+                          if (Ser_Cid_ldate == 0) {
+                            if (Status_pe != null &&
+                                Value_Chang_Zone_People != null) {
+                              read_GC_tenantSelect();
+                            }
+                          } else {
+                            if (Status_pe != null &&
+                                Value_Chang_Zone_People != null &&
+                                Mon_Cid_ldate != null &&
+                                YE_Cid_ldate != null) {
+                              read_GC_tenantSelect2_ldate();
+                            }
+                          }
+                          // if (Ser_Cid_ldate == 0) {
+                          //   read_GC_tenantSelect();
+                          // } else {
+                          //   read_GC_tenantSelect2_ldate();
+                          // }
                         },
                         child: Container(
                             width: 100,
@@ -1516,31 +2253,59 @@ class _ReportScreen5State extends State<ReportScreen5> {
                           ),
                         ),
                       ),
-                      onTap: (Status_pe == null ||
-                              Value_Chang_Zone_People == null ||
-                              teNantModels.isEmpty)
-                          ? null
-                          : () async {
-                              Insert_log.Insert_logs(
-                                  'รายงาน', 'กดดูรายงานข้อมูลผู้เช่า');
-                              RE_People_Widget();
-                            }),
+                      onTap: (Ser_Cid_ldate == 0)
+                          ? (Status_pe == null ||
+                                  Value_Chang_Zone_People == null ||
+                                  teNantModels.isEmpty)
+                              ? null
+                              : () async {
+                                  Insert_log.Insert_logs(
+                                      'รายงาน', 'กดดูรายงานข้อมูลผู้เช่า');
+                                  RE_People_Widget();
+                                }
+                          : (Status_pe == null ||
+                                  Value_Chang_Zone_People == null ||
+                                  teNantModels.isEmpty ||
+                                  Mon_Cid_ldate == null ||
+                                  YE_Cid_ldate == null)
+                              ? null
+                              : () async {
+                                  Insert_log.Insert_logs(
+                                      'รายงาน', 'กดดูรายงานข้อมูลผู้เช่า');
+                                  RE_People_Widget();
+                                }),
                   (teNantModels.isEmpty || Await_Status_Report1 == null)
                       ? Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            (Status_pe != null &&
-                                    teNantModels.isEmpty &&
-                                    Value_Chang_Zone_People != null &&
-                                    Await_Status_Report1 != null)
-                                ? 'รายงานข้อมูลผู้เช่า (ไม่พบข้อมูล ✖️)'
-                                : 'รายงานข้อมูลผู้เช่า',
-                            style: const TextStyle(
-                              color: ReportScreen_Color.Colors_Text2_,
-                              // fontWeight: FontWeight.bold,
-                              fontFamily: Font_.Fonts_T,
-                            ),
-                          ),
+                          child: (Ser_Cid_ldate == 0)
+                              ? Text(
+                                  (Status_pe != null &&
+                                          teNantModels.isEmpty &&
+                                          Value_Chang_Zone_People != null &&
+                                          Await_Status_Report1 != null)
+                                      ? 'รายงานข้อมูลผู้เช่า (ไม่พบข้อมูล ✖️)'
+                                      : 'รายงานข้อมูลผู้เช่า',
+                                  style: const TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                )
+                              : Text(
+                                  (Status_pe != null &&
+                                          teNantModels.isEmpty &&
+                                          Value_Chang_Zone_People != null &&
+                                          Await_Status_Report1 != null &&
+                                          Mon_Cid_ldate != null &&
+                                          YE_Cid_ldate != null)
+                                      ? 'รายงานข้อมูลผู้เช่า (ไม่พบข้อมูล ✖️)'
+                                      : 'รายงานข้อมูลผู้เช่า',
+                                  style: const TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
                         )
                       : (Await_Status_Report1 == 0)
                           ? SizedBox(
@@ -1992,6 +2757,205 @@ class _ReportScreen5State extends State<ReportScreen5> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'เดือน :',
+                        style: TextStyle(
+                          color: ReportScreen_Color.Colors_Text2_,
+                          // fontWeight: FontWeight.bold,
+                          fontFamily: Font_.Fonts_T,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: AppbackgroundColor.Sub_Abg_Colors,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          // border: Border.all(color: Colors.grey, width: 1),
+                        ),
+                        width: 120,
+                        padding: const EdgeInsets.all(8.0),
+                        child: DropdownButtonFormField2(
+                          alignment: Alignment.center,
+                          focusColor: Colors.white,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            floatingLabelAlignment:
+                                FloatingLabelAlignment.center,
+                            enabled: true,
+                            hoverColor: Colors.brown,
+                            prefixIconColor: Colors.blue,
+                            fillColor: Colors.white.withOpacity(0.05),
+                            filled: false,
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                topLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                              ),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(255, 231, 227, 227),
+                              ),
+                            ),
+                          ),
+                          isExpanded: false,
+                          value: (Mon_People_Cancel == null)
+                              ? null
+                              : Mon_People_Cancel,
+
+                          icon: const Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.black,
+                          ),
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                          iconSize: 20,
+                          buttonHeight: 40,
+                          buttonWidth: 200,
+                          // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                          dropdownDecoration: BoxDecoration(
+                            // color: Colors
+                            //     .amber,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.white, width: 1),
+                          ),
+                          items: [
+                            for (int item = 1; item < 13; item++)
+                              DropdownMenuItem<String>(
+                                value: '${item}',
+                                child: Text(
+                                  '${monthsInThai[item - 1]}',
+                                  // '${item}',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              )
+                          ],
+
+                          onChanged: (value) async {
+                            Mon_People_Cancel = value.toString();
+                          },
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'ปี :',
+                        style: TextStyle(
+                          color: ReportScreen_Color.Colors_Text2_,
+                          // fontWeight: FontWeight.bold,
+                          fontFamily: Font_.Fonts_T,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: AppbackgroundColor.Sub_Abg_Colors,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          // border: Border.all(color: Colors.grey, width: 1),
+                        ),
+                        width: 120,
+                        padding: const EdgeInsets.all(8.0),
+                        child: DropdownButtonFormField2(
+                          alignment: Alignment.center,
+                          focusColor: Colors.white,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            floatingLabelAlignment:
+                                FloatingLabelAlignment.center,
+                            enabled: true,
+                            hoverColor: Colors.brown,
+                            prefixIconColor: Colors.blue,
+                            fillColor: Colors.white.withOpacity(0.05),
+                            filled: false,
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                topLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                              ),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(255, 231, 227, 227),
+                              ),
+                            ),
+                          ),
+                          isExpanded: false,
+                          value: (YE_People_Cancel == null)
+                              ? null
+                              : YE_People_Cancel,
+
+                          icon: const Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.black,
+                          ),
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                          iconSize: 20,
+                          buttonHeight: 40,
+                          buttonWidth: 200,
+                          // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                          dropdownDecoration: BoxDecoration(
+                            // color: Colors
+                            //     .amber,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.white, width: 1),
+                          ),
+                          items: YE_Th.map((item) => DropdownMenuItem<String>(
+                                value: '${item}',
+                                child: Text(
+                                  '${item}',
+                                  // '${int.parse(item) + 543}',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              )).toList(),
+
+                          onChanged: (value) async {
+                            YE_People_Cancel = value.toString();
+                          },
+                        ),
+                      ),
+                    ),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
@@ -4495,6 +5459,9 @@ class _ReportScreen5State extends State<ReportScreen5> {
                             Await_Status_Report1 = null;
                             teNantModels.clear();
                             contractPhotoModels.clear();
+                            Ser_Cid_ldate = 0;
+                            Mon_Cid_ldate = null;
+                            YE_Cid_ldate = null;
                           });
                           // check_clear();
                           Navigator.of(context).pop();
@@ -4747,6 +5714,23 @@ class _ReportScreen5State extends State<ReportScreen5> {
                                             flex: 1,
                                             child: const Text(
                                               'ประเภท',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'วันที่ยกเลิก/ทำรายการ',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   color: PeopleChaoScreen_Color
@@ -5058,6 +6042,35 @@ class _ReportScreen5State extends State<ReportScreen5> {
                                                   maxFontSize: 25,
                                                   maxLines: 1,
                                                   '${teNantModels_Cancel[index].rtname}',
+                                                  textAlign: TextAlign.end,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  (teNantModels_Cancel[index]
+                                                                  .cc_date ==
+                                                              null ||
+                                                          teNantModels_Cancel[
+                                                                      index]
+                                                                  .cc_date
+                                                                  .toString() ==
+                                                              '')
+                                                      ? '${teNantModels_Cancel[index].cc_date}'
+                                                      : '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels_Cancel[index].cc_date} 00:00:00'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${teNantModels_Cancel[index].cc_date} 00:00:00'))}') + 543}',
+                                                  //'${teNantModels_Cancel[index].cc_date}',
                                                   textAlign: TextAlign.end,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -7505,6 +8518,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
                             Value_Chang_Zone_historybill = null;
                             Value_Chang_Zone_historybill_Ser = null;
                             Await_Status_Report3 = null;
+                            Mon_People_Cancel = null;
+                            YE_People_Cancel = null;
                           });
 
                           Navigator.of(context).pop();
